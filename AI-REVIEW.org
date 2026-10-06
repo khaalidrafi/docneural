@@ -1,0 +1,146 @@
+#+TITLE: AI-REVIEW — org-docs-website exporter
+#+TODO: TODO QUESTION | NOTED RESOLVED
+
+* What to review in =scripts/org-docs-website-export.el=
+
+  This is batch Elisp (run via =make export=), not an installed package.
+  It reads a doc corpus of Org node files and emits two static artifacts
+  the Synapt theme consumes: =graph.json= and one body-only HTML fragment
+  per file under =docs/SLUG.html=.
+
+** RESOLVED Link rewriting lives in a parse-tree filter, not a text regex
+   :CODE:
+
+   - =org-docs-website--export-body= rewrites resolvable =id:= links to
+     =type=file=, =path= =docs/SLUG.html#ANCHOR= inside a
+     =:filter-parse-tree=.  Verify this is the shape the theme's
+     NotePreview interceptor expects (it is; see ~/synapt).
+   - Why not regex the finished HTML?  ox-html turns unresolvable =id:=
+     links into ="[BROKEN LINK:...]"= text that has *already dropped the
+     description*; you cannot recover it post-export.
+   - Review: unresolved =id:= links are collected into FAILED via the
+     SAME filter.  Confirm the (list html (nreverse failed)) ordering —
+     HTML must be produced *before* reading failed, because the filter
+     pushes onto failed during =org-export-as=.
+
+** RESOLVED Anchor integrity: org-html-prefer-user-labels
+   :ANCHORS:
+
+   - The =#ANCHOR= half of a rewritten href must match an =id="..."= the
+     target fragment actually carries.  Two kinds of anchor exist:
+     heading =:CUSTOM_ID: X= (ox emits =id="X=" always) and pandoc-style
+     =<<Node>>= targets.
+   - GOTCHA (was 47.5% dangling): by default ox renders a =<<Node>>=
+     target with a *generated hash* id (=orgd587c72...=) and discards the
+     literal name, so every =#NodeName= cross-node link dangled.  Fix:
+     bind =org-html-prefer-user-labels=t= in =--export-html= — then
+     =org-html--reference= uses the target's literal =:value= as the id.
+   - VERIFIED: the =#Slug==slug= self-target class is now 113/113
+     resolving, 0 dead (=make linkcheck=).  This is the exporter's real
+     responsibility; =check-anchors.py= gates on it.
+   - Hexify symmetry: the filter writes =url-hexify-string= on the anchor
+     but ox writes the id LITERALLY; that is correct because browsers
+     percent-decode a URL fragment before matching an id
+     (=#org%20(mode)%29= → id="org (mode)").  For =Site-map= / =_002d=
+     names hexify is the identity, so most anchors match byte-for-byte.
+   - A prior hack (rewriting =<<targets>>= to raw-html in the filter) is
+     GONE — =org-html-prefer-user-labels= is the documented switch; do
+     not reintroduce the hack.
+
+** QUESTION ~1900 dead =#index-*= anchors — accept or strip?
+   :DECISION:
+
+   - =make linkcheck= reports ~1944 dead anchors as INFO (NOT failures).
+     Root cause is UPSTREAM, not the exporter: the texinfo→org conversion
+     emitted Main-Index rows like
+     =[[id:org--exporting::#index-abstract_002c-in-LaTeX-export]]= but
+     NEVER created the matching =<<index-...>>= invisible =@cindex= target
+     in any content file.  The suffix/-N naming-skew (~74) and stub-node
+     redirects (~8) are the same class.
+   - Confirmed absent: =rg '<<index-abbreviation' Hyperlinks.org= → 0;
+     the landing spot does not exist to point at.
+   - Harmless at read: the href still resolves to the correct NODE file
+     (0 broken pages); the browser just can't scroll, and each index
+     ROW's second column links to a real section that DOES resolve.
+   - DECISION: keep the anchors verbatim (faithful + future-proof — if the
+     corpus is re-converted with =@cindex= targets, they light up
+     automatically).  Stripping them in the exporter would be permanent
+     precision loss for a source the exporter cannot fix, and would need a
+     per-file anchor-set build → not worth the complexity on a potato.
+     Revisit ONLY if a re-conversion still lacks the targets.
+
+** RESOLVED check-anchors.py + =make linkcheck= build gate
+   :TEST:
+
+   - =scripts/check-anchors.py= classifies every rewritten href and exits
+     non-zero on the exporter's own bugs only: =broken-file= (a link to a
+     page we never emitted) or =node-name= dead (a =<<Node>>= self-target
+     missing → prefer-user-labels regressed).  =index-/suffix/other= dead
+     anchors print as INFO.
+   - Doubles as the corpus link-integrity test for the test task (#5).
+     =make linkcheck= wires it; current status 0 broken, 113/113 node
+     anchors, gate green.
+
+** TODO Three Org quirks neutralized for the Org manual corpus
+   :CODE:
+
+   - =org-macro-replace-all= stubbed (cl-letf): the manual has a literal
+     ={{{name}}}= example and Org 9.7 aborts on undefined macros with no
+     off-switch.
+   - =org-id-find= stubbed to nil: otherwise every unresolvable =id:=
+     link makes Org rescan all known ID files (thousands) → crawls on a
+     4 GB box.
+   - =org-export-with-footnotes= bound nil and =org-export-use-babel= nil:
+     the manual's =[fn:N]= appear only inside verbatim examples; ox-html
+     raises "Definition not found for footnote".  With footnotes off,
+     org-export-as strips footnote elements *before* resolution.  The
+     manual's real footnotes are =[[#FOOT161][^{161}]]= CUSTOM_ID links,
+     which are ordinary links and survive.  Review that losing rendered
+     [fn:] footnotes is acceptable for a navigation site (we believe yes).
+
+** TODO lexical-binding gotcha: filter lambda capturing FAILED
+   :REVIEW:
+
+   - =--export-body= uses TWO nested =let= forms on purpose.  Under
+     lexical binding a =let= binding's init form cannot see its
+     siblings, so the filter lambda could not capture =failed= if both
+     were bindings of the same =let=.  A single-let version byte-compiles
+     with a "free variable failed" warning and misbehaves.  Keep nested.
+
+** TODO graph.json must encode nodes/links as vectors, not lists
+   :BUGFIX:
+
+   - =json-encode= treats a *list of plists* as an ALIST → one JSON object
+     with repeated keys, not an array.  We emit =(vconcat nodes*)= so the
+     top-level =:nodes=/=:links= become JSON arrays.  Review the byte-
+     compile warning "reference to free variable nodes*" is gone (message
+     moved inside the let that binds them).
+
+** TODO Corpus scanning is a single pass, not per-query grep
+   :PERF:
+
+   - =org-docs-website--scan-corpus= builds an =id→file= hash by grepping
+     each file's =:ID: drawer line once=.  org-docs-reader does a corpus
+     grep per id: query; 6k queries × corpus grep would crawl here.
+   - Review: =#+filetags:= split on =:=, tags default to the doc name so
+     the theme groups by corpus ("org", "guix", ...).
+
+** QUESTION .export/ artifacts — commit or regenerate?
+   :DECISION:
+
+   - Currently git-ignored (.export/, *.elc).  Only scripts/ + Makefile
+     are committed.  Confirm we never commit generated fragments; CI or a
+     local =make export= regenerates them.
+
+** NOTED Verified by
+   :TEST:
+
+   - =make check= byte-compiles clean (no warnings);
+     =org-html-prefer-user-labels= confirmed a real ox-html defvar.
+   - Two previously-failing files (Miscellaneous,
+     x_002doverriding_002dfactory_002dstyles) still export OK.
+   - Full corpus: 415 nodes, 5688 edges, valid JSON arrays, 0 export
+     failures; 605 unresolved =id:= links (manual examples / external
+     corpora — expected, dropped from graph.json).
+   - =make linkcheck= gate GREEN: 0 broken pages, node-name anchors
+     113/113, dead-anchor 1944 (all INFO — upstream =@cindex= gap).

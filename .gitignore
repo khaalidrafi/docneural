@@ -1,0 +1,12 @@
+# Static export artifacts (regenerate with: make export)
+.export/
+
+# Emacs build outputs
+*.elc
+
+# Harness session state, not project content
+.agent-org/
+
+# Site bundler outputs (once the Svelte app is wired in)
+node_modules/
+dist/

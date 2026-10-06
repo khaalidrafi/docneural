@@ -144,3 +144,50 @@
      corpora — expected, dropped from graph.json).
    - =make linkcheck= gate GREEN: 0 broken pages, node-name anchors
      113/113, dead-anchor 1944 (all INFO — upstream =@cindex= gap).
+
+* What to review in the Vite/Svelte site shell (task #4)
+
+  The second build half is a thin Svelte host (this repo) that mounts the
+  Synapt theme (../synapt) against the exporter's =.export/= output. Two
+  halves stay decoupled: =make export= (batch Emacs) produces data;
+  =npm run dev= (Vite) serves + renders it.
+
+** RESOLVED =.export/= is Vite's =publicDir=; base=""
+   :WIRING:
+
+   - =vite.config.ts= sets =publicDir = .export= so dev hits =/graph.json=
+     and =/docs/SLUG.html= directly and =vite build= copies them into
+     =dist/= verbatim.  No copy/rsync step.  =src/App.svelte= mounts
+     =<SynaptApp base="" ...>= — the store strips trailing slashes and
+     fetches =/graph.json=, matching exactly.  Verify: if the export
+     layout ever changes (e.g. a =data/= subdir), base and publicDir must
+     change together.
+
+** RESOLVED synapt consumed via alias, not a file: dependency
+   :WIRING:
+
+   - Imports ='synapt'=, ='synapt/store'=, ='synapt/core'=,
+     ='synapt/styles/synapt.css'= resolve through =resolve.alias= to
+     =../synapt/src/lib/*= (mirrors synapt's =exports= map).  Chosen over
+     a =file:../synapt= dependency so vite-plugin-svelte compiles the
+     theme's =.svelte=/=.svelte.ts= as first-class source (no node_modules
+     =include= override needed).  =force-graph= is declared here too, so
+     optimizeDeps prebundles it.  Downside: the two repos' svelte/vite
+     versions must stay compatible.
+   - =server.fs.allow: ['..']= — Vite 6 =replace=s (not appends) the
+     default allow list when you set it, so '..' (=$HOME=) must cover
+     BOTH this repo's =src/= AND =../synapt=.  A tighter list
+     (=[root, ../synapt]=) works too; '..' is the simple bound for sibling
+     repos.  =allow: ['../synapt']= alone caused 403s on our own =src/=
+     — do not reintroduce that.
+
+** NOTED Verified in a real browser (task #5, this unit)
+
+   - =npm run dev= (5174; 5173 was an unrelated app) → app mounts against
+     the real corpus: header, graph/reader switch, 415-node reader TOC.
+   - Deep link =/?doc=Exporting= selects the node (⇤1203 ⇥43, the
+     most-linked doc) and renders its fragment with rewritten links.
+   - Clicking a rewritten =<a href="docs/Publishing.html#Publishing">=
+     fires NotePreview's =onContentClick= → =store.goto= with NO reload:
+     URL became =/?doc=Publishing=, heading "Publishing (The Org
+     Manual)".  Proves the exporter→theme href contract end to end.

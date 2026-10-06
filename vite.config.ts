@@ -1,0 +1,36 @@
+import { defineConfig } from 'vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { fileURLToPath } from 'node:url'
+
+// Where the batch Emacs exporter (scripts/org-docs-website-export.el) drops
+// its artifacts.  Vite serves this as the public dir: dev hits it directly,
+// production copies it into dist/ verbatim.  The theme store fetches
+// `${base}/graph.json` and `${base}/docs/${slug}.html`, so with base="" the
+// site root must expose exactly those two paths — which .export/ already does.
+const PUBDIR = fileURLToPath(new URL('.export', import.meta.url))
+
+// Subpath aliases for the sibling synapt theme (see synapt/package.json
+// "exports"): import from source rather than installing a file: dependency,
+// so vite-plugin-svelte compiles the .svelte files as first-class modules
+// (no node_modules include dance).  force-graph is declared in our
+// dependencies so optimizeDeps can still prebundle it.
+const lib = (p: string) => fileURLToPath(new URL(`../synapt/src/lib/${p}`, import.meta.url))
+const synaptAliases = [
+  { find: /^synapt$/, replacement: lib('SynaptApp.svelte') },
+  { find: /^synapt\/store$/, replacement: lib('core/store.svelte.ts') },
+  { find: /^synapt\/core$/, replacement: lib('core/graph.ts') },
+  { find: /^synapt\/styles\/synapt\.css$/,
+    replacement: fileURLToPath(new URL('../synapt/styles/synapt.css', import.meta.url)) },
+]
+
+export default defineConfig({
+  plugins: [svelte()],
+  resolve: { alias: synaptAliases },
+  // Vite 6 confines server.fs to the workspace root; setting `allow` REPLACES
+  // the default (it does not append), so '../' must cover BOTH this project's
+  // src/ AND the sibling ../synapt the alias pulls in.  The two repos are
+  // siblings under $HOME, so allowing the parent is the right, simple bound.
+  server: { fs: { allow: ['..'] } },
+  publicDir: PUBDIR,
+  build: { outDir: 'dist', emptyOutDir: true },
+})

@@ -10,3 +10,6 @@
 # Site bundler outputs (once the Svelte app is wired in)
 node_modules/
 dist/
+
+# Playwright MCP browser snapshots (session artifacts, not project content)
+.playwright-mcp/

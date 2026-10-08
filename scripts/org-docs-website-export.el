@@ -94,11 +94,81 @@ examples, external corpora); the caller drops those."
     (when-let ((file (gethash base id->file)))
       (cons file anchor))))
 
+(defun org-docs-website--nav-id (path id->file)
+  "If the file part of id: PATH names a corpus node, return its id; else nil.
+Nodes are keyed by their :ID:, which is exactly the base (before `::') of
+every internal id: link, so a resolvable base IS the target node id.  The
+Org manual's synthetic top node (`Up: [[id:org]]') is not a file, so nav
+links to it resolve to nil -- which is how a chapter knows it is top-level."
+  (let ((sep (string-match "::" path)))
+    (let ((base (if sep (substring path 0 sep) path)))
+      (when (gethash base id->file) base))))
+
+(defun org-docs-website--node-nav (file id->file)
+  "Info structure of node FILE as (:next NID :prev NID :up NID :redirect R).
+NID are resolved node ids (nil when the target is not a corpus file).
+REDIRECT is (SLUG . ANCHOR) for an Info \"indirectly referenced\" stub: a
+heading-less file whose entire body is the line \"The node you are looking
+for is at [[id:...]]\".  Such a file has no content of its own, so the
+reader follows REDIRECT to the canonical section instead of showing a
+stub page.  The 20 real chapter files of the Org manual carry the nav
+line; the other 391 carry a redirect."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (goto-char (point-min))
+    ;; A real page has at least one heading.  A heading-less file is a leaf
+    ;; stub (an Info "indirectly referenced" node) whether or not its
+    ;; pointer resolves -- `stub' is what keeps 34 unresolvable stubs out
+    ;; of the reader's chapter tree.  `head' is just a truthy match
+    ;; position, so a plain search then re-goto-char is cleaner than
+    ;; save-excursion (which would restore match data we don't need here).
+    (let* ((head (re-search-forward "^\\*+ " nil t))
+           (next nil) (prev nil) (up nil) (redirect nil))
+      ;; One canonical nav header line, searched from the top.  Each target
+      ;; is a `[[id:PATH][desc]]` link, so capture up to the first `]' of
+      ;; the id and lean on lazy `.*?' to land on the NEXT `[[id:' (not a
+      ;; later one) after each keyword.
+      (goto-char (point-min))
+      (when (re-search-forward
+             (concat "^Next: .*?\\[\\[id:\\([^]]+\\)"
+                     ".*?Previous: .*?\\[\\[id:\\([^]]+\\)"
+                     ".*?Up: .*?\\[\\[id:\\([^]]+\\)")
+             nil t)
+        ;; Bind all three groups up front: --nav-id calls `string-match'
+        ;; internally, which clobbers the global match data, so reading
+        ;; (match-string 2) after the first --nav-id would yield nil.
+        (let ((g1 (match-string-no-properties 1))
+              (g2 (match-string-no-properties 2))
+              (g3 (match-string-no-properties 3)))
+          (setq next (org-docs-website--nav-id g1 id->file)
+                prev (org-docs-website--nav-id g2 id->file)
+                up   (org-docs-website--nav-id g3 id->file))))
+      ;; Stub pointer line: read the capture before --resolve clobbers
+      ;; match data, and follow it only when it resolves.
+      (when (and (not head)
+                 (progn (goto-char (point-min))
+                        (re-search-forward
+                         "^The node you are looking for is at \\[\\[id:\\([^]]+\\)"
+                         nil t)))
+        (let ((path (match-string-no-properties 1)))
+          (pcase-let ((`(,dst . ,anchor) (org-docs-website--resolve path id->file)))
+            (when dst
+              (setq redirect (cons (org-docs-website--slug dst) anchor))))))
+      (list :head head :next next :prev prev :up up :redirect redirect))))
+
 (defun org-docs-website--collect-links (file id->file)
   "Real id: links in FILE as a list of (TARGET-SLUG ANCHOR CONTEXT-LINE).
 Only links whose target resolves in this corpus count.  CONTEXT is the
 trimmed source line containing the link, capped so graph.json stays small
-enough to fetch on a potato."
+enough to fetch on a potato.
+
+The Info NAV header line (\"Next: ... Previous: ... Up: ...\") and a stub
+file's single pointer line are NOT citations -- they are the doc tree and
+the redirect, and we emit them as node fields instead.  So links sitting
+on those two line shapes are skipped here, which keeps the `links' set a
+pure set of semantic cross-references: the synapses canvas then shows how
+chapters actually refer to one another rather than a chain of mechanical
+edges (and 391 stub singletons with degree zero)."
   (with-temp-buffer
     (insert-file-contents file)
     (org-mode)
@@ -116,12 +186,16 @@ enough to fetch on a potato."
                                (string-trim
                                 (buffer-substring-no-properties
                                  (line-beginning-position) (line-end-position)))))))
-                  (push (list (org-docs-website--slug (car resolved))
-                              (cdr resolved)
-                              (if (> (length ctx) 160)
-                                  (substring ctx 0 160)
-                                ctx))
-                        out)))))))
+                  ;; Drop the two structural line shapes (see docstring).
+                  (unless (or (string-match-p "^Next: \\[\\[" ctx)
+                              (string-match-p
+                               "^The node you are looking for is at \\[\\[" ctx))
+                    (push (list (org-docs-website--slug (car resolved))
+                                (cdr resolved)
+                                (if (> (length ctx) 160)
+                                    (substring ctx 0 160)
+                                  ctx))
+                          out))))))))
       (nreverse out))))
 
 (defun org-docs-website--export-body (id->file slug)
@@ -259,9 +333,25 @@ tree, so the manual's example citations are never touched."
             (let ((file (expand-file-name (concat slug ".org") doc-dir)))
               ;; NODES: tags get the corpus name first so the theme groups
               ;; by doc ("org", "guix", ...) and colors deterministically.
-              (push (list :id id :slug slug :title title
-                          :tags (cons (plist-get args :doc) tags))
-                    nodes)
+              ;; The Info nav (up/next/prev) and stub redirect ride along as
+              ;; optional keys so the theme can build a chapter tree,
+              ;; breadcrumbs and a prev/next pager without parsing Org.
+              (let* ((nav (org-docs-website--node-nav file id->file))
+                     (node (list :id id :slug slug :title title
+                                 :tags (cons (plist-get args :doc) tags))))
+                ;; A heading-less file is a leaf stub: mark it so the reader
+                ;; keeps it out of the chapter tree even when its pointer did
+                ;; not resolve to a page in this corpus.
+                (unless (plist-get nav :head)
+                  (setq node (plist-put node :stub t)))
+                (dolist (k '(:next :prev :up))
+                  (when-let ((v (plist-get nav k)))
+                    (setq node (plist-put node k v))))
+                (when-let ((r (plist-get nav :redirect)))
+                  (setq node
+                        (plist-put node :redirect
+                                   (list :slug (car r) :anchor (cdr r)))))
+                (push node nodes))
               (dolist (l (org-docs-website--collect-links file id->file))
                 (pcase-let ((`(,dst _anchor ,ctx) l))
                   ;; Edge identity is the FILE-level citation (id -> id);

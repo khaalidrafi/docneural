@@ -16,7 +16,8 @@
       "synapt": ["../synapt/src/lib/SynaptApp.svelte"],
       "synapt/store": ["../synapt/src/lib/core/store.svelte.ts"],
       "synapt/core": ["../synapt/src/lib/core/graph.ts"],
-      "synapt/styles/synapt.css": ["../synapt/styles/synapt.css"]
+      "synapt/styles/synapt.css": ["../synapt/styles/synapt.css"],
+      "orui/*": ["../org-roam-lite-ui/src/lib/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.svelte", "vite.config.ts"]

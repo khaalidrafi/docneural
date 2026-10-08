@@ -297,6 +297,83 @@ tree, so the manual's example citations are never touched."
                       nil 'quiet)
         failed))))
 
+(defun org-docs-website--reading-order (nodes)
+  "Content NODES in reading order: walk each chapter-head's Info `next'
+chain, then any side chains.  Same algorithm as SynaptStore.chapters on
+the JS side (heads = chapters no other chapter links `next` into; a chain
+stops at a stub, since a stub is not a page) -- the two must agree or
+llms-full.txt and the reader would present different orders of the same
+corpus, which is exactly the kind of drift an agent cannot see."
+  (let ((by-id (make-hash-table :test #'equal))
+        (in-set (make-hash-table :test #'equal))
+        (content nil))
+    (dolist (n nodes)
+      (puthash (plist-get n :id) n by-id)
+      (unless (plist-get n :stub)
+        (puthash (plist-get n :id) t in-set)
+        (push n content)))
+    (setq content (nreverse content))
+    (let ((targeted (make-hash-table :test #'equal))
+          (seen (make-hash-table :test #'equal))
+          (order nil))
+      (dolist (n content)
+        (when-let ((nx (plist-get n :next))) (puthash nx t targeted)))
+      (cl-labels
+          ((walk (start)
+             (let ((cur start))
+               ;; `cur' is nil once the chain leaves the content set.
+               (while (and cur (not (gethash (plist-get cur :id) seen)))
+                 (puthash (plist-get cur :id) t seen)
+                 (push cur order)
+                 (setq cur (when (and (plist-get cur :next)
+                                      (gethash (plist-get cur :next) in-set))
+                             (gethash (plist-get cur :next) by-id)))))))
+        ;; Heads first (a chapter no `next' points into), then leftovers
+        ;; (side chains whose head was itself stub-targeted).
+        (dolist (n content) (unless (gethash (plist-get n :id) targeted) (walk n)))
+        (dolist (n content) (unless (gethash (plist-get n :id) seen) (walk n))))
+      (nreverse order))))
+
+(defun org-docs-website--write-llms (out doc-dir nodes)
+  "Write the LLM-facing entry points into OUT: llms.txt + llms-full.txt.
+This site serves humans AND agents -- the same corpus, in the shapes each
+reads best (see the README's two-audiences note).  NODES is the final
+nodes vector in reading order; stubs are filtered out of both files,
+because an Info stub is a pointer, not knowledge -- its canonical chapter
+is already in the list.
+
+llms.txt follows the llmstxt.org convention (# title, > blurb, ## sections
+of links) and points at the RAW Org files rather than the HTML fragments:
+Org is plain text, denser than HTML for an agent's context window, and
+lossless (a human can read or load it in Emacs as-is).
+
+llms-full.txt inlines the whole real corpus in ONE fetch (~3 MB for the
+Org manual) -- an agent that wants everything takes one request instead
+of 24, and the ordering here is the reading order, which is meaning."
+  (let ((real (org-docs-website--reading-order nodes)))
+    (with-temp-file (expand-file-name "llms.txt" out)
+      (insert "# synapt — Org documentation, wired as synapses\n\n"
+              "> The Org manual as a documentation reader with a live\n"
+              "> citation graph. Every page is also raw Org, readable\n"
+              "> as-is by humans and LLM agents alike.\n\n"
+              "## Docs (reading order)\n\n")
+      (dolist (n real)
+        (insert (format "- [%s](docs/%s.org)\n"
+                        (plist-get n :title) (plist-get n :slug))))
+      (insert "\n## Optional\n\n"
+              "- [Citation graph](graph.json): all docs + resolved id: links\n"
+              "- [Full corpus](llms-full.txt): every doc, one file, plain Org\n"))
+    (with-temp-file (expand-file-name "llms-full.txt" out)
+      ;; Org COMMENT lines as separators: the result stays a valid (if odd)
+      ;; Org file, so an agent that feeds it BACK to an Org-aware tool still
+      ;; parses it -- never markdown residue inside a doc boundary.
+      (dolist (n real)
+        (insert (format "# ==== %s — %s ====\n"
+                        (plist-get n :slug) (plist-get n :title)))
+        (insert-file-contents
+         (expand-file-name (concat (plist-get n :slug) ".org") doc-dir))
+        (insert "\n")))))
+
 (defun org-docs-website-parse-args (args)
   "Parse CLI ARGS (--corpus DIR --doc NAME --out DIR)."
   (let (corpus doc out)
@@ -367,7 +444,12 @@ tree, so the manual's example citations are never touched."
                            (length (org-docs-website--export-html
                                     file docs-out id->file)))
                 (error (push (cons slug (error-message-string e))
-                             broken-exports))))))
+                             broken-exports)))
+              ;; The RAW source too, next to the fragment: docs/SLUG.org is
+              ;; what llms.txt links and what an agent (or a human hitting
+              ;; "source") reads at full fidelity.  A plain copy -- Org is
+              ;; already the lossless artifact; the HTML is the derived one.
+              (copy-file file (expand-file-name (concat slug ".org") docs-out) t))))
         (make-directory out t)
         (let ((nodes* (nreverse nodes))
               (links* (nreverse links)))
@@ -378,7 +460,8 @@ tree, so the manual's example citations are never touched."
             (insert (json-encode `(:nodes ,(vconcat nodes*)
                                     :links ,(vconcat links*)))))
           (message "org-docs-website: %d nodes, %d edges, %d unresolved links"
-                   (length nodes*) (length links*) failures))
+                   (length nodes*) (length links*) failures)
+          (org-docs-website--write-llms out doc-dir nodes*))
         (when broken-exports
           (message "org-docs-website: %d FILES FAILED TO EXPORT:"
                    (length broken-exports))

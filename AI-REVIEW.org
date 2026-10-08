@@ -191,3 +191,82 @@
      fires NotePreview's =onContentClick= → =store.goto= with NO reload:
      URL became =/?doc=Publishing=, heading "Publishing (The Org
      Manual)".  Proves the exporter→theme href contract end to end.
+
+* What to review in the synapt reader + orui Layer-2 synapses (tasks #10, #14, #18)
+
+  The reader (Home, DocReader, SynapseRail, CommandPalette) is ours in
+  =../synapt=; the synapses graph is org-roam-lite-ui's REAL =GraphView=
+  and store, fed from the static =graph.json=.  Review the *bridge*, not
+  either side's internals — that seam is where a future upgrade breaks.
+
+** RESOLVED Layer-2 reuse: orui's store + GraphView, snapshot-fed
+   :BRIDGE:
+
+   - =src/lib/graph/SynapsesGraph.svelte= builds =createGraphStore()= and
+     pushes =applyGraphdata(toRoam(store.visible))= per change.  No
+     WebSocket, no live Emacs: the genuine roam UI runs off a snapshot.
+   - =src/lib/graph/roamBridge.ts::toRoam= maps =DocNode= →
+     =OrgRoamNode= (=level: 1, pos: 0, olp: null, properties: {}= are not
+     decoration — roam's node type requires them) and every edge gets
+     =type: 'id'=.  If synapt's =DocNode= grows a field roam should see,
+     this one function is the only place to edit.
+   - =loadEngine= is injected from synapt so =force-graph= resolves from
+     *synapt's* =node_modules=; =vite.config.ts= additionally pins it via
+     =resolve.alias=, else each sibling repo resolves the bare import from
+     its own tree and the build ships TWO ~175 kB force-graph chunks.
+     Verify =npm run build= output has exactly one.
+
+** TODO Two filter semantics must never be merged
+   :GOTCHA:
+
+   - synapt's =visible= is *inclusive* (keep a node matching ANY tag),
+     roam store's =filterMode= is *exclusive* (hide a node matching the
+     filter).  Feeding roam a filter would invert the meaning.  Instead
+     filters ride as whole-snapshot swaps: =applyGraphdata(toRoam(store.visible))=.
+   - Engine node objects are reused by id across snapshots, so d3-force
+     keeps positions/velocities and a keystroke does not re-seed physics.
+     Selection goes through the store's =setFocus({id})= (a fresh object
+     is fine — act-on-identity), never by mutating the snapshot.
+
+** RESOLVED Graph colors come from our CSS via orui's nine tokens
+   :THEME:
+
+   - =styles/synapt.css= defines =--sy-graph-palette= (8 colors) and
+     =--sy-graph-link= per light AND dark block; =SynapsesGraph.svelte=
+     and =SynapseRail.svelte= bridge them onto the container as
+     =--orui-node-palette= / =--orui-link-color=.
+   - This is the whole contract: =GraphView= paints a TRANSPARENT canvas
+     (page background follows through) and reads only palette/flat/link —
+     =getComputedStyle= per repaint, 500 ms poll.  Canvas
+     =fillStyle= cannot parse =var()=/=color-mix()=, so the bridged values
+     must be resolved literals.  Do not "simplify" them into =var()= chains.
+   - =hashString= (djb2) is load-bearing: a node's color is
+     =palette[hash(first tag) % len]=, stable across reloads.  Changing
+     the palette length re-shuffles colors — cosmetic, but a saved
+     palette screenshot then lies.
+
+** TODO LLM artifacts are generated, so their invariants are the exporter's
+   :EXPORTER:
+
+   - =make export= now also writes =.export/llms.txt= (index: blurb, docs in
+     reading order, Optional section), =.export/llms-full.txt= (whole corpus,
+     one fetch) and =docs/SLUG.org= (lossless raw Org per page).
+   - =org-docs-website--reading-order= in Elisp MUST stay identical to
+     =SynaptStore.chapters= in TS (content set, targeted-next exclusion,
+     chain walk that stops at stubs, leftover second pass).  Two
+     implementations of one algorithm — a human-visible consequence is
+     that llms.txt order == the sidebar order.  Change one, change both.
+   - =llms-full.txt= concatenates the ORIGINAL =.org= files, not the
+     exported HTML: an agent gets source, not presentation.  Size is the
+     trade-off (~3.2 MB corpus).  QUESTION: ship it, or gate it behind
+     =?full= / a build flag?
+
+** NOTED Verified by (this unit)
+
+   - =npm --prefix ../synapt run check= (svelte-check) clean; synapt
+     =npm test= 20/20 incl. new =?mode=graph= deep-link tests.
+   - Exporter =make check= byte-compiles clean; synthetic smoke: reading
+     order =Alpha > Beta > Gamma= with the stub excluded, llms.txt body
+     correct.
+   - Browser: see task #13 (load-gated CDP pass) — graph node count
+     ≈ 415, rail mini-graph paints, palette visible in both themes.

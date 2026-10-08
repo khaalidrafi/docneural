@@ -13,3 +13,6 @@ dist/
 
 # Playwright MCP browser snapshots (session artifacts, not project content)
 .playwright-mcp/
+
+# Ad-hoc export log (make export 2>&1 | tee export.log)
+export.log

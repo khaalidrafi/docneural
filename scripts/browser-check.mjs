@@ -35,10 +35,18 @@ if (!url) {
 
 const PORT = 9333 + (process.pid % 50) // avoid collisions between parallel runs
 const profile = mkdtempSync(join(tmpdir(), 'synapt-chrome-'))
+
+// Which browser to launch: $SYNAPT_CHROME wins, else the system chromium.
+// (Playwright's downloaded headless shell cannot execute on Guix — it wants
+// the FHS /lib64 loader. org-roam-lite-ui's playwright.config made the same
+// discovery and does the same fallback; system chromium DOES boot headless
+// here, it is merely slow under load — hence the long readiness budget.)
+const BIN = process.env.SYNAPT_CHROME ?? 'chromium'
+
 const chrome = spawn(
-  'chromium',
+  BIN,
   [
-    '--headless=new',
+    '--headless',
     '--no-sandbox',
     '--disable-gpu',
     '--disable-dev-shm-usage',
@@ -57,10 +65,11 @@ const die = (msg) => {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
-// Wait for the DevTools HTTP endpoint to answer (up to 90 s — a loaded 4 GB
-// box starts Chromium slowly).
+// Wait for the DevTools HTTP endpoint to answer. 240 rounds because on this
+// 2-core box Chromium's cold boot has measured 60-70 s at load ~8 (same
+// finding as org-roam-lite-ui's playwright.config), not seconds.
 let version = null
-for (let i = 0; i < 90 && !version; i++) {
+for (let i = 0; i < 240 && !version; i++) {
   await sleep(1000)
   try {
     version = await (await fetch(`http://127.0.0.1:${PORT}/json/version`)).json()
@@ -100,7 +109,10 @@ const send = (method, params = {}) =>
     const id = nextId++
     pending.set(id, { res, rej })
     ws.send(JSON.stringify({ id, method, params }))
-    setTimeout(() => pending.has(id) && (pending.delete(id), rej(new Error(method + ' timeout'))), 60000)
+    // 240 s, not 60: the CDP *reply* for even trivial commands queues behind
+    // renderer work, and this box's load swings 4..20 with other agent
+    // sessions. A hung browser is caught by the overall run, not this cap.
+    setTimeout(() => pending.has(id) && (pending.delete(id), rej(new Error(method + ' timeout'))), 240000)
   })
 
 await send('Runtime.enable')

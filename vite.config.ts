@@ -15,12 +15,28 @@ const PUBDIR = fileURLToPath(new URL('.export', import.meta.url))
 // (no node_modules include dance).  force-graph is declared in our
 // dependencies so optimizeDeps can still prebundle it.
 const lib = (p: string) => fileURLToPath(new URL(`../synapt/src/lib/${p}`, import.meta.url))
+// org-roam-lite-ui is the REAL roam UI we build on (Layer 2 of the
+// embed-org-roam-graph skill): its graphStore + GraphView + filters are plain
+// modules with RELATIVE internal imports, so a single `orui/*` alias resolves
+// its whole subtree with no `$lib` collision against synapt.  We feed its store
+// a static `graphdata` snapshot via applyGraphdata(), so the genuine roam UI
+// runs with zero live Emacs (see the site's graph mode).  Sibling repo, so the
+// '../' in server.fs.allow already covers it.
+const ORUI_LIB = fileURLToPath(new URL('../org-roam-lite-ui/src/lib/', import.meta.url))
 const synaptAliases = [
   { find: /^synapt$/, replacement: lib('SynaptApp.svelte') },
   { find: /^synapt\/store$/, replacement: lib('core/store.svelte.ts') },
   { find: /^synapt\/core$/, replacement: lib('core/graph.ts') },
   { find: /^synapt\/styles\/synapt\.css$/,
     replacement: fileURLToPath(new URL('../synapt/styles/synapt.css', import.meta.url)) },
+  { find: /^orui\/(.+)$/, replacement: `${ORUI_LIB}$1` },
+  // ONE force-graph on disk. synapt/ and org-roam-lite-ui/ each carry their
+  // own node_modules copy, and bare imports resolve relative to the IMPORTER,
+  // so without this pin the build ships two ~175 kB copies of the same engine
+  // (two lazy chunks). Point every resolution at THIS site's declared
+  // dependency instead.
+  { find: /^force-graph$/,
+    replacement: fileURLToPath(new URL('node_modules/force-graph/dist/force-graph.mjs', import.meta.url)) },
 ]
 
 export default defineConfig({

@@ -1,13 +1,13 @@
-;;; org-docs-website-export.el --- Export an org-docs corpus for the Synapt theme  -*- lexical-binding: t; -*-
+;;; org-docs-export.el --- Export an org-docs corpus for the docneural-ui theme  -*- lexical-binding: t; -*-
 
 ;; Copyright 2026 Khalid Rafi
 
-;; Part of org-docs-website. Batch script; not an installed package.
+;; Part of org-docs. Batch script; not an installed package.
 
 ;;; Commentary:
 
 ;; Turns doc directories of org-docs node files (e.g. ~/docs/org, the Org
-;; manual split per Info node) into the static artifacts the Synapt theme
+;; manual split per Info node) into the static artifacts the docneural-ui theme
 ;; reads:
 ;;
 ;;   OUT/graph.json        nodes (id, slug, title, tags) + links (source,
@@ -22,8 +22,8 @@
 ;;                         static pages both speak.
 ;;
 ;; Run (see Makefile):
-;;   emacs --batch -l scripts/org-docs-website-export.el \
-;;         -f org-docs-website-export-main -- \
+;;   emacs --batch -l scripts/org-docs-export.el \
+;;         -f org-docs-export-main -- \
 ;;         --corpus ~/docs --doc org --doc emacs --doc guix --out .export
 ;;
 ;; One --doc per manual; all of them land in ONE graph.json and ONE docs/
@@ -54,7 +54,7 @@
 (require 'json)
 (require 'url-util) ; url-hexify-string is not autoloaded in batch
 
-(defun org-docs-website--slug (file)
+(defun org-docs--slug (file)
   "Node slug for node FILE: \"MANUAL--basename\".
 MANUAL is the corpus subdirectory the file lives in (`directory-files'
 always hands us absolute paths, and export-main expands every file under
@@ -65,7 +65,7 @@ fragments), and it makes a URL say which manual it belongs to."
               (directory-file-name (file-name-directory file)))))
     (concat doc "--" (file-name-sans-extension (file-name-nondirectory file)))))
 
-(defun org-docs-website--scan-corpus (doc-dir)
+(defun org-docs--scan-corpus (doc-dir)
   "Return (ID->FILE ENTRIES) for every .org in DOC-DIR.
 ID->FILE maps each file's :ID: drawer line to its path; ENTRIES are
 \(FILE SLUG ID TITLE TAGS) with FILE the absolute path, the rest read
@@ -90,14 +90,14 @@ with the manual directory name."
               (setq tags (split-string (match-string 1) ":" t "[ \t]+"))))
           (when id (puthash id file id->file))
           (push (list file
-                      (org-docs-website--slug file)
-                      (or id (org-docs-website--slug file))
-                      (or title (org-docs-website--slug file))
+                      (org-docs--slug file)
+                      (or id (org-docs--slug file))
+                      (or title (org-docs--slug file))
                       tags)
                 slugs))))
     (list id->file (nreverse slugs))))
 
-(defun org-docs-website--resolve (path id->file)
+(defun org-docs--resolve (path id->file)
   "(FILE . ANCHOR) for id: link PATH — org-docs-reader--resolve-id-link
 without the per-call corpus grep.  Returns nil for unknown ids (manual
 examples, external corpora); the caller drops those."
@@ -109,7 +109,7 @@ examples, external corpora); the caller drops those."
     (when-let ((file (gethash base id->file)))
       (cons file anchor))))
 
-(defun org-docs-website--nav-id (path id->file)
+(defun org-docs--nav-id (path id->file)
   "If the file part of id: PATH names a corpus node, return its id; else nil.
 Nodes are keyed by their :ID:, which is exactly the base (before `::') of
 every internal id: link, so a resolvable base IS the target node id.  The
@@ -119,7 +119,7 @@ links to it resolve to nil -- which is how a chapter knows it is top-level."
     (let ((base (if sep (substring path 0 sep) path)))
       (when (gethash base id->file) base))))
 
-(defun org-docs-website--node-nav (file id->file)
+(defun org-docs--node-nav (file id->file)
   "Info structure of node FILE as (:next NID :prev NID :up NID :redirect R).
 NID are resolved node ids (nil when the target is not a corpus file).
 REDIRECT is (SLUG . ANCHOR) for an Info \"indirectly referenced\" stub: a
@@ -174,7 +174,7 @@ The Org manual always carried all three, which is why it looked fine."
                         (when (re-search-forward
                                (concat kw ": \\[\\[id:\\([^]]+\\)") end t)
                           (let ((path (match-string-no-properties 1)))
-                            (org-docs-website--nav-id path id->file))))))
+                            (org-docs--nav-id path id->file))))))
             (setq next (nav "Next")
                   prev (nav "Previous")
                   up   (nav "Up")))))
@@ -186,12 +186,12 @@ The Org manual always carried all three, which is why it looked fine."
                          "^The node you are looking for is at \\[\\[id:\\([^]]+\\)"
                          nil t)))
         (let ((path (match-string-no-properties 1)))
-          (pcase-let ((`(,dst . ,anchor) (org-docs-website--resolve path id->file)))
+          (pcase-let ((`(,dst . ,anchor) (org-docs--resolve path id->file)))
             (when dst
-              (setq redirect (cons (org-docs-website--slug dst) anchor))))))
+              (setq redirect (cons (org-docs--slug dst) anchor))))))
       (list :head head :next next :prev prev :up up :redirect redirect))))
 
-(defun org-docs-website--collect-links (file id->file)
+(defun org-docs--collect-links (file id->file)
   "Real id: links in FILE as a list of (TARGET-SLUG ANCHOR CONTEXT-LINE).
 Only links whose target resolves in this corpus count.  CONTEXT is the
 trimmed source line containing the link, capped so graph.json stays small
@@ -213,7 +213,7 @@ edges (and 391 stub singletons with degree zero)."
         (lambda (link)
           (when (equal (org-element-property :type link) "id")
             (let* ((path (org-element-property :path link))
-                   (resolved (org-docs-website--resolve path id->file)))
+                   (resolved (org-docs--resolve path id->file)))
               (when resolved
                 (let ((ctx (progn
                              (save-excursion
@@ -225,7 +225,7 @@ edges (and 391 stub singletons with degree zero)."
                   (unless (or (string-match-p "^Next: \\[\\[" ctx)
                               (string-match-p
                                "^The node you are looking for is at \\[\\[" ctx))
-                    (push (list (org-docs-website--slug (car resolved))
+                    (push (list (org-docs--slug (car resolved))
                                 (cdr resolved)
                                 (if (> (length ctx) 160)
                                     (substring ctx 0 160)
@@ -233,7 +233,7 @@ edges (and 391 stub singletons with degree zero)."
                           out))))))))
       (nreverse out))))
 
-(defun org-docs-website--export-body (id->file slug)
+(defun org-docs--export-body (id->file slug)
   "Export the current Org buffer body-only via ox-html, with link filter.
 Return (HTML FAILED-LINKS), FAILED-LINKS being (SLUG ID-PATH) for each id:
 link with no target in this corpus.  Three Org behaviors must be
@@ -263,7 +263,7 @@ Any remaining error propagates (the caller skips that one file)."
              (org-element-map tree 'link
                (lambda (l)
                  (when (equal (org-element-property :type l) "id")
-                   (let ((r (org-docs-website--resolve
+                   (let ((r (org-docs--resolve
                              (org-element-property :path l) id->file)))
                      (if (not r)
                          (push (list slug (org-element-property :path l)) failed)
@@ -271,7 +271,7 @@ Any remaining error propagates (the caller skips that one file)."
                        (org-element-put-property
                         l :path
                         (concat "docs/"
-                                (org-docs-website--slug (car r))
+                                (org-docs--slug (car r))
                                 ".html"
                                 (when-let ((a (cdr r)))
                                   (concat "#" (url-hexify-string a))))))))))
@@ -291,7 +291,7 @@ Any remaining error propagates (the caller skips that one file)."
                               (list :filter-parse-tree filter)))))
         (list html (nreverse failed))))))
 
-(defun org-docs-website--export-html (file out-dir id->file)
+(defun org-docs--export-html (file out-dir id->file)
   "Body-only ox-html export of FILE into OUT-DIR, with id: links rewritten.
 Returns the list of (SRC-SLUG ID-PATH) id: links that did NOT resolve in
 this corpus (for the build report).  Resolved links became FILE-type
@@ -318,12 +318,12 @@ tree, so the manual's example citations are never touched."
         ;; dangle every #NodeName / #index-... href our filter rewrote; see
         ;; org-html--reference (it uses the target's :value when this is on).
         (org-html-prefer-user-labels t)
-        (slug (org-docs-website--slug file)))
+        (slug (org-docs--slug file)))
     (with-temp-buffer
       (setq buffer-file-name file) ; so #+SETUPFILE / relative refs resolve
       (insert-file-contents file)
       (org-mode)
-      (pcase-let ((`(,body ,failed) (org-docs-website--export-body id->file slug)))
+      (pcase-let ((`(,body ,failed) (org-docs--export-body id->file slug)))
         (erase-buffer)
         (insert body)
         (make-directory out-dir t)
@@ -332,9 +332,9 @@ tree, so the manual's example citations are never touched."
                       nil 'quiet)
         failed))))
 
-(defun org-docs-website--reading-order (nodes)
+(defun org-docs--reading-order (nodes)
   "Content NODES in reading order: walk each chapter-head's Info `next'
-chain, then any side chains.  Same algorithm as SynaptStore.chapters on
+chain, then any side chains.  Same algorithm as DocneuralStore.chapters on
 the JS side (heads = chapters no other chapter links `next` into; a chain
 stops at a stub, since a stub is not a page) -- the two must agree or
 llms-full.txt and the reader would present different orders of the same
@@ -368,7 +368,7 @@ corpus, which is exactly the kind of drift an agent cannot see."
         ;; walked in ID order, NOT corpus scan order: ids are
         ;; `<manual>--<file>', so a manual's Top node (id `emacs', file
         ;; Top.org) sorts before every chapter of its manual while the
-        ;; file scan would land it mid-list.  SynaptStore.chapters sorts
+        ;; file scan would land it mid-list.  DocneuralStore.chapters sorts
         ;; identically -- keep the two in lockstep or llms-full.txt and
         ;; the reader diverge.
         (let ((heads nil))
@@ -381,7 +381,7 @@ corpus, which is exactly the kind of drift an agent cannot see."
         (dolist (n content) (unless (gethash (plist-get n :id) seen) (walk n))))
       (nreverse order))))
 
-(defun org-docs-website--write-llms (out slug->file nodes)
+(defun org-docs--write-llms (out slug->file nodes)
   "Write the LLM-facing entry points into OUT: llms.txt + llms-full.txt.
 This site serves humans AND agents -- the same corpus, in the shapes each
 reads best.  SLUG->FILE maps a node slug to its source .org; NODES is the
@@ -418,7 +418,7 @@ hundreds, and the ordering here is the reading order, which is meaning."
            "## Docs (reading order, by manual)\n\n"))
         (dolist (pair manuals)
           (insert (format "\n### %s\n\n" (capitalize (car pair))))
-          (dolist (n (org-docs-website--reading-order (cdr pair)))
+          (dolist (n (org-docs--reading-order (cdr pair)))
             (insert (format "- [%s](docs/%s.org)\n"
                             (plist-get n :title) (plist-get n :slug)))))
         (insert "\n## Optional\n\n"
@@ -429,13 +429,13 @@ hundreds, and the ordering here is the reading order, which is meaning."
         ;; Org file, so an agent that feeds it BACK to an Org-aware tool still
         ;; parses it -- never markdown residue inside a doc boundary.
         (dolist (pair manuals)
-          (dolist (n (org-docs-website--reading-order (cdr pair)))
+          (dolist (n (org-docs--reading-order (cdr pair)))
             (insert (format "# ==== %s — %s ====\n"
                             (plist-get n :slug) (plist-get n :title)))
             (insert-file-contents (gethash (plist-get n :slug) slug->file))
             (insert "\n")))))))
 
-(defun org-docs-website-parse-args (args)
+(defun org-docs-parse-args (args)
   "Parse CLI ARGS (--corpus DIR --doc NAME... --out DIR).
 --doc is repeatable; one manual per occurrence, all merged into one site."
   (let (corpus docs out)
@@ -449,9 +449,9 @@ hundreds, and the ordering here is the reading order, which is meaning."
           :doc (nreverse docs) ; nil -> export-main falls back to (\"org\")
           :out (or out ".export"))))
 
-(defun org-docs-website-export-main ()
+(defun org-docs-export-main ()
   "Batch entry: read --args after `--', export every --doc manual as one site."
-  (let* ((args (org-docs-website-parse-args
+  (let* ((args (org-docs-parse-args
                 (cdr (member "--" command-line-args))))
          (corpus (file-truename (plist-get args :corpus)))
          (manuals (or (plist-get args :doc) (list "org")))
@@ -466,11 +466,11 @@ hundreds, and the ordering here is the reading order, which is meaning."
          (entries nil))
     (dolist (manual manuals)
       (let ((doc-dir (expand-file-name manual corpus)))
-        (pcase-let ((`(,m-ids ,slugs) (org-docs-website--scan-corpus doc-dir)))
-          (message "org-docs-website: %s: %d files" manual (length slugs))
+        (pcase-let ((`(,m-ids ,slugs) (org-docs--scan-corpus doc-dir)))
+          (message "org-docs: %s: %d files" manual (length slugs))
           (maphash (lambda (k v) (puthash k v id->file)) m-ids)
           (dolist (e slugs) (push (append e (list manual)) entries)))))
-    (message "org-docs-website: corpus %s -> %s (%d ids)"
+    (message "org-docs: corpus %s -> %s (%d ids)"
              corpus out (hash-table-count id->file))
     (setq entries (nreverse entries))
     ;; slug -> node id / source file: an edge's target slug turns back into
@@ -493,7 +493,7 @@ hundreds, and the ordering here is the reading order, which is meaning."
             ;; A heading-less file is a leaf stub: mark it so the reader
             ;; keeps it out of the chapter tree even when its pointer did
             ;; not resolve to a page in this corpus.
-            (let ((nav (org-docs-website--node-nav file id->file)))
+            (let ((nav (org-docs--node-nav file id->file)))
               (unless (plist-get nav :head)
                 (setq node (plist-put node :stub t)))
               (dolist (k '(:next :prev :up))
@@ -504,7 +504,7 @@ hundreds, and the ordering here is the reading order, which is meaning."
                       (plist-put node :redirect
                                  (list :slug (car r) :anchor (cdr r))))))
             (push node nodes))
-          (dolist (l (org-docs-website--collect-links file id->file))
+          (dolist (l (org-docs--collect-links file id->file))
             (pcase-let ((`(,dst _anchor ,ctx) l))
               ;; Edge identity is the FILE-level citation (id -> id);
               ;; the anchor only lives on the rewritten in-body href,
@@ -516,7 +516,7 @@ hundreds, and the ordering here is the reading order, which is meaning."
           ;; catch, record, continue (fragment simply absent).
           (condition-case e
               (cl-incf failures
-                       (length (org-docs-website--export-html
+                       (length (org-docs--export-html
                                 file docs-out id->file)))
             (error (push (cons slug (error-message-string e))
                          broken-exports)))
@@ -557,14 +557,14 @@ hundreds, and the ordering here is the reading order, which is meaning."
         (with-temp-file (expand-file-name "graph.json" out)
           (insert (json-encode `(:nodes ,(vconcat nodes*)
                                   :links ,(vconcat links*)))))
-        (message "org-docs-website: %d nodes, %d edges, %d unresolved links"
+        (message "org-docs: %d nodes, %d edges, %d unresolved links"
                  (length nodes*) (length links*) failures)
-        (org-docs-website--write-llms out slug->file nodes*))
+        (org-docs--write-llms out slug->file nodes*))
       (when broken-exports
-        (message "org-docs-website: %d FILES FAILED TO EXPORT:"
+        (message "org-docs: %d FILES FAILED TO EXPORT:"
                  (length broken-exports))
         (dolist (b (nreverse broken-exports))
           (message "  %s: %s" (car b) (cdr b)))))))
 
-(provide 'org-docs-website-export)
-;;; org-docs-website-export.el ends here
+(provide 'org-docs-export)
+;;; org-docs-export.el ends here

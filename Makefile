@@ -1,4 +1,4 @@
-# org-docs-website build
+# org-docs build
 #
 # Pipeline (two independent halves — batch Emacs + Vite):
 #
@@ -39,7 +39,7 @@ PAINT ?= 180000
 # script defers DOMContentLoaded), so raise it when something else is compiling
 # on this box — or verify the built site, where there is no transform.
 NAV ?= 90000
-SCRIPT := scripts/org-docs-website-export.el
+SCRIPT := scripts/org-docs-export.el
 # One --doc flag per manual; the exporter merges them into one graph.json.
 DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 
@@ -49,8 +49,8 @@ check:
 	$(EMACS) --batch -Q --eval '(progn (byte-compile-file "$(SCRIPT)") (message "OK"))'
 
 export: check
-	$(EMACS) --batch -Q -L scripts -l org-docs-website-export \
-	  -f org-docs-website-export-main -- \
+	$(EMACS) --batch -Q -L scripts -l org-docs-export \
+	  -f org-docs-export-main -- \
 	  --corpus $(CORPUS) $(DOC_ARGS) --out $(OUT)
 	# Transport pass: the exporter emits the WHOLE graph (contexts and all);
 	# this moves 4.9 MB of citation prose out of the boot payload into

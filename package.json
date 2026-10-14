@@ -1,8 +1,8 @@
 {
-  "name": "org-docs-website",
+  "name": "org-docs",
   "version": "0.1.0",
   "private": true,
-  "description": "Deployable site for the org-docs corpus: batch Emacs ox-html exporter (scripts/) emits .export/graph.json + docs/SLUG.html, and this Vite+Svelte shell mounts the Synapt theme (../synapt) against that data.",
+  "description": "Deployable site for the org-docs corpus: batch Emacs ox-html exporter (scripts/) emits .export/graph.json + docs/SLUG.html, and this Vite+Svelte shell mounts the docneural-ui theme (../synapt) against that data.",
   "type": "module",
   "scripts": {
     "dev": "vite",

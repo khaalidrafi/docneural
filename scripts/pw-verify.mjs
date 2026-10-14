@@ -15,7 +15,7 @@
 // loader, which Guix does not have, so spawning it is an instant ENOENT (same
 // discovery org-roam-lite-ui's playwright.config and scripts/browser-check.mjs
 // made). The Guix `chromium` does boot headless, so `executablePath` points at
-// it. Set SYNAPT_CHROME to override.
+// it. Set DOCNEURAL_CHROME to override.
 //
 //   node scripts/pw-verify.mjs [--url http://localhost:5173/] [--out /tmp/pw]
 //
@@ -36,13 +36,13 @@ const OUT = arg('out', '/tmp/pw')
 // design one. Override with --paint 300000 when the load average says the
 // Celeron is busy.
 const PAINT = Number(arg('paint', '180000'))
-const CHROME = process.env.SYNAPT_CHROME ??
+const CHROME = process.env.DOCNEURAL_CHROME ??
   // Playwright's executablePath is NOT searched on PATH, so resolve it here
   // (the same system chromium browser-check.mjs uses).
   (process.env.PATH ?? '').split(':').map((d) => `${d}/chromium`).find((p) => existsSync(p))
 
 if (!CHROME || !existsSync(CHROME)) {
-  console.error('no chromium found — set SYNAPT_CHROME=/path/to/chromium')
+  console.error('no chromium found — set DOCNEURAL_CHROME=/path/to/chromium')
   process.exit(2)
 }
 mkdirSync(OUT, { recursive: true })
@@ -142,9 +142,9 @@ async function main() {
     const css = getComputedStyle(document.documentElement)
     const g = (n) => css.getPropertyValue(n).trim()
     return {
-      accent: g('--sy-accent'), accent2: g('--sy-accent-2'), hot: g('--sy-hot'),
-      bg: g('--sy-bg'), mono: g('--sy-font-mono'), display: g('--sy-font-display'),
-      palette: g('--sy-graph-palette').split(',').filter(Boolean).length
+      accent: g('--dn-accent'), accent2: g('--dn-accent-2'), hot: g('--dn-hot'),
+      bg: g('--dn-bg'), mono: g('--dn-font-mono'), display: g('--dn-font-display'),
+      palette: g('--dn-graph-palette').split(',').filter(Boolean).length
     }
   })
   check('dark neon tokens resolved', tokens.accent.toLowerCase() === '#00e5ff'
@@ -257,26 +257,26 @@ async function main() {
     }
     const cs = getComputedStyle(document.documentElement)
     const tok = (n) => cs.getPropertyValue(n)
-    const bg = tok('--sy-bg')
+    const bg = tok('--dn-bg')
     return {
       theme: document.documentElement.dataset.theme || 'auto-dark',
-      muted: ratio(tok('--sy-fg-muted'), bg),
-      faint: ratio(tok('--sy-fg-faint'), bg),
-      fg: ratio(tok('--sy-fg'), bg),
-      border: ratio(tok('--sy-border'), bg)
+      muted: ratio(tok('--dn-fg-muted'), bg),
+      faint: ratio(tok('--dn-fg-faint'), bg),
+      fg: ratio(tok('--dn-fg'), bg),
+      border: ratio(tok('--dn-border'), bg)
     }
   })
   const okC = (v, min) => v !== null && v >= min
   check('text contrast clears AA in the active theme',
     okC(contrast.fg, 7) && okC(contrast.muted, 4.5) && okC(contrast.faint, 4.5),
     JSON.stringify(contrast))
-  check('borders are visible', okC(contrast.border, 1.9), `--sy-border ${contrast.border}`)
+  check('borders are visible', okC(contrast.border, 1.9), `--dn-border ${contrast.border}`)
 
   // THE parity check. The corpus tags are not in the DOM (a card shows the
   // display name), so read them from graph.json — fetched above for the slim
   // check — and derive the manual list exactly the way SynaptStore.manuals
   // does: first tag of each node, in scan order. Then, in-page, compare each
-  // card's --sy-src against palette[djb2(tag) % palette.length] computed from
+  // card's --dn-src against palette[djb2(tag) % palette.length] computed from
   // the live theme, which is the formula orui/graph/colors.ts uses to colour a
   // node. Equal on both sides means the chip and the neurons cannot drift.
   const tagsSeen = []
@@ -286,12 +286,12 @@ async function main() {
   }
   const hueRows = await page.evaluate((tags) => {
     const css = getComputedStyle(document.documentElement)
-    const palette = css.getPropertyValue('--sy-graph-palette').split(',').map((s) => s.trim()).filter(Boolean)
+    const palette = css.getPropertyValue('--dn-graph-palette').split(',').map((s) => s.trim()).filter(Boolean)
     const hash = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return Math.abs(h) }
     const cards = [...document.querySelectorAll('.src-card')]
     return cards.map((el, i) => ({
       tag: tags[i],
-      dom: getComputedStyle(el).getPropertyValue('--sy-src').trim(),
+      dom: getComputedStyle(el).getPropertyValue('--dn-src').trim(),
       canvas: palette[hash(tags[i]) % palette.length],
       label: el.querySelector('.src-name')?.textContent?.trim()
     }))
@@ -366,7 +366,7 @@ async function main() {
     return {
       filters: document.querySelectorAll('.tag-chip').length,
       notched: c ? getComputedStyle(c).clipPath !== 'none' : false,
-      srcChip: chip ? getComputedStyle(chip).getPropertyValue('--sy-src').trim() : null
+      srcChip: chip ? getComputedStyle(chip).getPropertyValue('--dn-src').trim() : null
     }
   })
   check('graph filter module is notched and populated',
@@ -378,7 +378,7 @@ async function main() {
   const light = await page.evaluate(() => {
     const css = getComputedStyle(document.documentElement)
     const g = (n) => css.getPropertyValue(n).trim()
-    return { accent: g('--sy-accent'), bg: g('--sy-bg'), palette: g('--sy-graph-palette') }
+    return { accent: g('--dn-accent'), bg: g('--dn-bg'), palette: g('--dn-graph-palette') }
   })
   check('light theme swaps to ink hues',
     light.accent.toLowerCase() === '#00668d' && light.bg.toLowerCase() === '#eef2f7'
@@ -388,7 +388,7 @@ async function main() {
   // ---------- reader + command palette, dark, desktop ----------
   // One reader pass PER CORPUS. The whole point of the redesign is that a
   // manual keeps its own hue everywhere, so checking one page proves nothing
-  // about the other two — a stale `--sy-src` on the second channel is exactly
+  // about the other two — a stale `--dn-src` on the second channel is exactly
   // the bug this loop would catch.
   await page.evaluate(() => { document.documentElement.dataset.theme = 'dark' })
   const fragCounts = []
@@ -407,7 +407,7 @@ async function main() {
       const h2 = document.querySelector('.sy-org h2')
       const hv = (sel) => {
         const el = document.querySelector(sel)
-        return el ? getComputedStyle(el).getPropertyValue('--sy-src').trim() : null
+        return el ? getComputedStyle(el).getPropertyValue('--dn-src').trim() : null
       }
       return {
         chip: hv('.src-chip'), chipText: document.querySelector('.src-chip')?.textContent?.trim(),
@@ -729,7 +729,7 @@ async function main() {
   const layout = () => page.evaluate(() => ({
     hook: document.querySelector('.roam-wrap')?.dataset?.layout,
     fit: document.querySelector('.roam-wrap')?.dataset?.fit,
-    stored: localStorage.getItem('org-docs:layout'),
+    stored: localStorage.getItem('docneural:layout'),
     chip: (document.querySelector('.layout')?.innerText ?? '').replace(/\s+/g, ' ').trim(),
     pressed: document.querySelector('.layout')?.getAttribute('aria-pressed'),
     nodes: Number(document.querySelector('.roam-wrap')?.firstElementChild?.dataset?.nodes ?? -1)
@@ -776,7 +776,7 @@ async function main() {
   await page.waitForTimeout(500)
   const clipCtx = await page.evaluate(() => navigator.clipboard.readText().catch(() => ''))
   check('⧉ llm hands an agent the page with its provenance',
-    /^# \S/.test(clipCtx) && /Source: org-docs/.test(clipCtx) &&
+    /^# \S/.test(clipCtx) && /Source: docneural/.test(clipCtx) &&
       /Raw Org: \S+\.org/.test(clipCtx) && clipCtx.length > 400,
     `${clipCtx.length} B: ${clipCtx.slice(0, 52).replace(/\n/g, ' ')}`)
   await page.screenshot({ path: `${OUT}/08-reader-tools.png` })
@@ -796,7 +796,7 @@ async function main() {
   await page.waitForSelector('.home .wordmark', { timeout: PAINT })
   const afterReload = await page.locator('.home .resume').count()
   check('resume survives a reload', afterReload === 1,
-    await page.evaluate(() => localStorage.getItem('org-docs:last-read') ?? 'unset'))
+    await page.evaluate(() => localStorage.getItem('docneural:last-read') ?? 'unset'))
 
   await ctx.close()
 

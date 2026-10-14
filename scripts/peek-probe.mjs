@@ -4,7 +4,7 @@ import { chromium } from '/home/khalid/org-roam-lite-ui/node_modules/playwright-
 import { readFileSync } from 'node:fs'
 
 const BASE = process.argv[2] ?? 'http://127.0.0.1:4199/'
-const CHROME = process.env.SYNAPT_CHROME ??
+const CHROME = process.env.DOCNEURAL_CHROME ??
   (await import('node:child_process')).execSync('command -v chromium || true').toString().trim()
 const graph = JSON.parse(readFileSync('.export/graph.json', 'utf8'))
 

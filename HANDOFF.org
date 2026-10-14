@@ -1,4 +1,4 @@
-#+TITLE: HANDOFF — org-docs-website + docneural-ui (continue from here)
+#+TITLE: HANDOFF — org-docs + docneural-ui (continue from here)
 #+DESCRIPTION: Where the work stands on 2026-10-14, what is verified, what is not done, and how to pick it up without rediscovering anything. Read this first.
 #+STARTUP: overview
 #+TODO: NEXT WIP QUESTION | DONE LATER
@@ -8,26 +8,32 @@
   Everything lives in two git repos, both branched off =main= into =ai/main=,
   both pushed to GitHub. There are no local-only commits and no stashes.
 
-  | repo        | path                        | remote                            | HEAD (=ai/main=)                                       |
-  |-------------+-----------------------------+-----------------------------------+---------------------------------------------------------|
-  | org-docs    | =~/org-docs-website=        | =khaalidrafi/org-docs=            | =65f019a= Site: docneural wiring, export + verify tooling |
-  | docneural   | =~/synapt= (dir!)           | =khaalidrafi/docneural=            | =53f0087= spreadForces tests: run the real engine         |
+  | repo        | path                        | remote                | HEAD (=ai/main=)                                  |
+  |-------------+-----------------------------+-----------------------+---------------------------------------------------|
+  | org-docs    | =~/org-docs-website=        | =khaalidrafi/org-docs= | =d0f4217a= Rename to docneural, export tooling      |
+  | docneural-ui | =~/synapt= (dir!)         | =khaalidrafi/docneural= | =b7acf16f= Rename theme to docneural-ui           |
 
-  - The *theme package* is the one still in a directory called =synapt=, and
-    it is still named =synapt= in =package.json= / file names
-    (=SynaptApp.svelte=, =styles/synapt.css=, =SynapsesGraph.svelte=,
-    =spreadForces.ts=). The rename to =docneural-ui= is *not done* — see
-    [[Rename]] below. GitHub repo is already =docneural=.
+  - The rename to =docneural-ui= is *done*: package name, component
+    (=src/lib/DocneuralApp.svelte=), graph view (=DocneuralGraph.svelte=),
+    stylesheet (=styles/docneural-ui.css=), every =--sy-*= token → =--dn-*=,
+    and the =docneural:*= localStorage keys. Verified: 62 vitest tests,
+    =svelte-check= 0 errors, =vite build= in both repos. The site now names
+    the theme =docneural-ui= in =package.json=, its =src/App.svelte= shows
+    =docneural=, and the exporter script is =scripts/org-docs-export.el=.
+  - Two cosmetic remainders, by design: the *directory* is still
+    =~/synapt=, and =spreadForces.ts= keeps its name because ='spread'= is a
+    real layout-mode literal in =neuronEngine.ts= (=mode === 'spread'=).
   - =~/org-docs-website= consumes the theme by path alias, not by package
-    name: =vite.config.ts= maps =orui/*= to =../org-roam-lite-ui/src/lib/*=
-    (the real org-roam-lite-ui =GraphView= + =createGraphStore=) and the
-    graph engine is swapped in through orui's =loadEngine= seam.
+    name: =vite.config.ts= maps =docneural-ui= → =../synapt/src/lib/DocneuralApp.svelte=,
+    =orui/*= → =../org-roam-lite-ui/src/lib/*= (the real org-roam-lite-ui
+    =GraphView= + =createGraphStore=), and the graph engine is swapped in
+    through orui's =loadEngine= seam.
   - The *site* displayed to a visitor is a mix: =src/App.svelte= is a thin
     Svelte shell; the corpus itself is pre-exported Emacs-batch output.
 
 * The repository map (files that actually matter)
 
-  - =scripts/org-docs-website-export.el= — the Emacs batch exporter. Org
+  - =scripts/org-docs-export.el= — the Emacs batch exporter. Org
     corpus in, static site out. This is the whole pipeline: HTML fragments,
     =graph.json=, =llms.txt= / =llms-full.txt= entry points, raw Org per page.
   - =scripts/slim-graph.mjs= — splits the link =context= field out of
@@ -47,7 +53,7 @@
   - =src/lib/graph/= — =neuronEngine.ts= (the canvas painter + the d3 force
     wiring), =spreadForces.ts= (=forceLabelBoxes= + =forceFitContainer=),
     =roamBridge.ts= (static graphdata → orui store, no WebSocket),
-    =SynapsesGraph.svelte=.
+    =DocneuralGraph.svelte=.
   - =TODOs.org= — the backlog, with measured numbers beside every claim.
     =AI-REVIEW.org= — the review trail: every decision, every open QUESTION.
 
@@ -94,28 +100,39 @@
 
   #+begin_example
   cd ~/synapt && npx vitest run                    # 62 passing
-  cd ~/synapt && npx svelte-check --output machine | rg -E "ERROR|COMPLETED"   # 0 errors
+  cd ~/synapt && npx svelte-check --output machine | rg 'ERROR|COMPLETED'   # 0 errors
   cd ~/synapt && npx vite build
+  cd ~/org-docs-website && npx svelte-check --tsconfig ./tsconfig.json && npx vite build
   cd ~/org-docs-website && make verify             # the real browser gate
   #+end_example
 
   Note for =svelte-check=: filter on =ERROR|COMPLETED=, not =^Error=.
 
-* The rename that is NOT done
+* The rename (DONE)
 
-  The repo is =docneural=, the theme is meant to be =docneural-ui=. None of
-  the code is renamed. Still called =synapt=:
+  Both names landed together in one rename pass: the site is =org-docs=
+  (package =org-docs=, displayed title =docneural=) and the theme is
+  =docneural-ui=. What changed:
 
-  - =package.json= name, description, =svelte= and =exports= entries
-  - =src/lib/SynaptApp.svelte= (the component the site imports)
-  - =src/lib/graph/SynapsesGraph.svelte=
-  - =src/lib/graph/spreadForces.ts= + =spreadForces.test.ts=
-  - =src/styles/synapt.css= + every =--sy-*= CSS custom property
-  - =src/main.ts=, =index.html=, =Demo.svelte=, =roamBridge.ts=, =source.ts=
-  - =README= references and the =Makefile=
-
-  This is mechanical but wide. Do it as its own commit on its own branch and
-  keep the runtime behaviour identical, so the benchmark stays attributable.
+  - Theme =package.json=: name =docneural-ui=, =svelte= + =exports= entries,
+    description. =src/lib/DocneuralApp.svelte= and
+    =src/lib/graph/DocneuralGraph.svelte= (git mv'd from =SynaptApp= /
+    =SynapsesGraph=). =styles/docneural-ui.css= (git mv'd from
+    =synapt.css=).
+  - Every =--sy-*= custom property and =sy-*= class → =--dn-*= / =dn-*=.
+    Verified beforehand that neither org-roam-lite-ui nor the site used the
+    =--sy-*= namespace outside the theme, so the rename was wholesale-safe.
+  - localStorage keys =org-docs:*= → =docneural:*= (=layout=, =saved=,
+    =last-read=). =DocReader= provenance now says =Source: docneural=.
+  - Site: =vite.config.ts= alias =synaptAliases= → =themeAliases= with
+    =docneural-ui= finds; =tsconfig.json= paths updated the same way;
+    =src/main.ts= imports =docneural-ui/styles/docneural-ui.css=;
+    =index.html= has class =dn-body=.
+  - Exporter: =scripts/org-docs-website-export.el= → =scripts/org-docs-export.el=,
+    all =org-docs-website--*= identifiers → =org-docs--*=.
+  - =scripts/pw-verify.mjs= and the probe scripts switched to =--dn-*= and
+    the new storage keys. =browser-check.mjs= temp profile is
+    =docneural-chrome-*=.
 
 * Open work (see TODOs.org for the full planning)
 
@@ -129,8 +146,8 @@
   - NEXT #42 retire the terminal-window chrome (keep it moderate, not gone).
   - NEXT #43 make the graph-mode switch visible on phones.
   - NEXT #45 memoize =store.visible= (it re-scans O(links) per keystroke).
-  - NEXT #47 readable-overview layout — the physics half is done and
-    committed; only the rename above is left from that thread.
+  - NEXT #47 readable-overview layout — shipped and verified; nothing left.
+
   - =MONEY.org= — still to be authored (monetisation ideas for the site).
   - =AI-REVIEW.org= — needs the circle-vs-box packing limit and the
     force-order lesson recorded.

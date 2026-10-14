@@ -1,10 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Synapt — Org docs</title>
-    <meta name="description" content="Interlinked Org documentation: browse any node of the Org manual in the graph or the classic reader. Built by batch Emacs ox-html from ~/docs/org." />
+    <title>org-docs — technical manuals, wired as synapses</title>
+    <meta name="description" content="Documentation aggregator for any number of technical manuals (currently GNU Emacs, GNU Guix and Org): browse every node in the reader or the org-roam citation graph. Built by batch Emacs ox-html from ~/docs; themed by synapt." />
+    <!-- Night is the house style, not an afterthought: dark first, the day
+         theme a deliberate switch. Painted before CSS loads so a cold browser
+         never flashes white behind the HUD. -->
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#05070d" />
+    <style>
+      html { background: #05070d; color: #d5e4f2; }
+    </style>
+    <!-- Inline SVG mark: a lit soma with two firing wires. A data URI means
+         no extra request and no 404 in the console for a favicon the build
+         does not ship. -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305070d'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2300e5ff'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%2300e5ff' stroke-width='1.5' opacity='.5'/%3E%3Cpath d='M16 16 27 8M16 16 5 24' stroke='%23ff2d95' stroke-width='1' opacity='.7'/%3E%3Ccircle cx='27' cy='8' r='2' fill='%23ff2d95'/%3E%3Ccircle cx='5' cy='24' r='2' fill='%23ff2d95'/%3E%3C/svg%3E" />
+    <!-- No webfont <link> here on purpose. A stylesheet from
+         fonts.googleapis.com is render-blocking, so first paint waited on a
+         DNS + TLS + CSS round trip before the font files even started — tens
+         of seconds on this machine, minutes on a bad phone connection. The
+         theme ships three self-hosted latin subsets with font-display: swap
+         instead (see synapt/styles/synapt.css section 0). -->
   </head>
   <body class="sy-body">
     <div id="app"></div>

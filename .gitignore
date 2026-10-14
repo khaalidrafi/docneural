@@ -16,3 +16,10 @@ dist/
 
 # Ad-hoc export log (make export 2>&1 | tee export.log)
 export.log
+
+# Verification screenshots (regenerate with make verify)
+shots/
+verify-*.png
+
+# Qoder session state
+.qoder/

@@ -6,9 +6,9 @@
 
 ;;; Commentary:
 
-;; Turns a doc directory of org-docs node files (e.g. ~/docs/org, the Org
-;; manual split per Info node) into the two static artifacts the Synapt
-;; theme reads:
+;; Turns doc directories of org-docs node files (e.g. ~/docs/org, the Org
+;; manual split per Info node) into the static artifacts the Synapt theme
+;; reads:
 ;;
 ;;   OUT/graph.json        nodes (id, slug, title, tags) + links (source,
 ;;                         target, context) — same citation model as
@@ -24,7 +24,12 @@
 ;; Run (see Makefile):
 ;;   emacs --batch -l scripts/org-docs-website-export.el \
 ;;         -f org-docs-website-export-main -- \
-;;         --corpus ~/docs --doc org --out .export
+;;         --corpus ~/docs --doc org --doc emacs --doc guix --out .export
+;;
+;; One --doc per manual; all of them land in ONE graph.json and ONE docs/
+;; directory, so the theme sees a single corpus whose first tag names the
+;; manual.  Slugs are namespace-prefixed with the manual ("emacs--Intro")
+;; because the manuals reuse basenames (each has an "Introduction").
 ;;
 ;; Design notes:
 ;; - Links are extracted with org-element, NOT a text regex: the Org manual
@@ -50,14 +55,23 @@
 (require 'url-util) ; url-hexify-string is not autoloaded in batch
 
 (defun org-docs-website--slug (file)
-  "Node slug for node FILE: basename without extension."
-  (file-name-sans-extension (file-name-nondirectory file)))
+  "Node slug for node FILE: \"MANUAL--basename\".
+MANUAL is the corpus subdirectory the file lives in (`directory-files'
+always hands us absolute paths, and export-main expands every file under
+CORPUS/DOC).  The prefix matters twice: the manuals reuse basenames (each
+has an \"Introduction\", so bare slugs would overwrite each other's HTML
+fragments), and it makes a URL say which manual it belongs to."
+  (let ((doc (file-name-nondirectory
+              (directory-file-name (file-name-directory file)))))
+    (concat doc "--" (file-name-sans-extension (file-name-nondirectory file)))))
 
 (defun org-docs-website--scan-corpus (doc-dir)
-  "Return (ID->FILE SLUG->(ID TITLE TAGS)) for every .org in DOC-DIR.
-ID->FILE maps each file's :ID: drawer line to its path; the second
-table maps slug -> (id title tags) read from :ID:, #+title and
-#+file-tags (if present; tags default to the doc dir name)."
+  "Return (ID->FILE ENTRIES) for every .org in DOC-DIR.
+ID->FILE maps each file's :ID: drawer line to its path; ENTRIES are
+\(FILE SLUG ID TITLE TAGS) with FILE the absolute path, the rest read
+from :ID:, #+title and #+filetags (if present).  The FILE rides along
+because export-main cannot rebuild it from SLUG, which is now prefixed
+with the manual directory name."
   (let ((id->file (make-hash-table :test #'equal))
         (slugs nil))
     (dolist (file (directory-files doc-dir t "\\.org\\'"))
@@ -75,7 +89,8 @@ table maps slug -> (id title tags) read from :ID:, #+title and
             (when (re-search-forward "^[ \t]*#\\+filetags:[ \t]*\\(.*\\)$" nil t)
               (setq tags (split-string (match-string 1) ":" t "[ \t]+"))))
           (when id (puthash id file id->file))
-          (push (list (org-docs-website--slug file)
+          (push (list file
+                      (org-docs-website--slug file)
                       (or id (org-docs-website--slug file))
                       (or title (org-docs-website--slug file))
                       tags)
@@ -110,9 +125,16 @@ NID are resolved node ids (nil when the target is not a corpus file).
 REDIRECT is (SLUG . ANCHOR) for an Info \"indirectly referenced\" stub: a
 heading-less file whose entire body is the line \"The node you are looking
 for is at [[id:...]]\".  Such a file has no content of its own, so the
-reader follows REDIRECT to the canonical section instead of showing a
+reader follows REDIRECT to the canonical chapter instead of showing a
 stub page.  The 20 real chapter files of the Org manual carry the nav
-line; the other 391 carry a redirect."
+line; the other 391 carry a redirect.
+
+Each keyword is matched INDEPENDENTLY inside the nav line, because
+texinfo drops a relation when it is inferable: the Emacs and Guix
+corpora carry `Next:' + `Up:' on most nodes and a bare `Previous:' line
+on a few, so the old single `Next...Previous...Up' pattern matched only
+94 of 876 nodes and fragmented both manuals into a hundred chain heads.
+The Org manual always carried all three, which is why it looked fine."
   (with-temp-buffer
     (insert-file-contents file)
     (goto-char (point-min))
@@ -124,25 +146,38 @@ line; the other 391 carry a redirect."
     ;; save-excursion (which would restore match data we don't need here).
     (let* ((head (re-search-forward "^\\*+ " nil t))
            (next nil) (prev nil) (up nil) (redirect nil))
-      ;; One canonical nav header line, searched from the top.  Each target
-      ;; is a `[[id:PATH][desc]]` link, so capture up to the first `]' of
-      ;; the id and lean on lazy `.*?' to land on the NEXT `[[id:' (not a
-      ;; later one) after each keyword.
+      ;; The nav HEADER is the paragraph (up to the next blank line) opening
+      ;; with a keyword.  Paragraph, not line: the Guix Cookbook wraps one
+      ;; long node's nav line across several lines ("Next:" alone on its
+      ;; line, the link on the next), and matching a single line would drop
+      ;; that node's whole chain.  Nor does position matter: three corpus
+      ;; Top files (Guix, Guix Cookbook, Guile) place the nav line AFTER
+      ;; the settitle heading, and an earlier "must precede the first
+      ;; heading" guard discarded all three -- costing Guix its
+      ;; Top->Introduction entry edge and leaving the chainback below
+      ;; unable to fire.  So take the first keyword-opening paragraph,
+      ;; wherever it sits: a real page names its neighbours once.
       (goto-char (point-min))
-      (when (re-search-forward
-             (concat "^Next: .*?\\[\\[id:\\([^]]+\\)"
-                     ".*?Previous: .*?\\[\\[id:\\([^]]+\\)"
-                     ".*?Up: .*?\\[\\[id:\\([^]]+\\)")
-             nil t)
-        ;; Bind all three groups up front: --nav-id calls `string-match'
-        ;; internally, which clobbers the global match data, so reading
-        ;; (match-string 2) after the first --nav-id would yield nil.
-        (let ((g1 (match-string-no-properties 1))
-              (g2 (match-string-no-properties 2))
-              (g3 (match-string-no-properties 3)))
-          (setq next (org-docs-website--nav-id g1 id->file)
-                prev (org-docs-website--nav-id g2 id->file)
-                up   (org-docs-website--nav-id g3 id->file))))
+      (when (re-search-forward "^\\(Next\\|Previous\\|Up\\):" nil t)
+        (let ((beg (line-beginning-position))
+              (end (save-excursion
+                     (forward-paragraph 1)
+                     (point))))
+          ;; Each target is a `[[id:PATH][desc]]' link: capture up to the
+          ;; first `]' of the id and let --nav-id resolve the base (it
+          ;; strips a `::anchor' suffix).  --nav-id calls `string-match'
+          ;; internally, which clobbers the global match data, so the
+          ;; capture is bound before the call.
+          (cl-flet ((nav (kw)
+                      (save-excursion
+                        (goto-char beg)
+                        (when (re-search-forward
+                               (concat kw ": \\[\\[id:\\([^]]+\\)") end t)
+                          (let ((path (match-string-no-properties 1)))
+                            (org-docs-website--nav-id path id->file))))))
+            (setq next (nav "Next")
+                  prev (nav "Previous")
+                  up   (nav "Up")))))
       ;; Stub pointer line: read the capture before --resolve clobbers
       ;; match data, and follow it only when it resolves.
       (when (and (not head)
@@ -329,144 +364,207 @@ corpus, which is exactly the kind of drift an agent cannot see."
                                       (gethash (plist-get cur :next) in-set))
                              (gethash (plist-get cur :next) by-id)))))))
         ;; Heads first (a chapter no `next' points into), then leftovers
-        ;; (side chains whose head was itself stub-targeted).
-        (dolist (n content) (unless (gethash (plist-get n :id) targeted) (walk n)))
+        ;; (side chains whose head was itself stub-targeted).  Heads are
+        ;; walked in ID order, NOT corpus scan order: ids are
+        ;; `<manual>--<file>', so a manual's Top node (id `emacs', file
+        ;; Top.org) sorts before every chapter of its manual while the
+        ;; file scan would land it mid-list.  SynaptStore.chapters sorts
+        ;; identically -- keep the two in lockstep or llms-full.txt and
+        ;; the reader diverge.
+        (let ((heads nil))
+          (dolist (n content)
+            (unless (gethash (plist-get n :id) targeted) (push n heads)))
+          (dolist (h (sort heads
+                           (lambda (a b)
+                             (string< (plist-get a :id) (plist-get b :id)))))
+            (walk h)))
         (dolist (n content) (unless (gethash (plist-get n :id) seen) (walk n))))
       (nreverse order))))
 
-(defun org-docs-website--write-llms (out doc-dir nodes)
+(defun org-docs-website--write-llms (out slug->file nodes)
   "Write the LLM-facing entry points into OUT: llms.txt + llms-full.txt.
 This site serves humans AND agents -- the same corpus, in the shapes each
-reads best (see the README's two-audiences note).  NODES is the final
-nodes vector in reading order; stubs are filtered out of both files,
-because an Info stub is a pointer, not knowledge -- its canonical chapter
-is already in the list.
+reads best.  SLUG->FILE maps a node slug to its source .org; NODES is the
+final nodes list (all manuals interleaved as scanned).  Stubs are filtered
+out of both files, because an Info stub is a pointer, not knowledge -- its
+canonical chapter is already in the list.
+
+Nodes are grouped by their first tag (the manual, stamped by export-main)
+and each manual is laid out in its own reading order -- an agent skimming
+llms.txt should see three manuals, not one merged mush.
 
 llms.txt follows the llmstxt.org convention (# title, > blurb, ## sections
 of links) and points at the RAW Org files rather than the HTML fragments:
 Org is plain text, denser than HTML for an agent's context window, and
 lossless (a human can read or load it in Emacs as-is).
 
-llms-full.txt inlines the whole real corpus in ONE fetch (~3 MB for the
-Org manual) -- an agent that wants everything takes one request instead
-of 24, and the ordering here is the reading order, which is meaning."
-  (let ((real (org-docs-website--reading-order nodes)))
-    (with-temp-file (expand-file-name "llms.txt" out)
-      (insert "# synapt — Org documentation, wired as synapses\n\n"
-              "> The Org manual as a documentation reader with a live\n"
-              "> citation graph. Every page is also raw Org, readable\n"
-              "> as-is by humans and LLM agents alike.\n\n"
-              "## Docs (reading order)\n\n")
-      (dolist (n real)
-        (insert (format "- [%s](docs/%s.org)\n"
-                        (plist-get n :title) (plist-get n :slug))))
-      (insert "\n## Optional\n\n"
-              "- [Citation graph](graph.json): all docs + resolved id: links\n"
-              "- [Full corpus](llms-full.txt): every doc, one file, plain Org\n"))
-    (with-temp-file (expand-file-name "llms-full.txt" out)
-      ;; Org COMMENT lines as separators: the result stays a valid (if odd)
-      ;; Org file, so an agent that feeds it BACK to an Org-aware tool still
-      ;; parses it -- never markdown residue inside a doc boundary.
-      (dolist (n real)
-        (insert (format "# ==== %s — %s ====\n"
-                        (plist-get n :slug) (plist-get n :title)))
-        (insert-file-contents
-         (expand-file-name (concat (plist-get n :slug) ".org") doc-dir))
-        (insert "\n")))))
+llms-full.txt inlines the whole corpus in ONE fetch (~10 MB for three
+manuals) -- an agent that wants everything takes one request instead of
+hundreds, and the ordering here is the reading order, which is meaning."
+  (let ((by-manual nil)) ; alist (MANUAL . NODES-reversed), first-seen order
+    (dolist (n nodes)
+      (let ((m (car (plist-get n :tags))))
+        (unless (assoc m by-manual) (push (cons m nil) by-manual))
+        (push n (cdr (assoc m by-manual)))))
+    (let ((manuals (nreverse by-manual)))
+      (with-temp-file (expand-file-name "llms.txt" out)
+        (let ((names (mapconcat #'capitalize (mapcar #'car manuals) ", ")))
+          (insert
+           (format "# org-docs — %s manuals, wired as synapses\n\n" names)
+           (format "> The %s reference manuals, split per Info node, exported\n" names)
+           "> by batch Emacs, and wired into an org-roam style citation graph.\n"
+           "> Every page is also raw Org, readable as-is by humans and LLM\n"
+           "> agents alike.\n\n"
+           "## Docs (reading order, by manual)\n\n"))
+        (dolist (pair manuals)
+          (insert (format "\n### %s\n\n" (capitalize (car pair))))
+          (dolist (n (org-docs-website--reading-order (cdr pair)))
+            (insert (format "- [%s](docs/%s.org)\n"
+                            (plist-get n :title) (plist-get n :slug)))))
+        (insert "\n## Optional\n\n"
+                "- [Citation graph](graph.json): all docs + resolved id: links\n"
+                "- [Full corpus](llms-full.txt): every doc, one file, plain Org\n"))
+      (with-temp-file (expand-file-name "llms-full.txt" out)
+        ;; Org COMMENT lines as separators: the result stays a valid (if odd)
+        ;; Org file, so an agent that feeds it BACK to an Org-aware tool still
+        ;; parses it -- never markdown residue inside a doc boundary.
+        (dolist (pair manuals)
+          (dolist (n (org-docs-website--reading-order (cdr pair)))
+            (insert (format "# ==== %s — %s ====\n"
+                            (plist-get n :slug) (plist-get n :title)))
+            (insert-file-contents (gethash (plist-get n :slug) slug->file))
+            (insert "\n")))))))
 
 (defun org-docs-website-parse-args (args)
-  "Parse CLI ARGS (--corpus DIR --doc NAME --out DIR)."
-  (let (corpus doc out)
+  "Parse CLI ARGS (--corpus DIR --doc NAME... --out DIR).
+--doc is repeatable; one manual per occurrence, all merged into one site."
+  (let (corpus docs out)
     (while args
       (pcase (pop args)
         ("--corpus" (setq corpus (pop args)))
-        ("--doc" (setq doc (pop args)))
+        ("--doc" (push (pop args) docs))
         ("--out" (setq out (pop args)))
         (_ nil)))
     (list :corpus (or corpus "~/docs")
-          :doc (or doc "org")
+          :doc (nreverse docs) ; nil -> export-main falls back to (\"org\")
           :out (or out ".export"))))
 
 (defun org-docs-website-export-main ()
-  "Batch entry: read --args after `--', export the corpus."
+  "Batch entry: read --args after `--', export every --doc manual as one site."
   (let* ((args (org-docs-website-parse-args
                 (cdr (member "--" command-line-args))))
-         (doc-dir (expand-file-name (plist-get args :doc)
-                                    (file-truename (plist-get args :corpus))))
+         (corpus (file-truename (plist-get args :corpus)))
+         (manuals (or (plist-get args :doc) (list "org")))
          (out (file-truename (plist-get args :out)))
-         (docs-out (expand-file-name "docs/" out)))
-    (message "org-docs-website: corpus %s -> %s" doc-dir out)
-    (pcase-let ((`(,id->file ,slugs) (org-docs-website--scan-corpus doc-dir)))
-      (message "org-docs-website: %d files, %d ids"
-               (length slugs) (hash-table-count id->file))
-      ;; slug -> node id, so an edge's target slug can be turned back into
-      ;; the id the theme keys nodes by.
-      (let ((slug->id (make-hash-table :test #'equal))
-            (nodes nil) (links nil) (failures 0) (broken-exports nil))
-        (dolist (entry slugs)
-          (puthash (car entry) (cadr entry) slug->id))
-        (dolist (entry slugs)
-          (pcase-let ((`(,slug ,id ,title ,tags) entry))
-            (let ((file (expand-file-name (concat slug ".org") doc-dir)))
-              ;; NODES: tags get the corpus name first so the theme groups
-              ;; by doc ("org", "guix", ...) and colors deterministically.
-              ;; The Info nav (up/next/prev) and stub redirect ride along as
-              ;; optional keys so the theme can build a chapter tree,
-              ;; breadcrumbs and a prev/next pager without parsing Org.
-              (let* ((nav (org-docs-website--node-nav file id->file))
-                     (node (list :id id :slug slug :title title
-                                 :tags (cons (plist-get args :doc) tags))))
-                ;; A heading-less file is a leaf stub: mark it so the reader
-                ;; keeps it out of the chapter tree even when its pointer did
-                ;; not resolve to a page in this corpus.
-                (unless (plist-get nav :head)
-                  (setq node (plist-put node :stub t)))
-                (dolist (k '(:next :prev :up))
-                  (when-let ((v (plist-get nav k)))
-                    (setq node (plist-put node k v))))
-                (when-let ((r (plist-get nav :redirect)))
-                  (setq node
-                        (plist-put node :redirect
-                                   (list :slug (car r) :anchor (cdr r)))))
-                (push node nodes))
-              (dolist (l (org-docs-website--collect-links file id->file))
-                (pcase-let ((`(,dst _anchor ,ctx) l))
-                  ;; Edge identity is the FILE-level citation (id -> id);
-                  ;; the anchor only lives on the rewritten in-body href,
-                  ;; which is how the reader lands on the section anyway.
-                  (when-let ((tid (gethash dst slug->id)))
-                    (push (list :source id :target tid :context ctx)
-                          links))))
-              ;; One pathological file must not kill a 415-file build:
-              ;; catch, record, continue (fragment simply absent).
-              (condition-case e
-                  (cl-incf failures
-                           (length (org-docs-website--export-html
-                                    file docs-out id->file)))
-                (error (push (cons slug (error-message-string e))
-                             broken-exports)))
-              ;; The RAW source too, next to the fragment: docs/SLUG.org is
-              ;; what llms.txt links and what an agent (or a human hitting
-              ;; "source") reads at full fidelity.  A plain copy -- Org is
-              ;; already the lossless artifact; the HTML is the derived one.
-              (copy-file file (expand-file-name (concat slug ".org") docs-out) t))))
-        (make-directory out t)
-        (let ((nodes* (nreverse nodes))
-              (links* (nreverse links)))
-          ;; Vectors, NOT lists: json-encode treats a list-of-plists as an
-          ;; ALIST (one object with repeated keys), which is never what a
-          ;; nodes/links array means.  A vector always encodes as JSON array.
-          (with-temp-file (expand-file-name "graph.json" out)
-            (insert (json-encode `(:nodes ,(vconcat nodes*)
-                                    :links ,(vconcat links*)))))
-          (message "org-docs-website: %d nodes, %d edges, %d unresolved links"
-                   (length nodes*) (length links*) failures)
-          (org-docs-website--write-llms out doc-dir nodes*))
-        (when broken-exports
-          (message "org-docs-website: %d FILES FAILED TO EXPORT:"
-                   (length broken-exports))
-          (dolist (b (nreverse broken-exports))
-            (message "  %s: %s" (car b) (cdr b))))))))
+         (docs-out (expand-file-name "docs/" out))
+         ;; ONE merged ID table across every included manual, built before any
+         ;; export: an id: link resolves whenever its target exists in ANY
+         ;; corpus, so intra-manual citations work as before and cross-manual
+         ;; citations become real edges the day the manuals cite each other.
+         (id->file (make-hash-table :test #'equal))
+         ;; Every node file, flattened: (FILE SLUG ID TITLE TAGS MANUAL).
+         (entries nil))
+    (dolist (manual manuals)
+      (let ((doc-dir (expand-file-name manual corpus)))
+        (pcase-let ((`(,m-ids ,slugs) (org-docs-website--scan-corpus doc-dir)))
+          (message "org-docs-website: %s: %d files" manual (length slugs))
+          (maphash (lambda (k v) (puthash k v id->file)) m-ids)
+          (dolist (e slugs) (push (append e (list manual)) entries)))))
+    (message "org-docs-website: corpus %s -> %s (%d ids)"
+             corpus out (hash-table-count id->file))
+    (setq entries (nreverse entries))
+    ;; slug -> node id / source file: an edge's target slug turns back into
+    ;; the id the theme keys nodes by; llms-full.txt finds the raw Org.
+    (let ((slug->id (make-hash-table :test #'equal))
+          (slug->file (make-hash-table :test #'equal))
+          (nodes nil) (links nil) (failures 0) (broken-exports nil))
+      (dolist (entry entries)
+        (puthash (nth 1 entry) (nth 2 entry) slug->id)
+        (puthash (nth 1 entry) (nth 0 entry) slug->file))
+      (dolist (entry entries)
+        (pcase-let ((`(,file ,slug ,id ,title ,tags ,manual) entry))
+          ;; NODES: the manual name goes FIRST in tags so the theme groups
+          ;; and colors by corpus ("org", "emacs", "guix", ...).  The Info
+          ;; nav (up/next/prev) and stub redirect ride along as optional
+          ;; keys so the theme can build a chapter tree, breadcrumbs and a
+          ;; prev/next pager without parsing Org.
+          (let ((node (list :id id :slug slug :title title
+                            :tags (cons manual tags))))
+            ;; A heading-less file is a leaf stub: mark it so the reader
+            ;; keeps it out of the chapter tree even when its pointer did
+            ;; not resolve to a page in this corpus.
+            (let ((nav (org-docs-website--node-nav file id->file)))
+              (unless (plist-get nav :head)
+                (setq node (plist-put node :stub t)))
+              (dolist (k '(:next :prev :up))
+                (when-let ((v (plist-get nav k)))
+                  (setq node (plist-put node k v))))
+              (when-let ((r (plist-get nav :redirect)))
+                (setq node
+                      (plist-put node :redirect
+                                 (list :slug (car r) :anchor (cdr r))))))
+            (push node nodes))
+          (dolist (l (org-docs-website--collect-links file id->file))
+            (pcase-let ((`(,dst _anchor ,ctx) l))
+              ;; Edge identity is the FILE-level citation (id -> id);
+              ;; the anchor only lives on the rewritten in-body href,
+              ;; which is how the reader lands on the section anyway.
+              (when-let ((tid (gethash dst slug->id)))
+                (push (list :source id :target tid :context ctx)
+                      links))))
+          ;; One pathological file must not kill a 1500-file build:
+          ;; catch, record, continue (fragment simply absent).
+          (condition-case e
+              (cl-incf failures
+                       (length (org-docs-website--export-html
+                                file docs-out id->file)))
+            (error (push (cons slug (error-message-string e))
+                         broken-exports)))
+          ;; The RAW source too, next to the fragment: docs/SLUG.org is
+          ;; what llms.txt links and what an agent (or a human hitting
+          ;; "source") reads at full fidelity.  A plain copy -- Org is
+          ;; already the lossless artifact; the HTML is the derived one.
+          (copy-file file (expand-file-name (concat slug ".org") docs-out) t)))
+      (make-directory out t)
+      (let ((nodes* (nreverse nodes))
+            (links* (nreverse links)))
+        ;; AN INFO TOP NODE carries a menu, not a nav line, so its `next'
+        ;; is nil and the reading walk would enter the manual wherever the
+        ;; first bare fragment starts.  Chain back instead: when exactly
+        ;; one chapter names such a node as its `prev', that chapter IS
+        ;; Info's first node (Emacs: Top -> Distrib; Guix: Top ->
+        ;; Introduction).  Wire TOP -> FIRST into the data itself, so the
+        ;; reader's pager, the chapter tree and llms-full.txt all follow
+        ;; one real entry edge rather than each re-deriving it.
+        (dolist (n nodes*)
+          (when (and (not (plist-get n :stub))
+                     (not (plist-get n :next))
+                     (not (plist-get n :prev))
+                     (not (plist-get n :up)))
+            (let ((pointers
+                   (delq nil
+                         (mapcar (lambda (m)
+                                   (when (equal (plist-get m :prev)
+                                                (plist-get n :id))
+                                     m))
+                                 nodes*))))
+              (when (= 1 (length pointers))
+                (setf (plist-get n :next)
+                      (plist-get (car pointers) :id))))))
+        ;; Vectors, NOT lists: json-encode treats a list-of-plists as an
+        ;; ALIST (one object with repeated keys), which is never what a
+        ;; nodes/links array means.  A vector always encodes as JSON array.
+        (with-temp-file (expand-file-name "graph.json" out)
+          (insert (json-encode `(:nodes ,(vconcat nodes*)
+                                  :links ,(vconcat links*)))))
+        (message "org-docs-website: %d nodes, %d edges, %d unresolved links"
+                 (length nodes*) (length links*) failures)
+        (org-docs-website--write-llms out slug->file nodes*))
+      (when broken-exports
+        (message "org-docs-website: %d FILES FAILED TO EXPORT:"
+                 (length broken-exports))
+        (dolist (b (nreverse broken-exports))
+          (message "  %s: %s" (car b) (cdr b)))))))
 
 (provide 'org-docs-website-export)
 ;;; org-docs-website-export.el ends here

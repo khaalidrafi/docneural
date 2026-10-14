@@ -20,5 +20,9 @@
       "orui/*": ["../org-roam-lite-ui/src/lib/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.svelte", "vite.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.svelte",
+    "vite.config.ts"
+  ]
 }

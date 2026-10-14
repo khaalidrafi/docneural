@@ -41,10 +41,14 @@ jobs:
       - name: svelte-check (site)
         run: npx svelte-check --tsconfig ./tsconfig.json
 
-      - name: Theme repo (tests + types + build)
+      - name: Theme repo (shim, tests, types, build)
         run: |
           git clone --depth 1 https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          # The aliases point at ../org-roam-lite-ui: the committed shim
+          # stands in until the real repo is published.
+          cp -r ../docneural-ui/orui-shim ../org-roam-lite-ui
           cd ../docneural-ui
           npm ci --no-audit --no-fund
           npx vitest run
           npx svelte-check --output machine
+          npm run build

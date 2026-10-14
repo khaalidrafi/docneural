@@ -63,7 +63,18 @@ SCRIPT := scripts/docneural-export.el
 # One --doc flag per manual; the exporter merges them into one graph.json.
 DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 
-.PHONY: check export slim linkcheck install dev build serve verify all clean org-latest demo
+.PHONY: check export slim linkcheck install dev build serve verify all clean org-latest demo orui-shim
+
+# Materialise the orui-compatible shim at the sibling path BOTH repos'
+# aliases already point at (../org-roam-lite-ui). The shim is committed in
+# docneural-ui/orui-shim so the whole project lives in GitHub; when the real
+# org-roam-lite-ui is published: clone it at that path and delete this
+# target's output — no repo edits anywhere.
+THEME_DIR ?= ../synapt
+orui-shim:
+	@rm -rf ../org-roam-lite-ui
+	cp -r $(THEME_DIR)/orui-shim ../org-roam-lite-ui
+	@echo "orui shim ready at ../org-roam-lite-ui"
 
 # The latest Org release, materialised. ~7 s on a slow link, then reused by
 # every later export. build/ is gitignored.

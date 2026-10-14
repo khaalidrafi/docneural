@@ -1,0 +1,153 @@
+#+TITLE: HANDOFF — org-docs-website + docneural-ui (continue from here)
+#+DESCRIPTION: Where the work stands on 2026-10-14, what is verified, what is not done, and how to pick it up without rediscovering anything. Read this first.
+#+STARTUP: overview
+#+TODO: NEXT WIP QUESTION | DONE LATER
+
+* The two repos
+
+  Everything lives in two git repos, both branched off =main= into =ai/main=,
+  both pushed to GitHub. There are no local-only commits and no stashes.
+
+  | repo        | path                        | remote                            | HEAD (=ai/main=)                                       |
+  |-------------+-----------------------------+-----------------------------------+---------------------------------------------------------|
+  | org-docs    | =~/org-docs-website=        | =khaalidrafi/org-docs=            | =65f019a= Site: docneural wiring, export + verify tooling |
+  | docneural   | =~/synapt= (dir!)           | =khaalidrafi/docneural=            | =53f0087= spreadForces tests: run the real engine         |
+
+  - The *theme package* is the one still in a directory called =synapt=, and
+    it is still named =synapt= in =package.json= / file names
+    (=SynaptApp.svelte=, =styles/synapt.css=, =SynapsesGraph.svelte=,
+    =spreadForces.ts=). The rename to =docneural-ui= is *not done* — see
+    [[Rename]] below. GitHub repo is already =docneural=.
+  - =~/org-docs-website= consumes the theme by path alias, not by package
+    name: =vite.config.ts= maps =orui/*= to =../org-roam-lite-ui/src/lib/*=
+    (the real org-roam-lite-ui =GraphView= + =createGraphStore=) and the
+    graph engine is swapped in through orui's =loadEngine= seam.
+  - The *site* displayed to a visitor is a mix: =src/App.svelte= is a thin
+    Svelte shell; the corpus itself is pre-exported Emacs-batch output.
+
+* The repository map (files that actually matter)
+
+  - =scripts/org-docs-website-export.el= — the Emacs batch exporter. Org
+    corpus in, static site out. This is the whole pipeline: HTML fragments,
+    =graph.json=, =llms.txt= / =llms-full.txt= entry points, raw Org per page.
+  - =scripts/slim-graph.mjs= — splits the link =context= field out of
+    =graph.json= into =.export/ctx/<id>.json= (789 files). Pinned by
+    =tests/slim-graph.test.mjs= (9 cases).
+  - =scripts/pw-verify.mjs= (870 lines) — the Playwright verification gate.
+    Run with =make verify=. It asserts payload sizes, request counts,
+    fonts, prefetch counts, and takes the screenshots.
+  - =scripts/peek-diagnose.mjs= — prints, per chapter, how many in-prose
+    links are actually wired (e.g. /Agenda Views/: 19 links, 11 wired).
+  - =Makefile= — =export=, =slim=, =build=, =verify=, =serve=. =export=
+    runs the exporter then =slim-graph.mjs=.
+  - =src/lib/core/= (in the theme package) — =graph.ts= (the shared
+    geometry: =labelWidth=, =labelExtent=, =spreadStrength=, =somaRadius=,
+    =neighborIds=, =degreesOf=, =groupWires=), =store.svelte.ts=,
+    =source.ts= (hash parity with orui's canvas).
+  - =src/lib/graph/= — =neuronEngine.ts= (the canvas painter + the d3 force
+    wiring), =spreadForces.ts= (=forceLabelBoxes= + =forceFitContainer=),
+    =roamBridge.ts= (static graphdata → orui store, no WebSocket),
+    =SynapsesGraph.svelte=.
+  - =TODOs.org= — the backlog, with measured numbers beside every claim.
+    =AI-REVIEW.org= — the review trail: every decision, every open QUESTION.
+
+* What the last two commits landed
+
+  - The spread-layout test harness was rewritten to run the *real* engine
+    instead of a hand-rolled settle loop. =spreadForces.test.ts= now builds a
+    =forceSimulation= with =forceManyBody<Node>()= (+=spreadStrength=),
+    =forceFitContainer=, =forceLabelBoxes=, ticks it 180 times, and asserts.
+    That reproduces the browser measurement exactly: =fit 1.000, 0
+    collisions= on the 30-node Agenda-Views ego graph.
+  - =d3-force-3d.d.ts= was added (~50 lines of ambient types) because
+    force-graph pulls d3-force-3d in transitively and it ships no
+    declarations.
+  - The "room" assertion was loosened by =SLACK = 24= (matching
+    =SynapsesGraph='s =PAD = 24=). The residual overshoot is a *stable
+    floor* — 1.53 px at 180 ticks, 4.2 px at 400, 1.5 px at 400/800/1500
+    where alpha has decayed to 1e-5/1e-9/1e-16 — not a convergence lag. The
+    camera padding absorbs it, so the assertion now states the guarantee the
+    layout actually makes.
+
+* The load-bearing invariant (do not break this)
+
+  d3 iterates its forces in *Map insertion order* and integrates =x += vx=
+  after all of them run. The container spring pulls inward, so the packing
+  force must be registered *last*: it is the one that clamps the velocity
+  pointing into a gap. Register =fit= then =collide=. Swapping those two
+  lines reproduces the overlap bug at ~5% of a field (measured).
+
+  #+begin_example
+  if (room) engine.d3Force('fit', forceFitContainer(room, extentOf))
+  else engine.d3Force('fit', null)
+  engine.d3Force('collide', forceLabelBoxes(extentOf, room?.blockers ?? []))
+  #+end_example
+
+  The reason the whole thing works at all: labels paint at =11 / globalScale=,
+  so a title keeps its *screen* size while its *world* footprint is
+  =labelWidth / k=. A collide reserve authored at zoom 1 is only honoured
+  when the camera lands at k = 1. So the field must pack into the readable
+  room, =fitReadable= computes ≥ 1, and the 1:1 cap binds. If you shrink the
+  boxes, the camera zooms out, the titles grow back into each other.
+
+* Verify before you commit anything
+
+  #+begin_example
+  cd ~/synapt && npx vitest run                    # 62 passing
+  cd ~/synapt && npx svelte-check --output machine | rg -E "ERROR|COMPLETED"   # 0 errors
+  cd ~/synapt && npx vite build
+  cd ~/org-docs-website && make verify             # the real browser gate
+  #+end_example
+
+  Note for =svelte-check=: filter on =ERROR|COMPLETED=, not =^Error=.
+
+* The rename that is NOT done
+
+  The repo is =docneural=, the theme is meant to be =docneural-ui=. None of
+  the code is renamed. Still called =synapt=:
+
+  - =package.json= name, description, =svelte= and =exports= entries
+  - =src/lib/SynaptApp.svelte= (the component the site imports)
+  - =src/lib/graph/SynapsesGraph.svelte=
+  - =src/lib/graph/spreadForces.ts= + =spreadForces.test.ts=
+  - =src/styles/synapt.css= + every =--sy-*= CSS custom property
+  - =src/main.ts=, =index.html=, =Demo.svelte=, =roamBridge.ts=, =source.ts=
+  - =README= references and the =Makefile=
+
+  This is mechanical but wide. Do it as its own commit on its own branch and
+  keep the runtime behaviour identical, so the benchmark stays attributable.
+
+* Open work (see TODOs.org for the full planning)
+
+  - NEXT #37 hover peek card — shipped in =DocReader=; the remaining piece is
+    the same card in graph mode's =NotePreview= and a 200 ms grace period so
+    the card can be clicked into.
+  - NEXT #38 ego graph + co-citation edges, canvas skeleton, grouped rail.
+    =groupWires()= is already in =core/graph.ts= and unit-tested; the rail
+    render and the depth-2 co-citation pass are not wired.
+  - NEXT #40 frontend review — audit every component for defects.
+  - NEXT #42 retire the terminal-window chrome (keep it moderate, not gone).
+  - NEXT #43 make the graph-mode switch visible on phones.
+  - NEXT #45 memoize =store.visible= (it re-scans O(links) per keystroke).
+  - NEXT #47 readable-overview layout — the physics half is done and
+    committed; only the rename above is left from that thread.
+  - =MONEY.org= — still to be authored (monetisation ideas for the site).
+  - =AI-REVIEW.org= — needs the circle-vs-box packing limit and the
+    force-order lesson recorded.
+  - Some items are already shipped but still marked NEXT in TODOs.org (link
+    peek cards, grouped rail). Fix the status as you go.
+
+* Things to remember about this machine
+
+  - Guix, non-FHS, Celeron, 4 GB. Never build source packages locally
+    (=guix build --dry-run= only). Never =guix install= a source package.
+    Use =rg= and =fd=, never =find /= or =grep -r /=.
+  - Playwright-core lives at =~/org-roam-lite-ui/node_modules=; the site
+    scripts spawn the system chromium against it.
+  - Do not run two =guix home reconfigure= instances in parallel, and never
+    run one without explicit permission. Never edit
+    =$DOTFILES/.emacs.d/= live.
+  - The git identity to commit with: the model as author
+    (=MODEL <MODEL@PROVIDER>==), plus =Co-authored-by:= the harness and
+    =Co-authored-by: Khalid Rafi <khaalidrafi@gmail.com >=. Never commit
+    another session's uncommitted work as your own.

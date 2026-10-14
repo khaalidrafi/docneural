@@ -1,0 +1,104 @@
+#+TITLE: docneural — Org manuals as a wired, interactive site
+#+DESCRIPTION: Static docs site for Org-mode manuals: a reading view for humans, a citation graph ("synapses") for everyone, and machine-readable artifacts (llms.txt, ctx/, MCP server) for AI agents.
+
+* What this is
+
+  =docneural= turns a directory of Org-mode manuals into ONE static,
+  interactive site, built for two readers at once:
+
+  - a *person* lands in prose — reading view, chapter tree, keyboard
+    layer, distraction-free mode, link preview cards — and never has to
+    think about the graph;
+  - an *agent* fetches =graph.json=, =llms.txt=, a node's citation
+    context, the per-manual heading index, or drives the bundled MCP
+    server — the same structure, no scraping.
+
+  The graph is the brand: every cross-reference between chapters is a
+  *synapse*, and every synapse knows the sentence that created it (the
+  =why=, not just the fact).
+
+  It is two GitHub repos plus one corpus source:
+
+  | repo                            | role                                              |
+  |---------------------------------+---------------------------------------------------|
+  | =khaalidrafi/docneural= (here)  | the site: batch-Emacs exporter + transport pass + Vite/Svelte host + verification gates |
+  | =khaalidrafi/docneural-ui=      | the theme: reader components, canvas painter, store, styles |
+  | =~/org-docs= (Radicle)          | owns the Org corpus and the =id:= link engine (see =HANDOFF.org=) |
+
+* Quickstart (the demo, latest Org, no configuration)
+
+  #+begin_example
+  git clone https://github.com/khaalidrafi/docneural.git
+  cd docneural
+  make install      # npm install (once)
+  make demo         # fetch latest Org -> export demo corpus -> linkcheck -> build
+  make serve        # http://localhost:4173/
+  #+end_example
+
+  =make demo= exports the bundled =demo/= corpus (a small manual about
+  docneural itself — nav headers, stubs, wrapped headers, citations)
+  with Org 9.8.10, the latest release. It is the one command that must
+  always work from a clean checkout.
+
+* Building your own corpus
+
+  The corpus is =CORPUS/<manual>/*.org=; each file carries a =:ID:=
+  drawer, chapters carry =:CUSTOM_ID:= headings, and chapters link to
+  each other with =[[id:...]]=. Point the Makefile at it:
+
+  #+begin_example
+  make export CORPUS=~/docs DOC="org emacs guix" OUT=.export
+  make build
+  #+end_example
+
+  The exporter needs Org >= 9.7 (load-bearing:
+  =org-html-prefer-user-labels=). Either =make org-latest= and pass
+  =ORG_LOAD=build/org-9.8.10=, or use the Org your Emacs already
+  bundles.
+
+* What the build produces (all under =.export/=, then =dist/=)
+
+  | artifact            | for whom | what it is                                        |
+  |--------------------+----------+---------------------------------------------------|
+  | =graph.json=        | both     | nodes + wires, degrees, reading order (slim: no prose) |
+  | =docs/SLUG.html=    | humans   | one body fragment per chapter, links rewritten     |
+  | =ctx/<id>.json=     | both     | the citation sentences around one node (~1 kB, lazy) |
+  | =search/<manual>.json= | humans | every heading + anchor, per manual (lazy)         |
+  | =llms.txt=          | agents   | one line per chapter — the map of the corpus       |
+  | =llms-full.txt=     | agents   | the corpus as one text file                        |
+
+* Reading keys
+
+  =j/k= scroll · =g d/s/h= jump · =[ ]= prev/next chapter · =y= copy
+  link to this heading · =b= save this section · =v= distraction-free ·
+  =R= read aloud · =/= palette (docs, headings, commands) · =?= help.
+  On the palette: =? <question>= composes an ask-the-corpus prompt.
+
+* For agents (AI integrations)
+
+  - =llms.txt= / =llms-full.txt= / =ctx/=: the fetchable surface.
+  - MCP server: =node scripts/mcp-server.mjs --out .export= — stdio
+    JSON-RPC exposing =search=, =node=, =neighbours=, =citation-path=
+    and =stats= over the exported graph (see =scripts/mcp-server.mjs=).
+  - Export-time summaries (optional, BYO key): =make summarize= adds a
+    one-line =tldr= per node (cached by content hash).
+  - In the reader: =⧉ llm= copies the page as LLM context; the palette's
+    ask mode hands the prompt to a BYO-key OpenAI-compatible endpoint.
+
+* Verification (run before pushing)
+
+  #+begin_example
+  make check        # byte-compile the exporter on the target Org
+  make linkcheck    # every rewritten link resolves, every anchor exists
+  make verify       # ~50 headless-Chromium assertions against a running site
+  #+end_example
+
+  Plus =npx vitest run= (both repos) and =npx svelte-check= (both repos).
+  The same set runs in GitHub Actions on every push to =ai/*= branches —
+  copy =ci/github-actions.yml= to =.github/workflows/ci.yml= to enable it
+  (kept out of =.github/= here so the repo can be pushed with a token
+  that lacks the =workflow= scope).
+
+* License
+
+  MIT (see =LICENSE=).

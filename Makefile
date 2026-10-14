@@ -21,6 +21,26 @@
 #
 # Corpus knobs: make export CORPUS=~/docs DOC="org emacs guix" OUT=.export
 EMACS ?= emacs
+#
+# Org version. The exporter needs Org >= 9.7: org-html-prefer-user-labels
+# (load-bearing: it makes ox-html emit each <<target>> with its literal
+# name as the id, so the #ANCHOR half of a rewritten link resolves).
+# 9.8.10 is the newest release on GNU ELPA at the time of writing.
+#
+#   make org-latest    download org-$(ORG_VERSION) into build/ and leave it there
+#   make export ORG_LOAD=build/org-$(ORG_VERSION) ...
+#
+# ...runs the whole pipeline on that copy without touching the Org your
+# Emacs loads. Without ORG_LOAD you get whatever your Emacs bundles
+# (9.7+ required; the arity note in scripts/docneural-export.el still holds).
+ORG_VERSION ?= 9.8.10
+ORG_TARBALL := https://elpa.gnu.org/packages/org-$(ORG_VERSION).tar
+ORG_DIR := build/org-$(ORG_VERSION)
+# `make export ORG_LOAD=<dir>' prepends <dir> to load-path. `make demo'
+# sets it automatically so a fresh clone exports on the LATEST Org with
+# no Emacs configuration at all.
+ORG_LOAD ?=
+EMACS_RUN = $(EMACS) $(if $(ORG_LOAD),-L $(ORG_LOAD),)
 PYTHON ?= python3
 NODE ?= node
 CORPUS ?= ~/docs
@@ -43,23 +63,36 @@ SCRIPT := scripts/docneural-export.el
 # One --doc flag per manual; the exporter merges them into one graph.json.
 DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 
-.PHONY: check export slim linkcheck install dev build serve verify all clean
+.PHONY: check export slim linkcheck install dev build serve verify all clean org-latest demo
+
+# The latest Org release, materialised. ~7 s on a slow link, then reused by
+# every later export. build/ is gitignored.
+org-latest:
+	@mkdir -p build
+	curl -sfLO $(ORG_TARBALL) --output-dir build
+	tar xf build/org-$(ORG_VERSION).tar -C build
+	@$(EMACS) --batch -Q -L $(ORG_DIR) --eval '(progn (require (quote org)) (message "org %s ready" (org-version)))'
 
 check:
-	$(EMACS) --batch -Q --eval '(progn (byte-compile-file "$(SCRIPT)") (message "OK"))'
+	$(EMACS_RUN) --batch -Q --eval '(progn (require (quote org)) (message "org %s" (org-version)) (byte-compile-file "$(SCRIPT)") (message "OK"))'
 
 export: check
-	$(EMACS) --batch -Q -L scripts -l docneural-export \
+	$(EMACS_RUN) --batch -Q -L scripts -l docneural-export \
 	  -f docneural-export-main -- \
 	  --corpus $(CORPUS) $(DOC_ARGS) --out $(OUT)
 	# Transport pass: the exporter emits the WHOLE graph (contexts and all);
 	# this moves 4.9 MB of citation prose out of the boot payload into
 	# per-node ctx/ files and precompresses what is left.
 	$(NODE) scripts/slim-graph.mjs --out $(OUT)
+	# Heading index for search (per-manual, lazy): crawl the exported
+	# fragments for h2/h3 ids — a separate pass because it reads the HTML,
+	# not the graph.
+	$(NODE) scripts/build-search.mjs --out $(OUT)
 
 # Re-run only the transport pass (e.g. after changing slim-graph.mjs).
 slim:
 	$(NODE) scripts/slim-graph.mjs --out $(OUT)
+	$(NODE) scripts/build-search.mjs --out $(OUT)
 
 linkcheck:
 	$(PYTHON) scripts/check-anchors.py $(OUT)
@@ -89,8 +122,15 @@ serve:
 verify:
 	$(NODE) scripts/pw-verify.mjs --url $(URL) --paint $(PAINT) --nav $(NAV)
 
+# Build the SHIPPED demo site: the bundled corpus, on the latest Org,
+# from a clean checkout — the one command that must always work.
+demo: org-latest
+	$(MAKE) export CORPUS=demo DOC=demo OUT=.export ORG_LOAD=$(ORG_DIR)
+	$(MAKE) linkcheck OUT=.export
+	$(MAKE) build
+
 all: check export linkcheck build
 
 clean:
 	rm -f scripts/*.elc
-	rm -rf dist
+	rm -rf dist build .export

@@ -23,3 +23,6 @@ verify-*.png
 
 # Qoder session state
 .qoder/
+
+# Downloaded Org tarballs (make org-latest)
+build/

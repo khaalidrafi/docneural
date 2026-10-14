@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       demo--intro
+:END:
+#+title: Introduction
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: Introduction
+:END:
+
+Previous: [[id:demo--top][Top]]
+Next: [[id:demo--synapses][The Synapse Model]]
+
+docneural turns a directory of Org-mode manuals into one static,
+interactive site: a reading view for humans, and a wired graph —
+chapters as neurons, cross-references as synapses — for everyone.
+
+It is built for two readers at once. A person lands in prose and
+never has to think about the graph. An agent fetches ~graph.json~,
+~llms.txt~ or one node's citation context and gets the same
+structure without scraping HTML.
+
+* Who this is for
+:PROPERTIES:
+:CUSTOM_ID: Who-this-is-for
+:END:
+
+Documentation teams who own their corpus as plain text, and anyone
+whose manual has outgrown a sidebar. If your docs live in Org files
+and cross-reference each other, the graph is already there — this
+site makes it visible.
+
+* See also
+
+- [[id:demo--synapses::#How-a-citation-becomes-a-wire][How a citation becomes a wire]]
+- [[id:demo--install::#What-you-get][What you get from a build]]
+- [[id:demo--export::#The-nav-header-rule][The nav header rule]]

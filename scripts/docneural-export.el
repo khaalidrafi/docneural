@@ -30,6 +30,11 @@
 ;;         -f docneural-export-main -- \
 ;;         --corpus ~/docs --doc org --doc emacs --doc guix --out .export
 ;;
+;; Requires Org >= 9.7 (org-html-prefer-user-labels, bound by default so
+;; ox-html emits each <<target>> with its literal name as the heading id).
+;; Tested on the bundled Orgs 9.6.15 and 9.7.11 and on the latest release,
+;; 9.8.10 (`make org-latest && make export ORG_LOAD=build/org-9.8.10').
+;;
 ;; One --doc per manual; all of them land in ONE graph.json and ONE docs/
 ;; directory, so the theme sees a single corpus whose first tag names the
 ;; manual.  Slugs are namespace-prefixed with the manual ("emacs--Intro")
@@ -320,8 +325,8 @@ Any remaining error propagates (the caller skips that one file)."
       ;; the org-export-as call, so HTML and the (nreverse failed) below
       ;; must not be swapped.
       (let ((html
-             ;; NOTE: this bundled Org (9.7.11) takes
-             ;; (backend subtreep visible-only body-only ext-plist); the
+             ;; NOTE: the 5-arg shape (backend subtreep visible-only
+             ;; body-only ext-plist) is stable across Org 9.6-9.8: the
              ;; filter plist goes in EXT-PLIST, no HOW arg.
              (cl-letf (((symbol-function 'org-macro-replace-all)
                         (lambda (&rest _) nil))

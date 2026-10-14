@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       demo--install
+:END:
+#+title: Building the Site
+
+* Building the Site
+:PROPERTIES:
+:CUSTOM_ID: Building-the-Site
+:END:
+
+Previous: [[id:demo--synapses][The Synapse Model]]
+Next: [[id:demo--export][The Export Pipeline]]
+
+The whole pipeline is two commands and one Emacs:
+
+#+begin_example
+make org-latest      # Org 9.8.10 into build/ (once)
+make demo            # export this corpus, linkcheck, build
+#+end_example
+
+Point =CORPUS= at your own manuals (=make export CORPUS=~/docs
+DOC="org emacs guix"=) and everything else stays the same.
+
+* What you get
+:PROPERTIES:
+:CUSTOM_ID: What-you-get
+:END:
+
+A =dist/= directory: =graph.json=, one HTML fragment per chapter,
+per-node citation context, a heading index for search, and
+=llms.txt= — the corpus index an agent can read before it fetches
+anything.
+
+* See also
+
+- [[id:demo--export::#The-Export-Pipeline][The Export Pipeline]] in detail
+- [[id:demo--agents::#For-Agents][For Agents]] — the files an agent reads

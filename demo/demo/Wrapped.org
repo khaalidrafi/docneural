@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       demo--wrapped
+:END:
+#+title: A Wrapped Header
+
+* A Wrapped Header
+
+Next:
+[[id:demo--agents][For Agents]]
+
+Previous:
+[[id:demo--export::#The-nav-header-rule][The nav header rule]]
+
+Some manuals put each nav keyword on its own line. The exporter
+handles that shape: the fields still fill the chapter tree, and the
+header's links never enter the citation wire set.
+
+* See also
+
+- [[id:demo--synapses][The Synapse Model]]

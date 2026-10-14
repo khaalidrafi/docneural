@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       demo--agents
+:END:
+#+title: For Agents
+
+* For Agents
+:PROPERTIES:
+:CUSTOM_ID: For-Agents
+:END:
+
+Previous: [[id:demo--export][The Export Pipeline]]
+
+Everything a person reads, an agent can fetch:
+
+- =graph.json= — nodes, titles, degrees, reading order.
+- =llms.txt= — one line per chapter, the map of the corpus.
+- =ctx/<id>.json= — the citation sentences around one node.
+- =search/<manual>.json= — every heading and its anchor.
+
+The site also ships an MCP server (=scripts/mcp-server.mjs=)
+exposing search, node lookup, neighbours and citation paths as
+tools, so an assistant can answer from the corpus without
+scraping. See [[id:demo--synapses::#How-a-citation-becomes-a-wire][How a citation becomes a wire]].
+
+* See also
+
+- [[id:demo--intro::#Who-this-is-for][Who this is for]]
+- [[id:demo--install][Building the Site]]

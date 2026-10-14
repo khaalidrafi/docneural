@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       demo--top
+:END:
+#+title: The docneural Manual
+
+* The docneural Manual
+
+Next: [[id:demo--intro][Introduction]]
+
+Welcome to the demo corpus. It is small on purpose: seven files that
+exercise every shape the exporter understands — nav headers, inner
+cross-references, a wrapped header, and one Info stub pointer — so a
+fresh clone can build a real site in seconds, and so you can see what
+your own corpus will look like here.

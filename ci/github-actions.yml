@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: [ai/main, 'ai/**']
+  pull_request:
+
+jobs:
+  # Everything the site build needs, on a clean checkout: latest Org from
+  # GNU ELPA, the bundled demo corpus, the link gate, and both gates that
+  # catch a broken theme contract (vitest + svelte-check) in BOTH repos.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install site deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Byte-compile exporter on latest Org
+        run: |
+          make org-latest
+          make check ORG_LOAD=build/org-9.8.10
+
+      - name: Export the demo corpus
+        run: make export CORPUS=demo DOC=demo OUT=.export ORG_LOAD=build/org-9.8.10
+
+      - name: Linkcheck
+        run: make linkcheck OUT=.export
+
+      - name: Unit tests
+        run: npx vitest run
+
+      - name: Build the site
+        run: make build
+
+      - name: svelte-check (site)
+        run: npx svelte-check --tsconfig ./tsconfig.json
+
+      - name: Theme repo (tests + types + build)
+        run: |
+          git clone --depth 1 https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          cd ../docneural-ui
+          npm ci --no-audit --no-fund
+          npx vitest run
+          npx svelte-check --output machine

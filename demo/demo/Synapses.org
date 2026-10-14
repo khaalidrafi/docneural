@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       demo--synapses
+:END:
+#+title: The Synapse Model
+
+* The Synapse Model
+:PROPERTIES:
+:CUSTOM_ID: The-Synapse-Model
+:END:
+
+Previous: [[id:demo--intro][Introduction]]
+Next: [[id:demo--install][Building the Site]]
+
+A /synapse/ is a citation: the moment one chapter mentions another.
+The exporter records every ~[[id:...]]~ link in the corpus as a wire
+between two nodes, together with the sentence that made the
+reference — the /why/, not just the fact.
+
+* How a citation becomes a wire
+:PROPERTIES:
+:CUSTOM_ID: How-a-citation-becomes-a-wire
+:END:
+
+Each link is resolved against the corpus's =:ID:= drawers, then
+rewritten in the exported HTML to point at the target chapter's
+fragment, anchor included. The same link emits a wire in
+=graph.json=. One parse, two artifacts, no drift.
+
+* The co-citation trick
+:PROPERTIES:
+:CUSTOM_ID: The-co-citation-trick
+:END:
+
+Two chapters that many others cite together are related even when
+neither links to the other. The site computes these co-citation
+edges in the browser — dashed on the canvas, honest in the data —
+so a hub chapter still sits in a neighbourhood you can read. See
+[[id:demo--intro::#Who-this-is-for][Who this is for]].
+
+* See also
+
+- [[id:demo--agents][For Agents]] — what an agent fetches
+- [[id:demo--export][The Export Pipeline]] — where wires come from

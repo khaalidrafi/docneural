@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       demo--export
+:END:
+#+title: The Export Pipeline
+
+* The Export Pipeline
+:PROPERTIES:
+:CUSTOM_ID: The-Export-Pipeline
+:END:
+
+Previous: [[id:demo--install][Building the Site]]
+Next: [[id:demo--agents][For Agents]]
+
+Batch Emacs reads each manual, rewrites every =id:= link in the
+parse tree — never with a regex, because Org examples are full of
+links that must not become wires — and emits the graph plus body
+fragments. Node then slims the transport: citation prose moves out
+of =graph.json= into per-node files, and the result is precompressed.
+
+* The nav header rule
+:PROPERTIES:
+:CUSTOM_ID: The-nav-header-rule
+:END:
+
+Info manuals print =Next:=, =Previous:= and =Up:= headers. Those
+paragraphs are structure, not citation: they become the reader's
+chapter tree, and their links are skipped in the wire set. The rule
+is region-based, so a header wrapped across lines is understood as
+well as one printed on a single line.
+
+* See also
+
+- [[id:demo--synapses::#The-co-citation-trick][The co-citation trick]]
+- [[id:demo--install::#What-you-get][What you get]]

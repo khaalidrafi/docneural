@@ -60,8 +60,21 @@ const chrome = spawn(
 const die = (msg) => {
   console.error('FAIL:', msg)
   chrome.kill('SIGKILL')
-  rmSync(profile, { recursive: true, force: true })
+  quietRm(profile)
   process.exit(1)
+}
+const quietRm = (dir) => {
+  // Chromium keeps writing into its profile for a moment after SIGKILL, so a
+  // single rmSync can race an ENOTEMPTY and kill the run AFTER the result was
+  // already printed. Retry a few times; a leftover /tmp profile is harmless.
+  for (let i = 0; i < 5; i++) {
+    try {
+      rmSync(dir, { recursive: true, force: true })
+      return
+    } catch {
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200)
+    }
+  }
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
@@ -135,5 +148,5 @@ if (problems.length) {
 }
 ws.close()
 chrome.kill('SIGKILL')
-rmSync(profile, { recursive: true, force: true })
+quietRm(profile)
 process.exit(problems.length ? 1 : 0)

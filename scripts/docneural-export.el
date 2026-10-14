@@ -124,14 +124,24 @@ links to it resolve to nil -- which is how a chapter knows it is top-level."
       (when (gethash base id->file) base))))
 
 (defun docneural--node-nav (file id->file)
-  "Info structure of node FILE as (:next NID :prev NID :up NID :redirect R).
-NID are resolved node ids (nil when the target is not a corpus file).
-REDIRECT is (SLUG . ANCHOR) for an Info \"indirectly referenced\" stub: a
-heading-less file whose entire body is the line \"The node you are looking
-for is at [[id:...]]\".  Such a file has no content of its own, so the
-reader follows REDIRECT to the canonical chapter instead of showing a
-stub page.  The 20 real chapter files of the Org manual carry the nav
-line; the other 391 carry a redirect.
+  "Info structure of node FILE as (:next NID :prev NID :up NID :redirect R
+:skip REGIONS).  NID are resolved node ids (nil when the target is not a
+corpus file).  REDIRECT is (SLUG . ANCHOR) for an Info \"indirectly
+referenced\" stub: a heading-less file whose entire body is the line \"The node
+you are looking for is at [[id:...]]\".  Such a file has no content of its
+own, so the reader follows REDIRECT to the canonical chapter instead of
+showing a stub page.  The 20 real chapter files of the Org manual carry the
+nav line; the other 391 carry a redirect.
+
+SKIP is a list of (BEG . END) buffer regions — the nav paragraph and the stub
+pointer line — that --collect-links must treat as STRUCTURE, not citations.
+It is computed HERE, from the same parse that produced :next/:prev/:up, so
+there is one definition of \"the nav header\" instead of a regex approximation
+in two places.  The region matters most for the wrapped nav shape (the Guix
+Cookbook puts the keyword on one line and the link on the next): a line-prefix
+filter cannot see that the link belongs to a keyword it never shares a line
+with, and every wrapped `Previous:' / `Up:' line then entered the wire set as
+a phantom citation.
 
 Each keyword is matched INDEPENDENTLY inside the nav line, because
 texinfo drops a relation when it is inferable: the Emacs and Guix
@@ -149,7 +159,8 @@ The Org manual always carried all three, which is why it looked fine."
     ;; position, so a plain search then re-goto-char is cleaner than
     ;; save-excursion (which would restore match data we don't need here).
     (let* ((head (re-search-forward "^\\*+ " nil t))
-           (next nil) (prev nil) (up nil) (redirect nil))
+           (next nil) (prev nil) (up nil) (redirect nil)
+           (skip nil))
       ;; The nav HEADER is the paragraph (up to the next blank line) opening
       ;; with a keyword.  Paragraph, not line: the Guix Cookbook wraps one
       ;; long node's nav line across several lines ("Next:" alone on its
@@ -162,26 +173,43 @@ The Org manual always carried all three, which is why it looked fine."
       ;; unable to fire.  So take the first keyword-opening paragraph,
       ;; wherever it sits: a real page names its neighbours once.
       (goto-char (point-min))
-      (when (re-search-forward "^\\(Next\\|Previous\\|Up\\):" nil t)
-        (let ((beg (line-beginning-position))
-              (end (save-excursion
-                     (forward-paragraph 1)
-                     (point))))
-          ;; Each target is a `[[id:PATH][desc]]' link: capture up to the
-          ;; first `]' of the id and let --nav-id resolve the base (it
-          ;; strips a `::anchor' suffix).  --nav-id calls `string-match'
-          ;; internally, which clobbers the global match data, so the
-          ;; capture is bound before the call.
-          (cl-flet ((nav (kw)
-                      (save-excursion
-                        (goto-char beg)
-                        (when (re-search-forward
-                               (concat kw ": \\[\\[id:\\([^]]+\\)") end t)
-                          (let ((path (match-string-no-properties 1)))
-                            (docneural--nav-id path id->file))))))
-            (setq next (nav "Next")
-                  prev (nav "Previous")
-                  up   (nav "Up")))))
+      ;; EVERY keyword-opening paragraph is structure, not just the first:
+      ;; a wrapped nav header can put "Next:" and "Previous:" in separate
+      ;; paragraphs (blank line between), and only the first one would
+      ;; otherwise be recorded as a skip region.
+      (let ((first-nav nil))
+        (while (re-search-forward "^\\(Next\\|Previous\\|Up\\):" nil t)
+          (let ((beg (line-beginning-position))
+                (end (save-excursion
+                       (forward-paragraph 1)
+                       (point))))
+            (push (cons beg end) skip)
+            (unless first-nav (setq first-nav (cons beg end)))))
+        ;; Navigation FIELDS still come from the first keyword-opening
+        ;; paragraph: a real page names its neighbours once.
+        (when first-nav
+          (let ((beg (car first-nav))
+                (end (cdr first-nav)))
+            ;; Each target is a `[[id:PATH][desc]]' link: capture up to the
+            ;; first `]' of the id and let --nav-id resolve the base (it
+            ;; strips a `::anchor' suffix).  --nav-id calls `string-match'
+            ;; internally, which clobbers the global match data, so the
+            ;; capture is bound before the call.
+            ;; The keyword and the link may sit on DIFFERENT lines: the Guix
+            ;; Cookbook wraps "Next:" onto one line with the link on the next.
+            ;; A literal space in an Emacs regexp matches only a space, so the
+            ;; old `kw: [[id:' form silently dropped those nodes' whole chain
+            ;; (measured: no next/prev/up at all).  `[ \t\n]*' spans the wrap.
+            (cl-flet ((nav (kw)
+                        (save-excursion
+                          (goto-char beg)
+                          (when (re-search-forward
+                                 (concat kw ":[ \t\n]*\\[\\[id:\\([^]]+\\)") end t)
+                            (let ((path (match-string-no-properties 1)))
+                              (docneural--nav-id path id->file))))))
+              (setq next (nav "Next")
+                    prev (nav "Previous")
+                    up   (nav "Up"))))))
       ;; Stub pointer line: read the capture before --resolve clobbers
       ;; match data, and follow it only when it resolves.
       (when (and (not head)
@@ -192,22 +220,29 @@ The Org manual always carried all three, which is why it looked fine."
         (let ((path (match-string-no-properties 1)))
           (pcase-let ((`(,dst . ,anchor) (docneural--resolve path id->file)))
             (when dst
-              (setq redirect (cons (docneural--slug dst) anchor))))))
-      (list :head head :next next :prev prev :up up :redirect redirect))))
+              (setq redirect (cons (docneural--slug dst) anchor)))
+          ;; Same treatment as the nav paragraph: the pointer line is a
+          ;; redirect, not a citation.
+          (push (cons (line-beginning-position) (line-end-position)) skip))))
+      (list :head head :next next :prev prev :up up :redirect redirect
+            :skip skip))))
 
-(defun docneural--collect-links (file id->file)
+(defun docneural--collect-links (file id->file skip)
   "Real id: links in FILE as a list of (TARGET-SLUG ANCHOR CONTEXT-LINE).
 Only links whose target resolves in this corpus count.  CONTEXT is the
 trimmed source line containing the link, capped so graph.json stays small
 enough to fetch on a potato.
 
-The Info NAV header line (\"Next: ... Previous: ... Up: ...\") and a stub
-file's single pointer line are NOT citations -- they are the doc tree and
-the redirect, and we emit them as node fields instead.  So links sitting
-on those two line shapes are skipped here, which keeps the `links' set a
-pure set of semantic cross-references: the synapses canvas then shows how
-chapters actually refer to one another rather than a chain of mechanical
-edges (and 391 stub singletons with degree zero)."
+SKIP is the (BEG . END) region list from --node-nav: the Info nav header
+paragraph (Next/Previous/Up) and a stub file's single pointer line.  Those
+links are the doc tree and the redirect, emitted as node fields instead, so
+any link whose begin falls inside a skip region is dropped here.  This keeps
+the `links' set a pure set of semantic cross-references: the synapses canvas
+then shows how chapters actually refer to one another rather than a chain of
+mechanical edges (and 391 stub singletons with degree zero).  The REGION
+(not a line-shape regex) is the test, because a wrapped nav header puts the
+keyword on one line and the link on the next -- a regex on the link's own
+line cannot see which keyword it belongs to."
   (with-temp-buffer
     (insert-file-contents file)
     (org-mode)
@@ -217,24 +252,25 @@ edges (and 391 stub singletons with degree zero)."
         (lambda (link)
           (when (equal (org-element-property :type link) "id")
             (let* ((path (org-element-property :path link))
-                   (resolved (docneural--resolve path id->file)))
-              (when resolved
+                   (resolved (docneural--resolve path id->file))
+                   (begin (org-element-property :begin link)))
+              (when (and resolved
+                         (not (cl-some (lambda (r)
+                                         (and (>= begin (car r))
+                                              (<= begin (cdr r))))
+                                       skip)))
                 (let ((ctx (progn
                              (save-excursion
                                (goto-char (org-element-property :begin link))
                                (string-trim
                                 (buffer-substring-no-properties
                                  (line-beginning-position) (line-end-position)))))))
-                  ;; Drop the two structural line shapes (see docstring).
-                  (unless (or (string-match-p "^Next: \\[\\[" ctx)
-                              (string-match-p
-                               "^The node you are looking for is at \\[\\[" ctx))
-                    (push (list (docneural--slug (car resolved))
-                                (cdr resolved)
-                                (if (> (length ctx) 160)
-                                    (substring ctx 0 160)
-                                  ctx))
-                          out))))))))
+                  (push (list (docneural--slug (car resolved))
+                              (cdr resolved)
+                              (if (> (length ctx) 160)
+                                  (substring ctx 0 160)
+                                ctx))
+                        out)))))))
       (nreverse out))))
 
 (defun docneural--export-body (id->file slug)
@@ -492,30 +528,35 @@ hundreds, and the ordering here is the reading order, which is meaning."
           ;; nav (up/next/prev) and stub redirect ride along as optional
           ;; keys so the theme can build a chapter tree, breadcrumbs and a
           ;; prev/next pager without parsing Org.
-          (let ((node (list :id id :slug slug :title title
-                            :tags (cons manual tags))))
+          (let* ((nav (docneural--node-nav file id->file))
+                 (node (list :id id :slug slug :title title
+                             :tags (cons manual tags))))
             ;; A heading-less file is a leaf stub: mark it so the reader
             ;; keeps it out of the chapter tree even when its pointer did
             ;; not resolve to a page in this corpus.
-            (let ((nav (docneural--node-nav file id->file)))
-              (unless (plist-get nav :head)
-                (setq node (plist-put node :stub t)))
-              (dolist (k '(:next :prev :up))
-                (when-let ((v (plist-get nav k)))
-                  (setq node (plist-put node k v))))
-              (when-let ((r (plist-get nav :redirect)))
-                (setq node
-                      (plist-put node :redirect
-                                 (list :slug (car r) :anchor (cdr r))))))
-            (push node nodes))
-          (dolist (l (docneural--collect-links file id->file))
-            (pcase-let ((`(,dst _anchor ,ctx) l))
-              ;; Edge identity is the FILE-level citation (id -> id);
-              ;; the anchor only lives on the rewritten in-body href,
-              ;; which is how the reader lands on the section anyway.
-              (when-let ((tid (gethash dst slug->id)))
-                (push (list :source id :target tid :context ctx)
-                      links))))
+            (unless (plist-get nav :head)
+              (setq node (plist-put node :stub t)))
+            (dolist (k '(:next :prev :up))
+              (when-let ((v (plist-get nav k)))
+                (setq node (plist-put node k v))))
+            (when-let ((r (plist-get nav :redirect)))
+              (setq node
+                    (plist-put node :redirect
+                               (list :slug (car r) :anchor (cdr r)))))
+            (push node nodes)
+            ;; LINKS: the nav/pointer regions come from the SAME nav parse
+            ;; that produced the node fields -- one definition of what is
+            ;; structure, so a wrapped header's links can never leak into
+            ;; the citation wire set.
+            (dolist (l (docneural--collect-links
+                        file id->file (plist-get nav :skip)))
+              (pcase-let ((`(,dst _anchor ,ctx) l))
+                ;; Edge identity is the FILE-level citation (id -> id);
+                ;; the anchor only lives on the rewritten in-body href,
+                ;; which is how the reader lands on the section anyway.
+                (when-let ((tid (gethash dst slug->id)))
+                  (push (list :source id :target tid :context ctx)
+                        links)))))
           ;; One pathological file must not kill a 1500-file build:
           ;; catch, record, continue (fragment simply absent).
           (condition-case e

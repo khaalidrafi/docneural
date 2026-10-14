@@ -3,6 +3,42 @@
 #+STARTUP: overview
 #+TODO: NEXT WIP QUESTION | DONE LATER
 
+* Where this stands now (2026-10-14, branch =ai/workbuddy=)
+
+  All work now lives on =ai/workbuddy= in BOTH repos (site: this repo;
+  theme: docneural-ui), pulled from =ai/main= and ready to merge. What
+  landed, in order:
+
+  1. Exporter fixes: wrapped-nav metadata loss (=Next:= on its own line
+     lost the whole chain) and nav links leaking into the citation wire
+     set; skip regions now come from one nav parse that feeds both.
+  2. Shippable base: =make demo= (bundled 8-file corpus, latest Org
+     9.8.10 via =make org-latest=, linkcheck, build), =README.org=,
+     MIT =LICENSE=, =ci/github-actions.yml= (copy to
+     =.github/workflows/= to enable — the pushing token lacks the
+     workflow scope).
+  3. Section search (the QUESTION in TODOs.org, decided YES):
+     =scripts/build-search.mjs= per-manual heading index + the theme's
+     =core/search.ts= BM25 and palette rows.
+  4. Reader features: =r= read-aloud, =p= context packs, visited dots,
+     the learn strip (learn-path + related-now + % read).
+  5. AI integrations: MCP server (=scripts/mcp-server.mjs=, 11 protocol
+     cases), ask-this-corpus (BYO key, =?= in the palette), build-time
+     tldrs (=make summarize=, cached by content hash).
+  6. Monetization plan: =MONETIZATION.org= (five lines, pricing, 90-day
+     plan).
+
+  Everything is verified in a clean-ish sandbox: vitest 20/20 (site) +
+  84/84 (theme), svelte-check 0 errors in both repos, =make demo= green,
+  and browser checks over the built demo site (home, reader + learn
+  strip, palette section search, =?= ask flow, graph mode through the
+  orui shim with the stub filtered out).
+
+  Still open, in order of value: the phone-graph cost cap from TODOs
+  P1, offline/service worker (the QUESTION), and the real orui swap-in
+  when org-roam-lite-ui is published (=make orui-shim= shows where it
+  goes).
+
 * Where the content comes from (the ~/org-docs dependency)
 
   This site renders a corpus it does *not* own. The Org files, and the

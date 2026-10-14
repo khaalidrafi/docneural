@@ -1,7 +1,7 @@
-#+TITLE: AI-REVIEW — org-docs-website exporter
+#+TITLE: AI-REVIEW — docneural exporter
 #+TODO: TODO QUESTION | NOTED RESOLVED
 
-* What to review in =scripts/org-docs-website-export.el=
+* What to review in =scripts/docneural-export.el=
 
   This is batch Elisp (run via =make export=), not an installed package.
   It reads a doc corpus of Org node files and emits two static artifacts
@@ -11,7 +11,7 @@
 ** RESOLVED Link rewriting lives in a parse-tree filter, not a text regex
    :CODE:
 
-   - =org-docs-website--export-body= rewrites resolvable =id:= links to
+   - =docneural--export-body= rewrites resolvable =id:= links to
      =type=file=, =path= =docs/SLUG.html#ANCHOR= inside a
      =:filter-parse-tree=.  Verify this is the shape the theme's
      NotePreview interceptor expects (it is; see ~/synapt).
@@ -119,7 +119,7 @@
 ** TODO Corpus scanning is a single pass, not per-query grep
    :PERF:
 
-   - =org-docs-website--scan-corpus= builds an =id→file= hash by grepping
+   - =docneural--scan-corpus= builds an =id→file= hash by grepping
      each file's =:ID: drawer line once=.  org-docs-reader does a corpus
      grep per id: query; 6k queries × corpus grep would crawl here.
    - Review: =#+filetags:= split on =:=, tags default to the doc name so
@@ -251,7 +251,7 @@
    - =make export= now also writes =.export/llms.txt= (index: blurb, docs in
      reading order, Optional section), =.export/llms-full.txt= (whole corpus,
      one fetch) and =docs/SLUG.org= (lossless raw Org per page).
-   - =org-docs-website--reading-order= in Elisp MUST stay identical to
+   - =docneural--reading-order= in Elisp MUST stay identical to
      =SynaptStore.chapters= in TS (content set, targeted-next exclusion,
      chain walk that stops at stubs, leftover second pass).  Two
      implementations of one algorithm — a human-visible consequence is
@@ -275,7 +275,7 @@
 
   Second corpus problem after anchors: chapters landed in the sidebar in
   alphabetical order, not manual order. Three committed changes in
-  =scripts/org-docs-website-export.el=.
+  =scripts/docneural-export.el=.
 
 ** TODO Nav lines are parsed per-paragraph, position-independently
    :CODE:
@@ -288,7 +288,7 @@
    - New rule: take the FIRST nav keyword occurrence inside each
      paragraph after the node's own =[[id:...]]= links were absorbed;
      =[[id:PATH][desc]]= targets only (manuals use ids, not file links).
-   - Review =org-docs-website--parse-nav= for the paragraph scan, and
+   - Review =docneural--parse-nav= for the paragraph scan, and
      spot-check =.export/graph.json=: emacs Top -> =emacs--distrib=,
      guix Top -> =guix--introduction= (verified this pass).
 
@@ -338,9 +338,9 @@
 
    - =styles/synapt.css= section "2b. Neuron vocabulary"
      (=.sy-neuron-mark=, =.sy-halo=, =.sy-firing=) + wordmark in
-     SynaptApp/Home/NotePreview. Site name is =org-docs= (user-facing);
+     DocneuralApp/Home/NotePreview. Site name is =docneural= (user-facing);
      synapt is only the theme title — =src/App.svelte= passes
-     =title="org-docs"=.
+     =title="docneural"=.
 
 ** NOTED Verified by (this pass)
 
@@ -497,7 +497,7 @@
 ** TODO Errors are shaped like coreutils, which is a bet on the reader
    :COPY:
 
-   - Missing export: =org-docs: docs/SLUG.html: No such file or directory
+   - Missing export: =docneural: docs/SLUG.html: No such file or directory
      — run `make export && make build`=; palette no-match:
      =grep: no match for "q"=; failed boot: =curl: ...= inside a
      =error — tty0= window. The command names are the actual build
@@ -521,7 +521,7 @@
      (=[[[id:org--agenda-views::#index-...][=org-agenda-...]]=). That
      text comes straight from =graph.json='s =context= field, i.e. the
      Emacs exporter's "line around the link" — the fix belongs in
-     =scripts/org-docs-website-export.el= (flatten links to their
+     =scripts/docneural-export.el= (flatten links to their
      description when building context), which currently carries another
      session's uncommitted edits, so this pass left it alone.
 
@@ -534,7 +534,7 @@
      the dev server and the built =dist/= via =make serve=
      (=make verify URL=http://127.0.0.1:4173/=). New terminal assertions:
      hero is a =.sy-term= whose bar matches =/tty1/=, tty body is mono on
-     non-transparent ink, the stats came from =you@docs:~$ org-docs
+     non-transparent ink, the stats came from =you@docs:~$ docneural
      --stats=, the block cursor's =animation-name= is =sy-blink= (a
      screenshot of a blink is one frame, so assert the animation), and
      the palette reads as a session (=you@docs:~/jump= + =$= prompt).

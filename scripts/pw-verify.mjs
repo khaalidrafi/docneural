@@ -210,7 +210,7 @@ async function main() {
     const sel = '.sy-term, .tty-bar, .tty-body, .sy-ps1, .sy-cmd, .sy-block-cursor, .sy-ok, .boot-term, .fatal-term'
     const hit = [...document.querySelectorAll(sel)].map((e) => e.className)
     // Copy a shell would print, not copy a reader needs.
-    const pat = /\b(you@docs|system@docs|org-docs --|\$ (ls|grep|cat|curl)|grep -i|grep -ri|ls \| grep|No such file or directory|\[ ok \])/i
+    const pat = /\b(you@docs|system@docs|docneural --|\$ (ls|grep|cat|curl)|grep -i|grep -ri|ls \| grep|No such file or directory|\[ ok \])/i
     const text = [...document.querySelectorAll('body *')]
       .filter((e) => !e.children.length && e.textContent)
       .map((e) => e.textContent.trim())

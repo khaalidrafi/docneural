@@ -21,7 +21,7 @@
 //      `compress: true` and nginx `gzip_static on;` both pick it up).
 //
 // It is a separate step rather than a change to the exporter because
-// scripts/org-docs-website-export.el is batch Elisp with its own review
+// scripts/org-docs-export.el is batch Elisp with its own review
 // surface; keeping the transport concern here means the exporter stays
 // "emit the whole graph" and this stays "emit it small".
 //

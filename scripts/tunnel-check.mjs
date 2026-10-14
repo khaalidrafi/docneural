@@ -11,10 +11,10 @@ import { resolve } from 'node:path'
 import { chromium } from '/home/khalid/org-roam-lite-ui/node_modules/playwright-core/index.mjs'
 
 const BASE = process.argv[2] || 'https://burton-limits-garbage-cancelled.trycloudflare.com/'
-const CHROME = process.env.SYNAPT_CHROME ??
+const CHROME = process.env.DOCNEURAL_CHROME ??
   (process.env.PATH ?? '').split(':').map((d) => `${d}/chromium`).find((p) => existsSync(p))
 if (!CHROME) {
-  console.error('no chromium found — set SYNAPT_CHROME=/path/to/chromium')
+  console.error('no chromium found — set DOCNEURAL_CHROME=/path/to/chromium')
   process.exit(1)
 }
 const browser = await chromium.launch({

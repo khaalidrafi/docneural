@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SynaptApp from 'synapt'
+  import DocneuralApp from 'docneural-ui'
   // base="" -> store fetches /graph.json and /docs/SLUG.html, exactly the
   // shape vite's publicDir=.export serves.
 </script>
 
-<SynaptApp base="" title="org-docs" />
+<DocneuralApp base="" title="docneural" />

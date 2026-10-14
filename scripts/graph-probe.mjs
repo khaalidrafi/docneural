@@ -4,7 +4,7 @@ import { chromium } from '/home/khalid/org-roam-lite-ui/node_modules/playwright-
 import { execSync } from 'node:child_process'
 
 const BASE = process.argv[2] ?? 'http://127.0.0.1:4199/'
-const CHROME = process.env.SYNAPT_CHROME || execSync('command -v chromium || true').toString().trim()
+const CHROME = process.env.DOCNEURAL_CHROME || execSync('command -v chromium || true').toString().trim()
 
 const browser = await chromium.launch({
   executablePath: CHROME || undefined,

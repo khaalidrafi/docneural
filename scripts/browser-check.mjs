@@ -34,14 +34,14 @@ if (!url) {
 }
 
 const PORT = 9333 + (process.pid % 50) // avoid collisions between parallel runs
-const profile = mkdtempSync(join(tmpdir(), 'synapt-chrome-'))
+const profile = mkdtempSync(join(tmpdir(), 'docneural-chrome-'))
 
-// Which browser to launch: $SYNAPT_CHROME wins, else the system chromium.
+// Which browser to launch: $DOCNEURAL_CHROME wins, else the system chromium.
 // (Playwright's downloaded headless shell cannot execute on Guix — it wants
 // the FHS /lib64 loader. org-roam-lite-ui's playwright.config made the same
 // discovery and does the same fallback; system chromium DOES boot headless
 // here, it is merely slow under load — hence the long readiness budget.)
-const BIN = process.env.SYNAPT_CHROME ?? 'chromium'
+const BIN = process.env.DOCNEURAL_CHROME ?? 'chromium'
 
 const chrome = spawn(
   BIN,

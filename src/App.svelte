@@ -4,4 +4,4 @@
   // shape vite's publicDir=.export serves.
 </script>
 
-<SynaptApp base="" title="synapt" />
+<SynaptApp base="" title="org-docs" />

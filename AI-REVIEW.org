@@ -270,3 +270,482 @@
      correct.
    - Browser: see task #13 (load-gated CDP pass) — graph node count
      ≈ 415, rail mini-graph paints, palette visible in both themes.
+
+* What to review in the reading-order fix (nav parse + Top chainback)
+
+  Second corpus problem after anchors: chapters landed in the sidebar in
+  alphabetical order, not manual order. Three committed changes in
+  =scripts/org-docs-website-export.el=.
+
+** TODO Nav lines are parsed per-paragraph, position-independently
+   :CODE:
+
+   - Old triple-regex assumed =Next: / Previous: / Up:= on one line right
+     after the first heading. Texinfo->Org conversion does not guarantee
+     that: the nav block can sit ABOVE the first heading, AFTER a
+     =#+TITLE:=-heading node, or wrap across lines. Result was ~94/65
+     fragment heads with most chains lost.
+   - New rule: take the FIRST nav keyword occurrence inside each
+     paragraph after the node's own =[[id:...]]= links were absorbed;
+     =[[id:PATH][desc]]= targets only (manuals use ids, not file links).
+   - Review =org-docs-website--parse-nav= for the paragraph scan, and
+     spot-check =.export/graph.json=: emacs Top -> =emacs--distrib=,
+     guix Top -> =guix--introduction= (verified this pass).
+
+** TODO Top chainback synthesizes the missing first edge
+   :GOTCHA:
+
+   - A manual's first chapter has =Next:= from Top but no =Up:= back, and
+     Top itself is often not a node file. If a node is named =prev= by
+     exactly ONE other node, that unique successor is the manual's head:
+     synthesize Top->head so the chain walk never starts orphaned.
+   - Uniqueness is the safety valve: multi-predecessor nodes are real
+     cross-references, never heads.
+
+** RESOLVED Stubs stay edgeless on purpose
+   :DECISION:
+
+   - 773/1559 corpus nodes are Info "indirectly referenced" pointer
+     files: no nav lines, so no edges — NOT a parse bug.
+     =filteredGraph= (synapt =core/graph.ts=) drops them from the canvas;
+     =graph.json= keeps them so redirects and search still resolve.
+   - 1 non-stub isolated node remains (=org--gnu-free-documentation-license=,
+     a legal appendix with no nav block); acceptable.
+
+* What to review in the neuron rebrand (synapt, tasks #26-#28)
+
+** TODO Painting lives in the loadEngine seam, not GraphView props
+   :CODE:
+
+   - =neuronEngine.ts= wraps orui's =loadEngine=: hero mode paints AFTER
+     upstream (=after= hook), compact/rail REPLACES. GraphView takes no
+     painter prop — this is the only supported seam; do not fork
+     GraphView for cosmetics.
+   - This pass: soma radius multiplier 1.6 -> 2.6 in compact mode and
+     brighter selection halos in hero mode, because 390x844 screens showed
+     near-invisible dots. Verify on phone that nodes read as neurons
+     (glow ring + title), not specks.
+
+** RESOLVED Mobile graph: controls collapse, rail has height
+   :UI:
+
+   - Full-width FilterBar over the canvas left a sliver of neurons on
+     phones; header carries the live wire count so the panel now starts
+     collapsed <= 600 px. SynapseRail got a fixed 260 px height on mobile.
+
+** TODO Branding is per-theme tokens, zero JS
+   :THEME:
+
+   - =styles/synapt.css= section "2b. Neuron vocabulary"
+     (=.sy-neuron-mark=, =.sy-halo=, =.sy-firing=) + wordmark in
+     SynaptApp/Home/NotePreview. Site name is =org-docs= (user-facing);
+     synapt is only the theme title — =src/App.svelte= passes
+     =title="org-docs"=.
+
+** NOTED Verified by (this pass)
+
+   - svelte-check 0 errors / 0 warnings; synapt =npm test= 27/27.
+   - =make export= (3 manuals) -> 1559 nodes / 29017 links / 84 heads;
+     chains walk in reading order.
+   - Browser: desktop + 390x844 screenshots; canvas pixel sampling
+     confirms neurons paint (see verify-*.png at commit time).
+
+* What to review in the cyberpunk HUD re-theme (synapt, task #29)
+
+  The brief was "coolest, and it must say /many sources/", not "polish".
+  So the whole visual system changed (tokens, typography, chrome shape,
+  motion) and one new invariant was introduced: a corpus's hue is derived,
+  not chosen. Everything below is the part worth a human's eye, because a
+  theme swap fails silently — it looks fine and disagrees with the canvas.
+
+** TODO One hue per source, derived by hash — and it must match the canvas
+   :CODE:CRITICAL:
+
+   - =src/lib/core/source.ts= re-implements orui's djb2 (=hashString=) and
+     indexes the theme's =--sy-graph-palette= itself, because CSS cannot
+     compute a hash and a =<canvas>= cannot read a CSS custom property.
+     orui colours a node with =palette[hash(firstTag) % len]=
+     (=org-roam-lite-ui/src/lib/graph/colors.ts=); =sourceColor= is the DOM
+     half of that same expression.
+   - THE CONTRACT: the two implementations must stay byte-identical.
+     =source.test.ts= imports orui's OWN =hashString= / =nodeColor= through
+     the =orui/*= alias and asserts equality per tag, so a drift in either
+     repo fails =npm test= rather than quietly recolouring the site. Review
+     that test's stub of =globalThis.document= (it must feed a literal
+     palette, since =canvasTokens= reads =getPropertyValue=).
+   - =source.ts= memoises the palette read for 500 ms on purpose — that is
+     GraphView's own token poll interval, so DOM and canvas flip theme on
+     the same beat. The memo is why =source.test.ts= declares the
+     "no document" case FIRST (a stale cache would otherwise pass it).
+   - The hue reaches the DOM as an inline custom property
+     (=style={sourceVars(tag)}=) on the component root, then every surface
+     reads =var(--sy-src, var(--sy-accent))=: header rail, mode switches,
+     tabs, breadcrumb chip, sidebar, palette rows, note preview border,
+     reader pager, =h2::before= sigil, prose =pre= left rule.
+
+** QUESTION Third-party webfonts in =index.html=: keep, self-host, or drop?
+   :DECISION:
+
+   - The mono chrome (JetBrains Mono 400/600/800 + Inter for prose) is half
+     the look, and a stack that names them still degrades to
+     =ui-monospace=, so offline visitors get the layout, not the type.
+     Current form is one render-blocking-ish stylesheet on
+     fonts.googleapis (preconnect x2, =display=swap).
+   - Cost of keeping: a third party sees every pageview of a docs site that
+     is explicitly for agents and privacy-minded Emacs/Guix readers.
+   - Alternatives: bundle woff2 into =dist/= (Vite handles it; ~3 weights
+     latin-subset is a few hundred KB) or accept the fallback. Pick before
+     this is public.
+
+** TODO Perf choices were forced by this box, keep them that way
+   :PERF:
+
+   - NO =backdrop-filter= on the header or the note preview: they are solid
+     ink (=color-mix(… 92-97%)=) with a lit edge. Frost over a 1559-node
+     canvas repaints the whole blur every frame.
+   - =neuronEngine.ts= adds a targeting reticle (4 corner ticks +
+     =shadowBlur=10=) ONLY on the selected node — never per neuron; a
+     shadow per disc is the classic force-graph frame killer.
+   - Every animation is transform/opacity only, and the wordmark glitch
+     bursts for ~300 ms of a 6 s cycle instead of running continuously.
+   - Scanlines are one fixed =body::after= with =mix-blend-mode=
+     (multiply on dark, screen on light). It sits above everything at
+     =z-index= — verify it never eats clicks (=pointer-events: none=).
+
+** TODO Dark is the house style: =data-theme="dark"= in the shell
+   :THEME:
+
+   - =index.html= now pins =data-theme="dark"= + =theme-color= /
+     color-scheme and paints =html{background:#05070d}= inline, so a cold
+     browser never flashes white behind the HUD. Consequence: a
+     light-OS visitor gets dark until they press the theme toggle — that is
+     the intent, not an accident. =synapt.css= keeps THREE token blocks in
+     sync (=:root=, =:root[data-theme='light']=, and the
+     =prefers-color-scheme= block for pages with no =data-theme=); a new
+     token must be added to all three or the light theme breaks.
+
+** TODO Copy must not assume Emacs — three surfaces said "Manual"
+   :COPY:
+
+   - =SynaptStore.manualTitle= dropped the ="<tag> Manual"= suffix for real
+     project names (=SOURCE_NAMES= in =source.ts=, unknown tags get a
+     capitalised split), Home's lede is source-agnostic, the =?= keymap
+     says the corpus is "any Org corpus, one channel per manual, each with
+     its own hue". Review the wording: this is the site's pitch.
+   - =store.sources= (pages excluding stubs + wires per originating tag) is
+     what the Home strip and the header readout show. Cross-source citations
+     are counted on both ends deliberately — check that reading is the one
+     you want published.
+
+** NOTED Verified by (this pass)
+
+   - =node scripts/pw-verify.mjs= — Playwright-core (from the sibling
+     orui checkout, zero installs) driving the SYSTEM chromium: playwright's
+     own Chromium build will not exec on Guix (wants the FHS /lib64 loader),
+     so =executablePath= points at =chromium= found on PATH
+     (=SYNAPT_CHROME= overrides). Asserts token values, glitch pseudo
+     content, scanline blend, per-source DOM hue == canvas hue for all 3
+     corpora, canvas pixel-lit > 2000 px with =data-nodes= 786, light-theme
+     swap, reader hue per corpus, palette hints, phone overflow. Screenshots
+     to =/tmp/pw= for the human.
+   - =make verify URL=http://127.0.0.1:4173/=: the same 25 checks pass
+     against the PRODUCTION =dist/= (=npm run build= -> 93.8 kB entry JS,
+     174 kB force-graph chunk behind a dynamic import, 48 kB CSS;
+     gzip 33/58/8.6 kB), so what gets deployed is what was asserted.
+   - svelte-check 0 errors / 0 warnings; synapt =npm test= 34/34
+     (was 27; +7 for =source.ts= / =store.sources=).
+
+* What to review in the terminal / shell pass (synapt § 2c, task #31)
+
+  The HUD now reads as one working session: tty windows with title bars,
+  PS1 prompts, =[ ok ]= boot lines, shell-shaped errors, block cursors,
+  and path-style breadcrumbs. The vocabulary is ONE global CSS section
+  (=synapt/styles/synapt.css= § 2c) that components reuse; review that
+  split first, then the copy.
+
+** TODO =.sy-term= / =.sy-ps1= / =.sy-block-cursor= are global, not per-component
+   :CODE:
+
+   - § 2c defines =.sy-term= (window: =.tty-bar= + =.tty-body=),
+     =.sy-ps1= (with =.at= / =.path= / =.sig= parts), =.sy-cmd=,
+     =.sy-out=, =.sy-ok=, =.sy-err=, =.sy-kv= (a =max-content 1fr= grid
+     for command output), =.sy-block-cursor=, and =::selection=.
+     Home's stats panel, the boot screen and the fatal screen are all
+     =.sy-term= instances — check that no component re-implements one.
+   - =.sy-term= gets its notched corner from =clip-path: polygon(...)=
+     plus =overflow: hidden=, deliberately NOT =backdrop-filter= or a
+     shadow: this box is a 4 GB Celeron and a blur on a large surface is
+     what makes the tab stutter. The cursor blinks with the existing
+     =sy-blink= keyframes (=steps(1)=, opacity only) and both are
+     disabled under =prefers-reduced-motion=.
+   - Scope question: the section lives in the theme package, so every
+     synapt consumer gets it. If it should be opt-in, it needs its own
+     stylesheet import — say so before this spreads.
+
+** TODO The prompt is a literal identity: =you@docs:~$= / =system@docs:~$=
+   :COPY:
+
+   - =user@host= is fixed text in =Home.svelte=, =SynaptApp.svelte=,
+     =CommandPalette.svelte= (=you@docs:~/jump=) and =DocReader.svelte=
+     (=system@docs:~$ curl docs/SLUG.html=). Review the wording: it is
+     the site's voice now, and it must not read as "the Emacs manual
+     site" — =docs= is the only host name, no corpus is named.
+   - =you@*= is the visitor's shell (they type the search), =system@*= is
+     the machine's (it fetched the page). Keep that distinction if the
+     prompts grow.
+
+** TODO Errors are shaped like coreutils, which is a bet on the reader
+   :COPY:
+
+   - Missing export: =org-docs: docs/SLUG.html: No such file or directory
+     — run `make export && make build`=; palette no-match:
+     =grep: no match for "q"=; failed boot: =curl: ...= inside a
+     =error — tty0= window. The command names are the actual build
+     commands, so the message is also the fix. Verify a non-shell
+     reader can still act on it (the =— run ...= tail is the plain-words
+     escape hatch).
+
+** QUESTION Third-party webfonts are still the one external request
+   :DECISION:
+
+   - Unchanged from the re-theme pass: =index.html= loads JetBrains Mono +
+     Inter from Google Fonts. =fonts.gstatic.com= is preconnected, and
+     the CSS is render-blocking, which is why the readiness budget in
+     =make verify= is a =PAINT= knob (a stalled font stylesheet delays
+     first paint on this box). Self-hosting two woff2 subsets in
+     =dist/= would remove the dependency and the privacy leak. Your call.
+
+** NOTED Found while verifying (NOT fixed here)
+
+   - The synapse rail's =AFFERENT= context lines show raw Org link syntax
+     (=[[[id:org--agenda-views::#index-...][=org-agenda-...]]=). That
+     text comes straight from =graph.json='s =context= field, i.e. the
+     Emacs exporter's "line around the link" — the fix belongs in
+     =scripts/org-docs-website-export.el= (flatten links to their
+     description when building context), which currently carries another
+     session's uncommitted edits, so this pass left it alone.
+
+** NOTED Verified by (this pass)
+
+   - =npx vitest run= 34/34; =npx svelte-check= 0 errors / 0 warnings;
+     =npm run build= -> 96.65 kB entry JS + 174.10 kB force-graph chunk +
+     49.61 kB CSS (gzip 33.92 / 58.15 / 8.87).
+   - =node scripts/pw-verify.mjs= — now 34 checks, all green against BOTH
+     the dev server and the built =dist/= via =make serve=
+     (=make verify URL=http://127.0.0.1:4173/=). New terminal assertions:
+     hero is a =.sy-term= whose bar matches =/tty1/=, tty body is mono on
+     non-transparent ink, the stats came from =you@docs:~$ org-docs
+     --stats=, the block cursor's =animation-name= is =sy-blink= (a
+     screenshot of a blink is one frame, so assert the animation), and
+     the palette reads as a session (=you@docs:~/jump= + =$= prompt).
+   - Driver changes worth reviewing: =NAV= now carries an explicit 90 s
+     goto timeout (Playwright's 30 s default was the flake, not the
+     app), and =--paint= / =make verify PAINT= sets first-paint budget —
+     the boot screen parses a ~7 MB =graph.json= before anything paints,
+     so on a loaded machine 90 s was not enough (observed pass at
+     load average 6 with 180 s).
+
+* What to review in the transport + reading-tools pass (tasks #33, #34)
+
+** TODO Review the destructive step first: scripts/slim-graph.mjs
+   :PERF:
+
+   - It REWRITES =.export/graph.json= in place and deletes every
+     =ctx/*.json= before rebuilding them. The only way back is
+     =make export= (the Emacs exporter emits the fat graph again), so read
+     the guard at the top before running it on anything you care about:
+     if =graph.json= has no =context= left and =ctx/= is non-empty it exits
+     without touching a byte.
+   - Check the arithmetic yourself: =jq '.links[0]' .export/graph.json=
+     must show =source=/=target= only. The 4.9 MB that left the boot
+     payload is the whole claim of this pass.
+   - =graph.json.gz= / =.br= are written but vite's preview server ignores
+     them (verified: =content-encoding= absent, 2.25 MB served). Deploy
+     needs =gzip_static on;= or equivalent — that is a host config item,
+     not a site bug, and it is the one number in TODOs.org that is not yet
+     true for a visitor.
+
+** TODO Review =flatten()= against YOUR corpus, not my test cases
+   :EXPORT:
+
+   - =scripts/flatten-context.mjs= is the only place Org syntax is removed
+     from the prose the rail shows. The rules are ordered and the order is
+     load-bearing: complete links collapse first, so any =[[= left at the
+     tail is by definition a link the exporter's window cut in half.
+   - The cases in =tests/slim-graph.test.mjs= came out of this corpus. A
+     new manual (one with footnotes, math, or =[[file:...][desc]]= links)
+     may produce shapes none of the six rules cover. Grep for residue after
+     an export with the one-liner in the pass notes:
+     =rg -l '\[\[|\]\]|<<|>>' .export/ctx= must print nothing.
+   - Alternative worth considering before this grows more rules: do the
+     flattening in the exporter, where the link is still structured data
+     rather than a string that was already truncated.
+
+** TODO Review the anchor plumbing in the store
+   :STORE:
+
+   - =goto(doc, mode?, anchor?)= now takes a third argument and
+     =setUrl= writes it into the hash. Two invariants to check:
+     an explicit anchor must beat =doc.redirect.anchor= (a copied link
+     names where the copier was, not where the stub points), and
+     =selectFromUrl= must survive a hand-typed =%= in the hash without
+     losing the page (it is wrapped in try/catch for that reason).
+   - =store.lastRead= is a =\$state= mirror of a localStorage key. That is
+     deliberate — Home's =--resume= line has to appear when you click the
+     brand, and localStorage is not reactive — but it means there are two
+     copies of one fact. =notePosition()= is the only writer; if you find
+     another, it should call that.
+
+** QUESTION Are the reading keys the right keys?
+   :UX:
+
+   - =j=/=k= scroll rather than jump headings (this site has =g d/s/h=,
+     =g g= would collide, and a scroll is what you actually want 90% of the
+     time); =/= opens the palette, not the sidebar filter; =y= copies a link
+     to the heading at the top of the screen — and to the chapter's own first
+     heading when nothing has reached the scroll-spy's trigger yet
+     (=currentAnchor()=, because a link to "this chapter, somewhere" is not a
+     citation). All three are the conventions of GitHub/Vim-style readers,
+     but they are a decision, not a law. Say the word and they move.
+   - Clicking a heading copies its link. That is a discoverable affordance
+     (=#= on hover, a title, =cursor: pointer=) and it is also a mild
+     surprise: a click that used to do nothing now writes the clipboard, and
+     the only feedback is a 2.6 s tty toast. If you dislike it, the
+     alternative is a real =#<a>= injected next to each heading.
+
+** NOTED Perf claims that are load-bearing in the code
+
+   - The progress hairline writes =style.transform= from a rAF callback and
+     never touches =\$state=: a per-frame reactive write would re-render the
+     reader 60×/s on a Celeron. Keep it that way if you extend it.
+   - =prefetch()= is bounded (8 fragments) and skipped on =save-data= or a
+     2g connection; =body()= de-duplicates, so a hover-prefetched chapter
+     that you then click is one request. =make verify= counts fragments per
+     open and fails at 1.
+   - =ctxFor()= falls back to =link.context=, so a site built WITHOUT the
+     slim step still renders. Nothing requires the split.
+
+** NOTED Verified by (this pass)
+
+   - =npx vitest run= (synapt) 34/34; =npx svelte-check= 0 errors / 0
+     warnings; =npx vitest run tests= (site) 9/9 for =flatten()=;
+     =npm run build= -> 103.52 kB entry JS + 52.12 kB CSS + 3 woff2 (96 kB),
+     fonts emitted into =dist/assets/= from the sibling theme.
+   - =scripts/pw-verify.mjs= against the BUILT site (4173): 49 checks, 0
+     FAIL, exit 0 — including the transport half (self-hosted fonts with zero
+     external requests, slim graph.json with 0 fat links, per-node ctx prose
+     with no Org residue, prefetch counted from the request log) and the
+     reading-tools half (=/=, =j=, the progress hairline's transform, =y=,
+     heading click, =⧉ llm=, =--resume= across a reload, phone layout).
+   - Read those two boot numbers as *contended*, not as the site's: the run
+     landed while the box was at load average 11 (=DOM 7319 ms, FCP 67036 ms,
+     wordmark 114039 ms=). The same checks at load ~1.2 painted in seconds.
+     Nothing in the diff explains a slow FCP; =uptime= before trusting either
+     number, and re-run when quiet.
+   - Fonts now travel with their license: =make build= copies
+     =../synapt/fonts/*-OFL.txt= into =dist/fonts/= (fetched from
+     =google/fonts@main=, one file per family, copyright headers intact). A
+     redistributed =.woff2= must be accompanied by its OFL text; Vite emits
+     only the font files a stylesheet references.
+
+** QUESTION Is the paste budget the right size, and should it be one action?
+
+   =⧉ llm= copies the chapter with its provenance, capped at
+   =CONTEXT_BUDGET = 40_000= characters (~10 k tokens): it cuts at the last
+   line boundary and appends a visible =[… truncated — the whole chapter is
+   at the Raw Org URL above. ]= marker, and the toast says
+   =copied 38.9 kB of 69.3 kB · full: <slug>.org=. Measured on
+   =org--Agenda-Views=: 39,797 B pasted where 68,975 B used to be.
+
+   Two judgement calls to review: 40 kB is a guess tuned at "fits a prompt
+   and still reads like a page", and one button currently means "as much as
+   fits". A second action ("copy this section only", heading-to-heading)
+   would be more precise for citation and is ~10 lines on top of
+   =pageAsContext()= — say so if you want it instead of the cap.
+
+* What to review in the wow pass (ego graph, hover peek, hot-path indexes)
+
+  This is the riskiest pass so far: it changes what the graph /shows/ by
+  default, adds a hover-driven surface on every one of 1,559 chapters, and
+  replaces three linear scans with caches. Review the semantics first, the
+  styling last.
+
+** REVIEW First the graph change, because it is a product decision
+
+   =store.visible= (=synapt/src/lib/core/store.svelte.ts=, the =get visible=
+   near line 213) now narrows the canvas to the two-hop neighbourhood of the
+   selected chapter whenever a chapter IS selected. Before this pass the
+   canvas always showed the whole filtered corpus.
+
+   - Is ego-by-default right? My argument: 786 nodes answer no question, 32
+     answer the one you arrived with. The chip (=.scope= in
+     =SynaptApp.svelte=) is one click from the corpus, and boot has no
+     selection so the corpus is what a fresh =?mode=graph= still shows.
+   - The hop/edge caps are =EGO_HOPS = 2= and =COCITE_CAP = 8= at the top of
+     the store. Raise either at your cost: a third hop is the whole corpus by
+     construction, and a hub chapter (the Org variable index has 1,122
+     synapses) will paint 60 dashed edges if uncapped.
+
+** REVIEW =coCitations()= — the new edge type, and what it claims
+
+   =synapt/src/lib/core/graph.ts=, next to =egoGraph=. It answers: which
+   chapters are cited /together with/ this one, by how many chapters. The
+   corpus never claims a link that is not there, so these edges are synthesized
+   in =store.cociteInto()= and carry their evidence as =context=
+   ("co-cited: 3 chapters cite both") — the field the rail and note preview
+   already print.
+
+   Two judgement calls worth your eye:
+   - /one evidence per citer/: a chapter that links the same page twice counts
+     once. Otherwise a single verbose chapter out-ranks three independent ones.
+   - only edges whose both ends are already in the ego graph are added, so a
+     co-citation never drags an unrelated node onto the canvas.
+
+   Tested in =graph.test.ts= (9 new cases: ranking, the dedup rule, the centre
+   never returned, the cap, empty for an uncited page).
+
+** REVIEW The hot-path caches — correct, but they are caches
+
+   =store.index()= replaces =data.nodes.find(...)= in =byId=/=bySlug= and
+   rebuilds =nodeViews()= only when the graph object identity changes;
+   =store.wire()= indexes all 29,017 links both ways, the same way.
+   - =bySlug= keeps the FIRST node for a duplicated slug (a comment explains
+     why). =Array.find= did exactly this, so behaviour is unchanged — but if
+     you ever want "last wins", this is the line.
+   - The invalidation is =!== this.data= / =!== this.data.links=. Anything that
+     MUTATES =data= in place (a future live-update from an Emacs socket?) would
+     serve a stale index. If you get to that, invalidate on a version counter,
+     not identity.
+   - This exists because =store.views= used to rebuild a 1,559-entry Map on
+     /every hover/. Do not "simplify" it back.
+
+** REVIEW =LinkPeek= — the hover card's restraint rules
+
+   =synapt/src/lib/reader/LinkPeek.svelte= + the pointer handlers in
+   =DocReader.svelte= (=openPeek=, =onPeekMove=, =onPeekDown=). The rules that
+   keep it out of your way, each of which is a decision:
+   - 300 ms hover-intent (a card that fires on the way past a paragraph is
+     noise), 420 ms long-press on touch, because touch has no hover.
+   - =pointer-events: none= — the card is a label, not a menu. You cannot click
+     into it, so it can never steal a click or trap a pointer mid-scroll.
+   - it closes on scroll and on chapter change; repositioning per frame would
+     cost a layout read every scroll event.
+   - the body is the citation sentence from =ctx/<id>.json/ — the same lazy
+     file the rail fetches, so the card adds zero bytes to the boot. When a
+     reference is not a wire (some prose links point at chapters the exporter
+     never wired), the card says so plainly rather than showing nothing.
+   QUESTION Is a card that you cannot click into too austere? The alternative
+            is a 200 ms grace period before it closes (Feishu does this), which
+            costs a second timer and the ability to mis-click.
+
+** NOTED Verified by (this pass)
+
+   - =npx vitest run= (synapt) 43/43 — the 9 new graph-math cases plus the
+     existing store/source suites, after the =byId=/=bySlug=/=views= index
+     change.
+   - Ego scope, measured in a real browser on the built site: the canvas fed
+     32 nodes around /Agenda Views/ out of 1,559 corpus nodes, the chip
+     expanded it to 786 (every non-stub node the filters pass) and collapsed it
+     back to 32.
+   - =make build= -> 45 s on a contended box; entry JS/CSS unchanged in size
+     (the peek card and ego math are ~6 kB of the bundle, no new dependency).

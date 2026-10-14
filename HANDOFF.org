@@ -3,15 +3,51 @@
 #+STARTUP: overview
 #+TODO: NEXT WIP QUESTION | DONE LATER
 
+* Where the content comes from (the ~/org-docs dependency)
+
+  This site renders a corpus it does *not* own. The Org files, and the
+  Emacs code that turns them into that corpus, live in the *org-docs*
+  package at =~/org-docs= (a symlink to =/home/rafi/org-docs=, a Radicle
+  repo — =rad://zuEEqFauVz31JjMeZV727X2hrHwh=, not GitHub). The two are
+  coupled: this repo's =scripts/docneural-export.el= reimplements the
+  *export half* of that package in batch-mode Elisp so the site can be
+  built without loading a user's Emacs init.
+
+  What is shared, and must stay shared:
+
+  - =id:= link semantics. =org-docs-reader--resolve-id-link= resolves a
+    link to =(FILE . ANCHOR)= by grepping each corpus file's =:ID:= drawer
+    line; =docneural--resolve= does the same thing. A citation that means
+    one thing to the CLI, to the MCP server and to this site is the whole
+    point, so a change to the id: resolution rule must land in BOTH repos
+    or the site will silently disagree with the package.
+  - The corpus itself: =~/docs= (default =CORPUS= in the =Makefile=),
+    populated by =org-docs-update.el= / =org-docs-recipes.el=. The
+    exporter reads whatever is there; it never fetches.
+  - Chapter/section reading order, and the =Top= chainback that
+    =docneural--reading-order= reproduces from =org-docs-reader='s
+    navigation predicates.
+
+  When you change one of those, check the sibling package BEFORE you
+  commit, and say so in =AI-REVIEW.org=. =org-docs-reader= and
+  =org-docs-agent= references in this repo's comments are those two
+  files — never rename them to "docneural", they are a different project.
+
+  Both repos were renamed on GitHub to match: `khaalidrafi/docneural`
+  (the site) and `khaalidrafi/docneural-ui` (the theme). The two remotes
+  had briefly been swapped, now fixed along with the upstream tracking.
+  The checkout directories (`~/org-docs-website`, `~/synapt`) are
+  unchanged and the handoff still uses them everywhere.
+
 * The two repos
 
   Everything lives in two git repos, both branched off =main= into =ai/main=,
   both pushed to GitHub. There are no local-only commits and no stashes.
 
-  | repo        | path                        | remote                  | HEAD (=ai/main=)                                  |
-  |-------------+-----------------------------+-------------------------+---------------------------------------------------|
-  | docneural   | =~/docneural=               | =khaalidrafi/org-docs= | =0a2c4bf= Rename to docneural, export tooling      |
-  | docneural-ui | =~/synapt= (dir!)         | =khaalidrafi/docneural= | =b7acf16f= Rename theme to docneural-ui           |
+  | repo        | path                        | remote                    | HEAD (=ai/main=)                                  |
+  |-------------+-----------------------------+---------------------------+---------------------------------------------------|
+  | docneural   | =~/org-docs-website=        | =khaalidrafi/docneural=   | =4818187= Name the site docneural everywhere      |
+  | docneural-ui | =~/synapt= (dir!)         | =khaalidrafi/docneural-ui= | =5ec9b40= Rename the theme to docneural-ui       |
 
   - The rename to =docneural-ui= is *done*: package name, component
     (=src/lib/DocneuralApp.svelte=), graph view (=DocneuralGraph.svelte=),

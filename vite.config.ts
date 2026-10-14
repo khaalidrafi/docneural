@@ -3,7 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { fileURLToPath } from 'node:url'
 import { precompressed } from './scripts/serve-precompressed'
 
-// Where the batch Emacs exporter (scripts/org-docs-export.el) drops
+// Where the batch Emacs exporter (scripts/docneural-export.el) drops
 // its artifacts.  Vite serves this as the public dir: dev hits it directly,
 // production copies it into dist/ verbatim.  The theme store fetches
 // `${base}/graph.json` and `${base}/docs/${slug}.html`, so with base="" the

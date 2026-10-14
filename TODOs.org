@@ -1,5 +1,5 @@
-#+TITLE: TODOs — org-docs (usability + performance backlog)
-#+DESCRIPTION: Feature and performance backlog for the org-docs site and its theme. Usability first, design second; instant load and navigation on mobile and desktop is the hard requirement.
+#+TITLE: TODOs — docneural (usability + performance backlog)
+#+DESCRIPTION: Feature and performance backlog for the docneural site and its theme. Usability first, design second; instant load and navigation on mobile and desktop is the hard requirement.
 #+STARTUP: overview
 #+TODO: NEXT WIP QUESTION | DONE LATER
 
@@ -156,7 +156,7 @@
    - SHIPPED =core/lastRead.ts= (one =localStorage= key, try/catch both ways)
      mirrored into =store.lastRead= ($state) so Home's line appears without a
      reload. =DocReader= records slug + current heading; Home's tty window
-     prints =you@docs:~$ org-docs --resume org/Agenda Views#… ↵= and clicking
+     prints =you@docs:~$ docneural --resume org/Agenda Views#… ↵= and clicking
      it =goto(node, 'reader', anchor)=.
    - Anchor, not scroll percent: an offset is meaningless after a reflow or on
      another screen, a heading id is stable and the reader already jumps to

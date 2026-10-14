@@ -63,7 +63,7 @@ SCRIPT := scripts/docneural-export.el
 # One --doc flag per manual; the exporter merges them into one graph.json.
 DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 
-.PHONY: check export slim linkcheck install dev build serve verify all clean org-latest demo orui-shim
+.PHONY: check export slim summarize linkcheck install dev build serve verify all clean org-latest demo orui-shim
 
 # Materialise the orui-compatible shim at the sibling path BOTH repos'
 # aliases already point at (../org-roam-lite-ui). The shim is committed in
@@ -99,6 +99,14 @@ export: check
 	# fragments for h2/h3 ids — a separate pass because it reads the HTML,
 	# not the graph.
 	$(NODE) scripts/build-search.mjs --out $(OUT)
+
+# Optional, BYO key: a one-line tldr per chapter, at build time (costs the
+# runtime nothing). Cache is content-hashed, so incremental builds only pay
+# for chapters that changed. Without a key the target skips and the site
+# still builds — summaries are an enhancement, not a requirement.
+summarize:
+	$(NODE) scripts/summarize-export.mjs --out $(OUT)
+	$(NODE) scripts/slim-graph.mjs --out $(OUT)
 
 # Re-run only the transport pass (e.g. after changing slim-graph.mjs).
 slim:

@@ -29,13 +29,16 @@ const graph = JSON.parse(readFileSync(join(out, 'graph.json'), 'utf8'))
 const bySlug = new Map()
 for (const n of graph.nodes) bySlug.set(n.slug, n)
 
-/** Strip the leading `<span class="section-number-2">1.</span>` ox-html
- *  puts in front of every numbered heading, and any other tags, so the
- *  index holds readable words. Entities are decoded to real characters —
- *  the query a human types is plain text. */
+/** Clean one heading into readable words: drop ox-html's leading
+ *  `<span class="section-number-2">1.</span>` NUMBER (the outline number
+ *  is chrome, not a search term — the reader's own TOC drops it too),
+ *  then any remaining tags, then decode entities. What a human types is
+ *  plain text, so that is what the index holds. */
 function cleanHeading(inner) {
-  const noTags = inner.replace(/<[^>]+>/g, '')
+  const noNumber = inner.replace(/<span class="section-number-[^"]*">[^<]*<\/span>/, '')
+  const noTags = noNumber.replace(/<[^>]+>/g, '')
   return noTags
+    .replace(/^\s*[0-9]+(\.[0-9]+)*\.?\s*/, '')
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')

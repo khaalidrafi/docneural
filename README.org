@@ -71,19 +71,34 @@
 
   =j/k= scroll · =g d/s/h= jump · =[ ]= prev/next chapter · =y= copy
   link to this heading · =b= save this section · =v= distraction-free ·
-  =R= read aloud · =/= palette (docs, headings, commands) · =?= help.
-  On the palette: =? <question>= composes an ask-the-corpus prompt.
+  =r= read aloud · =p= build a context pack · =/= palette (docs, section
+  headings, commands) · =? <question>= ask this corpus · =?= help.
 
 * For agents (AI integrations)
 
   - =llms.txt= / =llms-full.txt= / =ctx/=: the fetchable surface.
   - MCP server: =node scripts/mcp-server.mjs --out .export= — stdio
     JSON-RPC exposing =search=, =node=, =neighbours=, =citation-path=
-    and =stats= over the exported graph (see =scripts/mcp-server.mjs=).
+    and =stats= over the exported graph, plus =llms.txt= as a resource
+    (see =scripts/mcp-server.mjs=; =make verify= runs its 11 protocol
+    cases). Config for an assistant:
+
+    #+begin_example
+    { "mcpServers": { "docneural": {
+        "command": "node",
+        "args": ["scripts/mcp-server.mjs", "--out", ".export"] } } }
+    #+end_example
+
   - Export-time summaries (optional, BYO key): =make summarize= adds a
-    one-line =tldr= per node (cached by content hash).
-  - In the reader: =⧉ llm= copies the page as LLM context; the palette's
-    ask mode hands the prompt to a BYO-key OpenAI-compatible endpoint.
+    one-line =tldr= and three takeaways per node, cached by content
+    hash — the LLM runs during the build, so the runtime costs nothing.
+  - In the browser: =⧉ llm= copies the page as LLM context (40 kB
+    budget, truncation marked); =⧉ pack= bundles every chapter you
+    ticked into one markdown file with a token estimate BEFORE you copy;
+    the palette's =? <question>= sends a grounded prompt (open page +
+    corpus index, answers must cite sections) to YOUR OpenAI-compatible
+    endpoint — the key stays in your browser and the corpus is never
+    sent anywhere by default.
 
 * Verification (run before pushing)
 

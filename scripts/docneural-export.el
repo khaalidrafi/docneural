@@ -2,6 +2,11 @@
 
 ;; Copyright 2026 Khalid Rafi
 ;; Part of docneural. Batch script; not an installed package.
+;;
+;; Powered by the org-docs package (~/org-docs): it owns the Org corpus
+;; and the id: link engine this script must stay identical to
+;; (`org-docs-reader--resolve-id-link'). If you change id: resolution,
+;; reading order or the Top chainback here, change it there too.
 
 ;;; Commentary:
 

@@ -56,5 +56,18 @@ export default defineConfig({
   // host. Dev-only convenience — the shipped site is `npm run build` + sirv.
   server: { fs: { allow: ['..'] }, host: true, allowedHosts: true },
   publicDir: PUBDIR,
-  build: { outDir: 'dist', emptyOutDir: true },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      // Two doors, one build: '/' is the reader (Svelte app), '/cloud.html'
+      // is the self-contained money page (branding, pricing, Jev console,
+      // agent manifest). The cloud page is plain HTML+inline JS — no Svelte,
+      // no imports — so it adds one small entry and zero shared-chunk risk.
+      input: {
+        main: fileURLToPath(new URL('index.html', import.meta.url)),
+        cloud: fileURLToPath(new URL('cloud.html', import.meta.url)),
+      },
+    },
+  },
 })

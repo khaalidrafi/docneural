@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04060c">
+<title>docneural CLOUD — we fuel the neural networks of humans and AI</title>
+<meta name="description" content="docneural: the documentation aggregator that wires manuals into a citation graph. 1,559 chapters of Emacs, Guix and Org docs, 29,017 wires, and every wire carries the sentence that made it. Humans read it. Agents query it. We fuel the neural networks of humans and AI.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2304060c'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2300f0ff'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%2300f0ff' stroke-width='1.5' opacity='.5'/%3E%3Cpath d='M16 16 27 8M16 16 5 24' stroke='%23ff2bd6' stroke-width='1' opacity='.8'/%3E%3Ccircle cx='27' cy='8' r='2' fill='%23ff2bd6'/%3E%3Ccircle cx='5' cy='24' r='2' fill='%23ff2bd6'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"docneural","slogan":"We fuel the neural networks of humans and AI","applicationCategory":"DeveloperApplication","operatingSystem":"Web","description":"Documentation aggregator: the Emacs, Guix and Org manuals as one citation graph with provenance, a reader for humans, and a metered Agent API with typed System-One decisions (TypeSafe Jev).","offers":[{"@type":"Offer","name":"Cloud Free","price":"0","priceCurrency":"USD"},{"@type":"Offer","name":"Cloud Pro","price":"19","priceCurrency":"USD"},{"@type":"Offer","name":"Cloud Team","price":"49","priceCurrency":"USD"},{"@type":"Offer","name":"Agent API Build","price":"9","priceCurrency":"USD"},{"@type":"Offer","name":"Agent API Scale","price":"49","priceCurrency":"USD"},{"@type":"Offer","name":"Viewer License","price":"499","priceCurrency":"USD"}]}
+</script>
+<style>
+/* No webfonts on purpose — house rule: a render-blocking font CDN cost tens
+   of seconds on the build machine. Mono IS the identity. */
+:root{--bg:#04060c;--p1:#0a101c;--p2:#0d1524;--ln:#16233a;--tx:#d9e6f2;--mut:#8ea3ba;--cy:#00f0ff;--mg:#ff2bd6;--lm:#9dff00;--am:#ffb347;--m:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font:500 16px/1.6 var(--m);overflow-x:hidden}
+::selection{background:var(--mg);color:#000}
+a{color:var(--cy);text-decoration:none}
+#neurons{position:fixed;inset:0;z-index:0;opacity:.5}
+.scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px;position:relative;z-index:2}
+header{position:sticky;top:0;z-index:20;background:rgba(4,6,12,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--cy);box-shadow:0 0 24px rgba(0,240,255,.15)}
+nav{display:flex;align-items:center;gap:14px;height:58px}
+.logo{font-weight:700;letter-spacing:.14em;white-space:nowrap;font-size:15px}
+.logo b{color:var(--cy)}.logo i{color:var(--mg);font-style:normal}
+nav .links{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav .links a{color:var(--mut);font-weight:700;font-size:12px;letter-spacing:.12em;padding:8px 9px;border:1px solid transparent;white-space:nowrap}
+nav .links a:hover{color:var(--cy);border-color:var(--ln);background:#0b1322}
+.btn{display:inline-flex;align-items:center;gap:8px;font:700 13px/1 var(--m);letter-spacing:.1em;padding:12px 16px;border:1px solid var(--cy);color:var(--cy);background:transparent;cursor:pointer;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:background .15s,color .15s,box-shadow .15s}
+.btn:hover{background:var(--cy);color:#001318;box-shadow:0 0 24px rgba(0,240,255,.45)}
+.btn.mg{border-color:var(--mg);color:var(--mg)}.btn.mg:hover{background:var(--mg);color:#180012;box-shadow:0 0 24px rgba(255,43,214,.45)}
+.btn.lm{border-color:var(--lm);color:var(--lm)}.btn.lm:hover{background:var(--lm);color:#0c1800}
+.btn.sm{padding:8px 11px;font-size:11px}
+.btn.solid{background:var(--cy);color:#001318}
+section{padding:70px 0;position:relative;z-index:2}
+h1,h2,h3{letter-spacing:.06em;font-weight:700}
+h2{font-size:clamp(20px,3.2vw,30px);margin-bottom:8px}
+h2 .tag{color:var(--mg)}
+.sub{color:var(--mut);max-width:780px;margin-bottom:26px}
+.kicker{font:700 11px var(--m);letter-spacing:.3em;color:var(--lm);margin-bottom:10px}
+.hero{padding:84px 0 36px}
+.hero h1{font-size:clamp(26px,5.4vw,56px);line-height:1.08}
+.hero h1 .l2{color:var(--cy);text-shadow:0 0 26px rgba(0,240,255,.5)}
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;inset:0;pointer-events:none}
+.glitch::before{color:var(--mg);clip-path:inset(0 0 62% 0);transform:translate(-2px,-1px);opacity:.7;animation:gl1 3.1s infinite steps(2)}
+.glitch::after{color:var(--cy);clip-path:inset(58% 0 0 0);transform:translate(2px,1px);opacity:.7;animation:gl2 2.7s infinite steps(2)}
+@keyframes gl1{0%,86%{clip-path:inset(0 0 62% 0);transform:translate(-2px,-1px)}88%{clip-path:inset(10% 0 40% 0);transform:translate(3px,0)}100%{clip-path:inset(0 0 62% 0);transform:translate(-2px,-1px)}}
+@keyframes gl2{0%,80%{clip-path:inset(58% 0 0 0);transform:translate(2px,1px)}84%{clip-path:inset(30% 0 55% 0);transform:translate(-3px,0)}100%{clip-path:inset(58% 0 0 0);transform:translate(2px,1px)}}
+.hero p.sub{margin:18px 0 24px;font-size:16px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:32px}
+.stat{border-left:2px solid var(--mg);padding-left:12px}
+.stat b{display:block;font-size:21px}
+.stat span{color:var(--mut);font-size:11px;letter-spacing:.14em}
+.ticker{border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);background:#070c16;overflow:hidden;position:relative;z-index:2}
+.tk{display:inline-flex;gap:34px;white-space:nowrap;padding:9px 0;font:700 12px var(--m);letter-spacing:.2em;color:var(--cy);animation:tk 36s linear infinite}
+.tk em{color:var(--mg);font-style:normal}
+@keyframes tk{to{transform:translateX(-50%)}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:13px}
+.card{background:linear-gradient(180deg,var(--p1),#080d17);border:1px solid var(--ln);padding:16px;position:relative;transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--cy);box-shadow:0 8px 30px rgba(0,240,255,.12)}
+.card h3{font-size:13px;color:var(--cy);letter-spacing:.14em;margin-bottom:8px}
+.card p{color:var(--mut);font-size:13.5px}
+.card .idx{position:absolute;top:9px;right:11px;font:700 10px var(--m);color:#27405f}
+.card.mg h3{color:var(--mg)}.card.lm h3{color:var(--lm)}.card.am h3{color:var(--am)}
+.panel{background:linear-gradient(180deg,var(--p2),#070c15);border:1px solid var(--ln)}
+.term{display:flex;align-items:center;gap:8px;padding:9px 13px;border-bottom:1px solid var(--ln);font:700 11px var(--m);letter-spacing:.18em;color:var(--mut)}
+.term .dot{width:9px;height:9px;border-radius:50%}.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+.term .sp{margin-left:auto;color:var(--lm)}
+.console{display:grid;grid-template-columns:1.05fr .95fr}
+.console .left{border-right:1px solid var(--ln);padding:15px}
+.console .right{padding:15px;min-height:300px}
+label{display:block;font:700 11px var(--m);letter-spacing:.2em;color:var(--mut);margin:11px 0 5px}
+textarea,input[type=text],input[type=email],input[type=number],select{width:100%;background:#060a12;border:1px solid var(--ln);color:var(--tx);font:500 14px/1.5 var(--m);padding:9px 11px;outline:none}
+textarea:focus,input:focus,select:focus{border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,240,255,.18)}
+textarea{resize:vertical;min-height:96px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+.chip{font:700 11px var(--m);letter-spacing:.1em;padding:6px 10px;border:1px solid var(--ln);color:var(--mut);cursor:pointer;background:#0a1220}
+.chip[aria-pressed=true]{border-color:var(--mg);color:var(--mg);box-shadow:0 0 14px rgba(255,43,214,.25)}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:11px}
+.hint{color:var(--mut);font-size:12px}
+.ans{border:1px solid var(--ln);background:#08101c;padding:11px;margin-bottom:9px}
+.ans .hd{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.ans .id{font:700 12px var(--m);color:var(--cy);letter-spacing:.1em}
+.badge{font:700 9px var(--m);letter-spacing:.16em;padding:3px 6px;border:1px solid}
+.badge.noul{color:var(--lm);border-color:var(--lm)}
+.badge.choice{color:var(--cy);border-color:var(--cy)}
+.badge.score{color:var(--am);border-color:var(--am)}
+.badge.sim{color:var(--mut);border-color:var(--mut)}
+.ans .val{font:700 18px var(--m);margin:5px 0 2px}
+.bar{height:7px;background:#0d1626;margin:5px 0 11px;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--cy),var(--mg));width:0;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.bar small{position:absolute;right:0;top:-15px;font:700 9px var(--m);color:var(--mut)}
+.meta{font:700 10px var(--m);color:var(--mut);letter-spacing:.12em}
+pre.code{background:#060a12;border:1px solid var(--ln);padding:11px;overflow:auto;font:500 11.5px/1.55 var(--m);color:#bfe8f2;max-height:250px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px}
+.plan{padding:18px;border:1px solid var(--ln);background:linear-gradient(180deg,#0b1220,#070c15);display:flex;flex-direction:column;gap:9px;position:relative}
+.plan.hot{border-color:var(--mg);box-shadow:0 0 34px rgba(255,43,214,.16)}
+.plan .flag{position:absolute;top:-10px;right:13px;background:var(--mg);color:#180012;font:700 9px var(--m);letter-spacing:.18em;padding:4px 7px}
+.plan h3{font-size:13px;letter-spacing:.16em}
+.price{font:700 30px var(--m);color:var(--cy)}
+.price span{font:500 12px var(--m);color:var(--mut)}
+.plan ul{list-style:none;color:var(--mut);font-size:13px;display:grid;gap:5px}
+.plan li::before{content:"// ";color:var(--lm)}
+.plan .btn{margin-top:auto;justify-content:center}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px;align-items:end}
+.out{border:1px dashed var(--lm);padding:15px;background:rgba(157,255,0,.05)}
+.out b{font:700 27px var(--m);color:var(--lm)}
+.out div{color:var(--mut);font-size:12.5px}
+footer{border-top:1px solid var(--ln);padding:24px 0;color:var(--mut);font-size:12.5px;position:relative;z-index:2;background:#05080f}
+footer .wrap{display:flex;gap:15px;flex-wrap:wrap;align-items:center}
+footer .sp{margin-left:auto}
+.modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(2,4,9,.8);backdrop-filter:blur(4px)}
+.modal.on{display:flex}
+.modal .box{width:min(560px,92vw);max-height:86vh;overflow:auto}
+.modal .box .inner{padding:17px}
+.pal{position:fixed;left:50%;top:12vh;transform:translateX(-50%);width:min(620px,92vw);z-index:70;display:none}
+.pal.on{display:block}
+.pal input{border-color:var(--cy)}
+.pal ul{list-style:none;max-height:320px;overflow:auto}
+.pal li{padding:10px 13px;cursor:pointer;border-top:1px solid var(--ln);color:var(--mut);font-weight:700;font-size:13px;letter-spacing:.05em}
+.pal li[aria-selected=true]{background:#0d1728;color:var(--cy)}
+.pal li small{color:var(--mut);font:500 11px var(--m);margin-left:8px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:80;background:#081019;border:1px solid var(--cy);color:var(--cy);font:700 12px var(--m);letter-spacing:.1em;padding:9px 15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#agentview{display:none;position:relative;z-index:2;padding:80px 20px 60px;max-width:880px;margin:0 auto;font:500 13px/1.6 var(--m);color:#c7f5ff;white-space:pre-wrap}
+body.agent main,body.agent header .links,body.agent .ticker,body.agent footer .sp{display:none}
+body.agent #agentview{display:block}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:920px){.console{grid-template-columns:1fr}.console .left{border-right:0;border-bottom:1px solid var(--ln)}.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.glitch::before,.glitch::after{display:none}}
+</style>
+</head>
+<body>
+<canvas id="neurons" aria-hidden="true"></canvas>
+<div class="scan" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap">
+    <nav aria-label="primary">
+      <span class="logo">&#9673; DOC<b>NEURAL</b><i>//</i>CLOUD</span>
+      <div class="links">
+        <a href="#reader">READER</a>
+        <a href="#console">SYSTEM-ONE</a>
+        <a href="#agents">AGENTS</a>
+        <a href="#pricing">PRICING</a>
+        <a href="#roi">ROI</a>
+        <a href="#access">ACCESS</a>
+      </div>
+      <button class="btn sm" id="btn-agent" type="button">AGENT MODE</button>
+      <a class="btn sm solid" href="/">OPEN READER &#8594;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap hero" id="top">
+    <div class="kicker" id="reader">// HEBB'S LAW, SHIPPED &middot; FIRE TOGETHER, WIRE STRONGER</div>
+    <h1><span class="glitch" data-t="WE FUEL THE NEURAL NETWORKS">WE FUEL THE NEURAL NETWORKS</span><br><span class="l2">OF HUMANS AND AI.</span></h1>
+    <p class="sub">docneural is the documentation aggregator that <b>wires</b> manuals into one citation graph: the Emacs, Guix and Org manuals — 1,559 chapters, 29,017 wires — and <b>every wire carries the sentence that made it</b>. Humans read it in a neon HUD. Agents query it over a metered API and get typed decisions from TypeSafe Jev in ~70 ms. One corpus, two nervous systems, five income lines.</p>
+    <div class="cta">
+      <a class="btn lm" href="/">&#9654; READ THE CORPUS</a>
+      <button class="btn" id="cta-deploy" type="button">DEPLOY YOURS — $0</button>
+      <a class="btn mg" href="#console">&#9889; SYSTEM-ONE CONSOLE</a>
+      <button class="btn sm" id="cta-speak" type="button">&#128266; PITCH</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>1,559</b><span>CHAPTERS</span></div>
+      <div class="stat"><b>29,017</b><span>CITATION WIRES</span></div>
+      <div class="stat"><b>~70ms</b><span>JEV DECISIONS</span></div>
+      <div class="stat"><b>3</b><span>MANUALS WIRED</span></div>
+      <div class="stat"><b id="bootms">&hellip;</b><span>THIS PAGE BOOT</span></div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><div class="tk" id="tk"></div></div>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="kicker">// 01 &middot; FOR HUMANS — THE READER</div>
+      <h2><span class="tag">01.</span> A HUD, NOT A MAGAZINE</h2>
+      <p class="sub">DevDocs aggregates pages. docneural aggregates <b>synapses</b>: every cross-reference is a wire you can walk, with the citing sentence as provenance. Static CDN bytes — no runtime LLM cost, ever.</p>
+      <div class="cards">
+        <div class="card"><span class="idx">H-01</span><h3>CITATION GRAPH</h3><p>org-roam-style neuron canvas: ego graphs, co-citation, learn-paths. Every edge answers "why does this cite that?" with a sentence.</p></div>
+        <div class="card"><span class="idx">H-02</span><h3>SECTION SEARCH</h3><p>BM25 over a per-manual heading index, lazy-loaded. Ctrl+K palette, keyboard-first reading (j/k, g d/s/h, r, p).</p></div>
+        <div class="card"><span class="idx">H-03</span><h3>CONTEXT PACKS</h3><p>Tick chapters, get one markdown bundle with a token estimate — paste-ready fuel for any LLM chat.</p></div>
+        <div class="card"><span class="idx">H-04</span><h3>BUILD-TIME TLDRs</h3><p>One-line summaries per chapter, generated at build with YOUR key, cached by content hash. The runtime pays nothing.</p></div>
+        <div class="card"><span class="idx">H-05</span><h3>READ ALOUD + PEEK</h3><p>Speech synthesis for chapters; hover-peek cards on citations so you never lose your place.</p></div>
+        <div class="card mg"><span class="idx">H-06</span><h3>YOUR CORPUS, YOUR DOMAIN</h3><p>Cloud hosting: push any Org/texinfo manual family, get this exact site on your domain in minutes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="console">
+    <div class="wrap">
+      <div class="kicker">// 02 &middot; COOL AI INTEGRATION — TYPESAFE JEV (SYSTEM ONE)</div>
+      <h2><span class="tag">02.</span> DECISIONS, NOT ESSAYS</h2>
+      <p class="sub">Jev is TypeSafe's System-One model: send a <b>state</b> + typed <b>questions</b>, get typed answers with probabilities — choice / score / noul — in ~70 ms at ~$0.042 per 1M input tokens. The DOC ROUTER pack is what /v1/ask runs in production: route a question to the right manual, then judge candidates. Paste your own key (stays in your browser) or watch the offline SIM.</p>
+      <div class="panel console">
+        <div class="left">
+          <div class="term"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> STATE // INPUT <span class="sp" id="jev-mode">MODE: SIM</span></div>
+          <label for="jev-key">TYPESAFE API KEY (BYO — localStorage only)</label>
+          <input type="text" id="jev-key" placeholder="tsk_... (empty = offline SIM)" autocomplete="off">
+          <label for="jev-state">STATE TO EVALUATE</label>
+          <textarea id="jev-state">How do I capture todos from my mail in Org, and why does my agenda skip them?</textarea>
+          <label id="lbl-presets">QUESTION PACK</label>
+          <div class="chips" id="jev-chips" role="group" aria-label="question packs"></div>
+          <label for="jev-q">TYPED QUESTIONS (editable JSON)</label>
+          <textarea id="jev-q" style="min-height:140px"></textarea>
+          <div class="row">
+            <button class="btn lm" id="jev-run" type="button">&#9889; RUN SYSTEM-ONE</button>
+            <button class="btn sm" id="jev-curl" type="button">COPY cURL</button>
+            <span class="meta" id="jev-lat"></span>
+          </div>
+          <p class="hint" style="margin-top:8px">Live calls need http(s) + your key; a file:// preview runs the SIM. The SIM is deterministic and clearly labelled — it never pretends to be Jev.</p>
+        </div>
+        <div class="right" aria-live="polite">
+          <div class="term"><span class="dot g"></span> ANSWERS // TYPED <span class="sp" id="jev-usage"></span></div>
+          <div id="jev-out" style="padding:13px"><p class="hint">Typed answers render here with probability bars and confidence. Nothing leaves your browser except the direct call to api.typesafe.ai when you supply a key.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agents">
+    <div class="wrap">
+      <div class="kicker">// 03 &middot; FOR AI — FIRST-CLASS CITIZENS</div>
+      <h2><span class="tag">03.</span> THE AGENT GATEWAY</h2>
+      <p class="sub">This page has a twin surface for machines: <code>?agent=1</code> renders the whole offer as plain text (~2% of the tokens). The built site ships <code>/llms.txt</code>, <code>/llms-full.txt</code>, per-node <code>ctx/*.json</code> citation sentences, an MCP server, and a metered HTTP API. Answers arrive <b>with the sentence that proves them</b> — a verified citation replaces a support ticket and kills a hallucination.</p>
+      <div class="two">
+        <div class="panel">
+          <div class="term"><span class="dot y"></span> agent-manifest.json <span class="sp">EMBEDDED</span></div>
+          <pre class="code" id="manifest-view"></pre>
+          <div class="row" style="padding:0 13px 13px">
+            <button class="btn sm" id="copy-manifest" type="button">COPY MANIFEST</button>
+            <button class="btn sm mg" id="copy-llms" type="button">COPY llms.txt</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="term"><span class="dot g"></span> METERED HTTP API <span class="sp">scripts/agent-api.mjs</span></div>
+          <pre class="code" id="tool-example"></pre>
+          <div class="row" style="padding:0 13px 13px">
+            <button class="btn sm lm" id="btn-agent2" type="button">SWITCH TO TEXT MODE</button>
+            <button class="btn sm" id="copy-tool" type="button">COPY</button>
+          </div>
+        </div>
+      </div>
+      <div class="cards" style="margin-top:13px">
+        <div class="card lm"><span class="idx">A-01</span><h3>?agent=1 TEXT SURFACE</h3><p>Zero-CSS machine view: offer, tools, endpoints, prices. Tokens in, decisions out.</p></div>
+        <div class="card lm"><span class="idx">A-02</span><h3>MCP SERVER</h3><p>search / node / neighbours / citation-path over stdio — the same ranking as the site palette, so both cannot disagree.</p></div>
+        <div class="card lm"><span class="idx">A-03</span><h3>POST /v1/ask</h3><p>Jev routes the question to a manual (typed choice — it cannot invent one), BM25 ranks, Jev judges, citations prove.</p></div>
+        <div class="card lm"><span class="idx">A-04</span><h3>USAGE METERING</h3><p>Keys, plans, quotas, rps limits, usage-YYYYMM.jsonl — the invoice artifact. 429 + Retry-After when a plan is spent.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="kicker">// 04 &middot; INCOME LINES — PUBLIC PRICES</div>
+      <h2><span class="tag">04.</span> FIVE WAYS THIS EARS</h2>
+      <p class="sub">Hosting (Cloud), metered queries (Agent API), done-for-you manual conversions, the commercial viewer license, and sponsorship. Pick a line; the checkout drafts the invoice.</p>
+      <div class="plans">
+        <div class="plan"><h3>CLOUD FREE</h3><div class="price">$0</div><ul><li>public repos, 1 corpus</li><li>search + graph + badge</li><li>Agent API hobby: 1k q/mo</li></ul><button class="btn" data-plan="cloud-free" data-amt="0" type="button">START</button></div>
+        <div class="plan hot"><span class="flag">BEST MARGIN</span><h3>CLOUD PRO</h3><div class="price">$19<span>/mo</span></div><ul><li>5 private corpora</li><li>custom domain, no badge</li><li>TLDRs + export alerts</li></ul><button class="btn mg" data-plan="cloud-pro" data-amt="19" type="button">DEPLOY PRO</button></div>
+        <div class="plan"><h3>CLOUD TEAM</h3><div class="price">$49<span>/mo</span></div><ul><li>20 corpora, Google SSO</li><li>roles + usage analytics</li><li>priority builds</li></ul><button class="btn" data-plan="cloud-team" data-amt="49" type="button">DEPLOY TEAM</button></div>
+        <div class="plan"><h3>AGENT BUILD</h3><div class="price">$9<span>/mo</span></div><ul><li>50k queries, 10 rps</li><li>1 private corpus as tools</li><li>citations with every answer</li></ul><button class="btn" data-plan="agent-build" data-amt="9" type="button">METER IT</button></div>
+        <div class="plan"><h3>AGENT SCALE</h3><div class="price">$49<span>/mo</span></div><ul><li>500k queries, 100 rps</li><li>5 corpora, usage webhooks</li><li>overage $0.40 / 10k</li></ul><button class="btn" data-plan="agent-scale" data-amt="49" type="button">METER IT</button></div>
+        <div class="plan"><h3>VIEWER LICENSE</h3><div class="price">$499<span>/yr</span></div><ul><li>embed the neuron canvas</li><li>spread layout + theme tokens</li><li>commercial products, per company</li></ul><button class="btn" data-plan="viewer-license" data-amt="499" type="button">LICENSE</button></div>
+        <div class="plan"><h3>CONVERSIONS</h3><div class="price">$2.5-8k<span>/manual</span></div><ul><li>your 500-2,000 page manual</li><li>Org/DocBook/texinfo &rarr; wired site</li><li>2-3 weeks, fixed price</li></ul><button class="btn lm" id="btn-convert" type="button">REQUEST QUOTE</button></div>
+        <div class="plan"><h3>ENTERPRISE</h3><div class="price">~$2-5k<span>/mo</span></div><ul><li>self-hosted license + SLA</li><li>onboarding, invoice billing</li><li>sponsors: $25/$100/$500 tiers</li></ul><button class="btn" data-plan="enterprise" data-amt="2500" type="button">TALK</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roi">
+    <div class="wrap">
+      <div class="kicker">// 05 &middot; THE MONEY MATH</div>
+      <h2><span class="tag">05.</span> ROI CALCULATOR</h2>
+      <p class="sub">Price against the ticket, not the token: a cited answer replaces a $5-50 support ticket and an unbounded hallucination risk.</p>
+      <div class="panel" style="padding:17px">
+        <div class="calc">
+          <div><label for="roi-pages">CORPUS PAGES</label><input type="number" id="roi-pages" value="1559" min="10" max="20000"></div>
+          <div><label for="roi-tickets">SUPPORT TICKETS / MONTH</label><input type="number" id="roi-tickets" value="350" min="0" max="100000"></div>
+          <div><label for="roi-cost">LOADED COST / TICKET ($)</label><input type="number" id="roi-cost" value="12" min="1" max="500"></div>
+          <div class="out"><b id="roi-save">$0</b><div id="roi-detail">estimated annual savings</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="access">
+    <div class="wrap">
+      <div class="kicker">// 06 &middot; GET ON THE WIRE</div>
+      <h2><span class="tag">06.</span> ACCESS &amp; REFERRALS</h2>
+      <p class="sub">Queue for hosted Cloud, or mint a referral link — 20% recurring for twelve months on every seat you send.</p>
+      <div class="two">
+        <div class="panel"><div class="term"><span class="dot g"></span> WAITLIST</div>
+          <div class="inner" style="padding:15px">
+            <label for="wl-email">EMAIL</label>
+            <input type="email" id="wl-email" placeholder="you@company.com">
+            <div class="row"><button class="btn lm" id="wl-join" type="button">JOIN QUEUE</button><span class="hint" id="wl-count"></span></div>
+          </div>
+        </div>
+        <div class="panel"><div class="term"><span class="dot y"></span> REFERRAL MINT</div>
+          <div class="inner" style="padding:15px">
+            <label for="ref-handle">YOUR HANDLE</label>
+            <input type="text" id="ref-handle" placeholder="neon-runner">
+            <div class="row"><button class="btn mg" id="ref-make" type="button">MINT LINK</button><button class="btn sm" id="ref-copy" type="button">COPY</button></div>
+            <pre class="code" id="ref-out" style="margin-top:9px;max-height:64px">link appears here</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<pre id="agentview" aria-label="machine readable view"></pre>
+
+<footer>
+  <div class="wrap">
+    <span>&#9673; docneural CLOUD &middot; we fuel the neural networks of humans and AI</span>
+    <span class="meta">humans: / &middot; agents: ?agent=1 + #agent-manifest</span>
+    <span class="sp meta">MIT &middot; boot <span id="bootms2"></span> &middot; Ctrl+K</span>
+  </div>
+</footer>
+
+<div class="modal" id="checkout" role="dialog" aria-modal="true" aria-labelledby="co-title">
+  <div class="box panel">
+    <div class="term"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> <span id="co-title">CHECKOUT // DRAFT INVOICE</span><span class="sp"><button class="btn sm" id="co-close" type="button">ESC</button></span></div>
+    <div class="inner">
+      <label for="co-plan">LINE</label>
+      <select id="co-plan">
+        <option value="cloud-free|0">CLOUD FREE — $0</option>
+        <option value="cloud-pro|19">CLOUD PRO — $19/mo</option>
+        <option value="cloud-team|49">CLOUD TEAM — $49/mo</option>
+        <option value="agent-build|9">AGENT BUILD — $9/mo</option>
+        <option value="agent-scale|49">AGENT SCALE — $49/mo</option>
+        <option value="viewer-license|499">VIEWER LICENSE — $499/yr</option>
+        <option value="enterprise|2500">ENTERPRISE — from $2.5k/mo</option>
+      </select>
+      <label for="co-email">BILLING EMAIL</label>
+      <input type="email" id="co-email" placeholder="you@company.com">
+      <div class="row"><button class="btn lm" id="co-make" type="button">GENERATE INVOICE</button><button class="btn sm" id="co-copy" type="button">COPY JSON</button></div>
+      <pre class="code" id="co-out" style="margin-top:11px">draft invoice JSON — wire your Stripe payment link here</pre>
+    </div>
+  </div>
+</div>
+
+<div class="pal panel" id="palette" role="dialog" aria-modal="true" aria-label="command palette">
+  <div style="padding:9px">
+    <input type="text" id="pal-in" placeholder="jump to / run action..." aria-label="command palette input">
+    <ul id="pal-list"></ul>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script type="application/json" id="agent-manifest">
+{"name":"docneural-cloud","version":"2.1.0","slogan":"We fuel the neural networks of humans and AI","surface":{"reader":"/","cloud_page":"/cloud.html","agent_text":"?agent=1","llms_txt":"/llms.txt","llms_full":"/llms-full.txt","repo":"https://github.com/khaalidrafi/docneural","mcp":"scripts/mcp-server.mjs","http_api":"scripts/agent-api.mjs"},"tools":[{"name":"search","input":{"query":"string","manual":"emacs|guix|org?","limit":"int?"},"output":"BM25-ranked sections (title x3, heading x2, phrase bonus)"},{"name":"node","input":{"slug":"string"},"output":"chapter metadata + citations WITH their sentences"},{"name":"neighbours","input":{"slug":"string","hops":"1|2"},"output":"ego graph: chapters + wires + contexts"},{"name":"citation_path","input":{"from":"string","to":"string"},"output":"wire chain, each hop with the sentence that made it"},{"name":"ask","input":{"question":"string","k":"int?"},"output":"Jev-routed + judged candidates with citations (POST /v1/ask)"},{"name":"system_one_decide","input":{"state":"string|object","questions":"jev typed question map"},"output":"typed answers via POST https://api.typesafe.ai/v1/systemone (model jev-latest)"}],"auth":"bearer keys (keys.json); BYO TYPESAFE_API_KEY for Jev — never proxied","plans_usd":{"cloud":{"free":0,"pro":19,"team":49},"agent_api":{"hobby":{"price":0,"queries":1000,"rps":1},"build":{"price":9,"queries":50000,"rps":10},"scale":{"price":49,"queries":500000,"rps":100},"overage_per_10k":0.4},"viewer_license_per_year":499,"conversion_per_manual":[2500,8000]}}
+</script>
+
+<script type="text/plain" id="llms-txt">
+# docneural CLOUD
+> We fuel the neural networks of humans and AI.
+> The Emacs, Guix and Org manuals as one citation graph: 1,559 chapters,
+> 29,017 wires, every wire carries the sentence that made it.
+
+## Surfaces
+- Reader (humans): /            - Money page: /cloud.html
+- Agent text mode: ?agent=1     - llms.txt / llms-full.txt on the built site
+- MCP: scripts/mcp-server.mjs   - HTTP API: scripts/agent-api.mjs
+
+## Tools
+- search(query, manual?, limit?) -> BM25 sections
+- node(slug) -> chapter + citations with sentences
+- neighbours(slug, hops) -> ego graph
+- citation_path(from, to) -> provenance chain
+- POST /v1/ask {question} -> Jev-routed, judged, cited candidates
+- system_one(state, questions) -> typed answers (TypeSafe Jev, jev-latest)
+
+## Prices (USD)
+- Cloud: free 0 / pro 19 / team 49 per month
+- Agent API: hobby 0 (1k q) / build 9 (50k q) / scale 49 (500k q), overage 0.40 per 10k
+- Viewer license 499/yr; manual conversions 2500-8000; enterprise from 2500/mo
+</script>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var BOOT=performance.now();
+var REDUCED=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- neuron canvas: somas, axons, travelling spikes ---------- */
+(function(){
+  var c=$("#neurons"),x=c.getContext("2d"),W=0,H=0,N=[],dpr=Math.min(1.5,window.devicePixelRatio||1),spike=null,frame=0;
+  function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+"px";c.style.height=innerHeight+"px";build();}
+  function build(){var n=Math.min(56,Math.floor(innerWidth/24));N=[];for(var i=0;i<n;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22*dpr,vy:(Math.random()-.5)*.22*dpr,r:(1.4+Math.random()*1.8)*dpr});}
+  function near(a,b,lim){var dx=a.x-b.x,dy=a.y-b.y;return dx*dx+dy*dy<lim*lim}
+  function step(){
+    frame++;
+    if(!document.hidden){
+      x.clearRect(0,0,W,H);
+      var lim=150*dpr;
+      for(var i=0;i<N.length;i++){
+        var p=N[i];
+        if(!REDUCED){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;}
+        for(var j=i+1;j<N.length;j++){var q=N[j];
+          if(near(p,q,lim)){x.strokeStyle="rgba(0,240,255,.13)";x.lineWidth=dpr;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke();}}
+        x.fillStyle=i%6?"rgba(0,240,255,.8)":"rgba(255,43,214,.85)";
+        x.beginPath();x.arc(p.x,p.y,p.r,0,6.2832);x.fill();
+      }
+      if(!REDUCED){
+        if(!spike&&frame%90===0&&N.length>1){var a=Math.floor(Math.random()*N.length),b=(a+1+Math.floor(Math.random()*(N.length-1)))%N.length;spike={a:a,b:b,t:0};}
+        if(spike){var pa=N[spike.a],pb=N[spike.b],t=spike.t;
+          x.strokeStyle="rgba(157,255,0,.5)";x.lineWidth=dpr;x.beginPath();x.moveTo(pa.x,pa.y);x.lineTo(pb.x,pb.y);x.stroke();
+          x.fillStyle="#9dff00";x.beginPath();x.arc(pa.x+(pb.x-pa.x)*t,pa.y+(pb.y-pa.y)*t,2.4*dpr,0,6.2832);x.fill();
+          spike.t+=0.045;if(spike.t>=1)spike=null;}
+      }
+    }
+    if(!REDUCED)requestAnimationFrame(step);
+  }
+  addEventListener("resize",size,{passive:true});size();step();
+})();
+
+/* ---------- ticker ---------- */
+(function(){
+  var items=["WE FUEL THE NEURAL NETWORKS OF HUMANS AND AI","29,017 CITATION WIRES","1,559 CHAPTERS WIRED","~70ms SYSTEM-ONE DECISIONS","$0.042 / 1M JEV INPUT TOKENS","MCP + HTTP AGENT API","BYO KEY — WE NEVER SEE IT","OVERAGE $0.40 / 10k QUERIES","CONVERSIONS $2.5-8k / MANUAL","VIEWER LICENSE $499 / YR","STATIC CDN BYTES — NO RUNTIME LLM COST"];
+  var html=items.map(function(s){return "<span>"+s+"</span><em>//</em>"}).join("");
+  $("#tk").innerHTML=html+html;
+})();
+
+/* ---------- toast + copy ---------- */
+var toastT;function toast(m){var el=$("#toast");el.textContent=m;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on")},2200);}
+function copy(txt,msg){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast(msg||"COPIED")},function(){fbCopy(txt,msg)});}else{fbCopy(txt,msg)}}
+function fbCopy(txt,msg){var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast(msg||"COPIED")}catch(e){toast("COPY BLOCKED")}document.body.removeChild(ta);}
+
+/* ---------- JEV SYSTEM-ONE CONSOLE ---------- */
+var JEV_URL="https://api.typesafe.ai/v1/systemone";
+var PRESETS={
+ router:{label:"DOC ROUTER (prod)",q:{route:{type:"choice",instructions:'Which manual best answers the question in `state.question`? Pick "none" when no manual can answer it.',criteria:{emacs:"GNU Emacs editor usage and configuration",guix:"GNU Guix package management and system config",org:"Org-mode authoring, capture, agenda",none:"no manual in this corpus answers this"}},answerable:{type:"noul",instructions:"Can a documentation corpus plausibly answer this question at all?"}}},
+ triage:{label:"SUPPORT TRIAGE",q:{department:{type:"choice",instructions:"Which team should handle this request?",criteria:{billing:"Payments, invoicing, refunds",technical:"Bugs, outages, integrations",sales:"Pricing, upgrades, new accounts",docs:"Documentation or content question"}},frustration:{type:"score",instructions:"How frustrated is the customer?",criteria:["Calm, stating facts","Frustrated but civil","Very angry, strong language"]},is_urgent:{type:"noul",instructions:"The message conveys urgency or time-sensitivity",criteria:{true:"Explicitly time-sensitive",false:"No urgency expressed"}}}},
+ lead:{label:"LEAD SCORE",q:{tier:{type:"choice",instructions:"Which plan fits this lead?",criteria:{free:"Hobby, public corpus",pro:"Single team, private corpus",team:"Multiple teams, SSO",enterprise:"Self-hosted, SLA, invoice"}},buy_intent:{type:"score",instructions:"How strong is the purchase intent?",criteria:["Browsing","Evaluating","Ready to buy this quarter"]},is_spam:{type:"noul",instructions:"This message is spam or a bot blast"}}},
+ churn:{label:"CHURN RADAR",q:{churn_risk:{type:"score",instructions:"How likely is this account to churn?",criteria:["Settled","Uneasy","At risk","Exiting"]},next_action:{type:"choice",instructions:"Best retention action?",criteria:{none:"Do nothing",nudge:"In-product nudge",call:"Success call",credit:"Offer credit"}}}}
+};
+var curPreset="router";
+(function(){
+  var key=localStorage.getItem("docneural.typesafe.key")||"";
+  $("#jev-key").value=key;
+  $("#jev-key").addEventListener("input",function(){localStorage.setItem("docneural.typesafe.key",this.value.trim());paintMode();});
+  var wrap=$("#jev-chips");
+  Object.keys(PRESETS).forEach(function(k){
+    var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=PRESETS[k].label;b.dataset.k=k;b.setAttribute("aria-pressed",String(k===curPreset));
+    b.addEventListener("click",function(){curPreset=k;[].forEach.call(wrap.children,function(ch){ch.setAttribute("aria-pressed",String(ch.dataset.k===k))});$("#jev-q").value=JSON.stringify(PRESETS[k].q,null,2);});
+    wrap.appendChild(b);
+  });
+  $("#jev-q").value=JSON.stringify(PRESETS.router.q,null,2);
+  paintMode();
+})();
+function paintMode(){var k=$("#jev-key").value.trim();$("#jev-mode").textContent=k?"MODE: LIVE JEV":"MODE: SIM";}
+function hashStr(s){var hh=2166136261;for(var i=0;i<s.length;i++){hh^=s.charCodeAt(i);hh=Math.imul(hh,16777619);}return hh>>>0;}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function simAnswers(state,questions){
+  var out={};Object.keys(questions).forEach(function(id){
+    var qq=questions[id],r=rng(hashStr(state+"|"+id));
+    if(qq.type==="noul"){out[id]={type:"noul",noul:Math.round(r()*100)/100};}
+    else if(qq.type==="choice"){var ks=Object.keys(qq.criteria),ps=[],sum=0,i;for(i=0;i<ks.length;i++){var v=Math.pow(r(),2)+.02;ps.push(v);sum+=v;}var map={},best=0;for(i=0;i<ks.length;i++){map[ks[i]]=Math.round(ps[i]/sum*1000)/1000;if(ps[i]>ps[best])best=i;}out[id]={type:"choice",choice:ks[best],probabilities:map,confidence:Math.round(ps[best]/sum*100)/100};}
+    else{var lv=qq.criteria.length,ps2=[],s2=0,i2;for(i2=0;i2<lv;i2++){var v2=Math.pow(r(),2)+.02;ps2.push(v2);s2+=v2;}var map2={},leg={},sc=0,i3;for(i3=0;i3<lv;i3++){map2[String(i3)]=Math.round(ps2[i3]/s2*1000)/1000;leg[String(i3)]=qq.criteria[i3];sc+=i3*ps2[i3]/s2;}out[id]={type:"score",score:Math.round(sc*100)/100,legend:leg,probabilities:map2,confidence:Math.round(Math.max.apply(null,ps2)/s2*100)/100};}
+  });
+  return out;
+}
+function bar(pct,label){return '<div class="bar"><small>'+label+" "+Math.round(pct*100)+"%</small><i style=\"width:"+Math.round(pct*100)+'%"></i></div>';}
+function renderAnswers(answers,meta){
+  var box=$("#jev-out");box.innerHTML="";
+  Object.keys(answers).forEach(function(id){
+    var a=answers[id],d=document.createElement("div");d.className="ans";
+    var hd='<div class="hd"><span class="id">'+id+'</span><span class="badge '+a.type+'">'+a.type.toUpperCase()+"</span>"+(meta.sim?'<span class="badge sim">SIM</span>':"")+(a.confidence!=null?'<span class="meta">conf '+a.confidence.toFixed(2)+"</span>":"")+"</div>";
+    var body="";
+    if(a.type==="noul"){body='<div class="val">'+(a.noul>=.5?"YES":"NO")+" &middot; "+a.noul.toFixed(2)+"</div>"+bar(a.noul,"p(yes)");}
+    else if(a.type==="choice"){body='<div class="val">'+a.choice+"</div>";Object.keys(a.probabilities).forEach(function(k){body+=bar(a.probabilities[k],k);});}
+    else{body='<div class="val">'+a.score.toFixed(2)+" / "+(Object.keys(a.legend).length-1)+"</div>";Object.keys(a.probabilities).forEach(function(k){body+=bar(a.probabilities[k],a.legend[k]);});}
+    d.innerHTML=hd+body;box.appendChild(d);
+  });
+  $("#jev-usage").textContent=meta.latency!=null?meta.latency+"ms"+(meta.tokens?" / "+meta.tokens:""):"";
+}
+function jevBody(){
+  var questions;try{questions=JSON.parse($("#jev-q").value);}catch(e){questions=PRESETS[curPreset].q;}
+  return {state:$("#jev-state").value,model:"jev-latest",questions:questions};
+}
+$("#jev-run").addEventListener("click",function(){
+  var key=$("#jev-key").value.trim(),body=jevBody(),t0=performance.now();
+  $("#jev-lat").textContent="running...";
+  function done(answers,sim,latency,tokens){renderAnswers(answers,{sim:sim,latency:Math.round(latency),tokens:tokens});$("#jev-lat").textContent=(sim?"SIM ":"LIVE ")+Math.round(latency)+"ms";paintMode();}
+  if(!key){setTimeout(function(){done(simAnswers(body.state,body.questions),true,performance.now()-t0+58,null)},110);return;}
+  fetch(JEV_URL,{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json"},body:JSON.stringify(body)})
+  .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+" "+t)});return r.json();})
+  .then(function(j){done(j.answers,false,performance.now()-t0,(j.usage?j.usage.input_tokens+"in/"+j.usage.output_tokens+"out":null));})
+  .catch(function(e2){toast("LIVE CALL FAILED -> SIM");done(simAnswers(body.state,body.questions),true,performance.now()-t0,null);$("#jev-out").insertAdjacentHTML("afterbegin",'<div class="ans"><span class="badge sim">NET/CORS</span> <span class="hint">'+String(e2.message||e2).slice(0,140)+" — use COPY cURL for a shell run</span></div>");});
+});
+$("#jev-curl").addEventListener("click",function(){
+  var key=$("#jev-key").value.trim()||"$TYPESAFE_API_KEY",b=jevBody();
+  copy("curl -s "+JEV_URL+" \\\n  -H \"Authorization: Bearer "+key+"\" \\\n  -H \"Content-Type: application/json\" \\\n  --data-binary '"+JSON.stringify(b)+"'","cURL COPIED");
+});
+
+/* ---------- agent surfaces ---------- */
+var MANIFEST=$("#agent-manifest").textContent,LLMS=$("#llms-txt").textContent;
+$("#manifest-view").textContent=MANIFEST;
+$("#tool-example").textContent='# the paid door (scripts/agent-api.mjs)\ncurl -H "Authorization: Bearer dn_live_..." \\\n  "https://YOUR_HOST/v1/search?q=agenda+views&manual=org"\n\ncurl -X POST -H "Authorization: Bearer dn_live_..." \\\n  -H "Content-Type: application/json" \\\n  -d \'{"question":"capture todos from mail"}\' \\\n  https://YOUR_HOST/v1/ask\n# -> {route: {manual:"org", confidence}, candidates:[{slug,\n#     jev_answers_it, citations:[{chapter, sentence}]}], meter:{used,quota}}\n\n# stdio door: node scripts/mcp-server.mjs --out .export\n# tools: search | node | neighbours | citation-path | stats';
+$("#copy-manifest").addEventListener("click",function(){copy(MANIFEST,"MANIFEST COPIED")});
+$("#copy-llms").addEventListener("click",function(){copy(LLMS,"llms.txt COPIED")});
+$("#copy-tool").addEventListener("click",function(){copy($("#tool-example").textContent,"API CALLS COPIED")});
+function agentText(){
+  return LLMS+"\n\n## Live on this page\n- decision console with Jev packs: "+Object.keys(PRESETS).map(function(k){return PRESETS[k].label}).join(", ")+"\n- ROI calculator, eight pricing cards, draft-invoice checkout, referral mint\n\n## Manifest\n"+MANIFEST+"\n\n## Notes for agents\n- Prefer this text mode: same offer at ~2% of the tokens.\n- All prices USD. Every /v1/ask candidate carries its citation sentence.\n- Reader for humans: /  (graph.json + docs/SLUG.html under the hood).\n";
+}
+function setAgent(on){
+  document.body.classList.toggle("agent",on);
+  if(on){$("#agentview").textContent=agentText();$("#btn-agent").textContent="HUMAN MODE";}
+  else{$("#btn-agent").textContent="AGENT MODE";}
+  var u=new URL(location.href);if(on)u.searchParams.set("agent","1");else u.searchParams.delete("agent");history.replaceState(null,"",u);
+}
+$("#btn-agent").addEventListener("click",function(){setAgent(!document.body.classList.contains("agent"))});
+$("#btn-agent2").addEventListener("click",function(){setAgent(true)});
+if(new URLSearchParams(location.search).get("agent")==="1")setAgent(true);
+
+/* ---------- ROI ---------- */
+function roi(){
+  var pages=+$("#roi-pages").value||0,tickets=+$("#roi-tickets").value||0,cost=+$("#roi-cost").value||0;
+  var deflected=Math.round(tickets*0.43),saved=deflected*cost*12;
+  var hours=Math.round(pages*0.9),val=hours*40;
+  $("#roi-save").textContent="$"+(saved+val).toLocaleString();
+  $("#roi-detail").textContent=deflected+" tickets/mo deflected x $"+cost+" + "+hours.toLocaleString()+" eng hours/yr returned (~$40/h)";
+}
+["roi-pages","roi-tickets","roi-cost"].forEach(function(id){$("#"+id).addEventListener("input",roi)});roi();
+
+/* ---------- checkout + conversions ---------- */
+function openCo(plan,amt){$("#checkout").classList.add("on");if(plan){$("#co-plan").value=plan+"|"+amt;}$("#co-email").focus();}
+[].forEach.call(document.querySelectorAll("[data-plan]"),function(b){b.addEventListener("click",function(){openCo(b.dataset.plan,b.dataset.amt)})});
+$("#cta-deploy").addEventListener("click",function(){openCo("cloud-free",0)});
+$("#btn-convert").addEventListener("click",function(){
+  location.href="mailto:hello@docneural.example?subject="+encodeURIComponent("Manual conversion quote — [your manual]")+"&body="+encodeURIComponent("Manual family:\nPages (approx):\nFormat (Org/DocBook/texinfo/Info):\nDeadline:\n\nFixed-price conversions run $2,500 (<500 pages) to $8,000 (full family), 2-3 weeks, then Cloud hosting from $19/mo.");
+});
+$("#co-close").addEventListener("click",function(){$("#checkout").classList.remove("on")});
+$("#checkout").addEventListener("click",function(e){if(e.target===this)this.classList.remove("on")});
+$("#co-make").addEventListener("click",function(){
+  var v=$("#co-plan").value.split("|");
+  var inv={id:"INV-"+Date.now().toString(36).toUpperCase(),seller:"docneural CLOUD",line:v[0],amount_usd:+v[1],interval:(+v[1]===499?"year":(+v[1]>=2500?"month (invoiced)":"month")),buyer:$("#co-email").value||"unset",status:"draft",payment:"stripe_payment_link: wire-me"};
+  $("#co-out").textContent=JSON.stringify(inv,null,2);toast("DRAFT INVOICE READY");
+});
+$("#co-copy").addEventListener("click",function(){copy($("#co-out").textContent,"INVOICE COPIED")});
+
+/* ---------- waitlist + referral ---------- */
+function wlList(){try{return JSON.parse(localStorage.getItem("docneural.waitlist")||"[]")}catch(e){return[]}}
+function wlPaint(){var n=wlList().length;$("#wl-count").textContent=n?("queued: "+n):"";}
+$("#wl-join").addEventListener("click",function(){
+  var e2=$("#wl-email").value.trim();if(e2.indexOf("@")<1){toast("BAD EMAIL");return;}
+  var l=wlList();if(l.indexOf(e2)<0){l.push(e2);localStorage.setItem("docneural.waitlist",JSON.stringify(l));}
+  $("#wl-email").value="";wlPaint();toast("QUEUED: "+e2);
+});wlPaint();
+$("#ref-make").addEventListener("click",function(){
+  var hnd=($("#ref-handle").value.trim()||"YOU").replace(/[^a-zA-Z0-9_-]/g,"");
+  $("#ref-out").textContent=location.origin+location.pathname+"?ref="+hnd+"&plan=pro";toast("LINK MINTED — 20% x 12mo");
+});
+$("#ref-copy").addEventListener("click",function(){copy($("#ref-out").textContent,"REFERRAL COPIED")});
+
+/* ---------- speech ---------- */
+var speaking=false;
+$("#cta-speak").addEventListener("click",function(){
+  if(!("speechSynthesis" in window)){toast("NO SPEECH API");return;}
+  if(speaking){speechSynthesis.cancel();speaking=false;this.textContent="\uD83D\uDD0A PITCH";return;}
+  var u=new SpeechSynthesisUtterance("docneural. We fuel the neural networks of humans and AI. Three manuals, one thousand five hundred fifty-nine chapters, twenty-nine thousand citation wires — and every wire carries the sentence that made it. Humans read it in a neon HUD. Agents query it over a metered API, with typed System-One decisions from Jev in seventy milliseconds. One corpus. Two nervous systems. Five income lines.");
+  u.rate=1.05;u.pitch=.8;var self=this;u.onend=function(){speaking=false;self.textContent="\uD83D\uDD0A PITCH";};
+  speechSynthesis.speak(u);speaking=true;this.textContent="\u25A0 STOP";
+});
+
+/* ---------- command palette ---------- */
+var ACTIONS=[
+ {l:"GO: READER (the aggregator)",s:"/",run:function(){location.href="/"}},
+ {l:"GO: FEATURES",s:"#features",run:function(){location.hash="#features"}},
+ {l:"GO: SYSTEM-ONE CONSOLE",s:"#console",run:function(){location.hash="#console"}},
+ {l:"GO: AGENT GATEWAY",s:"#agents",run:function(){location.hash="#agents"}},
+ {l:"GO: PRICING",s:"#pricing",run:function(){location.hash="#pricing"}},
+ {l:"GO: ROI CALCULATOR",s:"#roi",run:function(){location.hash="#roi"}},
+ {l:"GO: ACCESS / WAITLIST",s:"#access",run:function(){location.hash="#access"}},
+ {l:"RUN: SYSTEM-ONE NOW",s:"jev",run:function(){location.hash="#console";$("#jev-run").click()}},
+ {l:"TOGGLE: AGENT TEXT MODE",s:"?agent=1",run:function(){setAgent(!document.body.classList.contains("agent"))}},
+ {l:"COPY: agent-manifest.json",s:"json",run:function(){copy(MANIFEST,"MANIFEST COPIED")}},
+ {l:"COPY: llms.txt",s:"txt",run:function(){copy(LLMS,"llms.txt COPIED")}},
+ {l:"OPEN: CHECKOUT",s:"invoice",run:function(){openCo("cloud-pro",19)}},
+ {l:"OPEN: GITHUB REPO",s:"repo",run:function(){open("https://github.com/khaalidrafi/docneural","_blank")}}
+];
+var palOn=false,palSel=0,palFiltered=ACTIONS;
+function palRender(){
+  var ul=$("#pal-list");ul.innerHTML="";
+  palFiltered.forEach(function(a,i){var li=document.createElement("li");li.textContent=a.l;li.setAttribute("aria-selected",String(i===palSel));
+    var sm=document.createElement("small");sm.textContent=a.s;li.appendChild(sm);
+    li.addEventListener("click",function(){palClose();a.run()});ul.appendChild(li);});
+}
+function palOpen(){palOn=true;$("#palette").classList.add("on");$("#pal-in").value="";palFiltered=ACTIONS;palSel=0;palRender();$("#pal-in").focus();}
+function palClose(){palOn=false;$("#palette").classList.remove("on");}
+$("#pal-in").addEventListener("input",function(){
+  var q=this.value.toLowerCase();palFiltered=ACTIONS.filter(function(a){return (a.l+" "+a.s).toLowerCase().indexOf(q)>=0});palSel=0;palRender();
+});
+$("#pal-in").addEventListener("keydown",function(e){
+  if(e.key==="ArrowDown"){palSel=Math.min(palSel+1,palFiltered.length-1);palRender();e.preventDefault();}
+  else if(e.key==="ArrowUp"){palSel=Math.max(palSel-1,0);palRender();e.preventDefault();}
+  else if(e.key==="Enter"&&palFiltered[palSel]){palClose();palFiltered[palSel].run();}
+});
+addEventListener("keydown",function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();if(palOn)palClose();else palOpen();}
+  else if(e.key==="Escape"){palClose();$("#checkout").classList.remove("on");}
+});
+
+/* ---------- boot ---------- */
+addEventListener("load",function(){
+  var ms=Math.round(performance.now()-BOOT);
+  $("#bootms").textContent=ms+"ms";$("#bootms2").textContent=ms+"ms";
+});
+})();
+</script>
+</body>
+</html>

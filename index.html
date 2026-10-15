@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>docneural — technical manuals, wired as synapses</title>
-    <meta name="description" content="Documentation aggregator for any number of technical manuals (currently GNU Emacs, GNU Guix and Org): browse every node in the reader or the org-roam citation graph. Built by batch Emacs ox-html from ~/docs; themed by docneural-ui." />
+    <title>docneural — we fuel the neural networks of humans and AI</title>
+    <meta name="description" content="Documentation aggregator for the GNU Emacs, Guix and Org manuals: browse every node in the reader or the org-roam citation graph — 1,559 chapters, 29,017 wires, and every wire carries the sentence that made it. Built by batch Emacs ox-html; themed by docneural-ui. Cloud + metered Agent API: /cloud.html." />
     <!-- Night is the house style, not an afterthought: dark first, the day
          theme a deliberate switch. Painted before CSS loads so a cold browser
          never flashes white behind the HUD. -->
@@ -12,6 +12,30 @@
     <meta name="theme-color" content="#05070d" />
     <style>
       html { background: #05070d; color: #d5e4f2; }
+      /* Boot splash: the tagline while graph.json wires up. Pure CSS, one
+         small script, removed from the DOM on load — it can never outlive
+         an 8 s fuse, so a slow corpus never traps the reader behind it. */
+      #boot { position: fixed; inset: 0; z-index: 9999; background: #05070d;
+              display: flex; flex-direction: column; align-items: center;
+              justify-content: center; gap: 18px; text-align: center;
+              transition: opacity .6s ease; font-family: ui-monospace,
+              SFMono-Regular, Menlo, Consolas, monospace; }
+      #boot.gone { opacity: 0; pointer-events: none; }
+      #boot .soma { width: 14px; height: 14px; border-radius: 50%;
+              background: #00e5ff; box-shadow: 0 0 24px #00e5ff;
+              animation: soma 1.6s ease-in-out infinite; }
+      #boot .ring { position: absolute; width: 14px; height: 14px;
+              border-radius: 50%; border: 1.5px solid #00e5ff; opacity: .5;
+              animation: ring 1.6s ease-out infinite; }
+      @keyframes soma { 50% { transform: scale(1.35); } }
+      @keyframes ring { to { transform: scale(4.5); opacity: 0; } }
+      #boot .tl { color: #d5e4f2; letter-spacing: .14em; font-weight: 700;
+              font-size: clamp(13px, 2.6vw, 17px); line-height: 1.7; }
+      #boot .tl b { color: #00e5ff; } #boot .tl i { color: #ff2d95; font-style: normal; }
+      #boot .ld { color: #5f7488; font-size: 11px; letter-spacing: .3em; }
+      @media (prefers-reduced-motion: reduce) {
+        #boot .soma, #boot .ring { animation: none; }
+      }
     </style>
     <!-- Inline SVG mark: a lit soma with two firing wires. A data URI means
          no extra request and no 404 in the console for a favicon the build
@@ -25,7 +49,30 @@
          instead (see docneural-ui/styles/docneural-ui.css section 0). -->
   </head>
   <body class="dn-body">
+    <div id="boot">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center">
+        <div class="ring"></div><div class="soma"></div>
+      </div>
+      <p class="tl"><b>DOCNEURAL</b> — WE FUEL THE NEURAL NETWORKS<br>OF <b>HUMANS</b> AND <i>AI</i></p>
+      <p class="ld">WIRING THE CORPUS…</p>
+    </div>
     <div id="app"></div>
+    <script>
+      // The splash is furniture, not a gate: it leaves on window load and
+      // always leaves by the 8 s fuse, even if a huge graph.json is still
+      // streaming in on a cold connection.
+      (function () {
+        var b = document.getElementById('boot');
+        var done = false;
+        function gone() {
+          if (done || !b) return; done = true;
+          b.classList.add('gone');
+          setTimeout(function () { if (b && b.parentNode) b.parentNode.removeChild(b); }, 700);
+        }
+        addEventListener('load', function () { setTimeout(gone, 300); });
+        setTimeout(gone, 8000);
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -19,17 +19,21 @@ jobs:
           sudo apt-get install -y emacs-nox texinfo graphviz make git curl
 
       - name: Clone sibling dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
-          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          git clone --depth 1 -b ai/cloud https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
           cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
 
       - name: Install site deps
         run: npm ci --no-audit --no-fund
 
       - name: Clone org-docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-docs.git ../org-docs
+          git clone --depth 1 -b ai/main https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/org-docs.git ../org-docs
 
       - name: Bootstrap corpus (Emacs + Org + Guix)
         run: |

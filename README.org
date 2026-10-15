@@ -29,17 +29,17 @@
 
   #+begin_example
   git clone -b ai/cloud https://github.com/khaalidrafi/docneural.git
-  git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git synapt
+  git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git docneural-ui
   git clone -b ai/main  https://github.com/khaalidrafi/org-roam-lite-ui.git
   cd docneural
   make install                       # npm install (once)
-  (cd ../synapt && npm install)      # the theme, consumed by path alias
+  (cd ../docneural-ui && npm install)      # the theme, consumed by path alias
   make demo         # fetch latest Org -> export demo corpus -> linkcheck -> build
   make serve        # http://localhost:4173/
   #+end_example
 
   The site consumes two siblings by path alias (=vite.config.ts=): the
-  theme at =../synapt= (=khaalidrafi/docneural-ui=) and the real roam
+  theme at =../docneural-ui= (=khaalidrafi/docneural-ui=) and the real roam
   graph UI at =../org-roam-lite-ui= (=khaalidrafi/org-roam-lite-ui= —
   no shim needed since it was published; =make orui-shim= still exists
   for offline work).

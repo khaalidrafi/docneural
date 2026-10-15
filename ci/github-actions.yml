@@ -7,7 +7,7 @@ on:
 
 jobs:
   # Everything the site build needs, on a clean checkout: the two sibling
-  # repos the vite aliases consume (theme at ../synapt, the REAL
+  # repos the vite aliases consume (theme at ../docneural-ui, the REAL
   # org-roam-lite-ui at ../org-roam-lite-ui — published, no shim), the
   # latest Org from GNU ELPA, the bundled demo corpus, the link gate, and
   # the gates that catch a broken theme contract (vitest + svelte-check)
@@ -21,14 +21,14 @@ jobs:
         with:
           node-version: 22
 
-      # BEFORE anything builds: the site imports docneural-ui from ../synapt
+      # BEFORE anything builds: the site imports docneural-ui from ../docneural-ui
       # and the theme imports orui/* from ../org-roam-lite-ui (aliases in
       # vite.config.ts). Cloning the real orui is also the standing
       # swap-in check: if its contract with the theme breaks, this job goes
       # red here instead of in production graph mode.
       - name: Clone sibling dependencies
         run: |
-          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../synapt
+          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
           git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
           cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
 
@@ -57,7 +57,7 @@ jobs:
 
       - name: Theme repo (tests, types, build)
         run: |
-          cd ../synapt
+          cd ../docneural-ui
           npm ci --no-audit --no-fund
           npx vitest run
           npx svelte-check --output machine

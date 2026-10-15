@@ -70,7 +70,7 @@ DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 # docneural-ui/orui-shim so the whole project lives in GitHub; when the real
 # org-roam-lite-ui is published: clone it at that path and delete this
 # target's output — no repo edits anywhere.
-THEME_DIR ?= ../synapt
+THEME_DIR ?= ../docneural-ui
 orui-shim:
 	@rm -rf ../org-roam-lite-ui
 	cp -r $(THEME_DIR)/orui-shim ../org-roam-lite-ui
@@ -128,7 +128,7 @@ build:
 	# SIL OFL texts that accompany them travel with the bundle (Vite only
 	# emits the .woff2 files a stylesheet references — never the licenses).
 	mkdir -p dist/fonts
-	cp ../synapt/fonts/*-OFL.txt dist/fonts/
+	cp ../docneural-ui/fonts/*-OFL.txt dist/fonts/
 
 serve:
 	npm run preview

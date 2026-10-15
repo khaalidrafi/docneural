@@ -83,7 +83,7 @@
   Both repos were renamed on GitHub to match: `khaalidrafi/docneural`
   (the site) and `khaalidrafi/docneural-ui` (the theme). The two remotes
   had briefly been swapped, now fixed along with the upstream tracking.
-  The checkout directories (`~/org-docs-website`, `~/synapt`) are
+  The checkout directories (`~/org-docs-website`, `~/docneural-ui`) are
   unchanged and the handoff still uses them everywhere.
 
 * The full-corpus build (Emacs + Guix + Org — the real site)
@@ -100,13 +100,13 @@
   #    (org-docs-update checks upstream versions and refreshes STAGED.)
   # 2. Siblings, once (all three side by side under $HOME):
   cd ~ && git clone -b ai/cloud https://github.com/khaalidrafi/docneural.git org-docs-website
-  cd ~ && git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git synapt
+  cd ~ && git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git docneural-ui
   cd ~ && git clone -b ai/main  https://github.com/khaalidrafi/org-roam-lite-ui.git
   #    (replaces the orui shim; npm install there also parks
   #     playwright-core for `make verify`)
   # 3. Export + gates + site:
   cd ~/org-docs-website
-  make install && (cd ../synapt && npm install) && (cd ../org-roam-lite-ui && npm install)
+  make install && (cd ../docneural-ui && npm install) && (cd ../org-roam-lite-ui && npm install)
   make org-latest
   make export CORPUS=~/docs DOC="org emacs guix" ORG_LOAD=build/org-9.8.10
   make linkcheck
@@ -129,7 +129,7 @@
   | repo        | path                        | remote                    | HEAD (=ai/main=)                                  |
   |-------------+-----------------------------+---------------------------+---------------------------------------------------|
   | docneural   | =~/org-docs-website=        | =khaalidrafi/docneural=   | =4818187= Name the site docneural everywhere      |
-  | docneural-ui | =~/synapt= (dir!)         | =khaalidrafi/docneural-ui= | =5ec9b40= Rename the theme to docneural-ui       |
+  | docneural-ui | =~/docneural-ui= (dir!)         | =khaalidrafi/docneural-ui= | =5ec9b40= Rename the theme to docneural-ui       |
 
   - The rename to =docneural-ui= is *done*: package name, component
     (=src/lib/DocneuralApp.svelte=), graph view (=DocneuralGraph.svelte=),
@@ -139,10 +139,10 @@
     the theme =docneural-ui= in =package.json=, its =src/App.svelte= shows
     =docneural=, and the exporter script is =scripts/docneural-export.el=.
   - Two cosmetic remainders, by design: the *directory* is still
-    =~/synapt=, and =spreadForces.ts= keeps its name because ='spread'= is a
+    =~/docneural-ui=, and =spreadForces.ts= keeps its name because ='spread'= is a
     real layout-mode literal in =neuronEngine.ts= (=mode === 'spread'=).
   - =~/docneural= consumes the theme by path alias, not by package
-    name: =vite.config.ts= maps =docneural-ui= → =../synapt/src/lib/DocneuralApp.svelte=,
+    name: =vite.config.ts= maps =docneural-ui= → =../docneural-ui/src/lib/DocneuralApp.svelte=,
     =orui/*= → =../org-roam-lite-ui/src/lib/*= (the real org-roam-lite-ui
     =GraphView= + =createGraphStore=), and the graph engine is swapped in
     through orui's =loadEngine= seam.
@@ -217,9 +217,9 @@
 * Verify before you commit anything
 
   #+begin_example
-  cd ~/synapt && npx vitest run                    # 62 passing
-  cd ~/synapt && npx svelte-check --output machine | rg 'ERROR|COMPLETED'   # 0 errors
-  cd ~/synapt && npx vite build
+  cd ~/docneural-ui && npx vitest run                    # 62 passing
+  cd ~/docneural-ui && npx svelte-check --output machine | rg 'ERROR|COMPLETED'   # 0 errors
+  cd ~/docneural-ui && npx vite build
   cd ~/docneural && npx svelte-check --tsconfig ./tsconfig.json && npx vite build
   cd ~/docneural && make verify             # the real browser gate
   #+end_example

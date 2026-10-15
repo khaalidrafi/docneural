@@ -14,7 +14,7 @@
    - =docneural--export-body= rewrites resolvable =id:= links to
      =type=file=, =path= =docs/SLUG.html#ANCHOR= inside a
      =:filter-parse-tree=.  Verify this is the shape the theme's
-     NotePreview interceptor expects (it is; see ~/synapt).
+     NotePreview interceptor expects (it is; see ~/docneural-ui).
    - Why not regex the finished HTML?  ox-html turns unresolvable =id:=
      links into ="[BROKEN LINK:...]"= text that has *already dropped the
      description*; you cannot recover it post-export.
@@ -148,7 +148,7 @@
 * What to review in the Vite/Svelte site shell (task #4)
 
   The second build half is a thin Svelte host (this repo) that mounts the
-  Synapt theme (../synapt) against the exporter's =.export/= output. Two
+  Synapt theme (../docneural-ui) against the exporter's =.export/= output. Two
   halves stay decoupled: =make export= (batch Emacs) produces data;
   =npm run dev= (Vite) serves + renders it.
 
@@ -168,17 +168,17 @@
 
    - Imports ='synapt'=, ='synapt/store'=, ='synapt/core'=,
      ='synapt/styles/synapt.css'= resolve through =resolve.alias= to
-     =../synapt/src/lib/*= (mirrors synapt's =exports= map).  Chosen over
-     a =file:../synapt= dependency so vite-plugin-svelte compiles the
+     =../docneural-ui/src/lib/*= (mirrors synapt's =exports= map).  Chosen over
+     a =file:../docneural-ui= dependency so vite-plugin-svelte compiles the
      theme's =.svelte=/=.svelte.ts= as first-class source (no node_modules
      =include= override needed).  =force-graph= is declared here too, so
      optimizeDeps prebundles it.  Downside: the two repos' svelte/vite
      versions must stay compatible.
    - =server.fs.allow: ['..']= — Vite 6 =replace=s (not appends) the
      default allow list when you set it, so '..' (=$HOME=) must cover
-     BOTH this repo's =src/= AND =../synapt=.  A tighter list
-     (=[root, ../synapt]=) works too; '..' is the simple bound for sibling
-     repos.  =allow: ['../synapt']= alone caused 403s on our own =src/=
+     BOTH this repo's =src/= AND =../docneural-ui=.  A tighter list
+     (=[root, ../docneural-ui]=) works too; '..' is the simple bound for sibling
+     repos.  =allow: ['../docneural-ui']= alone caused 403s on our own =src/=
      — do not reintroduce that.
 
 ** NOTED Verified in a real browser (task #5, this unit)
@@ -195,7 +195,7 @@
 * What to review in the synapt reader + orui Layer-2 synapses (tasks #10, #14, #18)
 
   The reader (Home, DocReader, SynapseRail, CommandPalette) is ours in
-  =../synapt=; the synapses graph is org-roam-lite-ui's REAL =GraphView=
+  =../docneural-ui=; the synapses graph is org-roam-lite-ui's REAL =GraphView=
   and store, fed from the static =graph.json=.  Review the *bridge*, not
   either side's internals — that seam is where a future upgrade breaks.
 
@@ -263,7 +263,7 @@
 
 ** NOTED Verified by (this unit)
 
-   - =npm --prefix ../synapt run check= (svelte-check) clean; synapt
+   - =npm --prefix ../docneural-ui run check= (svelte-check) clean; synapt
      =npm test= 20/20 incl. new =?mode=graph= deep-link tests.
    - Exporter =make check= byte-compiles clean; synthetic smoke: reading
      order =Alpha > Beta > Gamma= with the stub excluded, llms.txt body
@@ -643,7 +643,7 @@
      Nothing in the diff explains a slow FCP; =uptime= before trusting either
      number, and re-run when quiet.
    - Fonts now travel with their license: =make build= copies
-     =../synapt/fonts/*-OFL.txt= into =dist/fonts/= (fetched from
+     =../docneural-ui/fonts/*-OFL.txt= into =dist/fonts/= (fetched from
      =google/fonts@main=, one file per family, copyright headers intact). A
      redistributed =.woff2= must be accompanied by its OFL text; Vite emits
      only the font files a stylesheet references.
@@ -765,7 +765,7 @@
    :CODE:
    CI now clones the REAL =khaalidrafi/org-roam-lite-ui= (=ai/main=)
    instead of materialising the shim, and clones the theme at
-   =../synapt= (=ai/cloud=) BEFORE the site build — the vite aliases
+   =../docneural-ui= (=ai/cloud=) BEFORE the site build — the vite aliases
    need both siblings, and the previous step order could not have
    worked from a truly clean checkout. First green run of this file IS
    the swap-in proof; watch theme =svelte-check= against the real orui

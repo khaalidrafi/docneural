@@ -28,12 +28,21 @@
 * Quickstart (the demo, latest Org, no configuration)
 
   #+begin_example
-  git clone https://github.com/khaalidrafi/docneural.git
+  git clone -b ai/cloud https://github.com/khaalidrafi/docneural.git
+  git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git synapt
+  git clone -b ai/main  https://github.com/khaalidrafi/org-roam-lite-ui.git
   cd docneural
-  make install      # npm install (once)
+  make install                       # npm install (once)
+  (cd ../synapt && npm install)      # the theme, consumed by path alias
   make demo         # fetch latest Org -> export demo corpus -> linkcheck -> build
   make serve        # http://localhost:4173/
   #+end_example
+
+  The site consumes two siblings by path alias (=vite.config.ts=): the
+  theme at =../synapt= (=khaalidrafi/docneural-ui=) and the real roam
+  graph UI at =../org-roam-lite-ui= (=khaalidrafi/org-roam-lite-ui= —
+  no shim needed since it was published; =make orui-shim= still exists
+  for offline work).
 
   =make demo= exports the bundled =demo/= corpus (a small manual about
   docneural itself — nav headers, stubs, wrapped headers, citations)
@@ -44,11 +53,24 @@
 
   The corpus is =CORPUS/<manual>/*.org=; each file carries a =:ID:=
   drawer, chapters carry =:CUSTOM_ID:= headings, and chapters link to
-  each other with =[[id:...]]=. Point the Makefile at it:
+  each other with =[[id:...]]=. The Emacs, Guix and Org manuals are
+  produced by the *org-docs* package (=khaalidrafi/org-docs=, branch
+  =ai/main=): =M-x org-docs-import-emacs= / =-import-org= /
+  =-import-guix= convert the texinfo sources into =org-docs-dir=
+  (=~/docs= on the build machine), rewriting every link to a stable
+  =id:= link; =org-docs-update.el= checks upstream versions and
+  refreshes STAGED (never in place). The exporter only reads the
+  corpus — it never fetches. Point the Makefile at it:
 
   #+begin_example
-  make export CORPUS=~/docs DOC="org emacs guix" OUT=.export
+  make org-latest
+  make export CORPUS=~/docs DOC="org emacs guix" ORG_LOAD=build/org-9.8.10
+  make linkcheck
+  make summarize    # optional one-line tldrs, BYO key, hash-cached
   make build
+  make serve        # http://localhost:4173/
+  make verify URL=http://127.0.0.1:4173/   # browser gate (needs
+                    # playwright-core: npm install in ../org-roam-lite-ui)
   #+end_example
 
   The exporter needs Org >= 9.7 (load-bearing:

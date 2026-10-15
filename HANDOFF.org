@@ -28,6 +28,13 @@
   6. Monetization plan: drafted (five revenue lines, pricing, 90-day
      plan) — kept LOCAL on purpose; it is gitignored, never committed.
 
+  7. Agent API + Jev (this branch): =scripts/agent-api.mjs= (metered
+     HTTP door over the export: keys/plans/quotas/rps +
+     =usage-YYYYMM.jsonl=) and =scripts/jev.mjs= (TypeSafe Jev System
+     One client; typed routing + candidate judgement in =/v1/ask=,
+     BYO =TYPESAFE_API_KEY=). Tests in =tests/agent-api.test.mjs= +
+     =tests/jev.test.mjs=; README documents the door.
+
   Everything is verified in a clean-ish sandbox: vitest 20/20 (site) +
   84/84 (theme), svelte-check 0 errors in both repos, =make demo= green,
   and browser checks over the built demo site (home, reader + learn
@@ -35,16 +42,20 @@
   orui shim with the stub filtered out).
 
   Still open, in order of value: the phone-graph cost cap from TODOs
-  P1, offline/service worker (the QUESTION), and the real orui swap-in
-  when org-roam-lite-ui is published (=make orui-shim= shows where it
-  goes).
+  P1, offline/service worker (the QUESTION), and the real orui swap-in — org-roam-lite-ui is NOW
+  PUBLISHED (=khaalidrafi/org-roam-lite-ui=, branch =ai/main=): clone it
+  over the shim path =../org-roam-lite-ui=, =npm install= there, and
+  =make verify= is the gate (the theme imports exactly four orui modules —
+  =orui/api=, =orui/graph/GraphView.svelte=, =orui/graph/colors=,
+  =orui/state/graphStore= — and all four exist in the published repo).
 
 * Where the content comes from (the ~/org-docs dependency)
 
   This site renders a corpus it does *not* own. The Org files, and the
   Emacs code that turns them into that corpus, live in the *org-docs*
-  package at =~/org-docs= (a symlink to =/home/rafi/org-docs=, a Radicle
-  repo — =rad://zuEEqFauVz31JjMeZV727X2hrHwh=, not GitHub). The two are
+  package at =~/org-docs= (a symlink to =/home/rafi/org-docs=, a Radicle repo —
+  =rad://zuEEqFauVz31JjMeZV727X2hrHwh= — and now ALSO on GitHub:
+  =khaalidrafi/org-docs=, branch =ai/main=). The two are
   coupled: this repo's =scripts/docneural-export.el= reimplements the
   *export half* of that package in batch-mode Elisp so the site can be
   built without loading a user's Emacs init.
@@ -74,6 +85,41 @@
   had briefly been swapped, now fixed along with the upstream tracking.
   The checkout directories (`~/org-docs-website`, `~/synapt`) are
   unchanged and the handoff still uses them everywhere.
+
+* The full-corpus build (Emacs + Guix + Org — the real site)
+
+  The demo corpus proves the pipeline; the real site renders the three
+  manuals org-docs maintains. On the build machine (Guix, Emacs with
+  org-docs loaded):
+
+  #+begin_example
+  # 1. Corpus (org-docs owns it; the exporter only READS ~/docs).
+  #    In Emacs:  M-x org-docs-import-emacs
+  #               M-x org-docs-import-org
+  #               M-x org-docs-import-guix
+  #    (org-docs-update checks upstream versions and refreshes STAGED.)
+  # 2. Siblings, once (all three side by side under $HOME):
+  cd ~ && git clone -b ai/cloud https://github.com/khaalidrafi/docneural.git org-docs-website
+  cd ~ && git clone -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git synapt
+  cd ~ && git clone -b ai/main  https://github.com/khaalidrafi/org-roam-lite-ui.git
+  #    (replaces the orui shim; npm install there also parks
+  #     playwright-core for `make verify`)
+  # 3. Export + gates + site:
+  cd ~/org-docs-website
+  make install && (cd ../synapt && npm install) && (cd ../org-roam-lite-ui && npm install)
+  make org-latest
+  make export CORPUS=~/docs DOC="org emacs guix" ORG_LOAD=build/org-9.8.10
+  make linkcheck
+  make summarize        # optional one-line tldrs, BYO key, hash-cached
+  make build
+  make serve            # http://localhost:4173/
+  make verify URL=http://127.0.0.1:4173/
+  #+end_example
+
+  The exporter never fetches: it reads whatever org-docs put in
+  =CORPUS=. Full-corpus numbers to expect: ~1,559 chapters, ~29k wires
+  before the nav-leak fix trimmed mechanical edges, =graph.json= 2.2 MB
+  slimmed (7 MB before the ctx split).
 
 * The two repos
 

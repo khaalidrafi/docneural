@@ -100,6 +100,43 @@
     endpoint — the key stays in your browser and the corpus is never
     sent anywhere by default.
 
+* The Agent API (metered, zero-dep)
+
+  =scripts/mcp-server.mjs= serves ONE assistant over stdio;
+  =scripts/agent-api.mjs= serves ANY agent over HTTP — keys, plans,
+  quotas, per-second rate limits and an append-only usage log you can
+  invoice from. Same answers, same ranking (the weights are copied, so
+  the API, the MCP server and the palette cannot disagree), one file,
+  zero dependencies: hosting is a small VM plus a reverse proxy.
+
+  #+begin_example
+  node scripts/agent-api.mjs --out .export --port 8787 --keys keys.json
+  curl -H "Authorization: Bearer dn_live_..." \
+       "http://localhost:8787/v1/search?q=agenda+views"
+  curl -X POST -H "Authorization: Bearer dn_live_..." \
+       -H "Content-Type: application/json" \
+       -d '{"question":"how do I capture todos from mail"}' \
+       http://localhost:8787/v1/ask
+  #+end_example
+
+  - =keys.json=: ~{"dn_live_xxx": {"plan": "build", "tenant": "acme"}}~
+    — plans are =hobby= (1k queries/mo, 1 rps), =build= (50k, 10 rps),
+    =scale= (500k, 100 rps); every billable call appends to
+    =usage-YYYYMM.jsonl=, refusals are 429 with =Retry-After=.
+  - Endpoints: =/v1/search=, =/v1/node=, =/v1/neighbours=,
+    =/v1/citation-path=, =/v1/stats=, =/v1/llms.txt= (free — it is the
+    map that drives the paid calls), and =POST /v1/ask=.
+  - =POST /v1/ask= with =TYPESAFE_API_KEY= set adds Jev (TypeSafe's
+    System One model): a typed choice ROUTES the question to a manual —
+    Jev answers from the options it is given, so it cannot invent a
+    manual, and =none= keeps an out-of-corpus question an honest miss —
+    then one yes/no probability per candidate filters the BM25 hits.
+    ~70 ms per call, ~$0.042/1M input tokens, BYO key. Without a key it
+    degrades to pure BM25, and either way every candidate carries its
+    citation sentence: the answer arrives with the proof.
+  - Client + question packs: =scripts/jev.mjs=, with a CLI:
+    =node scripts/jev.mjs --manuals org,emacs "capture todos from mail"=.
+
 * Verification (run before pushing)
 
   #+begin_example

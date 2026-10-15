@@ -749,3 +749,33 @@
      back to 32.
    - =make build= -> 45 s on a contended box; entry JS/CSS unchanged in size
      (the peek card and ego math are ~6 kB of the bundle, no new dependency).
+
+* What to review from the 2026-10-15 ai/cloud session (author: Qwen)
+
+** TODO scripts/agent-api.mjs — the billing path
+   :CODE:
+   The quota/rps meter (=makeMeter=), the 429 + =Retry-After= path, the
+   =usage-YYYYMM.jsonl= log (the invoice artifact), and =/v1/ask='s
+   Jev route → BM25 → judge pipeline. Money code: verify the meter
+   cannot under-count (tests pin charge order, rps window and month
+   rollover) and that a failed Jev call DEGRADES to plain BM25 instead
+   of failing the answer.
+
+** TODO ci/github-actions.yml — the real orui swap-in
+   :CODE:
+   CI now clones the REAL =khaalidrafi/org-roam-lite-ui= (=ai/main=)
+   instead of materialising the shim, and clones the theme at
+   =../synapt= (=ai/cloud=) BEFORE the site build — the vite aliases
+   need both siblings, and the previous step order could not have
+   worked from a truly clean checkout. First green run of this file IS
+   the swap-in proof; watch theme =svelte-check= against the real orui
+   types (the shim only promised the contract).
+
+** NOTED orui contract check done statically, not at runtime
+   The theme imports exactly four orui modules: =orui/api=,
+   =orui/graph/GraphView.svelte=, =orui/graph/colors=,
+   =orui/state/graphStore=. All four paths exist in the published repo
+   (verified against its tree on 2026-10-15). The runtime contract —
+   =applyGraphdata= fed from a static snapshot, source-hue parity
+   between chip and canvas — is what =make verify= asserts; run it once
+   on the real machine after swapping the shim for the clone.

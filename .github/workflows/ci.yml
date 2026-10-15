@@ -18,16 +18,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y emacs-nox texinfo graphviz make git curl
 
-      # Fine-grained PATs (github_pat_*) do NOT support x-access-token auth.
-      # Use standard HTTPS credential injection instead.
       - name: Clone sibling dependencies
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          CLONE_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git config --global credential.helper store
-          echo "https://oauth2:${GH_PAT}@github.com" > ~/.git-credentials
-          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
-          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          git clone --depth 1 -b ai/cloud https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
           cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
 
       - name: Install site deps
@@ -35,21 +31,25 @@ jobs:
 
       - name: Clone org-docs
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          CLONE_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-docs.git ../org-docs
+          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-docs.git ../org-docs
 
+      # Bootstrap corpus: write Elisp to a temp file to avoid YAML/shell
+      # escaping issues with backslashes in --eval. Each recipe clones
+      # upstream texinfo, runs makeinfo, produces Org with stable id: links.
       - name: Bootstrap corpus (Emacs + Org + Guix)
         run: |
           mkdir -p ~/docs
+          cat > /tmp/bootstrap-corpus.el << 'ELISP'
+          (require 'org-docs-recipes)
+          (org-docs-import-emacs nil)
+          (org-docs-import-org nil)
+          (org-docs-import-guix nil)
+          (message "Corpus ready at ~/docs")
+          ELISP
           cd ../org-docs
-          emacs --batch -L . \
-            --eval '(progn \
-              (require (quote org-docs-recipes)) \
-              (org-docs-import-emacs nil) \
-              (org-docs-import-org nil) \
-              (org-docs-import-guix nil) \
-              (message "Corpus ready at ~/docs"))'
+          emacs --batch -L . -l /tmp/bootstrap-corpus.el
 
       - name: Export and build
         run: |

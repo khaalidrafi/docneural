@@ -20,10 +20,10 @@ jobs:
 
       - name: Clone sibling dependencies
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLONE_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git clone --depth 1 -b ai/cloud https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/docneural-ui.git ../docneural-ui
-          git clone --depth 1 -b ai/main https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          git clone --depth 1 -b ai/cloud https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
           cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
 
       - name: Install site deps
@@ -31,9 +31,9 @@ jobs:
 
       - name: Clone org-docs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLONE_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git clone --depth 1 -b ai/main https://x-access-token:${GITHUB_TOKEN}@github.com/khaalidrafi/org-docs.git ../org-docs
+          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-docs.git ../org-docs
 
       - name: Bootstrap corpus (Emacs + Org + Guix)
         run: |

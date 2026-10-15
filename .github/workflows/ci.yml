@@ -1,0 +1,78 @@
+name: ci
+on:
+  push:
+    branches: [ai/main, 'ai/**']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y emacs-nox texinfo graphviz make git curl
+
+      - name: Clone sibling dependencies
+        run: |
+          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
+
+      - name: Install site deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Clone org-docs
+        run: |
+          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-docs.git ../org-docs
+
+      - name: Bootstrap corpus (Emacs + Org + Guix)
+        run: |
+          mkdir -p ~/docs
+          cd ../org-docs
+          emacs --batch -L . \
+            --eval '(progn \
+              (require (quote org-docs-recipes)) \
+              (org-docs-import-emacs nil) \
+              (org-docs-import-org nil) \
+              (org-docs-import-guix nil) \
+              (message "Corpus ready at ~/docs"))'
+
+      - name: Export and build
+        run: |
+          make org-latest
+          make export CORPUS=~/docs DOC="org emacs guix" OUT=.export ORG_LOAD=build/org-9.8.10
+          make linkcheck OUT=.export
+          make build
+
+      - name: Verify site structure
+        run: |
+          ls -la dist/
+          test -f dist/index.html
+          test -f dist/cloud.html
+          test -f dist/graph.json
+          echo "Site built successfully"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/ai/cloud'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

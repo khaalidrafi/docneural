@@ -3,9 +3,9 @@
 #+STARTUP: overview
 #+TODO: NEXT WIP QUESTION | DONE LATER
 
-* Where this stands now (2026-10-14, branch =ai/workbuddy=)
+* Where this stands now (2026-10-14, branch =ai/cloud=)
 
-  All work now lives on =ai/workbuddy= in BOTH repos (site: this repo;
+  All work now lives on =ai/cloud= in BOTH repos (site: this repo;
   theme: docneural-ui), pulled from =ai/main= and ready to merge. What
   landed, in order:
 
@@ -25,8 +25,8 @@
   5. AI integrations: MCP server (=scripts/mcp-server.mjs=, 11 protocol
      cases), ask-this-corpus (BYO key, =?= in the palette), build-time
      tldrs (=make summarize=, cached by content hash).
-  6. Monetization plan: =MONETIZATION.org= (five lines, pricing, 90-day
-     plan).
+  6. Monetization plan: drafted (five revenue lines, pricing, 90-day
+     plan) — kept LOCAL on purpose; it is gitignored, never committed.
 
   Everything is verified in a clean-ish sandbox: vitest 20/20 (site) +
   84/84 (theme), svelte-check 0 errors in both repos, =make demo= green,

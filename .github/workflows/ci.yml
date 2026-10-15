@@ -18,12 +18,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y emacs-nox texinfo graphviz make git curl
 
+      # Fine-grained PATs (github_pat_*) do NOT support x-access-token auth.
+      # Use standard HTTPS credential injection instead.
       - name: Clone sibling dependencies
         env:
-          CLONE_TOKEN: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git clone --depth 1 -b ai/cloud https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/docneural-ui.git ../docneural-ui
-          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          git config --global credential.helper store
+          echo "https://oauth2:${GH_PAT}@github.com" > ~/.git-credentials
+          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
           cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
 
       - name: Install site deps
@@ -31,9 +35,9 @@ jobs:
 
       - name: Clone org-docs
         env:
-          CLONE_TOKEN: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git clone --depth 1 -b ai/main https://x-access-token:${CLONE_TOKEN}@github.com/khaalidrafi/org-docs.git ../org-docs
+          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-docs.git ../org-docs
 
       - name: Bootstrap corpus (Emacs + Org + Guix)
         run: |

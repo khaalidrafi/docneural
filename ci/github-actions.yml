@@ -62,3 +62,50 @@ jobs:
           npx vitest run
           npx svelte-check --output machine
           npm run build
+
+  # Ship it: the DEMO-corpus build to GitHub Pages on every push to ai/cloud.
+  # Honest scope: the full manuals need the org-docs corpus (~/docs), which
+  # lives on the build machine, not in CI — so Pages carries the demo site
+  # (reader at /, money page at /cloud.html) until a corpus-backed deploy
+  # runs where the corpus is. Enable in Settings -> Pages -> Source:
+  # GitHub Actions (the pushing token here lacks the pages scope).
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/ai/cloud'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Clone sibling dependencies
+        run: |
+          git clone --depth 1 -b ai/cloud https://github.com/khaalidrafi/docneural-ui.git ../docneural-ui
+          git clone --depth 1 -b ai/main https://github.com/khaalidrafi/org-roam-lite-ui.git ../org-roam-lite-ui
+          cd ../org-roam-lite-ui && npm ci --no-audit --no-fund
+
+      - name: Install site deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the demo site
+        run: |
+          make org-latest
+          make export CORPUS=demo DOC=demo OUT=.export ORG_LOAD=build/org-9.8.10
+          make build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

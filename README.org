@@ -49,6 +49,34 @@
   with Org 9.8.10, the latest release. It is the one command that must
   always work from a clean checkout.
 
+* The front door and the full manuals
+
+  Two doors, one build:
+
+  - =/= — the reader (this repo's Svelte app over =.export/=). The boot
+    splash carries the tagline: /we fuel the neural networks of humans
+    and AI./
+  - =/cloud.html= — the self-contained money page (branding, the five
+    income lines with public prices, the Jev System-One console, the
+    agent manifest, waitlist + referral minter). Plain HTML with inline
+    CSS/JS, no build step, no webfonts: open the file directly to
+    preview it anywhere, and =vite build= ships it beside the reader.
+
+  The REAL corpus (Emacs + Guix + Org manuals) is produced by the
+  *org-docs* package (=khaalidrafi/org-docs=, =ai/main=) into =~/docs=,
+  then one command exports, gates and builds the whole site:
+
+  #+begin_example
+  make manuals     # org-latest -> export CORPUS=~/docs DOC="org emacs guix"
+                   # -> linkcheck -> build
+  make site        # serve dist/ on http://localhost:4173/
+  #+end_example
+
+  The exporter only READS the corpus — refreshing it is org-docs's job
+  (=M-x org-docs-import-emacs= / =-import-org= / =-import-guix=, or the
+  staged updater). CI deploys the DEMO-corpus build to GitHub Pages;
+  the full-manual deploy runs where the corpus lives (this machine).
+
 * Building your own corpus
 
   The corpus is =CORPUS/<manual>/*.org=; each file carries a =:ID:=

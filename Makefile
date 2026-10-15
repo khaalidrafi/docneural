@@ -63,7 +63,7 @@ SCRIPT := scripts/docneural-export.el
 # One --doc flag per manual; the exporter merges them into one graph.json.
 DOC_ARGS := $(foreach d,$(DOC),--doc $(d))
 
-.PHONY: check export slim summarize linkcheck install dev build serve verify all clean org-latest demo orui-shim
+.PHONY: check export slim summarize linkcheck install dev build serve verify all clean org-latest demo orui-shim manuals site
 
 # Materialise the orui-compatible shim at the sibling path BOTH repos'
 # aliases already point at (../org-roam-lite-ui). The shim is committed in
@@ -147,6 +147,21 @@ demo: org-latest
 	$(MAKE) export CORPUS=demo DOC=demo OUT=.export ORG_LOAD=$(ORG_DIR)
 	$(MAKE) linkcheck OUT=.export
 	$(MAKE) build
+
+# The REAL site: the three manuals org-docs maintains in $(CORPUS) (~/docs).
+# Corpus production is org-docs's job — in Emacs: M-x org-docs-import-emacs /
+# -import-org / -import-guix (texinfo -> Org with stable id: links; the
+# updater refreshes STAGED, never in place). This target only READS the
+# corpus: latest Org, export, slim, search index, linkcheck, build.
+# `make site` then serves the built dist (reader at /, money page at
+# /cloud.html) on :4173.
+manuals: org-latest
+	$(MAKE) export CORPUS=$(CORPUS) DOC="$(DOC)" OUT=$(OUT) ORG_LOAD=$(ORG_DIR)
+	$(MAKE) linkcheck OUT=$(OUT)
+	$(MAKE) build
+
+site: build
+	npm run preview
 
 all: check export linkcheck build
 

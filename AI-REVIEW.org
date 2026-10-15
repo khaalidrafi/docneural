@@ -779,3 +779,55 @@
    =applyGraphdata= fed from a static snapshot, source-hue parity
    between chip and canvas — is what =make verify= asserts; run it once
    on the real machine after swapping the shim for the clone.
+
+* What to review from the 2026-10-15 front-door session (author: Qwen)
+
+** TODO cloud.html — the money page (new, self-contained)
+   :CODE:
+   Branding, tagline ("we fuel the neural networks of humans and AI"),
+   the five income lines with PUBLIC prices, the Jev System-One console
+   (BYO key in localStorage; deterministic SIM fallback, clearly
+   labelled), the agent manifest + llms block, waitlist/referral/invoice
+   drafts (all localStorage — no backend claims). Review: the pricing
+   numbers match the plan's public tiers; the Jev request body matches
+   docs.typesafe.ai/api (state/model/questions; noul/choice/score);
+   the page never implies a live backend where there is none (checkout
+   drafts an invoice JSON with `payment: wire-me`).
+
+** TODO index.html — boot splash must never gate the reader
+   :CODE:
+   The splash leaves on window load AND on an 8 s fuse, and removes
+   itself from the DOM. Verify `#app` mounting is untouched (Vite entry
+   intact: div#app + /src/main.ts + dn-body + data-theme=dark) and that
+   prefers-reduced-motion kills the pulse.
+
+** TODO vite.config.ts — two-entry build
+   :CODE:
+   rollupOptions.input {main: index.html, cloud: cloud.html}. cloud.html
+   has no imports, so no shared-chunk surprises; verify `npm run build`
+   emits dist/cloud.html and `npm run preview` serves both doors.
+
+** TODO Makefile — `manuals` and `site` targets
+   :CODE:
+   `make manuals` = org-latest -> export CORPUS=$(CORPUS) DOC="$(DOC)"
+   (defaults ~/docs, "org emacs guix") -> linkcheck -> build. It only
+   READS the corpus; org-docs produces it. Quoting of DOC="$(DOC)"
+   through the recursive $(MAKE) deserves a look.
+
+** TODO ci/github-actions.yml — deploy job (demo corpus to Pages)
+   :CODE:
+   New `deploy` job: needs build, ai/cloud pushes only, clones the two
+   siblings, exports the DEMO corpus, uploads dist/, deploy-pages.
+   Honest scope is stated in the comment: the full manuals cannot build
+   in CI (the corpus lives on the build machine). Needs Settings ->
+   Pages -> Source: GitHub Actions once (token here lacks pages scope).
+
+** NOTED follow-ups (not done, deliberately)
+   - Reader chrome has no link back to /cloud.html yet — that is theme
+     repo (docneural-ui) work; keep the money door one click away once
+     the theme grows a header slot for it.
+   - Stripe payment links replace the invoice drafts when the account
+     exists (search `wire-me` in cloud.html).
+   - Jev self-audit of this session could not run here (no
+     TYPESAFE_API_KEY in the sandbox); the checklist above is the
+     manual stand-in.

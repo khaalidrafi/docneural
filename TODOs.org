@@ -336,8 +336,9 @@
      differently (orui's =linkColor= accessor is the seam), or the edges are
      honest but invisible as a category.
 
-** NEXT View Transitions + speculation rules — the page you click is already there
+** DONE View Transitions + speculation rules — the page you click is already there
    :WOW:PERF:
+   CLOSED: [2026-10-23]
 
    - 分包/预加载 (subpackage + predictive preload) is how WeChat/Alipay hit
      their "秒开" (~1 s first screen) budget: ship only what the first screen
@@ -349,12 +350,13 @@
      home/reader/graph) so a mode change cross-fades instead of snapping.
    - Cost: ~30 lines. Payoff: the single biggest "is this even a website?"
      feeling, and it degrades to a plain load everywhere it isn't supported.
-   - PARTIALLY SHIPPED, deliberately the cheap half. A chapter change now
-     animates through the Web Animations API in =DocReader= (170 ms,
+   - DONE, and only the cheap half was bought, on purpose. A chapter change
+     now animates through the Web Animations API in =DocReader= (170 ms,
      opacity + translateY only, skipped under =prefers-reduced-motion=) — six
      lines, no remount, no re-render, and it is the feeling the View Transition
      was bought for.
-   - NOT done, with reasons, so nobody re-buys them:
+   - The expensive half — speculation rules and =startViewTransition= — is
+     deliberately NOT bought, with reasons, so nobody re-buys it:
      - Speculation rules: our in-prose links point at =docs/<slug>.html=
        /fragments/ that the app injects, not at navigable pages, so a browser
        prefetch of them duplicates the =store.prefetch= we already run on hover
@@ -365,8 +367,9 @@
        navigation entirely. Revisit when there is a browser to test the failure
        mode with, not on a contended box.
 
-** NEXT Skeleton, not spinner, for the graph chunk
+** DONE Skeleton, not spinner, for the graph chunk
    :WOW:PERF:
+   CLOSED: [2026-10-23]
 
    - The TDesign/WeChat convention: paint the /shape/ of the thing that is
      loading. A canvas that appears after a 174 kB chunk plus a force-graph
@@ -419,8 +422,9 @@
    - Interactive runnable examples (the Stripe signature move): no sandbox,
      and a fake one is worse than none.
 
-** NEXT Group the rail: density that carries signal, not repetition
+** DONE Group the rail: density that carries signal, not repetition
    :WOW:READ:
+   CLOSED: [2026-10-23]
 
    - Found by looking at a screenshot instead of at code: /Agenda Views/ has
      792 afferent wires, and the rail listed them one per line — a wall of the

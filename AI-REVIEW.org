@@ -738,6 +738,46 @@
             is a 200 ms grace period before it closes (Feishu does this), which
             costs a second timer and the ability to mis-click.
 
+** NOTED The force-order invariant: the packing force is registered LAST
+
+   d3 iterates its forces in /Map insertion order/ and integrates =x += vx=
+   once, after all of them have run — so the force registered last owns the
+   position. The container spring (=forceFitContainer=) pulls inward, so the
+   packing force (=forceLabelBoxes=) must be registered after it: the packer
+   is the one that clamps the velocity pointing into a gap — its velocity
+   clamp is what stops the spring from undoing the projection on the same
+   tick. The registration site is =applyLayout=
+   (=graph/neuronEngine.ts=, spread branch): =fit=, then =collide=. Swapping
+   those two lines reproduces the overlap bug at ~5% of a field (measured).
+   Recorded 2026-10-23: HANDOFF § /The load-bearing invariant/ states it in
+   one breath; this entry is the durable copy.
+   /Skeptic note: the invariant is invisible in review — a reorder reads as
+   a no-op cleanup — and =spreadForces.test.ts= pins it only by running the
+   REAL engine in registration order; a harness that runs the two forces
+   alone is a picture nobody sees./
+
+** NOTED The circle-vs-box limit: labels are screen-sized, boxes are world-sized
+
+   Titles paint at =11 / globalScale= (=paintNode= in
+   =graph/neuronEngine.ts=), so a name keeps its SCREEN size while its world
+   footprint is =labelWidth / k=. A collide reserve authored at zoom 1 is
+   therefore only honoured when the camera lands at k = 1 — which is why
+   =fitReadable= computes ≥ 1 for a field packed to the room and the 1:1 cap
+   binds (the =fitReadable= doc comment states the cap and its reason). The
+   trap is circular: shrink the keep-out boxes and the field packs smaller,
+   the camera zooms out to frame it, and every title's world footprint grows
+   back past its reserve — the overlap bug returns by zooming, not by
+   packing. Measured anchors: a circle wide enough to keep two ~180×13 px
+   titles apart reserves ~25,000 px² for ~2,300 px² of ink
+   (=spreadForces.ts= header); =forceCenter='s round blob needed a 0.79
+   zoom-out (697×608 of field in a 552×768 window) and re-overlapped the
+   labels, while the viewport-shaped room lands 1:1
+   (=forceFitContainer= comment). Recorded 2026-10-23, same provenance as
+   the force-order entry above.
+   /Skeptic note: all of it holds only at k = 1, and the painter's
+   drop-overlapping-label LOD hides a relapse — a fit below 1:1 fails
+   silently as MISSING ink, not as visible overlap./
+
 ** NOTED Verified by (this pass)
 
    - =npx vitest run= (synapt) 43/43 — the 9 new graph-math cases plus the

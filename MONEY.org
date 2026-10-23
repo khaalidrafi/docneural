@@ -1,0 +1,123 @@
+#+TITLE: MONEY — docneural
+#+DESCRIPTION: DRAFT monetisation ideas for the owner's judgement — a menu with verdicts, not a commitment. Nothing here is built, promised, or wired.
+#+STARTUP: overview
+
+* What is being monetised, and what is not for sale
+
+  The site is a self-hosted Org-corpus renderer: one Emacs-batch exporter
+  (=scripts/docneural-export.el=) turns a corpus it does NOT own into a
+  static site — HTML fragments, =graph.json= (1,559 nodes, 29,017 wires,
+  the citation sentence of every wire in =ctx/<id>.json=), =llms.txt= /
+  =llms-full.txt=, raw Org per page, copy-as-context. It runs on a 4 GB
+  Celeron behind a =make verify= gate that asserts every boot request is
+  same-origin: zero tracking, zero render-blocking externals. One
+  maintainer; reader trust is the entire asset, the cost base a static
+  host's nothing.
+
+  That fixes the judgement: revenue ideas are cheap and trust is
+  expensive, so the default answer is no. The two laws (/usability first/,
+  /instant means on a phone/ — TODOs.org § 1) are the veto: wire bytes,
+  first-paint cost, reader-facing noise — reject-by-default, whatever it
+  might earn.
+
+* Candidates
+
+** GitHub Sponsors / Ko-fi — a link, nothing more
+
+   - What: one text line in the README and the site footer pointing at
+     Sponsors/Ko-fi. Text, not a badge image — a badge is a request, and
+     the footer's request budget is zero.
+   - Cost to build: minutes, no code path, no dependency.
+   - Cost to trust/UX: ~zero — one colophon line, skippable by every
+     reader and agent.
+   - Revenue honesty: OSS tip jars land near nothing; expect coffee money,
+     not a salary. Honest test: if it reads zero after a year, delete it.
+   - Verdict: PURSUE. /Skeptic note: a donate link nobody clicks is a small
+     conscience tax on the owner; measure once, then keep or cut./
+
+** Hosted instances for teams — the pipeline as the product
+
+   - What: run =make export= + =make slim= + =make build= against a team's
+     internal Org corpus, hosted for them. The exporter is the product.
+   - Cost to build: the pipeline is three commands; the PRODUCT is a server
+     with more than 4 GB, uptime the owner is blamed for, and per-corpus
+     support — every Org corpus has idiosyncratic drawers, custom =id:=
+     links and broken anchors; the exporter already stays in lockstep with
+     =org-docs-reader= for ONE corpus (HANDOFF § the dependency) — N
+     customers is N of that, on-call, alone.
+   - Cost to trust/UX: none to readers; all of it to the maintainer's
+     calendar.
+   - Revenue honesty: the only real money on this list — teams do pay for
+     docs infrastructure — and the one most likely to kill the project
+     through support load.
+   - Verdict: PARK. /Skeptic note: "managed" means on-call, and a
+     one-person box selling managed anything is a second job wearing a
+     hobby's clothes./
+
+** One-time "install it on your machine" consulting
+
+   - What: a fixed-scope session standing the pipeline up on the client's
+     own machine — Guix + Emacs batch export + corpus wired + =make serve=.
+     They keep everything; nothing is hosted, nothing recurs.
+   - Cost to build: zero code; it sells hours.
+   - Cost to trust/UX: zero for readers — nothing touches the site.
+   - Revenue honesty: real but bounded. The niche is people who want an
+     Org-corpus site AND cannot DIY the Guix half; it scales with the
+     owner's hours, which compete with the maintenance the site needs.
+   - Verdict: PURSUE, inbound only. /Skeptic note: advertise it and it
+     becomes the job; take it when asked and it stays a favour with an
+     invoice./
+
+** A disclosed sponsorship line in the llms.txt headers
+
+   - What: one line in the =llms.txt= / =llms-full.txt= header ("index
+     served by X") — agent-audience only, zero human pixels, zero bytes
+     added to any human page.
+   - Cost to build: one line in =docneural-export.el=.
+   - Cost to trust/UX: the llms files are also read by humans auditing the
+     site, so the line must be a disclosure, never a disguise — an
+     undisclosed paid line would poison the exact trust the site sells,
+     permanently.
+   - Revenue honesty: agents ignore ads; no measured conversion for an
+     agent-audience sponsorship exists anywhere yet. Honest expectation:
+     zero, with a future only if llms.txt grows a disclosure economy.
+   - Verdict: PARK. /Skeptic note: selling placement to a reader that
+     cannot buy anything is monetising a fiction; revisit only if agent
+     traffic is measurable — and disclose or die./
+
+** Paid corpus packs
+
+   - What: pre-rendered, paid packs of manuals or corpora.
+   - The weak link, stated plainly: the maintainer must OWN the content,
+     and the corpus on the site — the Org, Emacs and Guix manuals — is
+     GFDL/GPL documentation the maintainer does not own. Selling it is a
+     licence violation, not a business; an original-corpus pack is a
+     content business wearing this one's domain.
+   - Cost to trust/UX: a paywall on anything reader-facing fails the two
+     laws outright.
+   - Verdict: REJECT. /Skeptic note: the only version that is legal is the
+     one that is a different job./
+
+* Rejected without a section (the two laws as veto)
+
+  - Ad networks, analytics, affiliate injection into prose: each adds
+    render-blocking externals or reader-facing noise, and the first two
+    break the zero-tracking promise =make verify= asserts. REJECT.
+  - A paywall or premium tier on chapters: the corpus is not ours to sell
+    (above), and a nag-wall is reader-facing noise. REJECT.
+  - A paid API over the corpus: the point of =llms.txt= is that an agent
+    gets in free; charging for it un-defines the site. REJECT.
+
+* The verdict table
+
+  | idea                        | verdict | one-line why                           |
+  |-----------------------------+---------+----------------------------------------|
+  | Sponsors/Ko-fi footer line  | PURSUE  | costs nothing, risks nothing           |
+  | Hosted instances for teams  | PARK    | real money, one-person support death   |
+  | Install-on-your-machine day | PURSUE  | inbound only; sells hours, no UX cost  |
+  | llms.txt sponsorship line   | PARK    | agents ignore ads; disclose or die     |
+  | Paid corpus packs           | REJECT  | the maintainer does not own the corpus |
+
+  Nothing here is built. Zero revenue, zero tracking, a fast site is a
+  legitimate steady state; every idea above is judged against the thing
+  that actually has value: a corpus renderer readers and agents can trust.

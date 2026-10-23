@@ -325,6 +325,10 @@ async function main() {
   })
   check('graph canvas is sized and fed', graph.w > 200 && graph.h > 200
     && Number(graph.dataNodes) > 50, JSON.stringify(graph))
+  // The parked state is phone-only: a desktop canvas must never carry the
+  // attribute the settle-pause publishes (a stale one survives mode switches).
+  const desktopPaused = await page.evaluate(() => document.querySelector('.roam-wrap')?.dataset?.paused ?? null)
+  check('desktop canvas never parks', desktopPaused === null, `data-paused=${desktopPaused}`)
 
   const sampleInk = () => page.evaluate(() => {
     const c = document.querySelector('.roam-wrap canvas')
@@ -853,6 +857,46 @@ async function main() {
   })
   check('phone: canvas still fills the viewport', mgraph.w > 300 && mgraph.h > 300,
     JSON.stringify(mgraph))
+
+  // The phone cap (core/graph.ts#capForPhone, 400 nodes): the engine's live
+  // count must never exceed it, while the desktop context above was fed the
+  // whole filtered corpus. A corpus smaller than the cap passes trivially —
+  // the assertion is the CEILING, not the exact number.
+  const mnodes = await mp.evaluate(() => {
+    const view = document.querySelector('.roam-wrap')?.firstElementChild
+    return Number(view?.dataset?.nodes ?? 0)
+  })
+  check('phone: graph is node-capped (<= 400)', mnodes > 0 && mnodes <= 400,
+    `${mnodes} nodes`)
+
+  // Settle-park: after the physics cool, the render loop pauses and the wrap
+  // publishes data-paused="1" (same DOM-fact pattern as data-fit). Poll for
+  // it: settling is cooldownTime(3500) plus whatever the machine is doing.
+  const parked = await mp.evaluate(() => new Promise((resolve) => {
+    const deadline = Date.now() + 30000
+    const poll = () => {
+      const p = document.querySelector('.roam-wrap')?.dataset?.paused ?? null
+      if (p === '1' || Date.now() > deadline) resolve(p)
+      else setTimeout(poll, 400)
+    }
+    poll()
+  }))
+  check('phone: canvas parks after the layout settles', parked === '1', `data-paused=${parked}`)
+
+  // And waking up: a touch on the dish must clear the parked state so the
+  // next frames actually paint — a canvas that stays parked through input is
+  // a frozen screenshot, which is worse than an unparked battery drain.
+  await mp.locator('.roam-wrap').tap({ position: { x: 150, y: 300 } }).catch(() => {})
+  const woken = await mp.evaluate(() => new Promise((resolve) => {
+    const deadline = Date.now() + 8000
+    const poll = () => {
+      const p = document.querySelector('.roam-wrap')?.dataset?.paused ?? null
+      if (p === null || Date.now() > deadline) resolve(p)
+      else setTimeout(poll, 200)
+    }
+    poll()
+  }))
+  check('phone: touching the dish wakes the canvas', woken === null, `data-paused=${woken}`)
   await mp.screenshot({ path: `${OUT}/07-phone-graph.png` })
   await mctx.close()
 

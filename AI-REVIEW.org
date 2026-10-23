@@ -749,3 +749,72 @@
      back to 32.
    - =make build= -> 45 s on a contended box; entry JS/CSS unchanged in size
      (the peek card and ego math are ~6 kB of the bundle, no new dependency).
+
+* REVIEW Agent-team pass (2026-10-23) — phone graph caps, visited marks, section copy
+
+  Work landed on the =ai/agent-team= branch of BOTH repos (not =ai/main=:
+  the Playwright gate cannot run on the machine that wrote this — no Emacs
+  corpus, no Guix chromium here). Merging to =ai/main= is gated on you
+  running =make verify= where the corpus lives. What this pass closes, all
+  from the NEXT shelf of =TODOs.org=:
+
+** REVIEW =capForPhone= — the cap's product decision
+
+   - The cap keeps the 400 most-connected chapters on a phone-sized
+     viewport and drops the rest of the overview. THE DECISION TO REVIEW:
+     hubs-over-leaves is the ranking. The alternative (keep corpus order,
+     cap the tail) would ship the first 400 slugs of the export — an
+     alphabet of Emacs chapters — which answers no question. Degree-first
+     keeps every manual's index and its spine; the TOC remains the way to
+     reach a leaf chapter, and the ego view (the default on open) is
+     unaffected either way.
+   - =keep= is the selection's hot set and is honoured even at degree 1:
+     the cap must never cost the reader the node they navigated to.
+   - The park =pauseAnimation()= after settle is phone-only. REVIEW the
+     wake set: =pointerdown= + =wheel= on the dish, any data change, and
+     effect cleanup. A pinch-zoom fires pointer events, so it wakes; a
+     two-finger pan that starts as touch does too. If you find a gesture
+     that stays frozen, the wake listener on the wrap is the one place to
+     extend.
+
+** REVIEW The visited marks' semantics
+
+   - A visit = any =goto()=: graph clicks, palette jumps, deep links and
+     pager steps all mark. That is the generous definition; the strict one
+     (reader-mode only) would leave graph-only browsing invisible in the
+     sidebar, which is the map's main audience.
+   - Marks are permanent by design (no decay, no unmark). If you want a
+     "mark as unread" affordance, it belongs on the =ChapterNav= row next
+     to the tick-checkbox, and =core/visited.ts= grows an unvisit().
+
+** REVIEW The section copy's block flattening
+
+   - =sectionAsContext()= renders a DOM =Range= to text: paragraphs and
+     headings are whitespace-collapsed, lists keep bullets/numbers, and a
+     TABLE flattens to a run of text. That last one is the honest loss —
+     a table's prose around it usually carries the meaning, and the
+     =Raw Org:= line is one click away for the agent that needs the real
+     structure. If tables matter more than this, the exporter could emit
+     org-table text per section (a bigger change, flagged here not built).
+
+** NOTED Verified by (this pass)
+
+   - =npx vitest run= (docneural-ui): 76/76 — 62 existing + 6 =capForPhone=
+     + 8 =visited=. No existing case changed.
+   - =svelte-check=: 0 errors, 0 warnings across the theme and its orui
+     sibling.
+   - =node --check scripts/pw-verify.mjs= (the site driver parses; its new
+     phone assertions are listed above and need the corpus machine).
+   - NOT verified here: =make verify= end-to-end, the exports themselves,
+     and the graph on a real corpus — everything fetch-dependent. The
+     branch is safe to check out: the unit suite is green on its own.
+
+** NOTED The two QUESTIONs stay questions
+
+   - Section-level search (#19) and the offline service worker both name
+     you as the decider in =TODOs.org=; this pass did not preempt them.
+     For the search question, one data point from this side: the corpus's
+     ~30k headings as a per-manual lazy =search/SLUGS.json= (title +
+     anchor + parent title only) is roughly 300-450 kB total, not 1.5 MB —
+     the 1.5 MB figure holds only if bodies ride along. A small BM25 over
+     that is ~150 lines. Say the word and it is the next pass.

@@ -107,13 +107,33 @@
      and pausing while the force-graph sim is hot. Both are refinements of
      the same call, so they stayed small.
 
-** NEXT Cap graph cost on phones
+** DONE Cap graph cost on phones
    :PERF:GRAPH:
-
-   - =devicePixelRatio= is already capped at 2; also cap =data-nodes= on
-     small screens (overview mode starts paused), and stop the sim once
-     it settles instead of running =cooldownTicks= forever.
-   - Assert in =make verify= (phone context): frames while idle.
+   CLOSED: [2026-10-23]
+   - SHIPPED =core/graph.ts#capForPhone(g, cap, keep)= — on a phone-sized
+     viewport (the SAME 700 px breakpoint the reader's stylesheets use, asked
+     through =core/layout.ts#isPhoneViewport()=) the canvas snapshot is
+     capped at 400 nodes: most-connected first, plus the selection's hot
+     set, and any wire whose both ends dropped goes with them. Desktop is
+     byte-for-byte the old path — the effect short-circuits so a selection
+     does not even re-run it.
+   - SHIPPED the park: =onEngineStop= on a phone now calls
+     =force-graph.pauseAnimation()= after the fit — a settled overview was
+     repainting ~N neurons per frame for nobody. The wrap publishes
+     =data-paused="1"= (same DOM-fact pattern as =data-fit=); a touch or
+     wheel on the dish wakes the loop, a data change resumes it in the
+     snapshot effect, and unmount cleanup resumes so a mode switch never
+     freezes the next mount. The sim itself was already bounded
+     (=cooldownTicks(180)=), so "stop once it settles" needed only the
+     render-loop half.
+   - Asserted in =make verify= (phone context): the live node count is
+     <= 400, =data-paused= appears after settle, a tap clears it, and the
+     DESKTOP context asserts the attribute never appears. Note this is a
+     DOM-fact assertion, not the originally sketched "count rAF frames": a
+     headless page fires rAF for its own compositing, so frame counting
+     would measure the browser, not the canvas.
+   - Pinned by 6 new =capForPhone= cases in =core/graph.test.ts= (hubs kept,
+     hot set kept at degree 1, no dangling wires, determinism).
 
 * NEXT P2 — convenience while reading
 
@@ -139,16 +159,20 @@
    - The reader keys live in =DocReader= (only it knows the article, the
      scroller and =activeId=); the app-level keys stay in =SynaptApp=.
      Both guard =INPUT=/=TEXTAREA=/=isContentEditable=.
-   - NEXT =v= distraction-free (hide sidebar + rail) and =b= bookmark a
-     section are still unbuilt; see the item after this one.
+   - DONE =v= distraction-free (hide sidebar + rail) and =b= bookmark a
+     section — see the next item, which is now CLOSED too.
 
-** NEXT Distraction-free reading and saved sections
+** DONE Distraction-free reading and saved sections
    :READ:
+   CLOSED: [2026-10-23]
 
-   - =v= hides the sidebar and the rail (article to full measure, =Esc= back),
-     =b= saves the current heading to =localStorage= and grows a "// saved"
-     list on Home. These are the two that make a 277-page manual readable on
-     a phone, and they need the same storage path =lastRead= already has.
+   - SHIPPED (this pass — TODO was stale, the keys landed in the theme
+     commits): =v= hides the sidebar and the rail (article to full measure,
+     =Esc= back), =b= toggles a mark on the current heading via
+     =core/saved.ts= (bounded at 24, slug+anchor keyed so a re-export
+     survives), and Home grows the saved list — the three were already in
+     =ai/main=; this pass only closes the item. Verified by the existing
+     =make verify= copy checks.
 
 ** DONE Resume where you stopped
    :READ:
@@ -181,9 +205,14 @@
      <slug>.org=). Measured on =org--Agenda-Views=: 39,797 B pasted where
      68,975 B used to be. =⧉ link= no longer copies a bare chapter URL
      either — it falls back to the chapter's own first heading when the
-     scroll-spy has not named one yet (=currentAnchor()=). Still open:
-     appending neighbours' one-line summaries, and a "copy this section only"
-     action instead of one cap. See =AI-REVIEW.org=.
+     scroll-spy has not named one yet (=currentAnchor()=).
+   - DONE (2026-10-23, this pass) both remainders: =pageAsContext= now
+     carries a =Neighbours:= line (prev/next titles, one line, nothing when
+     there is no pager), and =⧉ §= (key =c=) copies THE SECTION ONLY — from
+     the heading the scroll-spy names to the next heading of any level, via
+     a DOM =Range=; blocks are whitespace-collapsed and joined with blank
+     lines, lists keep their bullets/numbers. Same =CONTEXT_BUDGET= guard
+     as the page copy, same =Raw Org:= escape hatch in the header.
 
 ** DONE Reading progress and completion
    :READ:
@@ -191,8 +220,14 @@
    - SHIPPED a 2 px hairline at the top of the scroller, filled by
      =scaleX= from a rAF-throttled scroll listener that writes the element
      directly (no =$state=, so the article never re-renders per frame).
-   - NEXT visited-chapter marks in the sidebar, so a long manual has a shape.
-     Same =localStorage= path, a Set of slugs.
+   - DONE (2026-10-23) visited-chapter marks in the sidebar, so a long
+     manual has a shape. =core/visited.ts= (one =localStorage= key, a
+     slug log bounded at 500, written only on FIRST open so the store stays
+     a diff-able log) mirrored into =store.visited=; =goto()= records the
+     visit, so graph clicks and palette jumps count the same as pager
+     steps. ChapterNav wears a small dot per seen chapter plus a "N seen"
+     count next to the chapter counter. 8 unit tests in =core/visited.test.ts=
+     (persistence, idempotence, bounding, private-mode degradation).
 
 * QUESTION — needs your judgement before I build it
 

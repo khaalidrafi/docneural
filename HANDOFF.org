@@ -49,6 +49,16 @@
   | docneural   | =~/org-docs-website=        | =khaalidrafi/docneural=   | =4818187= Name the site docneural everywhere      |
   | docneural-ui | =~/synapt= (dir!)         | =khaalidrafi/docneural-ui= | =5ec9b40= Rename the theme to docneural-ui       |
 
+  - UPDATE 2026-10-23 (agent-team pass): the NEXT shelf of =TODOs.org= is
+    closed on REVIEW BRANCHES — =ai/agent-team= in BOTH repos, branched off
+    the =ai/main= HEADs above. Phone graph cap + settle-park
+    (and =make verify= phone assertions), visited-chapter marks in the
+    sidebar, section-only LLM copy (=c= / =⧉ §=) + the =Neighbours:= line,
+    and the stale DONE flips. Verified: vitest 76/76, svelte-check 0/0,
+    =node --check= on the driver. NOT verified: =make verify= (needs the
+    corpus + Guix chromium) — run it there, then fast-forward =ai/main= or
+    merge. Details in =AI-REVIEW.org= § "Agent-team pass".
+
   - The rename to =docneural-ui= is *done*: package name, component
     (=src/lib/DocneuralApp.svelte=), graph view (=DocneuralGraph.svelte=),
     stylesheet (=styles/docneural-ui.css=), every =--sy-*= token → =--dn-*=,

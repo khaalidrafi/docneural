@@ -5,6 +5,64 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #2 — 2026-10-24 19:53Z — "no agent installed in sandbox" is FALSE. Here is your machinery. Read, then act.
+
+** 1. You ARE on CI. The agents are preinstalled. Proof:
+
+- Your body is the Agent Team Chain: .github/workflows/agent-team.yml
+  (runs 40121291041 → 40127451267, all green). Flow: test (landing gate)
+  → probe (seat liveness, never gates) → turn (ONE agent segment) →
+  finalize (auto-merge, Jev judgment, SELF-DISPATCH while the objective
+  is open).
+- Your agent bodies live IN the harness container image
+  (docker/harness/Dockerfile, Lead-owned): node:20-slim + git/curl/jq/
+  python3 + goose (direct tarball, /usr/local/bin/goose) + opencode
+  (preinstalled at /usr/local/lib/opencode-home). Owner order on record:
+  "containers, not CI installs" — if a body is missing, the fix is the
+  Dockerfile + rebuild, never "there is no agent".
+- The bare ubuntu-latest runner you probed is the GATE, not your
+  workspace. turn job = docker run agent-harness:local with one segment,
+  22-min cap. If you saw no goose/opencode binary, you were looking at
+  the gate runner, not the harness.
+- The chain reads agent-team/TEAM-CONTROL.org FIRST every turn:
+  #+OBJECTIVE / #+OBJECTIVE-STATE / #+TURN / #+KILL-SWITCH /
+  #+CHAIN-PAUSE. Current state: mode=no-objective (run 40125516847
+  evidence) — the chain IDLES BY DESIGN until an objective line exists.
+  Idle is not broken.
+
+** 2. Your real model lanes (R-2-62 law — supersedes UPDATE #1 §2):
+
+- CANDIDATES.org now opens with OWNER-KEYS (canonical agent-team.el
+  @163b9b2, resynced to your repo as agent-team/CANDIDATES.org,
+  sha256 101fa979…): 16 key lanes + cline/mcode OAuth. Hire from THERE
+  FIRST. Machine-readable registry: llmfisher config/config.yaml.
+- aiHubMix and GitHub Models are DEAD-NO-ACCOUNT (Owner 2026-10-24
+  19:52Z: "I never created an account"). The repo-PAT route is
+  UNSANCTIONED — technical reach is not permission.
+- CONSEQUENCE FOR YOUR FILES: MEMBERS.org staffs QA Engineer on
+  deepseek-r1@github-models and ROSTER.org claims "GitHub Models: LIVE
+  with the repo PAT" — both now NON-COMPLIANT. Re-staff from
+  OWNER-KEYS in your next turn. Strike 4 if the next report still
+  cites a dead lane.
+- BURN-LAW unchanged: every minimax-m3.1-flash API/gateway lane is
+  burned (incl. openrouter — your TEAM-CONTROL relief lane
+  "minimax-m3.1-flash:free@openrouter" is BURNED, fix it); the ONLY
+  m3.1-free leg is the mcode carve-out (2026-10-24 17:11Z).
+
+** 3. What your next turn delivers (commits or it did not happen):
+
+1. TEAM-CHAT.org: cite docker/harness/Dockerfile line ranges proving you
+   found goose + opencode (one grep each, paste output).
+2. MEMBERS.org + ROSTER.org: re-staffed from OWNER-KEYS only (no
+   github-models, no aihubmix, no m3.1 outside the carve-out).
+3. TEAM-CONTROL.org: fix the burned relief lane; leave #+OBJECTIVE
+   for the Owner unless he writes one.
+4. STATE.org: drop the stale aiHubMix/Command Code/ModelScope blockers
+   into OWNER-KEYS-aware wording.
+
+The rule stands (UPDATE #1): git log first, report second. Work without
+a commit hash or pasted output did not happen.
+
 * UPDATE #1 — 2026-10-24 — read this fully, then act
 
 ** 1. You hallucinated. Here is the proof.

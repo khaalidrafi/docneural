@@ -6,22 +6,16 @@
 // equals the colour the canvas gives that source's nodes). Those are checkable
 // in-page; "does it look cool" is for the human, hence the screenshots.
 //
-// playwright-core is not a dependency of this repo — it is already installed in
-// the sibling org-roam-lite-ui checkout, so the library half of the stack needs
-// zero installs on this 4 GB machine.
-//
-// The BROWSER half does come from the system, not from Playwright's own
-// download: ~/.cache/ms-playwright/chromium-*/chrome wants the FHS /lib64
-// loader, which Guix does not have, so spawning it is an instant ENOENT (same
-// discovery org-roam-lite-ui's playwright.config and scripts/browser-check.mjs
-// made). The Guix `chromium` does boot headless, so `executablePath` points at
-// it. Set DOCNEURAL_CHROME to override.
-//
 //   node scripts/pw-verify.mjs [--url http://localhost:5173/] [--out /tmp/pw]
 //
-// Exit 0 = every assertion passed.
-import { chromium } from '/home/khalid/org-roam-lite-ui/node_modules/playwright-core/index.mjs'
+// The LIBRARY + BROWSER halves are resolved in scripts/browser.mjs: zero new
+// dependencies, sibling-checkout playwright-core, PATH chromium with the
+// Playwright cache as fallback. Set DOCNEURAL_PLAYWRIGHT / DOCNEURAL_CHROME
+// to override either half.
+import { loadPlaywright, findChrome } from './browser.mjs'
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
+
+const { chromium } = await loadPlaywright()
 
 const argv = process.argv.slice(2)
 const arg = (name, dflt) => {
@@ -36,10 +30,7 @@ const OUT = arg('out', '/tmp/pw')
 // design one. Override with --paint 300000 when the load average says the
 // Celeron is busy.
 const PAINT = Number(arg('paint', '180000'))
-const CHROME = process.env.DOCNEURAL_CHROME ??
-  // Playwright's executablePath is NOT searched on PATH, so resolve it here
-  // (the same system chromium browser-check.mjs uses).
-  (process.env.PATH ?? '').split(':').map((d) => `${d}/chromium`).find((p) => existsSync(p))
+const CHROME = process.env.DOCNEURAL_CHROME ?? findChrome()
 
 if (!CHROME || !existsSync(CHROME)) {
   console.error('no chromium found — set DOCNEURAL_CHROME=/path/to/chromium')
@@ -183,25 +174,68 @@ async function main() {
   check('sources strip renders one card per corpus', srcCards >= 2, `${srcCards} cards`)
 
   // Performance is the design constraint here, so the two things that used to
-  // cost the reader time are asserted as ABSENT: a third-party font CDN on the
-  // critical path, and the 4.9 MB of citation prose that used to ride in every
-  // boot to paint one line in the rail.
+  // cost the reader time are asserted as ABSENT: a third-party host anywhere
+  // on the boot's request log, and the 4.9 MB of citation prose that used to
+  // ride in every boot to paint one line in the rail.
+  //
+  // Same-origin is judged against the URL the site is actually served from
+  // (origin equality), not a localhost regex — on the deployed host every
+  // request carries the site's own domain, and THAT is the pass condition;
+  // loopback aliases stay legal for dev/preview. Anything else (a CDN font,
+  // analytics, a badge) is one DNS+TLS round trip per request the reader
+  // pays for nothing.
+  const baseHost = new URL(BASE).host
+  const loopback = (h) => /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(h)
   const hosts = [...new Set(reqs.filter((u) => /^https?:/.test(u)).map((u) => new URL(u).host))]
-  const foreign = hosts.filter((h) => !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(h))
+  const foreign = hosts.filter((h) => h !== baseHost && !(loopback(h) && loopback(baseHost)))
   const woff2 = reqs.filter((u) => /\.woff2(\?|$)/.test(u))
-  check('nothing leaves the machine — fonts are self-hosted',
-    foreign.length === 0 && woff2.length >= 2,
-    `hosts=[${hosts.join(' ')}] woff2=${woff2.length}`)
+  check('nothing leaves the machine — every boot request is same-origin',
+    foreign.length === 0,
+    `hosts=[${hosts.join(' ')}] foreign=[${foreign.join(' ')}]`)
+  check('self-hosted webfonts load (three woff2, swap, no CDN)',
+    woff2.length >= 2 && foreign.length === 0, `woff2=${woff2.length}`)
 
-  const gres = await fetch(`${BASE}graph.json`)
-  const graphJson = await gres.json()
-  const gRaw = JSON.stringify(graphJson).length
-  const gWire = gres.headers.get('content-length')
-  const fatLinks = graphJson.links.filter((l) => l.context).length
-  check('graph.json is slim (per-wire prose moved to ctx/*.json)',
-    fatLinks === 0 && gRaw < 2_600_000,
-    `${(gRaw / 1024).toFixed(0)} kB parsed, ${gWire ?? '?'} B on the wire ` +
-    `(${gres.headers.get('content-encoding') ?? 'identity'}), ${fatLinks} fat links`)
+  // TRANSPORT (P0): what the BOOT actually fetched is the fact that matters.
+  // The pipeline writes graph.json + .gz + .br side by side; the store must
+  // have asked for a precompressed artifact (decoded in-page via
+  // DecompressionStream) or for plain graph.json that the host compressed on
+  // the wire. A plain, identity-encoded graph fetch means the fat build is
+  // live again — the exact regression this exists to catch. The artifact is
+  // re-fetched and decoded node-side (zlib) so the byte numbers describe the
+  // real wire, not a re-request of the fat file.
+  // Parsed once here and shared with the rest of main() (chapter-tree and
+  // hue assertions below walk the same object).
+  let graphJson = null
+  const graphUrl = reqs.map((u) => new URL(u, BASE)).find((u) => /graph\.json(\.br|\.gz)?$/.test(u.pathname))
+  if (!graphUrl) {
+    check('the boot fetched the graph', false, 'no graph.json request in the log')
+  } else {
+    const artifact = graphUrl.pathname.split('/').pop()
+    const gres = await fetch(graphUrl.href)
+    const declared = Number(gres.headers.get('content-length') ?? NaN)
+    const raw = Buffer.from(await gres.arrayBuffer())
+    const wire = Number.isFinite(declared) ? declared : raw.length
+    const enc = gres.headers.get('content-encoding')
+    if (enc) {
+      graphJson = JSON.parse(raw.toString('utf8')) // fetch decoded it already
+    } else if (/\.br$/.test(artifact)) {
+      const { brotliDecompressSync } = await import('node:zlib')
+      graphJson = JSON.parse(brotliDecompressSync(raw).toString('utf8'))
+    } else if (/\.gz$/.test(artifact)) {
+      const { gunzipSync } = await import('node:zlib')
+      graphJson = JSON.parse(gunzipSync(raw).toString('utf8'))
+    } else {
+      graphJson = JSON.parse(raw.toString('utf8'))
+    }
+    const gRaw = JSON.stringify(graphJson).length
+    const fatLinks = graphJson.links.filter((l) => l.context).length
+    const small = /\.(br|gz)$/.test(artifact) || Boolean(enc)
+    check(`the boot graph arrived small (${artifact}${enc ? `, host ${enc}` : ', self-decoded'})`,
+      small, `${wire} B on the wire, ${(gRaw / 1024).toFixed(0)} kB parsed`)
+    check('graph.json is slim (per-wire prose moved to ctx/*.json)',
+      fatLinks === 0 && gRaw < 2_600_000,
+      `${(gRaw / 1024).toFixed(0)} kB parsed, ${fatLinks} fat links`)
+  }
 
   // The terminal aesthetic is DESIGN, not props: no fake tty windows, no PS1
   // prompts, no shell commands in the copy. Assert their absence, then assert
@@ -223,7 +257,9 @@ async function main() {
 
   const stats = await page.evaluate(() => {
     const s = document.querySelector('.home .stats')
-    if (!s) return null
+    // The inner selector is guarded too: a build whose stats panel lacks its
+    // rows must FAIL the check below, not crash the driver mid-gate.
+    if (!s || !s.querySelector('.sy-kv')) return null
     const cs = getComputedStyle(s)
     return {
       rows: s.querySelectorAll('.sy-kv > span:nth-child(even)').length,

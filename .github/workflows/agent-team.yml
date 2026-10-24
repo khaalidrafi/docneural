@@ -78,7 +78,7 @@ jobs:
         run: npm ci
       - name: Landing gate (vitest + svelte-check (corpus-free))
         run: |
-          bash .github/scripts/gate.sh
+          env GH_PAT=${{ secrets.GH_PAT }} bash .github/scripts/gate.sh
 
   # Seat-liveness heartbeat (engine shape). One real completion per
   # accountable API seat, direct to the provider. Results land in the run
@@ -900,7 +900,7 @@ jobs:
               sleep 15
               continue
             fi
-            if bash .github/scripts/gate.sh; then
+            if env GH_PAT=${{ secrets.GH_PAT }} bash .github/scripts/gate.sh; then
               bash .github/scripts/secret-guard.sh staged
               if git push origin "ai/main"; then RESULT=green; break; fi
               RESULT=push-retry

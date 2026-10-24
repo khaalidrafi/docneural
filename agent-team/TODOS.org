@@ -3,12 +3,12 @@
 
 * Board
 
-- P0 graph.json transport — serve the precompressed .gz/.br artifacts (make slim output sits ready) instead of the 7.1 MB raw fetch; src: TODOs.org baseline + TEAM-UPDATE #2.
-- P0 boot requests — nothing render-blocking at boot; fonts css2 legacy replaced by self-hosted faces, confirm in the built site; src: TEAM-UPDATE #2 + commit 25a5c14.
-- P0 fonts — finish/verify self-hosted faces: zero Google css2 dependency in dist; src: TEAM-UPDATE #2.
-- P1 tsconfig paths — ../synapt stale name -> docneural-ui sibling (gate symlinks it today); src: TEAM-UPDATE #2 gate facts.
-- P1 peek-card remainder + P1 defect shelf — Frontend Engineer board scope; src: MEMBERS.org + HANDOFF.org.
-- P2 usability + performance backlog — everything under root TODOs.org, judged by its two rules; src: TODOs.org.
+- DONE P0 graph.json transport — slim pass + graph.json.br/.gz + the precompressed preview middleware are landed; the P0 census asserts on the BUILT site that the boot graph arrives small (host gzip), desktop + phone (source: TODOs.org §Measured baseline; evidence: BOOT AUDIT PASSED 2026-10-25, fixture build at 3f2fe30's tree)
+- DONE P0 boot requests — census on the BUILT site: 7 boot requests (< 60), every one same-origin, desktop + phone viewports (source: TEAM-UPDATE #2; evidence: node scripts/boot-audit.mjs --project . --port 4174 -> PASS x6)
+- DONE P0 fonts — zero external font URLs in built HTML/CSS/JS and exactly 3 self-hosted woff2 faces in dist/assets, OFL texts shipped in dist/fonts (source: TODOs.org §DONE self-host the fonts; evidence: boot-audit fontScan PASS)
+- BLOCKED P0 re-land the gate-green seat work (peek 1299c00, wires b79c11e, ledger 7050e10) :OWN: — those branches exist only on the Owner's box and the named target ai/agent-team is frozen by TEAM-UPDATE #2; needs the branches pushed or a ruling where the re-land goes (evidence: git ls-remote shows only ai/main, ai/agent-team, ai/cloud)
+- DONE P1 tsconfig stale ../synapt — all four theme paths retargeted to ../docneural-ui; landing gate GREEN with the synapt symlink removed: vitest 9/9, svelte-check 0 shell errors, 0 sibling lines (source: TEAM-UPDATE #2 gate facts; evidence: gate rerun 2026-10-25, commit 3f2fe30)
+- REVIEW P1 sibling defect shelf — the fixes live in khaalidrafi/docneural-ui + org-roam-lite-ui, not here; CONFIRMED still open on the siblings' ai/main: DocneuralGraph plain (non-$state) engine read (graph/DocneuralGraph.svelte:109 read inside $effect:198), toggleLite -> location.reload() (DocneuralApp.svelte:67-69), orui GraphView no engine teardown on unmount; APPEAR FIXED by the landed re-land, pending corpus UAT on the Owner's box: cross-doc anchors (store.goto anchor param, DocReader pending-anchor consume) and the phone cap (COCITE_CAP co-cite design replaced capForPhone); this PAT is docneural-scoped so sibling writes are :OWN: (evidence: rg on sibling clones @ 5ec9b40 + 445ef5b, 2026-10-25)
 
 * Org cheat sheet
 

@@ -6,10 +6,10 @@
 - CANDIDATES.org supply verified: 715 lines, Free-lane delta count = 1.
 
 * IN-FLIGHT
-- Board P0s queued in agent-team/TODOS.org (graph.json transport, boot requests, fonts) — first dispatch waits on #+OBJECTIVE in TEAM-CONTROL.org (Owner writes it).
+- Board P0s verified + flipped DONE (agent-team/TODOS.org) — remaining work: P0 re-land is BLOCKED :OWN: (branches on the Owner's box, ai/agent-team frozen); sibling defect shelf blocked on sibling write scope; corpus UAT (pw-verify editorial gate) stays Owner-box.
 
 * READY-FOR-HUMAN-REVIEW
-- The teamify commit on ai/main — additive org files only; workflows, scripts, TEAM-CONTROL.org, TEAM-UPDATE.org, ROSTER.org, CANDIDATES.org untouched. Revert freely if the frozen-ai/teamify template line was meant literally.
+- Teamify commit (f95fdec) + tsconfig retarget (3f2fe30) + this board-flip commit on ai/main — revert freely if any ruling was meant differently.
 
 * DEFERRED
 

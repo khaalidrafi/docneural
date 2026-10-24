@@ -40,11 +40,11 @@ name: Agent Team Chain
 on:
   push:
     branches: [ai/main]
-  # schedule: DISABLED for docneural v1 — working base is ai/agent-team
-  #   and cron only fires from the default branch. Enable (remove the
-  #   '# ' prefix) when the team's base moves to ai/main:
-  # schedule:
-  #   - cron: '17 * * * *'
+  schedule:
+    # Chain safety net — the self-dispatching finalize owns the pacing;
+    # this cron only re-kicks a chain that died infra-level.
+    # (Enabled 2026-10-24: the team base IS ai/main now.)
+    - cron: '17 * * * *'
   workflow_dispatch: {}
 
 concurrency:

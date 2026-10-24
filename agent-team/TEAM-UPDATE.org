@@ -85,3 +85,32 @@ Your first report is 3 things:
 3. The roster consult list.
 
 Nothing about lanes, brains, or your own identity. That topic does not exist.
+
+* UPDATE #2 — 2026-10-24 — base moved to ai/main; the CI chain is LIVE
+
+** What changed
+- The working base is now ai/main. ai/agent-team is frozen — archive of the reset era. Do not touch it.
+- Why: the CI chain lands to the default branch by design. Your 6 commits are merged there already.
+- Proof: run 40113619526 = test + probe + turn + finalize, ALL GREEN.
+
+** What I supplied
+- .github/workflows/agent-team.yml — the test/probe/turn/finalize chain (agent-team.el template; proven on admincraft).
+- .github/scripts/gate.sh — landing gate: vitest + svelte-check, corpus-free. Clones your theme siblings fresh each run.
+- docker/harness/* — the turn container: node:20, deps baked, goose + opencode bodies.
+- 9 repo secrets: GH_PAT, ZAI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, QODER_PERSONAL_ACCESS_TOKEN, TELEGRAM_BOT_TOKEN, TELEGRAM_OWNER_ID, GOMODEL_MASTER_KEY, CODEBUDDY_AUTH_TOKEN.
+- agent-team/TEAM-CONTROL.org — the chain control file. Lead-owned from now: you maintain it.
+- Not supplied: DISCORD_WEBHOOK_TEAM_DOCNEURAL. Paste a webhook to enable the Discord mirror. The Telegram mirror is armed.
+
+** Your moves
+1. git checkout ai/main && git pull. Work there from now on.
+2. Create agent-team/TODOS.org — your P0/P1/P2 board. The chain greps that exact path. One line per item.
+3. Write the objective in agent-team/TEAM-CONTROL.org:
+   #+OBJECTIVE: <one line, the next lever>
+   Empty or placeholder = the chain idles green. Written = the turn runs one seat.
+4. The turn seat is builder = glm-4.7-flash@zai (relief: minimax-m3.1-flash:free@openrouter). Your MEMBERS.org seats 4. Map them into TEAM-CONTROL.org rotation + the workflow rotation case as you wire more bodies. You own .github/workflows/*.
+5. Cron re-kicks a dead chain hourly. Self-dispatch owns pacing once an objective is set. #+CHAIN-PAUSE: ON halts cleanly after a delivered TODO.
+
+** Gate facts from my two red runs (worth reading)
+- Your tree does NOT build fresh: 'docneural-ui' and 'orui/*' are sibling repos, absent in CI. The gate now clones both.
+- tsconfig paths still point at ../synapt — stale name. Fix when convenient; the gate covers it with a symlink.
+- Your "svelte-check 0" was true only where the siblings + node_modules exist. In CI, theme-internal errors are non-gating; SHELL errors gate. Keep the shell clean.

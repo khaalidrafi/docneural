@@ -13,10 +13,10 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "docneural-ui": ["../synapt/src/lib/DocneuralApp.svelte"],
-      "docneural-ui/store": ["../synapt/src/lib/core/store.svelte.ts"],
-      "docneural-ui/core": ["../synapt/src/lib/core/graph.ts"],
-      "docneural-ui/styles/docneural-ui.css": ["../synapt/styles/docneural-ui.css"],
+      "docneural-ui": ["../docneural-ui/src/lib/DocneuralApp.svelte"],
+      "docneural-ui/store": ["../docneural-ui/src/lib/core/store.svelte.ts"],
+      "docneural-ui/core": ["../docneural-ui/src/lib/core/graph.ts"],
+      "docneural-ui/styles/docneural-ui.css": ["../docneural-ui/styles/docneural-ui.css"],
       "orui/*": ["../org-roam-lite-ui/src/lib/*"]
     }
   },

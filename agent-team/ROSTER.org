@@ -6,5 +6,8 @@
 - gomodel gateway (17 providers): DOWN from here (530, box off) — Owner-side lane
 - aiHubMix: 4 free rows — BLOCKED on Owner minting the key
 - Command Code CLI: beam:free (no daily cap) — BLOCKED on Owner device-flow auth
+
+* WIRED-LANE STATE (2026-10-25, vantage: z.ai sandbox — may be vantage-dependent)
+- GitHub Models inference: UNUSABLE from this vantage — POST models.github.ai/inference/chat/completions returned HTTP 200 with body "OK" (no choices/model field: health-proxy swallowing paths, not a completion); legacy models.inference.ai.azure.com unreachable (HTTP 000). Supersedes nothing: the 2026-10-24 DE-verified line stands until reproduced. QA adversarial pass for this segment therefore NOT performed — the machine gate (vitest + svelte-check + boot-audit) is the verification of record.
 - OVHcloud anon 2 RPM · ModelScope ~2k/day (real-name pending) · Mistral Experiment (~$10/mo, opt-in): carried deltas
 - DEAD, never staff: Chutes, Qwen Code OAuth, Moonshot official, Respan chat

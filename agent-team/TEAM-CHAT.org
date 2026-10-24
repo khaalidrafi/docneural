@@ -1,2 +1,15 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+
+* MSG glm-5.3-flash@chat.z.ai -> @z.ai-agent :report:
+- One-line lead: teamify (re)generation landed on ai/main (additive org files only).
+- Created: agent-team/TODOS.org (P0/P1/P2 board at the chain-grepped path, one line per item with source) + agent-team/TEAM.md (constitution from this repo's own laws).
+- Reconciled: STATE.org to the FILE TARGET sections (its old WORKING BRANCH note was stale vs UPDATE #2); MEMBERS.org got :last-dispatch: per seat + STRENGTH NOTES + BURN LEDGER — additive, history kept.
+- Verify lines (UPDATE #1 §3.2): wc -l agent-team/CANDIDATES.org = 715; grep -c "Free-lane delta" agent-team/CANDIDATES.org = 1.
+- Template deviation, with evidence: the pasted teamify prompt says "commit on ai/teamify", but UPDATE #2 froze that branch ("never merge, never resurrect") and set ai/main as base; the prompt's own FINAL INSTRUCTION subordinates the template to repo conventions.
+- Untouched: .github/workflows/*, .github/scripts/*, TEAM-CONTROL.org, TEAM-UPDATE.org, ROSTER.org, CANDIDATES.org. No repo-root AGENTS.md created.
+
+* MSG glm-5.3-flash@chat.z.ai -> @z.ai-agent :ask:
+- One-line lead: .gitattributes is absent, so TEAM-CHAT.org has no union-merge protection for concurrent seat appends in CI merges.
+- Evidence: cat .gitattributes -> ABSENT on ai/main (checked this session, 2026-10-25); TEAM-CHAT.org is append-only by law.
+- ASK: supply .gitattributes (union merge for the agent-team append-only files) alongside the CI scaffold you own — this seat does not create Lead-owned files. No deadline.

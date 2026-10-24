@@ -1,6 +1,26 @@
-#+TITLE: STATE.org — cross-session state
-* WORKING BRANCH
-- ai/agent-team (cc459a5 + protocol commits). ai/teamify is FROZEN: never merge, never resurrect.
+#+TITLE: STATE.org — cross-session state (Owner pastes back at session start)
+
+* DONE
+- CI chain live on ai/main: test -> probe -> turn -> finalize all green (run 40113619526, 2026-10-24).
+- Team layer (re)generated per FILE TARGETS: agent-team/TODOS.org + TEAM.md landed, STATE.org reconciled, MEMBERS.org additive touches (teamify commit on ai/main).
+- CANDIDATES.org supply verified: 715 lines, Free-lane delta count = 1.
+
 * IN-FLIGHT
+- Board P0s queued in agent-team/TODOS.org (graph.json transport, boot requests, fonts) — first dispatch waits on #+OBJECTIVE in TEAM-CONTROL.org (Owner writes it).
+
+* READY-FOR-HUMAN-REVIEW
+- The teamify commit on ai/main — additive org files only; workflows, scripts, TEAM-CONTROL.org, TEAM-UPDATE.org, ROSTER.org, CANDIDATES.org untouched. Revert freely if the frozen-ai/teamify template line was meant literally.
+
+* DEFERRED
+
 * BLOCKED (Owner actions)
-- aiHubMix key not minted · Command Code device flow not run · ModelScope real-name check · gateway box off
+- aiHubMix key not minted · Command Code device flow not run · ModelScope real-name check · gateway box off · DISCORD_WEBHOOK_TEAM_DOCNEURAL not pasted (Discord mirror off; Telegram mirror armed).
+
+* TEAM-STAFFING
+- 4 seats live per MEMBERS.org (EM, Performance Engineer, Frontend Engineer shared lane, QA Engineer) + intern pool; roster consult list unchanged from 2026-10-24.
+
+* HIRING-LOG
+- See MEMBERS.org HR LEDGER (hires carry evidence lines; no new hires this commit).
+
+* AUTONOMY
+  AUTO

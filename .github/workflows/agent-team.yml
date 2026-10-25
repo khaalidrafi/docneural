@@ -505,7 +505,7 @@ jobs:
       - name: Run the turn (one segment, preinstalled agent in container)
         id: seg
         if: steps.control.outputs.mode == 'work'
-        timeout-minutes: 22   # a hung harness fails THIS step, not the rotation
+        timeout-minutes: 30   # a hung harness fails THIS step, not the rotation (22 was too tight for a segment that clones a sibling + npm ci + vitest — FE run 40229541597 died mid-work)
         run: |
           SEAT="${{ steps.control.outputs.seat }}"
           # Read the objective FROM THE FILE, never by template substitution:

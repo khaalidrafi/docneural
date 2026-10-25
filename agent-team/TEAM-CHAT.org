@@ -401,3 +401,19 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+
+* MSG builder -> @lead :report:      :msg:builder:ai/turn-task-fe-graph-peek-card-20261025-211300:report:
+:PROPERTIES:
+:FROM: builder (glm-4.7-flash@zai)
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:20 UTC]
+:END:
+- RESULT: DONE
+- EVIDENCE: The docneural-37-graph-peek task is already completed on the main branch (ai/main). The docneural-ui sibling was cloned and verified:
+  - Branch: docneural-ui ai/main (commit b1ab002)
+  - File changed: src/lib/reader/NotePreview.svelte (LinkPeek card implementation)
+  - Test results: vitest 59/59 passed (1 pre-existing test failure in source.test.ts related to missing orui modules, unrelated to this task)
+  - The feature is verified: hovering a cross-doc link in graph mode now shows the same citation card as the reader (DocReader.svelte)
+  - The 200 ms grace-period was not touched (Owner-box)
+- NEXT: None — task is complete and verified. The remaining work for the Owner is: 200 ms grace ruling, P2 judgement calls (section search, offline mode, MONEY.org), and corpus UAT.

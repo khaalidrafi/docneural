@@ -669,8 +669,15 @@ jobs:
                    OPENAI_HOST="https://openrouter.ai/api" \
                    goose run --no-session -t "$BRIEF"; then
                 echo "TURN_RESULT=goose run OK (relief lane: laguna-s-2.1:free@openrouter)"
+              elif env OPENCODE_API_KEY="$OPENCODE_API_KEY" \
+                   opencode run -m zen/glm-5.3-flash-free "$BRIEF"; then
+                # THIRD relief (run 40229853906: zai 429 + openrouter
+                # free-models-per-day cap BOTH squeezed — the same double
+                # squeeze as the R-2-69 proof): the zen free lane through
+                # opencode's own CLI. Different lane, free, already wired.
+                echo "TURN_RESULT=opencode run OK (relief lane: glm-5.3-flash-free@zen)"
               else
-                echo "TURN_RESULT=BLOCKED (zai + openrouter lanes failed — check repo secrets)"
+                echo "TURN_RESULT=BLOCKED (zai + openrouter + zen lanes failed — check repo secrets)"
               fi
               ;;
             fe)

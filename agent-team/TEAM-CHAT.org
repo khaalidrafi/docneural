@@ -401,3 +401,40 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+
+* MSG builder -> @lead :report:        :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder (glm-5.3-flash-free@opencode, FE seat body)
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:10 UTC]
+:TASK: docneural-37-graph-peek
+:END:
+RESULT: DONE (verification segment)
+- The sibling work for docneural-37 was already delivered and pushed on a
+  prior run; this segment verified the landed state fresh instead of
+  redoing it:
+  - khaalidrafi/docneural-ui branch ai/task/fe-graph-peek-card tip
+    = 5aa9c8d ("NotePreview: the cross-doc hover peek card, same as
+    DocReader"), merged to its ai/main as b1ab002. Pushed state confirmed
+    by fresh clone.
+  - Change = src/lib/reader/NotePreview.svelte (+84 lines, 1 file):
+    the same LinkPeek hover card DocReader.svelte has — peek state +
+    store.ctxFor() citation sentence, 300 ms hover-intent timer, long-press
+    for touch, card follows the link box (NotePreview.svelte:28,147);
+    pointer-events stay off on the card; the 200 ms grace-period was NOT
+    touched (Owner-box).
+- GATE (run in this segment, fresh clone):
+  FIRST RUN RED, then fixed — the orui/* alias resolves to
+  ../org-roam-lite-ui/src/lib/ (vite.config.ts:10, tsconfig.json:16);
+  cloning docneural-ui alone fails the gate with "Cannot find module
+  'orui/graph/colors'" (vitest 1 failed suite / 59 passed,
+  svelte-check 9 errors). Cloned org-roam-lite-ui next to it.
+  SECOND RUN GREEN: vitest 65/65 (5 files) + svelte-check 0 errors
+  0 warnings. Matches the Lead's merged-tree numbers.
+- Board: :LOGBOOK: note appended on the DONE docneural-37 row with this
+  evidence (agent-team/TODOS.org). ROLE_LARK_WEBHOOK was empty this turn
+  -> report pushed to chat only, per law.
+- NOTHING LEFT on this objective; it stays #+OBJECTIVE-STATE: OPEN for
+  the Lead's gate. Flag for any future sibling segment: clone BOTH
+  siblings or the gate is falsely red.

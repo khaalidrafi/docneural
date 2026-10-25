@@ -19,10 +19,10 @@
 - Remaining real Owner actions: gateway box off (Owner-side lane; no CI seat depends on it) · DISCORD_WEBHOOK_TEAM_DOCNEURAL not pasted (Discord mirror off; Telegram mirror armed) · XPLabs $1 card verification unblocks a sealed OWNER-KEYS lane (xplabs: clef-flash, qwen3.8-27b, gpt-6-luna).
 
 * TEAM-STAFFING
-- Notation fixed to PROVIDER/MODEL@AGENT per ID FORMAT LAW v2 (commit a96c1e6, 2026-10-26): EM glm-5.3-flash@chat.z.ai (legal bare form, Owner-paced courier) · PE zai/glm-4.7-flash@goose (baked #+TURN body; goose BENCHED for groq brains — HTTP 400 `developer` role) · FE openrouter/poolside-laguna-s-2.1:free@opencode (HIRED 2026-10-26, Owner order "Hire built-in free models from OpenCode and Cline"; pair pre-wired) · QA groq/qwen3.8-27b@opencode (groq provider block wired into opencode.json 2026-10-26) + machine gate · intern pool 7 (5 OWNER-KEYS + 2 cline FREE: nemotron-3-ultra-550b-a55b, inkling-small — catalog probe 472 ids/18 FREE 2026-10-26). Details + fallback chains: MEMBERS.org.
+- Notation fixed to PROVIDER/MODEL@AGENT per ID FORMAT LAW v2 (commit a96c1e6, 2026-10-26): EM glm-5.3-flash@chat.z.ai (legal bare form, Owner-paced courier) · PE zai/glm-4.7-flash@goose (baked #+TURN body; goose BENCHED for groq brains — HTTP 400 `developer` role) · FE glm-5.3-flash-free@opencode (HIRED 2026-10-26 from OpenCode Zen built-in free, OPENCODE_API_KEY lane; re-pointed same day off openrouter-relayed laguna per Owner correction "the model MUST be provided by opencode / cline, inside their CLI") · QA groq/qwen3.8-27b@opencode (groq provider block wired into opencode.json 2026-10-26) + machine gate · intern pool 7 (5 OWNER-KEYS + 2 cline FREE: nemotron-3-ultra-550b-a55b, inkling-small — cline catalog probe 472 ids/18 FREE; zen probe 85 ids/9 free, both 2026-10-26). Details + fallback chains: MEMBERS.org.
 
 * HIRING-LOG
-- See MEMBERS.org HR LEDGER. Latest: 2026-10-26 FE seated (laguna@opencode) + 2 cline FREE interns (nemotron-3-ultra-550b-a55b, inkling-small) per Owner order.
+- See MEMBERS.org HR LEDGER. Latest: 2026-10-26 FE seated glm-5.3-flash-free@opencode (Zen built-in free; first-day re-point off openrouter-relayed laguna per Owner correction) + 2 cline FREE interns (nemotron-3-ultra-550b-a55b, inkling-small) per Owner order.
 
 * AUTONOMY
   AUTO

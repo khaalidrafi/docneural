@@ -38,6 +38,22 @@
           "name": "Qwen3.8 27B"
         }
       }
+    },
+    "zen": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode Zen",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/v1",
+        "apiKey": "{env:OPENCODE_API_KEY}"
+      },
+      "models": {
+        "glm-5.3-flash-free": {
+          "name": "GLM 5.3 Flash (free)"
+        },
+        "beam-free": {
+          "name": "Beam (free)"
+        }
+      }
     }
   },
   "instructions": [

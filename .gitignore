@@ -23,3 +23,10 @@ verify-*.png
 
 # Qoder session state
 .qoder/
+
+# In-workspace sibling clones (R-2-69 task segments clone the UI repos
+# here to work on them; the landing gate clones the same repos OUTSIDE
+# the workspace. Either way: sibling source is never docneural content)
+/docneural-ui/
+/synapt/
+/org-roam-lite-ui/

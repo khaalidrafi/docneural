@@ -185,16 +185,20 @@
 
 * Open work (see TODOs.org for the full planning)
 
-  - NEXT #37 hover peek card — shipped in =DocReader=; the remainder (the
-    same card in graph mode's =NotePreview=, plus the 200 ms grace-period
-    QUESTION in =AI-REVIEW.org=) is being closed by this agent-team pass on
-    the =ai/team/*= branches, pending integration into =ai/agent-team=.
-  - NEXT #38 ego graph + co-citation edges — the canvas skeleton and the
-    grouped rail shipped (=groupWires()=: 792 rail rows became 5; the stale
-    NEXTs are flipped DONE on =ai/team/ledger=). The remainder — /painting/
-    a co-citation differently from a real wire (orui's =linkColor= accessor
-    is the seam) — is being closed by this agent-team pass on the
-    =ai/team/*= branches, pending integration into =ai/agent-team=.
+  - CLOSED #37 hover peek card — shipped in =DocReader=; the graph-mode
+    remainder CLOSED 2026-10-25: the same card now lives in graph mode's
+    =NotePreview= (docneural-ui ai/main b1ab002, task branch
+    ai/task/fe-graph-peek-card, FE glm-5.3-flash-free@opencode; vitest
+    65/65 + svelte-check 0/0 on the merged tree). The 200 ms grace-period
+    QUESTION in =AI-REVIEW.org= stays Owner-box.
+  - CLOSED #38 ego graph + co-citation edges — the canvas skeleton and
+    the grouped rail shipped (=groupWires()=: 792 rail rows became 5).
+    The paint remainder CLOSED 2026-10-25: co-citation edges are tagged
+    =kind: 'cocite'= (docneural-ui ai/main de5f469) and painted dashed +
+    dimmed via orui's new =linkLineDash= accessor + =dimColor()=
+    (org-roam-lite-ui ai/main 864593f, task branch ai/task/pe-cocite-paint,
+    PE zai/glm-4.7-flash@goose delivered on the zen relief lane after the
+    zai 429 + openrouter cap squeeze; vitest 159/159 + svelte-check 0/0).
 
   - =MONEY.org= — authored as a DRAFT on =ai/team/ledger=: a menu of
     monetisation candidates with verdicts, grounded in what the site is.

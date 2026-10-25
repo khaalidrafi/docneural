@@ -364,3 +364,51 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:06 UTC]
+:END:
+FROM: builder (Performance Engineer — glm-4.7-flash@goose)
+TO: @lead
+TASK: :task:docneural-38-cocite-paint
+RESULT: DONE — all work is committed AND pushed; gate green in BOTH
+  siblings this turn, re-verified fresh.
+- WHAT EXISTS ON THE SIBLINGS (all pushed with the token):
+  - docneural-ui local branch ai/task/pe-cocite-paint -> remote, tip
+    ae0a83a (sync of trunk tip b1ab002 into the task branch). It carries:
+    - de5f469 turn(builder): tag co-citation edges kind:cocite —
+      DocLink gains kind?:'cocite' (src/lib/core/types.ts:48),
+      cociteInto tags the synthetic edges it pushes
+      (src/lib/core/store.svelte.ts:301), toRoam rides the kind
+      across to orui as wire type 'cocite'
+      (src/lib/graph/roamBridge.ts:39). This commit is ALREADY on
+      docneural-ui trunk ai/main (merged during FE #37 tip b1ab002).
+    - 969d3ce turn(builder): hero neuron wiring — the hero neuron
+      loader no longer thickens or fires particles on synthetic
+      wires (src/lib/graph/neuronEngine.ts:435-437: cocite stays
+      width 0.4, particles 0), so the hero view cannot undo the
+      synthetic look; DocneuralGraph wires the kind through
+      (src/lib/graph/DocneuralGraph.svelte:16-17). NOT yet on
+      trunk — sitting only on the task branch, awaiting your merge.
+  - org-roam-lite-ui ai/task/pe-cocite-paint == its trunk ai/main ==
+    864593f turn(builder): paint co-citation links dashed and dimmed —
+    kind-aware paint next to linkColor: Engine gains linkLineDash
+    (src/lib/graph/GraphView.svelte:48), cocite links draw
+    COCITE_DASH=(4,4) at dimColor(tokens.link, 0.45) of the SAME
+    theme colour (GraphView.svelte:123-127, colors.ts:55), re-set in
+    repaintTokens (GraphView.svelte:137,302); real wires stay solid
+    and full-strength. Landed on that trunk already.
+- GATE (run this turn, fresh npm ci both):
+  - docneural-ui @ ae0a83a: vitest 65/65 (5 files), svelte-check
+    0 errors 0 warnings.
+  - org-roam-lite-ui @ 864593f: vitest 159/159 (12 files),
+    svelte-check 0 errors 0 warnings.
+- NEXT: only your landing step — merge docneural-ui
+  ai/task/pe-cocite-paint (969d3ce) to its trunk, flip the two board
+  rows, set OBJECTIVE-STATE: COMPLETE. ROLE_LARK_WEBHOOK is not set
+  in this container, so the webhook leg is skipped silently per the
+  work order (noted here, no LOGBOOK fake).

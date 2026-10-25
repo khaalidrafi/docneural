@@ -42,19 +42,25 @@
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol
     and law commits; never a code author; Owner-paced web courier
     only (chat.z.ai ToS bans account sharing).
-  - Performance Engineer — glm-4.7-flash@zai (OWNER-KEYS ZAI_API_KEY,
-    the #+TURN builder body): P0 re-land + gate-behind seat work;
-    covers FE scope until FE is staffed. Weakness on record (TB 14.4).
-  - Frontend Engineer — VACANT; rank chain laguna-s-2.1@openrouter ->
-    beam@ollama-cloud -> glm-4.5-flash@zai (all OWNER-KEYS-reachable).
-  - QA Engineer — qwen3.8-27b@groq (OWNER-KEYS GROQ_API_KEY) + machine
-    gate: adversarial review of landed diffs; verdict lines with exact
-    commands + counts; never the author of what it reviews.
-  - Intern pool (OWNER-KEYS no-data rows): ling-3.0-flash@antling,
-    ring-2.6-1t@antling, nemotron-3.5-super-vl@gmi, qwen3.8-flash@qoder,
-    deepseek-v4.1-flash@tokenharbor (PROMO :free lane, intern/API-probe
-    only; re-pointed from nvidia-nim — keys never issued, UPDATE #3
-    key-on-file law) — per MEMBERS.org.
+  - Performance Engineer — zai/glm-4.7-flash@goose (OWNER-KEYS
+    ZAI_API_KEY; goose = the #+TURN builder body, GOOSE_MODEL baked):
+    P0 re-land + gate-behind seat work; covers FE scope until FE is
+    staffed. Weakness on record (TB 14.4).
+  - Frontend Engineer — VACANT; rank chain
+    openrouter/poolside-laguna-s-2.1:free@opencode (pre-wired) ->
+    ollama-cloud/beam@unwired -> zai/glm-4.5-flash@unwired (all
+    OWNER-KEYS-reachable).
+  - QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY;
+    goose benched for this brain — HTTP 400 `developer` role,
+    goose-config.yaml) + machine gate: adversarial review of landed
+    diffs; verdict lines with exact commands + counts; never the author
+    of what it reviews.
+  - Intern pool (OWNER-KEYS no-data rows): antling/ling-3.0-flash@unwired,
+    antling/ring-2.6-1t@unwired, gmi/nemotron-3.5-super-vl@unwired,
+    qwen3.8-flash@qoder (legal bare form, ID FORMAT LAW v2),
+    tokenharbor/deepseek-v4.1-flash@unwired (PROMO :free lane,
+    intern/API-probe only; re-pointed from nvidia-nim — keys never
+    issued, UPDATE #3 key-on-file law) — per MEMBERS.org.
 
 * CONVENTIONS
   - Commits: small, one concern, descriptive messages; author = model

@@ -1,9 +1,13 @@
 #+TITLE: MEMBERS.org — roles + model@platform + why hired
 #+LAW: staff from CANDIDATES.org rows only (canonical: khaalidrafi/agent-team.el
-      agent-team/CANDIDATES.org @6a5653e, sha256 25e40995…; the docneural copy
-      was REMOVED by Owner R-2-64, commit a10ef3f). Every accountable seat
-      traces to an OWNER-KEYS lane (CANDIDATES.org §OWNER-KEYS) or an
-      explicitly keyless verified row. Roles come from the board (TODOS.org);
+      templates/CANDIDATES.org @94ffea0, 617 lines, sha256 9483cabd…; the
+      docneural copy was REMOVED by Owner R-2-64, commit a10ef3f; the
+      agent-team/ path there is a symlink to templates/). Every accountable
+      seat traces to an OWNER-KEYS lane (CANDIDATES.org §OWNER-KEYS) or an
+      explicitly keyless verified row. Key-on-file law (R-2-65): rows trace
+      to a key on file, an OAuth credential, or a wired llmfisher provider —
+      nvidia-nim/aimlapi/deepseek-official were struck everywhere. ADD-FREEZE
+      (R-2-66): rows are added ONLY by Owner fiat; agents propose. Roles come from the board (TODOS.org);
       no costume roles. NO-ACCOUNT-DEAD LAW binds: no github-models, no
       aihubmix, no commandcode, no m3.1 outside the mcode carve-out.
       Report = commit or pasted output.
@@ -31,12 +35,20 @@
      body (TEAM-CONTROL.org); vendor SWE-bench 59.2; MIT 30B-A3B; the
      only GLM the lanes serve PROVEN alive. WEAKNESS RECORDED: TB 14.4 —
      pair every segment with the machine gate + QA verdict
+   - evidence refresh 2026-10-26: benchlm.ai (page updated 2026-10-25)
+     corroborates SWE-bench Verified 59.2 and adds LCB v6 64.0 · GPQA 75.2
+     · AIME-25 91.6, 200K ctx; the page marks it superseded by
+     glm-5.3-flash — the seat holds because the zai key lane serves
+     glm-4.7-flash (the PROVEN turn body), not the 5.3 generation
    - fallback chain: laguna-s-2.1@openrouter :free leg (batch 4 BEST
-     accountable candidate: vendor TB2.1 70.2 · SWE-bench Pro 59.4 ·
-     DeepSWE 40.4, OpenMDW-1.1 day-one weights, 256K ctx free endpoint;
+     accountable candidate: vendor TB2.1 70.2 · SWE-bench Multilingual
+     78.5 · SWE-bench Pro 59.4 · DeepSWE 40.4, OpenMDW-1.1 day-one
+     weights, 1M-token model on a 256K free endpoint;
      OPENROUTER_API_KEY sealed) -> beam@ollama-cloud (vendor SWE-bench
-     Verified 80.9 · TB2.1 80.1, Apache-2.0 promised; thin independent
-     evidence caveat on record; OLLAMA_CLOUD_API_KEY sealed) ->
+     Verified 80.9 · TB2.1 80.1 — vendor-only, NO independent run;
+     Vals Index 43.42 independent 2026-10-19; Ollama free hosting is
+     "limited time" per zavino 2026-10-17 — lane risk recorded;
+     OLLAMA_CLOUD_API_KEY sealed) ->
      nemotron-3.5-lightning@openrouter :free leg (QA-grade)
 
 ** Frontend Engineer — VACANT (rank chain on file)
@@ -61,6 +73,13 @@
      numbers, script-permitting API, sized for CI probe jobs; open
      weights; NOT the author of any code it reviews (authors are GLM
      bodies) — independence holds
+   - evidence refresh 2026-10-26: vendor-published Terminal-Bench 2.1
+     73.0 · SWE-bench Pro 61.7 · GPQA-D 89.2 · DeepSWE 42.2
+     (northflank.com model review, acc. 2026-10-26); AA Intelligence 34
+     vs size-class median 8 (deepinfra.com 2026-10-07); Apache-2.0,
+     27.78B dense, 262K native ctx. Caveats on record: launch scores are
+     the vendor's own, no independent repro at launch (kingy.ai,
+     2026-08-14/22); very verbose (200M output tokens in the AA eval)
    - fallback chain: nemotron-3.5-lightning@openrouter :free leg (batch 4
      QA-grade; $0 with the 65,536 max-token output cap quoted) ->
      north-mini-code@openrouter :free leg (batch 4 "QA only"; AA coding
@@ -73,7 +92,7 @@
 - ring-2.6-1t@antling — same lane; no benchmark data yet
 - nemotron-3.5-super-vl@gmi — OWNER-KEYS GMI_API_KEY; no benchmark row
 - qwen3.8-flash@qoder — batch 3: no independent benchmark found (empty search rounds recorded); intern-grade on platform-work record
-- deepseek-v4.1-flash@nvidia-nim — OWNER-KEYS key on file (probed 2026-10-19); ds-flash is EXCLUDED from accountable seats -> intern/API-probe only, per CANDIDATES.org batch 4
+- deepseek-v4.1-flash@tokenharbor — OWNER-KEYS TOKENHARBOR_API_KEY; ds-flash EXCLUDED from accountable seats -> intern/API-probe only (batch 4: AA 45.1; Vals Index 61.26 independent 2026-10-19); PROMO :free lane, undated — can vanish, emergency-only. RE-POINTED 2026-10-26 from deepseek-v4.1-flash@nvidia-nim: the nvidia-nim/deepseek-official keys were never issued (UPDATE #3 key-on-file law)
 
 * HR LEDGER (one line per hire, with evidence; history kept, corrections appended)
 - performance-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, delivery record 1299c00 + b79c11e first-try gate green — CORRECTED 2026-10-25: platform FABRICATED (not a CANDIDATES.org row, not an Owner account); seat re-staffed glm-4.7-flash@zai
@@ -82,6 +101,7 @@
 - em — glm-5.3-flash@chat.z.ai: seated by Owner teamify order, protocol commit record; re-affirmed 2026-10-25 as Owner-paced web courier (batch 1 evidence)
 - performance-engineer — glm-4.7-flash@zai: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (ZAI_API_KEY; PROVEN ALIVE turn body; batch 1 evidence row)
 - qa-engineer — qwen3.8-27b@groq: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (GROQ_API_KEY; PROVEN ALIVE + published caps)
+- intern-5 — deepseek-v4.1-flash@nvidia-nim: seated 2026-10-25 (R-2-63) — CORRECTED 2026-10-26: nvidia-nim/deepseek-official keys never issued (UPDATE #3 key-on-file law, R-2-65); slot re-pointed to deepseek-v4.1-flash@tokenharbor (OWNER-KEYS; PROMO/emergency-only caveat on the lane)
 
 * HR REVIEW (KEEP/WATCH/PROBE/RELEASE at every pause window)
 | date | member | segments | gate-first-try | verdict |

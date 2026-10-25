@@ -364,3 +364,58 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report::task:docneural-38-cocite-paint:
+:PROPERTIES:
+:FROM: builder (PE, zai/glm-4.7-flash@goose)
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 20:33 UTC]
+:END:
+FROM: builder
+TO: @lead
+
+RESULT: DONE — task docneural-38-cocite-paint (co-citation edges painted
+differently from real wires), one segment, both siblings green.
+
+WHAT LANDED (committed on each sibling's branch ai/task/pe-cocite-paint
+and pushed with the token):
+- org-roam-lite-ui **864593f** — kind-aware link paint next to linkColor:
+  a link wired as type 'cocite' draws ON A DASH (COCITE_DASH=[4,4] via
+  force-graph linkLineDash) and at dimColor(tokens.link) — alpha times
+  0.45 of the SAME theme colour, so no page needs a new --orui-* token —
+  while real wires (type 'id') stay solid and full-strength. Both
+  accessors re-set in repaintTokens, so a theme flip repaints dash and
+  dimming too (GraphView.svelte construction chain + repaint, ~line 128
+  and ~line 300). dimColor (src/lib/graph/colors.ts) handles the
+  #hex/#rgb/rgba forms themes actually set; anything exotic passes
+  through unchanged and the dash still shows the difference.
+- docneural-ui **de5f469** — the tagging and the pass-through: DocLink
+  gains optional kind?:'cocite' (src/lib/core/types.ts:41);
+  store.cociteInto tags every edge it injects (store.svelte.ts:301);
+  roamBridge.toRoam translates kind into the wire type orui reads —
+  'cocite' for synthetic edges, 'id' for corpus wires — so DocneuralGraph
+  (hero mode) and SynapseRail get the paint for free through orui's real
+  GraphView. DocneuralGraph.svelte itself needed no diff: it is wired one
+  level down, through toRoam(store.visible), and that layer is tested.
+- TESTS: 7 new — orui: 3 dimColor tests + 1 GraphView test proving both
+  kinds reach the engine and paint differently (dash [4,4] + dimmed
+  rgba); docneural-ui: 2 store tests (cocite tagged with its citer count,
+  real wires untouched, no duplicate edge when a real wire already joins
+  the pair) + roamBridge.test.ts (kind rides across as the wire type).
+
+VERIFICATION (landing-gate commands, run in both siblings):
+- docneural-ui  ai/task/pe-cocite-paint de5f469: vitest 65/65 (62 base +
+  3 new), svelte-check 0 errors 0 warnings
+- org-roam-lite-ui ai/task/pe-cocite-paint 864593f: vitest 159/159 (155
+  base + 4 new), svelte-check 0 errors 0 warnings
+- both branches pushed (ls-remote confirmed: refs/heads/
+  ai/task/pe-cocite-paint = de5f469 / 864593f)
+
+NEXT: the sibling branches sit ready for merge to their own trunks —
+that is the Lead's gate per the objective. Board row stays PROGRESS
+with a full :LOGBOOK: note in agent-team/TODOS.org. One note for review:
+cociteInto's existing "skip a pair a real wire already joins" rule kept
+its behaviour (covered by a new test), and my first test draft confirmed
+a real b->hub wire correctly suppresses a hub->b synthetic edge before I
+converted it to the hub/far fixture — no code defect surfaced.

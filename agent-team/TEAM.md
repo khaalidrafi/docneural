@@ -44,23 +44,28 @@
     only (chat.z.ai ToS bans account sharing).
   - Performance Engineer — zai/glm-4.7-flash@goose (OWNER-KEYS
     ZAI_API_KEY; goose = the #+TURN builder body, GOOSE_MODEL baked):
-    P0 re-land + gate-behind seat work; covers FE scope until FE is
-    staffed. Weakness on record (TB 14.4).
-  - Frontend Engineer — VACANT; rank chain
-    openrouter/poolside-laguna-s-2.1:free@opencode (pre-wired) ->
-    ollama-cloud/beam@unwired -> zai/glm-4.5-flash@unwired (all
-    OWNER-KEYS-reachable).
+    builder segments on task-branch chains (R-2-69). Weakness on record
+    (TB 14.4).
+  - Frontend Engineer — openrouter/poolside-laguna-s-2.1:free@opencode
+    (OWNER-KEYS OPENROUTER_API_KEY; pair pre-wired; HIRED 2026-10-26 by
+    Owner order "Hire built-in free models from OpenCode and Cline"):
+    frontend segments on task-branch chains (R-2-69); PE resumes
+    builder-only scope.
   - QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY;
     goose benched for this brain — HTTP 400 `developer` role,
-    goose-config.yaml) + machine gate: adversarial review of landed
-    diffs; verdict lines with exact commands + counts; never the author
+    goose-config.yaml; groq provider block wired into opencode.json
+    2026-10-26) + machine gate: adversarial review of landed diffs;
+    verdict lines with exact commands + counts; never the author
     of what it reviews.
-  - Intern pool (OWNER-KEYS no-data rows): antling/ling-3.0-flash@unwired,
+  - Intern pool (keys/OAuth on file, 7 this round):
+    antling/ling-3.0-flash@unwired,
     antling/ring-2.6-1t@unwired, gmi/nemotron-3.5-super-vl@unwired,
     qwen3.8-flash@qoder (legal bare form, ID FORMAT LAW v2),
     tokenharbor/deepseek-v4.1-flash@unwired (PROMO :free lane,
     intern/API-probe only; re-pointed from nvidia-nim — keys never
-    issued, UPDATE #3 key-on-file law) — per MEMBERS.org.
+    issued, UPDATE #3 key-on-file law), + 2 cline FREE hires 2026-10-26
+    (nvidia/nemotron-3-ultra-550b-a55b:free@cline,
+    thinkingmachines/inkling-small:free@cline) — per MEMBERS.org.
 
 * CONVENTIONS
   - Commits: small, one concern, descriptive messages; author = model

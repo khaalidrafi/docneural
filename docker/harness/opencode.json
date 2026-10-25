@@ -25,6 +25,19 @@
           "name": "GLM 4.7 Flash"
         }
       }
+    },
+    "groq": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Groq",
+      "options": {
+        "baseURL": "https://api.groq.com/openai/v1",
+        "apiKey": "{env:GROQ_API_KEY}"
+      },
+      "models": {
+        "qwen3.8-27b": {
+          "name": "Qwen3.8 27B"
+        }
+      }
     }
   },
   "instructions": [

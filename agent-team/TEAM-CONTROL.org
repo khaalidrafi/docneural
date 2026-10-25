@@ -20,3 +20,13 @@
 - #+OBJECTIVE-STATE: COMPLETE -> chain stops clean; OPEN + new objective resumes.
 - #+KILL-SWITCH: ON -> everything stops, exit green.
 - #+CHAIN-PAUSE: ON -> clean halt after a delivered TODO; the Lead clears it to resume.
+
+* Task branches (Owner order 2026-10-25 #hq — R-2-69)
+- One branch per task, one member per task: ~ai/task/<member-slug>-<task-slug>~.
+- A task branch carries its OWN control fork (this file's shape) with
+  =#+TASK-ID:=, =#+ASSIGNEE:=, the task =#+OBJECTIVE:=, =#+TURN:= at the assignee.
+- Thin branch: trunk tip + this control; synced to fresh trunk every segment;
+  work lands on ai/main via the landing gate — the trunk control is never
+  touched by task chains.
+- Arm: cut branch from ai/main, fork the control, dispatch with
+  ~gh workflow run agent-team.yml --ref <branch>~ (or the Actions UI picker).

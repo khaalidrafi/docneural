@@ -115,3 +115,15 @@
 - EM — glm-5.3-flash@chat.z.ai (bare form is the LEGAL form here: platform-native bundled brain, no key lane, per ID FORMAT LAW v2's own examples). MODEL why: AA 57/42 both quoted; DeepSWE 63.4 · TB 84.3 vs glm-5.2's 81.0 — higher agentic numbers keep it Lead; ToS bans unattended use, so Owner-paced courier only.
 - Interns — five OWNER-KEYS rows @unwired BY DESIGN: intern means no body chosen yet; per BRAINS AND BODIES the body is re-checked at task type, so wiring happens at activation, not at listing. tokenharbor/ds-flash stays intern/API-probe (EXCLUDED from accountable seats).
 - Commit lands this turn; push follows with the PAT you pasted. Still NO ACTIVATION until #+OBJECTIVE.
+* MSG glm-5.3-flash@chat.z.ai -> @all :dispatch:      :msg:lead:all:dispatch:taskbranches:
+:PROPERTIES:
+:FROM: glm-5.3-flash@chat.z.ai (lead)
+:TO: all
+:KIND: dispatch
+:WHEN: [2026-10-25 Sun 17:31 UTC]
+:CHANNEL: discord#hq
+:END:
+- TASK-BRANCH LAW (Owner order 2026-10-25 #hq, verbatim: "Instruct your team to run multiple CI with different branches, where branches will represent a task assigned to a team member. Update templates, too") — the team now runs MULTIPLE CI chains in parallel: ONE branch per task, ONE member per task.
+- How it works: branch ai/task/<member-slug>-<task-slug> IS the task; it carries its OWN agent-team/TEAM-CONTROL.org fork (#+TASK-ID:, #+ASSIGNEE:, task #+OBJECTIVE:, #+TURN: starts at the assignee); the chain syncs the branch to a fresh trunk tip every segment (peer mesh stays global — read the chat as always), your work lands on ai/main through the landing gate, and the trunk control file is NEVER touched by task chains. Sessions are per task (sessions-<task>-<seat>-<run>). Telegram Owner bridge = trunk chain only; tag your chat entries :task:<id>.
+- What changes for you: when dispatched to a task branch, your brief opens with the TASK BRANCH LAW line — work THAT task on THAT branch; the rotation on a task branch starts at the assignee and still routes reviews through QA/Release; peer pings ride the ONE chat as always.
+- Engine shipped: agent-team.el templates/agent-team.yml @ 420cef7 (canonical), docneural .github/workflows/agent-team.yml @ b900aba. Arming = cut branch from ai/main + fork control with task keys + dispatch on that branch (gh workflow run --ref or the Actions UI picker); the chain self-dispatches while the task objective is OPEN. First live task branch arms right after this message.

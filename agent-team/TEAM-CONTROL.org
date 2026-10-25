@@ -10,7 +10,10 @@
 #+CHAIN-PAUSE: OFF
 
 * Rotation
-- builder = glm-4.7-flash@zai (CI lane; relief: minimax-m3.1-flash:free@openrouter)
+- builder = glm-4.7-flash@zai (CI lane; relief: laguna-s-2.1@openrouter :free leg — OWNER-KEYS OPENROUTER_API_KEY; second relief: beam@ollama-cloud — OWNER-KEYS OLLAMA_CLOUD_API_KEY)
+- former relief minimax-m3.1-flash:free@openrouter was BURNED by BURN-LAW
+  (Owner 2026-10-24 17:01Z) and is replaced per R-2-63 §3.3 — no m3.1
+  outside the mcode OAuth carve-out
 - roles and seats: agent-team/MEMBERS.org (board-scoped)
 
 * Marker semantics

@@ -1,13 +1,56 @@
 #+TITLE: ROSTER.org — wired-lane state + rank source
-#+LAW: the ONLY rank source is agent-team/CANDIDATES.org (715 lines). Team model access comes from wired lanes only (TEAM-UPDATE.org; CANDIDATES.org §Sandbox chat-lane artifact).
+#+LAW: the ONLY rank source is CANDIDATES.org — canonical
+      khaalidrafi/agent-team.el agent-team/CANDIDATES.org @6a5653e
+      (632 lines, sha256 25e40995…; PURGE R-2-64 — only the Owner's real
+      models remain). The docneural copy was REMOVED by the Owner
+      (a10ef3f) — do not recreate it here. Team model access comes from
+      wired lanes only; a lane the Owner has no account on is NOT
+      inventory (NO-ACCOUNT-DEAD LAW, CANDIDATES.org §OWNER-KEYS).
 
-* WIRED-LANE STATE (2026-10-24)
-- GitHub Models: LIVE with the repo PAT — llama-3.3-70b/405b ~50 RPD, deepseek-r1 ~8 RPD (DE-verified 2026-10-24)
-- gomodel gateway (17 providers): DOWN from here (530, box off) — Owner-side lane
-- aiHubMix: 4 free rows — BLOCKED on Owner minting the key
-- Command Code CLI: beam:free (no daily cap) — BLOCKED on Owner device-flow auth
+* WIRED-LANE STATE (2026-10-25, from OWNER-KEYS — CANDIDATES.org @6a5653e)
+- 24 secrets sealed on docneural/admincraft/agent-team.el; machine-readable
+  registry = llmfisher config/config.yaml. EVERY hire draws from there FIRST.
+- groq (GROQ_API_KEY): 7 ids — qwen3.8-27b PROVEN ALIVE (gateway completion
+  2026-10-20); caps published 30 RPM · 1,000 RPD · 8K TPM · 200K tokens/day
+- zai (ZAI_API_KEY): glm-4.7-flash PROVEN ALIVE — the #+TURN builder body;
+  glm-4.5-flash, glm-4.6v-flash unprobed this seat
+- openrouter (OPENROUTER_API_KEY): 20 ids incl. :free rows (laguna-s-2.1,
+  nemotron-3.5-lightning, north-mini-code, qwen3.8-27b, nemotron-3-ultra/
+  super …) — lane capped 20 RPM / 50-1,000 RPD, rotates; M3.1-flash row BURNED
+- ollama-cloud (OLLAMA_CLOUD_API_KEY): 7 ids — beam, gpt-oss:120b/20b,
+  nemotron-3 tiers, gemma4:31b
+- antling (ANTLING_API_KEY): 7 ids, burn-verified live 2026-10-24
+- nvidia-nim / deepseek-official: keys on file in the llmfisher deployment
+  env (deepseek-v4.1-flash probed 2026-10-19) — ds-flash excluded from
+  accountable seats, intern/API-probe only
+- xplabs (XPLABS_API_KEY): 3 ids declared — serving BLOCKED on XPLabs' $1
+  card verification (card_required); lane self-activates on the card check
+- mcode (MCODE_AUTH_JSON, OAuth carve-out 2026-10-24 17:11Z): M-Plan-Free
+  m3.1-flash leg ALIVE — the ONLY m3.1 leg; hallucination caveat binds
+- cline (CLINE_AUTH_JSON): credential live, token-keeper re-seals; its only
+  declared id (minimax-m3.1-flash) is BURNED — lane idles until a live
+  catalog probe names a replacement
+- cloudflare / tokenharbor / kilo (via gomodel): emergency-only or promo
+  tiers (values filters bind; kilo+tokenharbor = PROMO, vanishes)
+- gomodel gateway (17 providers): Owner-side lane — DOWN from the sandbox
+  vantage (530, box off); no CI seat may depend on it (GATEWAY law)
+- jev (TYPESAFE_API_KEY): decision layer (finalize judgment), not a chat seat
+
+* STRUCK FROM INVENTORY — DEAD-NO-ACCOUNT (Owner 2026-10-24 19:52Z + NO-ACCOUNT-DEAD LAW)
+- GitHub Models: Owner never created an account; the repo-PAT route is
+  UNSANCTIONED — "reach is not permission". The 2026-10-24 "LIVE" row and the
+  2026-10-25 sandbox-vantage note below are both MOOT. Never staff, never
+  probe, never recommend.
+- aiHubMix: Owner never created an account. Former "4 free rows BLOCKED on
+  key mint" row is deleted on sight.
+- Command Code CLI: no Owner account (device flow never run, platform purged
+  from CANDIDATES.org @6a5653e — named in the NO-ACCOUNT-DEAD LAW incident
+  list). Former "beam:free BLOCKED on auth" row is deleted on sight.
 
 * WIRED-LANE STATE (2026-10-25, vantage: z.ai sandbox — may be vantage-dependent)
-- GitHub Models inference: UNUSABLE from this vantage — POST models.github.ai/inference/chat/completions returned HTTP 200 with body "OK" (no choices/model field: health-proxy swallowing paths, not a completion); legacy models.inference.ai.azure.com unreachable (HTTP 000). Supersedes nothing: the 2026-10-24 DE-verified line stands until reproduced. QA adversarial pass for this segment therefore NOT performed — the machine gate (vitest + svelte-check + boot-audit) is the verification of record.
-- OVHcloud anon 2 RPM · ModelScope ~2k/day (real-name pending) · Mistral Experiment (~$10/mo, opt-in): carried deltas
-- DEAD, never staff: Chutes, Qwen Code OAuth, Moonshot official, Respan chat
+- OVHcloud AI Endpoints anonymous lane: 2 RPM/model, $0 request price, no key
+  — keyless verified delta, emergency overflow only
+- DEAD, never staff: Chutes (retired 2026-03-15), Qwen Code OAuth
+  (discontinued 2026-04-15), Moonshot official kimi (all paid), Respan chat
+  with a bare key (BYOK wall), every m3.1 API/gateway lane (BURN-LAW;
+  mcode carve-out is the only exception)

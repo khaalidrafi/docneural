@@ -3,7 +3,7 @@
 * DONE
 - CI chain live on ai/main: test -> probe -> turn -> finalize all green (run 40113619526, 2026-10-24).
 - Team layer (re)generated per FILE TARGETS: agent-team/TODOS.org + TEAM.md landed, STATE.org reconciled, MEMBERS.org additive touches (teamify commit on ai/main).
-- CANDIDATES.org supply verified: 715 lines, Free-lane delta count = 1.
+- CANDIDATES.org: docneural copy REMOVED by the Owner (R-2-64, a10ef3f) — rank source is now canonical khaalidrafi/agent-team.el @6a5653e (632 lines, sha256 25e40995…, PURGE: only real models remain).
 
 * IN-FLIGHT
 - Board P0s verified + flipped DONE (agent-team/TODOS.org) — remaining work: P0 re-land is BLOCKED :OWN: (branches on the Owner's box, ai/agent-team frozen); sibling defect shelf blocked on sibling write scope; corpus UAT (pw-verify editorial gate) stays Owner-box.
@@ -13,11 +13,12 @@
 
 * DEFERRED
 
-* BLOCKED (Owner actions)
-- aiHubMix key not minted · Command Code device flow not run · ModelScope real-name check · gateway box off · DISCORD_WEBHOOK_TEAM_DOCNEURAL not pasted (Discord mirror off; Telegram mirror armed).
+* BLOCKED (Owner actions — OWNER-KEYS-aware wording, R-2-63 §4)
+- The OWNER-KEYS lanes themselves are NOT blocked — 24 secrets are sealed and wired; hiring no longer waits on any signup (stale aiHubMix / Command Code / ModelScope blocker rows removed 2026-10-25: those platforms are either DEAD-NO-ACCOUNT (aiHubMix, Command Code) or no longer in the canonical CANDIDATES.org @6a5653e (ModelScope) — NO-ACCOUNT-DEAD LAW deletes them on sight).
+- Remaining real Owner actions: gateway box off (Owner-side lane; no CI seat depends on it) · DISCORD_WEBHOOK_TEAM_DOCNEURAL not pasted (Discord mirror off; Telegram mirror armed) · XPLabs $1 card verification unblocks a sealed OWNER-KEYS lane (xplabs: clef-flash, qwen3.8-27b, gpt-6-luna).
 
 * TEAM-STAFFING
-- 4 seats live per MEMBERS.org (EM, Performance Engineer, Frontend Engineer shared lane, QA Engineer) + intern pool; roster consult list unchanged from 2026-10-24.
+- Re-staffed 2026-10-25 from OWNER-KEYS only (R-2-63 §3.2): EM glm-5.3-flash@chat.z.ai (Owner-paced courier) · PE glm-4.7-flash@zai (CI builder body) · FE VACANT (rank chain: laguna-s-2.1@openrouter -> beam@ollama-cloud -> glm-4.5-flash@zai) · QA qwen3.8-27b@groq + machine gate · intern pool 5/5 OWNER-KEYS rows. Details + fallback chains: MEMBERS.org.
 
 * HIRING-LOG
 - See MEMBERS.org HR LEDGER (hires carry evidence lines; no new hires this commit).

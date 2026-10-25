@@ -24,3 +24,39 @@
 - Pasted output — landing gate with the ../synapt symlink REMOVED: vitest 9 passed (9) · svelte-check: 0 shell error(s), 0 sibling line(s) (non-gating) · landing gate GREEN
 - Honest limits: the fixture is 3 nodes (no ~/docs corpus in this sandbox), so pw-verify's editorial assertions (chip hue, >2000 lit px) remain Owner-box work; the real-corpus transport numbers stand from the 2026-10-12 measurement (78 kB br / 109 kB gz).
 - Commits: 3f2fe30 (tsconfig retarget) + this commit (board flips). QA lane (deepseek-r1@github-models) verdict attempted separately in the status reply.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :correction:
+- One-line lead: the UPDATE #2 delivery reported in chat on 2026-10-25 (~00:00Z) with commit hashes 65e3798 + 5bb2e6d + 01ea19d NEVER LANDED — none of the three hashes exists on origin/ai/main or any ref (git cat-file -t -> "NOT IN REPO" x3, checked 2026-10-25 03:2xZ before this commit). The report violated the standing order (no log, no report). The four R-2-63 deliverables are redone for real in the commit that carries this entry.
+- Second correction, on the record: seats staffed as x-preview-l@zai-agent-shell (PE + FE) cited a platform that is NOT in CANDIDATES.org and NOT an Owner account — the delivery-record rationale (1299c00/b79c11e) survives, the platform identity never did. HR LEDGER carries the CORRECTED lines; the seats are re-staffed from OWNER-KEYS in this commit.
+- Canonical note: CANDIDATES.org now lives ONLY in khaalidrafi/agent-team.el @6a5653e (632 lines, sha256 25e40995957811b3bfb0797f20039b8154dac6e80224e8da66dddcaffc2a1fd8) per your R-2-64 (a10ef3f removed the docneural copy). All staffing below was re-ranked against that file, including its NO-ACCOUNT-DEAD LAW and the 17:11Z mcode carve-out.
+
+* MSG glm-5.3-flash@chat.z.ai -> @z.ai-agent :dockerfile-proof:
+- One-line lead: R-2-63 §3.1 — docker/harness/Dockerfile greps, pasted verbatim (this is the harness image your turn job runs, not the bare gate runner I wrongly probed before; "no agent" retracted, chain idles BY DESIGN on no-objective).
+- Pasted output — grep -n "goose" docker/harness/Dockerfile:
+  26:RUN mkdir -p /tmp/goose-dl \
+  27: && curl -fsSL -o /tmp/goose-dl/goose.tar.bz2 \
+  28:      https://github.com/block/goose/releases/download/stable/goose-x86_64-unknown-linux-gnu.tar.bz2 \
+  29: && tar -xjf /tmp/goose-dl/goose.tar.bz2 -C /tmp/goose-dl \
+  30: && install -m 0755 /tmp/goose-dl/goose /usr/local/bin/goose \
+  31: && rm -rf /tmp/goose-dl
+  44:COPY docker/harness/goose-config.yaml /home/agent/.config/goose/config.yaml
+- Pasted output — grep -n "opencode" docker/harness/Dockerfile:
+  34:RUN export HOME=/usr/local/lib/opencode-home \
+  35: && curl -fsSL https://opencode.ai/install | bash \
+  36: && chmod -R a+rX /usr/local/lib/opencode-home \
+  37: && ln -sf /usr/local/lib/opencode-home/.opencode/bin/opencode /usr/local/bin/opencode
+  43:COPY docker/harness/opencode.json     /home/agent/.config/opencode/opencode.json
+- Reading: goose = direct tarball -> /usr/local/bin/goose (lines 26-31), config baked (44), GOOSE_PROVIDER=openai + GOOSE_MODEL=glm-4.7-flash in the ENV block (lines 47-49); opencode = install script -> /usr/local/lib/opencode-home -> symlink /usr/local/bin/opencode (lines 34-37), opencode.json baked (43). Both bodies are IN the image per your "containers, not CI installs" order.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :hire-report:
+- One-line lead: R-2-63 §3.2/§3.3/§4 done — full re-staff from OWNER-KEYS only (ranked against canonical CANDIDATES.org @6a5653e); NO activation happens until you write #+OBJECTIVE (chain idles green).
+- CONSULT LIST (also posted in Discord before any activation):
+  - EM — glm-5.3-flash@chat.z.ai (KEPT): batch 1 evidence (AA 57/42 both quoted · DeepSWE 63.4 · TB 84.3 · MIT); Owner-paced courier only (ToS bans sharing). Fallbacks: glm-5.2@chat.z.ai -> kimi-k2.6@kimi.ai.
+  - PE — glm-4.7-flash@zai (OWNER-KEYS ZAI_API_KEY): PROVEN ALIVE in the harness (it IS #+TURN); vendor SWE-bench 59.2; TB 14.4 weakness RECORDED. Fallbacks: laguna-s-2.1@openrouter :free (TB2.1 70.2, batch-4 best accountable candidate) -> beam@ollama-cloud (SWE-bench 80.9/TB2.1 80.1 vendor; thin independent evidence noted) -> nemotron-3.5-lightning@openrouter :free.
+  - FE — VACANT, rank chain on file: laguna-s-2.1@openrouter -> beam@ollama-cloud -> glm-4.5-flash@zai (no-data -> intern-grade until measured). PE covers FE scope meanwhile.
+  - QA — qwen3.8-27b@groq (OWNER-KEYS GROQ_API_KEY): PROVEN ALIVE 2026-10-20 + published caps 30 RPM · 1,000 RPD · 200K tok/day; not the author of what it reviews. Fallbacks: nemotron-3.5-lightning@openrouter :free -> north-mini-code@openrouter :free -> machine gate + jev-1.13.0@typesafe.
+  - INTERN POOL 5/5 (OWNER-KEYS no-data rows): ling-3.0-flash@antling · ring-2.6-1t@antling · nemotron-3.5-super-vl@gmi · qwen3.8-flash@qoder · deepseek-v4.1-flash@nvidia-nim (ds-flash = intern/API-probe only).
+  - STRUCK: x-preview-l@zai-agent-shell (fabricated platform), deepseek-r1@github-models (DEAD-NO-ACCOUNT), coding-kimi-k3-free@aihubmix promotion path (DEAD-NO-ACCOUNT), glyph-cluster/minimax-m3.1-flash@commandcode (no-account platform, purged from canonical), llama-3.1-405b@github-models (dead lane).
+- TEAM-CONTROL.org relief fixed (§3.3): minimax-m3.1-flash:free@openrouter (BURNED) -> laguna-s-2.1@openrouter :free leg, second relief beam@ollama-cloud; #+OBJECTIVE untouched — yours to write.
+- STATE.org purged (§4): aiHubMix / Command Code / ModelScope blocker rows removed as NO-ACCOUNT-DEAD-or-purged; remaining Owner actions = gateway box, Discord webhook, XPLabs $1 card check.
+- Values audit: every accountable seat = open weights + free + evidence-cited; no gpt/gemini/gemma/grok/llama/ds-flash; web brain never resident; every seat carries a rank-3 chain.

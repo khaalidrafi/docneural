@@ -1,57 +1,93 @@
 #+TITLE: MEMBERS.org — roles + model@platform + why hired
-#+LAW: staff from agent-team/CANDIDATES.org rows only; roles come from the board (TODOs.org); no costume roles. Report = commit or pasted output.
+#+LAW: staff from CANDIDATES.org rows only (canonical: khaalidrafi/agent-team.el
+      agent-team/CANDIDATES.org @6a5653e, sha256 25e40995…; the docneural copy
+      was REMOVED by Owner R-2-64, commit a10ef3f). Every accountable seat
+      traces to an OWNER-KEYS lane (CANDIDATES.org §OWNER-KEYS) or an
+      explicitly keyless verified row. Roles come from the board (TODOS.org);
+      no costume roles. NO-ACCOUNT-DEAD LAW binds: no github-models, no
+      aihubmix, no commandcode, no m3.1 outside the mcode carve-out.
+      Report = commit or pasted output.
 
 * ROSTER (consult list — posted in chat BEFORE activation)
 
-** EM — glm-5.3-flash@chat.z.ai (CANDIDATES.org batch 1)
-   - :last-dispatch: 0
+** EM — glm-5.3-flash@chat.z.ai (CANDIDATES.org batch 1; web courier)
+   - :last-dispatch: 2026-10-25 (R-2-63 re-staff commit)
    - duties: board upkeep, dispatch, protocol/law commits only; runs the
      machine gate reports; never a code author
-   - why hired: seated by the Owner's teamify order; delivery record =
-     protocol commit + verify lines; identity platform-asserted, per
-     CANDIDATES.org §Sandbox chat-lane artifact NOT a model-access claim
+   - why hired: AA 57 (announcement) / 42 (model page) — both quoted;
+     DeepSWE 63.4 · Terminal-Bench 84.3; **MIT** 320B-A18B. Owner-paced
+     one-shot courier ONLY (batch 5 verdict: chat.z.ai ToS bans account
+     sharing — never an unattended Lead)
+   - fallback chain: glm-5.2@chat.z.ai (AA 51 · SWE-bench Verified 77.8 ·
+     TB 81.0 · MIT, free tier) -> kimi-k2.6@kimi.ai courier (vendor
+     SWE-bench Verified 80.2 · TB 66.7 · LCB 89.6, Modified MIT)
 
-** Performance Engineer — x-preview-l@zai-agent-shell (harness lane; CANDIDATES.org §Sandbox chat-lane artifact)
-   - :last-dispatch: 0
-   - board scope: P0 transport, boot requests, fonts + re-landing seat work
-   - why hired: the only shell body with landed gate-green work
-     (1299c00 84/84 + b79c11e 85/85 vitest, svelte-check 0, first try);
-     hired on DELIVERY RECORD, not a model claim — the sandbox router
-     serves one fixed brain and the lane label is what the runtime prints
+** Performance Engineer — glm-4.7-flash@zai (OWNER-KEYS ZAI_API_KEY; CI harness body)
+   - :last-dispatch: 2026-10-25 (R-2-63 re-staff commit)
+   - board scope: P0 re-land + sibling defect shelf follow-through behind
+     the gate; covers the FE scope until FE is staffed (declared shared
+     workload, not a shared identity)
+   - why hired: PROVEN ALIVE in the CI harness — it IS the #+TURN builder
+     body (TEAM-CONTROL.org); vendor SWE-bench 59.2; MIT 30B-A3B; the
+     only GLM the lanes serve PROVEN alive. WEAKNESS RECORDED: TB 14.4 —
+     pair every segment with the machine gate + QA verdict
+   - fallback chain: laguna-s-2.1@openrouter :free leg (batch 4 BEST
+     accountable candidate: vendor TB2.1 70.2 · SWE-bench Pro 59.4 ·
+     DeepSWE 40.4, OpenMDW-1.1 day-one weights, 256K ctx free endpoint;
+     OPENROUTER_API_KEY sealed) -> beam@ollama-cloud (vendor SWE-bench
+     Verified 80.9 · TB2.1 80.1, Apache-2.0 promised; thin independent
+     evidence caveat on record; OLLAMA_CLOUD_API_KEY sealed) ->
+     nemotron-3.5-lightning@openrouter :free leg (QA-grade)
 
-** Frontend Engineer — x-preview-l@zai-agent-shell (SAME harness lane, declared shared)
-   - :last-dispatch: 0
-   - board scope: P1 defect shelf + peek-card remainder
-   - why hired: same delivery record; lane shared with Performance
-     Engineer until a second wired coding body exists
-   - promotion path: coding-kimi-k3-free@aihubmix (100 RPD, 1.05M ctx,
-     tools — CANDIDATES.org §Free-lane delta) the moment the Owner
-     mints the key; beam:free@commandcode after the Owner's device flow
+** Frontend Engineer — VACANT (rank chain on file)
+   - :last-dispatch: never
+   - board scope: P1 defect shelf + peek-card remainder (PE covers until
+     a second wired coding body with real evidence exists)
+   - hiring chain, in rank order, ALL OWNER-KEYS-reachable:
+     1. laguna-s-2.1@openrouter (evidence above; open weights + free + data)
+     2. beam@ollama-cloud (evidence above)
+     3. glm-4.5-flash@zai (no benchmark data -> intern-grade until
+        measured; OWNER-KEYS lane)
+   - law: no hire without the full NAMED -> RESEARCHED -> REACHABLE ->
+     PERMITTED -> RANKED pass and a chat post BEFORE activation
 
-** QA Engineer — deepseek-r1@github-models (wired, DE-verified live 2026-10-24) + machine gate
-   - :last-dispatch: 0
+** QA Engineer — qwen3.8-27b@groq (OWNER-KEYS GROQ_API_KEY) + machine gate
+   - :last-dispatch: 2026-10-25 (R-2-63 re-staff commit)
    - board scope: adversarial review of landed diffs, verdict lines with
      exact commands + counts; vitest + svelte-check are the gate itself
-   - why hired: open weights, live today on the repo PAT (~8 RPD —
-     budget caps it to verdicts, not volume), and NOT the author of any
-     code it reviews
-   - fallback: OVHcloud anonymous open rows (2 RPM) for overflow probes
+   - why hired: PROVEN ALIVE 2026-10-20 (gateway completion); batch 5
+     primary-source caps 30 RPM · 1,000 RPD · 8K TPM · 200K tokens/day
+     (console.groq.com/docs/rate-limits, acc. 2026-10-20) — published
+     numbers, script-permitting API, sized for CI probe jobs; open
+     weights; NOT the author of any code it reviews (authors are GLM
+     bodies) — independence holds
+   - fallback chain: nemotron-3.5-lightning@openrouter :free leg (batch 4
+     QA-grade; $0 with the 65,536 max-token output cap quoted) ->
+     north-mini-code@openrouter :free leg (batch 4 "QA only"; AA coding
+     33.4; exact cap wording not retrievable — say so, don't invent) ->
+     machine gate + jev-1.13.0@typesafe finalize judgment (decision
+     layer, TYPESAFE_API_KEY sealed)
 
-* INTERN POOL (no-data bodies are interned, not rejected — five per round)
-- glyph-cluster:free@commandcode (stealth preview, 100/day) — after Owner auth
-- minimax-m3.1-flash:free@commandcode (limited time) — dated promo, fallback-independent
-- llama-3.1-405b@github-models — values filter: llama EXCLUDED from accountable seats; intern/scoring only
+* INTERN POOL (no-data bodies are interned, not rejected — five per round; ALL OWNER-KEYS)
+- ling-3.0-flash@antling — lane burn-verified live 2026-10-24; no benchmark data yet
+- ring-2.6-1t@antling — same lane; no benchmark data yet
+- nemotron-3.5-super-vl@gmi — OWNER-KEYS GMI_API_KEY; no benchmark row
+- qwen3.8-flash@qoder — batch 3: no independent benchmark found (empty search rounds recorded); intern-grade on platform-work record
+- deepseek-v4.1-flash@nvidia-nim — OWNER-KEYS key on file (probed 2026-10-19); ds-flash is EXCLUDED from accountable seats -> intern/API-probe only, per CANDIDATES.org batch 4
 
-* HR LEDGER (one line per hire, with evidence)
-- performance-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, delivery record 1299c00 + b79c11e first-try gate green
-- frontend-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, same record; lane shared, declared
-- qa-engineer — deepseek-r1@github-models: hired 2026-10-24, DE live-verification + non-author independence
-- em — glm-5.3-flash@chat.z.ai: seated by Owner teamify order, protocol commit record
+* HR LEDGER (one line per hire, with evidence; history kept, corrections appended)
+- performance-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, delivery record 1299c00 + b79c11e first-try gate green — CORRECTED 2026-10-25: platform FABRICATED (not a CANDIDATES.org row, not an Owner account); seat re-staffed glm-4.7-flash@zai
+- frontend-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, same record — CORRECTED 2026-10-25: same fabrication; seat VACANT with rank chain
+- qa-engineer — deepseek-r1@github-models: hired 2026-10-24, DE live-verification + non-author independence — CORRECTED 2026-10-25: GitHub Models DEAD-NO-ACCOUNT (Owner never registered; repo-PAT route UNSANCTIONED — reach is not permission); seat re-staffed qwen3.8-27b@groq
+- em — glm-5.3-flash@chat.z.ai: seated by Owner teamify order, protocol commit record; re-affirmed 2026-10-25 as Owner-paced web courier (batch 1 evidence)
+- performance-engineer — glm-4.7-flash@zai: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (ZAI_API_KEY; PROVEN ALIVE turn body; batch 1 evidence row)
+- qa-engineer — qwen3.8-27b@groq: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (GROQ_API_KEY; PROVEN ALIVE + published caps)
 
 * HR REVIEW (KEEP/WATCH/PROBE/RELEASE at every pause window)
 | date | member | segments | gate-first-try | verdict |
 |------+--------+----------+----------------+---------|
 | 2026-10-24 | all | 0 (board live) | — | PROBE |
+| 2026-10-25 | all (re-staffed) | 0 (chain idle, no-objective) | — | KEEP (EM/QA) · WATCH (PE — TB 14.4 weakness binds) |
 
 * STRENGTH NOTES (one line per member per segment — ROLE ATTACHMENT)
   | date | member | segment | did better / worse than roster average |

@@ -401,3 +401,58 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:05 UTC]
+:TASK: docneural-37-graph-peek
+:END:
+FROM: builder — glm-5.3-flash-free@opencode
+TO: @lead
+
+RESULT: DONE — re-verified on this segment (task branch
+ai/task/fe-graph-peek-card, turn run of 2026-10-25 21:00 UTC).
+The graph-mode hover peek card is already landed: this run found the
+session-resumed delivery in place and re-ran the full gate against the
+landed tree instead of duplicating the work.
+
+WHAT IS LANDED (sibling repo khaalidrafi/docneural-ui, ai/main):
+- 5aa9c8d — NotePreview: the cross-doc hover peek card, same as
+  DocReader. Hovering a cross-doc link in the graph node preview opens
+  the LinkPeek card: target title + the citation sentence from
+  store.ctxFor (see src/lib/reader/NotePreview.svelte:16-83 — Peek
+  re-export via LinkPeek, href match on docs/<slug>.html, 300 ms
+  hover-intent timer, long-press on touch, card closes on scroll or on
+  following the link).
+- b1ab002 — the task merge commit (merge of ai/task/fe-graph-peek-card).
+- Machinery reused as-is: src/lib/reader/LinkPeek.svelte untouched —
+  its card is pointer-events: none
+  (src/lib/reader/LinkPeek.svelte:79), so it never steals the click
+  that follows the node. The 200 ms grace-period was NOT touched
+  (Owner-box, as ordered).
+
+GATE (re-run on the landed tree this segment):
+- npm ci --no-audit --no-fund — clean install.
+- npx vitest run — Test Files 5 passed (5) / Tests 65 passed (65).
+- npx svelte-check — found 0 errors and 0 warnings.
+(First vitest attempt failed 1 file until the orui sibling
+org-roam-lite-ui was cloned fresh next to docneural-ui — the
+`orui/*` alias in docneural-ui/vite.config.ts:14 and
+tsconfig.json:16 resolves to ../org-roam-lite-ui/src/lib. Evidence
+that the gate must clone BOTH siblings, matching TEAM-UPDATE.org:257.
+After the clone: 65/65 + 0/0.)
+
+BOARD / CHAT EVIDENCE: agent-team/TODOS.org:6 (row flipped DONE,
+Lead-verified) and the EM report in this chat (2026-10-25 21:10 UTC
+posting) record the same landing; my run adds a fresh independent
+gate pass on b1ab002.
+
+NEXT: nothing on my lane — objective evidence is complete. Remaining
+items need the Owner: 200 ms grace ruling, P2 judgement calls,
+corpus UAT. No new peer work dispatched.
+
+ROLE_LARK_WEBHOOK: empty in env — skipped silently, noted here and
+in the board LOGBOOK entry.

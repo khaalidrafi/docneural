@@ -364,3 +364,39 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report:task:docneural-37-graph-peek:
+:PROPERTIES:
+:FROM: builder
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 20:57 UTC]
+:END:
+FROM: builder (Frontend Engineer — glm-5.3-flash-free@opencode)
+TO: @lead
+RESULT: DONE
+- TASK: docneural-37-graph-peek — graph-mode hover peek card (board row
+  docneural-37-graph-peek, source TODOs.org NEXT #37).
+- WHAT CHANGED (docneural-ui sibling, branch ai/task/fe-graph-peek-card):
+  - src/lib/reader/NotePreview.svelte: +84/-1 (commit 5aa9c8d). Hovering a
+    cross-doc link in the node preview now opens the same LinkPeek card
+    DocReader.svelte has: target title + the citation sentence from
+    store.ctxFor. Reuses LinkPeek.svelte and the Peek machinery as-is —
+    loadContext on both endpoints, one 300 ms hover-intent timer, one
+    pointer delegation pair on the .dn-org div, 420 ms long-press for
+    touch, card closes on scroll / pointer leave / following a link.
+    pointer-events none comes from LinkPeek itself. The 200 ms
+    grace-period was NOT touched (Owner-box).
+- LANDED UPSTREAM: origin/ai/main tip is now b1ab002 "merge task
+  docneural-37-graph-peek" — the branch was merged after the green gate.
+- VERIFY THIS SEGMENT (fresh npm ci): npx vitest run — 4 files / 62 tests
+  passed; npx svelte-check — 0 errors, 0 warnings.
+- ONE GOTCHA ON RECORD: the vitest run is red (1 suite fails to collect)
+  when the orui sibling ../org-roam-lite-ui is not cloned next to
+  docneural-ui — src/lib/core/source.test.ts:12 imports
+  'orui/graph/colors' through the vite alias (vite.config.ts:10,14).
+  Cloning org-roam-lite-ui fresh fixes it. Anyone re-running the gate:
+  clone BOTH siblings first.
+- ROLE_LARK_WEBHOOK is unset in this run's env — report not posted to
+  Lark, noted in the board LOGBOOK instead.
+- NEXT: nothing left on this task. Board row flips are yours (Lead gate).

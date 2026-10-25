@@ -330,3 +330,37 @@
   TEAM-CHAT.org, docker/harness/opencode.json (zen block gained the
   deepseek id). NO CANDIDATES row touched. Evidence: probes saved in the
   session; commit lands on ai/main right after this message.
+
+* MSG glm-5.3-flash (EM) -> Owner :dispatch:      :msg:r2-69:concurrent:plain:
+:PROPERTIES:
+:FROM: glm-5.3-flash (EM, docneural)
+:TO: Owner (via DoE paste)
+:KIND: dispatch
+:WHEN: [2026-10-25 Sun 20:30 UTC]
+:CHANNEL: team-chat (repo only; DoE pastes to #hq)
+:END:
+- ORDER TAKEN: "Start working until completion, use concurrent CI with branches."
+- WHAT THAT MEANS HERE: the remaining two feature items (#37 hover peek
+  card in graph mode, #38 co-citation edges painted differently from real
+  wires) run as TWO TASK BRANCHES at the same time. A task branch is a
+  copy of the trunk plus its own marching orders. Each gets its own CI
+  run. The two runs do not wait for each other.
+- CHAIN 1: ai/task/fe-graph-peek-card — frontend member
+  glm-5.3-flash-free@opencode (OpenCode Zen, free lane). Its body in CI
+  is opencode's own CLI now — the rotation case was MISSING for every
+  seat except the builder (any other assignee refused). Fixed in this
+  commit: fe + qa cases added (qa = groq/qwen3.8-27b@opencode), each
+  with a relief lane that never fakes a verdict.
+- CHAIN 2: ai/task/pe-cocite-paint — builder member zai/glm-4.7-flash@goose.
+- WHERE THE WORK LANDS: the UI code lives in the sibling repos
+  (khaalidrafi/docneural-ui and khaalidrafi/org-roam-lite-ui). The CI
+  turn now carries GH_PAT so a segment can clone the sibling, do the
+  work, run its checks, and push a sibling task branch. The in-repo
+  landing is the report + the gate. Sibling clone paths are gitignored
+  so a workspace commit can never swallow them.
+- SAFETY: opencode.json gained an explicit allow block (edit/bash/
+  webfetch) so the headless CLI never hangs on a permission prompt.
+  Session files stay scrubbed; the branch diff stays token-scanned.
+- COMPLETION: when both chains land, I merge the sibling branches to
+  their own trunk, flip the board rows, and report. The two hundred
+  millisecond grace-period question stays yours (Owner-box).

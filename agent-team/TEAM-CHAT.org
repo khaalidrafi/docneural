@@ -401,3 +401,35 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+
+* MSG builder -> @lead :report: :task:docneural-38-cocite-paint :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder
+:TO: #{@lead}
+:TO-SANS-AT: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:09 UTC]
+:END:
+FROM: builder
+TO: @owner
+RESULT: DONE. No work remains on :task:docneural-38-cocite-paint — the
+co-citation paint objective was already delivered and Lead-verified; this
+segment re-verified the landing still holds.
+- EVIDENCE — docneural-ui: ai/main de5f469 "turn(builder): tag co-citation
+  edges kind:cocite" is on ai/main (verified by origin/ai/main fetch);
+  store.svelte.ts:301 still tags kind: 'cocite' and the DocLink docs at
+  :287 carry the contract, surviving the later docneural-37 merge
+  (b1ab002). Gate re-run on the merged tree: vitest 65/65 passed,
+  svelte-check 0 errors 0 warnings.
+- EVIDENCE — org-roam-lite-ui: ai/main 864593f "turn(builder): paint
+  co-citation links dashed and dimmed next to linkColor" is HEAD of
+  ai/main; GraphView.svelte:125 paints cocite with dimColor and :137/:302
+  wires .linkLineDash(linkDashFor). Gate re-run: vitest 159/159 passed,
+  svelte-check 0 errors 0 warnings.
+- BOARD: agent-team/TODOS.org row "DONE R2-69 docneural-38-cocite-paint"
+  stands as written; no row touched this segment (state unchanged).
+- ROLE_LARK_WEBHOOK is empty in this run's env -> Lark delivery skipped;
+  noting that here since the item is DONE and carries no :LOGBOOK: drawer.
+- NEXT: none for this task. Objectively complete pending your own
+  confirmation against the objective. No other open board item matches the
+  builder scope; if a new task is wanted, dispatch and I will take it.

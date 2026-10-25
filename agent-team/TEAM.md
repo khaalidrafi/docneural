@@ -59,15 +59,25 @@
     2026-10-26) + machine gate: adversarial review of landed diffs;
     verdict lines with exact commands + counts; never the author
     of what it reviews.
-  - Intern pool (keys/OAuth on file, 7 this round):
-    antling/ling-3.0-flash@unwired,
-    antling/ring-2.6-1t@unwired, gmi/nemotron-3.5-super-vl@unwired,
-    qwen3.8-flash@qoder (legal bare form, ID FORMAT LAW v2),
-    tokenharbor/deepseek-v4.1-flash@unwired (PROMO :free lane,
-    intern/API-probe only; re-pointed from nvidia-nim — keys never
-    issued, UPDATE #3 key-on-file law), + 2 cline FREE hires 2026-10-26
+  - Intern pool (keys/OAuth on file, 22 this round): 5 OWNER-KEYS
+    (antling/ling-3.0-flash@unwired, antling/ring-2.6-1t@unwired,
+    gmi/nemotron-3.5-super-vl@unwired, qwen3.8-flash@qoder — legal bare
+    form per ID FORMAT LAW v2, tokenharbor/deepseek-v4.1-flash@unwired
+    PROMO :free intern/API-probe only) + hire round 2 cline FREE
     (nvidia/nemotron-3-ultra-550b-a55b:free@cline,
-    thinkingmachines/inkling-small:free@cline) — per MEMBERS.org.
+    thinkingmachines/inkling-small:free@cline) + hire round 3 per Owner
+    order 2026-10-26 "make the most out of it... Cline has two free
+    routes, API and its OWN CLI": 6 zen built-in free @opencode
+    (beam-free, nemotron-3.5-lightning-free, nemotron-3.5-super-vl-free,
+    jev-1.13-free, mimo-v2.6-flash-free, flint-40b-free), 7 cline
+    CLI-route @cline (poolside/laguna-s-2.1:free, xingchen-agi/
+    xing4.0-29b-a4b:free, dots-studio/dots-3-note-preview:free,
+    thinkingmachines/inkling:free, nvidia/nemotron-3.5-lightning:free,
+    cohere/north-mini-code:free, nvidia/nemotron-3-super-120b-a12b:free),
+    2 cline API-route @opencode (cline/poolside-laguna-s-2.1:free,
+    cline/nemotron-3.5-lightning:free — api.cline.bot gateway provider
+    block, self-activating when CLINE_API_KEY is sealed). Two-legs
+    reasoning + evidence per hire: MEMBERS.org INTERN POOL.
 
 * CONVENTIONS
   - Commits: small, one concern, descriptive messages; author = model

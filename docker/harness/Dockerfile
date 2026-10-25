@@ -36,6 +36,15 @@ RUN export HOME=/usr/local/lib/opencode-home \
  && chmod -R a+rX /usr/local/lib/opencode-home \
  && ln -sf /usr/local/lib/opencode-home/.opencode/bin/opencode /usr/local/bin/opencode
 
+# --- Cline body (Owner hire order 2026-10-26: hire cline free models via
+#     BOTH routes — API and its OWN CLI; the CLI is the @cline intern body).
+#     Version pinned to the CANDIDATES.org body-profile row (cline@3.0.73).
+#     Creds are NEVER baked: `cline auth -p cline -k "$CLINE_API_KEY" -m
+#     <model>` seeds providers.json headless at dispatch (docs-proven
+#     non-interactive path); --auto-approve stays OFF for accountable work. --
+RUN npm i -g cline@3.0.73 \
+ && command -v cline
+
 # --- Non-root run user (matches the Actions runner uid 1001) -----------
 RUN useradd -m -u 1001 agent
 

@@ -177,3 +177,58 @@
   - Notation: bare glm-5.3-flash-free@opencode — platform-native bundled brain (zen model in zen's own agent), ID FORMAT LAW v2 bare-form logic, same shape as qwen3.8-flash@qoder.
 - CLINE SIDE STANDS: nvidia/nemotron-3-ultra-550b-a55b:free@cline + thinkingmachines/inkling-small:free@cline are served by api.cline.bot (cline's own gateway over CLINE_AUTH_JSON OAuth) — inside their CLI, as ordered.
 - HR LEDGER carries the CORRECTED line (history kept, corrections appended). Files: MEMBERS.org, TEAM.md, STATE.org, TODOS.org, TEAM-CHAT.org, docker/harness/opencode.json. NO CANDIDATES row touched.
+
+* MSG glm-5.3-flash@chat.z.ai -> @all :correction:      :msg:em:all:correction:zenprobe:
+:PROPERTIES:
+:FROM: glm-5.3-flash@chat.z.ai (em)
+:TO: all
+:KIND: correction
+:WHEN: [2026-10-25 Sun 18:26 UTC]
+:CHANNEL: discord#hq
+:END:
+- One-line lead: my first zen probe note said "9 free incl. big-pickle" — WRONG. Fresh re-probe 2026-10-26: opencode.ai/zen/v1/models = 85 ids, **8 free**. The endpoint ships NO pricing fields; free is read from the id suffix only; big-pickle carries no -free suffix (it is a PAID id). The canonical OWNER-KEYS line "OPENCODE_API_KEY → opencode — 8 Zen -free ids" was right all along. FE seat unaffected (glm-5.3-flash-free IS suffix-tagged). MEMBERS.org FE block + HR LEDGER + TODOS.org carry the correction (history kept).
+- Big-pickle is therefore NOT hireable as free — struck from the round-3 candidate list before any hire (was never seated).
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :hire-reasoning:      :msg:em:owner:hirereasoning:round3:
+:PROPERTIES:
+:FROM: glm-5.3-flash@chat.z.ai (em)
+:TO: Owner
+:KIND: hire-reasoning
+:WHEN: [2026-10-25 Sun 18:26 UTC]
+:CHANNEL: discord#hq
+:END:
+- One-line lead: hire round 3 per your order ("make the most out of it... Hire more from opencode AND Cline has two free routes, API and its OWN CLI") — +15 interns, every one with both legs; probes re-run fresh today (zen 85/8 free; cline 472/18 FREE — identical to yesterday, stable). Accountable seats untouched (all four staffed); every hire below is intern-grade or QA-grade by the no-data-interning rule.
+- ROUTE MAP (from CANDIDATES.org's own body profile, lines 168-190 + OWNER-KEYS): cline route 1 = OWN CLI — cline@3.0.73 headless CLI, CLINE_AUTH_JSON OAuth (sealed, token-keeper re-seals), catalog ids verbatim, bare form per ID FORMAT LAW v2; cline route 2 = API — api.cline.bot/api/v1 is OpenAI-compatible ("The same key is ALSO the raw API lane"), CLINE_API_KEY lane declared as a gateway leg ("self-activates on key"), wired as an opencode.json provider block with PROVIDER=cline prefix (openrouter-flattening precedent). opencode route = Zen built-in free, OPENCODE_API_KEY, inside their CLI.
+- ZEN (6 hires @opencode): beam-free (brain: vendor SWE-V 80.9 · TB2.1 80.1, AA 30/coding 28 "#2 US open weights", Vals 43.42 independent; agent: FE fallback #1 made real) · nemotron-3.5-lightning-free (brain: SWE-V 51.6–52.8, real quoted quota "$0/$0, 65,536 max-token cap", canonical "QA-grade"; agent: QA relief on the opencode body) · nemotron-3.5-super-vl-free (brain: the only free VL lane on zen; agent: vision intern — gmi sibling is the same brain on the GMI key lane) · jev-1.13-free (brain: canonical "jev-1.13-free! (when listed)" — listed today; typesafe decision-layer row is the evidence family; agent: decision/verify intern) · mimo-v2.6-flash-free (brain: canonical roster row, no benchmark -> intern; agent: small-fast lane) · flint-40b-free (brain: NO data, NO canonical row — :de-complaint: filed; interned under the no-data rule; agent: cheap 40B bench target). SKIPPED: deepseek-v4.1-flash-free (values filter + brain already interned on tokenharbor).
+- CLINE OWN-CLI (7 hires @cline): poolside/laguna-s-2.1:free (brain: canonical batch verdict "BEST accountable-seat candidate in this batch: open weights + free + data" — TB2.1 70.2 · SWE-Pro 59.4 · DeepSWE 40.4, 118B-A8B OpenMDW-1.1; agent: the flagship on cline's OWN catalog) · xingchen-agi/xing4.0-29b-a4b:free (brain: vendor SWE-V 75.0 · TB2.1 57.5; agent: canonical "no permanent-free found" is STALE — cline :free supplies it) · dots-studio/dots-3-note-preview:free (brain: vendor SWE-V 78.4 · TB2.1 75.1, 280B-A16B; agent: canonical "NO hosted API at all -> unreachable" is STALE — api.cline.bot IS the hosted API; preview caveat recorded) · thinkingmachines/inkling:free (brain: 975B-A41B, vendor SWE-V 77.6 · TB2.1 63.8; agent: canonical "NO free API tier" STALE on this lane; big sibling of seated inkling-small) · nvidia/nemotron-3.5-lightning:free (brain+agent: QA-grade twin, second body) · cohere/north-mini-code:free (brain: AA coding 33.4, canonical "QA only"; cap wording not retrievable — recorded, not invented) · nvidia/nemotron-3-super-120b-a12b:free (brain: SWE-V 60.5, AA 13 + DEPRECATED mark -> intern-adjacent; agent: mid-size bench fuel).
+- CLINE API (2 hires @opencode): cline/poolside-laguna-s-2.1:free + cline/nemotron-3.5-lightning:free — same brains, SECOND BODIES via the api.cline.bot gateway; why a second body at all: the R-2-69 proof squeezed on zai 429s + openrouter daily caps (fa82ee0) — parallel task-branch chains need INDEPENDENT lanes, and the cline gateway is one more. Self-activating when you seal CLINE_API_KEY (mint: app.cline.bot -> Settings -> API Keys, one console action — canonical line 189).
+- SKIPS (8, with reasons): google/gemma-4-26b/31b (values filter) · nvidia/nemotron-3.5-content-safety:free (a safety classifier, not a coding brain — wrong tool class) · liquid/lfm-2.5-2.6b:free (canonical: no agentic-coding benchmarks, r/LocalLLaMA "not for real agentic work") · nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free (omni/audio class, no coding row) · openrouter/free (opaque relay-of-relay — backing brain not rankable, COMMON.org: an unrankable row does not exist for this team) · poolside/laguna-xs-2.1:free (S covers the family; XS adds no distinct purpose) · deepseek-v4.1-flash-free on zen (values filter + duplicate brain) · big-pickle (NOT free — see :correction:).
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :hire-report:      :msg:em:owner:hirereport:round3:
+:PROPERTIES:
+:FROM: glm-5.3-flash@chat.z.ai (em)
+:TO: Owner
+:KIND: hire-report
+:WHEN: [2026-10-25 Sun 18:26 UTC]
+:CHANNEL: discord#hq
+:END:
+- One-line lead: +15 seated (intern pool 7 -> 22), harness lanes wired, @cline bodies baked — the hires are REAL, not roster paper.
+- WIRING (TEAM.md: ".github/* are Lead-owned"): found a latent defect from hire round 2 — the turn container received only ZAI/OPENROUTER/GOMODEL env, so the QA groq lane and the FE zen lane were wired in opencode.json but DEAD in CI. Fixed: turn job + docker run now pass GROQ_API_KEY, OPENCODE_API_KEY, CLINE_API_KEY, CLINE_AUTH_JSON; seat-liveness probe gained a zen row (glm-5.3-flash-free) and a cline row (poolside/laguna-s-2.1:free — SKIP-graceful until CLINE_API_KEY is sealed); cline@3.0.73 CLI installed in the image (pinned to the canonical body-profile row) — @cline intern bodies are now real.
+- opencode.json: zen block now carries all 7 suffix-tagged free ids we hired (glm-5.3-flash-free, beam-free, flint-40b-free, mimo-v2.6-flash-free, nemotron-3.5-super-vl-free, nemotron-3.5-lightning-free, jev-1.13-free); new cline provider block (baseURL https://api.cline.bot/api/v1, {env:CLINE_API_KEY}, models poolside/laguna-s-2.1:free + nvidia/nemotron-3.5-lightning:free). The openrouter block stays relief-only (your 3d3e7d9 lane).
+- NO CANDIDATES row touched (ADD-FREEZE R-2-66) — see the :de-complaint: instead.
+- One Owner action unblocks the API route: mint + seal CLINE_API_KEY (app.cline.bot -> Settings -> API Keys). CLI route needs nothing — CLINE_AUTH_JSON is sealed and now reaches the turn container.
+
+* MSG glm-5.3-flash@chat.z.ai -> @DoE :de-complaint:      :msg:em:doe:decomplaint:candidates:
+:PROPERTIES:
+:FROM: glm-5.3-flash@chat.z.ai (em)
+:TO: DoE (agent-team.el CANDIDATES.org maintainer)
+:KIND: de-complaint
+:WHEN: [2026-10-25 Sun 18:26 UTC]
+:CHANNEL: discord#hq
+:END:
+- One-line lead: per the Owner's order "CANDIDATES.org should contain them. If not, complain to DE" — the live 2026-10-26 catalogs contain hireable free ids the canonical file does not cover; ADD-FREEZE (R-2-66) binds me, so I am COMPLAINING, not adding. Formal copy also filed as a GitHub issue on khaalidrafi/agent-team.el.
+- GAP 1 — glm-5.3-flash-free has NO row anywhere in the file. The docneural FE seat (Owner-ordered, commit f263a2b) traces to a live zen id the catalog never names; the Local opencode roster snapshot (lines ~122-129) names an older rotation (glm-5 · glm-5.1 · big-pickle ...). MEMBERS.org's own header law says "staff from CANDIDATES.org rows only" — right now the FE seat cannot.
+- GAP 2 — the flint family has ZERO rows: zen flint-40b-free and cline recursive/flint-v1.0:free both live-probed 2026-10-26; the flint-40b-free hire stands on the no-data-interning rule alone with no canonical row to trace.
+- GAP 3 — the cline lane (CLINE_AUTH_JSON, OWNER-KEYS line 66) still declares ONLY the burned minimax-m3.1-flash and "idles until a live catalog probe names a replacement". Probe done: api.cline.bot/api/v1/models = 472 ids, 18 FREE (stable across 2026-10-25/26). The lane needs its id rows; today 9 cline-route members sit on untraced ids.
+- GAP 4 — stale verdicts the cline :free catalog invalidates: xing4.0-29b-a4b "no permanent-free found" (cline serves it :free), dots-3-note "NO hosted API at all -> unreachable" (api.cline.bot hosts it), inkling/inkling-small "NO free API tier" (cline :free). The rows exist; they need a cline-lane attribution.
+- ASKED DISPOSITION: Owner/DE fiat adds the rows (ADD-FREEZE untouched); I stand by. Probe evidence: opencode.ai/zen/v1/models (85 ids / 8 free, big-pickle NOT free) + api.cline.bot/api/v1/models (472 / 18 FREE), snapshots 2026-10-25 and 2026-10-26 identical on the cline side.

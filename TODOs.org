@@ -52,6 +52,19 @@
 - P0 Boot requests: every boot request same-origin and < 60, asserted green on the BUILT site, not only inside make verify (source: TODOs.org §Measured after the P1 pass; scripts/docneural-verify.mjs)
 - P0 Fonts: zero render-blocking font requests on the built site; three self-hosted woff2 only (source: TODOs.org §DONE Self-host the fonts, line 79)
 - DONE P0 Re-land the gate-green seat work: peek card + co-cite paint + org-docs flips — DONE 2026-10-25, resolved on the landing target rather than by reviving the frozen branch: ledger leg = 7050e10 IS on ai/main (merge-base verified); peek card = LinkPeek.svelte live + wired at DocReader.svelte:511 on docneural-ui ai/main; co-cite paint = COCITE_CAP=8 design flows coCitations() edges into the canvas pipeline (store.svelte.ts:291); the never-pushed 1299c00/b79c11e are unreachable on every ref (git ls-remote: ai/main, ai/agent-team, ai/cloud only) and are obsoleted by the landed equivalents — corpus UAT stays Owner-box (source: local branches ai/team/peek 1299c00, ai/team/wires b79c11e, ai/team/ledger 7050e10 — never pushed; evidence: this commit's TEAM-CHAT.org :report:)
+  :LOGBOOK:
+  - [2026-10-25 Sun 21:14 UTC] builder (glm-4.7-flash@goose, task scope
+    docneural-38-cocite-paint) re-verified the landing fresh on
+    ai/task/pe-cocite-paint: code present (store.svelte.ts:301 kind
+    'cocite', types.ts:48 DocLink field, roamBridge.ts:39 passthrough,
+    GraphView.svelte:113-127 dashed+dimmed paint,
+    GraphView.test.ts:513-539); sibling branches ae0a83a (docneural-ui)
+    and 864593f (org-roam-lite-ui) both on their remotes; gate green in
+    BOTH — docneural-ui vitest 65/65 + svelte-check 0/0, org-roam-lite-ui
+    vitest 159/159 + svelte-check 0/0. ROLE_LARK_WEBHOOK empty this run:
+    Lark delivery skipped silently per work order. No new commits needed;
+    report in TEAM-CHAT.org :task:docneural-38-cocite-paint
+  :END:
 
 ** P1 — defect shelf + features
 - DONE P1 DocneuralGraph reads plain engine inside $effects — DONE 2026-10-25, docneural-ui 928519a: reference is now $state.raw so the reassigned engine wakes the layout effect (boot layout applies, onEngineStop camera park arms); raw because deep-proxying a live force-graph object taxes every tick (source: audit dispatch #2, DocneuralGraph.svelte; gate: vitest 62/62 + svelte-check 0/0)

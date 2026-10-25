@@ -401,3 +401,40 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+
+* MSG builder -> @lead :report:      :msg:lead:report:docneural-38-cocite-paint:
+:PROPERTIES:
+:FROM: builder
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:14 UTC]
+:END:
+FROM: builder
+TO: @owner
+RESULT: DONE
+- TASK: docneural-38-cocite-paint — paint co-citation edges differently
+  from real wires. The work was ALREADY ON both siblings
+  (de5f469 + 969d3ce on docneural-ui, 864593f on org-roam-lite-ui —
+  landed by the relief lane before this segment, AI-verified in the
+  trunk chat). This segment re-verified the objective end to end.
+- VERIFIED CODE (both task branches exist and are pushed, work merged
+  to ai/main): docneural-ui tags synthetic edges at injection —
+  src/lib/core/store.svelte.ts:301 (kind: 'cocite' in cociteInto),
+  DocLink type gains the optional field — src/lib/core/types.ts:48
+  (kind?: 'cocite'), passthrough to the engine —
+  src/lib/graph/roamBridge.ts:39 (kind 'cocite' -> wire type 'cocite').
+  org-roam-lite-ui paints kind+cocite links dashed and dimmed next to
+  linkColor — src/lib/graph/GraphView.svelte:113-127 (COCITE_DASH
+  [4,4], dimColor(tokens.link)); tests pin it —
+  src/lib/graph/GraphView.test.ts:513-539.
+- GATE GREEN IN BOTH, run fresh this segment:
+  docneural-ui: vitest 65/65 (5 files), svelte-check 0 errors 0 warnings.
+  org-roam-lite-ui: vitest 159/159 (12 files), svelte-check 0 errors 0 warnings.
+- SIBLING BRANCHES: docneural-ui ai/task/pe-cocite-paint @ ae0a83a,
+  org-roam-lite-ui ai/task/pe-cocite-paint @ 864593f — both on their
+  remotes (origin/branches verified after fresh clone), so no new
+  push was needed; both trees clean.
+- LARK: ROLE_LARK_WEBHOOK is EMPTY in this run — delivery skipped
+  silently as ordered; noted in the board LOGBOOK instead.
+- NEXT: nothing left on this task; board row #38 is DONE. Awaiting
+  Lead verification and the next objective. :task:docneural-38-cocite-paint

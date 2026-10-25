@@ -1,32 +1,15 @@
-#+TITLE: TEAM-CONTROL.org — chain control surface (Lead-owned; the CI turn reads this file FIRST)
-# The CI chain reads: #+KILL-SWITCH / #+OBJECTIVE-STATE / #+OBJECTIVE /
-# #+TURN / #+CHAIN-PAUSE. Supplied by z.ai-agent 2026-10-24 so the chain
-# can boot; every line after this supply is the Lead's to own.
-
+#+TITLE: TEAM-CONTROL.org — TASK BRANCH ai/task/builder-parallel-proof (R-2-69 thin branch: trunk tip + this control)
+# Task branch = ONE task assigned to ONE member (Owner order 2026-10-25 #hq:
+# "run multiple CI with different branches, where branches will represent a
+# task assigned to a team member"). This fork carries the TASK state; the
+# trunk's own TEAM-CONTROL.org is NEVER touched by this chain — work lands
+# on ai/main via the landing gate.
+#+TASK-ID: parallel-proof
+#+ASSIGNEE: builder (zai/glm-4.7-flash@goose)
 #+KILL-SWITCH: OFF
-#+OBJECTIVE-STATE: OPEN
-#+OBJECTIVE: the Owner writes the objective line — until then the chain idles (standing orders: agent-team/TEAM-UPDATE.org UPDATE #1 section C)
+#+OBJECTIVE-STATE: COMPLETE
+#+OBJECTIVE: parallel-proof (Owner order 2026-10-25 #hq — "run multiple CI with different branches, where branches will represent a task assigned to a team member"): ONE segment on THIS branch — verify the chain is running the task branch (evidence: the branch name and #+TASK-ID your brief shows), append ONE chat entry tagged :task:parallel-proof to agent-team/TEAM-CHAT.org with RESULT: DONE | PARTIAL | BLOCKED plus that evidence, touch NOTHING else (no board edits, no code changes)
 #+TURN: glm-4.7-flash@zai (builder)
 #+CHAIN-PAUSE: OFF
-
-* Rotation
-- builder = glm-4.7-flash@zai (CI lane; relief: laguna-s-2.1@openrouter :free leg — OWNER-KEYS OPENROUTER_API_KEY; second relief: beam@ollama-cloud — OWNER-KEYS OLLAMA_CLOUD_API_KEY)
-- former relief minimax-m3.1-flash:free@openrouter was BURNED by BURN-LAW
-  (Owner 2026-10-24 17:01Z) and is replaced per R-2-63 §3.3 — no m3.1
-  outside the mcode OAuth carve-out
-- roles and seats: agent-team/MEMBERS.org (board-scoped)
-
-* Marker semantics
-- #+OBJECTIVE-STATE: COMPLETE -> chain stops clean; OPEN + new objective resumes.
-- #+KILL-SWITCH: ON -> everything stops, exit green.
-- #+CHAIN-PAUSE: ON -> clean halt after a delivered TODO; the Lead clears it to resume.
-
-* Task branches (Owner order 2026-10-25 #hq — R-2-69)
-- One branch per task, one member per task: ~ai/task/<member-slug>-<task-slug>~.
-- A task branch carries its OWN control fork (this file's shape) with
-  =#+TASK-ID:=, =#+ASSIGNEE:=, the task =#+OBJECTIVE:=, =#+TURN:= at the assignee.
-- Thin branch: trunk tip + this control; synced to fresh trunk every segment;
-  work lands on ai/main via the landing gate — the trunk control is never
-  touched by task chains.
-- Arm: cut branch from ai/main, fork the control, dispatch with
-  ~gh workflow run agent-team.yml --ref <branch>~ (or the Actions UI picker).
+#+PAUSE-AFTER-TODO: OFF
+#+LAST-BLOCKED-NOTIFY: 1792952472

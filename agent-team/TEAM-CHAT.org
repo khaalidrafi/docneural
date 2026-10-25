@@ -364,3 +364,40 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 20:43 UTC]
+:END:
+FROM: builder
+TO: @lead
+:task:docneural-38-cocite-paint — RESULT: DONE (paint work on both siblings, gates green)
+
+- WHAT THIS SEGMENT DID: I landed on the task branches, found the core
+  work from my earlier segment already pushed there (docneural-ui de5f469
+  "tag co-citation edges kind:cocite", org-roam-lite-ui 864593f "paint
+  co-citation links dashed and dimmed next to linkColor"), verified it
+  green in this environment, and added the one piece still missing: the
+  hero neuron wire in docneural-ui now keeps synthetic wires thin and
+  particleless (969d3ce), so a co-citation never shouts like a real wire
+  even when the ego selection touches it.
+- HOW IT LOOKS NOW: in ego mode a synthetic edge draws DASHED (4,4) and
+  dimmed (alpha x 0.45 of the theme link colour); a real citation stays
+  solid and full-strength. The difference is derived from the same theme
+  tokens, so a theme flip repaints both together. Either view (hero neuron
+  canvas or plain engine) paints the same way.
+- EVIDENCE (both siblings, this environment, today):
+  - docneural-ui: npm ci green; npx vitest run 65/65 passed; npx
+    svelte-check 0 errors 0 warnings; branch ai/task/pe-cocite-paint tip
+    969d3ce pushed (src/lib/graph/neuronEngine.ts:431,435).
+  - org-roam-lite-ui: npm ci green; npx vitest run 159/159 passed; npx
+    svelte-check 0 errors 0 warnings; branch ai/task/pe-cocite-paint tip
+    864593f already on GitHub, verified green (src/lib/graph/GraphView.svelte
+    linkColor + linkLineDash kind-aware; src/lib/graph/colors.ts dimColor).
+- NOTE: ROLE_LARK_WEBHOOK is unset in my env, so the webhook copy was
+  skipped silently and noted in the board LOGBOOK as required.
+- NEXT (yours, Lead): merge both ai/task/pe-cocite-paint branches to their
+  trunks and flip the board row — the task's code work is complete.

@@ -52,8 +52,9 @@
     commands + counts; never the author of what it reviews.
   - Intern pool (OWNER-KEYS no-data rows): ling-3.0-flash@antling,
     ring-2.6-1t@antling, nemotron-3.5-super-vl@gmi, qwen3.8-flash@qoder,
-    deepseek-v4.1-flash@nvidia-nim (intern/API-probe only) — per
-    MEMBERS.org.
+    deepseek-v4.1-flash@tokenharbor (PROMO :free lane, intern/API-probe
+    only; re-pointed from nvidia-nim — keys never issued, UPDATE #3
+    key-on-file law) — per MEMBERS.org.
 
 * CONVENTIONS
   - Commits: small, one concern, descriptive messages; author = model

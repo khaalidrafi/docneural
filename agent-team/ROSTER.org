@@ -20,9 +20,11 @@
 - ollama-cloud (OLLAMA_CLOUD_API_KEY): 7 ids — beam, gpt-oss:120b/20b,
   nemotron-3 tiers, gemma4:31b
 - antling (ANTLING_API_KEY): 7 ids, burn-verified live 2026-10-24
-- nvidia-nim / deepseek-official: keys on file in the llmfisher deployment
-  env (deepseek-v4.1-flash probed 2026-10-19) — ds-flash excluded from
-  accountable seats, intern/API-probe only
+- tokenharbor (TOKENHARBOR_API_KEY): deepseek-v4.1-flash:free — PROMO,
+  undated, can vanish; intern/API-probe only (ds-flash excluded from
+  accountable seats). Former "nvidia-nim / deepseek-official keys on
+  file" claim STRUCK 2026-10-26: those keys were never issued
+  (UPDATE #3 key-on-file law; canonical purge R-2-65)
 - xplabs (XPLABS_API_KEY): 3 ids declared — serving BLOCKED on XPLabs' $1
   card verification (card_required); lane self-activates on the card check
 - mcode (MCODE_AUTH_JSON, OAuth carve-out 2026-10-24 17:11Z): M-Plan-Free

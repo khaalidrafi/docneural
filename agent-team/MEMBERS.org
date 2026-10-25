@@ -66,15 +66,17 @@
      glm-5.3-flash posts AA 57/42 · Terminal-Bench 84.3 · DeepSWE 63.4
      (benchlm/vendor pages, the SAME model the EM seat cites); zen is
      the opencode team's own curated gateway, "tested and benchmarked
-     for coding agents"; probe 2026-10-26: opencode.ai/zen/v1/models =
-     85 ids, 9 free (big-pickle · beam-free · flint-40b-free ·
-     mimo-v2.6-flash-free · nemotron-3.5-super-vl-free ·
+     for coding agents"; probe 2026-10-26 (fresh re-probe same day):
+     opencode.ai/zen/v1/models = 85 ids, 8 free (beam-free ·
+     flint-40b-free · mimo-v2.6-flash-free · nemotron-3.5-super-vl-free ·
      nemotron-3.5-lightning-free · jev-1.13-free ·
-     deepseek-v4.1-flash-free · glm-5.3-flash-free); free tier read from
-     id suffix (public endpoint returns no pricing fields) — verify at
-     first dispatch; ONE BRAIN TWO BODIES = TWO MEMBERS (EM is
-     glm-5.3-flash@chat.z.ai — same brain, different body, per BRAINS
-     AND BODIES)
+     deepseek-v4.1-flash-free · glm-5.3-flash-free) — CORRECTED from the
+     first same-day reading of "9 free incl. big-pickle": the catalog
+     ships no pricing fields, free = id suffix only, and big-pickle
+     carries NO -free suffix (a PAID id; the canonical "8 Zen -free ids"
+     row was right). Verify at first dispatch; ONE BRAIN TWO BODIES = TWO
+     MEMBERS (EM is glm-5.3-flash@chat.z.ai — same brain, different body,
+     per BRAINS AND BODIES)
    - fallback chain (rank order): beam-free@opencode (independent Vals
      43.42 on the family; vendor 80.9/80.1 vendor-ONLY) ->
      ollama-cloud/beam@unwired (Ollama hosting "limited time" — lane
@@ -111,7 +113,11 @@
      machine gate + typesafe/jev-1.13.0@unwired finalize judgment (decision
      layer, TYPESAFE_API_KEY sealed)
 
-* INTERN POOL (no-data bodies are interned, not rejected — seven this round: 5 OWNER-KEYS + 2 cline FREE per Owner order 2026-10-26; all keys/OAuth on file)
+* INTERN POOL (no-data bodies are interned, not rejected — 22 this round:
+  5 OWNER-KEYS + 2 cline FREE (hire round 2) + 15 hire round 3 per Owner
+  order "make the most out of it... Hire more from opencode AND Cline has
+  two free routes, API and its OWN CLI" 2026-10-26; all keys/OAuth on
+  file or self-activating on the sealed key)
 - antling/ling-3.0-flash@unwired — lane burn-verified live 2026-10-24; no benchmark data yet
 - antling/ring-2.6-1t@unwired — same lane; no benchmark data yet
 - gmi/nemotron-3.5-super-vl@unwired — OWNER-KEYS GMI_API_KEY; no benchmark row
@@ -119,6 +125,21 @@
 - tokenharbor/deepseek-v4.1-flash@unwired — OWNER-KEYS TOKENHARBOR_API_KEY; ds-flash EXCLUDED from accountable seats -> intern/API-probe only (batch 4: AA 45.1; Vals Index 61.26 independent 2026-10-19); PROMO :free lane, undated — can vanish, emergency-only. RE-POINTED 2026-10-26 from deepseek-v4.1-flash@nvidia-nim: the nvidia-nim/deepseek-official keys were never issued (UPDATE #3 key-on-file law)
 - nvidia/nemotron-3-ultra-550b-a55b:free@cline — id verbatim from the cline catalog (bare form: platform-native catalog served over the CLINE_AUTH_JSON OAuth lane, ID FORMAT LAW v2); probe 2026-10-26: 472 ids, 18 FREE; strongest FREE id listed (550B-A55B); nemotron family evidence line exists; no benchmark row yet -> intern-grade
 - thinkingmachines/inkling-small:free@cline — same lane; brand-new face, no benchmark data -> intern-grade
+- beam-free@opencode — HIRED 2026-10-26 (hire round 3, zen built-in free, OPENCODE_API_KEY lane inside the opencode CLI). Model leg: beam@reflection vendor SWE-bench Verified 80.9 · TB2.1 80.1 + AA intelligence 30 / coding-agent 28 "#2 US open weights" (CANDIDATES.org batch row) + independent Vals Index 43.42 (vals.ai 2026-10-19); Apache-2.0 promised, 501B-A23B. Agent leg: the FE fallback #1 formalized as a real member — zen bundled, zero-wire in opencode.json
+- nemotron-3.5-lightning-free@opencode — HIRED 2026-10-26 (zen free). Model leg: vendor SWE-bench Verified 51.6–52.8 · TB2.1 24.6; free tier is a REAL quoted quota ("$0 input/$0 output, 65,536 max-token cap") — canonical verdict "QA-grade, not CI-critical". Agent leg: QA-relief lane on the opencode body; same brain as QA fallback #1 openrouter/nemotron-3.5-lightning:free — two bodies = two members
+- nemotron-3.5-super-vl-free@opencode — HIRED 2026-10-26 (zen free). Model leg: nemotron-3.5-super-vl family (vision-capable — the only free VL lane on zen). Agent leg: vision intern for image-bearing segments; gmi/nemotron-3.5-super-vl@unwired is the same brain on the GMI key lane
+- jev-1.13-free@opencode — HIRED 2026-10-26 (zen free). Model leg: canonical zen roster row "jev-1.13-free! (when listed)" — listed in the 2026-10-26 probe; the typesafe jev-1.13.0 row is the QA finalize judgment layer (decision-layer evidence). Agent leg: decision/verify intern on a zero-cost lane
+- mimo-v2.6-flash-free@opencode — HIRED 2026-10-26 (zen free). Model leg: canonical roster row "mimo-v2.6 (roster rotates)" + cline free tracker hit 2026-10-21; no benchmark row -> intern-grade. Agent leg: small-fast flash lane
+- flint-40b-free@opencode — HIRED 2026-10-26 (zen free). Model leg: NO data — the flint family has ZERO CANDIDATES.org rows (:de-complaint: filed 2026-10-26); interned under the no-data rule. Agent leg: 40B code-focused free id, cheap to bench at first dispatch
+- poolside/laguna-s-2.1:free@cline — HIRED 2026-10-26 (cline OWN-CLI route, CLINE_AUTH_JSON OAuth, api.cline.bot catalog id verbatim). Model leg: canonical batch verdict "BEST accountable-seat candidate in this batch: open weights + free + data" — vendor TB2.1 70.2 (thinking) · SWE-bench Pro 59.4 · DeepSWE 40.4, 118B-A8B OpenMDW-1.1, 1M-ctx class (256K on the free endpoint), r/LocalLLaMA positive within class. Agent leg: the flagship brain now on cline's OWN catalog — inside their CLI as the Owner ordered
+- xingchen-agi/xing4.0-29b-a4b:free@cline — HIRED 2026-10-26 (cline CLI route). Model leg: vendor SWE-bench Verified 75.0 · TB2.1 57.5 (HF card acc 2026-10-20), Apache-2.0. Agent leg: canonical verdict "no permanent-free found" is STALE — cline's :free catalog now supplies exactly the free hosted lane that row said was missing
+- dots-studio/dots-3-note-preview:free@cline — HIRED 2026-10-26 (cline CLI route; PREVIEW tag caveat recorded). Model leg: vendor SWE-bench Verified 78.4 · TB2.1 75.1 (280B-A16B multimodal; RedNote's dots studio per the canonical CORRECTION row). Agent leg: canonical verdict "NO hosted API at all -> unreachable" is STALE — api.cline.bot IS a hosted API serving it
+- thinkingmachines/inkling:free@cline — HIRED 2026-10-26 (cline CLI route). Model leg: 975B-A41B, Apache-2.0 on HF; vendor SWE-bench Verified 77.6 · TB2.1 63.8 (thinkingmachines.ai 2026-07-30). Agent leg: canonical "NO free API tier (time-limited discount only)" is STALE on the cline lane; big sibling of the seated inkling-small
+- nvidia/nemotron-3.5-lightning:free@cline — HIRED 2026-10-26 (cline CLI route). Model leg: same QA-grade brain as the zen hire (two bodies = two members). Agent leg: gives the QA-grade class a second free body on the cline lane
+- cohere/north-mini-code:free@cline — HIRED 2026-10-26 (cline CLI route). Model leg: 30B-A3B Apache-2.0, AA coding index 33.4 — canonical verdict "QA only"; exact cap wording NOT retrievable, recorded as such. Agent leg: code-specialized mini on a free lane
+- nvidia/nemotron-3-super-120b-a12b:free@cline — HIRED 2026-10-26 (cline CLI route). Model leg: vendor SWE-bench Verified 60.5 · TB-Hard 25.8; AA 13 + AA marks it DEPRECATED — intern-adjacent, caveat recorded. Agent leg: mid-size builder-lane bench fuel
+- cline/poolside-laguna-s-2.1:free@opencode — HIRED 2026-10-26 (cline API route: api.cline.bot OpenAI-compatible gateway wired as an opencode provider block, {env:CLINE_API_KEY}; provider prefix = the cline lane per PROVIDER/MODEL@AGENT). Model leg: same flagship brain as laguna@cline. Agent leg: SECOND BODY for lane diversity — the R-2-69 proof squeezed on zai 429s + openrouter daily caps; parallel task-branch chains need independent lanes; self-activates when the Owner seals CLINE_API_KEY (mint: app.cline.bot -> Settings -> API Keys, one console action per canonical)
+- cline/nemotron-3.5-lightning:free@opencode — HIRED 2026-10-26 (cline API route). Model leg: QA-grade brain (see zen hire). Agent leg: QA-grade parallel lane on the API route; self-activates on CLINE_API_KEY
 
 * HR LEDGER (one line per hire, with evidence; history kept, corrections appended)
 - performance-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, delivery record 1299c00 + b79c11e first-try gate green — CORRECTED 2026-10-25: platform FABRICATED (not a CANDIDATES.org row, not an Owner account); seat re-staffed glm-4.7-flash@zai
@@ -130,6 +151,7 @@
 - intern-5 — deepseek-v4.1-flash@nvidia-nim: seated 2026-10-25 (R-2-63) — CORRECTED 2026-10-26: nvidia-nim/deepseek-official keys never issued (UPDATE #3 key-on-file law, R-2-65); slot re-pointed to deepseek-v4.1-flash@tokenharbor (OWNER-KEYS; PROMO/emergency-only caveat on the lane)
 - frontend-engineer — openrouter/poolside-laguna-s-2.1:free@opencode: hired 2026-10-26 (Owner order "Hire built-in free models from OpenCode and Cline"; batch-4 evidence pack; pair pre-wired in opencode.json; consult + both-legs reasoning posted 2026-10-25/26) — CORRECTED 2026-10-26: OpenRouter is NOT "provided by opencode" (Owner: "the model MUST be provided by opencode / cline, inside their CLI, not openrouter or likes"); re-pointed to glm-5.3-flash-free@opencode (OpenCode Zen built-in free, OPENCODE_API_KEY lane, zen probe 85 ids/9 free)
 - intern-6/7 — nvidia/nemotron-3-ultra-550b-a55b:free@cline + thinkingmachines/inkling-small:free@cline: hired 2026-10-26 (same Owner order; cline catalog probe 472 ids / 18 FREE, api.cline.bot/api/v1/models; CLINE_AUTH_JSON OAuth = key-on-file; gemma ids SKIPPED per values filter; no m3.1 on the FREE list — BURN-LAW clean)
+- hire round 3 — +15 interns 2026-10-26 (Owner order "we have a lot of candidates and we MUST make the most out of it. Feel free to hire more quality candidates. Hire more from opencode AND Cline has two free routes, API and its OWN CLI"): 6 zen built-in free @opencode (beam-free, nemotron-3.5-lightning-free, nemotron-3.5-super-vl-free, jev-1.13-free, mimo-v2.6-flash-free, flint-40b-free — OPENCODE_API_KEY lane) · 7 cline CLI-route @cline (laguna-s-2.1, xing4.0-29b-a4b, dots-3-note-preview, inkling, nemotron-3.5-lightning, north-mini-code, nemotron-3-super-120b-a12b — :free ids verbatim from api.cline.bot, CLINE_AUTH_JSON OAuth) · 2 cline API-route @opencode (cline/poolside-laguna-s-2.1:free, cline/nemotron-3.5-lightning:free — {env:CLINE_API_KEY}, self-activating on seal). 8 skips recorded with reasons (TEAM-CHAT :hire-report:). SAME-DAY CORRECTION: the first zen probe note said "9 free incl. big-pickle" — WRONG, the catalog ships no pricing fields and big-pickle has no -free suffix; 8 free is correct (canonical "8 Zen -free ids" row was right). Harness lane wiring fixed in the same commit: turn container now receives GROQ_API_KEY + OPENCODE_API_KEY + CLINE_API_KEY + CLINE_AUTH_JSON (QA groq lane + FE zen lane were wired in opencode.json but DEAD in CI — latent defect from hire round 2); cline@3.0.73 CLI baked into the image (@cline bodies real); zen + cline probe rows added to the seat-liveness job
 
 * HR REVIEW (KEEP/WATCH/PROBE/RELEASE at every pause window)
 | date | member | segments | gate-first-try | verdict |

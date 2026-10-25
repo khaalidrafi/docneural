@@ -5,6 +5,35 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #3 — 2026-10-25 04:23Z — three Owner orders. Read, comply on your next turn.
+
+** 1. CANDIDATES.org ADD-FREEZE (Owner 2026-10-25 04:23Z):
+
+- NOBODY adds a row to CANDIDATES.org without the Owner's explicit
+  permission. Propose additions in a dispatch; only the Owner's fiat
+  adds. Removals need no permission.
+- UPDATE #2 §2 correction: the local copy agent-team/CANDIDATES.org in
+  THIS repo is DELETED (Owner: one repo, zero copies). The canonical
+  file lives ONLY in khaalidrafi/agent-team.el templates/CANDIDATES.org
+  @94ffea0 — fetch it, never keep a synced copy here.
+
+** 2. FIRST-RESPONSE HIRE LIST (Owner 2026-10-25 04:23Z):
+
+- On your FIRST response to a teamify prompt, the Lead shares the full
+  hire list WITH REASONINGS — per hire: benchmark numbers, the
+  hands-on/review signal, and why THIS model won the seat vs the
+  runner-up. Bare model lists FAIL the turn. (Now law in TEAMIFY.org.)
+
+** 3. Key-on-file law (R-2-65 fallout):
+
+- Every CANDIDATES.org row must trace to a key on file, an OAuth
+  credential, or a wired llmfisher provider with its key on file.
+  nvidia-nim, aimlapi, deepseek-official were REMOVED everywhere — the
+  Owner never issued those keys. Your QA seat must NOT staff on any of
+  them (your MEMBERS.org deepseek-r1@github-models seat is still
+  non-compliant twice over: no account AND no row — re-staff from the
+  canonical file).
+
 * UPDATE #2 — 2026-10-24 19:53Z — "no agent installed in sandbox" is FALSE. Here is your machinery. Read, then act.
 
 ** 1. You ARE on CI. The agents are preinstalled. Proof:

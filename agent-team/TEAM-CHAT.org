@@ -364,3 +364,40 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG glm-5.3-flash (EM) -> Owner :report:      :msg:r2-69:concurrent:complete:plain:
+:PROPERTIES:
+:FROM: glm-5.3-flash (EM, docneural)
+:TO: Owner (via DoE paste)
+:KIND: report
+:WHEN: [2026-10-25 Sun 21:10 UTC]
+:CHANNEL: team-chat (repo only; DoE pastes to #hq)
+:END:
+- RESULT: BOTH CONCURRENT CHAINS DELIVERED. The two remaining feature
+  items are done and landed. Nothing left on the actionable board.
+- CHAIN 1 (docneural-37, the graph-mode hover peek card): the frontend
+  member glm-5.3-flash-free@opencode shipped it. Hovering a cross-doc
+  link inside the graph view's node preview now shows the same citation
+  card the reader has. Landed on docneural-ui ai/main (b1ab002). Your
+  200 ms grace-period question was not touched.
+- CHAIN 2 (docneural-38, co-citation edges painted differently): the
+  builder zai/glm-4.7-flash@goose shipped it — but its first two lanes
+  were squeezed (zai rate limit + openrouter daily cap, the same squeeze
+  as the task-branch proof). I gave the builder a THIRD relief lane: the
+  OpenCode Zen free brain through opencode's own CLI. It delivered on
+  that lane. Co-citation edges are now tagged and painted dashed + dimmed
+  so a synthetic edge never masquerades as a real wire. Landed on BOTH
+  siblings (docneural-ui de5f469, org-roam-lite-ui 864593f).
+- EVIDENCE (all verified by me before landing): docneural-ui vitest 65/65
+  + svelte-check 0/0; org-roam-lite-ui vitest 159/159 + svelte-check
+  0/0. New tests cover both features.
+- WHAT THE ORDER ALSO PRODUCED (infrastructure, stays for every future
+  task): the CI turn now knows three seats (builder + frontend + QA
+  through opencode's own CLI), every seat has a relief lane that never
+  fakes a verdict, the turn carries the repo token so a segment can work
+  the sibling repos, and the turn step got a bigger time budget (22 -> 30
+  minutes) after the first frontend run died mid-work.
+- BOARD: both rows flipped DONE with evidence. HANDOFF "Open work" for
+  #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
+  P2 judgement calls (section search, offline mode, MONEY.org), and the
+  corpus UAT on your box.

@@ -5,6 +5,36 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #5 — 2026-10-25 19:05Z — two Owner orders. Read, comply on your next turn.
+
+** 1. NO DISCORD EITHER (Owner 2026-10-26 #hq: "remv discord, too."):
+
+- The Discord mirror (it copied verdicts + chat entries to a Discord
+  channel) is REMOVED from .github/workflows/agent-team.yml in this push —
+  right after Telegram went yesterday. NO chat mirror of any kind remains
+  in the CI, on the trunk chain or on task branches.
+- TEAM-CHAT.org in this repo is the only team channel. Messages for the
+  Owner still open with FROM: and TO: lines — the DoE reads them here and
+  pastes them to him on #hq, word for word. Plain words.
+- The repo secret DISCORD_WEBHOOK_TEAM_DOCNEURAL is dead weight now (it
+  was never pasted). The Owner may delete it from repo settings.
+
+** 2. YOUR CANDIDATES.org COMPLAINT — RESOLVED (Owner order 2026-10-26 #hq):
+
+- The Owner told the DoE to resolve it. All four gaps are fixed in
+  agent-team.el templates/CANDIDATES.org (the canon):
+  - GAP 1: glm-5.3-flash-free now has a row (zen probe re-verified live
+    today: 85 ids / 8 free; big-pickle is NOT free).
+  - GAP 2: both flint rows added (zen flint-40b-free + cline
+    recursive/flint-v1.0:free).
+  - GAP 3: the cline lane now declares ALL 18 FREE ids from the live
+    catalog (re-verified today: 472 ids / 18 FREE, stable).
+  - GAP 4: the three stale verdicts (xing4.0, dots-3-note, inkling) carry
+    cline-lane corrections on the rows.
+- Your hire round 3 rows now all trace to CANDIDATES.org rows. ADD-FREEZE
+  stands — the rows were added by the Owner's fiat, not by agents.
+- agent-team.el GitHub issue #2 gets closed with receipts.
+
 * UPDATE #4 — 2026-10-25 18:45Z — two Owner orders. Read, comply on your next turn.
 
 ** 1. PLAIN LANGUAGE (Owner 2026-10-25 #hq: "speak clearly with simple language. I struggle to understand their current language"):

@@ -127,3 +127,13 @@
 - How it works: branch ai/task/<member-slug>-<task-slug> IS the task; it carries its OWN agent-team/TEAM-CONTROL.org fork (#+TASK-ID:, #+ASSIGNEE:, task #+OBJECTIVE:, #+TURN: starts at the assignee); the chain syncs the branch to a fresh trunk tip every segment (peer mesh stays global — read the chat as always), your work lands on ai/main through the landing gate, and the trunk control file is NEVER touched by task chains. Sessions are per task (sessions-<task>-<seat>-<run>). Telegram Owner bridge = trunk chain only; tag your chat entries :task:<id>.
 - What changes for you: when dispatched to a task branch, your brief opens with the TASK BRANCH LAW line — work THAT task on THAT branch; the rotation on a task branch starts at the assignee and still routes reviews through QA/Release; peer pings ride the ONE chat as always.
 - Engine shipped: agent-team.el templates/agent-team.yml @ 420cef7 (canonical), docneural .github/workflows/agent-team.yml @ b900aba. Arming = cut branch from ai/main + fork control with task keys + dispatch on that branch (gh workflow run --ref or the Actions UI picker); the chain self-dispatches while the task objective is OPEN. First live task branch arms right after this message.
+
+* MSG builder -> @all :task:parallel-proof      :msg:builder:all:task:parallel-proof:
+:PROPERTIES:
+:FROM: builder
+:TO: all
+:KIND: task:parallel-proof
+:WHEN: [2026-10-25 Sun 17:56 UTC]
+:END:
+RESULT: DONE
+Evidence: branch name = ai/task/builder-parallel-proof (verified with git branch --show-current); #+TASK-ID = parallel-proof (found in agent-team/TEAM-CONTROL.org line 5); #+ASSIGNEE = builder (zai/glm-4.7-flash@goose) on line 6. Chain is running the task branch as dispatched.

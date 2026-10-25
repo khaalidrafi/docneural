@@ -1,38 +1,12 @@
-#+TITLE: TEAM-CONTROL.org — chain control surface (Lead-owned; the CI turn reads this file FIRST)
-# The CI chain reads: #+KILL-SWITCH / #+OBJECTIVE-STATE / #+OBJECTIVE /
-# #+TURN / #+CHAIN-PAUSE. Supplied by z.ai-agent 2026-10-24 so the chain
-# can boot; every line after this supply is the Lead's to own.
+#+TITLE: TEAM-CONTROL.org — TASK BRANCH FORK (ai/task/fe-graph-peek-card)
+# Thin branch per R-2-69: trunk tip + this control. The task sync step
+# re-syncs this branch to fresh trunk every segment; work lands on
+# ai/main via the landing gate. This file IS the task's marching orders.
 
 #+KILL-SWITCH: OFF
 #+OBJECTIVE-STATE: OPEN
-#+OBJECTIVE: the Owner writes the objective line — until then the chain idles (standing orders: agent-team/TEAM-UPDATE.org UPDATE #1 section C)
+#+TASK-ID: docneural-37-graph-peek
+#+ASSIGNEE: glm-5.3-flash-free@opencode (Frontend Engineer)
+#+OBJECTIVE: Ship the graph-mode hover peek card (TODOs.org NEXT #37 remainder): clone the sibling with the token you already have (git clone https://x-access-token:$GH_PAT@github.com/khaalidrafi/docneural-ui.git ./docneural-ui — the path is gitignored), then give src/lib/reader/NotePreview.svelte the same LinkPeek card DocReader.svelte already has (hover a cross-doc link in the node preview -> the card with title + the citation sentence from store.ctxFor; reuse the Peek machinery and LinkPeek.svelte as-is; pointer-events none; do NOT touch the 200 ms grace-period — it is Owner-box); verify green with cd docneural-ui && npm ci --no-audit --no-fund && npx vitest run && npx svelte-check; commit the sibling work on branch ai/task/fe-graph-peek-card and git push it using the same token; append one :report: entry to agent-team/TEAM-CHAT.org on THIS branch describing what changed with file paths.
 #+TURN: glm-4.7-flash@zai (builder)
 #+CHAIN-PAUSE: OFF
-
-# LEAD TASK LEDGER (concurrent-chain terminal state — 2026-10-25): a task
-# id listed here is CLOSED by the Lead; the task branch's own control copy
-# is advisory (its push step can clobber it — trunk wins). Control step
-# reads this and stands the chain down.
-#+TASKS-CLOSED: docneural-37-graph-peek docneural-38-cocite-paint
-
-* Rotation
-- builder = glm-4.7-flash@zai (CI lane; relief: laguna-s-2.1@openrouter :free leg — OWNER-KEYS OPENROUTER_API_KEY; second relief: beam@ollama-cloud — OWNER-KEYS OLLAMA_CLOUD_API_KEY)
-- former relief minimax-m3.1-flash:free@openrouter was BURNED by BURN-LAW
-  (Owner 2026-10-24 17:01Z) and is replaced per R-2-63 §3.3 — no m3.1
-  outside the mcode OAuth carve-out
-- roles and seats: agent-team/MEMBERS.org (board-scoped)
-
-* Marker semantics
-- #+OBJECTIVE-STATE: COMPLETE -> chain stops clean; OPEN + new objective resumes.
-- #+KILL-SWITCH: ON -> everything stops, exit green.
-- #+CHAIN-PAUSE: ON -> clean halt after a delivered TODO; the Lead clears it to resume.
-
-* Task branches (Owner order 2026-10-25 #hq — R-2-69)
-- One branch per task, one member per task: ~ai/task/<member-slug>-<task-slug>~.
-- A task branch carries its OWN control fork (this file's shape) with
-  =#+TASK-ID:=, =#+ASSIGNEE:=, the task =#+OBJECTIVE:=, =#+TURN:= at the assignee.
-- Thin branch: trunk tip + this control; synced to fresh trunk every segment;
-  work lands on ai/main via the landing gate — the trunk control is never
-  touched by task chains.
-- Arm: cut branch from ai/main, fork the control, dispatch with
-  ~gh workflow run agent-team.yml --ref <branch>~ (or the Actions UI picker).

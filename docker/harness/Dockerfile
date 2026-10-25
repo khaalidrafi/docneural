@@ -14,7 +14,7 @@ FROM node:20-slim
 
 RUN apt-get update -qq \
  && apt-get install -y -qq --no-install-recommends \
-      git curl ca-certificates jq procps python3 \
+      git curl ca-certificates jq procps python3 bzip2 \
  && rm -rf /var/lib/apt/lists/*
 
 # --- Project deps (baked; source is mounted at segment start) ----------

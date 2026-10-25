@@ -9,6 +9,12 @@
 #+TURN: glm-4.7-flash@zai (builder)
 #+CHAIN-PAUSE: OFF
 
+# LEAD TASK LEDGER (concurrent-chain terminal state — 2026-10-25): a task
+# id listed here is CLOSED by the Lead; the task branch's own control copy
+# is advisory (its push step can clobber it — trunk wins). Control step
+# reads this and stands the chain down.
+#+TASKS-CLOSED: docneural-37-graph-peek docneural-38-cocite-paint
+
 * Rotation
 - builder = glm-4.7-flash@zai (CI lane; relief: laguna-s-2.1@openrouter :free leg — OWNER-KEYS OPENROUTER_API_KEY; second relief: beam@ollama-cloud — OWNER-KEYS OLLAMA_CLOUD_API_KEY)
 - former relief minimax-m3.1-flash:free@openrouter was BURNED by BURN-LAW

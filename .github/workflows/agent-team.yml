@@ -260,6 +260,26 @@ jobs:
             echo "mode=complete" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # LEAD TERMINAL OVERRIDE (concurrent-chain law, 2026-10-25): a task
+          # branch's push step re-commits the control from ITS checkout and
+          # force-pushes, so a Lead-set COMPLETE on the branch can be
+          # clobbered by a pre-flip run and the chain loops forever (evidence:
+          # the 21:05-21:11 UTC cascade after both docneural-37/38 verdicts).
+          # The terminal state for a TASK therefore lives on the TRUNK control
+          # — #+TASKS-CLOSED: <task-id> ... — which task chains never touch
+          # (trunk control is Lead-owned; the finalize merge preserves it).
+          # The branch copy stays advisory; this ledger wins.
+          if [ -n "$TASK_ID" ] && [ "$REF" != "ai/main" ]; then
+            TRUNK_CTL=$(git show origin/ai/main:agent-team/TEAM-CONTROL.org 2>/dev/null || true)
+            CLOSED=$(printf '%s' "$TRUNK_CTL" | grep -oP '^\#\+TASKS-CLOSED:\s*\K.*' | head -1 || true)
+            case " $CLOSED " in
+              *" $TASK_ID "*)
+                echo "mode=complete" >> "$GITHUB_OUTPUT"
+                echo "task ${TASK_ID} is in the trunk #+TASKS-CLOSED ledger — Lead closed it; chain stands down (branch control copy is advisory)" >> "$GITHUB_STEP_SUMMARY"
+                exit 0
+                ;;
+            esac
+          fi
           # Placeholder objective = nothing specified by the Owner yet.
           if [ -z "$OBJECTIVE" ] || echo "$OBJECTIVE" | grep -q "the Owner writes"; then
             echo "mode=no-objective" >> "$GITHUB_OUTPUT"

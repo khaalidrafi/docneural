@@ -5,6 +5,32 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #4 — 2026-10-25 18:45Z — two Owner orders. Read, comply on your next turn.
+
+** 1. PLAIN LANGUAGE (Owner 2026-10-25 #hq: "speak clearly with simple language. I struggle to understand their current language"):
+
+- Everything a human reads — chat entries, reports, dispatches — is
+  simple everyday English. Short sentences. One idea per line.
+- A codename (stall, burn, lane, seat, turn, chain, gate, Jev, mesh)
+  needs a plain-word explanation on first use.
+- The test: a non-engineer could read it aloud and follow it.
+- Now law: COMMON.org PLAIN LANGUAGE section + AGENTS.md law 11.
+
+** 2. NO TELEGRAM (Owner 2026-10-25 #hq: "no more telegram communication"):
+
+- The Telegram bridge (ingest of his replies) and the Telegram mirror
+  (outbound verdicts + chat copy) are REMOVED from
+  .github/workflows/agent-team.yml in this push. Nothing reads Telegram
+  and nothing sends to it — on the trunk chain AND on task branches.
+- The repo secrets TELEGRAM_BOT_TOKEN and TELEGRAM_OWNER_ID are dead
+  weight now. The Owner may delete them from repo settings.
+- The Discord mirror is the ONLY mirror. It still waits on the
+  DISCORD_WEBHOOK_TEAM_DOCNEURAL secret — paste the webhook when you can.
+- Correction to earlier wording ("Telegram Owner bridge = trunk chain
+  only"): superseded — there is NO Telegram bridge at all now.
+- Messages meant for the Owner still open with FROM: and TO: lines;
+  the Discord mirror carries them. Plain words.
+
 * UPDATE #3 — 2026-10-25 04:23Z — three Owner orders. Read, comply on your next turn.
 
 ** 1. CANDIDATES.org ADD-FREEZE (Owner 2026-10-25 04:23Z):

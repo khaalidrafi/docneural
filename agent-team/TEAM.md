@@ -99,7 +99,8 @@
   in, task control kept), the seat works, and the work lands on ai/main
   through the landing gate — the trunk control file never crosses branches.
 - Sessions are per task: ~sessions-<task-slug>-<seat>-<run>~.
-- Telegram Owner bridge = ai/main chain only; tag chat entries =:task:<id>=.
+- No Telegram anywhere (Owner 2026-10-25): Discord only; tag chat
+  entries =:task:<id>=.
 - Arm a task: cut the branch from ai/main, fork the control file with the
   task keys, dispatch the workflow on that branch (Actions UI branch picker
   or ~gh workflow run agent-team.yml --ref <branch>~). Self-dispatch

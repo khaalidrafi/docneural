@@ -158,9 +158,7 @@ jobs:
             "https://api.z.ai/api/paas/v4/chat/completions" \
             "glm-4.7-flash" "$ZAI_API_KEY"
 
-          probe "openrouter/minimax/minimax-m3.1-flash:free" \
-            "https://openrouter.ai/api/v1/chat/completions" \
-            "minimax/minimax-m3.1-flash:free" "$OPENROUTER_API_KEY"
+          # minimax-m3.1 probe row REMOVED — BURN-LAW (Owner 2026-10-24 17:01Z)
 
           echo "" >> "$SUMMARY"
           echo "Law: a probe row is evidence of the RUNTIME, not of quality —" >> "$SUMMARY"
@@ -726,18 +724,21 @@ jobs:
           case "$SEAT" in
             builder)
               # glm-4.7-flash@zai — the lane PROVEN on admincraft CI runs.
-              # Relief: minimax-m3.1-flash:free via openrouter (promo-proven).
+              # Relief: laguna-s-2.1:free via openrouter (R-2-63 §3.3 —
+              # minimax-m3.1 is BURNED, Owner law 2026-10-24 17:01Z). Base
+              # URL carries NO /v1 — goose appends the version path itself
+              # (404 /v1/v1 evidence: proof run 40218134008).
               if env GOOSE_PROVIDER=openai GOOSE_MODEL=glm-4.7-flash \
                    OPENAI_API_KEY="$ZAI_API_KEY" \
                    OPENAI_HOST="https://api.z.ai" \
                    OPENAI_BASE_PATH="/api/paas/v4/chat/completions" \
                    goose run --no-session -t "$BRIEF"; then
                 echo "TURN_RESULT=goose run OK (lane: glm-4.7-flash@zai)"
-              elif env GOOSE_PROVIDER=openai GOOSE_MODEL=minimax/minimax-m3.1-flash:free \
+              elif env GOOSE_PROVIDER=openai GOOSE_MODEL=poolside/laguna-s-2.1:free \
                    OPENAI_API_KEY="$OPENROUTER_API_KEY" \
-                   OPENAI_HOST="https://openrouter.ai/api/v1" \
+                   OPENAI_HOST="https://openrouter.ai/api" \
                    goose run --no-session -t "$BRIEF"; then
-                echo "TURN_RESULT=goose run OK (relief lane: minimax-m3.1-flash:free@goose)"
+                echo "TURN_RESULT=goose run OK (relief lane: laguna-s-2.1:free@openrouter)"
               else
                 echo "TURN_RESULT=BLOCKED (zai + openrouter lanes failed — check repo secrets)"
               fi
@@ -942,6 +943,19 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}   # R-2-69: the chain ref itself — ai/main trunk or the task branch
+
+      # R-2-69: GITHUB_ENV is JOB-SCOPED — the turn job's CHAIN_REF never
+      # crosses into finalize. Recompute it here (proof run 40218134008:
+      # every task-aware branch in this job silently fell back to ai/main).
+      - name: Resolve chain ref (task-branch law)
+        run: |
+          REF="${{ github.ref_name }}"
+          case "$REF" in
+            ai/main|ai/task/*) : ;;
+            *) REF="ai/main" ;;
+          esac
+          echo "CHAIN_REF=$REF" >> "$GITHUB_ENV"
+          echo "REF_SLUG=$(printf '%s' "$REF" | sed 's#^ai/##; s#/#-#g')" >> "$GITHUB_ENV"
 
       - name: Auto-merge the turn branch (peer mail propagation)
         id: merge

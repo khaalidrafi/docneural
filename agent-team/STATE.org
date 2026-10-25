@@ -7,6 +7,7 @@
 
 * IN-FLIGHT
 - Board P0s verified + flipped DONE (agent-team/TODOS.org) — remaining work: P0 re-land is BLOCKED :OWN: (branches on the Owner's box, ai/agent-team frozen); sibling defect shelf blocked on sibling write scope; corpus UAT (pw-verify editorial gate) stays Owner-box.
+- R-2-69 acknowledged (b900aba + fixes 7ff6d95/3d3e7d9): coding tasks run ai/task/** branches — one branch per task, one member per task; work lands on ai/main via the existing gate.
 
 * READY-FOR-HUMAN-REVIEW
 - Teamify commit (f95fdec) + tsconfig retarget (3f2fe30) + this board-flip commit on ai/main — revert freely if any ruling was meant differently.
@@ -18,10 +19,10 @@
 - Remaining real Owner actions: gateway box off (Owner-side lane; no CI seat depends on it) · DISCORD_WEBHOOK_TEAM_DOCNEURAL not pasted (Discord mirror off; Telegram mirror armed) · XPLabs $1 card verification unblocks a sealed OWNER-KEYS lane (xplabs: clef-flash, qwen3.8-27b, gpt-6-luna).
 
 * TEAM-STAFFING
-- Re-staffed 2026-10-25 from OWNER-KEYS only (R-2-63 §3.2): EM glm-5.3-flash@chat.z.ai (Owner-paced courier) · PE glm-4.7-flash@zai (CI builder body) · FE VACANT (rank chain: laguna-s-2.1@openrouter -> beam@ollama-cloud -> glm-4.5-flash@zai) · QA qwen3.8-27b@groq + machine gate · intern pool 5/5 OWNER-KEYS rows. Details + fallback chains: MEMBERS.org.
+- Notation fixed to PROVIDER/MODEL@AGENT per ID FORMAT LAW v2 (commit a96c1e6, 2026-10-26): EM glm-5.3-flash@chat.z.ai (legal bare form, Owner-paced courier) · PE zai/glm-4.7-flash@goose (baked #+TURN body; goose BENCHED for groq brains — HTTP 400 `developer` role) · FE openrouter/poolside-laguna-s-2.1:free@opencode (HIRED 2026-10-26, Owner order "Hire built-in free models from OpenCode and Cline"; pair pre-wired) · QA groq/qwen3.8-27b@opencode (groq provider block wired into opencode.json 2026-10-26) + machine gate · intern pool 7 (5 OWNER-KEYS + 2 cline FREE: nemotron-3-ultra-550b-a55b, inkling-small — catalog probe 472 ids/18 FREE 2026-10-26). Details + fallback chains: MEMBERS.org.
 
 * HIRING-LOG
-- See MEMBERS.org HR LEDGER (hires carry evidence lines; no new hires this commit).
+- See MEMBERS.org HR LEDGER. Latest: 2026-10-26 FE seated (laguna@opencode) + 2 cline FREE interns (nemotron-3-ultra-550b-a55b, inkling-small) per Owner order.
 
 * AUTONOMY
   AUTO

@@ -3,6 +3,8 @@
 
 * Board
 
+- DONE hire built-in free models from OpenCode and Cline (Owner order 2026-10-25): FE seated openrouter/poolside-laguna-s-2.1:free@opencode (pair pre-wired, batch-4 evidence pack) + 2 cline FREE interns nvidia/nemotron-3-ultra-550b-a55b:free@cline + thinkingmachines/inkling-small:free@cline (probe 2026-10-26: 472 ids/18 FREE; gemma skipped per values filter; no m3.1 on the list) + QA's groq provider block wired into opencode.json (source: Owner Discord; evidence: MEMBERS.org HR LEDGER 2026-10-26 rows + STATE.org TEAM-STAFFING)
+
 - DONE P0 graph.json transport — slim pass + graph.json.br/.gz + the precompressed preview middleware are landed; the P0 census asserts on the BUILT site that the boot graph arrives small (host gzip), desktop + phone (source: TODOs.org §Measured baseline; evidence: BOOT AUDIT PASSED 2026-10-25, fixture build at 3f2fe30's tree)
 - DONE P0 boot requests — census on the BUILT site: 7 boot requests (< 60), every one same-origin, desktop + phone viewports (source: TEAM-UPDATE #2; evidence: node scripts/boot-audit.mjs --project . --port 4174 -> PASS x6)
 - DONE P0 fonts — zero external font URLs in built HTML/CSS/JS and exactly 3 self-hosted woff2 faces in dist/assets, OFL texts shipped in dist/fonts (source: TODOs.org §DONE self-host the fonts; evidence: boot-audit fontScan PASS)

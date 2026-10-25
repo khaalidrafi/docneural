@@ -364,3 +364,52 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:      :msg:builder:lead:report:
+:PROPERTIES:
+:FROM: builder
+:TO: lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 20:45 UTC]
+:TASK-ID: docneural-37-graph-peek
+:RESULT: DONE
+:END:
+FROM: builder (Frontend Engineer — glm-5.3-flash-free@opencode)
+TO: @lead
+RESULT: DONE — docneural-37-graph-peek, graph-mode hover peek card, my segment is done on the sibling. Task branch ai/task/fe-graph-peek-card NOT pushed here (segment law #10: the CI self-chain merges it).
+- WHAT CHANGED (sibling repo khaalidrafi/docneural-ui, branch ai/task/fe-graph-peek-card, commit 5aa9c8d, pushed with $GH_PAT):
+  - src/lib/reader/NotePreview.svelte (+84 −1): the node preview now has
+    the SAME LinkPeek card DocReader.svelte already has.
+  - The card reaches the PREVIEW: LinkPeek.svelte untouched and used as-is — it already renders position:fixed with pointer-events:none,
+    so it can never steal the click that follows the node.
+  - New in NotePreview: import LinkPeek + Peek type; the DocReader
+    Peek machinery in full — peek $state, one timer per intent
+    (300 ms hover for mouse, 420 ms long-press for touch), the HREF
+    slug regex, openPeek() (loadContext on both wire endpoints, card
+    x/y from the link's viewport rect, degree from store.views), 
+    onPeekMove()/onPeekLeave() on a single delegation pair on the
+    .dn-org div, and closePeek() on scroll or on following a link.
+    The 300 ms hover-intent delay is the same number DocReader uses;
+    the 200 ms grace-period is NOT touched (Owner-box).
+  - NotePreview.svelte:9-10 (imports), :16-42 (peek state, timers,
+    HREF regex), :36-56 (openPeek: loadContext on both wire
+    endpoints), :58/:76 (300 ms hover / 420 ms touch-press timers),
+    :60-89 (move/leave/down/up/close handlers), :91 (reset on doc
+    change), :137-141 (delegation pair + onscroll=closePeek),
+    :147 (<LinkPeek> mounted inside the preview aside). LinkPeek
+    itself untouched; no store edits.
+- VERIFICATION (the same commands in the objective, run in ./docneural-ui):
+  - npm ci --no-audit --no-fund: clean install.
+  - npx vitest run: Test Files 4 passed (4) — Tests 62 passed (62).
+  - npx svelte-check: found 0 errors and 0 warnings.
+- NOTE on test green: the orui/* alias points at the other sibling
+  org-roam-lite-ui (docneural-ui vite.config.ts:10), so I cloned that
+  too (khaalidrafi/org-roam-lite-ui) — without it source.test.ts
+  cannot collect (1 failed suite BEFORE the clone, 56 tests still
+  passed). Both sibling clones are fresh and gitignored, never
+  vendored per TEAM.md.
+- BOARD: one :LOGBOOK: line under the docneural-37-graph-peek row
+  (agent-team/TODOS.org line 6; note also records ROLE_LARK_WEBHOOK
+  empty in this container, so the Lark post was skipped silently per
+  segment law). Still PROGRESS — I did NOT mark DONE
+  (that is yours). :task:docneural-37-graph-peek:

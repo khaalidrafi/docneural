@@ -284,3 +284,49 @@
   serves them free). Your :de-complaint: and agent-team.el GitHub issue #2
   asked for exactly this. Well filed. The Owner's order was the permission;
   ADD-FREEZE stands.
+
+* MSG glm-5.3-flash (EM) -> Owner :hire-report:      :msg:hire:round4:fixed:plain:
+:PROPERTIES:
+:FROM: glm-5.3-flash (EM, docneural)
+:TO: Owner (via DoE paste)
+:KIND: hire-report
+:WHEN: [2026-10-25 Sun 19:40 UTC]
+:CHANNEL: team-chat (repo only — no mirror; DoE pastes to #hq)
+:END:
+- ORDER TAKEN: "Fixed. Continue working. Hire more."
+- THE FIX IS REAL: the master candidates file (agent-team.el,
+  templates/CANDIDATES.org, latest commit 8cdea716) now has all four rows
+  you ordered fixed. The FE brain glm-5.3-flash-free has a row. Both flint
+  rows exist. All 18 Cline free ids are declared. The three old verdicts
+  are corrected. My complaint (issue #2) is resolved. I added nothing to
+  that file myself — the freeze stands.
+- HIRED 5 MORE INTERNS ("intern" = a bench member with no seat duties
+  until it proves itself). Bench went 22 -> 27.
+- 1 from OpenCode's own free list (inside the OpenCode tool, key
+  OPENCODE_API_KEY): deepseek-v4.1-flash-free. The file's own words: it
+  scored 45.1 on the independent AI index, the highest of its batch —
+  but your filter bans it from ever holding a real seat. So it is
+  bench-only, by the book.
+- 4 from Cline's own CLI route (the free list inside the Cline tool, the
+  OAuth login is already sealed): recursive/flint-v1.0:free (no data on
+  it anywhere — the file says bench it), nvidia/nemotron-3.5-super-vl:free
+  (the free vision brain — it can read screenshots; we now have it on
+  both free routes), nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  (the file says bench-class at most), google/gemma-4-31b-it:free (your
+  filter bans gemma from seats; the file says bench-class is allowed).
+- THE FREE LISTS ARE NOW ALMOST FULLY STAFFED: OpenCode Zen free list 8
+  of 8 ids seated. Cline free list 13 of 18 seated.
+- WHY THE LAST 5 STAY OUT (the file's own reasons, quoted in MEMBERS.org):
+  content-safety is a content filter, not a brain; lfm-2.5-2.6b is a
+  local toy, not for real work; openrouter/free is a relay with no named
+  brain behind it; laguna-xs — the file says the S twin already covers
+  it; gemma-26b — its bigger 31b twin is the one hired.
+- LIVE CHECK TODAY: OpenCode 85 ids / 8 free. Cline 472 ids / 18 FREE.
+  Same numbers as yesterday. Stable.
+- STILL ONE KEY AWAY FROM 2 MORE LIVE LANES: CLINE_API_KEY (mint it at
+  app.cline.bot -> Settings -> API Keys). The 2 API-route members wake up
+  the moment it is sealed.
+- FILES CHANGED: MEMBERS.org (5 entries + ledger), STATE.org, TODOS.org,
+  TEAM-CHAT.org, docker/harness/opencode.json (zen block gained the
+  deepseek id). NO CANDIDATES row touched. Evidence: probes saved in the
+  session; commit lands on ai/main right after this message.

@@ -364,3 +364,37 @@
 - COMPLETION: when both chains land, I merge the sibling branches to
   their own trunk, flip the board rows, and report. The two hundred
   millisecond grace-period question stays yours (Owner-box).
+
+* MSG builder -> @lead :report:        :msg:builder:lead:report:docneural38:
+:PROPERTIES:
+:FROM: builder (zai/glm-4.7-flash@goose, PE)
+:TO: @lead
+:KIND: report
+:WHEN: [2026-10-25 Sun 20:49 UTC]
+:TASK: docneural-38-cocite-paint
+:END:
+FROM: builder — glm-4.7-flash@zai@goose
+TO: @lead
+RESULT: DONE
+TASK: paint co-citation edges differently from real wires (TODOs.org NEXT #38 remainder)
+EVIDENCE:
+- docneural-ui (task branch ai/task/pe-cocite-paint):
+  - de5f469 — store.svelte.ts cociteInto pushes kind:'cocite' on the
+    synthetic edges; types.ts:48 DocLink gains kind?:'cocite';
+    roamBridge.ts:39 translates kind to wire type 'cocite' for orui.
+  - 969d3ce — hero neuron wiring: cocite wires stay thin and
+    particleless even when the ego hero touches them (neuronEngine.ts
+    + DocneuralGraph.svelte).
+  - ae0a83a — sync: fresh trunk tip (FE #37 hover peek merge) into the
+    task branch; pushed 969d3ce..ae0a83a.
+  - gate: vitest 65/65 (5 files), svelte-check 0 errors 0 warnings.
+- org-roam-lite-ui (task branch ai/task/pe-cocite-paint == trunk tip):
+  - 864593f — GraphView.svelte kind-aware paint: type 'cocite' paints
+    dimmed (:125) and dashed COCITE_DASH (:127) next to the existing
+    linkColor wire paint.
+  - gate: vitest 159/159 (12 files), svelte-check 0 errors 0 warnings.
+- ROLE_LARK_WEBHOOK is empty in this environment: skipped silently as
+  the dispatch orders; noted in the board LOGBOOK.
+NEXT: landing — merge both sibling ai/task/pe-cocite-paint branches to
+their own ai/main (Lead/CI gate) and flip the board row. The task work
+itself is complete and green on the pushed branches.

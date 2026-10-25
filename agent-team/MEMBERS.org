@@ -52,24 +52,34 @@
      OLLAMA_CLOUD_API_KEY sealed) ->
      openrouter/nemotron-3.5-lightning:free@unwired (QA-grade)
 
-** Frontend Engineer — openrouter/poolside-laguna-s-2.1:free@opencode (OWNER-KEYS OPENROUTER_API_KEY; pair PRE-WIRED in opencode.json)
+** Frontend Engineer — glm-5.3-flash-free@opencode (OpenCode Zen built-in FREE; OWNER-KEYS OPENCODE_API_KEY; pair PRE-WIRED in opencode.json zen block)
    - :last-dispatch: never — HIRED 2026-10-26 by Owner order "Hire built-in
-     free models from OpenCode and Cline"; consult list + per-seat
-     reasoning (model AND agent legs) posted 2026-10-25/26, CONSULT LAW
-     satisfied
+     free models from OpenCode and Cline"; RE-POINTED same day (Owner
+     correction: the model must be PROVIDED BY opencode itself, not
+     openrouter or likes — the first hire openrouter/poolside-laguna-s-2.1:free
+     was an OpenRouter-relayed brain, wrong form; zen free tier is
+     opencode's own gateway inside its CLI)
    - board scope: frontend segments from the next task-branch chain
      onward (R-2-69: one branch per task, one member per task); PE
      resumes builder-only scope
-   - why hired: batch-4 BEST accountable candidate — vendor TB2.1 70.2 ·
-     SWE-bench Multilingual 78.5 · SWE-bench Pro 59.4 · DeepSWE 40.4
-     (poolside.ai 2026-07-21), OpenMDW-1.1 day-one open weights, 1M-ctx
-     model on the 256K :free endpoint; the exact pair is baked into
-     opencode.json (zero-wire activation); also served on the cline FREE
-     list (probe 2026-10-26) — lane redundancy in reserve
-   - fallback chain (rank order unchanged): ollama-cloud/beam@unwired
-     (vendor 80.9/80.1 vendor-ONLY; Vals independent 43.42; Ollama
-     hosting "limited time" — lane risk recorded) ->
-     zai/glm-4.5-flash@unwired (no data -> intern-grade until measured)
+   - why hired: strongest benchmark row among zen FREE ids —
+     glm-5.3-flash posts AA 57/42 · Terminal-Bench 84.3 · DeepSWE 63.4
+     (benchlm/vendor pages, the SAME model the EM seat cites); zen is
+     the opencode team's own curated gateway, "tested and benchmarked
+     for coding agents"; probe 2026-10-26: opencode.ai/zen/v1/models =
+     85 ids, 9 free (big-pickle · beam-free · flint-40b-free ·
+     mimo-v2.6-flash-free · nemotron-3.5-super-vl-free ·
+     nemotron-3.5-lightning-free · jev-1.13-free ·
+     deepseek-v4.1-flash-free · glm-5.3-flash-free); free tier read from
+     id suffix (public endpoint returns no pricing fields) — verify at
+     first dispatch; ONE BRAIN TWO BODIES = TWO MEMBERS (EM is
+     glm-5.3-flash@chat.z.ai — same brain, different body, per BRAINS
+     AND BODIES)
+   - fallback chain (rank order): beam-free@opencode (independent Vals
+     43.42 on the family; vendor 80.9/80.1 vendor-ONLY) ->
+     ollama-cloud/beam@unwired (Ollama hosting "limited time" — lane
+     risk) -> zai/glm-4.5-flash@unwired (no data -> intern-grade until
+     measured)
 
 ** QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY) + machine gate
    - body note (2026-10-26 notation fix): goose is BENCHED for this
@@ -118,7 +128,7 @@
 - performance-engineer — glm-4.7-flash@zai: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (ZAI_API_KEY; PROVEN ALIVE turn body; batch 1 evidence row)
 - qa-engineer — qwen3.8-27b@groq: hired 2026-10-25, R-2-63 re-staff from OWNER-KEYS (GROQ_API_KEY; PROVEN ALIVE + published caps)
 - intern-5 — deepseek-v4.1-flash@nvidia-nim: seated 2026-10-25 (R-2-63) — CORRECTED 2026-10-26: nvidia-nim/deepseek-official keys never issued (UPDATE #3 key-on-file law, R-2-65); slot re-pointed to deepseek-v4.1-flash@tokenharbor (OWNER-KEYS; PROMO/emergency-only caveat on the lane)
-- frontend-engineer — openrouter/poolside-laguna-s-2.1:free@opencode: hired 2026-10-26 (Owner order "Hire built-in free models from OpenCode and Cline"; batch-4 evidence pack; pair pre-wired in opencode.json; consult + both-legs reasoning posted 2026-10-25/26)
+- frontend-engineer — openrouter/poolside-laguna-s-2.1:free@opencode: hired 2026-10-26 (Owner order "Hire built-in free models from OpenCode and Cline"; batch-4 evidence pack; pair pre-wired in opencode.json; consult + both-legs reasoning posted 2026-10-25/26) — CORRECTED 2026-10-26: OpenRouter is NOT "provided by opencode" (Owner: "the model MUST be provided by opencode / cline, inside their CLI, not openrouter or likes"); re-pointed to glm-5.3-flash-free@opencode (OpenCode Zen built-in free, OPENCODE_API_KEY lane, zen probe 85 ids/9 free)
 - intern-6/7 — nvidia/nemotron-3-ultra-550b-a55b:free@cline + thinkingmachines/inkling-small:free@cline: hired 2026-10-26 (same Owner order; cline catalog probe 472 ids / 18 FREE, api.cline.bot/api/v1/models; CLINE_AUTH_JSON OAuth = key-on-file; gemma ids SKIPPED per values filter; no m3.1 on the FREE list — BURN-LAW clean)
 
 * HR REVIEW (KEEP/WATCH/PROBE/RELEASE at every pause window)

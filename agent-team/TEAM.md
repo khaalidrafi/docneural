@@ -46,11 +46,13 @@
     ZAI_API_KEY; goose = the #+TURN builder body, GOOSE_MODEL baked):
     builder segments on task-branch chains (R-2-69). Weakness on record
     (TB 14.4).
-  - Frontend Engineer — openrouter/poolside-laguna-s-2.1:free@opencode
-    (OWNER-KEYS OPENROUTER_API_KEY; pair pre-wired; HIRED 2026-10-26 by
-    Owner order "Hire built-in free models from OpenCode and Cline"):
-    frontend segments on task-branch chains (R-2-69); PE resumes
-    builder-only scope.
+  - Frontend Engineer — glm-5.3-flash-free@opencode (OpenCode Zen
+    built-in FREE; OWNER-KEYS OPENCODE_API_KEY; pair pre-wired in the
+    opencode.json zen block; HIRED 2026-10-26 by Owner order "Hire
+    built-in free models from OpenCode and Cline", RE-POINTED same day
+    off the openrouter-relayed laguna — Owner: the model must be
+    PROVIDED BY opencode itself): frontend segments on task-branch
+    chains (R-2-69); PE resumes builder-only scope.
   - QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY;
     goose benched for this brain — HTTP 400 `developer` role,
     goose-config.yaml; groq provider block wired into opencode.json

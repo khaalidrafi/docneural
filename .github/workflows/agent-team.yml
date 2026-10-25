@@ -1276,6 +1276,19 @@ jobs:
           # the Owner reviews the delivery first (step above armed it).
           PAUSE=$(grep -oP '^\#\+CHAIN-PAUSE:\s*\K\w+' "$CTL" | head -1 || true)
           if [ "${PAUSE:-OFF}" = "ON" ]; then DECISION="paused-todo-review"; fi
+          # LEAD TERMINAL OVERRIDE (same law as the turn's control read):
+          # the branch control copy is advisory — a pre-flip run's push step
+          # can clobber a Lead-set COMPLETE there. The trunk #+TASKS-CLOSED
+          # ledger is the terminal authority for a task; task chains never
+          # write the trunk control.
+          if [ "${CHAIN_REF:-ai/main}" != "ai/main" ]; then
+            TASK_ID=$(grep -oP '^\#\+TASK-ID:\s*\K.*' "$CTL" | head -1 | xargs || true)
+            TRUNK_CTL=$(git show origin/ai/main:agent-team/TEAM-CONTROL.org 2>/dev/null || true)
+            CLOSED=$(printf '%s' "$TRUNK_CTL" | grep -oP '^\#\+TASKS-CLOSED:\s*\K.*' | head -1 || true)
+            case " $CLOSED " in
+              *" $TASK_ID "*) DECISION="task-closed-by-lead" ;;
+            esac
+          fi
           # EMPTY-SEGMENT law (2c): zero post-turn commits is visible in
           # the accounting, never silently counted as work.
           COMMITS="${{ needs.turn.outputs.commits }}"

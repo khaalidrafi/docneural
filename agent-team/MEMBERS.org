@@ -26,7 +26,7 @@
      TB 81.0 · MIT, free tier) -> kimi-k2.6@kimi.ai courier (vendor
      SWE-bench Verified 80.2 · TB 66.7 · LCB 89.6, Modified MIT)
 
-** Performance Engineer — glm-4.7-flash@zai (OWNER-KEYS ZAI_API_KEY; CI harness body)
+** Performance Engineer — zai/glm-4.7-flash@goose (OWNER-KEYS ZAI_API_KEY; goose = the baked #+TURN body, GOOSE_MODEL=glm-4.7-flash in the harness image)
    - :last-dispatch: 2026-10-25 (R-2-63 re-staff commit)
    - board scope: P0 re-land + sibling defect shelf follow-through behind
      the gate; covers the FE scope until FE is staffed (declared shared
@@ -40,30 +40,39 @@
      · AIME-25 91.6, 200K ctx; the page marks it superseded by
      glm-5.3-flash — the seat holds because the zai key lane serves
      glm-4.7-flash (the PROVEN turn body), not the 5.3 generation
-   - fallback chain: laguna-s-2.1@openrouter :free leg (batch 4 BEST
+   - fallback chain: openrouter/poolside-laguna-s-2.1:free@opencode —
+     PRE-WIRED in opencode.json, batch 4 BEST
      accountable candidate: vendor TB2.1 70.2 · SWE-bench Multilingual
      78.5 · SWE-bench Pro 59.4 · DeepSWE 40.4, OpenMDW-1.1 day-one
      weights, 1M-token model on a 256K free endpoint;
-     OPENROUTER_API_KEY sealed) -> beam@ollama-cloud (vendor SWE-bench
+     OPENROUTER_API_KEY sealed) -> ollama-cloud/beam@unwired (vendor SWE-bench
      Verified 80.9 · TB2.1 80.1 — vendor-only, NO independent run;
      Vals Index 43.42 independent 2026-10-19; Ollama free hosting is
      "limited time" per zavino 2026-10-17 — lane risk recorded;
      OLLAMA_CLOUD_API_KEY sealed) ->
-     nemotron-3.5-lightning@openrouter :free leg (QA-grade)
+     openrouter/nemotron-3.5-lightning:free@unwired (QA-grade)
 
 ** Frontend Engineer — VACANT (rank chain on file)
    - :last-dispatch: never
    - board scope: P1 defect shelf + peek-card remainder (PE covers until
      a second wired coding body with real evidence exists)
    - hiring chain, in rank order, ALL OWNER-KEYS-reachable:
-     1. laguna-s-2.1@openrouter (evidence above; open weights + free + data)
-     2. beam@ollama-cloud (evidence above)
-     3. glm-4.5-flash@zai (no benchmark data -> intern-grade until
+     1. openrouter/poolside-laguna-s-2.1:free@opencode (evidence above;
+        open weights + free + data; pair PRE-WIRED in opencode.json)
+     2. ollama-cloud/beam@unwired (evidence above; body chosen at
+        activation)
+     3. zai/glm-4.5-flash@unwired (no benchmark data -> intern-grade until
         measured; OWNER-KEYS lane)
    - law: no hire without the full NAMED -> RESEARCHED -> REACHABLE ->
      PERMITTED -> RANKED pass and a chat post BEFORE activation
 
-** QA Engineer — qwen3.8-27b@groq (OWNER-KEYS GROQ_API_KEY) + machine gate
+** QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY) + machine gate
+   - body note (2026-10-26 notation fix): goose is BENCHED for this
+     brain — Groq's chat template rejects the `developer` role Goose
+     sends (HTTP 400 "Unexpected message role", goose-config.yaml);
+     opencode is the second baked body — wiring = one groq
+     custom-provider block in opencode.json (config commit, not a
+     CANDIDATES row; ADD-FREEZE untouched)
    - :last-dispatch: 2026-10-25 (R-2-63 re-staff commit)
    - board scope: adversarial review of landed diffs, verdict lines with
      exact commands + counts; vitest + svelte-check are the gate itself
@@ -80,19 +89,19 @@
      27.78B dense, 262K native ctx. Caveats on record: launch scores are
      the vendor's own, no independent repro at launch (kingy.ai,
      2026-08-14/22); very verbose (200M output tokens in the AA eval)
-   - fallback chain: nemotron-3.5-lightning@openrouter :free leg (batch 4
+   - fallback chain: openrouter/nemotron-3.5-lightning:free@unwired (batch 4
      QA-grade; $0 with the 65,536 max-token output cap quoted) ->
-     north-mini-code@openrouter :free leg (batch 4 "QA only"; AA coding
+     openrouter/north-mini-code:free@unwired (batch 4 "QA only"; AA coding
      33.4; exact cap wording not retrievable — say so, don't invent) ->
-     machine gate + jev-1.13.0@typesafe finalize judgment (decision
+     machine gate + typesafe/jev-1.13.0@unwired finalize judgment (decision
      layer, TYPESAFE_API_KEY sealed)
 
 * INTERN POOL (no-data bodies are interned, not rejected — five per round; ALL OWNER-KEYS)
-- ling-3.0-flash@antling — lane burn-verified live 2026-10-24; no benchmark data yet
-- ring-2.6-1t@antling — same lane; no benchmark data yet
-- nemotron-3.5-super-vl@gmi — OWNER-KEYS GMI_API_KEY; no benchmark row
+- antling/ling-3.0-flash@unwired — lane burn-verified live 2026-10-24; no benchmark data yet
+- antling/ring-2.6-1t@unwired — same lane; no benchmark data yet
+- gmi/nemotron-3.5-super-vl@unwired — OWNER-KEYS GMI_API_KEY; no benchmark row
 - qwen3.8-flash@qoder — batch 3: no independent benchmark found (empty search rounds recorded); intern-grade on platform-work record
-- deepseek-v4.1-flash@tokenharbor — OWNER-KEYS TOKENHARBOR_API_KEY; ds-flash EXCLUDED from accountable seats -> intern/API-probe only (batch 4: AA 45.1; Vals Index 61.26 independent 2026-10-19); PROMO :free lane, undated — can vanish, emergency-only. RE-POINTED 2026-10-26 from deepseek-v4.1-flash@nvidia-nim: the nvidia-nim/deepseek-official keys were never issued (UPDATE #3 key-on-file law)
+- tokenharbor/deepseek-v4.1-flash@unwired — OWNER-KEYS TOKENHARBOR_API_KEY; ds-flash EXCLUDED from accountable seats -> intern/API-probe only (batch 4: AA 45.1; Vals Index 61.26 independent 2026-10-19); PROMO :free lane, undated — can vanish, emergency-only. RE-POINTED 2026-10-26 from deepseek-v4.1-flash@nvidia-nim: the nvidia-nim/deepseek-official keys were never issued (UPDATE #3 key-on-file law)
 
 * HR LEDGER (one line per hire, with evidence; history kept, corrections appended)
 - performance-engineer — x-preview-l@zai-agent-shell: hired 2026-10-24, delivery record 1299c00 + b79c11e first-try gate green — CORRECTED 2026-10-25: platform FABRICATED (not a CANDIDATES.org row, not an Owner account); seat re-staffed glm-4.7-flash@zai

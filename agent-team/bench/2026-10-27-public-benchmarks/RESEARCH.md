@@ -101,6 +101,72 @@ Claude Sonnet 5.5 1769 · Kimi K3.1 Pro 1692.
    standing benches (designer-bakeoff eyes + design-forge hands) rerun the
    same day.
 
+## FULL-FIELD SWEEP — Owner challenge 2026-10-27 ("I can't blv that among ALL
+## the candidates in CANDIDATES.org of agent-team.el, only 5 are good at
+## designing web")
+
+Correct — the first pass covered only the VISION-seat field. Swept the whole
+canon (every lane: OWNER-KEYS API secrets, Web couriers, Cloud shells,
+WorkBuddy.ai/CodeBuddy pool, opencode zen + cline free rosters, ollama,
+groq, cloudflare). Result: the canon holds **~13 ids with public
+design/front-end rows**, and EIGHT of them sit ABOVE the crowned
+glm-5v-turbo on design boards — most in the WorkBuddy.ai / CodeBuddy pool.
+
+### Wired ids WITH public design/front-end rows (Design Arena Website unless noted)
+
+| model (canon lane) | public score | source |
+|---|---|---|
+| kimi-k3 (WorkBuddy/CodeBuddy pool) | **1335** — #2 designer on the whole public board | modelgrep.com/best/design |
+| deepseek-v4.1-flash (tokenharbor/zen-free/WorkBuddy pool) | **1308** — #14 (Owner: FREE this month — excluded from paid burn, not from benches) | modelgrep.com/best/design |
+| gemini-3.x-flash class (gemini lane 3.1→3.8; 3.8 also on WorkBuddy/CodeBuddy) | **~1303** (3.7 Flash measured) | modelgrep.com/best/design |
+| glm-5.2 (chat.z.ai, WorkBuddy/CodeBuddy) | **1285** — best z.ai-family designer | modelgrep.com/best/design/z-ai |
+| kimi-k2.6 (kimi.ai courier + pool) | **1268**, 54.2% win, top 20% | openrouter.ai/moonshotai/kimi-k2.6 |
+| glm-5 turbo (opencode zen roster) | **1262** | modelgrep.com/best/design/z-ai |
+| grok-4.7 (WorkBuddy/CodeBuddy) | **1253**, 46.1% win, top 27%, AAII 46.4 | openrouter.ai/x-ai/grok-4.7 |
+| glm-5 (opencode zen roster) | **1248** | modelgrep.com/best/design/z-ai |
+| **glm-5v-turbo (crowned craft)** | **1229**, 48.8% win, top 34% | openrouter.ai/z-ai/glm-5v-turbo |
+| glm-4.7-flash (zai secret lane) | **1194**, 54.0% win, top 45% | openrouter.ai/z-ai/glm-4.7-flash |
+| nemotron-3.5-super-vl (gmi/openrouter/cline) | **1169** | openrouter.ai/nvidia/nemotron-3.5-super-vl |
+| gemini-2.5-flash (gemini lane) | **1113**, 47.1% | openrouter.ai/google/gemini-2.5-flash |
+| gpt-oss-120b (groq/ollama-cloud) | **968** | openrouter.ai/openai/gpt-oss-120b |
+
+WebDev Arena cross-refs (Oct 22 2026): glm-5.3 1623 #23 · glm-5.3-flash 1608
+#30 (FE seat) · qwen3.8-max 1673 #12 (no Design Arena row; AAII 45.4,
+Coding Index 76.2) · gpt-6-sol 1681 #10 (no Design Arena row for the exact
+id) · glm-4.7 1435 #86 · glm-4.6 1341 #123.
+
+### Wired ids with NO public design row (checked, honestly empty)
+
+Ling family (3.0/3.1-flash, 3.0-flash-VL, 3.0-tiny, 2.6-flash/1T,
+Ring-2.6-1T — public record is general/coding only) · nemotron-3-ultra-550b
+/ 3-super-120b / 3.5-lightning / nano-omni · inkling + inkling-small ·
+poolside laguna-s-2.1/xs · flint-40b / flint-v1.0 · dots-3-note ·
+xing4.0-29b · north-mini-code · lfm-2.5-2.6b · jev-1.13 · mimo-v2.6 · beam ·
+gemma-4-31b · longcat-2.5 · big-pickle · step-3.5-flash / step-5-preview ·
+kimi-k2.8-preview · gpt-5.6-terra/luna · gpt-5.5/5.4 · glm-4.5-flash /
+4.6v-flash / 5.1 · allam-2-7b · minimax-m2 (no OpenRouter page) ·
+gpt-image-2 (bai lane — image GEN, not web design) · clef-flash (xplabs,
+card-blocked) · qwen3.8-omni-flash / 3.7-max / 3.7-plus · glm-5.3 /
+5.3-flash (text WebDev 1608-1623, no Design Arena Website row).
+
+### Verdict after the full sweep
+
+The Owner is right: **eight canon ids publicly out-design the crowned
+vision model** — kimi-k3 1335, ds-v4.1-flash 1308, gemini-3.x 1303,
+glm-5.2 1285, kimi-k2.6 1268, glm-5-turbo 1262, grok-4.7 1253, glm-5 1248.
+The structural catches, stated plainly:
+1. ALL eight are TEXT-only or chat-shaped lanes — none can take a
+   screenshot critique (the craft seat's consult loop), which is why the
+   vision field was only 3+1.
+2. Most sit in the **WorkBuddy.ai / CodeBuddy paid pool** — which the
+   Owner ordered burned on quality work the same day (75 credits,
+   expiring). forge round 2 (codebuddy): kimi-k3 + gemini-3.8-flash +
+   grok-4.7, same brief, same harness, deepseek-v4.1-flash hard-excluded
+   per fiat (free this month).
+3. Free-lane exceptions that now deserve a forge shot: glm-5.2 + glm-5 +
+   glm-5-turbo (chat.z.ai shell / zen roster) and qwen3.8-max (courier) —
+   queued for the next unpaid forge round.
+
 ## Seat verdict after cross-check (Owner delegated the call; public data now on the record)
 
 - DESIGN CRAFT: glm-5v-turbo@zai — HOLDS, re-scoped honestly: best wired

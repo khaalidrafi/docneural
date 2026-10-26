@@ -77,4 +77,5 @@ jobs:
           path: |
             forge-out/
             forge-codebuddy-gen-report.json
+            scripts/forge-staging/
           retention-days: 7

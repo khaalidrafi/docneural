@@ -48,13 +48,39 @@ if (models.length === 0) {
 const brief = fs.readFileSync('scripts/forge-brief.md', 'utf8');
 const prompt = `${brief}
 
-DELIVERABLE (strict): create ONE complete single-file HTML page (all CSS and JS inline, no external assets, no external fonts, no external images) implementing the brief EXACTLY, and SAVE it as index.html in the current working directory. Do not ask questions. Do not explain. Write the file and stop.`;
+DELIVERABLE (strict): create ONE complete single-file HTML page (all CSS and JS inline, no external assets, no external fonts, no external images) implementing the brief EXACTLY, and SAVE it as index.html in the current working directory. Do not ask questions. Do not explain. Write the file and stop.
 
-const version = (() => {
-  try { return execCapture(['--version'], 60000).out.trim(); }
-  catch (e) { return `version probe failed: ${e}`; }
+FINAL CHECK (mandatory, before you finish): the file ./index.html — exactly this name, in the CURRENT directory — must contain the complete page. If you wrote the page anywhere else, or under another name, or only partially, copy/complete it to ./index.html now. Ending without ./index.html means the task FAILED.`;
+
+const version = await (async () => {
+  const r = await execCapture(['--version'], 60000, process.cwd(), {}, '/tmp/cb-version');
+  return r.out.trim() || `probe: exit=${r.code} err=${r.err.slice(0, 80)}`;
 })();
 console.log(`codebuddy CLI: ${version}`);
+
+// ENDPOINT CONNECTIVITY PROBE (zero cost, zero credits) — run 40381847436
+// died with "502 ... connect ETIMEDOUT 0.0.0.1:443 (target:
+// https://www.codebuddy.ai)": GitHub runners may be unable to reach the
+// INTERNATIONAL endpoint at all (DNS blackhole). Probe every documented
+// site BEFORE burning wall-clock on retries. The pool models (kimi/glm/
+// deepseek/hy) suggest the account may live on the CHINESE site
+// (copilot.tencent.com, CODEBUDDY_INTERNET_ENVIRONMENT=internal).
+const ENDPOINTS = [
+  'https://www.codebuddy.ai',
+  'https://codebuddy.ai',
+  'https://api.codebuddy.ai',
+  'https://copilot.tencent.com',
+  'https://www.codebuddy.cn',
+];
+for (const ep of ENDPOINTS) {
+  const t0 = Date.now();
+  try {
+    const res = await fetch(ep, { signal: AbortSignal.timeout(8000), redirect: 'manual' });
+    console.log(`probe ${ep}: HTTP ${res.status} (${Date.now() - t0}ms)`);
+  } catch (e) {
+    console.log(`probe ${ep}: UNREACHABLE (${String(e.cause?.code || e.name).slice(0, 40)}, ${Date.now() - t0}ms)`);
+  }
+}
 
 function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
   return new Promise((resolve) => {
@@ -93,8 +119,19 @@ const safeRead = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch { ret
 // a near-duplicate page. Auth failures burn nothing (proven 40377347452:
 // auth fails before any model call) and are classified 0-burn in the ledger.
 const TOKEN = process.env.CODEBUDDY_AUTH_TOKEN || process.env.CODEBUDDY_API_KEY || '';
+// SPEND-LAW-COMPLIANT single attempt, aimed at the REACHABLE endpoint:
+// run 40381847436 proved the INTERNATIONAL site (www.codebuddy.ai) is
+// UNREACHABLE from GitHub runners — "502 网络请求超时 (connect ETIMEDOUT
+// 0.0.0.1:443, target https://www.codebuddy.ai)" after 18.6 min of the
+// CLI's own retry loop with zero API progress. The pool models (kimi/glm/
+// deepseek/hy) are domestic-flavored: the account most likely lives on the
+// CHINESE site (copilot.tencent.com) = CODEBUDDY_INTERNET_ENVIRONMENT=internal.
+// Auth failures burn ZERO credits (proven run 40377347452); a connect
+// timeout also burns zero (fails before any model call) — but it wastes
+// the dispatch window, so the one allowed attempt goes to the reachable
+// endpoint first. The zero-cost endpoint probe above logs the evidence.
 const ENV_MATRIX = [
-  { label: 'api-key-slot', extra: { CODEBUDDY_API_KEY: TOKEN } },
+  { label: 'api-key+internal-china', extra: { CODEBUDDY_API_KEY: TOKEN, CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
 ];
 const ATTEMPT_BUDGET_MS = 25 * 60 * 1000; // kimi-k3 was still generating at 8 min
 const MAX_PAID_GENERATIONS = models.length; // spend cap: one real generation per model, hard

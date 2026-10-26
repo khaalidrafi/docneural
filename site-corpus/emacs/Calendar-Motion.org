@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID: emacs--Calendar-Motion
+:END:
+#+filetags: :emacs:
+#+title: Calendar Motion
+
+Next: [[id:emacs--Scroll-Calendar][Scrolling in the Calendar]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
+
+<<Calendar-Motion>>
+*** 33.1 Movement in the Calendar [[#Movement-in-the-Calendar][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Movement-in-the-Calendar
+:CLASS: section
+:END:
+Calendar mode provides commands to move through the calendar in logical units of time such as days, weeks, months, and years. If you move outside the three months originally displayed, the calendar display scrolls automatically through time to make the selected date visible. Moving to a date lets you view its holidays or diary entries, or convert it to other calendars; moving by long time periods is also useful simply to scroll the calendar.
+
+--------------
+
+<<Calendar-Unit-Motion>>
+**** 33.1.1 Motion by Standard Lengths of Time [[#Motion-by-Standard-Lengths-of-Time][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Motion-by-Standard-Lengths-of-Time
+:CLASS: subsection
+:END:
+The commands for movement in the calendar buffer parallel the commands for movement in text. You can move forward and backward by days, weeks, months, and years.
+
+- C-f :: Move point one day forward (=calendar-forward-day=).
+
+- C-b :: Move point one day backward (=calendar-backward-day=).
+
+- C-n :: Move point one week forward (=calendar-forward-week=).
+
+- C-p :: Move point one week backward (=calendar-backward-week=).
+
+- M-} :: Move point one month forward (=calendar-forward-month=).
+
+- M-{ :: Move point one month backward (=calendar-backward-month=).
+
+- C-x ] :: Move point one year forward (=calendar-forward-year=).
+
+- C-x [ :: Move point one year backward (=calendar-backward-year=).
+
+The day and week commands are natural analogues of the usual Emacs commands for moving by characters and by lines. Just as C-n usually moves to the same column in the following line, in Calendar mode it is bound to =calendar-forward-week=, which moves to the same day in the following week. And C-p (=calendar-backward-week=) moves to the same day in the previous week. C-f (=calendar-forward-day=) and C-b (=calendar-backward-day=) move forward and back by days.
+
+The arrow keys are equivalent to C-f, C-b, C-n and C-p, just as they normally are in other modes.
+
+The commands for motion by months and years work like those for weeks, but move a larger distance. The month commands M-} (=calendar-forward-month=) and M-{ (=calendar-backward-month=) move forward or backward by an entire month. The year commands C-x ] (=calendar-forward-year=) and C-x [ (=calendar-backward-year=) move forward or backward a whole year.
+
+The easiest way to remember these commands is to consider months and years analogous to paragraphs and pages of text, respectively. But the calendar movement commands themselves do not quite parallel those for movement through text: the ordinary Emacs paragraph commands move to the beginning or end of a paragraph, whereas these month and year commands move by an entire month or an entire year, keeping the same date within the month or year.
+
+All these commands accept a numeric argument as a repeat count. For convenience, the digit keys and the minus sign specify numeric arguments in Calendar mode even without the Meta modifier. For example, 100 C-f moves point 100 days forward from its present location.
+
+--------------
+
+<<Move-to-Beginning-or-End>>
+**** 33.1.2 Beginning or End of Week, Month or Year [[#Beginning-or-End-of-Week_002c-Month-or-Year][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Beginning-or-End-of-Week_002c-Month-or-Year
+:CLASS: subsection
+:END:
+A week (or month, or year) is not just a quantity of days; we think of weeks (months, years) as starting on particular dates. So Calendar mode provides commands to move to the start or end of a week, month or year:
+
+-  <<index-C_002da-_0028Calendar-mode_0029>>C-a [[#index-C_002da-_0028Calendar-mode_0029][¶]] :: Move point to start of week (=calendar-beginning-of-week=).
+
+- C-e :: Move point to end of week (=calendar-end-of-week=).
+
+- M-a :: Move point to start of month (=calendar-beginning-of-month=).
+
+- M-e :: Move point to end of month (=calendar-end-of-month=).
+
+- M-< :: Move point to start of year (=calendar-beginning-of-year=).
+
+- M-> :: Move point to end of year (=calendar-end-of-year=).
+
+These commands also take numeric arguments as repeat counts, with the repeat count indicating how many weeks, months, or years to move backward or forward.
+
+By default, weeks begin on Sunday. To make them begin on Monday instead, set the variable =calendar-week-start-day= to 1. To change which day headers are highlighted as weekend days, set the variable =calendar-weekend-days=.
+
+--------------
+
+<<Specified-Dates>>
+**** 33.1.3 Specified Dates [[#Specified-Dates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Specified-Dates-1
+:CLASS: subsection
+:END:
+Calendar mode provides commands for moving to a particular date specified in various ways.
+
+- g d :: Move point to specified date (=calendar-goto-date=).
+
+- g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
+
+- g w :: Move point to specified week of year (=calendar-iso-goto-week=).
+
+- o :: Center calendar around specified month (=calendar-other-month=).
+
+- . :: Move point to today's date (=calendar-goto-today=).
+
+g d (=calendar-goto-date=) prompts for a year, a month, and a day of the month, and then moves to that date. Because the calendar includes all dates from the beginning of the current era, you must type the year in its entirety; that is, type ‘=2010=', not ‘=10='.
+
+g D (=calendar-goto-day-of-year=) prompts for a year and day number, and moves to that date. Negative day numbers count backward from the end of the year. g w (=calendar-iso-goto-week=) prompts for a year and week number, and moves to that week.
+
+o (=calendar-other-month=) prompts for a month and year, then centers the three-month calendar around that month.
+
+You can return to today's date with . (=calendar-goto-today=).
+
+--------------

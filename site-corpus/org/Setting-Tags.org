@@ -1,0 +1,138 @@
+:PROPERTIES:
+:ID: org--Setting-Tags
+:END:
+#+filetags: :org:
+#+title: Setting Tags (The Org Manual)
+
+Next:
+
+<<Setting-Tags>>
+Next: [[id:org--Tag-Hierarchy][Tag Hierarchy]], Previous: [[id:org--Tag-Inheritance][Tag Inheritance]], Up: [[id:org--Tags][Tags]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 6.2 Setting Tags [[#Setting-Tags-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-Tags-1
+:CLASS: section
+:END:
+Tags can simply be typed into the buffer at the end of a headline. After a colon, M-TAB offers completion on tags. There is also a special command for inserting tags:
+
+-  <<index-C_002dc-C_002dq-1>>C-c C-q (=org-set-tags-command=) [[#index-C_002dc-C_002dq-1][¶]] :: Enter new tags for the current headline. Org mode either offers completion or a special single-key interface for setting tags, see below. After pressing RET, the tags are inserted and aligned to =org-tags-column=. When called with a C-u prefix, all tags in the current buffer are aligned to that column, just to make things look nice. Tags are automatically realigned after promotion, demotion, and TODO state changes (see [[id:org--TODO-Basics][Basic TODO Functionality]]).
+
+- <<index-C_002dc-C_002dc-7>>C-c C-c (=org-set-tags-command=) [[#index-C_002dc-C_002dc-7][¶]] :: When point is in a headline, this does the same as C-c C-q.
+
+Org supports tag insertion based on a /list of tags/. By default, this list is constructed dynamically, containing all tags currently used in the buffer[[#FOOT53][^{53}]]. You may also globally specify a hard list of tags with the variable =org-tag-alist=. Finally, you can set the default tags for a given file using the ‘=TAGS=' keyword, like
+
+#+begin_example
+#+TAGS: @work @home @tennisclub
+#+TAGS: laptop car pc sailboat
+#+end_example
+
+If you have globally defined your preferred set of tags using the variable =org-tag-alist=, but would like to use a dynamic tag list in a specific file, add an empty ‘=TAGS=' keyword to that file:
+
+#+begin_example
+#+TAGS:
+#+end_example
+
+If you have a preferred set of tags that you would like to use in every file, in addition to those defined on a per-file basis by ‘=TAGS=' keyword, then you may specify a list of tags with the variable =org-tag-persistent-alist=. You may turn this off on a per-file basis by adding a ‘=STARTUP=' keyword to that file:
+
+#+begin_example
+#+STARTUP: noptag
+#+end_example
+
+By default, Org mode uses the standard minibuffer completion facilities for entering tags. However, it also implements another, quicker, tag selection method called /fast tag selection/. This allows you to select and deselect tags with just a single key press. For this to work well you should assign unique letters to most of your commonly used tags. You can do this globally by configuring the variable =org-tag-alist= in your Emacs init file. For example, you may find the need to tag many items in different files with ‘=@home='. In this case you can set something like:
+
+#+begin_src lisp-preformatted
+(setq org-tag-alist '(("@work" . ?w) ("@home" . ?h) ("laptop" . ?l)))
+#+end_src
+
+If the tag is only relevant to the file you are working on, then you can instead set the ‘=TAGS=' keyword as:
+
+#+begin_example
+#+TAGS: @work(w)  @home(h)  @tennisclub(t)  laptop(l)  pc(p)
+#+end_example
+
+The tags interface shows the available tags in a splash window. If you want to start a new line after a specific tag, insert ‘=\n=' into the tag list
+
+#+begin_example
+#+TAGS: @work(w) @home(h) @tennisclub(t) \n laptop(l) pc(p)
+#+end_example
+
+or write them in two lines:
+
+#+begin_example
+#+TAGS: @work(w)  @home(h)  @tennisclub(t)
+#+TAGS: laptop(l)  pc(p)
+#+end_example
+
+You can also group together tags that are mutually exclusive by using braces, as in:
+
+#+begin_example
+#+TAGS: { @work(w)  @home(h)  @tennisclub(t) }  laptop(l)  pc(p)
+#+end_example
+
+you indicate that at most one of ‘=@work=', ‘=@home=', and ‘=@tennisclub=' should be selected. Multiple such groups are allowed.
+
+Do not forget to press C-c C-c with point in one of these lines to activate any changes.
+
+To set these mutually exclusive groups in the variable =org-tags-alist=, you must use the dummy tags =:startgroup= and =:endgroup= instead of the braces. Similarly, you can use =:newline= to indicate a line break. The previous example would be set globally by the following configuration:
+
+#+begin_src lisp-preformatted
+(setq org-tag-alist '((:startgroup . nil)
+                      ("@work" . ?w) ("@home" . ?h)
+                      ("@tennisclub" . ?t)
+                      (:endgroup . nil)
+                      ("laptop" . ?l) ("pc" . ?p)))
+#+end_src
+
+If at least one tag has a selection key then pressing C-c C-c automatically presents you with a special interface, listing inherited tags, the tags of the current headline, and a list of all valid tags with corresponding keys[[#FOOT54][^{54}]].
+
+Pressing keys assigned to tags adds or removes them from the list of tags in the current line. Selecting a tag in a group of mutually exclusive tags turns off any other tag from that group.
+
+In this interface, you can also use the following special keys:
+
+- <<index-TAB-5>>TAB [[#index-TAB-5][¶]] :: Enter a tag in the minibuffer, even if the tag is not in the predefined list. You can complete on all tags present in the buffer and globally pre-defined tags from =org-tag-alist= and =org-tag-persistent-alist=. You can also add several tags: just separate them with a comma.
+
+- <<index-SPC>>SPC [[#index-SPC][¶]] :: Clear all tags for this line.
+
+- <<index-RET-2>>RET [[#index-RET-2][¶]] :: Accept the modified set.
+
+- <<index-C_002dg>>C-g [[#index-C_002dg][¶]] :: Abort without installing changes.
+
+- <<index-q>>q [[#index-q][¶]] :: If q is not assigned to a tag, it aborts like C-g.
+
+- <<index-_0021>>! [[#index-_0021][¶]] :: Turn off groups of mutually exclusive tags. Use this to (as an exception) assign several tags from such a group.
+
+- <<index-C_002dc-C_002dc-8>>C-c [[#index-C_002dc-C_002dc-8][¶]] :: Toggle auto-exit after the next change (see below). If you are using expert mode, the first C-c displays the selection window.
+
+This method lets you assign tags to a headline with very few keys. With the above setup, you could clear the current tags and set ‘=@home=', ‘=laptop=' and ‘=pc=' tags with just the following keys: C-c C-c SPC h l p RET. Switching from ‘=@home=' to ‘=@work=' would be done with C-c C-c w RET or alternatively with C-c C-c C-c w. Adding the non-predefined tag ‘=sarah=' could be done with C-c C-c TAB s a r a h RET.
+
+If you find that most of the time you need only a single key press to modify your list of tags, set the variable =org-fast-tag-selection-single-key=. Then you no longer have to press RET to exit fast tag selection---it exits after the first change. If you then occasionally need more keys, press C-c to turn off auto-exit for the current tag selection process (in effect: start selection with C-c C-c C-c instead of C-c C-c). If you set the variable to the value =expert=, the special window is not even shown for single-key tag selection, it comes up only when you press an extra C-c.
+
+The number of tags displayed in the fast tag selection interface is limited by =org-fast-tag-selection-maximum-tags= to avoid running out of keyboard keys. You can customize this variable.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF53][(53)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+To extend this default list to all tags used in all agenda files (see [[id:org--Agenda-Views][Agenda Views]]), customize the variable =org-complete-tags-always-offer-all-agenda-tags=.
+
+***** [[#DOCF54][(54)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Keys are automatically assigned to tags that have no configured keys.
+
+--------------
+
+Next: [[id:org--Tag-Hierarchy][Tag Hierarchy]], Previous: [[id:org--Tag-Inheritance][Tag Inheritance]], Up: [[id:org--Tags][Tags]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

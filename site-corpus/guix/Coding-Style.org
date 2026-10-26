@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID: guix--Coding-Style
+:END:
+#+filetags: :guix:
+#+title: Coding Style
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Coding-Style>>
+Next: [[id:guix--Copyright-Matters][Copyright Matters]], Previous: [[id:guix--Packaging-Guidelines][Packaging Guidelines]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.8 Coding Style [[#Coding-Style-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Coding-Style-1
+:CLASS: section
+:END:
+In general our code follows the GNU Coding Standards (see [[https://www.gnu.org/prep/standards/html_node/index.html#Top][GNU Coding Standards]]). However, they do not say much about Scheme, so here are some additional rules.
+
+- [[id:guix--Programming-Paradigm][Programming Paradigm]]
+- [[id:guix--Modules][Modules]]
+- [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]]
+- [[id:guix--Formatting-Code][Formatting Code]]

@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Regexp-Example
+:END:
+#+filetags: :emacs:
+#+title: Regexp Example
+
+Next: [[id:emacs--Lax-Search][Lax Matching During Searching]]   Previous: [[id:emacs--Regexp-Backslash][Backslash in Regular Expressions]]   Up: [[id:emacs--Search][Searching and Replacement]]
+
+<<Regexp-Example>>
+*** 17.8 Regular Expression Example [[#Regular-Expression-Example][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Regular-Expression-Example
+:CLASS: section
+:END:
+Here is an example of a regexp---similar to the regexp that Emacs uses, by default, to recognize the end of a sentence, not including the following space (i.e., the variable =sentence-end-base=):
+
+#+begin_src verbatim
+[.?!][]\"')}]*
+#+end_src
+
+This contains two parts in succession: a character set matching period, ‘=?=', or ‘=!=', and a character set matching close-brackets, quotes, or parentheses, repeated zero or more times.
+
+--------------

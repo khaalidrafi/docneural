@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID: guix--Emacs-Packages
+:END:
+#+filetags: :guix:
+#+title: Emacs Packages
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Emacs-Packages>>
+Next: [[id:guix--Python-Modules][Python Modules]], Previous: [[id:guix--Bulk-Updates][Bulk Updates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.9 Emacs Packages [[#Emacs-Packages-2][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Emacs-Packages-2
+:CLASS: subsection
+:END:
+Emacs packages should preferably use the Emacs build system (see [[id:guix--Build-Systems::#emacs_002dbuild_002dsystem][emacs-build-system]]), for uniformity and the benefits provided by its build phases, such as the auto-generation of the autoloads file and the byte compilation of the sources.
+
+The Elisp dependencies of Emacs packages are typically provided as =propagated-inputs= when required at run time. As for other packages, build or test dependencies should be specified as =native-inputs=.
+
+Emacs packages sometimes depend on resources directories that should be installed along the Elisp files. The =#:include= argument can be used for that purpose, by specifying a list of regexps to match. The best practice when using the =#:include= argument is to extend rather than override its default value (accessible via the =%default-include= variable). As an example, a yasnippet extension package typically include a =snippets= directory, which could be copied to the installation directory using:
+
+#+begin_src lisp
+#:include (cons "^snippets/" %default-include)
+#+end_src
+
+When encountering problems, it is wise to check for the presence of the =Package-Requires= extension header in the package main source file, and whether any dependencies and their versions listed therein are satisfied.
+
+--------------
+
+Next: [[id:guix--Python-Modules][Python Modules]], Previous: [[id:guix--Bulk-Updates][Bulk Updates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

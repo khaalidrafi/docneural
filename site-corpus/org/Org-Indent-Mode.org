@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID: org--Org-Indent-Mode
+:END:
+#+filetags: :org:
+#+title: Org Indent Mode (The Org Manual)
+
+Next:
+
+<<Org-Indent-Mode>>
+Next: [[id:org--Hard-indentation][Hard indentation]], Up: [[id:org--Clean-View][A Cleaner Outline View]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 17.4.1 Org Indent Mode [[#Org-Indent-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-Indent-Mode-1
+:CLASS: subsection
+:END:
+To display the buffer in the indented view, activate Org Indent minor mode, using M-x org-indent-mode. Text lines that are not headlines are prefixed with virtual spaces to vertically align with the headline text[[#FOOT163][^{163}]].
+
+To make more horizontal space, the headlines are shifted by two characters. Configure =org-indent-indentation-per-level= variable for a different number.
+
+By default, Org Indent mode turns off =org-adapt-indentation= and does hide leading stars by locally setting =org-hide-leading-stars= to =t=: only one star on each headline is visible, the rest are masked with the same font color as the background. If you want to customize this default behavior, see =org-indent-mode-turns-on-hiding-stars= and =org-indent-mode-turns-off-org-adapt-indentation=.
+
+To globally turn on Org Indent mode for all files, customize the variable =org-startup-indented=. To control it for individual files, use ‘=STARTUP=' keyword as follows:
+
+#+begin_example
+#+STARTUP: indent
+#+STARTUP: noindent
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF163][(163)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Org Indent mode also sets =wrap-prefix= correctly for indenting and wrapping long lines of headlines or text. This minor mode also handles Visual Line mode and directly applied settings through =word-wrap=.
+
+--------------
+
+Next: [[id:org--Hard-indentation][Hard indentation]], Up: [[id:org--Clean-View][A Cleaner Outline View]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

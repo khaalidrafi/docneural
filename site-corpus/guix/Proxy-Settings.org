@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID: guix--Proxy-Settings
+:END:
+#+filetags: :guix:
+#+title: Proxy Settings
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Proxy-Settings>>
+Next: [[id:guix--Substitution-Failure][Substitution Failure]], Previous: [[id:guix--Substitute-Authentication][Substitute Authentication]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 5.3.6 Proxy Settings [[#Proxy-Settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Proxy-Settings-1
+:CLASS: subsection
+:END:
+Substitutes are downloaded over HTTP or HTTPS. The =http_proxy= and =https_proxy= environment variables can be set in the environment of =guix-daemon= and are honored for downloads of substitutes. Note that the value of those environment variables in the environment where =guix build=, =guix package=, and other client commands are run has /absolutely no effect/.

@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID: guix--Updating-the-Guix-Package
+:END:
+#+filetags: :guix:
+#+title: Updating the Guix Package
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Updating-the-Guix-Package>>
+Next: [[id:guix--Deprecation-Policy][Deprecation Policy]], Previous: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.16 Updating the Guix Package [[#Updating-the-Guix-Package-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Updating-the-Guix-Package-1
+:CLASS: section
+:END:
+It is sometimes desirable to update the =guix= package itself (the package defined in =(gnu packages package-management)=), for example to make new daemon features available for use by the =guix-service-type= service type. In order to simplify this task, the following command can be used:
+
+#+begin_example
+make update-guix-package
+#+end_example
+
+The =update-guix-package= make target will use the last known /commit/ corresponding to =HEAD= in your Guix checkout, compute the hash of the Guix sources corresponding to that commit and update the =commit=, =revision= and hash of the =guix= package definition.
+
+To validate that the updated =guix= package hashes are correct and that it can be built successfully, the following command can be run from the directory of your Guix checkout:
+
+#+begin_example
+./pre-inst-env guix build guix
+#+end_example
+
+To guard against accidentally updating the =guix= package to a commit that others can't refer to, a check is made that the commit used has already been pushed to the Codeberg-hosted Guix Git repository.
+
+This check can be disabled, /at your own peril/, by setting the =GUIX_ALLOW_ME_TO_USE_PRIVATE_COMMIT= environment variable. When this variable is set, the updated package source is also added to the store. This is used as part of the release process of Guix.
+
+--------------
+
+Next: [[id:guix--Deprecation-Policy][Deprecation Policy]], Previous: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

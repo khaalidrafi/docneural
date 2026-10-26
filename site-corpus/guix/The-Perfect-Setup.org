@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID: guix--The-Perfect-Setup
+:END:
+#+filetags: :guix:
+#+title: The Perfect Setup
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<The-Perfect-Setup>>
+Next: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.5 The Perfect Setup [[#The-Perfect-Setup-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Perfect-Setup-1
+:CLASS: section
+:END:
+All configuration and development in Guix is done in the Scheme language. Like all languages of the Lisp family, Scheme has a simple syntax. The perfect setup is one where the editor you choose makes working with that syntax seamless and pleasant; for that it must absolutely support a few things for Scheme:
+
+- automatic indentation, such that hitting the “Enter” key (or RET) places cursor “at the right place” on the next line;
+- “parentheses matching”, allowing you to jump from a closing parenthesis to the corresponding opening parenthesis and vice-versa;
+- syntax highlighting, so that keywords are visually distinguishable.
+
+The following optional features can make your life easier:
+
+- structural editing of Scheme syntax;
+- Guile integration so you can easily evaluate code, jump to procedure definitions, view documentation, and so on.
+
+The following sections look at editor setups that are known to work well. Do share your setup for these and other editors for inclusion in this manual! See [[id:guix--Submitting-Patches][Submitting Patches]].
+
+- [[id:guix--Emacs][Emacs]]
+- [[id:guix--Guile-Studio][Guile Studio]]
+- [[id:guix--Vim-and-NeoVim][Vim and NeoVim]]
+
+--------------
+
+Next: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

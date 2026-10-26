@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: org--Drawers
+:END:
+#+filetags: :org:
+#+title: Drawers (The Org Manual)
+
+Next:
+
+<<Drawers>>
+Next: [[id:org--Blocks][Blocks]], Previous: [[id:org--Plain-Lists][Plain Lists]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 2.7 Drawers [[#Drawers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Drawers-1
+:CLASS: section
+:END:
+Sometimes you want to keep information associated with an entry, but you do not normally want to see it. For this, Org mode has /drawers/. They can contain anything but a headline and another drawer. Drawers look like this:
+
+#+begin_example
+** This is a headline
+Still outside the drawer
+:DRAWERNAME:
+This is inside the drawer.
+:END:
+After the drawer.
+#+end_src
+
+You can interactively insert a drawer at point by calling =org-insert-drawer=, which is bound to C-c C-x d. With an active region, this command puts the region inside the drawer. With a prefix argument, this command calls non-interactive function =org-insert-property-drawer=, which creates a ‘=PROPERTIES=' drawer right below the current headline. Org mode uses this special drawer for storing properties (see [[id:org--Properties-and-Columns][Properties and Columns]]). You cannot use it for anything else.
+
+Completion over drawer keywords is also possible using M-TAB[[#FOOT16][^{16}]].
+
+Visibility cycling (see [[id:org--Visibility-Cycling][Visibility Cycling]]) on the headline hides and shows the entry, but keeps the drawer collapsed to a single line. In order to look inside the drawer, you need to move point to the drawer line and press TAB there.
+
+You can also arrange for state change notes (see [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]]) and clock times (see [[id:org--Clocking-Work-Time][Clocking Work Time]]) to be stored in a ‘=LOGBOOK=' drawer. If you want to store a quick note there, similarly to state changes, use
+
+- <<index-C_002dc-C_002dz>>C-c C-z [[#index-C_002dc-C_002dz][¶]] :: Add a time-stamped note to the ‘=LOGBOOK=' drawer.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF16][(16)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Many desktops intercept M-TAB to switch windows. Use C-M-i or ESC TAB instead.
+
+--------------
+
+Next: [[id:org--Blocks][Blocks]], Previous: [[id:org--Plain-Lists][Plain Lists]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

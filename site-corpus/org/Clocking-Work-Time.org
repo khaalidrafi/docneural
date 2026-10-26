@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: org--Clocking-Work-Time
+:END:
+#+filetags: :org:
+#+title: Clocking Work Time (The Org Manual)
+
+Next:
+
+<<Clocking-Work-Time>>
+Next: [[id:org--Effort-Estimates][Effort Estimates]], Previous: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]], Up: [[id:org--Dates-and-Times][Dates and Times]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 8.4 Clocking Work Time [[#Clocking-Work-Time-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Clocking-Work-Time-1
+:CLASS: section
+:END:
+Org mode allows you to clock the time you spend on specific tasks in a project. When you start working on an item, you can start the clock. When you stop working on that task, or when you mark the task done, the clock is stopped and the corresponding time interval is recorded. It also computes the total time spent on each subtree[[#FOOT73][^{73}]] of a project. And it remembers a history or tasks recently clocked, so that you can jump quickly between a number of tasks absorbing your time.
+
+To save the clock history across Emacs sessions, use:
+
+#+begin_src lisp-preformatted
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+#+end_src
+
+When you clock into a new task after resuming Emacs, the incomplete clock[[#FOOT74][^{74}]] is retrieved (see [[id:org--Resolving-idle-time::#Resolving-idle-time-_00281_0029][Resolving idle time (1)]]) and you are prompted about what to do with it.
+
+- [[id:org--Clocking-commands][Clocking commands]]
+- [[id:org--The-clock-table][The clock table]]
+- [[id:org--Resolving-idle-time][Resolving idle time and continuous clocking]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF73][(73)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Clocking only works if all headings are indented with less than 30 stars. This is a hard-coded limitation of =lmax= in =org-clock-sum=.
+
+***** [[#DOCF74][(74)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+To resume the clock under the assumption that you have worked on this task while outside Emacs, use ‘=(setq org-clock-persist t)='.
+
+--------------
+
+Next: [[id:org--Effort-Estimates][Effort Estimates]], Previous: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]], Up: [[id:org--Dates-and-Times][Dates and Times]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

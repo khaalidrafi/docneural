@@ -1,0 +1,120 @@
+:PROPERTIES:
+:ID: guix--Using-TeX-and-LaTeX
+:END:
+#+filetags: :guix:
+#+title: Using TeX and LaTeX
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Using-TeX-and-LaTeX>>
+Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 18 Using TeX and LaTeX [[#Using-TeX-and-LaTeX-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-TeX-and-LaTeX-1
+:CLASS: chapter
+:END:
+Guix provides packages for the TeX, LaTeX, ConTeXt, LuaTeX, and related typesetting systems, taken from the [[https://www.tug.org/texlive/][TeX Live distribution]]. Because TeX Live is so huge and because finding one's way in this maze is tricky, this section provides some guidance on how to deploy the relevant packages to compile TeX and LaTeX documents. Guix contains the full TeX Live distribution in a modular setup, in which you only install the packages you need, whose name is always prefixed with ‘=texlive-='.
+
+Building a coherent system that provides all the essential tools and, at the same time, satisfies all of its internal dependencies can be a difficult task. It is therefore recommended to start with sets of packages, called /collections/, and /schemes/, the name for collections of collections. The following command lists available schemes and collections (see [[id:guix--Invoking-guix-package::#guix_002dsearch][Invoking guix package]]):
+
+#+begin_example
+guix search texlive-\(scheme\|collection\) | recsel -p name,description
+#+end_example
+
+If needed, you may then complete your system with individual packages, particularly when they belong to a large collection you're not otherwise interested in.
+
+For instance, the following manifest is a reasonable, yet frugal starting point for a French LaTeX user:
+
+#+begin_src lisp
+(specifications->manifest
+ '("rubber"
+
+   "texlive-scheme-basic"
+   "texlive-collection-latexrecommended"
+   "texlive-collection-fontsrecommended"
+   "texlive-babel-french"
+
+   ;; From "latexextra" collection.
+   "texlive-tabularray"
+   ;; From "binextra" collection.
+   "texlive-texdoc"))
+#+end_src
+
+If you come across a document that does not compile in such a basic setting, the main difficulty is finding the missing packages. In this case, =pdflatex= and similar commands tend to fail with obscure error messages along the lines of:
+
+#+begin_example
+doc.tex: File `tikz.sty' not found.
+doc.tex:7: Emergency stop.
+#+end_example
+
+or, for a missing font:
+
+#+begin_example
+kpathsea: Running mktexmf phvr7t
+! I can't find file `phvr7t'.
+#+end_example
+
+How do you determine what the missing package is? In the first case, you will find the answer by running:
+
+#+begin_example
+$ guix search texlive tikz
+name: texlive-pgf
+version: 59745
+...
+#+end_example
+
+In the second case, =guix search= turns up nothing. Instead, you can search the TeX Live package database using the =tlmgr= command:
+
+#+begin_example
+$ tlmgr info phvr7t
+tlmgr: cannot find package phvr7t, searching for other matches:
+
+Packages containing `phvr7t' in their title/description:
+
+Packages containing files matching `phvr7t':
+helvetic:
+        texmf-dist/fonts/tfm/adobe/helvetic/phvr7t.tfm
+        texmf-dist/fonts/tfm/adobe/helvetic/phvr7tn.tfm
+        texmf-dist/fonts/vf/adobe/helvetic/phvr7t.vf
+        texmf-dist/fonts/vf/adobe/helvetic/phvr7tn.vf
+tex4ht:
+        texmf-dist/tex4ht/ht-fonts/alias/adobe/helvetic/phvr7t.htf
+#+end_example
+
+The file is available in the TeX Live =helvetic= package, which is known in Guix as =texlive-helvetic=. Quite a ride, but you found it!
+
+--------------
+
+Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

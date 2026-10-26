@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID: org--Markdown-Export
+:END:
+#+filetags: :org:
+#+title: Markdown Export (The Org Manual)
+
+Next:
+
+<<Markdown-Export>>
+Next: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]], Previous: [[id:org--LaTeX-Export][LaTeX Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.11 Markdown Export [[#Markdown-Export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Markdown-Export-1
+:CLASS: section
+:END:
+The Markdown export backend, “md”, converts an Org file to Markdown format, as defined at [[https://daringfireball.net/projects/markdown/]]. This is the original Markdown specification, developed by John Gruber and Aaron Swartz.
+
+Since “md” backend is built on top of the HTML backend (see [[id:org--HTML-Export][HTML Export]]), it converts every Org construct not defined in Markdown syntax, such as tables, to HTML.
+
+Do note that the original Markdown syntax has differences with other commonly used Markdown flavors. See [[https://en.wikipedia.org/wiki/Markdown]] for more details.
+
+**** Markdown export commands [[#Markdown-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Markdown-export-commands-1
+:CLASS: subheading
+:END:
+-  <<index-C_002dc-C_002dc-m-m>>C-c C-e m m (=org-md-export-to-markdown=) [[#index-C_002dc-C_002dc-m-m][¶]] :: Export to a text file with Markdown syntax. For ‘=myfile.org=', Org exports to ‘=myfile.md=', overwritten without warning.
+
+-  <<index-C_002dc-C_002dc-m-M>>C-c C-e m M (=org-md-export-as-markdown=) [[#index-C_002dc-C_002dc-m-M][¶]] :: Export to a temporary buffer. Does not create a file.
+
+- <<index-C_002dc-C_002de-m-o>>C-c C-e m o [[#index-C_002dc-C_002de-m-o][¶]] :: Export as a text file with Markdown syntax, then open it.
+
+**** Header and sectioning structure [[#Header-and-sectioning-structure-2][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Header-and-sectioning-structure-2
+:CLASS: subheading
+:END:
+Based on =org-md-headline-style=, Markdown export can generate headlines of both /atx/ and /setext/ types. /setext/ limits headline levels to two whereas /atx/ limits headline levels to six. /mixed/ exports headline levels one and two in /setext/-style, and headline levels three through six as /atx/-style headlines. Beyond these limits, the export backend converts headlines to lists. To set a limit to a level before the absolute limit (see [[id:org--Export-Settings][Export Settings]]).
+
+--------------
+
+Next: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]], Previous: [[id:org--LaTeX-Export][LaTeX Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

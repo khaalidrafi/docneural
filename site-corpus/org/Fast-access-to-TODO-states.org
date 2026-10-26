@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID: org--Fast-access-to-TODO-states
+:END:
+#+filetags: :org:
+#+title: Fast access to TODO states (The Org Manual)
+
+Next:
+
+<<Fast-access-to-TODO-states>>
+Next: [[id:org--Per_002dfile-keywords][Setting up keywords for individual files]], Previous: [[id:org--Multiple-sets-in-one-file][Multiple keyword sets in one file]], Up: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 5.2.4 Fast access to TODO states [[#Fast-access-to-TODO-states-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Fast-access-to-TODO-states-1
+:CLASS: subsection
+:END:
+If you would like to quickly change an entry to an arbitrary TODO state instead of cycling through the states, you can set up keys for single-letter access to the states. This is done by adding the selection character after each keyword, in parentheses[[#FOOT40][^{40}]]. For example:
+
+#+begin_src lisp-preformatted
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "|" "DONE(d)")
+        (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+        (sequence "|" "CANCELED(c)")))
+#+end_src
+
+If you then press C-c C-t followed by the selection key, the entry is switched to this state. SPC can be used to remove any TODO keyword from an entry.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF40][(40)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+All characters are allowed except ‘=@=', ‘=^=' and ‘=!=', which have a special meaning here.

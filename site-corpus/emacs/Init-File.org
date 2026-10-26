@@ -1,0 +1,343 @@
+:PROPERTIES:
+:ID: emacs--Init-File
+:END:
+#+filetags: :emacs:
+#+title: Init File
+
+Next: [[id:emacs--Authentication][Keeping Persistent Authentication Information]]   Previous: [[id:emacs--Key-Bindings#Key-Bindings][Customizing Key Bindings]]   Up: [[id:emacs--Customization][Customization]]
+
+<<Init-File>>
+*** 51.4 The Emacs Initialization File [[#The-Emacs-Initialization-File][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Emacs-Initialization-File
+:CLASS: section
+:END:
+When Emacs is started, it normally tries to load a Lisp program from an /initialization file/, or /init file/ for short. This file, if it exists, specifies how to initialize Emacs for you. Traditionally, file =~/.emacs= is used as the init file, although Emacs also looks at =~/.emacs.el=, =~/.emacs.d/init.el=, =~/.config/emacs/init.el=, or other locations. See [[#Find-Init][How Emacs Finds Your Init File]].
+
+You may find it convenient to have all your Emacs configuration in one directory, in which case you should use =~/.emacs.d/init.el= or the XDG-compatible =~/.config/emacs/init.el=.
+
+You can use the command line switch ‘=-q=' to prevent loading your init file, and ‘=-u=' (or ‘=--user=') to specify a different user's init file (see [[id:emacs--Initial-Options][Initial Options]]).
+
+There can also be a /default init file/, which is the library named =default.el=, found via the standard search path for libraries. The Emacs distribution contains no such library; your site may create one for local customizations. If this library exists, it is loaded whenever you start Emacs (except when you specify ‘=-q='). But your init file, if any, is loaded first; if it sets =inhibit-default-init= non-=nil=, then =default= is not loaded.
+
+Your site may also have a /site startup file/; this is named =site-start.el=, if it exists. Like =default.el=, Emacs finds this file via the standard search path for Lisp libraries. Emacs loads this library before it loads your init file. To inhibit loading of this library, use the option ‘=--no-site-file='. See [[id:emacs--Initial-Options][Initial Options]]. We recommend against using =site-start.el= for changes that some users may not like. It is better to put them in =default.el=, so that users can more easily override them.
+
+You can place =default.el= and =site-start.el= in any of the directories which Emacs searches for Lisp libraries. The variable =load-path= (see [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]) specifies these directories. Many sites put these files in a subdirectory named =site-lisp= in the Emacs installation directory, such as =/usr/local/share/emacs/site-lisp=.
+
+Byte-compiling your init file is not recommended (see [[../elisp_html/Byte-Compilation.html#Byte-Compilation][Byte Compilation]] in the Emacs Lisp Reference Manual). It generally does not speed up startup very much, and often leads to problems when you forget to recompile the file. A better solution is to use the Emacs server to reduce the number of times you have to start Emacs (see [[id:emacs--Emacs-Server][Using Emacs as a Server]]). If your init file defines many functions, consider moving them to a separate (byte-compiled) file that you load in your init file.
+
+If you are going to write actual Emacs Lisp programs that go beyond minor customization, you should read the Emacs Lisp Reference Manual. See [[../elisp_html/index.html#Top][Emacs Lisp]] in the Emacs Lisp Reference Manual.
+
+--------------
+
+<<Init-Syntax>>
+**** 51.4.1 Init File Syntax [[#Init-File-Syntax][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Init-File-Syntax
+:CLASS: subsection
+:END:
+The init file contains one or more Lisp expressions. Each of these consists of a function name followed by arguments, all surrounded by parentheses. For example, =(setq fill-column 60)= calls the function =setq= to set the variable =fill-column= (see [[id:emacs--Filling::#Filling][Filling Text]]) to 60.
+
+You can set any Lisp variable with =setq=, but with certain variables =setq= won't do what you probably want in the init file. Some variables automatically become buffer-local when set with =setq=; what you want in the init file is to set the default value, using =setq-default=. (The following section has examples of both of these methods.)
+
+Some customizable minor mode variables do special things to enable the mode when you set them with Customize, but ordinary =setq= won't do that; to enable the mode in your init file, call the minor mode command. Finally, a few customizable user options are initialized in complex ways, and these have to be set either via the customize interface (see [[id:emacs--Customization][Customization]]), or by using =customize-set-variable=/=setopt= (see [[id:emacs--Variables::#Examining][Examining and Setting Variables]]).
+
+The second argument to =setq= is an expression for the new value of the variable. This can be a constant, a variable, or a function call expression. In the init file, constants are used most of the time. They can be:
+
+- Numbers: :: Numbers are written in decimal, with an optional initial minus sign.
+
+-  <<index-Lisp-string-syntax>>Strings: [[#index-Lisp-string-syntax][¶]] :: Lisp string syntax is the same as C string syntax with a few extra features. Use a double-quote character to begin and end a string constant.
+
+  In a string, you can include newlines and special characters literally. But often it is cleaner to use backslash sequences for them: ‘=\n=' for newline, ‘=\b=' for backspace, ‘=\r=' for carriage return, ‘=\t=' for tab, ‘=\f=' for formfeed (control-L), ‘=\e=' for escape, ‘=\\=' for a backslash, ‘=\"=' for a double-quote, or ‘=\==ooo=' for the character whose octal code is =ooo=. Backslash and double-quote are the only characters for which backslash sequences are mandatory.
+
+  ‘=\C-=' can be used as a prefix for a control character, as in ‘=\C-s=' for ASCII control-S, and ‘=\M-=' can be used as a prefix for a Meta character, as in ‘=\M-a=' for Meta-A or ‘=\M-\C-a=' for Ctrl-Meta-A.
+
+  See [[#Init-Non_002dASCII][Non-ASCII Characters in Init Files]], for information about including non-ASCII in your init file.
+
+-  <<index-Lisp-character-syntax>>Characters: [[#index-Lisp-character-syntax][¶]] :: Lisp character constant syntax consists of a ‘=?=' followed by either a character or an escape sequence starting with ‘=\='. Examples: =?x=, =?\n=, =?\"=, =?\)=. Note that strings and characters are not interchangeable in Lisp; some contexts require one and some contexts require the other.
+
+  See [[#Init-Non_002dASCII][Non-ASCII Characters in Init Files]], for information about binding commands to keys which send non-ASCII characters.
+
+- True: :: =t= stands for “true”.
+
+- False: :: =nil= stands for “false”.
+
+- <<index-Lisp-object-syntax>>Other Lisp objects: [[#index-Lisp-object-syntax][¶]] :: Write a single-quote (='=) followed by the Lisp object you want.
+
+For more information on the Emacs Lisp syntax, see [[../elisp_html/Introduction.html#Introduction][Introduction]] in The Emacs Lisp Reference Manual.
+
+--------------
+
+<<Init-Examples>>
+**** 51.4.2 Init File Examples [[#Init-File-Examples][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Init-File-Examples
+:CLASS: subsection
+:END:
+Here are some examples of doing certain commonly desired things with Lisp expressions:
+
+- Add a directory to the variable =load-path=. You can then put Lisp libraries that are not included with Emacs in this directory, and load them with M-x load-library. See [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]].
+
+  #+begin_example
+  (add-to-list 'load-path "/path/to/lisp/libraries")
+#+end_example
+
+- Make TAB in C mode just insert a tab if point is in the middle of a line.
+
+  #+begin_example
+  (setq c-tab-always-indent nil)
+#+end_example
+
+  Here we have a variable whose value is normally =t= for “true” and the alternative is =nil= for “false”.
+
+- Make searches case sensitive by default (in all buffers that do not override this).
+
+  #+begin_example
+  (setq-default case-fold-search nil)
+#+end_example
+
+  This sets the default value, which is effective in all buffers that do not have local values for the variable (see [[id:emacs--Variables::#Locals][Local Variables]]). Setting =case-fold-search= with =setq= affects only the current buffer's local value, which is probably not what you want to do in an init file.
+
+-  Specify your own email address, if Emacs can't figure it out correctly.
+
+  #+begin_example
+  (setq user-mail-address "cheney@torture.gov")
+#+end_example
+
+  Various Emacs packages, such as Message mode, consult =user-mail-address= when they need to know your email address. See [[id:emacs--Mail-Headers][Mail Header Fields]].
+
+- Make Text mode the default mode for new buffers.
+
+  #+begin_example
+  (setq-default major-mode 'text-mode)
+#+end_example
+
+  Note that =text-mode= is used because it is the command for entering Text mode. The single-quote before it makes the symbol a constant; otherwise, =text-mode= would be treated as a variable name.
+
+- Set up defaults for the Latin-1 character set, which supports most of the languages of Western Europe.
+
+  #+begin_example
+  (set-language-environment "Latin-1")
+#+end_example
+
+- Turn off Line Number mode, a global minor mode.
+
+  #+begin_example
+  (line-number-mode 0)
+#+end_example
+
+- Turn on Auto Fill mode automatically in Text mode and related modes (see [[id:emacs--Variables::#Hooks][Hooks]]).
+
+  #+begin_example
+  (add-hook 'text-mode-hook 'auto-fill-mode)
+#+end_example
+
+- Change the coding system used when using the clipboard (see [[id:emacs--Communication-Coding][Coding Systems for Interprocess Communication]]).
+
+  #+begin_example
+  (setopt selection-coding-system 'utf-8)
+#+end_example
+
+- Load the installed Lisp library named =foo= (actually a file =foo.elc= or =foo.el= in a standard Emacs directory).
+
+  #+begin_example
+  (load "foo")
+#+end_example
+
+  When the argument to =load= is a relative file name, not starting with ‘=/=' or ‘=~=', =load= searches the directories in =load-path= (see [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]).
+
+- Load the compiled Lisp file =foo.elc= from your home directory.
+
+  #+begin_example
+  (load "~/foo.elc")
+#+end_example
+
+  Here a full file name is used, so no searching is done.
+
+-  Tell Emacs to find the definition for the function =myfunction= by loading a Lisp library named =mypackage= (i.e., a file =mypackage.elc= or =mypackage.el=):
+
+  #+begin_example
+  (autoload 'myfunction "mypackage" "Do what I say." t)
+#+end_example
+
+  Here the string ="Do what I say."= is the function's documentation string. You specify it in the =autoload= definition so it will be available for help commands even when the package is not loaded. The last argument, =t=, indicates that this function is interactive; that is, it can be invoked interactively by typing M-x myfunction RET or by binding it to a key. If the function is not interactive, omit the =t= or use =nil=.
+
+- Rebind the key C-x l to run the function =make-symbolic-link= (see [[id:emacs--Key-Bindings::#Init-Rebinding][Rebinding Keys in Your Init File]]).
+
+  #+begin_example
+  (keymap-global-set "C-x l" 'make-symbolic-link)
+#+end_example
+
+  or
+
+  #+begin_example
+  (keymap-set global-map "C-x l" 'make-symbolic-link)
+#+end_example
+
+  Note once again the single-quote used to refer to the symbol =make-symbolic-link= instead of its value as a variable.
+
+- Do the same thing for Lisp mode only.
+
+  #+begin_example
+  (keymap-set lisp-mode-map "C-x l" 'make-symbolic-link)
+#+end_example
+
+- Redefine all keys which now run =next-line= in Fundamental mode so that they run =forward-line= instead.
+
+  #+begin_example
+  (keymap-substitute global-map 'next-line 'forward-line)
+#+end_example
+
+- Make C-x C-v undefined.
+
+  #+begin_example
+  (keymap-global-unset "C-x C-v")
+#+end_example
+
+  One reason to undefine a key is so that you can make it a prefix. Simply defining C-x C-v =anything= will make C-x C-v a prefix, but C-x C-v must first be freed of its usual non-prefix definition.
+
+- Make ‘=$=' have the syntax of punctuation in Text mode. Note the use of a character constant for ‘=$='.
+
+  #+begin_example
+  (modify-syntax-entry ?\$ "." text-mode-syntax-table)
+#+end_example
+
+- Enable the use of the command =narrow-to-region= without confirmation.
+
+  #+begin_example
+  (put 'narrow-to-region 'disabled nil)
+#+end_example
+
+- Adjusting the configuration to various platforms and Emacs versions.
+
+  Users typically want Emacs to behave the same on all systems, so the same init file is right for all platforms. However, sometimes it happens that a function you use for customizing Emacs is not available on some platforms or in older Emacs versions. To deal with that situation, put the customization inside a conditional that tests whether the function or facility is available, like this:
+
+  #+begin_example
+  (if (fboundp 'blink-cursor-mode)
+      (blink-cursor-mode 0))
+
+  (if (boundp 'coding-category-utf-8)
+      (set-coding-priority '(coding-category-utf-8)))
+#+end_example
+
+  You can also simply disregard the errors that occur if the function is not defined.
+
+  #+begin_example
+  (ignore-errors (set-face-background 'region "grey75"))
+#+end_example
+
+  A =setq= on a variable which does not exist is generally harmless, so those do not need a conditional.
+
+- Using =use-package= to automatically load and configure a package.
+
+  #+begin_example
+  (use-package hi-lock
+    :defer t
+    :init (add-hook 'some-hook 'hi-lock-mode)
+    :config (use-package my-hi-lock)
+    :bind (("M-o l" . highlight-lines-matching-regexp)
+           ("M-o r" . highlight-regexp)
+           ("M-o w" . highlight-phrase)))
+#+end_example
+
+  This will load =hi-lock= when some of its commands or variables are first used, bind 3 keys to its commands, and additionally load the =my-hi-lock= package (presumably further customizing =hi-lock=) after loading =hi-lock=. The =use-package= facility is fully documented in its own manual, see [[../use-package_html/index.html#Top][use-package User manual]].
+
+--------------
+
+<<Terminal-Init>>
+**** 51.4.3 Terminal-specific Initialization [[#Terminal_002dspecific-Initialization][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Terminal_002dspecific-Initialization
+:CLASS: subsection
+:END:
+Each terminal type can have a Lisp library to be loaded into Emacs when it is run on that type of terminal. For a terminal type named =termtype=, the library is called =term/==termtype=. (If there is an entry of the form =(==termtype== . ==alias==)= in the =term-file-aliases= association list, Emacs uses =alias= in place of =termtype=.) The library is found by searching the directories =load-path= as usual and trying the suffixes ‘=.elc=' and ‘=.el='. Normally it appears in the subdirectory =term= of the directory where most Emacs libraries are kept.
+
+The usual purpose of the terminal-specific library is to map the escape sequences used by the terminal's function keys onto more meaningful names, using =input-decode-map=. See the file =term/lk201.el= for an example of how this is done. Many function keys are mapped automatically according to the information in the Termcap data base; the terminal-specific library needs to map only the function keys that Termcap does not specify.
+
+When the terminal type contains a hyphen, only the part of the name before the first hyphen is significant in choosing the library name. Thus, terminal types ‘=aaa-48=' and ‘=aaa-30-rv=' both use the library =term/aaa=. The code in the library can use =(getenv "TERM")= to find the full terminal type name.
+
+The library's name is constructed by concatenating the value of the variable =term-file-prefix= and the terminal type. Your =.emacs= file can prevent the loading of the terminal-specific library by setting =term-file-prefix= to =nil=.
+
+Emacs runs the hook =tty-setup-hook= at the end of initialization, after both your =.emacs= file and any terminal-specific library have been read in. Add hook functions to this hook if you wish to override part of any of the terminal-specific libraries and to define initializations for terminals that do not have a library. See [[id:emacs--Variables::#Hooks][Hooks]].
+
+--------------
+
+<<Find-Init>>
+**** 51.4.4 How Emacs Finds Your Init File [[#How-Emacs-Finds-Your-Init-File][¶]]
+:PROPERTIES:
+:CUSTOM_ID: How-Emacs-Finds-Your-Init-File
+:CLASS: subsection
+:END:
+Emacs normally finds your init file in a location under your home directory[[#FOOT26][^{26}]]. See [[#Init-File][The Emacs Initialization File]].
+
+Emacs looks for your init file using the filenames =~/.emacs.el=, =~/.emacs=, or =~/.emacs.d/init.el= in that order; you can choose to use any one of these names. (Note that only the locations directly in your home directory have a leading dot in the location's basename.)
+
+Emacs can also look in an XDG-compatible location for =init.el=, the default is the directory =~/.config/emacs=. This can be overridden by setting =XDG_CONFIG_HOME= in your environment, its value replaces =~/.config= in the name of the default XDG init file. However =~/.emacs.d=, =~/.emacs=, and =~/.emacs.el= are always preferred if they exist, which means that you must delete or rename them in order to use the XDG location.
+
+Note also that if neither the XDG location nor =~/.emacs.d= exist, then Emacs will create =~/.emacs.d= (and therefore use it during subsequent invocations).
+
+Emacs will set =user-emacs-directory= to the directory it decides to use. This directory is subsequently used to look for your other user-specific Emacs files, such as =custom-file= (see [[id:emacs--Easy-Customization::#Saving-Customizations][Saving Customizations]]), the saved desktop (see [[id:emacs--Saving-Emacs-Sessions][Saving Emacs Sessions]]) and others. The =--init-directory= command-line option (see [[id:emacs--Initial-Options][Initial Options]]) overrides the value of =user-emacs-directory= determined as side effect of the search for your user init file described above.
+
+Although this is backward-compatible with older Emacs versions, modern POSIX platforms prefer putting your initialization files under =~/.config= so that troubleshooting a problem that might be due to a bad init file, or archiving a collection of init files, can be done by renaming that directory. To help older Emacs versions find configuration files in their current default locations, you can execute the following Emacs Lisp code:
+
+#+begin_example
+(make-symbolic-link ".config/emacs" "~/.emacs.d")
+#+end_example
+
+However, if you run Emacs from a shell started by =su= and =XDG_CONFIG_HOME= is not set in your environment, Emacs tries to find your own initialization files, not that of the user you are currently pretending to be. The idea is that you should get your own editor customizations even if you are running as the super user.
+
+More precisely, Emacs first determines which user's init file to use. It gets your user name from the environment variables =LOGNAME= and =USER=; if neither of those exists, it uses the effective user-ID. If that user name matches the real user-ID, then Emacs uses =HOME=; otherwise, it looks up the home directory corresponding to that user name in the system's data base of users.
+
+For brevity the rest of the Emacs documentation generally uses just the current default location =~/.emacs.d/init.el= for the init file.
+
+--------------
+
+<<Init-Non_002dASCII>>
+**** 51.4.5 Non-ASCII Characters in Init Files [[#Non_002dASCII-Characters-in-Init-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Non_002dASCII-Characters-in-Init-Files
+:CLASS: subsection
+:END:
+Language and coding systems may cause problems if your init file contains non-ASCII characters, such as accented letters, in strings or key bindings.
+
+If you want to use non-ASCII characters in your init file, you should put a ‘=-*-coding: ==coding-system==-*-=' tag on the first line of the init file, and specify a coding system that supports the character(s) in question. See [[id:emacs--Recognize-Coding][Recognizing Coding Systems]]. This is because the defaults for decoding non-ASCII text might not yet be set up by the time Emacs reads those parts of your init file which use such strings, possibly leading Emacs to decode those strings incorrectly. You should then avoid adding Emacs Lisp code that modifies the coding system in other ways, such as calls to =set-language-environment=.
+
+An alternative to using non-ASCII characters directly is to use one of the character escape syntaxes described in see [[../elisp_html/General-Escape-Syntax.html#General-Escape-Syntax][General Escape Syntax]] in The Emacs Lisp Reference Manual, as they allow all Unicode codepoints to be specified using only ASCII characters.
+
+To bind non-ASCII keys, you must use a vector (see [[id:emacs--Key-Bindings::#Init-Rebinding][Rebinding Keys in Your Init File]]). The string syntax cannot be used, since the non-ASCII characters will be interpreted as meta keys. For instance:
+
+#+begin_example
+(global-set-key [?char] 'some-function)
+#+end_example
+
+Type C-q, followed by the key you want to bind, to insert =char=.
+
+--------------
+
+<<Early-Init-File>>
+**** 51.4.6 The Early Init File [[#The-Early-Init-File][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Early-Init-File
+:CLASS: subsection
+:END:
+Most customizations for Emacs should be put in the normal init file. See [[#Init-File][The Emacs Initialization File]]. However, it is sometimes necessary to have customizations take effect during Emacs startup earlier than the normal init file is processed. Such customizations can be put in the early init file, =~/.config/emacs/early-init.el= or =~/.emacs.d/early-init.el=. This file is loaded before the package system and GUI is initialized, so in it you can customize variables that affect the package initialization process, such as =package-enable-at-startup=, =package-load-list=, and =package-user-dir=. Note that variables like =package-archives= which only affect the installation of new packages, and not the process of making already-installed packages available, may be customized in the regular init file. See [[id:emacs--Package-Installation][Package Installation]].
+
+We do not recommend that you move into =early-init.el= customizations that can be left in the normal init files. That is because the early init file is read before the GUI is initialized, so customizations related to GUI features will not work reliably in =early-init.el=. By contrast, the normal init files are read after the GUI is initialized. If you must have customizations in the early init file that rely on GUI features, make them run off hooks provided by the Emacs startup, such as =window-setup-hook= or =tty-setup-hook=. See [[id:emacs--Variables::#Hooks][Hooks]].
+
+For more information on the early init file, see [[../elisp_html/Init-File.html#Init-File][Init File]] in The Emacs Lisp Reference Manual.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF26][(26)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+On MS-Windows, there's no single directory considered by all programs as “the home directory” of the user. Emacs uses one of the pertinent directories as the equivalent of your home directory; see [[id:emacs--Windows-HOME][HOME and Startup Directories on MS-Windows]], for the details.
+
+--------------

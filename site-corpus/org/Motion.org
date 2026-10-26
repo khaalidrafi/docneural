@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID: org--Motion
+:END:
+#+filetags: :org:
+#+title: Motion (The Org Manual)
+
+Next:
+
+<<Motion>>
+Next: [[id:org--Structure-Editing][Structure Editing]], Previous: [[id:org--Visibility-Cycling][Visibility Cycling]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 2.3 Motion [[#Motion-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Motion-1
+:CLASS: section
+:END:
+The following commands jump to other headlines in the buffer.
+
+-  <<index-C_002dc-C_002dn>>C-c C-n (=org-next-visible-heading=) [[#index-C_002dc-C_002dn][¶]] :: Next heading.
+
+-  <<index-C_002dc-C_002dp>>C-c C-p (=org-previous-visible-heading=) [[#index-C_002dc-C_002dp][¶]] :: Previous heading.
+
+-  <<index-C_002dc-C_002df>>C-c C-f (=org-forward-heading-same-level=) [[#index-C_002dc-C_002df][¶]] :: Next heading same level.
+
+-  <<index-C_002dc-C_002db>>C-c C-b (=org-backward-heading-same-level=) [[#index-C_002dc-C_002db][¶]] :: Previous heading same level.
+
+-  <<index-C_002dc-C_002du>>C-c C-u (=outline-up-heading=) [[#index-C_002dc-C_002du][¶]] :: Backward to higher level heading.
+
+-  <<index-C_002dc-C_002dj>>C-c C-j (=org-goto=) [[#index-C_002dc-C_002dj][¶]] :: Jump to a different place without changing the current outline visibility. Shows the document structure in a temporary buffer, where you can use the following keys to find your destination:
+
+  | TAB       | Cycle visibility.               |
+  | DOWN / UP | Next/previous visible headline. |
+  | RET       | Select this location.           |
+  | /         | Do a Sparse-tree search         |
+
+  The following keys work if you turn off =org-goto-auto-isearch=.
+
+  | n / p   | Next/previous visible headline.    |
+  | f / b   | Next/previous headline same level. |
+  | u       | One level up.                      |
+  | 0 ... 9 | Digit argument.                    |
+  | q       | Quit.                              |
+
+  See also the variable =org-goto-interface=.
+
+--------------
+
+Next: [[id:org--Structure-Editing][Structure Editing]], Previous: [[id:org--Visibility-Cycling][Visibility Cycling]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

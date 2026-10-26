@@ -1,0 +1,264 @@
+:PROPERTIES:
+:ID: guix--Scheduled-Job-Execution
+:END:
+#+filetags: :guix:
+#+title: Scheduled Job Execution
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Scheduled-Job-Execution>>
+Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.2 Scheduled Job Execution [[#Scheduled-Job-Execution-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Scheduled-Job-Execution-1
+:CLASS: subsection
+:END:
+It is often useful to have system tasks run periodically. This can be achieved by defining Shepherd /timers/ or by using the historical and somewhat less flexible mcron service.
+
+- [[#Shepherd-Timers][Shepherd Timers]]
+- [[#Mcron][Mcron]]
+
+<<Shepherd-Timers>>
+**** 11.10.2.1 Shepherd Timers [[#Shepherd-Timers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: shepherd-timers
+:CLASS: subsubsection
+:END:
+The Shepherd supports running jobs periodically by defining /timers/, a special kind of service. A Shepherd timer can be defined like another Shepherd service, but with specific =start= and =stop= methods (see [[id:guix--Shepherd-Services][Shepherd Services]]):
+
+#+begin_src lisp
+;; Defining a timer, verbosely.
+(shepherd-service
+ (provision '(updatedb))
+ (requirement '(user-processes))
+ (modules '((shepherd service timer)))
+ (start #~(make-timer-constructor
+           ;; Everyday at 3AM (using Vixie cron syntax).
+           (cron-string->calendar-event "0 3 * * *")
+           (command '(#$(file-append findutils "/bin/updatedb")))
+           #:wait-for-termination? #t))
+ (stop #~(make-timer-destructor))
+ (documentation "Periodically run 'updatedb'.")
+ (actions (list shepherd-trigger-action)))
+#+end_src
+
+This is quite some boilerplate so you can instead use this equivalent shorthand notation:
+
+#+begin_src lisp
+;; Equivalent timer definition, but shorter.
+(shepherd-timer '(updatedb) "0 3 * * *"
+                #~(#$(file-append findutils "/bin/updatedb"))
+                #:requirement '(user-processes))
+#+end_src
+
+This procedure is defined as follows.
+
+- Procedure: *shepherd-timer* =provision== ==schedule== ==command== [#:requirement ’()] [#:documentation %default-timer-documentation]= [[#index-shepherd_002dtimer][¶]] :: Return a Shepherd service with the given =provision= periodically running =command=, a list-valued gexp, according to =schedule=, a string in Vixie cron syntax or a gexp providing a Shepherd calendar event. =documentation= is the string that appears when running =herd doc ==service=.
+
+The example below shows how to define a timer and to add it to your operating system configuration.
+
+#+begin_src lisp
+(use-modules (gnu))
+(use-service-modules shepherd)
+(use-package-modules base)
+
+(define updatedb-timer
+  ;; Run 'updatedb' at 3AM everyday.
+  (shepherd-timer '(updatedb)
+                  "0 3 * * *"  ;Vixie cron syntax
+                  #~(#$(file-append findutils "/bin/updatedb")
+                     "--prunepaths=/tmp /var/tmp /gnu/store")
+                  #:requirement '(user-processes)))
+
+(define garbage-collection-timer
+  ;; Run 'guix gc' everyday at 5AM.
+  (shepherd-timer '(garbage-collection)
+                  #~(calendar-event #:hours '(5) #:minutes '(0))
+                  #~("/run/current-system/profile/bin/guix"
+                     "gc" "-F" "10G")
+                  #:requirement '(guix-daemon)))
+
+(operating-system
+  ;; ...
+
+  ;; Extend the Shepherd service with additional timers
+  ;; using 'simple-service'.
+  (services (cons (simple-service 'my-timers
+                                   shepherd-root-service-type
+                                   (list garbage-collection-timer
+                                         updatedb-timer))
+                  %base-services)))
+#+end_src
+
+The resulting system contains these two services, which can be inspected with =herd status=. They can also be triggered manually:
+
+#+begin_example
+herd trigger garbage-collection
+#+end_example
+
+See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual for more information on Shepherd timers.
+
+<<Mcron>>
+**** 11.10.2.2 Mcron [[#Mcron][¶]]
+:PROPERTIES:
+:CUSTOM_ID: mcron
+:CLASS: subsubsection
+:END:
+Alternatively, the =(gnu services mcron)= module provides an interface to GNU mcron, a daemon to run jobs at scheduled times (see [[https://www.gnu.org/software/mcron/manual/html_node/index.html#Top][GNU mcron]]). GNU mcron is similar to the traditional Unix =cron= daemon; the main difference is that it is implemented in Guile Scheme. It is overall less convenient than Shepherd timers: individual jobs cannot depend on specific Shepherd services, logging is coarse-grain (one file for all the jobs), jobs may not be inspected, updated, or triggered manually.
+
+#+begin_quote
+*Note:* For the reasons given above, we recommend using Shepherd timers rather than mcron for your periodic tasks.
+
+#+end_quote
+
+The example below defines an operating system that runs the =updatedb= (see [[https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-updatedb.html#Invoking-updatedb][Invoking updatedb]] in Finding Files) and the =guix gc= commands (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]) daily, as well as the =mkid= command on behalf of an unprivileged user (see [[https://www.gnu.org/software/idutils/manual/html_node/mkid-invocation.html#mkid-invocation][mkid invocation]] in ID Database Utilities). It uses gexps to introduce job definitions that are passed to mcron (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+#+begin_src lisp
+(use-modules (guix) (gnu) (gnu services mcron))
+(use-package-modules base idutils)
+
+(define updatedb-job
+  ;; Run 'updatedb' at 3AM every day.  Here we write the
+  ;; job's action as a Scheme procedure.
+  #~(job '(next-hour '(3))
+         (lambda ()
+           (system* (string-append #$findutils "/bin/updatedb")
+                    "--prunepaths=/tmp /var/tmp /gnu/store"))
+         "updatedb"))
+
+(define garbage-collector-job
+  ;; Collect garbage 5 minutes after midnight every day.
+  ;; The job's action is a shell command.
+  #~(job "5 0 * * *"            ;Vixie cron syntax
+         "guix gc -F 1G"))
+
+(define idutils-job
+  ;; Update the index database as user "charlie" at 12:15PM
+  ;; and 19:15PM.  This runs from the user's home directory.
+  #~(job '(next-minute-from (next-hour '(12 19)) '(15))
+         (string-append #$idutils "/bin/mkid src")
+         #:user "charlie"))
+
+(operating-system
+  ;; ...
+
+  ;; %BASE-SERVICES already includes an instance of
+  ;; 'mcron-service-type', which we extend with additional
+  ;; jobs using 'simple-service'.
+  (services (cons (simple-service 'my-cron-jobs
+                                   mcron-service-type
+                                   (list garbage-collector-job
+                                         updatedb-job
+                                         idutils-job))
+                  %base-services)))
+#+end_src
+
+#+begin_quote
+*Tip:* When providing the action of a job specification as a procedure, you should provide an explicit name for the job via the optional 3rd argument as done in the =updatedb-job= example above. Otherwise, the job would appear as “Lambda function” in the output of =herd schedule mcron=, which is not nearly descriptive enough!
+
+#+end_quote
+
+#+begin_quote
+*Tip:* Avoid calling the Guile procedures =execl=, =execle= or =execlp= inside a job specification, else mcron won't be able to output the completion status of the job.
+
+#+end_quote
+
+For more complex jobs defined in Scheme where you need control over the top level, for instance to introduce a =use-modules= form, you can move your code to a separate program using the =program-file= procedure of the =(guix gexp)= module (see [[id:guix--G_002dExpressions][G-Expressions]]). The example below illustrates that.
+
+#+begin_src lisp
+(define %battery-alert-job
+  ;; Beep when the battery percentage falls below %MIN-LEVEL.
+  #~(job
+     '(next-minute (range 0 60 1))
+     #$(program-file
+        "battery-alert.scm"
+        (with-imported-modules (source-module-closure
+                                '((guix build utils)))
+          #~(begin
+              (use-modules (guix build utils)
+                           (ice-9 popen)
+                           (ice-9 regex)
+                           (ice-9 textual-ports)
+                           (srfi srfi-2))
+
+              (define %min-level 20)
+
+              (setenv "LC_ALL" "C")     ;ensure English output
+              (and-let* ((input-pipe (open-pipe*
+                                      OPEN_READ
+                                      #$(file-append acpi "/bin/acpi")))
+                         (output (get-string-all input-pipe))
+                         (m (string-match "Discharging, ([0-9]+)%" output))
+                         (level (string->number (match:substring m 1)))
+                         ((< level %min-level)))
+                (format #t "warning: Battery level is low (~a%)~%" level)
+                (invoke #$(file-append beep "/bin/beep") "-r5")))))))
+#+end_src
+
+See [[https://www.gnu.org/software/mcron/manual/html_node/Guile-Syntax.html#Guile-Syntax][mcron job specifications]] in GNU mcron, for more information on mcron job specifications. Below is the reference of the mcron service.
+
+On a running system, you can use the =schedule= action of the service to visualize the mcron jobs that will be executed next:
+
+#+begin_example
+# herd schedule mcron
+#+end_example
+
+The example above lists the next five tasks that will be executed, but you can also specify the number of tasks to display:
+
+#+begin_example
+# herd schedule mcron 10
+#+end_example
+
+- Variable: *mcron-service-type* [[#index-mcron_002dservice_002dtype][¶]] :: This is the type of the =mcron= service, whose value is an =mcron-configuration= object.
+
+  This service type can be the target of a service extension that provides additional job specifications (see [[id:guix--Service-Composition][Service Composition]]). In other words, it is possible to define services that provide additional mcron jobs to run.
+
+- Data Type: *mcron-configuration* [[#index-mcron_002dconfiguration][¶]] :: Available =mcron-configuration= fields are:
+
+  - =mcron= (default: =mcron=) (type: file-like) :: The mcron package to use.
+
+  - =jobs= (default: ='()=) (type: list-of-gexps) :: This is a list of gexps (see [[id:guix--G_002dExpressions][G-Expressions]]), where each gexp corresponds to an mcron job specification (see [[https://www.gnu.org/software/mcron/manual/html_node/Syntax.html#Syntax][mcron job specifications]] in GNU mcron).
+
+  - =log?= (default: =#t=) (type: boolean) :: Log messages to standard output.
+
+  - =log-file= (default: ="/var/log/mcron.log"=) (type: string) :: Log file location.
+
+  - =log-format= (default: ="~1@*~a ~a: ~a~%"=) (type: string) :: =(ice-9 format)= format string for log messages. The default value produces messages like ‘=pid== ==name==: ==message=' (see [[https://www.gnu.org/software/mcron/manual/html_node/Invoking-mcron.html#Invoking-mcron][Invoking]] in GNU mcron). Each message is also prefixed by a timestamp by GNU Shepherd.
+
+  - =date-format= (type: maybe-string) :: =(srfi srfi-19)= format string for date.
+
+--------------
+
+Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

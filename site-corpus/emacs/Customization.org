@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Customization
+:END:
+#+filetags: :emacs:
+#+title: Customization
+
+Next: [[id:emacs--Quitting][Quitting and Aborting]]   Previous: [[id:emacs--Packages][Emacs Lisp Packages]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Customization>>
+** 51 Customization [[#Customization-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customization-1
+:CLASS: chapter
+:END:
+This chapter describes some simple methods to customize the behavior of Emacs.
+
+Apart from the methods described here, see [[id:emacs--X-Resources][X Options and Resources]] for information about using X resources to customize Emacs, and see [[id:emacs--Keyboard-Macros][Keyboard Macros]] for information about recording and replaying keyboard macros. Making more far-reaching and open-ended changes involves writing Emacs Lisp code; see [[../elisp_html/index.html#Top][Emacs Lisp]] in The Emacs Lisp Reference Manual.
+
+--------------

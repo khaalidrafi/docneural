@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID: org--Creating-Timestamps
+:END:
+#+filetags: :org:
+#+title: Creating Timestamps (The Org Manual)
+
+Next:
+
+<<Creating-Timestamps>>
+Next: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]], Previous: [[id:org--Timestamps][Timestamps]], Up: [[id:org--Dates-and-Times][Dates and Times]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 8.2 Creating Timestamps [[#Creating-Timestamps-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-Timestamps-1
+:CLASS: section
+:END:
+For Org mode to recognize timestamps, they need to be in the specific format. All commands listed below produce timestamps in the correct format.
+
+-  <<index-C_002dc-_002e>>C-c . (=org-timestamp=) [[#index-C_002dc-_002e][¶]] :: Prompt for a date and insert a corresponding timestamp. When point is at an existing timestamp in the buffer, the command is used to modify this timestamp instead of inserting a new one. When this command is used twice in succession, a time range is inserted.
+
+  When called with a prefix argument, use the alternative format which contains date and time. The default time can be rounded to multiples of 5 minutes. See the option =org-time-stamp-rounding-minutes=.
+
+  With two prefix arguments, insert an active timestamp with the current time without prompting.
+
+-  <<index-C_002dc-_0021>>C-c ! (=org-timestamp-inactive=) [[#index-C_002dc-_0021][¶]] :: Like C-c ., but insert an inactive timestamp that does not cause an agenda entry.
+
+- <<index-C_002dc-C_002dc-13>>C-c C-c [[#index-C_002dc-C_002dc-13][¶]] :: Normalize timestamp, insert or fix day name if missing or wrong.
+
+-  <<index-C_002dc-_003c>>C-c < (=org-date-from-calendar=) [[#index-C_002dc-_003c][¶]] :: Insert a timestamp corresponding to point date in the calendar.
+
+-  <<index-C_002dc-_003e>>C-c > (=org-goto-calendar=) [[#index-C_002dc-_003e][¶]] :: Access the Emacs calendar for the current date. If there is a timestamp in the current line, go to the corresponding date instead.
+
+-  <<index-C_002dc-C_002do-1>>C-c C-o (=org-open-at-point=) [[#index-C_002dc-C_002do-1][¶]] :: Access the agenda for the date given by the timestamp or -range at point (see [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]]).
+
+-  <<index-S_002dLEFT-7>>S-LEFT (=org-timestamp-down-day=), S-RIGHT (=org-timestamp-up-day=) [[#index-S_002dLEFT-7][¶]] :: Change date at point by one day. These key bindings conflict with shift-selection and related modes (see [[id:org--Conflicts][Packages that conflict with Org mode]]).
+
+-  <<index-S_002dUP-4>>S-UP (=org-timestamp-up=), S-DOWN (=org-timestamp-down=) [[#index-S_002dUP-4][¶]] :: On the beginning or enclosing bracket of a timestamp, change its type. Within a timestamp, change the item under point. Point can be on a year, month, day, hour or minute. When the timestamp contains a time range like ‘=15:30-16:30=', modifying the first time also shifts the second, shifting the time block with constant length. To change the length, modify the second time. Note that if point is in a headline and not at a timestamp, these same keys modify the priority of an item (see [[id:org--Priorities][Priorities]]). The key bindings also conflict with shift-selection and related modes (see [[id:org--Conflicts][Packages that conflict with Org mode]]).
+
+-  <<index-C_002dc-C_002dy>>C-c C-y (=org-evaluate-time-range=) [[#index-C_002dc-C_002dy][¶]] :: Evaluate a time range by computing the difference between start and end. With a prefix argument, insert result after the time range (in a table: into the following column).
+
+- [[id:org--The-date_002ftime-prompt][The date/time prompt]]
+- [[id:org--Custom-time-format][Custom time format]]
+
+--------------
+
+Next: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]], Previous: [[id:org--Timestamps][Timestamps]], Up: [[id:org--Dates-and-Times][Dates and Times]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

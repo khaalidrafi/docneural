@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: guix--Data-Types-and-Pattern-Matching
+:END:
+#+filetags: :guix:
+#+title: Data Types and Pattern Matching
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Data-Types-and-Pattern-Matching>>
+Next: [[id:guix--Formatting-Code][Formatting Code]], Previous: [[id:guix--Modules][Modules]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.8.3 Data Types and Pattern Matching [[#Data-Types-and-Pattern-Matching-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Data-Types-and-Pattern-Matching-1
+:CLASS: subsection
+:END:
+The tendency in classical Lisp is to use lists to represent everything, and then to browse them “by hand” using =car=, =cdr=, =cadr=, and co. There are several problems with that style, notably the fact that it is hard to read, error-prone, and a hindrance to proper type error reports.
+
+Guix code should define appropriate data types (for instance, using =define-record-type*=) rather than abuse lists. In addition, it should use pattern matching, via Guile's =(ice-9 match)= module, especially when matching lists (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Pattern-Matching.html#Pattern-Matching][Pattern Matching]] in GNU Guile Reference Manual); pattern matching for records is better done using =match-record= from =(guix records)=, which, unlike =match=, verifies field names at macro-expansion time.
+
+When defining a new record type, keep the /record type descriptor/ (RTD) private (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Records.html#Records][Records]] in GNU Guile Reference Manual, for more on records and RTDs). As an example, the =(guix packages)= module defines =<package>= as the RTD for package records but it does not export it; instead, it exports a type predicate, a constructor, and field accessors. Exporting RTDs would make it harder to change the application binary interface (because code in other modules might be matching fields by position) and would make it trivial for users to forge records of that type, bypassing any checks we may have in the official constructor (such as “field sanitizers”).
+
+--------------
+
+Next: [[id:guix--Formatting-Code][Formatting Code]], Previous: [[id:guix--Modules][Modules]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

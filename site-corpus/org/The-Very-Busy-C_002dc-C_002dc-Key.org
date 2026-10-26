@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID: org--The-Very-Busy-C_002dc-C_002dc-Key
+:END:
+#+filetags: :org:
+#+title: The Very Busy C-c C-c Key (The Org Manual)
+
+Next:
+
+<<The-Very-Busy-C_002dc-C_002dc-Key>>
+Next: [[id:org--In_002dbuffer-Settings][Summary of In-Buffer Settings]], Previous: [[id:org--Dynamic-Headline-Numbering][Dynamic Headline Numbering]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.7 The Very Busy C-c C-c Key [[#The-Very-Busy-C_002dc-C_002dc-Key-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Very-Busy-C_002dc-C_002dc-Key-1
+:CLASS: section
+:END:
+The C-c C-c key in Org serves many purposes depending on the context. It is probably the most over-worked, multipurpose key combination in Org. Its uses are well documented throughout this manual, but here is a consolidated list for easy reference.
+
+- If column view (see [[id:org--Column-View][Column View]]) is on, exit column view.
+- If any highlights shown in the buffer from the creation of a sparse tree, or from clock display, remove such highlights.
+- If point is in one of the special ‘=KEYWORD=' lines, scan the buffer for these lines and update the information. Also reset the Org file cache used to temporarily store the contents of URLs used as values for keywords like ‘=SETUPFILE='.
+- If point is inside a table, realign the table.
+- If point is on a ‘=TBLFM=' keyword, re-apply the formulas to the entire table.
+- If the current buffer is a capture buffer, close the note and file it. With a prefix argument, also jump to the target location after saving the note.
+- If point is on a ‘=<<<target>>>=', update radio targets and corresponding links in this buffer.
+- If point is on a property line or at the start or end of a property drawer, offer property commands.
+- If point is at a footnote reference, go to the corresponding definition, and /vice versa/.
+- If point is on a statistics cookie, update it.
+- If point is in a plain list item with a checkbox, toggle the status of the checkbox.
+- If point is on a numbered item in a plain list, renumber the ordered list.
+- If point is on the ‘=#+BEGIN=' line of a dynamic block, the block is updated.
+- If point is at a timestamp, fix the day name in the timestamp.
+
+--------------
+
+Next: [[id:org--In_002dbuffer-Settings][Summary of In-Buffer Settings]], Previous: [[id:org--Dynamic-Headline-Numbering][Dynamic Headline Numbering]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

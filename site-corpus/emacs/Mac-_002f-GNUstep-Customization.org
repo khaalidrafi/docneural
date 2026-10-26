@@ -1,0 +1,72 @@
+:PROPERTIES:
+:ID: emacs--Mac-_002f-GNUstep-Customization
+:END:
+#+filetags: :emacs:
+#+title: Mac / GNUstep Customization
+
+Next: [[id:emacs--Mac-_002f-GNUstep-Events][Windowing System Events under macOS / GNUstep]]   Previous: [[id:emacs--Mac-_002f-GNUstep-Basics][Basic Emacs usage under macOS and GNUstep]]   Up: [[id:emacs--Mac-OS-_002f-GNUstep][Emacs and macOS / GNUstep]]
+
+<<Mac-_002f-GNUstep-Customization>>
+*** F.2 Mac / GNUstep Customization [[#Mac-_002f-GNUstep-Customization-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mac-_002f-GNUstep-Customization-1
+:CLASS: section
+:END:
+There are a few customization options that are specific to the Nextstep port. For example, they affect things such as the modifier keys and the fullscreen behavior. To see all such options, use M-x customize-group RET ns RET.
+
+<<Modifier-keys>>
+**** F.2.1 Modifier keys [[#Modifier-keys][¶]]
+:PROPERTIES:
+:CUSTOM_ID: f.2.1-modifier-keys
+:CLASS: subsection
+:END:
+The following variables control the behavior of the actual modifier keys:
+
+-  <<index-ns_002dalternate_002dmodifier>>=ns-alternate-modifier= [[#index-ns_002dalternate_002dmodifier][¶]]\\
+  =ns-right-alternate-modifier= :: The left and right Option or Alt keys.
+
+-  <<index-ns_002dcommand_002dmodifier>>=ns-command-modifier= [[#index-ns_002dcommand_002dmodifier][¶]]\\
+  =ns-right-command-modifier= :: The left and right Command keys.
+
+-  <<index-ns_002dcontrol_002dmodifier>>=ns-control-modifier= [[#index-ns_002dcontrol_002dmodifier][¶]]\\
+  =ns-right-control-modifier= :: The left and right Control keys.
+
+- <<index-ns_002dfunction_002dmodifier>>=ns-function-modifier= [[#index-ns_002dfunction_002dmodifier][¶]] :: The Function (fn) key.
+
+The value of each variable is either a symbol, describing the key for any purpose, or a list of the form =(:ordinary ==symbol== :function ==symbol== :mouse ==symbol==)=, which describes the modifier when used with ordinary keys, function keys (that do not produce a character, such as arrow keys), and mouse clicks.
+
+If the =symbol= is one of =control=, =meta=, =alt=, =super= or =hyper=, this describes the Emacs modifier it represents. If =symbol= is =none=, Emacs does not use the key, which retains its standard behavior. For instance, the Option key in macOS is then used for composing additional characters.
+
+The variables for right-hand keys, like =ns-right-alternate-modifier=, may also be set to =left=, which means to use the same behavior as the corresponding left-hand key.
+
+<<Frame-Variables>>
+**** F.2.2 Frame Variables [[#Frame-Variables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: f.2.2-frame-variables
+:CLASS: subsection
+:END:
+- <<index-ns_002duse_002dproxy_002dicon>>=ns-use-proxy-icon= [[#index-ns_002duse_002dproxy_002dicon][¶]] :: This variable specifies whether to display the proxy icon in the titlebar. The proxy icon can be used to drag the file associated with the current buffer to other applications, a printer, the desktop, etc., in the same way you can from Finder. You might have to disable =tool-bar-mode= to see the proxy icon.
+
+- <<index-ns_002dconfirm_002dquit>>=ns-confirm-quit= [[#index-ns_002dconfirm_002dquit][¶]] :: This variable specifies whether to display a graphical confirmation dialog on quitting.
+
+- <<index-ns_002dauto_002dhide_002dmenu_002dbar>>=ns-auto-hide-menu-bar= [[#index-ns_002dauto_002dhide_002dmenu_002dbar][¶]] :: This variable specifies whether the macOS menu bar is hidden when an Emacs frame is selected. If non-=nil= the menu bar is not shown unless the mouse pointer is moved near to the top of the screen.
+
+- <<index-ns_002duse_002dnative_002dfullscreen>>=ns-use-native-fullscreen= [[#index-ns_002duse_002dnative_002dfullscreen][¶]] :: This variable controls whether to use native, or non-native fullscreen. Native fullscreen is only available on macOS 10.7 and above.
+
+<<macOS-Trackpad_002fMousewheel-Variables>>
+**** F.2.3 macOS Trackpad/Mousewheel Variables [[#macOS-Trackpad_002fMousewheel-Variables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: f.2.3-macos-trackpadmousewheel-variables
+:CLASS: subsection
+:END:
+These variables only apply to macOS 10.7 (Lion) and above.
+
+- <<index-ns_002duse_002dmwheel_002dacceleration>>=ns-use-mwheel-acceleration= [[#index-ns_002duse_002dmwheel_002dacceleration][¶]] :: This variable controls whether Emacs ignores the system mousewheel acceleration. When =nil= each ‘click' of the mousewheel will correspond exactly with one mousewheel event. When non-=nil=, the default, each ‘click' may correspond with more than one mousewheel event, depending on the user's input.
+
+- <<index-ns_002duse_002dmwheel_002dmomentum>>=ns-use-mwheel-momentum= [[#index-ns_002duse_002dmwheel_002dmomentum][¶]] :: This variable controls whether Emacs ignores the system ‘momentum' when scrolling using a trackpad. When non-=nil=, the default, scrolling rapidly may result in the buffer continuing to scroll for a short while after the user has lifted their fingers off the trackpad.
+
+- <<index-ns_002dmwheel_002dline_002dheight>>=ns-mwheel-line-height= [[#index-ns_002dmwheel_002dline_002dheight][¶]] :: This variable controls the sensitivity of scrolling with the trackpad. Apple trackpads scroll by pixels, not lines, so Emacs converts the system's pixel values into lines. When set to a number, this variable sets the number of pixels Emacs will consider as one line. When =nil= or a non-number the default line height is used.
+
+  Setting a lower number makes the trackpad more sensitive, and a higher number makes the trackpad less sensitive.
+
+--------------

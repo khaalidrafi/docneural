@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: org--Clocking-commands
+:END:
+#+filetags: :org:
+#+title: Clocking commands (The Org Manual)
+
+Next:
+
+<<Clocking-commands>>
+Next: [[id:org--The-clock-table][The clock table]], Up: [[id:org--Clocking-Work-Time][Clocking Work Time]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 8.4.1 Clocking commands [[#Clocking-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Clocking-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002dx-C_002di>>C-c C-x C-i (=org-clock-in=) [[#index-C_002dc-C_002dx-C_002di][¶]] :: Start the clock on the current item (clock-in). This inserts the ‘=CLOCK=' keyword together with a timestamp. If this is not the first clocking of this item, the multiple ‘=CLOCK=' lines are wrapped into a ‘=LOGBOOK=' drawer (see also the variable =org-clock-into-drawer=). You can also overrule the setting of this variable for a subtree by setting a ‘=CLOCK_INTO_DRAWER=' or ‘=LOG_INTO_DRAWER=' property. When called with a C-u prefix argument, select the task from a list of recently clocked tasks. With two C-u C-u prefixes, clock into the task at point and mark it as the default task; the default task is always be available with letter d when selecting a clocking task. With three C-u C-u C-u prefixes, force continuous clocking by starting the clock when the last clock stopped.
+
+  While the clock is running, Org shows the current clocking time in the mode line, along with the title of the task. The clock time shown is all time ever clocked in for this task and its children. If the task has an effort estimate (see [[id:org--Effort-Estimates][Effort Estimates]]), the mode line displays the current clocking time against it[[#FOOT75][^{75}]]. If the task is a repeating one (see [[id:org--Repeated-tasks][Repeated tasks]]), show only the time since the last reset of the task[[#FOOT76][^{76}]]. You can exercise more control over show time with the ‘=CLOCK_MODELINE_TOTAL=' property. It may have the values ‘=current=' to show only the current clocking instance, ‘=today=' to show all time clocked on this task today---see also the variable =org-extend-today-until=, =all= to include all time, or =auto= which is the default[[#FOOT77][^{77}]]. Clicking with mouse-1 onto the mode line entry pops up a menu with clocking options.
+
+-  <<index-C_002dc-C_002dx-C_002do>>C-c C-x C-o (=org-clock-out=) [[#index-C_002dc-C_002dx-C_002do][¶]] :: Stop the clock (clock-out). This inserts another timestamp at the same location where the clock was last started. It also directly computes the resulting time in inserts it after the time range as ‘==>HH:MM='. See the variable =org-log-note-clock-out= for the possibility to record an additional note together with the clock-out timestamp[[#FOOT78][^{78}]].
+
+-  <<index-C_002dc-C_002dx-C_002dx>>C-c C-x C-x (=org-clock-in-last=) [[#index-C_002dc-C_002dx-C_002dx][¶]] :: Re-clock the last clocked task. With one C-u prefix argument, select the task from the clock history. With two C-u prefixes, force continuous clocking by starting the clock when the last clock stopped.
+
+-  <<index-C_002dc-C_002dx-C_002de>>C-c C-x C-e (=org-clock-modify-effort-estimate=) [[#index-C_002dc-C_002dx-C_002de][¶]] :: Update the effort estimate for the current clock task.
+
+-  <<index-C_002dc-C_002dc-14>>C-c C-c or C-c C-y (=org-evaluate-time-range=) [[#index-C_002dc-C_002dc-14][¶]] :: Recompute the time interval after changing one of the timestamps. This is only necessary if you edit the timestamps directly. If you change them with S-<cursor> keys, the update is automatic.
+
+-  <<index-C_002dS_002dUP>>C-S-UP (=org-clock-timestamps-up=), C-S-DOWN (=org-clock-timestamps-down=) [[#index-C_002dS_002dUP][¶]] :: On CLOCK log lines, increase/decrease both timestamps so that the clock duration keeps the same value.
+
+-  <<index-S_002dM_002dUP>>S-M-UP (=org-timestamp-up=), S-M-DOWN (=org-timestamp-down=) [[#index-S_002dM_002dUP][¶]] :: On ‘=CLOCK=' log lines, increase/decrease the timestamp at point and the one of the previous, or the next, clock timestamp by the same duration. For example, if you hit S-M-UP to increase a clocked-out timestamp by five minutes, then the clocked-in timestamp of the next clock is increased by five minutes.
+
+  Only ‘=CLOCK=' logs created during current Emacs session are considered when adjusting next/previous timestamp.
+
+-  <<index-C_002dc-C_002dt-1>>C-c C-t (=org-todo=) [[#index-C_002dc-C_002dt-1][¶]] :: Changing the TODO state of an item to DONE automatically stops the clock if it is running in this same item.
+
+-  <<index-C_002dc-C_002dx-C_002dq>>C-c C-x C-q (=org-clock-cancel=) [[#index-C_002dc-C_002dx-C_002dq][¶]] :: Cancel the current clock. This is useful if a clock was started by mistake, or if you ended up working on something else.
+
+-  <<index-C_002dc-C_002dx-C_002dj>>C-c C-x C-j (=org-clock-goto=) [[#index-C_002dc-C_002dx-C_002dj][¶]] :: Jump to the headline of the currently clocked-in task. With a C-u prefix argument, select the target task from a list of recently clocked tasks.
+
+-  <<index-C_002dc-C_002dx-C_002dd>>C-c C-x C-d (=org-clock-display=) [[#index-C_002dc-C_002dx-C_002dd][¶]] :: Display time summaries for each subtree in the current buffer. This puts overlays at the end of each headline, showing the total time recorded under that heading, including the time of any subheadings. You can use visibility cycling to study the tree, but the overlays disappear when you change the buffer (see variable =org-remove-highlights-with-change=) or press C-c C-c.
+
+The l key may be used in the agenda (see [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]]) to show which tasks have been worked on or closed during a day.
+
+*Important:* note that both =org-clock-out= and =org-clock-in-last= can have a global key binding and do not modify the window disposition.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF75][(75)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+To add an effort estimate “on the fly”, hook a function doing this to =org-clock-in-prepare-hook=.
+
+***** [[#DOCF76][(76)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The last reset of the task is recorded by the ‘=LAST_REPEAT=' property.
+
+***** [[#DOCF77][(77)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+See also the variable =org-clock-mode-line-total=.
+
+***** [[#DOCF78][(78)]]
+:PROPERTIES:
+:CUSTOM_ID: section-3
+:CLASS: footnote-body-heading
+:END:
+The corresponding in-buffer setting is: ‘=#+STARTUP: lognoteclock-out='.
+
+--------------
+
+Next: [[id:org--The-clock-table][The clock table]], Up: [[id:org--Clocking-Work-Time][Clocking Work Time]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

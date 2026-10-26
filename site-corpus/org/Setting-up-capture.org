@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Setting-up-capture
+:END:
+#+filetags: :org:
+#+title: Setting up capture (The Org Manual)
+
+Next:
+
+<<Setting-up-capture>>
+Next: [[id:org--Using-capture][Using capture]], Up: [[id:org--Capture][Capture]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.1.1 Setting up capture [[#Setting-up-capture-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-up-capture-1
+:CLASS: subsection
+:END:
+The following customization sets a default target file for notes.
+
+#+begin_src lisp-preformatted
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+#+end_src
+
+You may also define a global key for capturing new material (see [[id:org--Activation][Activation]]).

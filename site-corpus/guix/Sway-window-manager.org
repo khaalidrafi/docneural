@@ -1,0 +1,327 @@
+:PROPERTIES:
+:ID: guix--Sway-window-manager
+:END:
+#+filetags: :guix:
+#+title: Sway window manager
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Sway-window-manager>>
+Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.19 Sway window manager [[#Sway-window-manager-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sway-window-manager-1
+:CLASS: subsection
+:END:
+The =(gnu home services sway)= module provides =home-sway-service-type=, a home service to configure the [[https://github.com/swaywm/sway][Sway window manager for Wayland]] in a declarative way.
+
+Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
+
+#+begin_src lisp
+(service home-sway-service-type
+         (sway-configuration
+          (gestures
+           '((swipe:3:down . "move to scratchpad")
+             (swipe:3:up   . "scratchpad show")))
+          (outputs
+           (list (sway-output
+                  (identifier '*)
+                  (background (file-append sway
+                                           "\
+/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png")))))))
+#+end_src
+
+The above example describes a Sway configuration in which
+
+- all monitors use a particular wallpaper whose =.png= is provided by the =sway= package;
+- swiping down (resp. up) with three fingers moves the active window to the scratchpad (resp. shows/hides the scratchpad).
+
+#+begin_quote
+*Note:* This home service only sets up the configuration file and profile packages for Sway. It does /not/ start Sway in any way. If you want to do so, you might be interested in using =greetd-wlgreet-sway-session= instead.
+
+The procedure =sway-configuration->file= defined below can be used to provide the value for the /optional/ =sway-configuration= field of =greetd-wlgreet-sway-session=.
+
+#+end_quote
+
+- Procedure: *sway-configuration->file* =config= [[#index-sway_002dconfiguration_002d_003efile][¶]] :: This procedure takes one argument =config=, which must be a =sway-configuration= record (defined below), and returns a file-like object representing the serialized configuration.
+
+- Variable: *home-sway-service-type* [[#index-home_002dsway_002dservice_002dtype][¶]] :: This is a home service type to set up Sway. It takes care of:
+
+  - providing a =~/.config/sway/config= file,
+  - adding Sway-related packages to your profile.
+
+  It is possible to extend this service (see [[id:guix--Service-Composition][Service Composition]]). The resulting configuration file contains the concatenation of keybindings, modes, /etc./ found in all extensions.
+
+  #+begin_quote
+  *Note:* At the moment, only one bar configuration is allowed. If more are found, an error will be raised.
+
+  #+end_quote
+
+- Variable: *%empty-sway-configuration* [[#index-_0025empty_002dsway_002dconfiguration][¶]] :: The variable =%empty-sway-configuration= contains an empty =sway-configuration= record. This value can help users write simple service extensions.
+
+- Data Type: *sway-configuration* [[#index-sway_002dconfiguration][¶]] :: This configuration record describes the Sway configuration (see sway(5)). Available fields are:
+
+  - =variables= (default: =%sway-default-variables=) :: The value of this field is an association list in which keys are symbols and values are either strings, G-expressions or file-like objects (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+    Example:
+
+    #+begin_src lisp
+    (variables `((mod . "Mod4") ; string
+                 (term ; file-append
+                  . ,(file-append foot "/bin/foot"))
+                 (Term ; G-expression
+                  . ,#~(string-append #$foot "/bin/foot"))))
+    #+end_src
+
+    #+begin_quote
+    *Note:* Default keybindings assume the existence of variables named =$mod=, =$left=, =$right=, =$up= and =$down=. If you choose not to define these variables, make sure to remove keybindings referring to them.
+
+    #+end_quote
+
+  - =keybindings= (default: =%sway-default-keybindings=) :: This field describes keybindings for the /default/ mode. The value is an association list in which keys are symbols. Values can either be:
+
+    - strings or G-expressions,
+    - a cons-cell of a string or G-expression and a list of options. Options must be a string starting with “input-device=” or strings among “no-warn”, “whole-window”, “border”, “exclude-titlebar”, “release”, “locked”, “to-code”, “inhibited” and “no-repeat”.
+
+    The following snippet launches the terminal when pressing $mod+t and $mod+Shift+t (assuming that a variable =$term= is defined):
+
+    #+begin_src lisp
+    `(($mod+t . ,#~(string-append "exec " #$foot "/bin/foot"))
+      ($mod+Shift+t . "exec $term")
+      ($mod+q "exec $term" . ("to-code"))) ;; passes the --to-code option.
+    #+end_src
+
+  - =gestures= (default: =%sway-default-gestures=) :: Similar to the previous field, but for finger-gestures. Options must start with “input-device=” or be among “exact” and “no-warn”.
+
+    The following snippet allows to navigate through workspaces by swiping right and left with three fingers:
+
+    #+begin_src lisp
+    '((swipe:3:right . "workspace next_on_output")
+      (swipe:3:left    "workspace prev_on_output" . ("exact")))
+    #+end_src
+
+  - =packages= (default: =%sway-default-packages=) :: This field describes a list of packages to add to the user profile. At the moment, the default value only adds =sway= to the profile.
+
+  - =inputs= (default: ='()=) :: List of =sway-input= configuration records (described below).
+
+  - =outputs= (default: ='()=) :: List of =sway-output= configuration records (described below).
+
+  - =bar= (optional =sway-bar= record) :: Optional =sway-bar= record (described below) to configure a Sway bar.
+
+  - =modes= (default: =%sway-default-modes=) :: List of =sway-mode= records (described below) to add modes to the Sway configuration. The default value =%sway-default-modes= adds the “resize” mode of the default Sway configuration (as described below).
+
+  - =startup+reload-programs= (default: ='()=) :: Programs to execute at startup time /and/ after every configuration reload. The value of this field is a list of strings, G-expressions or file-like objects (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+  - =startup-programs= (default: =%sway-default-startup-programs=) :: Programs to execute at startup time. As above, values of this field are a list of strings, G-expressions or file-like objects.
+
+    The default value, =%sway-default-startup-programs=, executes =swayidle= in order to lock the screen after 5 minutes of inactivity (displaying a background distributed with Sway) and turn the screen off after 10 minutes of inactivity.
+
+  - =extra-content= (default: ='()=) :: Lines to add to the configuration file. The value of this field is a list of strings or G-expressions.
+
+- Data Type: *sway-input* [[#index-sway_002dinput][¶]] :: =sway-input= records describe input blocks (see sway-input(5)). For example, the following snippet makes all keyboards use a French layout, in which capslock has been remapped to ctrl:
+
+  #+begin_src lisp
+  (sway-input (identifier "type:keyboard")
+              (layout
+                (keyboard-layout "fr" #:options '("ctrl:nocaps"))))
+  #+end_src
+
+  Available fields for =sway-input= configuration records are:
+
+  - =identifier= (default: ='*=) :: Identifier of the input. The field accepts symbols and strings. If the =identifier= is a symbol, it is inserted as is; if it is a string, it will be quoted in the configuration file.
+
+  - =layout= (optional =<keyboard-layout>= record) :: Keyboard specific option. Field specifying the layout to use for the input. The value must be a =<keyboard-layout>= record (see [[id:guix--Keyboard-Layout][Keyboard Layout]]).
+
+    #+begin_quote
+    *Note:* =(gnu home services sway)= does not re-export the =keyboard-layout= procedure.
+
+    #+end_quote
+
+  - =disable-while-typing= (optional boolean) :: If =#t= (resp. =#f=) enables (resp. disables) the “disable while typing” option for this input.
+
+  - =disable-while-trackpointing= (optional boolean) :: If =#t= (resp. =#f=), enables (resp. disables) the “disable while track-pointing” option for this input.
+
+  - =tap= (optional boolean) :: Enables or disables the “tap” option, which allows clicking by tapping on a touchpad.
+
+  - =extra-content= (default: ='()=) :: Lines to add to the input block. The value of this field must a list whose elements are either strings or G-expressions.
+
+- Data Type: *sway-output* [[#index-sway_002doutput][¶]] :: =sway-output= records describe Sway outputs (see sway-output(5)). Available fields are:
+
+  - =identifier= (default: ='*=) :: Identifier of the monitor. The field accepts symbols and strings. If the =identifier= is a symbol, it is inserted as is; if it is a string, it will be quoted in the configuration file.
+
+  - =resolution= (optional string) :: This string defines the resolution of the monitor.
+
+  - =position= (optional) :: The (optional) value of this field must be a =point=. Example:
+
+    #+begin_src lisp
+    (position
+     (point (x 1920)
+            (y 0)))
+    #+end_src
+
+  - =background= (optional) :: The value of this field describes what wallpaper to use on this output. The field accepts the following types of values:
+
+    - a string,
+
+    - a G-expression,
+
+    - a file-like object,
+
+    - a pair. The first argument of this pair must be a string, a G-expression or a file-like object. The second element describes how the wallpaper will be displayed. It must be a symbol among =stretch=, =fill=, =fit=, =center=, =tile= and =solid_color=.
+
+      If the second element is not specified (/i.e./ when the value is not a pair), the =fill= mode will be used.
+
+    #+begin_quote
+    *Note:* In order to use an SVG file, you must have =librsvg= in your profile (/e.g./ by adding it in the =packages= field of =sway-configuration=).
+
+    #+end_quote
+
+  - =extra-content= (default: ='()=) :: List defining additional lines to add to the output configuration block. Elements of the list must be either strings or G-expressions.
+
+- Data Type: *sway-border-color* [[#index-sway_002dborder_002dcolor][¶]] :: - =border= :: Color of the border.
+
+  - =background= :: Color of the background.
+
+  - =text= :: Color of the text.
+
+- Data Type: *sway-color* [[#index-sway_002dcolor][¶]] :: - =background= (optional string) :: Background color of the bar.
+
+  - =statusline= (optional string) :: Text color of the status line.
+
+  - =focused-background= (optional string) :: Background color of the bar on the currently focused monitor.
+
+  - =focused-statusline= (optional string) :: Text color of the statusline on the currently focused monitor.
+
+  - =focused-workspace= (optional =sway-border-color=) :: Color scheme for focused workspaces.
+
+  - =active-workspace= (optional =sway-border-color=) :: Color scheme for active workspaces.
+
+  - =inactive-workspace= (optional =sway-border-color=) :: Color scheme for inactive workspaces.
+
+  - =urgent-workspace= (optional =sway-border-color=) :: Color scheme for workspaces containing “urgent windows”.
+
+  - =binding-mode= (optional =sway-border-color=) :: Color scheme for the binding mode indicator.
+
+- Data Type: *sway-bar* [[#index-sway_002dbar][¶]] :: Describes the Sway bar (see sway-bar(5)).
+
+  - =identifier= (default: ='bar0=) :: Identifier of the bar. The value must be a symbol.
+
+  - =position= (optional) :: Specify the position of the bar. Accepted values are ='top= or ='bottom=.
+
+  - =hidden-state= (optional) :: Specify the appearance of the bar when it is hidden. Accepted values are ='hide= or ='show=.
+
+  - =binding-mode-indicator= (optional) :: Boolean enabling or disabling the binding mode indicator.
+
+  - =colors= (optional) :: An optional =sway-color= configuration record.
+
+  - =status-command= (optional) :: This field accept strings, G-expressions and executable file-like values. The default value is a command (string) that prints the date and time every second.
+
+    Each line printed on =stdout= by this command (or script) will be displayed on the status area of the bar.
+
+    Below are a few examples using:
+
+    - a string: ="while date +'%Y-%m-%d %X'; do sleep 1; done"=,
+    - a G-exp:
+
+      #+begin_src lisp
+      #~(string-append "while "
+                       #$coreutils "/bin/date"
+                       " +'%Y-%m-%d %X'; do sleep 1; done")
+      #+end_src
+
+    - an executable file:
+
+      #+begin_src lisp
+      (program-file
+       "sway-bar-status"
+       #~(begin
+           (use-modules (ice-9 format)
+                        (srfi srfi-19))
+           (let loop ()
+             (let* ((date (date->string
+                           (current-date)
+                           "~d/~m/~Y (~a) • ~H:~M:~S")))
+               (format #t "~a~%~!" date)
+               (sleep 1)
+               (loop)))))
+      #+end_src
+
+  - =mouse-bindings= (default: ='()=) :: This field accepts an associative list. Keys are integers describing mouse events. Values are similar to that of key-bindings (except that “to-code” is not a valid option for mouse-bindings).
+
+    The module =(gnu home services sway)= exports constants =%ev-code-mouse-left=, =%ev-code-mouse-right= and =%ev-code-mouse-scroll-click= whose values are integers corresponding to left, right and scroll click respectively. For example, with =(mouse-bindings `((,%ev-code-mouse-left . "exec $term")))=, left clicks in the status bar open the terminal (assuming that the variable =$term= is bound to a terminal).
+
+- Data Type: *sway-mode* [[#index-sway_002dmode][¶]] :: Describes a Sway mode (see sway(5)). For example, the following snippet defines the resize mode of the default Sway configuration:
+
+  #+begin_example
+  (sway-mode
+   (mode-name "resize")
+   (keybindings
+    '(($left  . "resize shrink width 10px")
+      ($right . "resize grow width 10px")
+      ($down  . "resize grow height 10px")
+      ($up    . "resize shrink height 10px")
+      (Left   . "resize shrink width 10px")
+      (Right  . "resize grow width 10px")
+      (Down   . "resize grow height 10px")
+      (Up     . "resize shrink height 10px")
+      (Return . "mode \"default\"")
+      (Escape . "mode \"default\""))))
+#+end_example
+
+  - =mode-name= (default: ="default"=) :: Name of the mode. This field accepts strings.
+
+  - =keybindings= (default: ='()=) :: This field describes keybindings. The value is an association list. As above, keys are symbols and values are either strings, G-expressions or cons-cells.
+
+  - =mouse-bindings= (default: ='()=) :: Ditto, but keys are mouse events (integers). Constants =%ev-code-mouse-*= described above can be used as helpers to define mouse bindings.
+
+The =home-jellyfin-mpv-shim-service-type= in the =(gnu home services media)= module runs a cast client for the [[https://jellyfin.org/][Jellyfin]] media system.
+
+To enable, add this to your home services:
+
+#+begin_src lisp
+(service home-jellyfin-mpv-shim-service-type)
+#+end_src
+
+The service starts only if =jellyfin-mpv-shim= has been configured with a remote server and credentials. This must be done manually, by launching =jellyfin-mpv-shim=. After configuring the server, the service will start automatically when you log in.
+
+- Variable: *home-jellyfin-mpv-shim-service-type* [[#index-home_002djellyfin_002dmpv_002dshim_002dservice_002dtype][¶]] :: Type of the service which launches Jellyfin MPV Shim.
+
+- Data Type: *home-jellyfin-mpv-shim-configuration* [[#index-home_002djellyfin_002dmpv_002dshim_002dconfiguration][¶]] :: Available =home-jellyfin-mpv-shim-configuration= fields are:
+
+  - =package= (default: =jellyfin-mpv-shim=) (type: package) :: The Jellyfin MPV Shim package to use.
+
+--------------
+
+Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

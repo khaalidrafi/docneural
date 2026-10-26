@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID: guix--Privileged-Programs
+:END:
+#+filetags: :guix:
+#+title: Privileged Programs
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Privileged-Programs>>
+Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.11 Privileged Programs [[#Privileged-Programs-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Privileged-Programs-1
+:CLASS: section
+:END:
+Some programs need to run with elevated privileges, even when they are launched by unprivileged users. A notorious example is the =passwd= program, which users can run to change their password, and which needs to access the =/etc/passwd= and =/etc/shadow= files---something normally restricted to root, for obvious security reasons. To address that, =passwd= should be /setuid-root/, meaning that it always runs with root privileges (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/How-Change-Persona.html#How-Change-Persona][How Change Persona]] in The GNU C Library Reference Manual, for more info about the setuid mechanism).
+
+The store itself /cannot/ contain privileged programs: that would be a security issue since any user on the system can write derivations that populate the store (see [[id:guix--The-Store][The Store]]). Thus, a different mechanism is used: instead of directly granting permissions to files that are in the store, we let the system administrator /declare/ which programs should be entrusted with these additional privileges.
+
+The =privileged-programs= field of an =operating-system= declaration contains a list of =<privileged-program>= denoting the names of programs to have a setuid or setgid bit set (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]). For instance, the =mount.nfs= program, which is part of the nfs-utils package, with a setuid root can be designated like this:
+
+#+begin_src lisp
+(privileged-program
+  (program (file-append nfs-utils "/sbin/mount.nfs"))
+  (setuid? #t))
+#+end_src
+
+And then, to make =mount.nfs= setuid on your system, add the previous example to your operating system declaration by appending it to =%default-privileged-programs= like this:
+
+#+begin_src lisp
+(operating-system
+  ;; Some fields omitted...
+  (privileged-programs
+    (append (list (privileged-program
+                    (program (file-append nfs-utils "/sbin/mount.nfs"))
+                    (setuid? #t)))
+            %default-privileged-programs)))
+#+end_src
+
+- Data Type: *privileged-program* [[#index-privileged_002dprogram][¶]] :: This data type represents a program with special privileges, such as setuid
+
+  - =program= :: A file-like object to which all given privileges should apply.
+
+  - =setuid?= (default: =#f=) :: Whether to set user setuid bit.
+
+  - =setgid?= (default: =#f=) :: Whether to set group setgid bit.
+
+  - =user= (default: =0=) :: UID (integer) or user name (string) for the user owner of the program, defaults to root.
+
+  - =group= (default: =0=) :: GID (integer) group name (string) for the group owner of the program, defaults to root.
+
+  - =capabilities= (default: =#f=) :: A string representing the program's POSIX capabilities, as described by the =cap_to_text(3)= man page from the libcap package, or =#f= to make no changes.
+
+A default set of privileged programs is defined by the =%default-privileged-programs= variable of the =(gnu system)= module.
+
+- Variable: *Scheme Variable* =%default-privileged-programs= [[#index-Scheme-Variable][¶]] :: A list of =<privileged-program>= denoting common programs with elevated privileges.
+
+  The list includes commands such as =passwd=, =ping=, =su=, and =sudo=.
+
+Under the hood, the actual privileged programs are created in the =/run/privileged/bin= directory at system activation time. The files in this directory refer to the “real” binaries, which are in the store.
+
+--------------
+
+Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

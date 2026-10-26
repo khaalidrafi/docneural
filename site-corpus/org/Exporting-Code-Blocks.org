@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID: org--Exporting-Code-Blocks
+:END:
+#+filetags: :org:
+#+title: Exporting Code Blocks (The Org Manual)
+
+Next:
+
+<<Exporting-Code-Blocks>>
+Next: [[id:org--Extracting-Source-Code][Extracting Source Code]], Previous: [[id:org--Results-of-Evaluation][Results of Evaluation]], Up: [[id:org--Working-with-Source-Code][Working with Source Code]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 16.7 Exporting Code Blocks [[#Exporting-Code-Blocks-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Exporting-Code-Blocks-1
+:CLASS: section
+:END:
+It is possible to export the /code/ of code blocks, the /results/ of code block evaluation, /both/ the code and the results of code block evaluation, or /none/. Org defaults to exporting /code/ for most languages and /results/ for inline code blocks. For some languages, such as ditaa, Org defaults to /results/ both in ordinary source blocks and in inline source blocks. To export just the body of code blocks, see [[id:org--Literal-Examples][Literal Examples]]. To selectively export subtrees of an Org document, see [[id:org--Exporting][Exporting]].
+
+The ‘=exports=' header argument specifies whether that part of the Org file is exported to, say, HTML or LaTeX formats.
+
+- ‘=code=' :: The default. The body of code is included into the exported file. Example: ‘=:exports code='.
+
+- ‘=results=' :: The results of evaluation of the code are included in the exported file. Example: ‘=:exports results='.
+
+- ‘=both=' :: Both the code and results of evaluation are included in the exported file. Example: ‘=:exports both='.
+
+- ‘=none=' :: Neither the code nor the results of evaluation are included in the exported file. Whether the code is evaluated at all depends on other options. Example: ‘=:exports none='.
+
+If a source block is named using the ‘=NAME=' keyword, the same name will be assigned to the results of evaluation. This way, fuzzy links pointing to the named source blocks exported using ‘=:exports results=' will remain valid and point to the results of evaluation.
+
+Results of evaluation of a named block can also be explicitly named using a separate ‘=NAME=' keyword. The name value set via the ‘=NAME=' keyword will be preferred over the parent source block.
+
+#+begin_example
+#+NAME: code name
+#+BEGIN_SRC emacs-lisp :exports both value
+(+ 1 2)
+#+END_SRC
+
+#+NAME: results name
+#+RESULTS: code name
+3
+
+This [[code name][link]] will point to the code block.
+Another [[results name][link]] will point to the results.
+#+end_example
+
+Explicit setting of the result name may be necessary when a named code block is exported using ‘=:exports both='. Links to such a block may point arbitrarily either to the code block or to its results when the results do not have a distinct name.
+
+Note that all the links pointing to a source block exported using ‘=:exports none=' will be broken. This will cause the export process to fail, unless broken links are allowed during export (see [[id:org--Export-Settings][Export Settings]]).
+
+You can prevent Org from evaluating code blocks for speed or security reasons:
+
+- To speed up export, use the header argument ‘=:eval never-export=' (see [[id:org--Evaluating-Code-Blocks][Evaluating Code Blocks]]).
+- For greater security, set the =org-export-use-babel= variable to =nil=, but understand that header arguments will have no effect in this case.
+
+If results of evaluation are not marked for export (‘=:exports code=' or ‘=:exports none='), Org will not evaluate them, even for ‘=:eval yes='. The only exception is when a code block uses ‘=:session=' - such blocks are evaluated according to their ‘=:eval=' header argument.
+
+Turning off evaluation comes in handy when batch processing. For example, markup languages for wikis have a high risk of untrusted code. Stopping code block evaluation also stops evaluation of all header arguments of the code block. This may not be desirable in some circumstances. So during export, to allow evaluation of just the header arguments but not any code evaluation in the source block, set ‘=:eval never-export=' (see [[id:org--Evaluating-Code-Blocks][Evaluating Code Blocks]]).
+
+Org never evaluates code blocks in commented subtrees when exporting (see [[id:org--Comment-Lines][Comment Lines]]). On the other hand, Org does evaluate code blocks in subtrees excluded from export (see [[id:org--Export-Settings][Export Settings]]).
+
+--------------
+
+Next: [[id:org--Extracting-Source-Code][Extracting Source Code]], Previous: [[id:org--Results-of-Evaluation][Results of Evaluation]], Up: [[id:org--Working-with-Source-Code][Working with Source Code]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

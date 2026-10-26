@@ -1,0 +1,452 @@
+:PROPERTIES:
+:ID: guix--Monitoring-Services
+:END:
+#+filetags: :guix:
+#+title: Monitoring Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Monitoring-Services>>
+Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.18 Monitoring Services [[#Monitoring-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Monitoring-Services-1
+:CLASS: subsection
+:END:
+**** Darkstat Service [[#Darkstat-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Darkstat-Service
+:CLASS: subsubheading
+:END:
+Darkstat is a packet sniffer that captures network traffic, calculates statistics about usage, and serves reports over HTTP.
+
+- Variable: *darkstat-service-type* [[#index-darkstat_002dservice_002dtype][¶]] :: This is the service type for the [[https://unix4lyfe.org/darkstat/][darkstat]] service, its value must be a =darkstat-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service darkstat-service-type
+           (darkstat-configuration
+             (interface "eno1")))
+  #+end_src
+
+- Data Type: *darkstat-configuration* [[#index-darkstat_002dconfiguration][¶]] :: Data type representing the configuration of =darkstat=.
+
+  - =package= (default: =darkstat=) :: The darkstat package to use.
+
+  - =interface= :: Capture traffic on the specified network interface.
+
+  - =port= (default: ="667"=) :: Bind the web interface to the specified port.
+
+  - =bind-address= (default: ="127.0.0.1"=) :: Bind the web interface to the specified address.
+
+  - =base= (default: ="/"=) :: Specify the path of the base URL. This can be useful if =darkstat= is accessed via a reverse proxy.
+
+**** Prometheus Node Exporter Service [[#Prometheus-Node-Exporter-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Prometheus-Node-Exporter-Service
+:CLASS: subsubheading
+:END:
+The Prometheus “node exporter” makes hardware and operating system statistics provided by the Linux kernel available for the Prometheus monitoring system. This service should be deployed on all physical nodes and virtual machines, where monitoring these statistics is desirable.
+
+- Variable: *prometheus-node-exporter-service-type* [[#index-prometheus_002dnode_002dexporter_002dservice_002dtype][¶]] :: This is the service type for the [[https://github.com/prometheus/node_exporter/][prometheus-node-exporter]] service, its value must be a =prometheus-node-exporter-configuration=.
+
+  #+begin_src lisp
+  (service prometheus-node-exporter-service-type)
+  #+end_src
+
+- Data Type: *prometheus-node-exporter-configuration* [[#index-prometheus_002dnode_002dexporter_002dconfiguration][¶]] :: Data type representing the configuration of =node_exporter=.
+
+  - =package= (default: =go-github-com-prometheus-node-exporter=) :: The prometheus-node-exporter package to use.
+
+  - =web-listen-address= (default: =":9100"=) :: Bind the web interface to the specified address.
+
+  - =textfile-directory= (default: ="/var/lib/prometheus/node-exporter"=) :: This directory can be used to export metrics specific to this machine. Files containing metrics in the text format, with the filename ending in =.prom= should be placed in this directory.
+
+  - =extra-options= (default: ='()=) :: Extra options to pass to the Prometheus node exporter.
+
+**** vnStat Network Traffic Monitor [[#vnStat-Network-Traffic-Monitor][¶]]
+:PROPERTIES:
+:CUSTOM_ID: vnStat-Network-Traffic-Monitor
+:CLASS: subsubheading
+:END:
+vnStat is a network traffic monitor that uses interface statistics provided by the kernel rather than traffic sniffing. This makes it a light resource monitor, regardless of network traffic rate.
+
+- Variable: *vnstat-service-type* [[#index-vnstat_002dservice_002dtype][¶]] :: This is the service type for the [[https://humdi.net/vnstat/][vnStat]] daemon and accepts a =vnstat-configuration= value.
+
+  The following example will configure the service with default values:
+
+  #+begin_src lisp
+  (service vnstat-service-type)
+  #+end_src
+
+- Data Type: *vnstat-configuration* [[#index-vnstat_002dconfiguration][¶]] :: Available =vnstat-configuration= fields are:
+
+  - =package= (default: =vnstat=) (type: file-like) :: The vnstat package.
+
+  - =database-directory= (default: ="/var/lib/vnstat"=) (type: string) :: Specifies the directory where the database is to be stored. A full path must be given and a leading '/' isn't required.
+
+  - =5-minute-hours= (default: =48=) (type: maybe-integer) :: Data retention duration for the 5 minute resolution entries. The configuration defines for how many past hours entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+  - =64bit-interface-counters= (default: =-2=) (type: maybe-integer) :: Select interface counter handling. Set to =1= for defining that all interfaces use 64-bit counters on the kernel side and =0= for defining 32-bit counter. Set to =-1= for using the old style logic used in earlier versions where counter values within 32-bits are assumed to be 32-bit and anything larger is assumed to be a 64-bit counter. This may produce false results if a 64-bit counter is reset within the 32-bits. Set to =-2= for using automatic detection based on available kernel datastructures.
+
+  - =always-add-new-interfaces?= (default: =#t=) (type: maybe-boolean) :: Enable or disable automatic creation of new database entries for interfaces not currently in the database even if the database file already exists when the daemon is started. New database entries will also get created for new interfaces seen while the daemon is running. Pseudo interfaces ‘=lo=', ‘=lo0=' and ‘=sit0=' are always excluded from getting added.
+
+  - =bandwidth-detection?= (default: =#t=) (type: maybe-boolean) :: Try to automatically detect =max-bandwidth= value for each monitored interface. Mostly only ethernet interfaces support this feature. =max-bandwidth= will be used as fallback value if detection fails. Any interface specific =max-BW= configuration will disable the detection for the specified interface. In Linux, the detection is disabled for tun interfaces due to the Linux kernel always reporting 10 Mbit regardless of the used real interface.
+
+  - =bandwidth-detection-interval= (default: =5=) (type: maybe-integer) :: How often in minutes interface specific detection of =max-bandwidth= is done for detecting possible changes when =bandwidth-detection= is enabled. Can be disabled by setting to =0=. Value range: ‘=0='..‘=30='
+
+  - =boot-variation= (default: =15=) (type: maybe-integer) :: Time in seconds how much the boot time reported by system kernel can variate between updates. Value range: ‘=0='..‘=300='
+
+  - =check-disk-space?= (default: =#t=) (type: maybe-boolean) :: Enable or disable the availability check of at least some free disk space before a database write.
+
+  - =create-directories?= (default: =#t=) (type: maybe-boolean) :: Enable or disable the creation of directories when a configured path doesn't exist. This includes =database-directory=.
+
+  - =daemon-group= (type: maybe-user-group) :: Specify the group to which the daemon process should switch during startup. Set to =%unset-value= to disable group switching.
+
+  - =daemon-user= (type: maybe-user-account) :: Specify the user to which the daemon process should switch during startup. Set to =%unset-value= to disable user switching.
+
+  - =daily-days= (default: =62=) (type: maybe-integer) :: Data retention duration for the one day resolution entries. The configuration defines for how many past days entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+  - =database-synchronous= (default: =-1=) (type: maybe-integer) :: Change the setting of the SQLite "synchronous" flag which controls how much care is taken to ensure disk writes have fully completed when writing data to the database before continuing other actions. Higher values take extra steps to ensure data safety at the cost of slower performance. A value of =0= will result in all handling being left to the filesystem itself. Set to =-1= to select the default value according to database mode controlled by =database-write-ahead-logging= setting. See SQLite documentation for more details regarding values from =1= to =3=. Value range: ‘=-1='..‘=3='
+
+  - =database-write-ahead-logging?= (default: =#f=) (type: maybe-boolean) :: Enable or disable SQLite Write-Ahead Logging mode for the database. See SQLite documentation for more details and note that support for read-only operations isn't available in older SQLite versions.
+
+  - =hourly-days= (default: =4=) (type: maybe-integer) :: Data retention duration for the one hour resolution entries. The configuration defines for how many past days entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+  - =log-file= (type: maybe-string) :: Specify log file path and name to be used if =use-logging= is set to =1=.
+
+  - =max-bandwidth= (type: maybe-integer) :: Maximum bandwidth for all interfaces. If the interface specific traffic exceeds the given value then the data is assumed to be invalid and rejected. Set to 0 in order to disable the feature. Value range: ‘=0='..‘=50000='
+
+  - =max-bw= (type: maybe-alist) :: Same as =max-bandwidth= but can be used for setting individual limits for selected interfaces. This is an association list of interfaces as strings to integer values. For example,
+
+    #+begin_src lisp
+    (max-bw `(("eth0" .  15000)
+              ("ppp0" .  10000)))
+    #+end_src
+
+    =bandwidth-detection= is disabled on an interface specific level for each =max-bw= configuration. Value range: ‘=0='..‘=50000='
+
+  - =monthly-months= (default: =25=) (type: maybe-integer) :: Data retention duration for the one month resolution entries. The configuration defines for how many past months entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+  - =month-rotate= (default: =1=) (type: maybe-integer) :: Day of month that months are expected to change. Usually set to 1 but can be set to alternative values for example for tracking monthly billed traffic where the billing period doesn't start on the first day. For example, if set to 7, days of February up to and including the 6th will count for January. Changing this option will not cause existing data to be recalculated. Value range: ‘=1='..‘=28='
+
+  - =month-rotate-affects-years?= (default: =#f=) (type: maybe-boolean) :: Enable or disable =month-rotate= also affecting yearly data. Applicable only when =month-rotate= has a value greater than one.
+
+  - =offline-save-interval= (default: =30=) (type: maybe-integer) :: How often in minutes cached interface data is saved to file when all monitored interfaces are offline. Value range: =save-interval=..‘=60='
+
+  - =pid-file= (default: ="/var/run/vnstatd.pid"=) (type: maybe-string) :: Specify pid file path and name to be used.
+
+  - =poll-interval= (default: =5=) (type: maybe-integer) :: How often in seconds interfaces are checked for status changes. Value range: ‘=2='..‘=60='
+
+  - =rescan-database-on-save?= (type: maybe-boolean) :: Automatically discover added interfaces from the database and start monitoring. The rescan is done every =save-interval= or =offline-save-interval= minutes depending on the current activity state.
+
+  - =save-interval= (default: =5=) (type: maybe-integer) :: How often in minutes cached interface data is saved to file. Value range: ( =update-interval= / 60 )..‘=60='
+
+  - =save-on-status-change?= (default: =#t=) (type: maybe-boolean) :: Enable or disable the additional saving to file of cached interface data when the availability of an interface changes, i.e., when an interface goes offline or comes online.
+
+  - =time-sync-wait= (default: =5=) (type: maybe-integer) :: How many minutes to wait during daemon startup for system clock to sync if most recent database update appears to be in the future. This may be needed in systems without a real-time clock (RTC) which require some time after boot to query and set the correct time. =0= = wait disabled. Value range: ‘=0='..‘=60='
+
+  - =top-day-entries= (default: =20=) (type: maybe-integer) :: Data retention duration for the top day entries. The configuration defines how many of the past top day entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+  - =trafficless-entries?= (default: =#t=) (type: maybe-boolean) :: Create database entries even when there is no traffic during the entry's time period.
+
+  - =update-file-owner?= (default: =#t=) (type: maybe-boolean) :: Enable or disable the update of file ownership during daemon process startup. During daemon startup, only database, log and pid files will be modified if the user or group change feature ( =daemon-user= or =daemon-group= ) is enabled and the files don't match the requested user or group. During manual database creation, this option will cause file ownership to be inherited from the database directory if the directory already exists. This option only has effect when the process is started as root or via sudo.
+
+  - =update-interval= (default: =20=) (type: maybe-integer) :: How often in seconds the interface data is updated. Value range: =poll-interval=..‘=300='
+
+  - =use-logging= (default: =2=) (type: maybe-integer) :: Enable or disable logging. Accepted values are: =0= = disabled, =1= = logfile and =2= = syslog.
+
+  - =use-utc?= (type: maybe-boolean) :: Enable or disable using UTC as timezone in the database for all entries. When enabled, all entries added to the database will use UTC regardless of the configured system timezone. When disabled, the configured system timezone will be used. Changing this setting will not result in already existing data to be modified.
+
+  - =yearly-years= (default: =-1=) (type: maybe-integer) :: Data retention duration for the one year resolution entries. The configuration defines for how many past years entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
+
+**** Zabbix server [[#Zabbix-server][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Zabbix-server
+:CLASS: subsubheading
+:END:
+Zabbix is a high performance monitoring system that can collect data from a variety of sources and provide the results in a web-based interface. Alerting and reporting is built-in, as well as /templates/ for common operating system metrics such as network utilization, CPU load, and disk space consumption.
+
+This service provides the central Zabbix monitoring service; you also need [[#zabbix_002dfront_002dend][=zabbix-front-end-service-type=]] to configure Zabbix and display results, and optionally [[#zabbix_002dagent][=zabbix-agent-service-type=]] on machines that should be monitored (other data sources are supported, such as [[#prometheus_002dnode_002dexporter][Prometheus Node Exporter]]).
+
+- Variable: *zabbix-server-service-type* [[#index-zabbix_002dserver_002dservice_002dtype][¶]] :: This is the service type for the Zabbix server service. Its value must be a =zabbix-server-configuration= record, shown below.
+
+- Data Type: *zabbix-server-configuration* [[#index-zabbix_002dserver_002dconfiguration][¶]] :: Available =zabbix-server-configuration= fields are:
+
+  - =zabbix-server= (default: =zabbix-server=) (type: file-like) :: The zabbix-server package.
+
+  - =user= (default: ="zabbix"=) (type: string) :: User who will run the Zabbix server.
+
+  - =group= (default: ="zabbix"=) (type: string) :: Group who will run the Zabbix server.
+
+  - =db-host= (default: ="127.0.0.1"=) (type: string) :: Database host name.
+
+  - =db-name= (default: ="zabbix"=) (type: string) :: Database name.
+
+  - =db-user= (default: ="zabbix"=) (type: string) :: Database user.
+
+  - =db-password= (default: =""=) (type: string) :: Database password. Please, use =include-files= with =DBPassword=SECRET= inside a specified file instead.
+
+  - =db-port= (default: =5432=) (type: number) :: Database port.
+
+  - =log-type= (default: =""=) (type: string) :: Specifies where log messages are written to:
+
+    - =system= - syslog.
+    - =file= - file specified with =log-file= parameter.
+    - =console= - standard output.
+
+  - =log-file= (default: ="/var/log/zabbix/server.log"=) (type: string) :: Log file name for =log-type= =file= parameter.
+
+  - =pid-file= (default: ="/var/run/zabbix/zabbix_server.pid"=) (type: string) :: Name of PID file.
+
+  - =ssl-ca-location= (default: ="/etc/ssl/certs/ca-certificates.crt"=) (type: string) :: The location of certificate authority (CA) files for SSL server certificate verification.
+
+  - =ssl-cert-location= (default: ="/etc/ssl/certs"=) (type: string) :: Location of SSL client certificates.
+
+  - =extra-options= (default: =""=) (type: extra-options) :: Extra options will be appended to Zabbix server configuration file.
+
+  - =include-files= (default: ='()=) (type: include-files) :: You may include individual files or all files in a directory in the configuration file.
+
+**** Zabbix agent [[#Zabbix-agent][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Zabbix-agent
+:CLASS: subsubheading
+:END:
+The Zabbix agent gathers information about the running system for the Zabbix monitoring server. It has a variety of built-in checks, and can be extended with custom [[https://www.zabbix.com/documentation/current/en/manual/config/items/userparameters][/user parameters/]].
+
+- Variable: *zabbix-agent-service-type* [[#index-zabbix_002dagent_002dservice_002dtype][¶]] :: This is the service type for the Zabbix agent service. Its value must be a =zabbix-agent-configuration= record, shown below.
+
+- Data Type: *zabbix-agent-configuration* [[#index-zabbix_002dagent_002dconfiguration][¶]] :: Available =zabbix-agent-configuration= fields are:
+
+  - =zabbix-agent= (default: =zabbix-agentd=) (type: file-like) :: The zabbix-agent package.
+
+  - =user= (default: ="zabbix"=) (type: string) :: User who will run the Zabbix agent.
+
+  - =group= (default: ="zabbix"=) (type: string) :: Group who will run the Zabbix agent.
+
+  - =hostname= (default: =""=) (type: string) :: Unique, case sensitive hostname which is required for active checks and must match hostname as configured on the server.
+
+  - =log-type= (default: =""=) (type: string) :: Specifies where log messages are written to:
+
+    - =system= - syslog.
+    - =file= - file specified with =log-file= parameter.
+    - =console= - standard output.
+
+  - =log-file= (default: ="/var/log/zabbix/agent.log"=) (type: string) :: Log file name for =log-type= =file= parameter.
+
+  - =pid-file= (default: ="/var/run/zabbix/zabbix_agent.pid"=) (type: string) :: Name of PID file.
+
+  - =server= (default: ='("127.0.0.1")=) (type: list) :: List of IP addresses, optionally in CIDR notation, or hostnames of Zabbix servers and Zabbix proxies. Incoming connections will be accepted only from the hosts listed here.
+
+  - =server-active= (default: ='("127.0.0.1")=) (type: list) :: List of IP:port (or hostname:port) pairs of Zabbix servers and Zabbix proxies for active checks. If port is not specified, default port is used. If this parameter is not specified, active checks are disabled.
+
+  - =extra-options= (default: =""=) (type: extra-options) :: Extra options will be appended to Zabbix server configuration file.
+
+  - =include-files= (default: ='()=) (type: include-files) :: You may include individual files or all files in a directory in the configuration file.
+
+**** Zabbix front-end [[#Zabbix-front_002dend][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Zabbix-front_002dend
+:CLASS: subsubheading
+:END:
+The Zabbix front-end provides a web interface to Zabbix. It does not need to run on the same machine as the Zabbix server. This service works by extending the [[id:guix--Web-Services::#PHP_002dFPM][PHP-FPM]] and [[id:guix--Web-Services::#NGINX][NGINX]] services with the configuration necessary for loading the Zabbix user interface.
+
+- Variable: *zabbix-front-end-service-type* [[#index-zabbix_002dfront_002dend_002dservice_002dtype][¶]] :: This is the service type for the Zabbix web frontend. Its value must be a =zabbix-front-end-configuration= record, shown below.
+
+- Data Type: *zabbix-front-end-configuration* [[#index-zabbix_002dfront_002dend_002dconfiguration][¶]] :: Available =zabbix-front-end-configuration= fields are:
+
+  - =zabbix-server= (default: =zabbix-server=) (type: file-like) :: The Zabbix server package to use.
+
+  - =nginx= (default: ='()=) (type: list) :: List of [[id:guix--Web-Services::#nginx_002dserver_002dconfiguration][=nginx-server-configuration=]] blocks for the Zabbix front-end. When empty, a default that listens on port 80 is used.
+
+  - =db-host= (default: ="localhost"=) (type: string) :: Database host name.
+
+  - =db-port= (default: =5432=) (type: number) :: Database port.
+
+  - =db-name= (default: ="zabbix"=) (type: string) :: Database name.
+
+  - =db-user= (default: ="zabbix"=) (type: string) :: Database user.
+
+  - =db-password= (default: =""=) (type: string) :: Database password. Please, use =db-secret-file= instead.
+
+  - =db-secret-file= (default: =""=) (type: string) :: Secret file which will be appended to =zabbix.conf.php= file. This file contains credentials for use by Zabbix front-end. You are expected to create it manually.
+
+  - =zabbix-host= (default: ="localhost"=) (type: string) :: Zabbix server hostname.
+
+  - =zabbix-port= (default: =10051=) (type: number) :: Zabbix server port.
+
+**** collectd Service [[#collectd-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: collectd-Service
+:CLASS: subsubheading
+:END:
+collectd is a daemon which collects, stores, transports, and visualizes system and application performance metrics in a variety of ways.
+
+- Variable: *collectd-service-type* [[#index-collectd_002dservice_002dtype][¶]] :: This is the service type for the [[https://collectd.org/][collectd]] service. Its value must be a =collectd-configuration= record:
+
+  #+begin_src lisp
+  (service collectd-service-type
+           (collectd-configuration
+            (plugins
+             (list
+              (collectd-plugin-generic
+               (name "cpu")
+                  (options '((ReportByCpu . #t)
+                             (ReportByState . #t)
+                             (ValuesPercentage . #t))))))))
+  #+end_src
+
+  The service may be extended to add new plugins:
+
+  #+begin_src lisp
+  (simple-service 'collectd-memory
+                  collectd-service-type
+                  (list
+                   (collectd-plugin-generic
+                    (name "memory")
+                    (options '((ValuesAbsolute . #t)
+                               (ValusPercentage . #t))))))
+  #+end_src
+
+- Data Type: *collectd-configuration* [[#index-collectd_002dconfiguration][¶]] :: Available =collectd-configuration= fields are:
+
+  - =collectd= (default: =collectd=) (type: package) :: The collectd package to use.
+
+  - =base-directory= (default: ="/var/lib/collectd"=) (type: string) :: Sets the base directory. This is the directory beneath which all RRD (round-robin database) files are created. Possibly more subdirectories are created. This is also the working directory for collectd.
+
+  - =auto-load-plugins?= (default: =#f=) (type: boolean) :: When set to =#f=, plugins must be loaded explicitly, by setting the =load-plugin?= field of each plugin configuration to =#t=. If a =<Plugin ...>= block is encountered and no configuration handling callback for this plugin has been registered, a warning is logged and the block is ignored.
+
+    When set to =#t=, each =<Plugin ...>= block acts as if it was immediately preceded by a =LoadPlugin= statement. =LoadPlugin= statements are still required for plugins that don't provide any configuration, e.g. the =Load= plugin.
+
+  - =collect-internal-stats?= (default: =#f=) (type: boolean) :: When =#t=, various statistics about the collectd daemon will be collected, with "collectd" as the plugin name.
+
+  - =type-databases= (type: list-of-file-likes) :: One or more files that contain the data-set descriptions. See =types.db(5)= for a description of the format of these files.
+
+  - =interval= (default: =60=) (type: maybe-seconds) :: Configures the interval in which to query the read plugins. Smaller values lead to a higher system load produced by collectd, while higher values lead to more coarse statistics. Warning: You should set this once and then never touch it again. If you do, you will have to delete all your RRD files or know some serious RRDtool magic! (Assuming you're using the RRDtool or RRDCacheD plugin.)
+
+  - =max-read-interval= (default: =86400=) (type: seconds) :: A read plugin doubles the interval between queries after each failed attempt to get data. This options limits the maximum value of the interval.
+
+  - =timeout= (type: maybe-integer) :: Consider a value list "missing" when no update has been read or received for =Iterations= iterations. By default, collectd considers a value list missing when no update has been received for twice the update interval. Since this setting uses iterations, the maximum allowed time without update depends on the =Interval= information contained in each value list. This is used in the =Threshold= configuration to dispatch notifications about missing values, see =collectd-threshold(5)= for details.
+
+  - =read-threads= (default: =5=) (type: integer) :: Number of threads to start for reading plugins. You may want to increase this if you have more than five plugins that take a long time to read. Mostly those are plugins that do network-IO. Setting this to a value higher than the number of registered read callbacks is not recommended.
+
+  - =write-threads= (default: =5=) (type: integer) :: Number of threads to start for dispatching value lists to write plugins. You may want to increase this if you have more than five plugins that may take relatively long to write to.
+
+  - =write-queue-limit-high= (type: maybe-integer) :: Metrics are read by the read threads and then put into a queue to be handled by the write threads. If one of the write plugins is slow (e.g. network timeouts, I/O saturation of the disk) this queue will grow. In order to avoid running into memory issues in such a case, you can limit the size of this queue. If there are =write-queue-limit-high= metrics in the queue, any new metrics will be dropped. If the number of metrics currently in the queue is between =write-queue-limit-low= and =write-queue-limit-high=, the metric is dropped with a probability that is proportional to the number of metrics in the queue (i.e. it increases linearly until it reaches 100%).
+
+  - =write-queue-limit-low= (type: maybe-integer) :: If there are less than =write-queue-limit-low= metrics in the queue, all new metrics will be enqueued. If =write-queue-limit-high= is set to non-zero and =write-queue-limit-low= is unset, the latter will default to half of =write-queue-limit-high=.
+
+  - =host-name= (type: maybe-string) :: Sets the hostname that identifies a host. If you omit this setting, the hostname will be determined using the =gethostname(2)= system call.
+
+  - =fully-qualified-domain-name-lookup?= (default: =#t=) (type: boolean) :: If =host-name= is determined automatically, this setting controls whether or not the daemon should try to figure out the FQDN (fully qualified domain name). This is done using a lookup of the name returned by =gethostname(2)=.
+
+  - =plugins= (default: =()=) (type: list-of-collectd-plugins) :: Configurations for collectd plugins.
+
+- Data Type: *collectd-plugin-generic* [[#index-collectd_002dplugin_002dgeneric][¶]] :: The =collectd-plugin-generic= record can represent most collectd plugins.
+
+  This example configuration will enable the CPU usage reporting plugin. See the =collectd.conf(5)= man page for a list of plugins and their options.
+
+  #+begin_src lisp
+  (collectd-plugin-generic
+   (name "cpu")
+   (options '((ReportByCpu . #t)
+              (ReportByState . #t)
+              (ValuesPercentage . #t))))
+  #+end_src
+
+  Available =collectd-plugin-generic= fields are:
+
+  - =load-plugin?= (default: =#t=) (type: boolean) :: When =#t=, include a =LoadPlugin= directive in the configuration. This interacts with =auto-load-plugins?= in =collectd-configuration=; if =auto-load-plugins?= is =#f=, all plugins should set this to =#t=.
+
+  - =name= (type: string) :: The name of the plugin to configure.
+
+  - =options= (default: =()=) (type: plugin-options) :: Configuration options for the plugin, as an alist. See =collect.conf(5)= for the available plugin options.
+
+
+- Data Type: *collectd-plugin-python* [[#index-collectd_002dplugin_002dpython][¶]] :: The =collectd-plugin-python= configuration record holds configuration for collectd plugins written in Python. See the =collectd-python(5)= man page for more information on Python support in collectd.
+
+  Guix packages listed in the =packages= field will be added to the profile used to run collectd. This example configuration will load a Python plugin named =myplugin=, whose code is in the =python-myplugin= Guix package.
+
+  #+begin_src lisp
+  (collectd-plugin-python
+   (packages (list python-myplugin))
+   (module "myplugin")
+   (module-options '((SomeOption . "hi")
+                     (AnotherOption . 123))))
+  #+end_src
+
+  The =module-paths= field will emit verbatim =ModulePath= lines, for plugins not packaged for Guix. This example configuration loads the =gpio= plugin from =/home/user/projects/collectd-gpio/gpio=.
+
+  #+begin_src lisp
+  (collectd-plugin-python
+   (module-paths
+    (list
+     "/home/user/projects/collectd-gpio/gpio"))
+   (module "gpio")
+   (module-options '((MonitorGPIOs 1 2 3 4))))
+  #+end_src
+
+  The two mechanisms may be combined: a Guix-packaged Python library may be used by unpackaged plugin code. This example loads a =mongometrics= plugin from =/opt/collectd-mongodb/mongometrics=, and also makes the =python-pymongo= Python package available for it to use.
+
+  #+begin_src lisp
+  (collectd-plugin-python
+   (packages (list python-pymongo))
+   (module-paths
+    (list
+     "/opt/collectd-mongodb/mongometrics"))
+   (module "mongometrics")
+   (module-options '((Host . "localhost"))))
+  #+end_src
+
+  Available =collectd-plugin-python= fields are:
+
+  - =load-plugin?= (default: =#t=) (type: boolean) :: When =#t=, include a =LoadPlugin= directive in the configuration. This interacts with =auto-load-plugins?= in =collectd-configuration=; if =collectd-configuration='s =auto-load-plugins?= is =#f=, all plugins should set this to =#t=.
+
+  - =type-databases= (default: =()=) (type: list-of-file-likes) :: One or more files that contain the data-set descriptions. See =types.db(5)= for a description of the format of these files.
+
+  - =packages= (default: =()=) (type: list-of-packages) :: Packages to make available to the Python plugin. These can be dependencies of the plugin code, or may contain the plugin.
+
+  - =module-paths= (default: =()=) (type: list-of-string) :: Entries to prepend to =sys.path=.
+
+  - =log-traces?= (default: =#f=) (type: boolean) :: If a Python script throws an exception it will be logged by collectd with the name of the exception and the message. If you set this option to true it will also log the full stacktrace just like the default output of an interactive Python interpreter. This does not apply to the =CollectError= exception, which will never log a stacktrace. This should probably be set to false most of the time but is very useful for development and debugging of new modules.
+
+  - =interactive?= (default: =#f=) (type: boolean) :: This option will cause the module to launch an interactive Python interpreter that reads from and writes to the terminal. Note that collectd will terminate right after starting up if you try to run it as a daemon while this option is enabled so make sure to start collectd with the =-f= option. See the =collectd-python(5)= man page for more information on this option.
+
+  - =module= (type: string) :: The name of the Python module to import into the collectd Python process. The module must be available in =packages= or =module-paths=, and register a MPD callback.
+
+  - =module-options= (default: =()=) (type: alist) :: Configuration options for the module.
+
+--------------
+
+Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

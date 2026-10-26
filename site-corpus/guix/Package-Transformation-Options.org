@@ -1,0 +1,287 @@
+:PROPERTIES:
+:ID: guix--Package-Transformation-Options
+:END:
+#+filetags: :guix:
+#+title: Package Transformation Options
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Package-Transformation-Options>>
+Next: [[id:guix--Additional-Build-Options][Additional Build Options]], Previous: [[id:guix--Common-Build-Options][Common Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 9.1.2 Package Transformation Options [[#Package-Transformation-Options-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Package-Transformation-Options-1
+:CLASS: subsection
+:END:
+Another set of command-line options supported by =guix build= and also =guix package= are /package transformation options/. These are options that make it possible to define /package variants/---for instance, packages built from different source code. This is a convenient way to create customized packages on the fly without having to type in the definitions of package variants (see [[id:guix--Defining-Packages][Defining Packages]]).
+
+Package transformation options are preserved across upgrades: =guix upgrade= attempts to apply transformation options initially used when creating the profile to the upgraded packages.
+
+The available options are listed below. Most commands support them and also support a =--help-transform= option that lists all the available options and a synopsis (these options are not shown in the =--help= output for brevity).
+
+-  <<index-performance_002c-tuning-code>>=--tune[===cpu==]= [[#index-performance_002c-tuning-code][¶]] :: Use versions of the packages marked as “tunable” optimized for =cpu=. When =cpu= is =native=, or when it is omitted, tune for the CPU on which the =guix= command is running.
+
+  Valid =cpu= names are those recognized by the underlying compiler, by default the GNU Compiler Collection. On x86_64 processors, this includes CPU names such as =nehalem=, =haswell=, and =skylake= (see [[https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html#x86-Options][=-march=]] in Using the GNU Compiler Collection (GCC)).
+
+  As new generations of CPUs come out, they augment the standard instruction set architecture (ISA) with additional instructions, in particular instructions for single-instruction/multiple-data (SIMD) parallel processing. For example, while Core2 and Skylake CPUs both implement the x86_64 ISA, only the latter supports AVX2 SIMD instructions.
+
+  The primary gain one can expect from =--tune= is for programs that can make use of those SIMD capabilities /and/ that do not already have a mechanism to select the right optimized code at run time. Packages that have the =tunable?= property set are considered /tunable packages/ by the =--tune= option; a package definition with the property set looks like this:
+
+  #+begin_src lisp
+  (package
+    (name "hello-simd")
+    ;; ...
+
+    ;; This package may benefit from SIMD extensions so
+    ;; mark it as "tunable".
+    (properties '((tunable? . #t))))
+  #+end_src
+
+  Other packages are not considered tunable. This allows Guix to use generic binaries in the cases where tuning for a specific CPU is unlikely to provide any gain.
+
+  Tuned packages are built with =-march===CPU=; under the hood, the =-march= option is passed to the actual wrapper by a compiler wrapper. Since the build machine may not be able to run code for the target CPU micro-architecture, the test suite is not run when building a tuned package.
+
+  To reduce rebuilds to the minimum, tuned packages are /grafted/ onto packages that depend on them (see [[id:guix--Security-Updates][grafts]]). Thus, using =--no-grafts= cancels the effect of =--tune=.
+
+  We call this technique /package multi-versioning/: several variants of tunable packages may be built, one for each CPU variant. It is the coarse-grain counterpart of /function multi-versioning/ as implemented by the GNU tool chain (see [[https://gcc.gnu.org/onlinedocs/gcc/Function-Multiversioning.html#Function-Multiversioning][Function Multiversioning]] in Using the GNU Compiler Collection (GCC)).
+
+- =--amd-gpu===targets= :: Build relevant packages for the AMD GPUs specified by =targets=. Only packages with an =amd-gpu-targets= property are affected. =targets= must be a comma-separated list of [[https://llvm.org/docs/AMDGPUUsage.html#amdgpu-processor-table][AMD GPU target identifiers]]. For example, the command below builds the GPU code of =rocm-bandwidth-test= for AMD Instinct MI250 (=gfx90a=) and for AMD Instinct MI300 (=gfx942=):
+
+  #+begin_example
+  guix build --amd-gpu=gfx90a,gfx942 rocm-bandwidth-test
+#+end_example
+
+  To know the identifier(s) of the GPU(s) available on your machine, run:
+
+  #+begin_example
+  guix shell rocminfo -- rocm_agent_enumerator
+#+end_example
+
+  Under the hood, these GPU identifiers are passed to Clang's =--offload-arch= option.
+
+  When =--amd-gpu= is omitted, packages are built for a default set of GPUs, that we hope covers common needs. Building for more GPUs increases build time significantly and leads to bigger package binaries.
+
+- =--with-source===source=\\
+  =--with-source===package=====source=\\
+  =--with-source===package==@==version=====source= :: Use =source= as the source of =package=, and =version= as its version number. =source= must be a file name or a URL, as for =guix download= (see [[id:guix--Invoking-guix-download][Invoking =guix download=]]).
+
+  When =package= is omitted, it is taken to be the package name specified on the command line that matches the base of =source=---e.g., if =source= is =/src/guile-2.0.10.tar.gz=, the corresponding package is =guile=.
+
+  Likewise, when =version= is omitted, the version string is inferred from =source=; in the previous example, it is =2.0.10=.
+
+  This option allows users to try out versions of packages other than the one provided by the distribution. The example below downloads =ed-1.7.tar.gz= from a GNU mirror and uses that as the source for the =ed= package:
+
+  #+begin_example
+  guix build ed --with-source=mirror://gnu/ed/ed-1.4.tar.gz
+#+end_example
+
+  As a developer, =--with-source= makes it easy to test release candidates, and even to test their impact on packages that depend on them:
+
+  #+begin_example
+  guix build elogind --with-source=.../shepherd-0.9.0rc1.tar.gz
+#+end_example
+
+  ... or to build from a checkout in a pristine environment:
+
+  #+begin_example
+  $ git clone git://git.sv.gnu.org/guix.git
+  $ guix build guix --with-source=guix@1.0=./guix
+#+end_example
+
+- =--with-input===package=====replacement= :: Replace dependency on =package= by a dependency on =replacement=. =package= must be a package name, and =replacement= must be a package specification such as =guile= or =guile@1.8=.
+
+  For instance, the following command builds Guix, but replaces its dependency on the current stable version of Guile with a dependency on the legacy version of Guile, =guile@2.2=:
+
+  #+begin_example
+  guix build --with-input=guile=guile@2.2 guix
+#+end_example
+
+  This is a recursive, deep replacement. So in this example, both =guix= and its dependency =guile-json= (which also depends on =guile=) get rebuilt against =guile@2.2=.
+
+  This is implemented using the =package-input-rewriting/spec= Scheme procedure (see [[id:guix--Defining-Packages][=package-input-rewriting/spec=]]).
+
+- =--with-graft===package=====replacement= :: This is similar to =--with-input= but with an important difference: instead of rebuilding the whole dependency chain, =replacement= is built and then /grafted/ onto the binaries that were initially referring to =package=. See [[id:guix--Security-Updates][Security Updates]], for more information on grafts.
+
+  For example, the command below grafts version 3.5.4 of GnuTLS onto Wget and all its dependencies, replacing references to the version of GnuTLS they currently refer to:
+
+  #+begin_example
+  guix build --with-graft=gnutls=gnutls@3.5.4 wget
+#+end_example
+
+  This has the advantage of being much faster than rebuilding everything. But there is a caveat: it works if and only if =package= and =replacement= are strictly compatible---for example, if they provide a library, the application binary interface (ABI) of those libraries must be compatible. If =replacement= is somehow incompatible with =package=, then the resulting package may be unusable. Use with care!
+
+- <<index-debugging-info_002c-rebuilding>>=--with-debug-info===package= [[#index-debugging-info_002c-rebuilding][¶]] :: Build =package= in a way that preserves its debugging info and graft it onto packages that depend on it. This is useful if =package= does not already provide debugging info as a =debug= output (see [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]).
+
+  For example, suppose you're experiencing a crash in Inkscape and would like to see what's up in GLib, a library deep down in Inkscape's dependency graph. GLib lacks a =debug= output, so debugging is tough. Fortunately, you rebuild GLib with debugging info and tack it on Inkscape:
+
+  #+begin_example
+  guix install inkscape --with-debug-info=glib
+#+end_example
+
+  Only GLib needs to be recompiled so this takes a reasonable amount of time. See [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], for more info.
+
+  #+begin_quote
+  *Note:* Under the hood, this option works by passing the ‘=#:strip-binaries? #f=' to the build system of the package of interest (see [[id:guix--Build-Systems][Build Systems]]). Most build systems support that option but some do not. In that case, an error is raised.
+
+  Likewise, if a C/C++ package is built without =-g= (which is rarely the case), debugging info will remain unavailable even when =#:strip-binaries?= is false.
+
+  #+end_quote
+
+- <<index-tool-chain_002c-changing-the-build-tool-chain-of-a-package>>=--with-c-toolchain===package=====toolchain= [[#index-tool-chain_002c-changing-the-build-tool-chain-of-a-package][¶]] :: This option changes the compilation of =package= and everything that depends on it so that they get built with =toolchain= instead of the default GNU tool chain for C/C++.
+
+  Consider this example:
+
+  #+begin_example
+  guix build octave-cli \
+    --with-c-toolchain=fftw=gcc-toolchain@10 \
+    --with-c-toolchain=fftwf=gcc-toolchain@10
+#+end_example
+
+  The command above builds a variant of the =fftw= and =fftwf= packages using version 10 of =gcc-toolchain= instead of the default tool chain, and then builds a variant of the GNU Octave command-line interface using them. GNU Octave itself is also built with =gcc-toolchain@10=.
+
+  This other example builds the Hardware Locality (=hwloc=) library and its dependents up to =intel-mpi-benchmarks= with the Clang C compiler:
+
+  #+begin_example
+  guix build --with-c-toolchain=hwloc=clang-toolchain \
+             intel-mpi-benchmarks
+#+end_example
+
+  #+begin_quote
+  *Note:* There can be application binary interface (ABI) incompatibilities among tool chains. This is particularly true of the C++ standard library and run-time support libraries such as that of OpenMP. By rebuilding all dependents with the same tool chain, =--with-c-toolchain= minimizes the risks of incompatibility but cannot entirely eliminate them. Choose =package= wisely.
+
+  #+end_quote
+
+-  <<index-Git_002c-using-the-latest-commit>>=--with-git-url===package=====url= [[#index-Git_002c-using-the-latest-commit][¶]] :: Build =package= from the latest commit of the =master= branch of the Git repository at =url=. Git sub-modules of the repository are fetched, recursively, if =package= =source= is not a Git repository, otherwise it depends on the inherited value of =recursive?=.
+
+  For example, the following command builds the NumPy Python library against the latest commit of the master branch of Python itself:
+
+  #+begin_example
+  guix build python-numpy \
+    --with-git-url=python=https://github.com/python/cpython
+#+end_example
+
+  This option can also be combined with =--with-branch= or =--with-commit= (see below).
+
+  Obviously, since it uses the latest commit of the given branch, the result of such a command varies over time. Nevertheless it is a convenient way to rebuild entire software stacks against the latest commit of one or more packages. This is particularly useful in the context of continuous integration (CI).
+
+  Checkouts are kept in a cache under =~/.cache/guix/checkouts= to speed up consecutive accesses to the same repository. You may want to clean it up once in a while to save disk space.
+
+- =--with-branch===package=====branch= :: Build =package= from the latest commit of =branch=. If the =source= field of =package= is an origin with the =git-fetch= method (see [[id:guix--origin-Reference][=origin= Reference]]) or a =git-checkout= object, the repository URL is taken from that =source=. Otherwise you have to use =--with-git-url= to specify the URL of the Git repository.
+
+  For instance, the following command builds =guile-sqlite3= from the latest commit of its =master= branch, and then builds =guix= (which depends on it) and =cuirass= (which depends on =guix=) against this specific =guile-sqlite3= build:
+
+  #+begin_example
+  guix build --with-branch=guile-sqlite3=master cuirass
+#+end_example
+
+- =--with-commit===package=====commit= :: This is similar to =--with-branch=, except that it builds from =commit= rather than the tip of a branch. =commit= must be a valid Git commit SHA1 identifier, a tag, or a =git describe= style identifier such as =1.0-3-gabc123=.
+
+- =--with-patch===package=====file= :: Add =file= to the list of patches applied to =package=, where =package= is a spec such as =python@3.8= or =glibc=. =file= must contain a patch; it is applied with the flags specified in the =origin= of =package= (see [[id:guix--origin-Reference][=origin= Reference]]), which by default includes =-p1= (see [[https://www.gnu.org/software/diffutils/manual/html_node/patch-Directories.html#patch-Directories][patch Directories]] in Comparing and Merging Files).
+
+  As an example, the command below rebuilds Coreutils with the GNU C Library (glibc) patched with the given patch:
+
+  #+begin_example
+  guix build coreutils --with-patch=glibc=./glibc-frob.patch
+#+end_example
+
+  In this example, glibc itself as well as everything that leads to Coreutils in the dependency graph is rebuilt.
+
+- <<index-configure-flags_002c-changing-them>>=--with-configure-flag===package=====flag= [[#index-configure-flags_002c-changing-them][¶]] :: Append =flag= to the configure flags of =package=, where =package= is a spec such as =guile@3.0= or =glibc=. The build system of =package= must support the =#:configure-flags= argument.
+
+  For example, the command below builds GNU Hello with the configure flag =--disable-nls=:
+
+  #+begin_example
+  guix build hello --with-configure-flag=hello=--disable-nls
+#+end_example
+
+  The following command passes an extra flag to =cmake= as it builds =lapack=:
+
+  #+begin_example
+  guix build lapack \
+    --with-configure-flag=lapack=-DBUILD_SHARED_LIBS=OFF
+#+end_example
+
+  #+begin_quote
+  *Note:* Under the hood, this option works by passing the ‘=#:configure-flags=' argument to the build system of the package of interest (see [[id:guix--Build-Systems][Build Systems]]). Most build systems support that option but some do not. In that case, an error is raised.
+
+  #+end_quote
+
+- <<index-upstream_002c-latest-version>>=--with-latest===package= [[#index-upstream_002c-latest-version][¶]]\\
+  =--with-version===package=====version= :: So you like living on the bleeding edge? The =--with-latest= option is for you! It replaces occurrences of =package= in the dependency graph with its latest upstream version, as reported by =guix refresh= (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
+
+  It does so by determining the latest upstream release of =package= (if possible), downloading it, and authenticating it /if/ it comes with an OpenPGP signature.
+
+  As an example, the command below builds Guix against the latest version of Guile-JSON:
+
+  #+begin_example
+  guix build guix --with-latest=guile-json
+#+end_example
+
+  The =--with-version= works similarly except that it lets you specify that you want precisely =version=, assuming that version exists upstream. For example, to spawn a development environment with SciPy built against version 1.22.4 of NumPy (skipping its test suite because hey, we're not gonna wait this long), you would run:
+
+  #+begin_example
+  guix shell python python-scipy --with-version=python-numpy=1.22.4
+#+end_example
+
+  #+begin_quote
+  *Warning:* Because they depend on source code published at a given point in time on upstream servers, deployments made with =--with-latest= and =--with-version= may be non-reproducible: source might disappear or be modified in place on the servers.
+
+  To deploy old software versions without compromising on reproducibility, see [[id:guix--Invoking-guix-time_002dmachine][=guix time-machine=]].
+
+  #+end_quote
+
+  There are limitations. First, in cases where the tool cannot or does not know how to authenticate source code, you are at risk of running malicious code; a warning is emitted in this case. Second, this option simply changes the source used in the existing package definitions, which is not always sufficient: there might be additional dependencies that need to be added, patches to apply, and more generally the quality assurance work that Guix developers normally do will be missing.
+
+  You've been warned! When those limitations are acceptable, it's a snappy way to stay on top. We encourage you to submit patches updating the actual package definitions once you have successfully tested an upgrade with =--with-latest= (see [[id:guix--Contributing][Contributing]]).
+
+- <<index-test-suite_002c-skipping>>=--without-tests===package= [[#index-test-suite_002c-skipping][¶]] :: Build =package= without running its tests. This can be useful in situations where you want to skip the lengthy test suite of a intermediate package, or if a package's test suite fails in a non-deterministic fashion. It should be used with care because running the test suite is a good way to ensure a package is working as intended.
+
+  Turning off tests leads to a different store item. Consequently, when using this option, anything that depends on =package= must be rebuilt, as in this example:
+
+  #+begin_example
+  guix install --without-tests=python python-notebook
+#+end_example
+
+  The command above installs =python-notebook= on top of =python= built without running its test suite. To do so, it also rebuilds everything that depends on =python=, including =python-notebook= itself.
+
+  Internally, =--without-tests= relies on changing the =#:tests?= option of a package's =check= phase (see [[id:guix--Build-Systems][Build Systems]]). Note that some packages use a customized =check= phase that does not respect a =#:tests? #f= setting. Therefore, =--without-tests= has no effect on these packages.
+
+Wondering how to achieve the same effect using Scheme code, for example in your manifest, or how to write your own package transformation? See [[id:guix--Defining-Package-Variants][Defining Package Variants]], for an overview of the programming interfaces available.
+
+To use package transformations at the level of the entire system, see [[id:guix--operating_002dsystem-Reference::#operating_002dsystem_002dtransformation][the =transformation= field of =operating-system=]]. See [[id:guix--home_002denvironment-Reference::#home_002denvironment_002dtransformation][the =transformation= field of =home-environment=]], for how to do it at the level of the home environment
+
+--------------
+
+Next: [[id:guix--Additional-Build-Options][Additional Build Options]], Previous: [[id:guix--Common-Build-Options][Common Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

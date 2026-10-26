@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Tag-Searches
+:END:
+#+filetags: :org:
+#+title: Tag Searches (The Org Manual)
+
+Next:
+
+<<Tag-Searches>>
+Previous: [[id:org--Tag-Hierarchy][Tag Hierarchy]], Up: [[id:org--Tags][Tags]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 6.4 Tag Searches [[#Tag-Searches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tag-Searches-1
+:CLASS: section
+:END:
+Once a system of tags has been set up, it can be used to collect related information into special lists.
+
+-  <<index-C_002dc-_002f-m>>C-c / m or C-c \ (=org-match-sparse-tree=) [[#index-C_002dc-_002f-m][¶]] :: Create a sparse tree with all headlines matching a tags search. With a C-u prefix argument, ignore headlines that are not a TODO line.
+
+-  <<index-m-_0028Agenda-dispatcher_0029>>M-x org-agenda m (=org-tags-view=) [[#index-m-_0028Agenda-dispatcher_0029][¶]] :: Create a global list of tag matches from all agenda files. See [[id:org--Matching-tags-and-properties][Matching tags and properties]].
+
+- <<index-M-_0028Agenda-dispatcher_0029>>M-x org-agenda M (=org-tags-view=) [[#index-M-_0028Agenda-dispatcher_0029][¶]] :: Create a global list of tag matches from all agenda files, but check only TODO items.
+
+These commands all prompt for a match string which allows basic Boolean logic, such as ‘=+boss+urgent-project1=' to find entries with tags ‘=boss=' and ‘=urgent=', but not ‘=project1=' or ‘=Kathy|Sally=' to find entries tagged with either ‘=Kathy=' or ‘=Sally='. The full syntax of the search string is rich and allows also matching against TODO keywords, entry levels and properties. For a complete description with many examples, see [[id:org--Matching-tags-and-properties][Matching tags and properties]].
+
+--------------
+
+Previous: [[id:org--Tag-Hierarchy][Tag Hierarchy]], Up: [[id:org--Tags][Tags]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

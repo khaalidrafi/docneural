@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID: org--Headlines-in-HTML-export
+:END:
+#+filetags: :org:
+#+title: Headlines in HTML export (The Org Manual)
+
+Next:
+
+<<Headlines-in-HTML-export>>
+Next: [[id:org--Links-in-HTML-export][Links in HTML export]], Previous: [[id:org--Quoting-HTML-tags][Quoting HTML tags]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.7 Headlines in HTML export [[#Headlines-in-HTML-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Headlines-in-HTML-export-1
+:CLASS: subsection
+:END:
+Headlines are exported to ‘=<h1>=', ‘=<h2>=', etc. Each headline gets the ‘=id=' attribute from ‘=CUSTOM_ID=' property, or a unique generated value, see [[id:org--Internal-Links][Internal Links]].
+
+Headlines can contain a link to themselves. To enable it, you can:
+
+- Set the variable =org-html-self-link-headlines= to a non-=nil= value
+- In an Org file, use =html-self-link-headlines= option
+
+  #+begin_example
+  #+OPTIONS: html-self-link-headlines:t
+#+end_example
+
+When enabled, the text of the headlines is wrapped in ‘=<a>=' tags. These tags have a ‘=href=' attribute making the headlines link to themselves.

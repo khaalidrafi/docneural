@@ -1,0 +1,115 @@
+:PROPERTIES:
+:ID: emacs--Table-of-Resources
+:END:
+#+filetags: :emacs:
+#+title: Table of Resources
+
+Next: [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]]   Previous: [[id:emacs--Resources][X Resources]]   Up: [[id:emacs--X-Resources][X Options and Resources]]
+
+<<Table-of-Resources>>
+*** D.2 Table of X Resources for Emacs [[#Table-of-X-Resources-for-Emacs][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-of-X-Resources-for-Emacs
+:CLASS: appendixsec
+:END:
+The table below lists the X resource names that Emacs recognizes. Note that some of the resources have no effect in Emacs compiled with various X toolkits (GTK+, Lucid, etc.)---we indicate below when this is the case.
+
+- =alpha= (class =Alpha=) :: Sets the ‘=alpha=' frame parameter, determining frame transparency (see [[../elisp_html/Frame-Parameters.html#Frame-Parameters][Frame Parameters]] in The Emacs Lisp Reference Manual).
+
+- =alphaBackground= (class =AlphaBackground=) :: Sets the ‘=alpha-background=' frame parameter, determining background transparency (see [[../elisp_html/Frame-Parameters.html#Frame-Parameters][Frame Parameters]] in The Emacs Lisp Reference Manual).
+
+- =background= (class =Background=) :: Background color (see [[id:emacs--Colors][Colors for Faces]]).
+
+- =bitmapIcon= (class =BitmapIcon=) :: Tell the window manager to display the Emacs icon if ‘=on='; don't do so if ‘=off='. See [[id:emacs--Icons-X][Icons]], for a description of the icon.
+
+- =borderColor= (class =BorderColor=) :: Color of the frame's external border. This has no effect if Emacs is compiled with GTK+ support.
+
+- =borderWidth= (class =BorderWidth=) :: Width of the frame's external border, in pixels. This has no effect if Emacs is compiled with GTK+ support.
+
+- =cursorBlink= (class =CursorBlink=) :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=' at startup, Emacs disables Blink Cursor mode (see [[id:emacs--Cursor-Display][Displaying the Cursor]]).
+
+- =cursorColor= (class =Foreground=) :: Text cursor color. If this resource is specified when Emacs starts up, Emacs sets its value as the background color of the =cursor= face (see [[id:emacs--Faces][Text Faces]]).
+
+- =font= (class =Font=) :: Font name for the =default= face (see [[id:emacs--Fonts][Fonts]]). You can also specify a fontset name (see [[id:emacs--Fontsets][Fontsets]]).
+
+- =fontBackend= (class =FontBackend=) :: Comma-delimited list of backend(s) to use for drawing fonts, in order of precedence. For instance, the value ‘=x,xft=' tells Emacs to draw fonts using the X core font driver, falling back on the Xft font driver if that fails. Normally, you should leave this resource unset, in which case Emacs tries using all available font backends.
+
+- =foreground= (class =Foreground=) :: Default foreground color for text.
+
+- =fullscreen= (class =Fullscreen=) :: The desired fullscreen size. The value can be one of =fullboth=, =maximized=, =fullwidth= or =fullheight=, which correspond to the command-line options ‘=-fs=', ‘=-mm=', ‘=-fw=', and ‘=-fh=' (see [[id:emacs--Window-Size-X][Options for Window Size and Position]]). Note that this applies to the initial frame only.
+
+- =geometry= (class =Geometry=) :: Window size and position. The value should be a size and position specification, of the same form as in the ‘=-g=' or ‘=--geometry=' command-line option (see [[id:emacs--Window-Size-X][Options for Window Size and Position]]).
+
+  The size applies to all frames in the Emacs session, but the position applies only to the initial Emacs frame (or, in the case of a resource for a specific frame name, only that frame).
+
+  Be careful not to specify this resource as ‘=emacs*geometry=', as that may affect individual menus as well as the main Emacs frame.
+
+- =horizontalScrollBars= (class =ScrollBars=) :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=', Emacs disables Horizontal Scroll Bar mode at startup (see [[id:emacs--Scroll-Bars][Scroll Bars]]).
+
+- =iconName= (class =Title=) :: Name to display in the icon.
+
+- =internalBorder= (class =BorderWidth=) :: Width of the internal frame border, in pixels.
+
+- <<index-line-spacing-_0028X-resource_0029>>=lineSpacing= (class =LineSpacing=) [[#index-line-spacing-_0028X-resource_0029][¶]] :: Additional space between lines, in pixels.
+
+- <<index-background-for-menus-_0028X-resource_0029>>=menuBackground= (class =Background=) [[#index-background-for-menus-_0028X-resource_0029][¶]] :: The background color of the menus in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+
+- <<index-menu-bar-_0028X-resource_0029>>=menuBar= (class =MenuBar=) [[#index-menu-bar-_0028X-resource_0029][¶]] :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=', Emacs disables Menu Bar mode at startup (see [[id:emacs--Menu-Bars][Menu Bars]]).
+
+- =minibuffer= (class =Minibuffer=) :: If ‘=none=', Emacs will not make a minibuffer in this frame; it will use a separate minibuffer frame instead.
+
+- <<index-font-for-menus-_0028X-resource_0029>>=paneFont= (class =Font=) [[#index-font-for-menus-_0028X-resource_0029][¶]] :: Font name for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+
+- <<index-foreground-for-menus-_0028X-resource_0029>>=paneForeground= (class =Foreground=) [[#index-foreground-for-menus-_0028X-resource_0029][¶]] :: Foreground color for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+
+- =pointerColor= (class =Foreground=) :: Color of the mouse cursor. This has no effect in many graphical desktop environments, as they do not let Emacs change the mouse cursor this way.
+
+- =privateColormap= (class =PrivateColormap=) :: If ‘=on=', use a private color map, in the case where the default visual of class PseudoColor and Emacs is using it.
+
+- =reverseVideo= (class =ReverseVideo=) :: Switch foreground and background default colors if ‘=on=', use colors as specified if ‘=off='.
+
+- <<index-gamma-correction-_0028X-resource_0029>>=screenGamma= (class =ScreenGamma=) [[#index-gamma-correction-_0028X-resource_0029][¶]] :: Gamma correction for colors, equivalent to the frame parameter =screen-gamma=.
+
+- <<index-scroll-bar-_0028X-resource_0029>>=scrollBar= (class =ScrollBar=) [[#index-scroll-bar-_0028X-resource_0029][¶]] :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=', Emacs disables Scroll Bar mode at startup (see [[id:emacs--Scroll-Bars][Scroll Bars]]).
+
+- <<index-scrollbar-width-_0028X-resource_0029>>=scrollBarWidth= (class =ScrollBarWidth=) [[#index-scrollbar-width-_0028X-resource_0029][¶]] :: The scroll bar width in pixels, equivalent to the frame parameter =scroll-bar-width=. Do not set this resource if Emacs is compiled with GTK+ support.
+
+- =selectionFont= (class =SelectionFont=) :: Font name for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+
+- =selectionForeground= (class =SelectionForeground=) :: Foreground color for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+
+- =selectionTimeout= (class =SelectionTimeout=) :: Number of milliseconds to wait for a selection reply. If the selection owner doesn't reply in this time, we give up. A value of 0 means wait as long as necessary.
+
+-  <<index-debugging-X-problems>>=synchronous= (class =Synchronous=) [[#index-debugging-X-problems][¶]] :: Run Emacs in synchronous mode if ‘=on='. Synchronous mode is useful for debugging X problems.
+
+- =title= (class =Title=) :: Name to display in the title bar of the initial Emacs frame.
+
+- <<index-tool-bar-_0028X-resource_0029>>=toolBar= (class =ToolBar=) [[#index-tool-bar-_0028X-resource_0029][¶]] :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=', Emacs disables Tool Bar mode at startup (see [[id:emacs--Tool-Bars][Tool Bars]]).
+
+- <<index-tab-bar-_0028X-resource_0029>>=tabBar= (class =TabBar=) [[#index-tab-bar-_0028X-resource_0029][¶]] :: If the value of this resource is ‘=on=' or ‘=yes=' or ‘=1=', Emacs enables Tab Bar mode at startup (see [[id:emacs--Tab-Bars][Tab Bars]]).
+
+-  <<index-XIM-_0028X-resource_0029>>=useXIM= (class =UseXIM=) [[#index-XIM-_0028X-resource_0029][¶]] :: Disable use of X input methods (XIM) if ‘=false=' or ‘=off='. This is only relevant if your Emacs is built with XIM support. It might be useful to turn off XIM on slow X client/server links.
+
+-  <<index-inputStyle-_0028X-resource_0029>>=inputStyle= (class =InputStyle=) [[#index-inputStyle-_0028X-resource_0029][¶]] :: This resource controls how preview text generated by X input methods is displayed. Its value can be on of the following:
+
+  - ‘=callback=' :: Display the contents of the preview text in the current buffer.
+
+  - ‘=offthespot=' :: Display the preview text inside a separate area of the display provided by Emacs.
+
+  - ‘=overthespot=' :: Display the preview text inside a popup window at the location of point in the current window.
+
+  - ‘=none=' :: Let the input method decide how to display itself. This is usually equivalent to ‘=overthespot=', but it might work with more input methods.
+
+  - ‘=native=' :: Use the toolkit for handling input methods. This is currently implemented only on GTK.
+
+  - ‘=root=' :: Use some location on display specific to the input method for displaying the preview text.
+
+- =synchronizeResize= (class =SynchronizeResize=) :: If ‘=off=' or ‘=false=', Emacs will not try to tell the window manager when it has finished redrawing the display in response to a frame being resized. Otherwise, the window manager will postpone drawing a frame that was just resized until its contents are updated, which prevents blank areas of a frame that have not yet been painted from being displayed. If set to ‘=extended=', it will enable use of an alternative frame synchronization protocol, which might be supported by some compositing window managers that don't support the protocol Emacs uses by default, and causes Emacs to synchronize display with the monitor refresh rate when a compatible compositing window manager is in use.
+
+- =verticalScrollBars= (class =ScrollBars=) :: Give frames scroll bars on the left if ‘=left=', on the right if ‘=right='; don't have scroll bars if ‘=off=' (see [[id:emacs--Scroll-Bars][Scroll Bars]]).
+
+- =visualClass= (class =VisualClass=) :: The /visual class/ for X color display. If specified, the value should start with one of ‘=TrueColor=', ‘=PseudoColor=', ‘=DirectColor=', ‘=StaticColor=', ‘=GrayScale=', and ‘=StaticGray=', followed by ‘=-==depth=', where =depth= is the number of color planes.
+
+You can also use X resources to customize individual Emacs faces (see [[id:emacs--Faces][Text Faces]]). For example, setting the resource ‘=face==.attributeForeground=' is equivalent to customizing the ‘=foreground=' attribute of the face =face=. However, we recommend customizing faces from within Emacs, instead of using X resources. See [[id:emacs--Easy-Customization::#Face-Customization][Customizing Faces]].
+
+--------------

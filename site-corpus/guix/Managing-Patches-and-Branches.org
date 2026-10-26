@@ -1,0 +1,93 @@
+:PROPERTIES:
+:ID: guix--Managing-Patches-and-Branches
+:END:
+#+filetags: :guix:
+#+title: Managing Patches and Branches
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Managing-Patches-and-Branches>>
+Next: [[id:guix--Cuirass-Build-Notifications][Cuirass Build Notifications]], Previous: [[id:guix--The-Issue-Tracker][The Issue Tracker]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.11.2 Managing Patches and Branches [[#Managing-Patches-and-Branches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Managing-Patches-and-Branches-1
+:CLASS: subsection
+:END:
+Submitted patches are picked up and tested by the quality assurance service; the result of that testing eventually shows up on the dashboard at ‘=https://qa.guix.gnu.org/issue/==ISSUE_NUMBER=', where =ISSUE_NUMBER= is the number assigned by the issue tracker, currently Debbugs (work is in progress to support Codeberg pull requests). Leave time for a review, without committing anything.
+
+As an exception, some changes considered “trivial” or “obvious” may be pushed directly to the =master= branch. This includes changes to fix typos and reverting commits that caused immediate problems. This is subject to being adjusted, allowing individuals to commit directly on non-controversial changes on parts they're familiar with.
+
+Changes which affect more than 300 dependent packages (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]) should first be pushed to a topic branch other than =master=; the set of changes should be consistent---e.g., “GNOME update”, “NumPy update”, etc. This allows for testing: the branch will automatically show up at ‘=https://qa.guix.gnu.org/branch/==branch=', with an indication of its build status on various platforms.
+
+To help coordinate the merging of branches, you must create a new guix-patches issue each time you create a branch (see [[id:guix--The-Issue-Tracker][The Issue Tracker]]). The title of the issue requesting to merge a branch should have the following format:
+
+#+begin_example
+Request for merging "name" branch
+#+end_example
+
+The [[https://qa.guix.gnu.org/][QA infrastructure]] recognizes such issues and lists the merge requests on its main page. The following points apply to managing these branches:
+
+1. The commits on the branch should be a combination of the patches relevant to the branch. Patches not related to the topic of the branch should go elsewhere.
+2. Any changes that can be made on the master branch, should be made on the master branch. If a commit can be split to apply part of the changes on master, this is good to do.
+3. It should be possible to re-create the branch by starting from master and applying the relevant patches.
+4. Avoid merging master in to the branch. Prefer rebasing or re-creating the branch on top of an updated master revision.
+5. Minimise the changes on master that are missing on the branch prior to merging the branch in to master. This means that the state of the branch better reflects the state of master should the branch be merged.
+6. If you don't have commit access, create the “Request for merging” issue and request that someone creates the branch. Include a list of issues/patches to include on the branch.
+
+Normally branches will be merged in a “first come, first merged” manner, tracked through the guix-patches issues. If you agree on a different order with those involved, you can track this by updating which issues block[[#FOOT50][^{50}]] which other issues. Therefore, to know which branch is at the front of the queue, look for the oldest issue, or the issue that isn't /blocked/ by any other branch merges. An ordered list of branches with the open issues is available at [[https://qa.guix.gnu.org]].
+
+Once a branch is at the front of the queue, wait until sufficient time has passed for the build farms to have processed the changes, and for the necessary testing to have happened. For example, you can check ‘=https://qa.guix.gnu.org/branch/==branch=' to see information on some builds and substitute availability.
+
+Once the branch has been merged, the issue should be closed and the branch deleted.
+
+Sometimes, a branch may be a work in progress, for example for larger efforts such as updating the GNOME desktop. In these cases, the branch name should reflect this by having the ‘=wip-=' prefix. The QA infrastructure will avoid building work-in-progress branches, so that the available resources can be better focused on building the branches that are ready to be merged. When the branch is no longer a work in progress, it should be renamed, with the ‘=wip-=' prefix removed, and only then should the merge requests be created, as documented earlier.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF50][(50)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+You can mark an issue as blocked by another by emailing [[mailto:control@debbugs.gnu.org][control@debbugs.gnu.org]] with the following line in the body of the email: =block XXXXX by YYYYY=. Where =XXXXX= is the number for the blocked issue, and =YYYYY= is the number for the issue blocking it.
+
+--------------
+
+Next: [[id:guix--Cuirass-Build-Notifications][Cuirass Build Notifications]], Previous: [[id:guix--The-Issue-Tracker][The Issue Tracker]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

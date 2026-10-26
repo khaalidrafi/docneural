@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--DocView-Searching
+:END:
+#+filetags: :emacs:
+#+title: DocView Searching
+
+Next: [[id:emacs--DocView-Slicing][DocView Slicing]]   Previous: [[id:emacs--DocView-Navigation][DocView Navigation]]   Up: [[id:emacs--Document-View][Document Viewing]]
+
+<<DocView-Searching>>
+*** 39.2 DocView Searching [[#DocView-Searching-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: DocView-Searching-1
+:CLASS: section subsection-level-set-section
+:END:
+In DocView mode, you can search the file's text for a regular expression (see [[id:emacs--Regexps][Syntax of Regular Expressions]]). The interface for searching is inspired by =isearch= (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]).
+
+To begin a search, type C-s (=doc-view-search=) or C-r (=doc-view-search-backward=). This reads a regular expression using a minibuffer, then echoes the number of matches found within the document. You can move forward and back among the matches by typing C-s and C-r. DocView mode has no way to show the match inside the page image; instead, it displays a tooltip (at the mouse position) listing all matching lines in the current page. To force display of this tooltip, type C-t (=doc-view-show-tooltip=).
+
+To start a new search, use the search command with a prefix argument; i.e., C-u C-s for a forward search or C-u C-r for a backward search.
+
+--------------

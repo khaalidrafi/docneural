@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: emacs--Title-X
+:END:
+#+filetags: :emacs:
+#+title: Title X
+
+Next: [[id:emacs--Icons-X][Icons]]   Previous: [[id:emacs--Borders-X][Internal and Outer Borders]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Title-X>>
+*** C.10 Frame Titles [[#Frame-Titles][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Frame-Titles
+:CLASS: appendixsec
+:END:
+Each Emacs frame always has a title, which appears in window decorations and icons as the name of the frame. The default title is of the form ‘=invocation-name==@==machine=' (if there is only one frame) or shows the selected window's buffer name (if there is more than one frame).
+
+You can specify a non-default title for the initial Emacs frame with a command line option:
+
+-  <<index-_002d_002dtitle>>‘=-T ==title=' [[#index-_002d_002dtitle][¶]] :: 
+- ‘=--title===title=' :: Specify =title= as the title for the initial Emacs frame.
+
+The ‘=--name=' option (see [[id:emacs--Resources][X Resources]]) also specifies the title for the initial Emacs frame.
+
+--------------

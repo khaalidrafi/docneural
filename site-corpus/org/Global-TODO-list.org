@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID: org--Global-TODO-list
+:END:
+#+filetags: :org:
+#+title: Global TODO list (The Org Manual)
+
+Next:
+
+<<Global-TODO-list>>
+Next: [[id:org--Matching-tags-and-properties][Matching tags and properties]], Previous: [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]], Up: [[id:org--Built_002din-Agenda-Views][The Built-in Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 11.3.2 The global TODO list [[#The-global-TODO-list][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-global-TODO-list
+:CLASS: subsection
+:END:
+The global TODO list contains all unfinished TODO items formatted and collected into a single place.
+
+-  <<index-t-_0028Agenda-dispatcher_0029-1>>M-x org-agenda t (=org-todo-list=) [[#index-t-_0028Agenda-dispatcher_0029-1][¶]] :: Show the global TODO list. This collects the TODO items from all agenda files (see [[id:org--Agenda-Views][Agenda Views]]) into a single buffer. By default, this lists items with a state that is not a DONE state. The buffer is in Agenda mode, so there are commands to examine and manipulate the TODO entries directly from that buffer (see [[id:org--Agenda-Commands][Commands in the Agenda Buffer]]).
+
+-  <<index-T-_0028Agenda-dispatcher_0029>>M-x org-agenda T (=org-todo-list=) [[#index-T-_0028Agenda-dispatcher_0029][¶]] :: Like the above, but allows selection of a specific TODO keyword. You can also do this by specifying a prefix argument to t. You are prompted for a keyword, and you may also specify several keywords by separating them with ‘=|=' as the boolean OR operator. With a numeric prefix, the Nth keyword in =org-todo-keywords= is selected.
+
+  The r key in the agenda buffer regenerates it, and you can give a prefix argument to this command to change the selected TODO keyword, for example 3 r. If you often need a search for a specific keyword, define a custom command for it (see [[id:org--Agenda-Dispatcher][The Agenda Dispatcher]]).
+
+  Matching specific TODO keywords can also be done as part of a tags search (see [[id:org--Tag-Searches][Tag Searches]]).
+
+Remote editing of TODO items means that you can change the state of a TODO entry with a single key press. The commands available in the TODO list are described in [[id:org--Agenda-Commands][Commands in the Agenda Buffer]].
+
+Normally the global TODO list simply shows all headlines with TODO keywords. This list can become very long. There are two ways to keep it more compact:
+
+-  Some people view a TODO item that has been /scheduled/ for execution or have a /deadline/ (see [[id:org--Timestamps][Timestamps]]) as no longer /open/. Configure the variables =org-agenda-todo-ignore-scheduled= to exclude some or all scheduled items from the global TODO list, =org-agenda-todo-ignore-deadlines= to exclude some or all items with a deadline set, =org-agenda-todo-ignore-timestamp= to exclude some or all items with an active timestamp other than a DEADLINE or a SCHEDULED timestamp and/or =org-agenda-todo-ignore-with-date= to exclude items with at least one active timestamp.
+-  TODO items may have sublevels to break up the task into subtasks. In such cases it may be enough to list only the highest level TODO headline and omit the sublevels from the global list. Configure the variable =org-agenda-todo-list-sublevels= to get this behavior.
+
+--------------
+
+Next: [[id:org--Matching-tags-and-properties][Matching tags and properties]], Previous: [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]], Up: [[id:org--Built_002din-Agenda-Views][The Built-in Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

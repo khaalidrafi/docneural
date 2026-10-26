@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Configuration-Registers
+:END:
+#+filetags: :emacs:
+#+title: Configuration Registers
+
+Next: [[id:emacs--Number-Registers][Keeping Numbers in Registers]]   Previous: [[id:emacs--Rectangle-Registers][Saving Rectangles in Registers]]   Up: [[id:emacs--Registers][Registers]]
+
+<<Configuration-Registers>>
+*** 15.4 Saving Window and Frame Configurations in Registers [[#Saving-Window-and-Frame-Configurations-in-Registers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Saving-Window-and-Frame-Configurations-in-Registers
+:CLASS: section
+:END:
+You can save the window configuration of the selected frame in a register, or even the configuration of all windows in all frames, and restore the configuration later. See [[id:emacs--Window-Convenience][Convenience Features for Window Handling]], for information about window configurations.
+
+- C-x r w =r= :: Save the state of the selected frame's windows in register =r= (=window-configuration-to-register=).
+
+- C-x r f =r= :: Save the state of all frames, including all their windows (a.k.a. /frameset/), in register =r= (=frameset-to-register=).
+
+Use C-x r j =r= to restore a window or frame configuration. This is the same command used to restore a cursor position. When you restore a frame configuration, any existing frames not included in the configuration become invisible. If you wish to delete these frames instead, use C-u C-x r j =r=.
+
+--------------

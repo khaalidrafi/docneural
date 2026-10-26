@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Rmail-Digest
+:END:
+#+filetags: :emacs:
+#+title: Rmail Digest
+
+Next: [[id:emacs--Rmail-Rot13][Reading Rot13 Messages]]   Previous: [[id:emacs--Rmail-Editing][Editing Within a Message]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
+
+<<Rmail-Digest>>
+*** 35.16 Digest Messages [[#Digest-Messages][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Digest-Messages
+:CLASS: section
+:END:
+A /digest message/ is a message which exists to contain and carry several other messages. Digests are used on some mailing lists; all the messages that arrive for the list during a period of time such as one day are put inside a single digest which is then sent to the subscribers. Transmitting the single digest uses less computer time than transmitting the individual messages even though the total size is the same, because of the per-message overhead in network mail transmission.
+
+When you receive a digest message, the most convenient way to read it is to /undigestify/ it: to turn it back into many individual messages. Then you can read and delete the individual messages as it suits you. To do this, select the digest message and type the command M-x undigestify-rmail-message. This extracts the submessages as separate Rmail messages, and inserts them following the digest. The digest message itself is flagged as deleted.
+
+--------------

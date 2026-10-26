@@ -1,0 +1,108 @@
+:PROPERTIES:
+:ID: guix--Native-Builds
+:END:
+#+filetags: :guix:
+#+title: Native Builds
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Native-Builds>>
+Previous: [[id:guix--Cross_002dCompilation][Cross-Compilation]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 10.2 Native Builds [[#Native-Builds-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Native-Builds-1
+:CLASS: section
+:END:
+The commands that support impersonating a specific system have the =--list-systems= and =--system= options.
+
+The =--list-systems= option lists all the supported systems that can be passed as an argument to =--system=.
+
+#+begin_example
+$ guix build --list-systems
+The available systems are:
+
+   - x86_64-linux [current]
+   - aarch64-linux
+   - armhf-linux
+   - i586-gnu
+   - i686-linux
+   - mips64el-linux
+   - powerpc-linux
+   - powerpc64le-linux
+   - riscv64-linux
+
+$ guix build --system=i686-linux hello
+/gnu/store/cc0km35s8x2z4pmwkrqqjx46i8b1i3gm-hello-2.12
+
+$ file /gnu/store/cc0km35s8x2z4pmwkrqqjx46i8b1i3gm-hello-2.12/bin/hello
+/gnu/store/cc0km35s8x2z4pmwkrqqjx46i8b1i3gm-hello-2.12/bin/hello: ELF
+32-bit LSB executable, Intel 80386 ...
+#+end_example
+
+In the above example, the current system is =x86_64-linux=. The =hello= package is however built for the =i686-linux= system.
+
+This is possible because the =i686= CPU instruction set is a subset of the =x86_64=, hence =i686= targeting binaries can be run on =x86_64=.
+
+Still in the context of the previous example, if picking the =aarch64-linux= system and the =guix build --system=aarch64-linux hello= has to build some derivations, an extra step might be needed.
+
+The =aarch64-linux= targeting binaries cannot directly be run on a =x86_64-linux= system. An emulation layer is requested. The GNU Guix daemon can take advantage of the Linux kernel [[https://en.wikipedia.org/wiki/Binfmt_misc][binfmt_misc]] mechanism for that. In short, the Linux kernel can defer the execution of a binary targeting a foreign platform, here =aarch64-linux=, to a userspace program, usually an emulator.
+
+There is a service that registers QEMU as a backend for the =binfmt_misc= mechanism (see [[id:guix--Virtualization-Services][=qemu-binfmt-service-type=]]). On Debian based foreign distributions, the alternative would be the =qemu-user-static= package.
+
+If the =binfmt_misc= mechanism is not setup correctly, the building will fail this way:
+
+#+begin_example
+$ guix build --system=armhf-linux hello --check
+...
+ unsupported-platform /gnu/store/jjn969pijv7hff62025yxpfmc8zy0aq0-hello-2.12.drv aarch64-linux
+while setting up the build environment: a `aarch64-linux' is required to
+build `/gnu/store/jjn969pijv7hff62025yxpfmc8zy0aq0-hello-2.12.drv', but
+I am a `x86_64-linux'...
+#+end_example
+
+whereas, with the =binfmt_misc= mechanism correctly linked with QEMU, one can expect to see:
+
+#+begin_example
+$ guix build --system=armhf-linux hello --check
+/gnu/store/13xz4nghg39wpymivlwghy08yzj97hlj-hello-2.12
+#+end_example
+
+The main advantage of native building compared to cross-compiling, is that more packages are likely to build correctly. However it comes at a price: compilation backed by QEMU is /way slower/ than cross-compilation, because every instruction needs to be emulated.
+
+The availability of substitutes for the architecture targeted by the =--system= option can mitigate this problem. An other way to work around it is to install GNU Guix on a machine whose CPU supports the targeted instruction set, and set it up as an offload machine (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]).
+
+--------------
+
+Previous: [[id:guix--Cross_002dCompilation][Cross-Compilation]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

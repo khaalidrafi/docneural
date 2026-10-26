@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID: org--Defining-columns
+:END:
+#+filetags: :org:
+#+title: Defining columns (The Org Manual)
+
+Next:
+
+<<Defining-columns>>
+Next: [[id:org--Using-column-view][Using column view]], Up: [[id:org--Column-View][Column View]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 7.5.1 Defining columns [[#Defining-columns-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Defining-columns-1
+:CLASS: subsection
+:END:
+Setting up a column view first requires defining the columns. This is done by defining a column format line.
+
+- [[id:org--Scope-of-column-definitions][Scope of column definitions]]
+- [[id:org--Column-attributes][Column attributes]]

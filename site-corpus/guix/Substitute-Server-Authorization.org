@@ -1,0 +1,92 @@
+:PROPERTIES:
+:ID: guix--Substitute-Server-Authorization
+:END:
+#+filetags: :guix:
+#+title: Substitute Server Authorization
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Substitute-Server-Authorization>>
+Next: [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], Previous: [[id:guix--Volunteer-Run-Mirrors][Volunteer Run Mirrors]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 5.3.3 Substitute Server Authorization [[#Substitute-Server-Authorization-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Substitute-Server-Authorization-1
+:CLASS: subsection
+:END:
+To allow Guix to download substitutes from =bordeaux.guix.gnu.org=, =ci.guix.gnu.org= or a mirror, you must add the relevant public key to the access control list (ACL) of archive imports, using the =guix archive= command (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]). Doing so implies that you trust the substitute server to not be compromised and to serve genuine substitutes.
+
+#+begin_quote
+*Note:* If you are using Guix System, you can skip this section: Guix System authorizes substitutes from =bordeaux.guix.gnu.org= and =ci.guix.gnu.org= by default.
+
+#+end_quote
+
+The public keys for each of the project maintained substitute servers are installed along with Guix, in =prefix==/share/guix/=, where =prefix= is the installation prefix of Guix. If you installed Guix from source, make sure you checked the GPG signature of =guix-ad54bd5.tar.gz=, which contains this public key file. Then, you can run something like this:
+
+#+begin_example
+# guix archive --authorize < prefix/share/guix/bordeaux.guix.gnu.org.pub
+# guix archive --authorize < prefix/share/guix/ci.guix.gnu.org.pub
+#+end_example
+
+Once this is in place, the output of a command like =guix build= should change from something like:
+
+#+begin_example
+$ guix build emacs --dry-run
+The following derivations would be built:
+   /gnu/store/yr7bnx8xwcayd6j95r2clmkdl1qh688w-emacs-24.3.drv
+   /gnu/store/x8qsh1hlhgjx6cwsjyvybnfv2i37z23w-dbus-1.6.4.tar.gz.drv
+   /gnu/store/1ixwp12fl950d15h2cj11c73733jay0z-alsa-lib-1.0.27.1.tar.bz2.drv
+   /gnu/store/nlma1pw0p603fpfiqy7kn4zm105r5dmw-util-linux-2.21.drv
+...
+#+end_example
+
+to something like:
+
+#+begin_example
+$ guix build emacs --dry-run
+112.3 MB would be downloaded:
+   /gnu/store/pk3n22lbq6ydamyymqkkz7i69wiwjiwi-emacs-24.3
+   /gnu/store/2ygn4ncnhrpr61rssa6z0d9x22si0va3-libjpeg-8d
+   /gnu/store/71yz6lgx4dazma9dwn2mcjxaah9w77jq-cairo-1.12.16
+   /gnu/store/7zdhgp0n1518lvfn8mb96sxqfmvqrl7v-libxrender-0.9.7
+...
+#+end_example
+
+The text changed from “The following derivations would be built” to “112.3 MB would be downloaded”. This indicates that substitutes from the configured substitute servers are usable and will be downloaded, when possible, for future builds.
+
+The substitute mechanism can be disabled globally by running =guix-daemon= with =--no-substitutes= (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]). It can also be disabled temporarily by passing the =--no-substitutes= option to =guix package=, =guix build=, and other command-line tools.
+
+--------------
+
+Next: [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], Previous: [[id:guix--Volunteer-Run-Mirrors][Volunteer Run Mirrors]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

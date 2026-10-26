@@ -1,0 +1,729 @@
+:PROPERTIES:
+:ID: guix--Desktop-Services
+:END:
+#+filetags: :guix:
+#+title: Desktop Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Desktop-Services>>
+Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.10 Desktop Services [[#Desktop-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Desktop-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services desktop)= module provides services that are usually useful in the context of a “desktop” setup---that is, on a machine running a graphical display server, possibly with graphical user interfaces, etc. It also defines services that provide specific desktop environments like GNOME, Xfce or MATE.
+
+To simplify things, the module defines a variable containing the set of services that users typically expect on a machine with a graphical environment and networking:
+
+- Variable: *%desktop-services* [[#index-_0025desktop_002dservices][¶]] :: This is a list of services that builds upon =%base-services= and adds or adjusts services for a typical “desktop” setup.
+
+  In particular, it adds a graphical login manager (see [[id:guix--X-Window][=gdm-service-type=]]), screen lockers, a network management tool (see [[id:guix--Networking-Services][=network-manager-service-type=]]) with modem support (see [[id:guix--Networking-Services][=modem-manager-service-type=]]), energy and color management services, the =elogind= login and seat manager, the Polkit privilege service, the GeoClue location service, the AccountsService daemon that allows authorized users change system passwords, a NTP client (see [[id:guix--Networking-Services][Networking Services]]) and the Avahi daemon.
+
+The =%desktop-services= variable can be used as the =services= field of an =operating-system= declaration (see [[id:guix--operating_002dsystem-Reference][=services=]]).
+
+Additionally, the following procedures add one (or more!) desktop environments to a system.
+
+- =gnome-desktop-service-type= adds GNOME,
+- =plasma-desktop-service-type= adds KDE Plasma,
+- =enlightenment-desktop-service-type= adds Enlightenment,
+- =lxqt-desktop-service-type= adds LXQt,
+- =mate-desktop-service-type= adds MATE, and
+- =xfce-desktop-service-type= adds Xfce.
+
+These service types add “metapackages” such as =gnome= or =plasma= to the system profile, but most of them also set up other useful services that mere packages can't do.
+
+For example, they may elevate privileges on a limited number of special-purpose system interfaces and programs. This allows backlight adjustment helpers, power management utilities, screen lockers, and other integrated functionality to work as expected.
+
+- Variable: *gnome-desktop-service-type* [[#index-gnome_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://www.gnome.org][GNOME]] desktop environment. Its value is a =gnome-desktop-configuration= object (see below).
+
+  This service adds the =gnome= package to the system profile, and extends polkit with the actions from =gnome-settings-daemon=.
+
+- Data Type: *gnome-desktop-configuration* [[#index-gnome_002ddesktop_002dconfiguration][¶]] :: Configuration record for the GNOME desktop environment. Available =gnome-desktop-configuration= fields are:
+
+  - =core-services= (type: list-of-packages) :: A list of packages that the GNOME Shell and applications may rely on.
+
+  - =shell= (type: list-of-packages) :: A list of packages that constitute the GNOME Shell, without applications.
+
+  - =utilities= (type: list-of-packages) :: A list of packages that serve as applications to use on top of the GNOME Shell.
+
+  - =gnome= (type: maybe-package) :: This field used to be the only configuration point and specified a GNOME meta-package to install system-wide. Since the meta-package itself provides neither sources nor the actual packages and is only used to propagate them, this field is deprecated.
+
+  - =extra-packages= (type: list-of-packages) :: A list of GNOME-adjacent packages to also include. This field is intended for users to add their own packages to their GNOME experience. Note, that it already includes some packages that are considered essential by some (most?) GNOME users.
+
+  - =udev-ignorelist= (default: =()=) (type: list-of-strings) :: A list of regular expressions denoting udev rules or hardware file names provided by any package that should not be installed. By default, every udev rule and hardware file specified by any package referenced in the other fields are installed.
+
+  - =polkit-ignorelist= (default: =()=) (type: list-of-strings) :: A list of regular expressions denoting polkit rules provided by any package that should not be installed. By default, every polkit rule added by any package referenced in the other fields are installed.
+
+  - =keyring= (type: gnome-keyring-configuration-or-#f) :: A <gnome-keyring-configuration> record used to better integrate the GNOME keyring with the system. Refer to the documentation of the =gnome-keyring-service-type= for more information. If you'd rather avoid integrating the GNOME keyring, you can set this to =#f=.
+
+- Variable: *plasma-desktop-service-type* [[#index-plasma_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://kde.org/plasma-desktop/][Plasma]] desktop environment. Its value is a =plasma-desktop-configuration= object (see below).
+
+  This service adds the =plasma= package to the system profile.
+
+- Data Type: *plasma-desktop-configuration* [[#index-plasma_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Plasma desktop environment.
+
+  - =plasma= (default: =plasma=) :: The Plasma package to use.
+
+- Variable: *xfce-desktop-service-type* [[#index-xfce_002ddesktop_002dservice_002dtype][¶]] :: This is the type of a service to run the [[https://xfce.org/][Xfce]] desktop environment. Its value is an =xfce-desktop-configuration= object (see below).
+
+  This service adds the =xfce= package to the system profile, and extends polkit with the ability for =thunar= to manipulate the file system as root from within a user session, after the user has authenticated with the administrator's password.
+
+  Note that =xfce4-panel= and its plugin packages should be installed in the same profile to ensure compatibility. When using this service, you should add extra plugins (=xfce4-whiskermenu-plugin=, =xfce4-weather-plugin=, etc.) to the =packages= field of your =operating-system=.
+
+- Data Type: *xfce-desktop-configuration* [[#index-xfce_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Xfce desktop environment.
+
+  - =xfce= (default: =xfce=) :: The Xfce package to use.
+
+- Variable: *mate-desktop-service-type* [[#index-mate_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://mate-desktop.org/][MATE desktop environment]]. Its value is a =mate-desktop-configuration= object (see below).
+
+  This service adds the =mate= package to the system profile, and extends polkit with the actions from =mate-settings-daemon=.
+
+- Data Type: *mate-desktop-configuration* [[#index-mate_002ddesktop_002dconfiguration][¶]] :: Configuration record for the MATE desktop environment.
+
+  - =mate= (default: =mate=) :: The MATE package to use.
+
+- Variable: *lxqt-desktop-service-type* [[#index-lxqt_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://lxqt-project.org][LXQt desktop environment]]. Its value is a =lxqt-desktop-configuration= object (see below).
+
+  This service adds the =lxqt= package to the system profile.
+
+- Data Type: *lxqt-desktop-configuration* [[#index-lxqt_002ddesktop_002dconfiguration][¶]] :: Configuration record for the LXQt desktop environment.
+
+  - =lxqt= (default: =lxqt=) :: The LXQT package to use.
+
+- Variable: *sugar-desktop-service-type* [[#index-sugar_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://www.sugarlabs.org][Sugar desktop environment]]. Its value is a =sugar-desktop-configuration= object (see below).
+
+  This service adds the =sugar= package to the system profile, as well as any selected Sugar activities. By default it only includes a minimal set of activities.
+
+- Data Type: *sugar-desktop-configuration* [[#index-sugar_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Sugar desktop environment.
+
+  - =sugar= (default: =sugar=) :: The Sugar package to use.
+
+  - =gobject-introspection= (default: =gobject-introspection=) :: The =gobject-introspection= package to use. This package is used to access libraries installed as dependencies of Sugar activities.
+
+  - =activities= (default: =(list sugar-help-activity)=) :: A list of Sugar activities to install.
+
+The following example configures the Sugar desktop environment with a number of useful activities:
+
+#+begin_src lisp
+(use-modules (gnu))
+(use-package-modules sugar)
+(use-service-modules desktop)
+(operating-system
+  ...
+  (services (cons* (service sugar-desktop-service-type
+                            (sugar-desktop-configuration
+                              (activities (list sugar-browse-activity
+                                                sugar-help-activity
+                                                sugar-jukebox-activity
+                                                sugar-typing-turtle-activity))))
+                   %desktop-services))
+  ...)
+#+end_src
+
+- Variable: *enlightenment-desktop-service-type* [[#index-enlightenment_002ddesktop_002dservice_002dtype][¶]] :: Return a service that adds the =enlightenment= package to the system profile, and extends dbus with actions from =efl=.
+
+- Data Type: *enlightenment-desktop-service-configuration* [[#index-enlightenment_002ddesktop_002dservice_002dconfiguration][¶]] :: - =enlightenment= (default: =enlightenment=) :: The enlightenment package to use.
+
+Because the GNOME, Xfce and MATE desktop services pull in so many packages, the default =%desktop-services= variable doesn't include any of them by default. To add GNOME, Xfce or MATE, just =cons= them onto =%desktop-services= in the =services= field of your =operating-system=:
+
+#+begin_src lisp
+(use-modules (gnu))
+(use-service-modules desktop)
+(operating-system
+  ...
+  ;; cons* adds items to the list given as its last argument.
+  (services (cons* (service gnome-desktop-service-type)
+                   (service xfce-desktop-service-type)
+                   %desktop-services))
+  ...)
+#+end_src
+
+These desktop environments will then be available as options in the graphical login window.
+
+The actual service definitions included in =%desktop-services= and provided by =(gnu services dbus)= and =(gnu services desktop)= are described below.
+
+- Variable: *dbus-root-service-type* [[#index-dbus_002droot_002dservice_002dtype][¶]] :: Type for a service that runs the D-Bus “system bus”. [[#FOOT35][^{35}]]
+
+  The value for this service type is a =<dbus-configuration>= record.
+
+- Data Type: *dbus-configuration* [[#index-dbus_002dconfiguration][¶]] :: Data type representing the configuration for =dbus-root-service-type=.
+
+  - =dbus= (default: =dbus=) (type: file-like) :: Package object for dbus.
+
+  - =services= (default: ='()=) (type: list) :: List of packages that provide an =etc/dbus-1/system.d= directory containing additional D-Bus configuration and policy files. For example, to allow avahi-daemon to use the system bus, =services= must be equal to =(list avahi)=.
+
+  - =verbose?= (default: =#f=) (type: boolean) :: When =#t=, D-Bus is launched with environment variable ‘=DBUS_VERBOSE=' set to ‘=1='. A verbose-enabled D-Bus package such as =dbus-verbose= should be provided to =dbus= in this scenario. The verbose output is logged to =/var/log/dbus-daemon.log=.
+
+**** Elogind [[#Elogind][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Elogind
+:CLASS: subsubheading
+:END:
+[[https://github.com/elogind/elogind][Elogind]] is a login and seat management daemon that also handles most system-level power events for a computer, for example suspending the system when a lid is closed, or shutting it down when the power button is pressed.
+
+It also provides a D-Bus interface that can be used to know which users are logged in, know what kind of sessions they have open, suspend the system, inhibit system suspend, reboot the system, and other tasks.
+
+- Variable: *elogind-service-type* [[#index-elogind_002dservice_002dtype][¶]] :: Type of the service that runs =elogind=, a login and seat management daemon. The value for this service is a =<elogind-configuration>= object.
+
+- Data Type: *elogind-configuration* [[#index-elogind_002dconfiguration][¶]] :: Available =elogind-configuration= fields are:
+
+  - =elogind= (default: =elogind=) (type: file-like) :: The elogind package to use.
+
+  - =system-sleep-hook-files= (default: =()=) (type: list-of-file-likes) :: A list of executables (file-like objects) that will be installed into the =/etc/elogind/system-sleep= hook directory. See ‘Hook directories' in the ‘=loginctl(1)=' man page for more information.
+
+  - =system-shutdown-hook-files= (default: =()=) (type: list-of-file-likes) :: A list of executables (file-like objects) that will be installed into the =/etc/elogind/system-shutdown/= hook directory.
+
+  - =allow-power-off-interrupts?= (default: =#f=) (type: maybe-boolean) :: Whether the executables in elogind's hook directories (see above) can cause a power-off action to be cancelled (interrupted) by printing an appropriate error message to stdout.
+
+  - =allow-suspend-interrupts?= (default: =#f=) (type: maybe-boolean) :: Likewise as the =allow-power-off-interrupts?= option, but for the suspend action.
+
+  - =broadcast-power-off-interrupts?= (default: =#t=) (type: maybe-boolean) :: Whether an interrupt of a power-off action is broadcasted.
+
+  - =broadcast-suspend-interrupts?= (default: =#t=) (type: maybe-boolean) :: Whether an interrupt of a suspend action is broadcasted.
+
+  - =kill-user-processes?= (default: =#f=) (type: maybe-boolean) :: Whether the processes of a user should be killed when the user logs out.
+
+  - =kill-only-users= (type: maybe-list-of-user-names) :: Usernames whose processes should be killed, regardless the value of =kill-user-processes?=.
+
+  - =kill-exclude-users= (default: =("root")=) (type: maybe-list-of-user-names) :: Usernames whose processes should /not/ be killed, regardless the value of =kill-user-processes?=.
+
+  - =inhibit-delay-max-seconds= (default: =5=) (type: maybe-non-negative-integer) :: The maximum time a system shutdown or sleep request is delayed due to an inhibitor lock of type delay being active before the inhibitor is ignored and the operation executes anyway.
+
+  - =handle-power-key= (default: =poweroff=) (type: maybe-action) :: The action done when the power key is pressed.
+
+  - =handle-power-key-long-press= (default: =ignore=) (type: maybe-action) :: The action done when the power key is long pressed.
+
+  - =handle-suspend-key= (default: =suspend=) (type: maybe-action) :: The action done when the suspend key is pressed.
+
+  - =handle-suspend-key-long-press= (default: =hibernate=) (type: maybe-action) :: The action done when the suspend key is long pressed.
+
+  - =handle-hibernate-key= (default: =hibernate=) (type: maybe-action) :: The action done when the hibernate key is pressed.
+
+  - =handle-hibernate-key-long-press= (default: =ignore=) (type: maybe-action) :: The action done when the hibernate key is long pressed.
+
+  - =handle-lid-switch= (default: =suspend=) (type: maybe-action) :: The action done when the lid is closed.
+
+  - =handle-lid-switch-docked= (default: =ignore=) (type: maybe-action) :: The action done when the lid is closed and the device docked.
+
+  - =handle-lid-switch-external-power= (default: =suspend=) (type: maybe-action) :: The action done when the lid is closed and the device is externally powered.
+
+  - =power-key-ignore-inhibited?= (default: =#f=) (type: maybe-boolean) :: Whether to ignore high-level inhibitor locks (shutdown, reboot, sleep or idle) when the power key is pressed.
+
+  - =suspend-key-ignore-inhibited?= (default: =#f=) (type: maybe-boolean) :: Whether to ignore high-level inhibitor locks (shutdown, reboot, sleep or idle) when the suspend key is pressed.
+
+  - =hibernate-key-ignore-inhibited?= (default: =#f=) (type: maybe-boolean) :: Whether to ignore high-level inhibitor locks (shutdown, reboot, sleep or idle) when the hibernate key is pressed.
+
+  - =lid-switch-ignore-inhibited?= (default: =#f=) (type: maybe-boolean) :: Whether to ignore high-level inhibitor locks (shutdown, reboot, sleep or idle) when the lid is closed.
+
+  - =holdoff-timeout-seconds= (default: =30=) (type: maybe-non-negative-integer) :: Specifies the number of seconds after system startup or system resume during which elogind will hold off on reacting to lid events.
+
+  - =idle-action= (default: =ignore=) (type: maybe-action) :: Action to take when the system is idle.
+
+  - =idle-action-seconds= (type: maybe-non-negative-integer) :: The delay after which the action configured in =idle-action= is taken after the system is idle.
+
+  - =runtime-directory-size= (default: ='(10 . %)=) (type: maybe-non-negative-integer-and-suffix) :: Set the size limit on the =XDG_RUNTIME_DIR= runtime directory for each user who logs in. The size in bytes can be given as an integer and paired with symbols: K, M, G, or T. When paired with ='%=, the integer represents the limit as a percentage share of the total amount of physical RAM (read access memory).
+
+  - =remove-ipc?= (default: =#t=) (type: maybe-boolean) :: Whether IPC (inter-process communication) objects belonging to the user shall be removed when the user fully logs out.
+
+  - =suspend-state= (default: =(mem standby freeze)=) (type: maybe-list-of-suspend-states) :: The suspend state values to be write to =/sys/power/state= by elogind when suspending the system. They will be tried in turn, until one is written without error.
+
+  - =suspend-mode= (type: maybe-list-of-suspend-modes) :: The suspend mode values to write to =/sys/power/mem_sleep= by elogind when suspending the system.
+
+  - =suspend-estimation-seconds= (default: =3600=) (type: maybe-non-negative-integer) :: Cause the RTC alarm to wake the system after the specified time span to measure the system battery capacity level and estimate the battery discharging rate, which is used for estimating the time span until the system battery charge level goes down to 5%. This option is only used by elogind when using the ='suspend-then-hibernate= action.
+
+  - =hibernate-mode= (default: =(platform shutdown)=) (type: maybe-list-of-hibernation-modes) :: The hibernation mode values to write to =/sys/power/disk= by elogind when hibernating the system.
+
+  - =hibernate-on-ac-power= (default: =#t=) (type: maybe-boolean) :: Whether to allow hibernation when the system has AC power. This option is only used if =hibernate-delay-seconds= is set. If this option is disabled, the coutdown of =hibernate-delay-seconds= starts only after AC power is disconnected, keeping the system in the suspend state otherwise.
+
+  - =hibernate-delay-seconds= (type: maybe-non-negative-integer) :: The amount of time the system spends in suspend mode before the system is automatically put into hibernate mode.
+
+- Variable: *gardenhostd-service-type* [[#index-gardenhostd_002dservice_002dtype][¶]] :: Type for the service that runs gardenhostd, a partial implementation of the systemd-hostnamed daemon. It provides the org.freedesktop.hostname1 D-Bus interface, which helps applications like gnome-control-center retrieve and modify the system's hostname, as well as set a pretty hostname for display.
+
+  The value for this service is a =<gardenhostd-configuration>= object.
+
+- Data Type: *gardenhostd-configuration* [[#index-gardenhostd_002dconfiguration][¶]] :: Available =gardenhostd-configuration= fields are:
+
+  - =gardenhostd= (default: =gardenhostd=) (type: package) :: The gardenhostd package to use.
+
+- Variable: *accountsservice-service-type* [[#index-accountsservice_002dservice_002dtype][¶]] :: Type for the service that runs AccountsService, a system service that can list available accounts, change their passwords, and so on. AccountsService integrates with PolicyKit to enable unprivileged users to acquire the capability to modify their system configuration. See [[https://www.freedesktop.org/wiki/Software/AccountsService/][AccountsService]] for more information.
+
+  The value for this service is a file-like object, by default it is set to =accountsservice= (the package object for AccountsService).
+
+- Variable: *polkit-service-type* [[#index-polkit_002dservice_002dtype][¶]] :: Type for the service that runs the [[https://www.freedesktop.org/wiki/Software/polkit/][Polkit privilege management service]], which allows system administrators to grant access to privileged operations in a structured way. By querying the Polkit service, a privileged system component can know when it should grant additional capabilities to ordinary users. For example, an ordinary user can be granted the capability to suspend the system if the user is logged in locally.
+
+  The value for this service is a =<polkit-configuration>= object.
+
+- Variable: *polkit-wheel-service* [[#index-polkit_002dwheel_002dservice][¶]] :: Service that adds the =wheel= group as admins to the Polkit service. This makes it so that users in the =wheel= group are queried for their own passwords when performing administrative actions instead of =root='s, similar to the behaviour used by =sudo=.
+
+- Variable: *upower-service-type* [[#index-upower_002dservice_002dtype][¶]] :: Service that runs [[https://upower.freedesktop.org/][=upowerd=]], a system-wide monitor for power consumption and battery levels, with the given configuration settings.
+
+  It implements the =org.freedesktop.UPower= D-Bus interface, and is notably used by GNOME.
+
+- Data Type: *upower-configuration* [[#index-upower_002dconfiguration][¶]] :: Data type representation the configuration for UPower.
+
+  - =upower= (default: =upower=) :: Package to use for =upower=.
+
+  - =watts-up-pro?= (default: =#f=) :: Enable the Watts Up Pro device.
+
+  - =poll-batteries?= (default: =#t=) :: Enable polling the kernel for battery level changes.
+
+  - =ignore-lid?= (default: =#f=) :: Ignore the lid state, this can be useful if it's incorrect on a device.
+
+  - =use-percentage-for-policy?= (default: =#t=) :: Whether to use a policy based on battery percentage rather than on estimated time left. A policy based on battery percentage is usually more reliable.
+
+  - =percentage-low= (default: =20=) :: When =use-percentage-for-policy?= is =#t=, this sets the percentage at which the battery is considered low.
+
+  - =percentage-critical= (default: =5=) :: When =use-percentage-for-policy?= is =#t=, this sets the percentage at which the battery is considered critical.
+
+  - =percentage-action= (default: =2=) :: When =use-percentage-for-policy?= is =#t=, this sets the percentage at which action will be taken.
+
+  - =time-low= (default: =1200=) :: When =use-time-for-policy?= is =#f=, this sets the time remaining in seconds at which the battery is considered low.
+
+  - =time-critical= (default: =300=) :: When =use-time-for-policy?= is =#f=, this sets the time remaining in seconds at which the battery is considered critical.
+
+  - =time-action= (default: =120=) :: When =use-time-for-policy?= is =#f=, this sets the time remaining in seconds at which action will be taken.
+
+  - =critical-power-action= (default: ='hybrid-sleep=) :: The action taken when =percentage-action= or =time-action= is reached (depending on the configuration of =use-percentage-for-policy?=).
+
+    Possible values are:
+
+    - ='power-off=
+    - ='hibernate=
+    - ='hybrid-sleep=.
+
+- Variable: *udisks-service-type* [[#index-udisks_002dservice_002dtype][¶]] :: Type for the service that runs [[https://udisks.freedesktop.org/docs/latest/][UDisks]], a /disk management/ daemon that provides user interfaces with notifications and ways to mount/unmount disks. Programs that talk to UDisks include the =udisksctl= command, part of UDisks, and GNOME Disks. Note that Udisks relies on the =mount= command, so it will only be able to use the file-system utilities installed in the system profile. For example if you want to be able to mount NTFS file-systems in read and write fashion, you'll need to have =ntfs-3g= installed system-wide.
+
+  The value for this service is a =<udisks-configuration>= object.
+
+- Data Type: *udisks-configuration* [[#index-udisks_002dconfiguration][¶]] :: Data type representing the configuration for =udisks-service-type=.
+
+  - =udisks= (default: =udisks=) (type: file-like) :: Package object for UDisks.
+
+- Variable: *gvfs-service-type* [[#index-gvfs_002dservice_002dtype][¶]] :: Type for the service that provides virtual file systems for GIO applications, which enables support for =trash://=, =ftp://=, =sftp://= and many other location schemas in file managers like Nautilus (GNOME Files) and Thunar.
+
+  The value for this service is a =<gvfs-configuration>= object.
+
+- Data Type: *gvfs-configuration* [[#index-gvfs_002dconfiguration][¶]] :: Data type representing the configuration for =gvfs-service-type=.
+
+  - =gvfs= (default: =gvfs=) (type: file-like) :: Package object for GVfs.
+
+- Variable: *kanata-service-type* [[#index-kanata_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/jtroo/kanata][Kanata]], a keyboard layout re-mapper. Its value is a =kanata-configuration= object. This service allows spawning =kanata= configurations to manage keyboards.
+
+- Data Type: *kanata-configuration* [[#index-kanata_002dconfiguration][¶]] :: Configuration record for the Kanata service.
+
+  - =kanata= (default: =kanata=) (type: package) :: The Kanata package to use.
+
+  - =keymaps= (default: =()=) (type: list-of-file-likes) :: List of =kanata= configuration files (file-like objects). See [[https://jtroo.github.io/config.html#linux-only-linux-dev][Kanata's device specification documentation]].
+
+- Variable: *kmonad-service-type* [[#index-kmonad_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/kmonad/kmonad][KMonad]]. Its value is a =kmonad-configuration= object. This service allows spawning =kmonad= configurations to manage keyboards.
+
+- Data Type: *kmonad-configuration* [[#index-kmonad_002dconfiguration][¶]] :: Available =kmonad-configuration= fields are:
+
+  - =kmonad= (default: =kmonad=) (type: package) :: The KMonad package to use.
+
+  - =keymaps= (default: =()=) (type: list-of-file-likes) :: A list of KMonad configurations (file-like objects). See [[https://github.com/kmonad/kmonad/blob/master/keymap/tutorial.kbd][KMonad - Keymap Tutorial]]
+
+- Variable: *colord-service-type* [[#index-colord_002dservice_002dtype][¶]] :: This is the type of the service that runs =colord=, a system service with a D-Bus interface to manage the color profiles of input and output devices such as screens and scanners. It is notably used by the GNOME Color Manager graphical tool. See [[https://www.freedesktop.org/software/colord/][the colord web site]] for more information.
+
+- Variable: *sane-service-type* [[#index-sane_002dservice_002dtype][¶]] :: This service provides access to scanners /via/ [[http://www.sane-project.org][SANE]] by installing the necessary udev rules and pluggable backends. It is included in =%desktop-services= (see [[#Desktop-Services][Desktop Services]]) and relies by default on =sane-backends= package (see below) for hardware support.
+
+- Data Type: *sane-configuration* [[#index-sane_002dconfiguration][¶]] :: Data type representing the configuration for SANE.
+
+  - =sane= (default: =sane=) :: Package containing SANE library.
+
+  - =backends= (default: =(sane-backends)=) :: List of packages with pluggable SANE backends:
+
+    - =sane-backends=: The default backend collection which supports many recent scanners,
+    - =sane-airscan=: A backend that enables network scanners supporting eSCL (Apple) or WSD, (Microsoft) protocols
+    - =hplip=: A backend containing drivers for older Hewlett-Packard scanners,
+    - =utsushi=: A backend containing drivers for older Epson devices.
+
+In order to use additional backends on a system which relies on =%desktop-services=, you may use =modify-services= (see [[id:guix--Service-Reference][=modify-services=]]) as illustrated below:
+
+#+begin_src lisp
+(use-modules (gnu))
+(use-service-modules
+  ...
+  desktop)
+(use-package-modules
+  ...
+  scanner)
+
+(define %my-desktop-services
+  ;; List of desktop services that supports a broader range of scanners.
+  (modify-services %desktop-services
+    (sane-service-type _ =>
+      (sane-configuration
+        (backends (list sane-backends sane-airscan))))))
+
+(operating-system
+  ...
+  (services %my-desktop-services))
+#+end_src
+
+- Procedure: *geoclue-application* =name [#:allowed? #t] [#:system? #f] [#:users ’()]= [[#index-geoclue_002dapplication][¶]] :: Return a configuration allowing an application to access GeoClue location data. =name= is the Desktop ID of the application, without the =.desktop= part. If =allowed?= is true, the application will have access to location information by default. The boolean =system?= value indicates whether an application is a system component or not. Finally =users= is a list of UIDs of all users for which this application is allowed location info access. An empty users list means that all users are allowed.
+
+- Variable: *%standard-geoclue-applications* [[#index-_0025standard_002dgeoclue_002dapplications][¶]] :: The standard list of well-known GeoClue application configurations, granting authority to the GNOME date-and-time utility to ask for the current location in order to set the time zone, and allowing the IceCat and Epiphany web browsers to request location information. IceCat and Epiphany both query the user before allowing a web page to know the user's location.
+
+- Variable: *geoclue-service-type* [[#index-geoclue_002dservice_002dtype][¶]] :: Type for the service that runs the [[https://wiki.freedesktop.org/www/Software/GeoClue/][GeoClue]] location service. This service provides a D-Bus interface to allow applications to request access to a user's physical location, and optionally to add information to online location databases.
+
+  The value for this service is a =<geoclue-configuration>= object.
+
+- Variable: *iio-sensor-proxy-service-type* [[#index-iio_002dsensor_002dproxy_002dservice_002dtype][¶]] :: Type for the service that runs [[https://gitlab.freedesktop.org/hadess/iio-sensor-proxy][IIO sensor proxy]], a daemon that proxies low-level sensor data from Industrial I/O (IIO) devices into a D-Bus interface. It enables user-space applications, such as desktop environments like GNOME and KDE, and services like GeoClue, to access data from various sensors commonly found in devices like ultrabooks and 2-in-1s. This allows for:
+
+  - Automatic screen rotation based on accelerometer data.
+  - Ambient brightness adjustment using light sensor data.
+  - Compass/direction information for location services (via GeoClue).
+
+  The value for this service is a =<iio-sensor-proxy-configuration>= object.
+
+- Data Type: *iio-sensor-proxy-configuration* [[#index-iio_002dsensor_002dproxy_002dconfiguration][¶]] :: Data type representing the configuration for =iio-sensor-proxy-service-type=.
+
+  - =iio-sensor-proxy= (default: =iio-sensor-proxy=) (type: file-like) :: Package object of iio-sensor-proxy.
+
+- Variable: *bluetooth-service-type* [[#index-bluetooth_002dservice_002dtype][¶]] :: This is the type for the [[https://bluez.org/][Linux Bluetooth Protocol Stack]] (BlueZ) system, which generates the =/etc/bluetooth/main.conf= configuration file. The value for this type is a =bluetooth-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service bluetooth-service-type)
+  #+end_src
+
+  See below for details about =bluetooth-configuration=.
+
+- Data Type: *bluetooth-configuration* [[#index-bluetooth_002dconfiguration][¶]] :: Data type representing the configuration for =bluetooth-service=.
+
+  - =bluez= (default: =bluez=) :: =bluez= package to use.
+
+  - =name= (default: ="BlueZ"=) :: Default adapter name.
+
+  - =class= (default: =#x000000=) :: Default device class. Only the major and minor device class bits are considered.
+
+  - =discoverable-timeout= (default: =180=) :: How long to stay in discoverable mode before going back to non-discoverable. The value is in seconds.
+
+  - =always-pairable?= (default: =#f=) :: Always allow pairing even if there are no agents registered.
+
+  - =pairable-timeout= (default: =0=) :: How long to stay in pairable mode before going back to non-discoverable. The value is in seconds.
+
+  - =device-id= (default: =#f=) :: Use vendor id source (assigner), vendor, product and version information for DID profile support. The values are separated by ":" and =assigner=, =VID=, =PID= and =version=.
+
+    Possible values are:
+
+    - =#f= to disable it,
+    - ="assigner:1234:5678:abcd"=, where =assigner= is either =usb= (default) or =bluetooth=.
+
+  - =reverse-service-discovery?= (default: =#t=) :: Do reverse service discovery for previously unknown devices that connect to us. For BR/EDR this option is really only needed for qualification since the BITE tester doesn't like us doing reverse SDP for some test cases, for LE this disables the GATT client functionally so it can be used in system which can only operate as peripheral.
+
+  - =name-resolving?= (default: =#t=) :: Enable name resolving after inquiry. Set it to =#f= if you don't need remote devices name and want shorter discovery cycle.
+
+  - =debug-keys?= (default: =#f=) :: Enable runtime persistency of debug link keys. Default is false which makes debug link keys valid only for the duration of the connection that they were created for.
+
+  - =controller-mode= (default: ='dual=) :: Restricts all controllers to the specified transport. ='dual= means both BR/EDR and LE are enabled (if supported by the hardware).
+
+    Possible values are:
+
+    - ='dual=
+    - ='bredr=
+    - ='le=
+
+  - =multi-profile= (default: ='off=) :: Enables Multi Profile Specification support. This allows to specify if system supports only Multiple Profiles Single Device (MPSD) configuration or both Multiple Profiles Single Device (MPSD) and Multiple Profiles Multiple Devices (MPMD) configurations.
+
+    Possible values are:
+
+    - ='off=
+    - ='single=
+    - ='multiple=
+
+  - =fast-connectable?= (default: =#f=) :: Permanently enables the Fast Connectable setting for adapters that support it. When enabled other devices can connect faster to us, however the tradeoff is increased power consumptions. This feature will fully work only on kernel version 4.1 and newer.
+
+  - =privacy= (default: ='off=) :: Default privacy settings.
+
+    - ='off=: Disable local privacy
+    - ='network/on=: A device will only accept advertising packets from peer devices that contain private addresses. It may not be compatible with some legacy devices since it requires the use of RPA(s) all the time
+    - ='device=: A device in device privacy mode is only concerned about the privacy of the device and will accept advertising packets from peer devices that contain their Identity Address as well as ones that contain a private address, even if the peer device has distributed its IRK in the past
+
+    and additionally, if =controller-mode= is set to ='dual=:
+
+    - ='limited-network=: Apply Limited Discoverable Mode to advertising, which follows the same policy as to BR/EDR that publishes the identity address when discoverable, and Network Privacy Mode for scanning
+    - ='limited-device=: Apply Limited Discoverable Mode to advertising, which follows the same policy as to BR/EDR that publishes the identity address when discoverable, and Device Privacy Mode for scanning.
+
+  - =just-works-repairing= (default: ='never=) :: Specify the policy to the JUST-WORKS repairing initiated by peer.
+
+    Possible values:
+
+    - ='never=
+    - ='confirm=
+    - ='always=
+
+  - =temporary-timeout= (default: =30=) :: How long to keep temporary devices around. The value is in seconds. =0= disables the timer completely.
+
+  - =refresh-discovery?= (default: =#t=) :: Enables the device to issue an SDP request to update known services when profile is connected.
+
+  - =experimental= (default: =#f=) :: Enables experimental features and interfaces, alternatively a list of UUIDs can be given.
+
+    Possible values:
+
+    - =#t=
+    - =#f=
+    - =(list (uuid <uuid-1>) (uuid <uuid-2>) ...)=.
+
+    List of possible UUIDs:
+
+    - =d4992530-b9ec-469f-ab01-6c481c47da1c=: BlueZ Experimental Debug,
+    - =671b10b5-42c0-4696-9227-eb28d1b049d6=: BlueZ Experimental Simultaneous Central and Peripheral,
+    - =15c0a148-c273-11ea-b3de-0242ac130004=: BlueZ Experimental LL privacy,
+    - =330859bc-7506-492d-9370-9a6f0614037f=: BlueZ Experimental Bluetooth Quality Report,
+    - =a6695ace-ee7f-4fb9-881a-5fac66c629af=: BlueZ Experimental Offload Codecs.
+
+  - =remote-name-request-retry-delay= (default: =300=) :: The duration to avoid retrying to resolve a peer's name, if the previous try failed.
+
+  - =page-scan-type= (default: =#f=) :: BR/EDR Page scan activity type.
+
+  - =page-scan-interval= (default: =#f=) :: BR/EDR Page scan activity interval.
+
+  - =page-scan-window= (default: =#f=) :: BR/EDR Page scan activity window.
+
+  - =inquiry-scan-type= (default: =#f=) :: BR/EDR Inquiry scan activity type.
+
+  - =inquiry-scan-interval= (default: =#f=) :: BR/EDR Inquiry scan activity interval.
+
+  - =inquiry-scan-window= (default: =#f=) :: BR/EDR Inquiry scan activity window.
+
+  - =link-supervision-timeout= (default: =#f=) :: BR/EDR Link supervision timeout.
+
+  - =page-timeout= (default: =#f=) :: BR/EDR Page timeout.
+
+  - =min-sniff-interval= (default: =#f=) :: BR/EDR minimum sniff interval.
+
+  - =max-sniff-interval= (default: =#f=) :: BR/EDR maximum sniff interval.
+
+  - =min-advertisement-interval= (default: =#f=) :: LE minimum advertisement interval (used for legacy advertisement only).
+
+  - =max-advertisement-interval= (default: =#f=) :: LE maximum advertisement interval (used for legacy advertisement only).
+
+  - =multi-advertisement-rotation-interval= (default: =#f=) :: LE multiple advertisement rotation interval.
+
+  - =scan-interval-auto-connect= (default: =#f=) :: LE scanning interval used for passive scanning supporting auto connect.
+
+  - =scan-window-auto-connect= (default: =#f=) :: LE scanning window used for passive scanning supporting auto connect.
+
+  - =scan-interval-suspend= (default: =#f=) :: LE scanning interval used for active scanning supporting wake from suspend.
+
+  - =scan-window-suspend= (default: =#f=) :: LE scanning window used for active scanning supporting wake from suspend.
+
+  - =scan-interval-discovery= (default: =#f=) :: LE scanning interval used for active scanning supporting discovery.
+
+  - =scan-window-discovery= (default: =#f=) :: LE scanning window used for active scanning supporting discovery.
+
+  - =scan-interval-adv-monitor= (default: =#f=) :: LE scanning interval used for passive scanning supporting the advertisement monitor APIs.
+
+  - =scan-window-adv-monitor= (default: =#f=) :: LE scanning window used for passive scanning supporting the advertisement monitor APIs.
+
+  - =scan-interval-connect= (default: =#f=) :: LE scanning interval used for connection establishment.
+
+  - =scan-window-connect= (default: =#f=) :: LE scanning window used for connection establishment.
+
+  - =min-connection-interval= (default: =#f=) :: LE default minimum connection interval. This value is superseded by any specific value provided via the Load Connection Parameters interface.
+
+  - =max-connection-interval= (default: =#f=) :: LE default maximum connection interval. This value is superseded by any specific value provided via the Load Connection Parameters interface.
+
+  - =connection-latency= (default: =#f=) :: LE default connection latency. This value is superseded by any specific value provided via the Load Connection Parameters interface.
+
+  - =connection-supervision-timeout= (default: =#f=) :: LE default connection supervision timeout. This value is superseded by any specific value provided via the Load Connection Parameters interface.
+
+  - =autoconnect-timeout= (default: =#f=) :: LE default autoconnect timeout. This value is superseded by any specific value provided via the Load Connection Parameters interface.
+
+  - =adv-mon-allowlist-scan-duration= (default: =300=) :: Allowlist scan duration during interleaving scan. Only used when scanning for ADV monitors. The units are msec.
+
+  - =adv-mon-no-filter-scan-duration= (default: =500=) :: No filter scan duration during interleaving scan. Only used when scanning for ADV monitors. The units are msec.
+
+  - =enable-adv-mon-interleave-scan?= (default: =#t=) :: Enable/Disable Advertisement Monitor interleave scan for power saving.
+
+  - =cache= (default: ='always=) :: GATT attribute cache.
+
+    Possible values are:
+
+    - ='always=: Always cache attributes even for devices not paired, this is recommended as it is best for interoperability, with more consistent reconnection times and enables proper tracking of notifications for all devices
+    - ='yes=: Only cache attributes of paired devices
+    - ='no=: Never cache attributes.
+
+  - =key-size= (default: =0=) :: Minimum required Encryption Key Size for accessing secured characteristics.
+
+    Possible values are:
+
+    - =0=: Don't care
+    - =7 <= N <= 16=
+
+  - =exchange-mtu= (default: =517=) :: Exchange MTU size. Possible values are:
+
+    - =23 <= N <= 517=
+
+  - =att-channels= (default: =3=) :: Number of ATT channels. Possible values are:
+
+    - =1=: Disables EATT
+    - =2 <= N <= 5=
+
+  - =session-mode= (default: ='basic=) :: AVDTP L2CAP signalling channel mode.
+
+    Possible values are:
+
+    - ='basic=: Use L2CAP basic mode
+    - ='ertm=: Use L2CAP enhanced retransmission mode.
+
+  - =stream-mode= (default: ='basic=) :: AVDTP L2CAP transport channel mode.
+
+    Possible values are:
+
+    - ='basic=: Use L2CAP basic mode
+    - ='streaming=: Use L2CAP streaming mode.
+
+  - =reconnect-uuids= (default: ='()=) :: The ReconnectUUIDs defines the set of remote services that should try to be reconnected to in case of a link loss (link supervision timeout). The policy plugin should contain a sane set of values by default, but this list can be overridden here. By setting the list to empty the reconnection feature gets disabled.
+
+    Possible values:
+
+    - ='()=
+    - =(list (uuid <uuid-1>) (uuid <uuid-2>) ...)=.
+
+  - =reconnect-attempts= (default: =7=) :: Defines the number of attempts to reconnect after a link lost. Setting the value to 0 disables reconnecting feature.
+
+  - =reconnect-intervals= (default: ='(1 2 4 8 16 32 64)=) :: Defines a list of intervals in seconds to use in between attempts. If the number of attempts defined in =reconnect-attempts= is bigger than the list of intervals the last interval is repeated until the last attempt.
+
+  - =auto-enable?= (default: =#f=) :: Defines option to enable all controllers when they are found. This includes adapters present on start as well as adapters that are plugged in later on.
+
+  - =resume-delay= (default: =2=) :: Audio devices that were disconnected due to suspend will be reconnected on resume. =resume-delay= determines the delay between when the controller resumes from suspend and a connection attempt is made. A longer delay is better for better co-existence with Wi-Fi. The value is in seconds.
+
+  - =rssi-sampling-period= (default: =#xFF=) :: Default RSSI Sampling Period. This is used when a client registers an advertisement monitor and leaves the RSSISamplingPeriod unset.
+
+    Possible values are:
+
+    - =#x0=: Report all advertisements
+    - =N = #xXX=: Report advertisements every N x 100 msec (range: #x01 to #xFE)
+    - =#xFF=: Report only one advertisement per device during monitoring period.
+
+- Variable: *gnome-keyring-service-type* [[#index-gnome_002dkeyring_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://wiki.gnome.org/Projects/GnomeKeyring][GNOME Keyring]]. Its value is a =gnome-keyring-configuration= object (see below). Note that there is no need to use this service when using =gnome-desktop-service-type=, which includes it.
+
+  This service adds the =gnome-keyring= package to the system profile and extends PAM with entries using =pam_gnome_keyring.so=, unlocking a user's login keyring when they log in or setting its password with passwd.
+
+- Data Type: *gnome-keyring-configuration* [[#index-gnome_002dkeyring_002dconfiguration][¶]] :: Configuration record for the GNOME Keyring service.
+
+  - =keyring= (default: =gnome-keyring=) :: The GNOME keyring package to use.
+
+  - =pam-services= :: A list of =(==service== . ==kind==)= pairs denoting PAM services to extend, where =service= is the name of an existing service to extend and =kind= is one of =login= or =passwd=.
+
+    If =login= is given, it adds an optional =pam_gnome_keyring.so= to the auth block without arguments and to the session block with =auto_start=. If =passwd= is given, it adds an optional =pam_gnome_keyring.so= to the password block without arguments.
+
+    By default, this field contains “gdm-password” with the value =login= and “passwd” is with the value =passwd=.
+
+- Variable: *kwallet-service-type* [[#index-kwallet_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://invent.kde.org/plasma/kwallet-pam][KWallet keyring]]. Its value is a =kwallet-configuration= object (see below). Note that, contrary to =gnome-desktop-service-type=, which includes the respective keyring for that service, =gnome-keyring-service-type=, =plasma-desktop-service-type= does not include =kwallet-service-type=.
+
+  This service adds the =kwallet-pam= package to the system profile and extends PAM with entries using =pam_kwallet5.so=. It can unlock the user's login keyring or set their password with =passwd= at the time they log in.
+
+- Data Type: *kwallet-configuration* [[#index-kwallet_002dconfiguration][¶]] :: Configuration record for the KWallet Keyring service.
+
+  - =keyring= (default: =kwallet-pam=) :: The KWallet keyring package to use.
+
+  - =pam-services= :: A list of =(==service== . ==kind==)= pairs denoting PAM services to extend, where =service= is the name of an existing service to extend and =kind= is one of =login= or =passwd= symbols.
+
+    If =login= is given, it adds an optional =pam_kwallet5.so= to the auth block without arguments and to the session block with =auto_start=. If =passwd= is given, it adds an optional =pam_kwallet5.so= to the password block without arguments.
+
+    By default, it takes for value an alist associating the ="sddm"= key with the ='login= value, and the ="passwd"= key with the ='passwd= value.
+
+- Variable: *seatd-service-type* [[#index-seatd_002dservice_002dtype][¶]] :: [[https://sr.ht/~kennylevinsen/seatd/][seatd]] is a minimal seat management daemon.
+
+  Seat management takes care of mediating access to shared devices (graphics, input), without requiring the applications needing access to be root.
+
+  #+begin_src lisp
+  (append
+    (list
+     ;; make sure seatd is running
+     (service seatd-service-type))
+
+    ;; normally one would want %base-services
+    %base-services)
+  #+end_src
+
+  =seatd= operates over a UNIX domain socket, with =libseat= providing the client side of the protocol. Applications that acquire access to the shared resources via =seatd= (e.g. =sway=) need to be able to talk to this socket. This can be achieved by adding the user they run under to the group owning =seatd='s socket (usually “seat”), like so:
+
+  #+begin_src lisp
+  (user-account
+    (name "alice")
+    (group "users")
+    (supplementary-groups '("wheel"   ; allow use of sudo, etc.
+                            "seat"    ; seat management
+                            "audio"   ; sound card
+                            "video"   ; video devices such as webcams
+                            "cdrom")) ; the good ol' CD-ROM
+    (comment "Bob's sister"))
+  #+end_src
+
+  Depending on your setup, you will have to not only add regular users, but also system users to this group. For instance, some greetd greeters require graphics and therefore also need to negotiate with seatd.
+
+- Data Type: *seatd-configuration* [[#index-seatd_002dconfiguration][¶]] :: Configuration record for the seatd daemon service.
+
+  - =seatd= (default: =seatd=) :: The seatd package to use.
+
+  - =group= (default: ‘="seat"=') :: Group to own the seatd socket.
+
+  - =socket= (default: ‘="/run/seatd.sock"=') :: Where to create the seatd socket.
+
+  - =logfile= (default: ‘="/var/log/seatd.log"=') :: Log file to write to.
+
+  - =loglevel= (default: ‘="error"=') :: Log level to output logs. Possible values: ‘="silent"=', ‘="error"=', ‘="info"=' and ‘="debug"='.
+
+- Variable: *rtkit-service-type* [[#index-rtkit_002dservice_002dtype][¶]] :: Type for the service that allows D-Bus to start the RealtimeKit D-Bus service. The RTKit service provides a system D-Bus interface for user processes, such as PipeWire, to securely use realtime scheduling.
+
+  The value for this service is a =<rtkit-configuration>= object.
+
+- Data Type: *rtkit-configuration* [[#index-rtkit_002dconfiguration][¶]] :: Data type representing the configuration for =rtkit-service-type=.
+
+  - =rtkit= (default: =rtkit=) (type: file-like) :: Package object for RTKit.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF35][(35)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+[[https://dbus.freedesktop.org/][D-Bus]] is an inter-process communication facility. Its system bus is used to allow system services to communicate and to be notified of system-wide events.
+
+--------------
+
+Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

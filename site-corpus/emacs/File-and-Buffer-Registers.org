@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID: emacs--File-and-Buffer-Registers
+:END:
+#+filetags: :emacs:
+#+title: File and Buffer Registers
+
+Next: [[id:emacs--Keyboard-Macro-Registers][Keyboard Macro Registers]]   Previous: [[id:emacs--Number-Registers][Keeping Numbers in Registers]]   Up: [[id:emacs--Registers][Registers]]
+
+<<File-and-Buffer-Registers>>
+*** 15.6 Keeping File and Buffer Names in Registers [[#Keeping-File-and-Buffer-Names-in-Registers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Keeping-File-and-Buffer-Names-in-Registers
+:CLASS: section
+:END:
+If you visit certain file names frequently, you can visit them more conveniently if you put their names in registers. Here's the Lisp code used to put a file =name= into register =r=:
+
+#+begin_example
+(set-register r '(file . name))
+#+end_example
+
+For example,
+
+#+begin_example
+(set-register ?z '(file . "/gd/gnu/emacs/19.0/src/ChangeLog"))
+#+end_example
+
+puts the file name shown in register ‘=z='.
+
+To visit the file whose name is in register =r=, type C-x r j =r=. (This is the same command used to jump to a position or restore a frame configuration.)
+
+Similarly, if there are certain buffers you visit frequently, you can put their names in registers. For instance, if you visit the ‘=*Messages*=' buffer often, you can use the following snippet to put that buffer into the ‘=m=' register:
+
+#+begin_example
+(set-register ?m '(buffer . "*Messages*"))
+#+end_example
+
+To switch to the buffer whose name is in register =r=, type C-x r j =r=.
+
+--------------

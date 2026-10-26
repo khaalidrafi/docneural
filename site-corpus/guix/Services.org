@@ -1,0 +1,128 @@
+:PROPERTIES:
+:ID: guix--Services
+:END:
+#+filetags: :guix:
+#+title: Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Services>>
+Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.10 Services [[#Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Services-1
+:CLASS: section
+:END:
+An important part of preparing an =operating-system= declaration is listing /system services/ and their configuration (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]). System services are typically daemons launched when the system boots, or other actions needed at that time---e.g., configuring network access.
+
+Guix has a broad definition of “service” (see [[id:guix--Service-Composition][Service Composition]]), but many services are managed by the GNU Shepherd (see [[id:guix--Shepherd-Services][Shepherd Services]]). On a running system, the =herd= command allows you to list the available services, show their status, start and stop them, or do other specific operations (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual). For example:
+
+#+begin_example
+# herd status
+#+end_example
+
+The above command, run as =root=, lists the currently defined services. The =herd doc= command shows a synopsis of the given service and its associated actions:
+
+#+begin_example
+# herd doc nscd
+Run libc's name service cache daemon (nscd).
+
+# herd doc nscd action invalidate
+invalidate: Invalidate the given cache--e.g., 'hosts' for host name lookups.
+#+end_example
+
+The =start=, =stop=, and =restart= sub-commands have the effect you would expect. For instance, the commands below stop the nscd service and restart the Xorg display server:
+
+#+begin_example
+# herd stop nscd
+Service nscd has been stopped.
+# herd restart xorg-server
+Service xorg-server has been stopped.
+Service xorg-server has been started.
+#+end_example
+
+For some services, =herd configuration= returns the name of the service's configuration file, which can be handy to inspect its configuration:
+
+#+begin_example
+# herd configuration sshd
+/gnu/store/...-sshd_config
+#+end_example
+
+The following sections document the available services, starting with the core services, that may be used in an =operating-system= declaration.
+
+- [[id:guix--Base-Services][Base Services]]
+- [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]
+- [[id:guix--Log-Rotation][Log Rotation]]
+- [[id:guix--Networking-Setup][Networking Setup]]
+- [[id:guix--Authorization-Services][Authorization Services]]
+- [[id:guix--Networking-Services][Networking Services]]
+- [[id:guix--Unattended-Upgrades][Unattended Upgrades]]
+- [[id:guix--X-Window][X Window]]
+- [[id:guix--Printing-Services][Printing Services]]
+- [[id:guix--Desktop-Services][Desktop Services]]
+- [[id:guix--Sound-Services][Sound Services]]
+- [[id:guix--File-Search-Services][File Search Services]]
+- [[id:guix--Database-Services][Database Services]]
+- [[id:guix--Mail-Services][Mail Services]]
+- [[id:guix--Messaging-Services][Messaging Services]]
+- [[id:guix--Telephony-Services][Telephony Services]]
+- [[id:guix--File_002dSharing-Services][File-Sharing Services]]
+- [[id:guix--Monitoring-Services][Monitoring Services]]
+- [[id:guix--Kerberos-Services][Kerberos Services]]
+- [[id:guix--LDAP-Services][LDAP Services]]
+- [[id:guix--Web-Services][Web Services]]
+- [[id:guix--High-Availability-Services][High Availability Services]]
+- [[id:guix--Certificate-Services][Certificate Services]]
+- [[id:guix--DNS-Services][DNS Services]]
+- [[id:guix--VNC-Services][VNC Services]]
+- [[id:guix--VPN-Services][VPN Services]]
+- [[id:guix--DAV-Services][DAV Services]]
+- [[id:guix--Network-File-System][Network File System]]
+- [[id:guix--Samba-Services][Samba Services]]
+- [[id:guix--Continuous-Integration][Continuous Integration]]
+- [[id:guix--Power-Management-Services][Power Management Services]]
+- [[id:guix--Audio-Services][Audio Services]]
+- [[id:guix--Virtualization-Services][Virtualization Services]]
+- [[id:guix--Version-Control-Services][Version Control Services]]
+- [[id:guix--Game-Services][Game Services]]
+- [[id:guix--PAM-Mount-Service][PAM Mount Service]]
+- [[id:guix--Guix-Services][Guix Services]]
+- [[id:guix--Linux-Services][Linux Services]]
+- [[id:guix--Hurd-Services][Hurd Services]]
+- [[id:guix--Miscellaneous-Services][Miscellaneous Services]]
+
+--------------
+
+Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

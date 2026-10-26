@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Links-in-ODT-export
+:END:
+#+filetags: :org:
+#+title: Links in ODT export (The Org Manual)
+
+Next:
+
+<<Links-in-ODT-export>>
+Next: [[id:org--Tables-in-ODT-export][Tables in ODT export]], Previous: [[id:org--Applying-custom-styles][Applying custom styles]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.6 Links in ODT export [[#Links-in-ODT-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Links-in-ODT-export-1
+:CLASS: subsection
+:END:
+ODT exporter creates native cross-references for internal links. It creates Internet-style links for all other links.
+
+A link with no description and pointing to a regular, un-itemized, outline heading is replaced with a cross-reference and section number of the heading.
+
+A ‘=\ref{label}='-style reference to an image, table etc., is replaced with a cross-reference and sequence number of the labeled entity. See [[id:org--Labels-and-captions-in-ODT-export][Labels and captions in ODT export]].

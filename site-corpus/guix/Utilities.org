@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID: guix--Utilities
+:END:
+#+filetags: :guix:
+#+title: Utilities
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Utilities>>
+Next: [[id:guix--Foreign-Architectures][Foreign Architectures]], Previous: [[id:guix--Programming-Interface][Programming Interface]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 9 Utilities [[#Utilities-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Utilities-1
+:CLASS: chapter
+:END:
+This section describes Guix command-line utilities. Some of them are primarily targeted at developers and users who write new package definitions, while others are more generally useful. They complement the Scheme programming interface of Guix in a convenient way.
+
+- [[id:guix--Invoking-guix-build][Invoking =guix build=]]
+- [[id:guix--Invoking-guix-edit][Invoking =guix edit=]]
+- [[id:guix--Invoking-guix-download][Invoking =guix download=]]
+- [[id:guix--Invoking-guix-hash][Invoking =guix hash=]]
+- [[id:guix--Invoking-guix-import][Invoking =guix import=]]
+- [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]
+- [[id:guix--Invoking-guix-style][Invoking =guix style=]]
+- [[id:guix--Invoking-guix-lint][Invoking =guix lint=]]
+- [[id:guix--Invoking-guix-size][Invoking =guix size=]]
+- [[id:guix--Invoking-guix-graph][Invoking =guix graph=]]
+- [[id:guix--Invoking-guix-publish][Invoking =guix publish=]]
+- [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]]
+- [[id:guix--Invoking-guix-copy][Invoking =guix copy=]]
+- [[id:guix--Invoking-guix-container][Invoking =guix container=]]
+- [[id:guix--Invoking-guix-weather][Invoking =guix weather=]]
+- [[id:guix--Invoking-guix-processes][Invoking =guix processes=]]
+- [[id:guix--Extending-Guix][Extending Guix]]

@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID: org--Export-Region
+:END:
+#+filetags: :org:
+#+title: Export Region (The Org Manual)
+
+Next:
+
+<<Export-Region>>
+Previous: [[id:org--Advanced-Export-Configuration][Advanced Export Configuration]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.18 Export Region [[#Export-Region-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Export-Region-1
+:CLASS: section
+:END:
+Some export backends include commands to convert a region of Org formatted text to another format, such as HTML or LaTeX. The conversion replaces the original source. Here are such commands:
+
+-  <<index-org_002dascii_002dconvert_002dregion_002dto_002dascii>>=org-export-region-to-ascii= [[#index-org_002dascii_002dconvert_002dregion_002dto_002dascii][¶]] :: Convert the selected region into ASCII.
+
+-  <<index-org_002dascii_002dconvert_002dregion_002dto_002dutf8>>=org-export-region-to-utf8= [[#index-org_002dascii_002dconvert_002dregion_002dto_002dutf8][¶]] :: Convert the selected region into UTF-8.
+
+-  <<index-org_002dhtml_002dconvert_002dregion_002dto_002dhtml>>=org-export-region-to-html= [[#index-org_002dhtml_002dconvert_002dregion_002dto_002dhtml][¶]] :: Convert the selected region into HTML.
+
+-  <<index-org_002dlatex_002dconvert_002dregion_002dto_002dlatex>>=org-export-region-to-latex= [[#index-org_002dlatex_002dconvert_002dregion_002dto_002dlatex][¶]] :: Convert the selected region into LaTeX.
+
+-  <<index-org_002dtexinfo_002dconvert_002dregion_002dto_002dtexinfo>>=org-export-region-to-texinfo= [[#index-org_002dtexinfo_002dconvert_002dregion_002dto_002dtexinfo][¶]] :: Convert the selected region into Texinfo.
+
+-  <<index-org_002dmd_002dconvert_002dregion_002dto_002dmd>>=org-export-region-to-md= [[#index-org_002dmd_002dconvert_002dregion_002dto_002dmd][¶]] :: Convert the selected region into Markdown.
+
+The in-place conversion is particularly handy for quick conversion of tables and lists in non-Org buffers. For example, in an HTML buffer, write a list in Org syntax, select it, and convert it to HTML with M-x org-html-convert-region-to-html.
+
+--------------
+
+Previous: [[id:org--Advanced-Export-Configuration][Advanced Export Configuration]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

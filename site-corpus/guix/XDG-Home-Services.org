@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID: guix--XDG-Home-Services
+:END:
+#+filetags: :guix:
+#+title: XDG Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<XDG-Home-Services>>
+Next: [[id:guix--Guix-Home-Services][Guix Home Services]], Previous: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.9 XDG Home Services [[#XDG-Home-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: XDG-Home-Services-1
+:CLASS: subsection
+:END:
+The =(gnu home services xdg)= module provides services related to XDG specifications for the desktop.
+
+**** XDG User Directories [[#XDG-User-Directories][¶]]
+:PROPERTIES:
+:CUSTOM_ID: XDG-User-Directories
+:CLASS: subsubheading
+:END:
+- Variable: *home-xdg-user-directories-service-type* [[#index-home_002dxdg_002duser_002ddirectories_002dservice_002dtype][¶]] :: This service sets the names of default user directories such as ‘=Downloads=' and ‘=Documents='. These settings are respected by most applications via =xdg-user-dirs=.
+
+  To disable a directory, set it to ="$HOME"=.
+
+- Data Type: *home-xdg-user-directories-configuration* [[#index-home_002dxdg_002duser_002ddirectories_002dconfiguration][¶]] :: Available =home-xdg-user-directories-configuration= fields are:
+
+  - =desktop= (default: ="$HOME/Desktop"=) (type: string) :: Default ‘=Desktop=' directory, this is what you see on your background when using a desktop environment, e.g. KDE.
+
+  - =documents= (default: ="$HOME/Documents"=) (type: string) :: Default directory to put documents like PDFs.
+
+  - =download= (default: ="$HOME/Downloads"=) (type: string) :: Default directory downloaded files, this is where your Web-broser will put downloaded files in.
+
+  - =music= (default: ="$HOME/Music"=) (type: string) :: Default directory for audio files.
+
+  - =pictures= (default: ="$HOME/Pictures"=) (type: string) :: Default directory for pictures and images.
+
+  - =projects= (default: ="$HOME/Projects"=) (type: string) :: Default directory for projects.
+
+  - =publicshare= (default: ="$HOME/Public"=) (type: string) :: Default directory for shared files, which can be accessed by other users on local machine or via network.
+
+  - =templates= (default: ="$HOME/Templates"=) (type: string) :: Default directory for templates. They can be used by graphical file manager or other apps for creating new files with some pre-populated content.
+
+  - =videos= (default: ="$HOME/Videos"=) (type: string) :: Default directory for videos.
+
+--------------
+
+Next: [[id:guix--Guix-Home-Services][Guix Home Services]], Previous: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

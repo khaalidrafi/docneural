@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Line-Truncation
+:END:
+#+filetags: :emacs:
+#+title: Line Truncation
+
+Next: [[id:emacs--Visual-Line-Mode][Visual Line Mode]]   Previous: [[id:emacs--Cursor-Display][Displaying the Cursor]]   Up: [[id:emacs--Display][Controlling the Display]]
+
+<<Line-Truncation>>
+*** 16.22 Line Truncation [[#Line-Truncation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Line-Truncation-1
+:CLASS: section
+:END:
+As an alternative to continuation (see [[id:emacs--Continuation-Lines][Continuation Lines]]), Emacs can display long lines by /truncation/. This means that all the characters that do not fit in the width of the screen or window do not appear at all. On graphical displays, a small straight arrow in the fringe indicates truncation at either end of the line. On text terminals, this is indicated with ‘=$=' signs in the rightmost and/or leftmost columns.
+
+Horizontal scrolling automatically causes line truncation (see [[id:emacs--Horizontal-Scrolling][Horizontal Scrolling]]). You can explicitly enable line truncation for a particular buffer with the command C-x x t (=toggle-truncate-lines=). This works by locally changing the variable =truncate-lines=. If that variable is non-=nil=, long lines are truncated; if it is =nil=, they are continued onto multiple screen lines. Setting the variable =truncate-lines= in any way makes it local to the current buffer; until that time, the default value, which is normally =nil=, is in effect.
+
+Since line truncation and word wrap (described in the next section) are contradictory, =toggle-truncate-lines= disables word wrap when it turns on line truncation.
+
+If a split window becomes too narrow, Emacs may automatically enable line truncation. See [[id:emacs--Split-Window][Splitting Windows]], for the variable =truncate-partial-width-windows= which controls this.
+
+--------------

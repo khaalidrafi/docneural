@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID: guix--Modules
+:END:
+#+filetags: :guix:
+#+title: Modules
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Modules>>
+Next: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Previous: [[id:guix--Programming-Paradigm][Programming Paradigm]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.8.2 Modules [[#Modules-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Modules-1
+:CLASS: subsection
+:END:
+Guile modules that are meant to be used on the builder side must live in the =(guix build …)= name space. They must not refer to other Guix or GNU modules. However, it is OK for a “host-side” module to use a build-side module. As an example, the =(guix search-paths)= module should not be imported and used by a package since it isn't meant to be used as a “build-side” module. It would also couple the module with the package's dependency graph, which is undesirable.
+
+Modules that deal with the broader GNU system should be in the =(gnu …)= name space rather than =(guix …)=.

@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID: org--Search-Options
+:END:
+#+filetags: :org:
+#+title: Search Options (The Org Manual)
+
+Next:
+
+<<Search-Options>>
+Next: [[id:org--Custom-Searches][Custom Searches]], Previous: [[id:org--Link-Abbreviations][Link Abbreviations]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 4.8 Search Options in File Links [[#Search-Options-in-File-Links][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Search-Options-in-File-Links
+:CLASS: section
+:END:
+File links can contain additional information to make Emacs jump to a particular location in the file when following a link. This can be a line number or a search option after a double colon[[#FOOT36][^{36}]]. For example, when the command =org-store-link= creates a link (see [[id:org--Handling-Links][Handling Links]]) to a file, it encodes the words in the current line as a search string that can be used to find this line back later when following the link with C-c C-o.
+
+Note that all search options apply for Attachment and ID links in the same way that they apply for File links.
+
+Here is the syntax of the different ways to attach a search to a file link, together with explanations for each:
+
+#+begin_example
+[[file:~/code/main.c::255]]
+[[file:~/xx.org::My Target]]
+[[file:~/xx.org::*My Target]]
+[[file:~/xx.org::#my-custom-id]]
+[[file:~/xx.org::/regexp/]]
+[[attachment:main.c::255]]
+#+end_example
+
+- ‘=255=' :: Jump to line 255.
+
+- ‘=My Target=' :: Search for a link target ‘=<<My Target>>=', or do a text search for ‘=my target=', similar to the search in internal links, see [[id:org--Internal-Links][Internal Links]]. In HTML export (see [[id:org--HTML-Export][HTML Export]]), such a file link becomes an HTML reference to the corresponding named anchor in the linked file.
+
+- ‘=*My Target=' :: In an Org file, restrict search to headlines.
+
+- ‘=#my-custom-id=' :: Link to a heading with a ‘=CUSTOM_ID=' property
+
+- ‘=/REGEXP/=' :: Do a regular expression search for =REGEXP= (see [[id:org--Regular-Expressions][Regular Expressions]]). This uses the Emacs command =occur= to list all matches in a separate window. If the target file is in Org mode, =org-occur= is used to create a sparse tree with the matches.
+
+As a degenerate case, a file link with an empty file name can be used to search the current file. For example, ‘=[[file:::find me]]=' does a search for ‘=find me=' in the current file, just as ‘=[[find me]]=' would.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF36][(36)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+For backward compatibility, line numbers can also follow a single colon.
+
+--------------
+
+Next: [[id:org--Custom-Searches][Custom Searches]], Previous: [[id:org--Link-Abbreviations][Link Abbreviations]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

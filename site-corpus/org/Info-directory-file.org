@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: org--Info-directory-file
+:END:
+#+filetags: :org:
+#+title: Info directory file (The Org Manual)
+
+Next:
+
+<<Info-directory-file>>
+Next: [[id:org--Headings-and-sectioning-structure][Headings and sectioning structure]], Previous: [[id:org--Texinfo-title-and-copyright-page][Texinfo title and copyright page]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.5 Info directory file [[#Info-directory-file-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Info-directory-file-1
+:CLASS: subsection
+:END:
+The end result of the Texinfo export process is the creation of an Info file. This Info file's metadata has variables for category, title, and description: ‘=TEXINFO_DIR_CATEGORY=', ‘=TEXINFO_DIR_NAME=', and ‘=TEXINFO_DIR_DESC=' keywords that establish where in the Info hierarchy the file fits.
+
+Here is an example that writes to the Info directory file:
+
+#+begin_example
+#+TEXINFO_DIR_CATEGORY: Emacs
+#+TEXINFO_DIR_NAME: Org Mode
+#+TEXINFO_DIR_DESC: Outline-based notes management and organizer
+#+end_example

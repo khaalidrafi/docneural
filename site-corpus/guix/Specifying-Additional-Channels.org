@@ -1,0 +1,77 @@
+:PROPERTIES:
+:ID: guix--Specifying-Additional-Channels
+:END:
+#+filetags: :guix:
+#+title: Specifying Additional Channels
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Specifying-Additional-Channels>>
+Next: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.1 Specifying Additional Channels [[#Specifying-Additional-Channels-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Specifying-Additional-Channels-1
+:CLASS: section
+:END:
+You can specify /additional channels/ to pull from. To use a channel, write =~/.config/guix/channels.scm= to instruct =guix pull= to pull from it /in addition/ to the default Guix channel(s):
+
+#+begin_src lisp
+;; Add variant packages to those Guix provides.
+(cons (channel
+        (name 'variant-packages)
+        (url "https://example.org/variant-packages.git"))
+      %default-channels)
+#+end_src
+
+Note that the snippet above is (as always!) Scheme code; we use =cons= to add a channel the list of channels that the variable =%default-channels= is bound to (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Pairs.html#Pairs][=cons= and lists]] in GNU Guile Reference Manual). With this file in place, =guix pull= builds not only Guix but also the package modules from your own repository. The result in =~/.config/guix/current= is the union of Guix with your own package modules:
+
+#+begin_example
+$ guix describe
+Generation 19   Aug 27 2018 16:20:48
+  guix d894ab8
+    repository URL: https://git.guix.gnu.org/guix.git
+    branch: master
+    commit: d894ab8e9bfabcefa6c49d9ba2e834dd5a73a300
+  variant-packages dd3df5e
+    repository URL: https://example.org/variant-packages.git
+    branch: master
+    commit: dd3df5e2c8818760a8fc0bd699e55d3b69fef2bb
+#+end_example
+
+The output of =guix describe= above shows that we're now running Generation 19 and that it includes both Guix and packages from the =variant-packages= channel (see [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]).
+
+--------------
+
+Next: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

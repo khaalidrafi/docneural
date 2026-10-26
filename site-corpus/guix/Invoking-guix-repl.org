@@ -1,0 +1,122 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-repl
+:END:
+#+filetags: :guix:
+#+title: Invoking guix repl
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-repl>>
+Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.13 Invoking =guix repl= [[#Invoking-guix-repl-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-repl-1
+:CLASS: section
+:END:
+The =guix repl= command makes it easier to program Guix in Guile by launching a Guile /read-eval-print loop/ (REPL) for interactive programming (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Using-Guile-Interactively.html#Using-Guile-Interactively][Using Guile Interactively]] in GNU Guile Reference Manual), or by running Guile scripts (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Running-Guile-Scripts.html#Running-Guile-Scripts][Running Guile Scripts]] in GNU Guile Reference Manual). Compared to just launching the =guile= command, =guix repl= guarantees that all the Guix modules and all its dependencies are available in the search path.
+
+The general syntax is:
+
+#+begin_example
+guix repl options [file args]
+#+end_example
+
+When a =file= argument is provided, =file= is executed as a Guile script:
+
+#+begin_example
+guix repl my-script.scm
+#+end_example
+
+To pass arguments to the script, use =--= to prevent them from being interpreted as arguments to =guix repl= itself:
+
+#+begin_example
+guix repl -- my-script.scm --input=foo.txt
+#+end_example
+
+To make a script executable directly from the shell, using the guix executable that is on the user's search path, add the following two lines at the top of the script:
+
+#+begin_example
+#!/usr/bin/env -S guix repl --
+!#
+#+end_example
+
+To make a script that launches an interactive REPL directly from the shell, use the =--interactive= flag:
+
+#+begin_example
+#!/usr/bin/env -S guix repl --interactive
+!#
+#+end_example
+
+Without a file name argument, a Guile REPL is started, allowing for interactive use (see [[id:guix--Using-Guix-Interactively][Using Guix Interactively]]):
+
+#+begin_example
+$ guix repl
+scheme@(guile-user)> ,use (gnu packages base)
+scheme@(guile-user)> coreutils
+$1 = #<package coreutils@8.29 gnu/packages/base.scm:327 3e28300>
+#+end_example
+
+In addition, =guix repl= implements a simple machine-readable REPL protocol for use by =(guix inferior)=, a facility to interact with /inferiors/, separate processes running a potentially different revision of Guix.
+
+The available options are as follows:
+
+- =--list-types= :: Display the =TYPE= options for =guix repl --type=TYPE= and exit.
+
+- =--type===type=\\
+  =-t ==type= :: Start a REPL of the given =TYPE=, which can be one of the following:
+
+  - =guile= :: This is default, and it spawns a standard full-featured Guile REPL.
+
+  - =machine= :: Spawn a REPL that uses the machine-readable protocol. This is the protocol that the =(guix inferior)= module speaks.
+
+- =--listen===endpoint= :: By default, =guix repl= reads from standard input and writes to standard output. When this option is passed, it will instead listen for connections on =endpoint=. Here are examples of valid options:
+
+  - =--listen=tcp:37146= :: Accept connections on localhost on port 37146.
+
+  - =--listen=unix:/tmp/socket= :: Accept connections on the Unix-domain socket =/tmp/socket=.
+
+- =--interactive=\\
+  =-i= :: Launch the interactive REPL after =file= is executed.
+
+- =--load-path===directory=\\
+  =-L ==directory= :: Add =directory= to the front of the package module search path (see [[id:guix--Package-Modules][Package Modules]]).
+
+  This allows users to define their own packages and make them visible to the script or REPL.
+
+- =-q= :: Inhibit loading of the =~/.guile= file. By default, that configuration file is loaded when spawning a =guile= REPL.
+
+--------------
+
+Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

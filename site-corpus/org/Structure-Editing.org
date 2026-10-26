@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID: org--Structure-Editing
+:END:
+#+filetags: :org:
+#+title: Structure Editing (The Org Manual)
+
+Next:
+
+<<Structure-Editing>>
+Next: [[id:org--Sparse-Trees][Sparse Trees]], Previous: [[id:org--Motion][Motion]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 2.4 Structure Editing [[#Structure-Editing-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Structure-Editing-1
+:CLASS: section
+:END:
+-  <<index-M_002dRET>>M-RET (=org-meta-return=) [[#index-M_002dRET][¶]] :: Insert a new heading, item, or row.
+
+  If the command is used at the /beginning/ of a line, and if there is a heading or a plain list item (see [[id:org--Plain-Lists][Plain Lists]]) at point, the new heading/item is created /before/ the current line. When used at the beginning of a regular line of text, turn that line into a heading.
+
+  When this command is used in the middle of a line, the line is split and the rest of the line becomes the new item or headline. If you do not want the line to be split, customize =org-M-RET-may-split-line=.
+
+  Calling the command with a C-u prefix unconditionally inserts a new heading at the end of the current subtree, thus preserving its contents. With a double C-u C-u prefix, the new heading is created at the end of the parent subtree instead.
+
+-  <<index-C_002dRET>>C-RET (=org-insert-heading-respect-content=) [[#index-C_002dRET][¶]] :: Insert a new heading at the end of the current subtree.
+
+-  <<index-M_002dS_002dRET>>M-S-RET (=org-insert-todo-heading=) [[#index-M_002dS_002dRET][¶]] :: Insert new TODO entry with same level as current heading. See also the variable =org-treat-insert-todo-heading-as-state-change=.
+
+-  <<index-C_002dS_002dRET>>C-S-RET (=org-insert-todo-heading-respect-content=) [[#index-C_002dS_002dRET][¶]] :: Insert new TODO entry with same level as current heading. Like C-RET, the new headline is inserted after the current subtree.
+
+-  <<index-TAB-1>>TAB (=org-cycle=) [[#index-TAB-1][¶]] :: In a new entry with no text yet, the first TAB demotes the entry to become a child of the previous one. The next TAB makes it a parent, and so on, all the way to top level. Yet another TAB, and you are back to the initial level.
+
+-  <<index-M_002dLEFT>>M-LEFT (=org-do-promote=), M-RIGHT (=org-do-demote=) [[#index-M_002dLEFT][¶]] :: Promote or demote current heading by one level.
+
+  When there is an active region---i.e., when Transient Mark mode is active---promotion and demotion work on all headlines in the region. To select a region of headlines, it is best to set mark at the beginning of the first headline, and point at the line just after the last headline to change.
+
+-  <<index-M_002dS_002dLEFT>>M-S-LEFT (=org-promote-subtree=) [[#index-M_002dS_002dLEFT][¶]] :: Promote the current subtree by one level.
+
+-  <<index-M_002dS_002dRIGHT>>M-S-RIGHT (=org-demote-subtree=) [[#index-M_002dS_002dRIGHT][¶]] :: Demote the current subtree by one level.
+
+-  <<index-M_002dUP>>M-UP (=org-move-subtree-up=) [[#index-M_002dUP][¶]] :: Move subtree up, i.e., swap with previous subtree of same level.
+
+-  <<index-M_002dDOWN>>M-DOWN (=org-move-subtree-down=) [[#index-M_002dDOWN][¶]] :: Move subtree down, i.e., swap with next subtree of same level.
+
+-  <<index-C_002dc-_0040>>C-c @ (=org-mark-subtree=) [[#index-C_002dc-_0040][¶]] :: Mark the subtree at point. Hitting it repeatedly marks subsequent subtrees of the same level as the marked subtree.
+
+-  <<index-C_002dc-C_002dx-C_002dw>>C-c C-x C-w (=org-cut-subtree=) [[#index-C_002dc-C_002dx-C_002dw][¶]] :: Kill subtree, i.e., remove it from the buffer but save in kill ring. With a numeric prefix argument N, kill N sequential subtrees.
+
+-  <<index-C_002dc-C_002dx-M_002dw>>C-c C-x M-w (=org-copy-subtree=) [[#index-C_002dc-C_002dx-M_002dw][¶]] :: Copy subtree to kill ring. With a numeric prefix argument N, copy the N sequential subtrees.
+
+-  <<index-C_002dc-C_002dx-C_002dy>>C-c C-x C-y (=org-paste-subtree=) [[#index-C_002dc-C_002dx-C_002dy][¶]] :: Yank subtree from kill ring. This does modify the level of the subtree to make sure the tree fits in nicely at the yank position. The yank level can also be specified with a numeric prefix argument, or by yanking after a headline marker like ‘=****='. With C-u prefix, force inserting as a sibling. With C-u C-u prefix argument, force inserting as a child.
+
+-  <<index-C_002dy>>C-y (=org-yank=) [[#index-C_002dy][¶]] :: Depending on the variables =org-yank-adjusted-subtrees= and =org-yank-folded-subtrees=, Org's internal =yank= command pastes subtrees folded and in a clever way, using the same command as C-c C-x C-y. With the default settings, no level adjustment takes place, but the yanked tree is folded unless doing so would swallow text previously visible. Any prefix argument to this command forces a normal =yank= to be executed, with the prefix passed along. A good way to force a normal yank is C-u C-y. If you use =yank-pop= after a yank, it yanks previous kill items plainly, without adjustment and folding.
+
+-  <<index-C_002dc-C_002dx-c>>C-c C-x c (=org-clone-subtree-with-time-shift=) [[#index-C_002dc-C_002dx-c][¶]] :: Clone a subtree by making a number of sibling copies of it. You are prompted for the number of copies to make, and you can also specify whether any timestamps in the entry should be shifted. This can be useful, for example, to create a number of tasks related to a series of lectures to prepare. For more details, see the docstring of the command =org-clone-subtree-with-time-shift=.
+
+-  <<index-C_002dc-C_002dw>>C-c C-w (=org-refile=) [[#index-C_002dc-C_002dw][¶]] :: Refile entry or region to a different location. See [[id:org--Refile-and-Copy][Refile and Copy]].
+
+-  <<index-C_002dc-_005e>>C-c ^ (=org-sort=) [[#index-C_002dc-_005e][¶]] :: Sort same-level entries. When there is an active region, all entries in the region are sorted. Otherwise, the children of the current headline are sorted. The command prompts for the sorting method, which can be alphabetically, numerically, by time---first timestamp with active preferred, creation time, scheduled time, deadline time---by priority, by TODO keyword---in the sequence the keywords have been defined in the setup---or by the value of a property. Reverse sorting is possible as well. You can also supply your own function to extract the sorting key. With a C-u prefix, sorting is case-sensitive.
+
+-  <<index-C_002dx-n-s>>C-x n s (=org-narrow-to-subtree=) [[#index-C_002dx-n-s][¶]] :: Narrow buffer to current subtree.
+
+-  <<index-C_002dx-n-b>>C-x n b (=org-narrow-to-block=) [[#index-C_002dx-n-b][¶]] :: Narrow buffer to current block.
+
+-  <<index-C_002dx-n-w>>C-x n w (=widen=) [[#index-C_002dx-n-w][¶]] :: Widen buffer to remove narrowing.
+
+-  <<index-C_002dc-_002a>>C-c * (=org-toggle-heading=) [[#index-C_002dc-_002a][¶]] :: Turn a normal line or plain list item into a headline---so that it becomes a subheading at its location. Also turn a headline into a normal line by removing the stars. If there is an active region, turn all lines in the region into headlines. If the first line in the region was an item, turn only the item lines into headlines. Finally, if the first line is a headline, remove the stars from all headlines in the region.
+
+Note that when point is inside a table (see [[id:org--Tables][Tables]]), the Meta-Cursor keys have different functionality.
+
+--------------
+
+Next: [[id:org--Sparse-Trees][Sparse Trees]], Previous: [[id:org--Motion][Motion]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

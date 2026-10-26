@@ -1,0 +1,105 @@
+:PROPERTIES:
+:ID: guix--image_002dtype-Reference
+:END:
+#+filetags: :guix:
+#+title: image-type Reference
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<image_002dtype-Reference>>
+Next: [[id:guix--Image-Modules][Image Modules]], Previous: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 16.3 image-type Reference [[#image_002dtype-Reference-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: image_002dtype-Reference-1
+:CLASS: section
+:END:
+The =guix system image= command can, as we saw above, take a file containing an =image= declaration as argument and produce an actual disk image from it. The same command can also handle a file containing an =operating-system= declaration as argument. In that case, how is the =operating-system= turned into an image?
+
+That's where the =image-type= record intervenes. This record defines how to transform an =operating-system= record into an =image= record.
+
+- Data Type: *image-type* [[#index-image_002dtype][¶]] :: This is the data type representing an image-type.
+
+  - =name= :: The image-type name as a mandatory symbol, ='efi32-raw= for instance.
+
+  - =constructor= :: The image-type constructor, as a mandatory procedure that takes an =operating-system= record as argument and returns an =image= record.
+
+There are several =image-type= records provided by the =(gnu system image)= and the =(gnu system images …)= modules.
+
+- Variable: *mbr-raw-image-type* [[#index-mbr_002draw_002dimage_002dtype][¶]] :: Build an image based on the =mbr-disk-image= image.
+
+- Variable: *mbr-hybrid-raw-image-type* [[#index-mbr_002dhybrid_002draw_002dimage_002dtype][¶]] :: Build an image based on the =mbr-hybrid-disk-image= image.
+
+- Variable: *efi-raw-image-type* [[#index-efi_002draw_002dimage_002dtype][¶]] :: Build an image based on the =efi-disk-image= image.
+
+- Variable: *efi32-raw-image-type* [[#index-efi32_002draw_002dimage_002dtype][¶]] :: Build an image based on the =efi32-disk-image= image.
+
+- Variable: *qcow2-image-type* [[#index-qcow2_002dimage_002dtype][¶]] :: Build an image based on the =mbr-disk-image= image but with the =compressed-qcow2= image format. The resulting image will have an MBR embedded bootloader as well as an EFI bootloader. This image is not suitable for architectures that do not support ‘grub-pc‘, such as AArch64. See =qcow2-gpt-image-type= for an alternative.
+
+- Variable: *qcow2-gpt-image-type* [[#index-qcow2_002dgpt_002dimage_002dtype][¶]] :: Build an image based on the =efi-disk-image= image but with the =compressed-qcow2= image format. The resulting image will have only EFI bootloader, unlike =qcow2-image-type=. This image is suitable for architectures that do not support ‘grub-pc‘, such as AArch64.
+
+- Variable: *iso-image-type* [[#index-iso_002dimage_002dtype][¶]] :: Build a compressed image based on the =iso9660-image= image.
+
+- Variable: *uncompressed-iso-image-type* [[#index-uncompressed_002diso_002dimage_002dtype][¶]] :: Build an image based on the =iso9660-image= image but with the =compression?= field set to =#false=.
+
+- Variable: *docker-image-type* [[#index-docker_002dimage_002dtype][¶]] :: Build an image based on the =docker-image= image.
+
+- Variable: *raw-with-offset-image-type* [[#index-raw_002dwith_002doffset_002dimage_002dtype][¶]] :: Build an MBR image with a single partition starting at a =1024KiB= offset. This is useful to leave some room to install a bootloader in the post-MBR gap.
+
+- Variable: *pinebook-pro-image-type* [[#index-pinebook_002dpro_002dimage_002dtype][¶]] :: Build an image that is targeting the Pinebook Pro machine. The MBR image contains a single partition starting at a =9MiB= offset. The =u-boot-pinebook-pro-rk3399-bootloader= bootloader will be installed in this gap.
+
+- Variable: *rock64-image-type* [[#index-rock64_002dimage_002dtype][¶]] :: Build an image that is targeting the Rock64 machine. The MBR image contains a single partition starting at a =16MiB= offset. The =u-boot-rock64-rk3328-bootloader= bootloader will be installed in this gap.
+
+- Variable: *novena-image-type* [[#index-novena_002dimage_002dtype][¶]] :: Build an image that is targeting the Novena machine. It has the same characteristics as =raw-with-offset-image-type=.
+
+- Variable: *pine64-image-type* [[#index-pine64_002dimage_002dtype][¶]] :: Build an image that is targeting the Pine64 machine. It has the same characteristics as =raw-with-offset-image-type=.
+
+- Variable: *hurd-image-type* [[#index-hurd_002dimage_002dtype][¶]] :: Build an image that is targeting a =i386= machine running the Hurd kernel. The MBR image contains a single ext2 partitions with specific =file-system-options= flags.
+
+- Variable: *hurd-qcow2-image-type* [[#index-hurd_002dqcow2_002dimage_002dtype][¶]] :: Build an image similar to the one built by the =hurd-image-type= but with the =format= set to ='compressed-qcow2=.
+
+- Variable: *wsl2-image-type* [[#index-wsl2_002dimage_002dtype][¶]] :: Build an image for the WSL2 (Windows Subsystem for Linux 2). It can be imported by running:
+
+  #+begin_example
+  wsl --import Guix ./guix ./wsl2-image.tar.gz
+  wsl -d Guix
+#+end_example
+
+So, if we get back to the =guix system image= command taking an =operating-system= declaration as argument. By default, the =mbr-raw-image-type= is used to turn the provided =operating-system= into an actual bootable image.
+
+To use a different =image-type=, the =--image-type= option can be used. The =--list-image-types= option will list all the supported image types. It turns out to be a textual listing of all the =image-types= variables described just above (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).
+
+--------------
+
+Next: [[id:guix--Image-Modules][Image Modules]], Previous: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

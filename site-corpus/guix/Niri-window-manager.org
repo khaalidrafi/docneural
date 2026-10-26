@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID: guix--Niri-window-manager
+:END:
+#+filetags: :guix:
+#+title: Niri window manager
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Niri-window-manager>>
+Next: [[id:guix--Sway-window-manager][Sway window manager]], Previous: [[id:guix--mpv-Media-Player][mpv Media Player]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.18 Niri window manager [[#Niri-window-manager-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Niri-window-manager-1
+:CLASS: subsection
+:END:
+The =(gnu home services niri)= module provides the =home-niri-service-type= service, which installs and configures [[https://github.com/YaLTeR/niri][Niri]], a scrollable tiling Wayland compositor. Niri combines traditional tiling window management with smooth scrolling between workspaces.
+
+This service starts Niri as a user-level desktop session with proper environment variables configured for Wayland compatibility, including =XDG_CURRENT_DESKTOP=, =XDG_SESSION_DESKTOP=, and =DESKTOP_SESSION=.
+
+Here is a minimal example service declaration for your =home-environment= configuration:
+
+#+begin_example
+(service home-niri-service-type)
+#+end_example
+
+For more advanced configurations, you can customize the service with a =niri-configuration= record to specify additional environment variables.

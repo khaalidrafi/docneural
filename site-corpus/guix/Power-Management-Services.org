@@ -1,0 +1,641 @@
+:PROPERTIES:
+:ID: guix--Power-Management-Services
+:END:
+#+filetags: :guix:
+#+title: Power Management Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Power-Management-Services>>
+Next: [[id:guix--Audio-Services][Audio Services]], Previous: [[id:guix--Continuous-Integration][Continuous Integration]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.31 Power Management Services [[#Power-Management-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Power-Management-Services-1
+:CLASS: subsection
+:END:
+**** Power Profiles Daemon [[#Power-Profiles-Daemon][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Power-Profiles-Daemon
+:CLASS: subsubheading
+:END:
+The =(gnu services pm)= module provides a Guix service definition for the Linux Power Profiles Daemon, which makes power profiles handling available over D-Bus.
+
+The available profiles consist of the default ‘=balanced=' mode, a ‘=power-saver=' mode and on supported systems a ‘=performance=' mode.
+
+#+begin_quote
+*Important:* The =power-profiles-daemon= conflicts with other power management tools like =tlp=. Using both together is not recommended.
+
+#+end_quote
+
+- Variable: *power-profiles-daemon-service-type* [[#index-power_002dprofiles_002ddaemon_002dservice_002dtype][¶]] :: This is the service type for the [[https://gitlab.freedesktop.org/upower/power-profiles-daemon/][Power Profiles Daemon]]. The value for this service is a =power-profiles-daemon-configuration=.
+
+  To enable the Power Profiles Daemon with default configuration add this line to your services:
+
+  #+begin_src lisp
+  (service power-profiles-daemon-service-type)
+  #+end_src
+
+- Data Type: *power-profiles-daemon-configuration* [[#index-power_002dprofiles_002ddaemon_002dconfiguration][¶]] :: Data type representing the configuration of =power-profiles-daemon-service-type=.
+
+  - =power-profiles-daemon= (default: =power-profiles-daemon=) (type: file-like) :: Package object of power-profiles-daemon.
+
+**** TLP daemon [[#TLP-daemon][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TLP-daemon
+:CLASS: subsubheading
+:END:
+The =(gnu services pm)= module provides a Guix service definition for the Linux power management tool TLP.
+
+TLP enables various powersaving modes in userspace and kernel. Contrary to =upower-service=, it is not a passive, monitoring tool, as it will apply custom settings each time a new power source is detected. More information can be found at [[https://linrunner.de/en/tlp/tlp.html][TLP home page]].
+
+- Variable: *tlp-service-type* [[#index-tlp_002dservice_002dtype][¶]] :: The service type for the TLP tool. The default settings are optimised for battery life on most systems, but you can tweak them to your heart's content by adding a valid =tlp-configuration=:
+
+  #+begin_src lisp
+  (service tlp-service-type
+           (tlp-configuration
+            (cpu-scaling-governor-on-ac (list "performance"))
+            (sched-powersave-on-bat? #t)))
+  #+end_src
+
+Each parameter definition is preceded by its type; for example, ‘=boolean foo=' indicates that the =foo= parameter should be specified as a boolean. Types starting with =maybe-= denote parameters that won't show up in TLP config file when their value is left unset, or is explicitly set to the =%unset-value= value.
+
+Available =tlp-configuration= fields are:
+
+- =tlp-configuration= parameter: =package= *tlp* [[#index-tlp-1][¶]] :: The TLP package.
+
+- =tlp-configuration= parameter: =boolean= *tlp-enable?* [[#index-tlp_002denable_003f][¶]] :: Set to true if you wish to enable TLP.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =string= *tlp-default-mode* [[#index-tlp_002ddefault_002dmode][¶]] :: Default mode when no power supply can be detected. Alternatives are AC and BAT.
+
+  Defaults to ‘="AC"='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *disk-idle-secs-on-ac* [[#index-disk_002didle_002dsecs_002don_002dac][¶]] :: Number of seconds Linux kernel has to wait after the disk goes idle, before syncing on AC.
+
+  Defaults to ‘=0='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *disk-idle-secs-on-bat* [[#index-disk_002didle_002dsecs_002don_002dbat][¶]] :: Same as =disk-idle-ac= but on BAT mode.
+
+  Defaults to ‘=2='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *max-lost-work-secs-on-ac* [[#index-max_002dlost_002dwork_002dsecs_002don_002dac][¶]] :: Dirty pages flushing periodicity, expressed in seconds.
+
+  Defaults to ‘=15='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *max-lost-work-secs-on-bat* [[#index-max_002dlost_002dwork_002dsecs_002don_002dbat][¶]] :: Same as =max-lost-work-secs-on-ac= but on BAT mode.
+
+  Defaults to ‘=60='.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *cpu-scaling-governor-on-ac* [[#index-cpu_002dscaling_002dgovernor_002don_002dac][¶]] :: CPU frequency scaling governor on AC mode. With intel_pstate driver, alternatives are powersave and performance. With acpi-cpufreq driver, alternatives are ondemand, powersave, performance and conservative.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *cpu-scaling-governor-on-bat* [[#index-cpu_002dscaling_002dgovernor_002don_002dbat][¶]] :: Same as =cpu-scaling-governor-on-ac= but on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-scaling-min-freq-on-ac* [[#index-cpu_002dscaling_002dmin_002dfreq_002don_002dac][¶]] :: Set the min available frequency for the scaling governor on AC.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-scaling-max-freq-on-ac* [[#index-cpu_002dscaling_002dmax_002dfreq_002don_002dac][¶]] :: Set the max available frequency for the scaling governor on AC.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-scaling-min-freq-on-bat* [[#index-cpu_002dscaling_002dmin_002dfreq_002don_002dbat][¶]] :: Set the min available frequency for the scaling governor on BAT.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-scaling-max-freq-on-bat* [[#index-cpu_002dscaling_002dmax_002dfreq_002don_002dbat][¶]] :: Set the max available frequency for the scaling governor on BAT.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-min-perf-on-ac* [[#index-cpu_002dmin_002dperf_002don_002dac][¶]] :: Limit the min P-state to control the power dissipation of the CPU, in AC mode. Values are stated as a percentage of the available performance.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-max-perf-on-ac* [[#index-cpu_002dmax_002dperf_002don_002dac][¶]] :: Limit the max P-state to control the power dissipation of the CPU, in AC mode. Values are stated as a percentage of the available performance.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-min-perf-on-bat* [[#index-cpu_002dmin_002dperf_002don_002dbat][¶]] :: Same as =cpu-min-perf-on-ac= on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *cpu-max-perf-on-bat* [[#index-cpu_002dmax_002dperf_002don_002dbat][¶]] :: Same as =cpu-max-perf-on-ac= on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-boolean= *cpu-boost-on-ac?* [[#index-cpu_002dboost_002don_002dac_003f][¶]] :: Enable CPU turbo boost feature on AC mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-boolean= *cpu-boost-on-bat?* [[#index-cpu_002dboost_002don_002dbat_003f][¶]] :: Same as =cpu-boost-on-ac?= on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =boolean= *sched-powersave-on-ac?* [[#index-sched_002dpowersave_002don_002dac_003f][¶]] :: Allow Linux kernel to minimize the number of CPU cores/hyper-threads used under light load conditions.
+
+  Defaults to ‘=#f='.
+
+- =tlp-configuration= parameter: =boolean= *sched-powersave-on-bat?* [[#index-sched_002dpowersave_002don_002dbat_003f][¶]] :: Same as =sched-powersave-on-ac?= but on BAT mode.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =boolean= *nmi-watchdog?* [[#index-nmi_002dwatchdog_003f][¶]] :: Enable Linux kernel NMI watchdog.
+
+  Defaults to ‘=#f='.
+
+- =tlp-configuration= parameter: =maybe-string= *phc-controls* [[#index-phc_002dcontrols][¶]] :: For Linux kernels with PHC patch applied, change CPU voltages. An example value would be ‘="F:V F:V F:V F:V"='.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =string= *energy-perf-policy-on-ac* [[#index-energy_002dperf_002dpolicy_002don_002dac][¶]] :: Set CPU performance versus energy saving policy on AC. Alternatives are performance, normal, powersave.
+
+  Defaults to ‘="performance"='.
+
+- =tlp-configuration= parameter: =string= *energy-perf-policy-on-bat* [[#index-energy_002dperf_002dpolicy_002don_002dbat][¶]] :: Same as =energy-perf-policy-ac= but on BAT mode.
+
+  Defaults to ‘="powersave"='.
+
+- =tlp-configuration= parameter: =space-separated-string-list= *disks-devices* [[#index-disks_002ddevices][¶]] :: Hard disk devices.
+
+- =tlp-configuration= parameter: =space-separated-string-list= *disk-apm-level-on-ac* [[#index-disk_002dapm_002dlevel_002don_002dac][¶]] :: Hard disk advanced power management level.
+
+- =tlp-configuration= parameter: =space-separated-string-list= *disk-apm-level-on-bat* [[#index-disk_002dapm_002dlevel_002don_002dbat][¶]] :: Same as =disk-apm-bat= but on BAT mode.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *disk-spindown-timeout-on-ac* [[#index-disk_002dspindown_002dtimeout_002don_002dac][¶]] :: Hard disk spin down timeout. One value has to be specified for each declared hard disk.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *disk-spindown-timeout-on-bat* [[#index-disk_002dspindown_002dtimeout_002don_002dbat][¶]] :: Same as =disk-spindown-timeout-on-ac= but on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *disk-iosched* [[#index-disk_002diosched][¶]] :: Select IO scheduler for disk devices. One value has to be specified for each declared hard disk. Example alternatives are cfq, deadline and noop.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =string= *sata-linkpwr-on-ac* [[#index-sata_002dlinkpwr_002don_002dac][¶]] :: SATA aggressive link power management (ALPM) level. Alternatives are min_power, medium_power, max_performance.
+
+  Defaults to ‘="max_performance"='.
+
+- =tlp-configuration= parameter: =string= *sata-linkpwr-on-bat* [[#index-sata_002dlinkpwr_002don_002dbat][¶]] :: Same as =sata-linkpwr-ac= but on BAT mode.
+
+  Defaults to ‘="min_power"='.
+
+- =tlp-configuration= parameter: =maybe-string= *sata-linkpwr-blacklist* [[#index-sata_002dlinkpwr_002dblacklist][¶]] :: Exclude specified SATA host devices for link power management.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-on-off-boolean= *ahci-runtime-pm-on-ac?* [[#index-ahci_002druntime_002dpm_002don_002dac_003f][¶]] :: Enable Runtime Power Management for AHCI controller and disks on AC mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-on-off-boolean= *ahci-runtime-pm-on-bat?* [[#index-ahci_002druntime_002dpm_002don_002dbat_003f][¶]] :: Same as =ahci-runtime-pm-on-ac= on BAT mode.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *ahci-runtime-pm-timeout* [[#index-ahci_002druntime_002dpm_002dtimeout][¶]] :: Seconds of inactivity before disk is suspended.
+
+  Defaults to ‘=15='.
+
+- =tlp-configuration= parameter: =string= *pcie-aspm-on-ac* [[#index-pcie_002daspm_002don_002dac][¶]] :: PCI Express Active State Power Management level. Alternatives are default, performance, powersave.
+
+  Defaults to ‘="performance"='.
+
+- =tlp-configuration= parameter: =string= *pcie-aspm-on-bat* [[#index-pcie_002daspm_002don_002dbat][¶]] :: Same as =pcie-aspm-ac= but on BAT mode.
+
+  Defaults to ‘="powersave"='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *start-charge-thresh-bat0* [[#index-start_002dcharge_002dthresh_002dbat0][¶]] :: Percentage when battery 0 should begin charging. Only supported on some laptops.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *stop-charge-thresh-bat0* [[#index-stop_002dcharge_002dthresh_002dbat0][¶]] :: Percentage when battery 0 should stop charging. Only supported on some laptops.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *start-charge-thresh-bat1* [[#index-start_002dcharge_002dthresh_002dbat1][¶]] :: Percentage when battery 1 should begin charging. Only supported on some laptops.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-non-negative-integer= *stop-charge-thresh-bat1* [[#index-stop_002dcharge_002dthresh_002dbat1][¶]] :: Percentage when battery 1 should stop charging. Only supported on some laptops.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =string= *radeon-power-profile-on-ac* [[#index-radeon_002dpower_002dprofile_002don_002dac][¶]] :: Radeon graphics clock speed level. Alternatives are low, mid, high, auto, default.
+
+  Defaults to ‘="high"='.
+
+- =tlp-configuration= parameter: =string= *radeon-power-profile-on-bat* [[#index-radeon_002dpower_002dprofile_002don_002dbat][¶]] :: Same as =radeon-power-ac= but on BAT mode.
+
+  Defaults to ‘="low"='.
+
+- =tlp-configuration= parameter: =string= *radeon-dpm-state-on-ac* [[#index-radeon_002ddpm_002dstate_002don_002dac][¶]] :: Radeon dynamic power management method (DPM). Alternatives are battery, performance.
+
+  Defaults to ‘="performance"='.
+
+- =tlp-configuration= parameter: =string= *radeon-dpm-state-on-bat* [[#index-radeon_002ddpm_002dstate_002don_002dbat][¶]] :: Same as =radeon-dpm-state-ac= but on BAT mode.
+
+  Defaults to ‘="battery"='.
+
+- =tlp-configuration= parameter: =string= *radeon-dpm-perf-level-on-ac* [[#index-radeon_002ddpm_002dperf_002dlevel_002don_002dac][¶]] :: Radeon DPM performance level. Alternatives are auto, low, high.
+
+  Defaults to ‘="auto"='.
+
+- =tlp-configuration= parameter: =string= *radeon-dpm-perf-level-on-bat* [[#index-radeon_002ddpm_002dperf_002dlevel_002don_002dbat][¶]] :: Same as =radeon-dpm-perf-ac= but on BAT mode.
+
+  Defaults to ‘="auto"='.
+
+- =tlp-configuration= parameter: =on-off-boolean= *wifi-pwr-on-ac?* [[#index-wifi_002dpwr_002don_002dac_003f][¶]] :: Wifi power saving mode.
+
+  Defaults to ‘=#f='.
+
+- =tlp-configuration= parameter: =on-off-boolean= *wifi-pwr-on-bat?* [[#index-wifi_002dpwr_002don_002dbat_003f][¶]] :: Same as =wifi-power-ac?= but on BAT mode.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =y-n-boolean= *wol-disable?* [[#index-wol_002ddisable_003f][¶]] :: Disable wake on LAN.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *sound-power-save-on-ac* [[#index-sound_002dpower_002dsave_002don_002dac][¶]] :: Timeout duration in seconds before activating audio power saving on Intel HDA and AC97 devices. A value of 0 disables power saving.
+
+  Defaults to ‘=0='.
+
+- =tlp-configuration= parameter: =non-negative-integer= *sound-power-save-on-bat* [[#index-sound_002dpower_002dsave_002don_002dbat][¶]] :: Same as =sound-powersave-ac= but on BAT mode.
+
+  Defaults to ‘=1='.
+
+- =tlp-configuration= parameter: =y-n-boolean= *sound-power-save-controller?* [[#index-sound_002dpower_002dsave_002dcontroller_003f][¶]] :: Disable controller in powersaving mode on Intel HDA devices.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =boolean= *bay-poweroff-on-bat?* [[#index-bay_002dpoweroff_002don_002dbat_003f][¶]] :: Enable optical drive in UltraBay/MediaBay on BAT mode. Drive can be powered on again by releasing (and reinserting) the eject lever or by pressing the disc eject button on newer models.
+
+  Defaults to ‘=#f='.
+
+- =tlp-configuration= parameter: =string= *bay-device* [[#index-bay_002ddevice][¶]] :: Name of the optical drive device to power off.
+
+  Defaults to ‘="sr0"='.
+
+- =tlp-configuration= parameter: =string= *runtime-pm-on-ac* [[#index-runtime_002dpm_002don_002dac][¶]] :: Runtime Power Management for PCI(e) bus devices. Alternatives are on and auto.
+
+  Defaults to ‘="on"='.
+
+- =tlp-configuration= parameter: =string= *runtime-pm-on-bat* [[#index-runtime_002dpm_002don_002dbat][¶]] :: Same as =runtime-pm-ac= but on BAT mode.
+
+  Defaults to ‘="auto"='.
+
+- =tlp-configuration= parameter: =boolean= *runtime-pm-all?* [[#index-runtime_002dpm_002dall_003f][¶]] :: Runtime Power Management for all PCI(e) bus devices, except blacklisted ones.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =maybe-space-separated-string-list= *runtime-pm-blacklist* [[#index-runtime_002dpm_002dblacklist][¶]] :: Exclude specified PCI(e) device addresses from Runtime Power Management.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =space-separated-string-list= *runtime-pm-driver-blacklist* [[#index-runtime_002dpm_002ddriver_002dblacklist][¶]] :: Exclude PCI(e) devices assigned to the specified drivers from Runtime Power Management.
+
+- =tlp-configuration= parameter: =boolean= *usb-autosuspend?* [[#index-usb_002dautosuspend_003f][¶]] :: Enable USB autosuspend feature.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =maybe-string= *usb-blacklist* [[#index-usb_002dblacklist][¶]] :: Exclude specified devices from USB autosuspend.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =boolean= *usb-blacklist-wwan?* [[#index-usb_002dblacklist_002dwwan_003f][¶]] :: Exclude WWAN devices from USB autosuspend.
+
+  Defaults to ‘=#t='.
+
+- =tlp-configuration= parameter: =maybe-string= *usb-whitelist* [[#index-usb_002dwhitelist][¶]] :: Include specified devices into USB autosuspend, even if they are already excluded by the driver or via =usb-blacklist-wwan?=.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =maybe-boolean= *usb-autosuspend-disable-on-shutdown?* [[#index-usb_002dautosuspend_002ddisable_002don_002dshutdown_003f][¶]] :: Enable USB autosuspend before shutdown.
+
+  Defaults to ‘=disabled='.
+
+- =tlp-configuration= parameter: =boolean= *restore-device-state-on-startup?* [[#index-restore_002ddevice_002dstate_002don_002dstartup_003f][¶]] :: Restore radio device state (bluetooth, wifi, wwan) from previous shutdown on system startup.
+
+  Defaults to ‘=#f='.
+
+- =tlp-configuration= parameter: =string= *cpu-energy-perf-policy-on-ac* [[#index-cpu_002denergy_002dperf_002dpolicy_002don_002dac][¶]] :: Set CPU energy/performance policy when on AC mode. Possible values, in order of increasing power saving, are performance, balance_performance, default, balance_power and power.
+
+- =tlp-configuration= parameter: =string= *cpu-energy-perf-policy-on-bat* [[#index-cpu_002denergy_002dperf_002dpolicy_002don_002dbat][¶]] :: Set CPU energy/performance policy when on BAT mode. Possible values, in order of increasing power saving, are performance, balance_performance, default, balance_power and power.
+
+**** Thermald daemon [[#Thermald-daemon][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Thermald-daemon
+:CLASS: subsubheading
+:END:
+The =(gnu services pm)= module provides an interface to thermald, a CPU frequency scaling service which helps prevent overheating.
+
+- Variable: *thermald-service-type* [[#index-thermald_002dservice_002dtype][¶]] :: This is the service type for [[https://01.org/linux-thermal-daemon/][thermald]], the Linux Thermal Daemon, which is responsible for controlling the thermal state of processors and preventing overheating.
+
+- Data Type: *thermald-configuration* [[#index-thermald_002dconfiguration][¶]] :: Data type representing the configuration of =thermald-service-type=.
+
+  - =adaptive?= (default: =#f=) :: Use DPTF (Dynamic Power and Thermal Framework) adaptive tables when present.
+
+  - =ignore-cpuid-check?= (default: =#f=) :: Ignore cpuid check for supported CPU models.
+
+  - =thermald= (default: =thermald=) :: Package object of thermald.
+
+    **** PowerTOP [[#PowerTOP][¶]]
+    :PROPERTIES:
+    :CUSTOM_ID: PowerTOP
+    :CLASS: subsubheading
+    :END:
+    The =(gnu services pm)= module also provides a service definition for [[https://01.org/powertop/][PowerTOP]], a power consumption analysis and tuning tool. When started, it tunes Linux kernel settings to reduce power consumption.
+
+    - Variable: *powertop-service-type* [[#index-powertop_002dservice_002dtype][¶]] :: The service type for PowerTOP. No configuration is necessary. When the service starts, it executes =powertop --auto-tune=.
+
+      #+begin_src lisp
+      (service powertop-service-type)
+      #+end_src
+
+    Available =powertop-configuration= fields are:
+
+    - =powertop-configuration= parameter: =package= *powertop* [[#index-powertop][¶]] :: The PowerTOP package. Defaults to =powertop= in the =(gnu packages linux)= module
+
+**** hd-idle [[#hd_002didle][¶]]
+:PROPERTIES:
+:CUSTOM_ID: hd_002didle
+:CLASS: subsubheading
+:END:
+The =(gnu services pm)= module also provides a service definition for [[https://github.com/adelolmo/hd-idle][hd-idle]], a daemon that spins down hard disks after a period of inactivity. It is primarily useful for external USB (Universal Serial Bus) disks, which usually do not support setting an idle timer with =hdparm=.
+
+- Variable: *hd-idle-service-type* [[#index-hd_002didle_002dservice_002dtype][¶]] :: The service type for hd-idle. Its value is an =hd-idle-configuration= record, as in this example, which spins down all disks after ten minutes of inactivity, except for =/dev/sda=, which is spun down after two minutes:
+
+  #+begin_src lisp
+  (service hd-idle-service-type
+           (hd-idle-configuration
+            (idle-time 600)
+            (disks (list (hd-idle-disk
+                          (name "sda")
+                          (idle-time 120))))))
+  #+end_src
+
+- Data Type: *hd-idle-configuration* [[#index-hd_002didle_002dconfiguration][¶]] :: Data type representing the configuration of =hd-idle-service-type=.
+
+  - =idle-time= (default: =600=) :: Number of seconds a disk must be idle before it is spun down. A value of =0= disables spinning down.
+
+    To have hd-idle only work with the explicitly configured disks, set this to =0=.
+
+  - =command-type= (default: ='scsi=) :: The command used to spin disks down, either ='scsi= or ='ata=.
+
+  - =power-condition= (default: =0=) :: The power condition passed to the SCSI (Small Computer System Interface) =START STOP UNIT= command, an integer between =0= and =15=. It is ignored when =command-type= is ='ata=.
+
+  - =symlink-policy= (default: =0=) :: How to resolve disk names that are symbolic links. =0= resolves them once at startup, whereas with =1= symlinks are also resolved on runtime until success.
+
+  - =log-file= (default: unset) :: A file name to which hd-idle logs disk spin-up and spin-down events, for instance ="/var/log/hd-idle.log"=. When left unset, no log file is written.
+
+  - =ignore-spin-down-detection?= (default: =#f=) :: Whether to skip detection of disks that were spun down by some other means.
+
+  - =debug?= (default: =#f=) :: Whether to log the disk statistics that hd-idle reads on each poll.
+
+  - =disks= (default: ='()=) :: A list of =hd-idle-disk= records (see below) describing per-disk overrides. Disks that are not listed here are still managed, using the values above.
+
+  - =hd-idle= (default: =hd-idle=) :: The hd-idle package to use.
+
+- Data Type: *hd-idle-disk* [[#index-hd_002didle_002ddisk][¶]] :: Data type overriding the configuration above for a single disk. Fields left unset default to the corresponding top-level =hd-idle-configuration= value.
+
+  - =name= :: The device to configure, either a name under =/dev= such as ="sda"=, or an absolute file name such as ="/dev/disk/by-uuid/1234-5678"=.
+
+  - =idle-time= (default: unset) :: Number of seconds this disk must be idle before it is spun down.
+
+  - =command-type= (default: unset) :: The command used to spin this disk down, either ='scsi= or ='ata=.
+
+  - =power-condition= (default: unset) :: The power condition to use for this disk.
+
+The =(gnu services power)= module provides a service definition for [[http://www.apcupsd.org/][apcupsd]], a utility to interact with APC (APC by Schneider Electric or formerly American Power Conversion Corporation) UPS (Uninterruptible Power Supply) devices. Apcupsd also works with some OEM (Original Equipment Manufacturer)-branded products manufactured by APC.
+
+- Variable: *apcupsd-service-type* [[#index-apcupsd_002dservice_002dtype][¶]] :: The service type for apcupsd. For USB UPSes no configuration is necessary, however tweaking some fields to better suit your needs might be desirable. The defaults are taken from the upstream configuration and they are not very conservative (for example, the default =battery-level= of 5% may be considered too low by some).
+
+  The default event handlers do send emails, read more in [[#apcupsd_002devent_002dhandlers][apcupsd-event-handlers]].
+
+  #+begin_src lisp
+  (service apcupsd-service-type)
+  #+end_src
+
+- Data Type: *apcupsd-configuration* [[#index-apcupsd_002dconfiguration][¶]] :: Available =apcupsd-configuration= fields are:
+
+  - =apcupsd= (default: =apcupsd=) (type: package) :: The =apcupsd= package to use.
+
+  - =shepherd-service-name= (default: =apcupsd=) (type: symbol) :: The name of the shepherd service. You can add the service multiple times with different names to manage multiple UPSes.
+
+  - =auto-start?= (default: =#t=) (type: boolean) :: Should the shepherd service auto-start?
+
+  - =pid-file= (default: ="/var/run/apcupsd.pid"=) (type: string) :: The file name of the pid file.
+
+  - =debug-level= (default: =0=) (type: integer) :: The logging verbosity. Bigger number means more logs. The source code uses up to =300= as debug level value, so a value of =999= seems reasonable to enable all the logs.
+
+  - =run-dir= (default: ="/var/run/apcupsd"=) (type: string) :: The directory containing runtime information. You need to change this if you desire to run multiple instances of the daemon.
+
+  - =name= (type: maybe-string) :: Use this to give your UPS a name in log files and such. This is particularly useful if you have multiple UPSes. This does not set the EEPROM. It should be 8 characters or less.
+
+  - =cable= (default: =usb=) (type: enum-cable) :: The type of a cable connecting the UPS to your computer. Possible generic choices are ='simple=, ='smart=, ='ether= and ='usb=.
+
+    Alternatively, a specific cable model number may be used: ='940-0119A=, ='940-0127A=, ='940-0128A=, ='940-0020B=, ='940-0020C=, ='940-0023A=, ='940-0024B=, ='940-0024C=, ='940-1524C=, ='940-0024G=, ='940-0095A=, ='940-0095B=, ='940-0095C=, ='940-0625A=, ='M-04-02-2000=.
+
+  - =type= (default: =usb=) (type: enum-type) :: The type of the UPS you have.
+
+    - =apcsmart= :: Newer serial character device, appropriate for SmartUPS models using a serial cable (not an USB).
+
+    - =usb= :: Most new UPSes are an USB.
+
+    - =net= :: Network link to a master apcupsd through apcupsd's Network Information Server. This is used if the UPS powering your computer is connected to a different computer for monitoring.
+
+    - =snmp= :: SNMP network link to an SNMP-enabled UPS device.
+
+    - =netsnmp= :: Same as the SNMP above but requires use of the net-snmp library. Unless you have a specific need for this old driver, you should use the ='snmp= instead.
+
+    - =dumb= :: An old serial character device for use with simple-signaling UPSes.
+
+    - =pcnet= :: A PowerChute Network Shutdown protocol which can be used as an alternative to an SNMP with the AP9617 family of smart slot cards.
+
+    - =modbus= :: A serial device for use with newest SmartUPS models supporting the MODBUS protocol.
+
+  - =device= (default: =""=) (type: string) :: For USB UPSes, usually you want to set this to an empty string (the default). For other UPS types, you must specify an appropriate port or address.
+
+    - =apcsmart= :: Set to the appropriate =/dev/tty**= device.
+
+    - =usb= :: A null string setting enables auto-detection, which is the best choice for most installations.
+
+    - =net= :: Set to =hostname==:==port=.
+
+    - =snmp= :: Set to =hostname==:==port==:==vendor==:==community=. The =hostname= is the ip address or hostname of the UPS on the network. The =vendor= can be can be "APC" or "APC_NOTRAP". "APC_NOTRAP" will disable SNMP trap catching; you usually want "APC". The =port= is usually 161. The =community= is usually "private".
+
+    - =netsnmp= :: Same as the ='snmp=.
+
+    - =dumb= :: Set to the appropriate =/dev/tty**= device.
+
+    - =pcnet= :: Set to =ipaddr==:==username==:==passphrase==:==port=. The =ipaddr= is the IP address of the UPS management card. The =username= and the =passphrase= are the credentials for which the card has been configured. The =port= is the port number on which to listen for messages from the UPS, normally 3052. If this parameter is empty or missing, the default of 3052 will be used.
+
+    - =modbus= :: Set to the appropriate =/dev/tty**= device. You can also leave it empty for MODBUS over USB or set to the serial number of the UPS.
+
+  - =poll-time= (default: =60=) (type: integer) :: The interval (in seconds) at which apcupsd polls the UPS for status. This setting applies both to directly-attached UPSes (apcsmart, usb, dumb) and networked UPSes (net, snmp). Lowering this setting will improve the apcupsd's responsiveness to certain events at the cost of higher CPU utilization.
+
+  - =on-batery-delay= (default: =6=) (type: integer) :: The time in seconds from when a power failure is detected until we react to it with an onbattery event. The ='powerout= event will be triggered immediately when a power failure is detected. However, the ='onbattery= event will be trigger only after this delay.
+
+  - =battery-level= (default: =5=) (type: integer) :: If during a power failure, the remaining battery percentage (as reported by the UPS) is below or equal to this value, the apcupsd will initiate a system shutdown.
+
+    #+begin_quote
+    *Note:* =battery-level=, =remaining-minutes=, and =timeout= work in a conjunction, so the first that occurs will cause the initiation of a shutdown.
+
+    #+end_quote
+
+  - =remaining-minutes= (default: =3=) (type: integer) :: If during a power failure, the remaining runtime in minutes (as calculated internally by the UPS) is below or equal to this value, apcupsd will initiate a system shutdown.
+
+    #+begin_quote
+    *Note:* =battery-level=, =remaining-minutes=, and =timeout= work in a conjunction, so the first that occurs will cause the initiation of a shutdown.
+
+    #+end_quote
+
+  - =timeout= (default: =0=) (type: integer) :: If during a power failure, the UPS has run on batteries for this many seconds or longer, apcupsd will initiate a system shutdown. The value of 0 disables this timer.
+
+    #+begin_quote
+    *Note:* =battery-level=, =remaining-minutes=, and =timeout= work in a conjunction, so the first that occurs will cause the initiation of a shutdown.
+
+    #+end_quote
+
+  - =annoy-interval= (default: =300=) (type: integer) :: The time in seconds between annoying users (via the ='annoyme= event) to sign off prior to system shutdown. 0 disables.
+
+  - =annoy-delay= (default: =60=) (type: integer) :: The initial delay in seconds after a power failure before warning users to get off the system.
+
+  - =no-logon= (default: =disable=) (type: enum-no-logon) :: The condition which determines when users are prevented from logging in during a power failure.
+
+  - =kill-delay= (default: =0=) (type: integer) :: If this is non-zero, the apcupsd will continue running after a shutdown has been requested, and after the specified time in seconds attempt to kill the power. This is for use on systems where apcupsd cannot regain control after a shutdown.
+
+  - =net-server= (default: =#f=) (type: boolean) :: If enabled, a network information server process will be started.
+
+  - =net-server-ip= (default: ="127.0.0.1"=) (type: string) :: An IP address on which the NIS server will listen for incoming connections.
+
+  - =net-server-port= (default: =3551=) (type: integer) :: An IP port on which the NIS server will listen for incoming connections.
+
+  - =net-server-events-file= (type: maybe-string) :: If you want the last few EVENTS to be available over the network by the network information server, you must set this to a file name.
+
+  - =net-server-events-file-max-size= (default: =10=) (type: integer) :: The maximum size of the events file in kilobytes.
+
+  - =class= (default: =standalone=) (type: enum-class) :: Normally standalone unless you share an UPS using an APC ShareUPS card.
+
+  - =mode= (default: =disable=) (type: enum-mode) :: Normally disable unless you share an UPS using an APC ShareUPS card.
+
+  - =stat-time= (default: =0=) (type: integer) :: The time interval in seconds between writing the status file, 0 disables.
+
+  - =log-stats= (default: =#f=) (type: boolean) :: Also write the stats as a logs. This generates a lot of output.
+
+  - =data-time= (default: =0=) (type: integer) :: The time interval in seconds between writing the data records to the log file, 0 disables.
+
+  - =facility= (type: maybe-string) :: The logging facility for the syslog.
+
+  - =event-handlers= (type: apcupsd-event-handlers) :: Handlers for events produced by apcupsd.
+
+- Data Type: *apcupsd-event-handlers* [[#index-apcupsd_002devent_002dhandlers][¶]] :: For a description of the events please refer to ‘=man 8 apccontrol='.
+
+  Each handler shall be a gexp. It is spliced into the control script for the daemon. In addition to the standard Guile programming environment, the following procedures and variables are also available:
+
+  - =conf= :: Variable containing the file name of the configuration file.
+
+  - =powerfail-file= :: Variable containing the file name of the powerfail file.
+
+  - =cmd= :: The event currently being handled.
+
+  - =name= :: The name of the UPS as specified in the configuration file.
+
+  - =connected?= :: Is =#t= if =apcupsd= is connected to the UPS via a serial port (or a USB port). In most configurations, this will be the case. In the case of a Slave machine where apcupsd is not directly connected to the UPS, this value will be =#f=.
+
+  - =powered?= :: Is =#t= if the computer on which =apcupsd= is running is powered by the UPS and =#f= if not. At the moment, this value is unimplemented and always =#f=.
+
+  - =(err ==fmt== ==args...==)= :: Wrapper around =format= outputting to =(current-error-port)=.
+
+  - =(wall ==fmt== ==args...==)= :: Wrapper around =format= outputting via =wall=.
+
+  - =(apcupsd ==args...==)= :: Call =apcupsd= while passing the correct configuration file and all the arguments.
+
+  - =(mail-to-root ==subject== ==body==)= :: Send an email to the local administrator. This procedure assumes the =sendmail= is located at =/run/privileged/bin/sendmail= (as would be the case with =opensmtpd-service-type=).
+
+  Available =apcupsd-event-handlers= fields are:
+
+  - =modules= (type: gexp) :: Additional modules to import into the generated handler script.
+
+  - =killpower= (type: gexp) :: The handler for the killpower event.
+
+  - =commfailure= (type: gexp) :: The handler for the commfailure event.
+
+  - =commok= (type: gexp) :: The handler for the commfailure event.
+
+  - =powerout= (type: gexp) :: The handler for the powerout event.
+
+  - =onbattery= (type: gexp) :: The handler for the onbattery event.
+
+  - =offbattery= (type: gexp) :: The handler for the offbattery event.
+
+  - =mainsback= (type: gexp) :: The handler for the mainsback event.
+
+  - =failing= (type: gexp) :: The handler for the failing event.
+
+  - =timeout= (type: gexp) :: The handler for the timeout event.
+
+  - =loadlimit= (type: gexp) :: The handler for the loadlimit event.
+
+  - =runlimit= (type: gexp) :: The handler for the runlimit event.
+
+  - =doreboot= (type: gexp) :: The handler for the doreboot event.
+
+  - =doshutdown= (type: gexp) :: The handler for the doshutdown event.
+
+  - =annoyme= (type: gexp) :: The handler for the annoyme event.
+
+  - =emergency= (type: gexp) :: The handler for the emergency event.
+
+  - =changeme= (type: gexp) :: The handler for the changeme event.
+
+  - =remotedown= (type: gexp) :: The handler for the remotedown event.
+
+  - =startselftest= (type: gexp) :: The handler for the startselftest event.
+
+  - =endselftest= (type: gexp) :: The handler for the endselftest event.
+
+  - =battdetach= (type: gexp) :: The handler for the battdetach event.
+
+  - =battattach= (type: gexp) :: The handler for the battattach event.
+
+--------------
+
+Next: [[id:guix--Audio-Services][Audio Services]], Previous: [[id:guix--Continuous-Integration][Continuous Integration]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

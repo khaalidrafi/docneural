@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID: guix--Snippets-versus-Phases
+:END:
+#+filetags: :guix:
+#+title: Snippets versus Phases
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Snippets-versus-Phases>>
+Next: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Previous: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.6 Snippets versus Phases [[#Snippets-versus-Phases-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Snippets-versus-Phases-1
+:CLASS: subsection
+:END:
+The boundary between using an origin snippet versus a build phase to modify the sources of a package can be elusive. Origin snippets are typically used to remove unwanted files such as bundled libraries, nonfree sources, or to apply simple substitutions. The source derived from an origin should produce a source that can be used to build the package on any system that the upstream package supports (i.e., act as the corresponding source). In particular, origin snippets must not embed store items in the sources; such patching should rather be done using build phases. Refer to the =origin= record documentation for more information (see [[id:guix--origin-Reference][=origin= Reference]]).

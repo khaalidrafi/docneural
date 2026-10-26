@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID: guix--Programming-Interface
+:END:
+#+filetags: :guix:
+#+title: Programming Interface
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Programming-Interface>>
+Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 8 Programming Interface [[#Programming-Interface-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Programming-Interface-1
+:CLASS: chapter
+:END:
+GNU Guix provides several Scheme programming interfaces (APIs) to define, build, and query packages. The first interface allows users to write high-level package definitions. These definitions refer to familiar packaging concepts, such as the name and version of a package, its build system, and its dependencies. These definitions can then be turned into concrete build actions.
+
+Build actions are performed by the Guix daemon, on behalf of users. In a standard setup, the daemon has write access to the store---the =/gnu/store= directory---whereas users do not. The recommended setup also has the daemon perform builds in chroots, under specific build users, to minimize interference with the rest of the system.
+
+Lower-level APIs are available to interact with the daemon and the store. To instruct the daemon to perform a build action, users actually provide it with a /derivation/. A derivation is a low-level representation of the build actions to be taken, and the environment in which they should occur---derivations are to package definitions what assembly is to C programs. The term “derivation” comes from the fact that build results /derive/ from them.
+
+This chapter describes all these APIs in turn, starting from high-level package definitions. See [[id:guix--Source-Tree-Structure][Source Tree Structure]], for a more general overview of the source code.
+
+- [[id:guix--Package-Modules][Package Modules]]
+- [[id:guix--Defining-Packages][Defining Packages]]
+- [[id:guix--Defining-Package-Variants][Defining Package Variants]]
+- [[id:guix--Writing-Manifests][Writing Manifests]]
+- [[id:guix--Build-Systems][Build Systems]]
+- [[id:guix--Build-Phases][Build Phases]]
+- [[id:guix--Build-Utilities][Build Utilities]]
+- [[id:guix--Search-Paths][Search Paths]]
+- [[id:guix--The-Store][The Store]]
+- [[id:guix--Derivations][Derivations]]
+- [[id:guix--The-Store-Monad][The Store Monad]]
+- [[id:guix--G_002dExpressions][G-Expressions]]
+- [[id:guix--Invoking-guix-repl][Invoking =guix repl=]]
+- [[id:guix--Using-Guix-Interactively][Using Guix Interactively]]
+
+--------------
+
+Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

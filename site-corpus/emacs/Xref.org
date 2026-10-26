@@ -1,0 +1,486 @@
+:PROPERTIES:
+:ID: emacs--Xref
+:END:
+#+filetags: :emacs:
+#+title: Xref
+
+Next: [[id:emacs--EDE][Emacs Development Environment]]   Previous: [[id:emacs--Change-Log#Change-Log][Change Logs]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
+
+<<Xref>>
+*** 30.4 Find Identifier References [[#Find-Identifier-References][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Find-Identifier-References
+:CLASS: section
+:END:
+An /identifier/ is a name of a syntactical subunit of the program: a function, a subroutine, a method, a class, a data type, a macro, etc. In a programming language, each identifier is a symbol in the language's syntax. Identifiers are also known as /tags/.
+
+Program development and maintenance requires capabilities to quickly find where each identifier was defined and referenced, to rename identifiers across the entire project, etc. These capabilities are also useful for finding references in major modes other than those defined to support programming languages. For example, chapters, sections, appendices, etc. of a text or a TeX document can be treated as subunits as well, and their names can be used as identifiers. In this chapter, we use the term “identifiers” to collectively refer to the names of any kind of subunits, in program source and in other kinds of text alike.
+
+Emacs provides a unified interface to these capabilities, called ‘=xref='.
+
+To do its job, =xref= needs to make use of information and to employ methods specific to the major mode. What files to search for identifiers, how to find references to identifiers, how to complete on identifiers---all this and more is mode-specific knowledge. =xref= delegates the mode-specific parts of its job to a /backend/ provided by the mode; it also includes defaults for some of its commands, for those modes that don't provide their own.
+
+A backend can implement its capabilities in a variety of ways. Here are a few examples:
+
+1. Some major modes provide built-in means for looking up the language symbols. For example, Emacs Lisp symbols can be identified by searching the package load history, maintained by the Emacs Lisp interpreter, and by consulting the built-in documentation strings; the Emacs Lisp mode uses these facilities in its backend to allow finding definitions of symbols. (One disadvantage of this kind of backend is that it only knows about subunits that were loaded into the interpreter.)
+2. If Eglot is activated for the current buffer's project (see [[id:emacs--Projects::#Projects][Working with Projects]]) and the current buffer's major mode, Eglot consults an external language server program and provides the data supplied by the server regarding the definitions of the identifiers in the project. See [[../eglot_html/Eglot-Features.html#Eglot-Features][Eglot Features]] in Eglot: The Emacs LSP Client.
+3. An external program can extract references by scanning the relevant files, and build a database of these references. A backend can then access this database whenever it needs to list or look up references. The Emacs distribution includes =etags=, a command for tagging identifier definitions in programs, which supports many programming languages and other major modes, such as HTML, by extracting references into /tags tables/. See [[#Create-Tags-Table][Creating Tags Tables]]. Major modes for languages supported by =etags= can use tags tables as basis for their backend. (One disadvantage of this kind of backend is that tags tables need to be kept reasonably up to date, by rebuilding them from time to time.)
+
+--------------
+
+<<Find-Identifiers>>
+**** 30.4.1 Find Identifiers [[#Find-Identifiers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Find-Identifiers-1
+:CLASS: subsection
+:END:
+This subsection describes the commands that find references to identifiers and perform various queries about identifiers. Each such reference could /define/ an identifier, e.g., provide the implementation of a program subunit or the text of a document section; or it could /use/ the identifier, e.g., call a function or a method, assign a value to a variable, mention a chapter in a cross-reference, etc.
+
+--------------
+
+<<Looking-Up-Identifiers>>
+**** 30.4.1.1 Looking Up Identifiers [[#Looking-Up-Identifiers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Looking-Up-Identifiers-1
+:CLASS: subsubsection
+:END:
+The most important thing that =xref= enables you to do is to find the definition of a specific identifier.
+
+- M-. :: Find definitions of an identifier (=xref-find-definitions=).
+
+- C-M-. =pattern= RET :: Find all identifiers whose name matches =pattern= (=xref-find-apropos=).
+
+- C-x 4 . RET :: Find definitions of identifier, but display it in another window (=xref-find-definitions-other-window=).
+
+- C-x 5 . RET :: Find definition of identifier, and display it in a new frame (=xref-find-definitions-other-frame=).
+
+- M-x xref-find-definitions-at-mouse :: Find definition of identifier at mouse click.
+
+- M-, :: Go back to where you previously invoked M-. and friends (=xref-go-back=).
+
+- C-M-, :: Go forward to where you previously invoked M-, (=xref-go-forward=).
+
+- M-x xref-etags-mode :: Switch =xref= to use the =etags= backend.
+
+M-. (=xref-find-definitions=) shows the definition of the identifier at point. With a prefix argument, or if there's no identifier at point, it prompts for the identifier. (If you want it to always prompt, customize =xref-prompt-for-identifier= to =t=.)
+
+When entering the identifier argument to M-., you can use the usual minibuffer completion commands (see [[id:emacs--Completion::#Completion][Completion]]), with the known identifier names being the completion candidates.
+
+Like most commands that can switch buffers, =xref-find-definitions= has a variant that displays the new buffer in another window, and one that makes a new frame for it. The former is C-x 4 . (=xref-find-definitions-other-window=), and the latter is C-x 5 . (=xref-find-definitions-other-frame=).
+
+The command =xref-find-definitions-at-mouse= works like =xref-find-definitions=, but it looks for the identifier name at or around the place of a mouse event. This command is intended to be bound to a mouse event, such as C-M-mouse-1, for example.
+
+The command C-M-. (=xref-find-apropos=) is like =apropos= for tags (see [[id:emacs--Apropos][Apropos]]). It displays a list of identifiers in the selected tags table whose names match the specified =regexp=. This is just like M-., except that it does regexp matching of identifiers instead of matching symbol names as fixed strings. By default, the command pops up the =*xref*= buffer, like M-., but you can display additional output by customizing the variable =tags-apropos-additional-actions=; see its documentation for details.
+
+If any of the above commands finds more than one matching definition, it by default pops up the =*xref*= buffer showing the matching candidates and selects that buffer's window. (C-M-. /always/ pops up the =*xref*= buffer if it finds at least one match.) Each candidate is normally shown in that buffer as the name of a file and the matching identifier(s) in that file. In that buffer, you can select any of the candidates for display, and you have several additional commands, described in [[#Xref-Commands][Commands Available in the =*xref*= Buffer]]. However, if the value of the variable =xref-auto-jump-to-first-definition= is =move=, Emacs automatically moves point to the first of these candidates in the =*xref*= buffer, so just typing RET will display the definition of that candidate. If the value of the variable is =t= or =show=, the first candidate is automatically shown in its own window; =t= also selects the window showing the first candidate's definition, while =show= leaves the window of the =*xfer*= buffer selected. The default value is =nil=, which just shows the candidates in the =*xref*= buffer, but neither selects any of them nor shows their definition, until you select a candidate in the =*xref*= buffer.
+
+If you switch away of the window showing the =*xref*= buffer which displays several candidates, you can move from one candidate to another using the commands M-g M-n (=next-error=) and M-g M-p (=previous-error=). See [[id:emacs--Compilation-Mode][Compilation Mode]].
+
+To go back to places /from where/ you've displayed the definition, use M-, (=xref-go-back=). It jumps back to the point of the last invocation of M-.. Thus you can find and examine the definition of something with M-. and then return to where you were with M-,. M-, allows you to retrace the steps you made forward in the history of places, all the way to the first place in history, where you first invoked M-., or to any place in-between.
+
+If you previously went back too far with M-,, or want to re-examine a place from which you went back, you can use C-M-, (=xref-go-forward=) to go forward again. This is similar to using M-., except that you don't need on each step to move point to the identifier whose definition you want to look up. C-M-, allows you to retrace all the steps you made back in the history of places, all the way to the last place in history, where you invoked M-,, or to any place in-between.
+
+Some major modes install =xref= support facilities that might sometimes fail to find certain identifiers. For example, in Emacs Lisp mode (see [[id:emacs--Lisp-Eval][Evaluating Emacs Lisp Expressions]]) M-. will by default find only functions and variables from Lisp packages which are loaded into the current Emacs session or are auto-loaded (see [[../elisp_html/Autoload.html#Autoload][Autoload]] in The Emacs Lisp Reference Manual). If M-. fails to find some identifiers, you can try forcing =xref= to use the =etags= backend (see [[#Xref][Find Identifier References]]). To this end, turn on the Xref Etags minor mode with M-x xref-etags-mode, then invoke M-. again. (For this to work, be sure to run =etags= to create the tags table in the directory tree of the source files, see [[#Create-Tags-Table][Creating Tags Tables]].)
+
+--------------
+
+<<Xref-Commands>>
+**** 30.4.1.2 Commands Available in the =*xref*= Buffer [[#Commands-Available-in-the-_002axref_002a-Buffer][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Commands-Available-in-the-_002axref_002a-Buffer
+:CLASS: subsubsection
+:END:
+The following commands are provided in the =*xref*= buffer by the special XREF mode:
+
+- RET\\
+  mouse-1 :: Display the reference on the current line (=xref-goto-xref=). With prefix argument, also bury the =*xref*= buffer.
+
+- <<index-xref_002dselect_002dand_002dshow_002dxref>>mouse-2 [[#index-xref_002dselect_002dand_002dshow_002dxref][¶]] :: The same as =mouse-1=, but make the window displaying the =*xref*= buffer the selected window (=xref-select-and-show-xref=).
+
+- <<index-xref_002dnext_002dline>>n [[#index-xref_002dnext_002dline][¶]]\\
+  . :: Move to the next reference and display it in the other window (=xref-next-line=).
+
+- <<index-xref_002dnext_002dgroup>>N [[#index-xref_002dnext_002dgroup][¶]] :: Move to the first reference of the next reference group and display it in the other window (=xref-next-group=).
+
+- <<index-xref_002dprev_002dline>>p [[#index-xref_002dprev_002dline][¶]]\\
+  , :: Move to the previous reference and display it in the other window (=xref-prev-line=).
+
+- <<index-xref_002dprev_002dgroup>>P [[#index-xref_002dprev_002dgroup][¶]] :: Move to the first reference of the previous reference group and display it in the other window (=xref-prev-group=).
+
+- <<index-xref_002dshow_002dlocation_002dat_002dpoint>>C-o [[#index-xref_002dshow_002dlocation_002dat_002dpoint][¶]] :: Display the reference on the current line in the other window (=xref-show-location-at-point=).
+
+- r =pattern= RET =replacement= RET :: Perform interactive query-replace on references that match =pattern= (=xref-query-replace-in-results=), replacing the match with =replacement=. This command can only be used in =*xref*= buffers that show all the matches for an identifier in all the relevant files. See [[#Identifier-Search][Searching and Replacing with Identifiers]].
+
+- <<index-revert_002dbuffer_002c-in-_002axref_002a-buffers>>g [[#index-revert_002dbuffer_002c-in-_002axref_002a-buffers][¶]] :: Refresh the contents of the =*xref*= buffer (=revert-buffer=). See [[id:emacs--Reverting][Reverting a Buffer]].
+
+- <<index-xref_002dquit_002dand_002dpop_002dmarker_002dstack>>M-, [[#index-xref_002dquit_002dand_002dpop_002dmarker_002dstack][¶]] :: Quit the window showing the =*xref*= buffer, and then jump to the previous Xref stack location (=xref-quit-and-pop-marker-stack=).
+
+- <<index-xref_002dquit>>q [[#index-xref_002dquit][¶]] :: Quit the window showing the =*xref*= buffer (=xref-quit=).
+
+In addition, the usual navigation commands, such as the arrow keys, C-n, and C-p are available for moving around the buffer without displaying the references.
+
+--------------
+
+<<Identifier-Search>>
+**** 30.4.1.3 Searching and Replacing with Identifiers [[#Searching-and-Replacing-with-Identifiers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Searching-and-Replacing-with-Identifiers
+:CLASS: subsubsection
+:END:
+The commands in this section perform various search and replace operations either on identifiers themselves or on files that reference them.
+
+- M-? :: Find all the references for the identifier at point.
+
+- r\\
+  M-x xref-query-replace-in-results RET =replacement= RET\\
+  C-u M-x xref-query-replace-in-results RET =regexp= RET =replacement= RET :: Interactively replace =regexp= with =replacement= in the names of all the identifiers shown in the =*xref*= buffer.
+
+- M-x xref-find-references-and-replace RET =from= RET =to= RET :: Interactively rename all instances of the identifier =from= to the new name =to=.
+
+- M-x tags-search RET =regexp= RET :: Search for =regexp= through the files in the selected tags table.
+
+- M-x tags-query-replace RET =regexp= RET =replacement= RET :: Perform a =query-replace-regexp= on each file in the selected tags table.
+
+- M-x fileloop-continue :: Restart one of the last 2 commands above, from the current location of point.
+
+M-? finds all the references for the identifier at point, prompting for the identifier as needed, with completion. Depending on the current backend (see [[#Xref][Find Identifier References]]), the command may prompt even if it finds a valid identifier at point. When invoked with a prefix argument, it always prompts for the identifier. (If you want it to prompt always, customize the value of the variable =xref-prompt-for-identifier= to =t=; or set it to =nil= to prompt only if there's no usable identifier at point.) The command then presents the =*xref*= buffer with all the references to the identifier, showing the file name and the line where the identifier is referenced. The XREF mode commands are available in this buffer, see [[#Xref-Commands][Commands Available in the =*xref*= Buffer]].
+
+If the value of the variable =xref-auto-jump-to-first-xref= is =t=, =xref-find-references= automatically jumps to the first result in the =*xref*= buffer and selects the window where that reference is displayed; you can select the other results with M-g M-n (=next-error=) and M-g M-p (=previous-error=) (see [[id:emacs--Compilation-Mode][Compilation Mode]]). If the value is =show=, the first result is displayed, but the window showing the =*xref*= buffer is left selected. If the value is =move=, the first result is selected in the =*xref*= buffer, but is not displayed; you can then use RET to actually display the reference. The default value is =nil=, which just shows the results in the =*xref*= buffer, but doesn't select any of them, and doesn't display the reference itself.
+
+r (=xref-query-replace-in-results=) reads a =replacement= string, just like ordinary M-x query-replace-regexp. It then renames the identifiers shown in the =*xref*= buffer in all the places in all the files where these identifiers are referenced, such that their new name is =replacement=. This is useful when you rename your identifiers as part of refactoring. This command should be invoked in the =*xref*= buffer generated by M-?. By default, the command replaces the entire name of each identifier with =replacement=, but if invoked with a prefix argument, the command prompts for a regexp to match identifier names, and replaces only the matches of that regexp in the names of the identifiers with =replacement=.
+
+M-x xref-find-references-and-replace works similarly to =xref-query-replace-in-results=, but is more convenient when you want to rename a single identifier specified by its name =from=.
+
+M-x tags-search reads a regexp using the minibuffer, then searches for matches in all the files in the selected tags table, one file at a time. It displays the name of the file being searched so you can follow its progress. As soon as it finds an occurrence, =tags-search= returns. This command requires tags tables to be available (see [[#Tags-Tables][Tags Tables]]).
+
+Having found one match with =tags-search=, you probably want to find all the rest. M-x fileloop-continue resumes the =tags-search=, finding one more match. This searches the rest of the current buffer, followed by the remaining files of the tags table.
+
+M-x tags-query-replace performs a single =query-replace-regexp= through all the files in the tags table. It reads a regexp to search for and a string to replace with, just like ordinary M-x query-replace-regexp. It searches much like M-x tags-search, but repeatedly, processing matches according to your input. See [[id:emacs--Replace::#Query-Replace][Query Replace]], for more information on query replace.
+
+You can control the case-sensitivity of tags search commands by customizing the value of the variable =tags-case-fold-search=. The default is to use the same setting as the value of =case-fold-search= (see [[id:emacs--Lax-Search][Lax Matching During Searching]]).
+
+It is possible to get through all the files in the tags table with a single invocation of M-x tags-query-replace. But often it is useful to exit temporarily, which you can do with any input event that has no special query replace meaning. You can resume the query replace subsequently by typing M-x fileloop-continue; this command resumes the last tags search or replace command that you did. For instance, to skip the rest of the current file, you can type M-> M-x fileloop-continue.
+
+Note that the commands described above carry out much broader searches than the =xref-find-definitions= family. The =xref-find-definitions= commands search only for definitions of identifiers that match your string or regexp. The commands =xref-find-references=, =tags-search=, and =tags-query-replace= find every occurrence of the identifier or regexp, as ordinary search commands and replace commands do in the current buffer.
+
+As an alternative to =xref-find-references= and =tags-search=, you can run =grep= as a subprocess and have Emacs show you the matching lines one by one. See [[id:emacs--Grep-Searching][Searching with Grep under Emacs]].
+
+--------------
+
+<<List-Identifiers>>
+**** 30.4.1.4 Identifier Inquiries [[#Identifier-Inquiries][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Identifier-Inquiries
+:CLASS: subsubsection
+:END:
+- C-M-i\\
+  M-TAB :: Perform completion on the text around point, possibly using the selected tags table if one is loaded (=completion-at-point=).
+
+- M-x list-tags RET =file= RET :: Display a list of the identifiers defined in the program file =file=.
+
+- C-M-. =regexp= RET :: Display a list of all identifiers matching =regexp= (=xref-find-apropos=). See [[#Looking-Up-Identifiers][Looking Up Identifiers]].
+
+- M-x tags-next-file :: Visit files recorded in the selected tags table.
+
+In most programming language modes, you can type C-M-i or M-TAB (=completion-at-point=) to complete the symbol at point. Some modes provide specialized completion for this command tailored to the mode; for those that don't, if there is a tags table loaded, this command can use it to generate completion candidates. See [[id:emacs--Symbol-Completion][Completion for Symbol Names]].
+
+M-x list-tags reads the name of one of the files covered by the selected tags table, with completion, and displays the list of tags defined in that file; it offers the current buffer's file name as the default file whose tags to list. Do not include a directory as part of the file name unless the file name recorded in the tags table includes a directory. This command works only with the etags backend, and requires a tags table for the project to be available. See [[#Tags-Tables][Tags Tables]].
+
+M-x tags-next-file visits files covered by the selected tags table. The first time it is called, it visits the first file covered by the table. Each subsequent call visits the next covered file, unless a prefix argument is supplied, in which case it returns to the first file. This command requires a tags table to be selected.
+
+--------------
+
+<<Tags-Tables>>
+**** 30.4.2 Tags Tables [[#Tags-Tables-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tags-Tables-1
+:CLASS: subsection
+:END:
+A /tags table/ records the tags[[#FOOT18][^{18}]] extracted by scanning the source code of a certain program or a certain document. Tags extracted from generated files reference the original files, rather than the generated files that were scanned during tag extraction. Examples of generated files include C files generated from Cweb source files, from a Yacc parser, or from Lex scanner definitions; =.i= preprocessed C files; and Fortran files produced by preprocessing =.fpp= source files.
+
+To produce a tags table, you run the =etags= shell command on a document or the source code file. The ‘=etags=' program writes the tags to a /tags table file/, or /tags file/ in short. The conventional name for a tags file is =TAGS=. See [[#Create-Tags-Table][Creating Tags Tables]]. (It is also possible to create a tags table by using one of the commands from other packages that can produce such tables in the same format.)
+
+Emacs uses the tags tables via the =etags= package as one of the supported backends for =xref=. Because tags tables are produced by the =etags= command that is part of an Emacs distribution, we describe tags tables in more detail here.
+
+The Ebrowse facility is similar to =etags= but specifically tailored for C++. See [[../ebrowse_html/index.html#Top][Ebrowse]] in Ebrowse User's Manual. The Semantic package provides another way to generate and use tags, separate from the =etags= facility. See [[id:emacs--Semantic][Semantic]].
+
+--------------
+
+<<Tag-Syntax>>
+**** 30.4.2.1 Source File Tag Syntax [[#Source-File-Tag-Syntax][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Source-File-Tag-Syntax
+:CLASS: subsubsection
+:END:
+Here is how tag syntax is defined for the most popular languages:
+
+- In C code, any C function or typedef is a tag, and so are definitions of =struct=, =union= and =enum=. =#define= macro definitions, =#undef= and =enum= constants are also tags, unless you specify ‘=--no-defines=' when making the tags table. Similarly, global variables are tags, unless you specify ‘=--no-globals=', and so are struct members, unless you specify ‘=--no-members='. Use of ‘=--no-globals=', ‘=--no-defines=' and ‘=--no-members=' can make the tags table file much smaller.
+
+  You can tag function declarations and external variables in addition to function definitions by giving the ‘=--declarations=' option to =etags=.
+
+- In C++ code, in addition to all the tag constructs of C code, member functions are also recognized; member variables are also recognized, unless you use the ‘=--no-members=' option. =operator= definitions have tag names like ‘=operator+='. If you specify the ‘=--class-qualify=' option, tags for variables and functions in classes are named ‘=class==::==variable=' and ‘=class==::==function='. By default, class methods and members are not class-qualified, which facilitates identifying their names in the sources more accurately.
+
+- In Java code, tags include all the constructs recognized in C++, plus the =interface=, =extends= and =implements= constructs. Tags for variables and functions in classes are named ‘=class==.==variable=' and ‘=class==.==function='.
+
+- In LaTeX documents, the arguments for =\chapter=, =\section=, =\subsection=, =\subsubsection=, =\eqno=, =\label=, =\ref=, =\cite=, =\bibitem=, =\part=, =\appendix=, =\entry=, =\index=, =\def=, =\newcommand=, =\renewcommand=, =\newenvironment= and =\renewenvironment= are tags.
+
+  Other commands can make tags as well, if you specify them in the environment variable =TEXTAGS= before invoking =etags=. The value of this environment variable should be a colon-separated list of command names. For example,
+
+  #+begin_example
+  TEXTAGS="mycommand:myothercommand"
+  export TEXTAGS
+#+end_example
+
+  specifies (using Bourne shell syntax) that the commands ‘=\mycommand=' and ‘=\myothercommand=' also define tags.
+
+- In Lisp code, any function defined with =defun=, any variable defined with =defvar= or =defconst=, and in general the first argument of any expression that starts with ‘=(def=' in column zero is a tag. As an exception, expressions of the form =(defvar ==foo==)= are treated as declarations, and are only tagged if the ‘=--declarations=' option is given.
+
+- In Scheme code, tags include anything defined with =def= or with a construct whose name starts with ‘=def='. They also include variables set with =set!= at top level in the file.
+
+Several other languages are also supported:
+
+- In Ada code, functions, procedures, packages, tasks and types are tags. Use the ‘=--packages-only=' option to create tags for packages only.
+
+  In Ada, the same name can be used for different kinds of entity (e.g., for a procedure and for a function). Also, for things like packages, procedures and functions, there is the spec (i.e., the interface) and the body (i.e., the implementation). To make it easier to pick the definition you want, Ada tag names have suffixes indicating the type of entity:
+
+  - ‘=/b=' :: package body.
+
+  - ‘=/f=' :: function.
+
+  - ‘=/k=' :: task.
+
+  - ‘=/p=' :: procedure.
+
+  - ‘=/s=' :: package spec.
+
+  - ‘=/t=' :: type.
+
+  Thus, M-x find-tag RET bidule/b RET will go directly to the body of the package =bidule=, while M-x find-tag RET bidule RET will just search for any tag =bidule=.
+
+- In assembler code, labels appearing at the start of a line, followed by a colon, are tags.
+
+- In Bison or Yacc input files, each rule defines as a tag the nonterminal it constructs. The portions of the file that contain C code are parsed as C code.
+
+- In Cobol code, tags are paragraph names; that is, any word starting in column 8 and followed by a period.
+
+- In Erlang code, the tags are the functions, records and macros defined in the file.
+
+- In Fortran code, functions, subroutines and block data are tags.
+
+- In Go code, packages, functions, and types are tags.
+
+- In HTML input files, the tags are the =title= and the =h1=, =h2=, =h3= headers. Also, tags are =name== in anchors and all occurrences of =id==.
+
+- In Lua input files, all functions are tags.
+
+- In makefiles, targets are tags; additionally, variables are tags unless you specify ‘=--no-globals='.
+
+- In Objective C code, tags include Objective C definitions for classes, class categories, methods and protocols. Tags for variables and functions in classes are named ‘=class==::==variable=' and ‘=class==::==function='.
+
+- In Pascal code, the tags are the functions and procedures defined in the file.
+
+- In Perl code, the tags are the packages, subroutines and variables defined by the =package=, =sub=, =use constant=, =my=, and =local= keywords. Use ‘=--globals=' if you want to tag global variables. Tags for subroutines are named ‘=package==::==sub='. The name for subroutines defined in the default package is ‘=main::==sub='.
+
+- In PHP code, tags are functions, classes and defines. Vars are tags too, unless you use the ‘=--no-members=' option.
+
+- In PostScript code, the tags are the functions.
+
+- In Prolog code, tags are predicates and rules at the beginning of line.
+
+- In Python code, =def= or =class= at the beginning of a line generate a tag.
+
+- In Ruby code, =def= or =class= or =module= at the beginning of a line generate a tag. Constants also generate tags.
+
+- In Rust code, tags anything defined with =fn=, =enum=, =struct= or =macro_rules!=.
+
+You can also generate tags based on regexp matching (see [[#Etags-Regexps][Etags Regexps]]) to handle other formats and languages.
+
+--------------
+
+<<Create-Tags-Table>>
+**** 30.4.2.2 Creating Tags Tables [[#Creating-Tags-Tables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-Tags-Tables
+:CLASS: subsubsection
+:END:
+The =etags= program is used to create a tags table file. It knows the syntax of several languages, as described in [[#Tag-Syntax][Source File Tag Syntax]]. Here is how to run =etags=:
+
+#+begin_example
+etags inputfiles...
+#+end_example
+
+The =etags= program reads the specified files, and writes a tags table named =TAGS= in the current working directory. You can optionally specify a different file name for the tags table by using the ‘=--output===file=' option; specifying =-= as a file name prints the tags table to standard output. You can also append the newly created tags table to an existing file by using the ‘=--append=' option.
+
+If the specified files don't exist, =etags= looks for compressed versions of them and uncompresses them to read them. Under MS-DOS, =etags= also looks for file names like =mycode.cgz= if it is given ‘=mycode.c=' on the command line and =mycode.c= does not exist.
+
+If the tags table becomes outdated due to changes in the files described in it, you can update it by running the =etags= program again. If the tags table does not record a tag, or records it for the wrong file, then Emacs will not be able to find that definition until you update the tags table. But if the position recorded in the tags table becomes a little bit wrong (due to other editing), Emacs will still be able to find the right position, with a slight delay.
+
+Thus, there is no need to update the tags table after each edit. You should update a tags table when you define new tags that you want to have listed, or when you move tag definitions from one file to another, or when changes become substantial.
+
+You can make a tags table /include/ another tags table, by passing the ‘=--include===file=' option to =etags=. It then covers all the files covered by the included tags file, as well as its own.
+
+If you specify the source files with relative file names when you run =etags=, the tags file will contain file names relative to the directory where the tags file was initially written. This way, you can move an entire directory tree containing both the tags file and the source files, and the tags file will still refer correctly to the source files. If the tags file is =-= or is in the =/dev= directory, however, the file names are made relative to the current working directory. This is useful, for example, when writing the tags to the standard output.
+
+When using a relative file name, it should not be a symbolic link pointing to a tags file in a different directory, because this would generally render the file names invalid.
+
+If you specify absolute file names as arguments to =etags=, then the tags file will contain absolute file names. This way, the tags file will still refer to the same files even if you move it, as long as the source files remain in the same place. Absolute file names start with ‘=/=', or with ‘=device==:/=' on MS-DOS and MS-Windows.
+
+When you want to make a tags table from a great number of files, you may have problems listing them on the command line, because some systems have a limit on its length. You can circumvent this limit by telling =etags= to read the file names from its standard input, by typing a dash in place of the file names, like this:
+
+#+begin_example
+find . -name "*.[chCH]" -print | etags -
+#+end_example
+
+=etags= recognizes the language used in an input file based on its file name and contents. It first tries to match the file's name and extension to the ones commonly used with certain languages. Some languages have interpreters with known names (e.g., =perl= for Perl or =pl= for Prolog), so =etags= next looks for an interpreter specification of the form ‘=#!==interp=' on the first line of an input file, and matches that against known interpreters. If none of that works, or if you want to override the automatic detection of the language, you can specify the language explicitly with the ‘=--language===name=' option. You can intermix these options with file names; each one applies to the file names that follow it. Specify ‘=--language=auto=' to tell =etags= to resume guessing the language from the file names and file contents. Specify ‘=--language=none=' to turn off language-specific processing entirely; then =etags= recognizes tags by regexp matching alone (see [[#Etags-Regexps][Etags Regexps]]). This comes in handy when an input file uses a language not yet supported by =etags=, and you want to avoid having =etags= fall back on Fortran and C as the default languages.
+
+The option ‘=--parse-stdin===file=' is mostly useful when calling =etags= from programs. It can be used (only once) in place of a file name on the command line. =etags= will read from standard input and mark the produced tags as belonging to the file =file=.
+
+For C and C++, if the source files don't observe the GNU Coding Standards' convention if having braces (‘={=' and ‘=}=') in column zero only for top-level definitions, like functions and =struct= definitions, we advise that you use the ‘=--ignore-indentation=' option, to prevent =etags= from incorrectly interpreting closing braces in column zero.
+
+‘=etags --help=' outputs the list of the languages =etags= knows, and the file name rules for guessing the language. It also prints a list of all the available =etags= options, together with a short explanation. If followed by one or more ‘=--language===lang=' options, it outputs detailed information about how tags are generated for =lang=.
+
+Instead of creating and updating the tags table by manually invoking =etags=, you can ask Emacs to do it for you automatically. The global minor mode =etags-regen-mode=, if enabled, generates tags tables automatically as needed, and takes care of updating them when you edit any of the source files that contribute tags. This mode uses the current project configuration (see [[id:emacs--Projects::#Projects][Working with Projects]]) to determine which files to submit to =etags= for regenerating the tags table for the project. You can customize how this minor mode works using the following user options:
+
+- <<index-etags_002dregen_002dprogram>>=etags-regen-program= [[#index-etags_002dregen_002dprogram][¶]] :: The program to regenerate tags table; defaults to =etags=.
+
+- <<index-etags_002dregen_002dprogram_002doptions>>=etags-regen-program-options= [[#index-etags_002dregen_002dprogram_002doptions][¶]] :: Command-line options to pass to the program which regenerates tags tables.
+
+- <<index-etags_002dregen_002dignores>>=etags-regen-ignores= [[#index-etags_002dregen_002dignores][¶]] :: List of glob patterns which specify files to ignore when regenerating tags tables.
+
+If you select a tags table manually, with M-x visit-tags-table (see [[#Select-Tags-Table][Selecting a Tags Table]]), =etags-regen-mode= effectively disables itself: it will no longer automatically create and update tags tables, assuming that you prefer managing your tags tables manually. You can cancel this effect of using =visit-tags-table= by invoking the command =tags-reset-tags-tables=.
+
+--------------
+
+<<Etags-Regexps>>
+**** 30.4.2.3 Etags Regexps [[#Etags-Regexps-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Etags-Regexps-1
+:CLASS: subsubsection
+:END:
+The ‘=--regex=' option to =etags= allows tags to be recognized by regular expression matching. You can intermix this option with file names; each one applies to the source files that follow it. If you specify multiple ‘=--regex=' options, all of them are used in parallel. The syntax is:
+
+#+begin_example
+--regex=[{language}]/tagregexp/[nameregexp/]modifiers
+#+end_example
+
+The essential part of the option value is =tagregexp=, the regexp for matching tags. It is always used anchored, that is, it only matches at the beginning of a line. If you want to allow indented tags, use a regexp that matches initial whitespace; start it with ‘=[ \t]*='.
+
+In these regular expressions, ‘=\=' quotes the next character, and all the C character escape sequences are supported: ‘=\a=' for bell, ‘=\b=' for back space, ‘=\e=' for escape, ‘=\f=' for formfeed, ‘=\n=' for newline, ‘=\r=' for carriage return, ‘=\t=' for tab, and ‘=\v=' for vertical tab. In addition, ‘=\d=' stands for the =DEL= character. Otherwise, the regular expression syntax is the same as Emacs except that backslash escapes are the same as GNU grep (which means, for example, that shy groups are not supported), and ‘=[:ascii:]=', ‘=[:multibyte:]=', ‘=[:nonascii:]=', ‘=[:word:]=', and ‘=[:unibyte:]=' are not supported.
+
+Ideally, =tagregexp= should not match more characters than are needed to recognize what you want to tag. If the syntax requires you to write =tagregexp= so it matches more characters beyond the tag itself, you should add a =nameregexp=, to pick out just the tag. This will enable Emacs to find tags more accurately and to do completion on tag names more reliably. In =nameregexp=, it is frequently convenient to use “back references” (see [[id:emacs--Regexp-Backslash][Backslash in Regular Expressions]]) to parenthesized groupings ‘=\( … \)=' in =tagregexp=. For example, ‘=\1=' refers to the first such parenthesized grouping. You can find some examples of this below.
+
+The =modifiers= are a sequence of zero or more characters that modify the way =etags= does the matching. A regexp with no modifiers is applied sequentially to each line of the input file, in a case-sensitive way. The modifiers and their meanings are:
+
+- ‘=i=' :: Ignore case when matching this regexp.
+
+- ‘=m=' :: Match this regular expression against the whole file, so that multi-line matches are possible.
+
+- ‘=s=' :: Match this regular expression against the whole file, and allow ‘=.=' in =tagregexp= to match newlines.
+
+The ‘=-R=' option cancels all the regexps defined by preceding ‘=--regex=' options. It too applies to the file names following it. Here's an example:
+
+#+begin_example
+etags --regex=/reg1/i voo.doo --regex=/reg2/m \
+    bar.ber -R --lang=lisp los.er
+#+end_example
+
+Here =etags= chooses the parsing language for =voo.doo= and =bar.ber= according to their contents. =etags= also uses =reg1= to recognize additional tags in =voo.doo=, and both =reg1= and =reg2= to recognize additional tags in =bar.ber=. =reg1= is checked against each line of =voo.doo= and =bar.ber=, in a case-insensitive way, while =reg2= is checked against the whole =bar.ber= file, permitting multi-line matches, in a case-sensitive way. =etags= uses only the Lisp tags rules, with no user-specified regexp matching, to recognize tags in =los.er=.
+
+You can restrict a ‘=--regex=' option to match only files of a given language by using the optional prefix ={language}=. (‘=etags --help=' prints the list of languages recognized by =etags=.) This is particularly useful when storing many predefined regular expressions for =etags= in a file. The following example tags the =DEFVAR= macros in the Emacs source files, for the C language only:
+
+#+begin_example
+--regex='{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/\1/'
+#+end_example
+
+When you have complex regular expressions, you can store the list of them in a file. The following option syntax instructs =etags= to read two files of regular expressions. The regular expressions contained in the second file are matched without regard to case.
+
+#+begin_example
+--regex=@case-sensitive-file --ignore-case-regex=@ignore-case-file
+#+end_example
+
+A regex file for =etags= contains one regular expression per line. Empty lines, and lines beginning with space or tab are ignored. When the first character in a line is ‘=@=', =etags= assumes that the rest of the line is the name of another file of regular expressions; thus, one such file can include another file. All the other lines are taken to be regular expressions. If the first non-whitespace text on the line is ‘=--=', that line is a comment.
+
+For example, we can create a file called ‘=emacs.tags=' with the following contents:
+
+#+begin_example
+        -- This is for GNU Emacs C source files
+{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/\1/
+#+end_example
+
+and then use it like this:
+
+#+begin_example
+etags --regex=@emacs.tags *.[ch] */*.[ch]
+#+end_example
+
+Here are some more examples. The regexps are quoted to protect them from shell interpretation.
+
+- Tag Octave files:
+
+  #+begin_example
+  etags --language=none \
+        --regex='/[ \t]*function.*=[ \t]*\([^ \t]*\)[ \t]*(/\1/' \
+        --regex='/###key \(.*\)/\1/' \
+        --regex='/[ \t]*global[ \t].*/' \
+        *.m
+#+end_example
+
+  Note that tags are not generated for scripts, so that you have to add a line by yourself of the form ‘=###key ==scriptname=' if you want to jump to it.
+
+- Tag Tcl files:
+
+  #+begin_example
+  etags --language=none --regex='/proc[ \t]+\([^ \t]+\)/\1/' *.tcl
+#+end_example
+
+- Tag VHDL files:
+
+  #+begin_example
+  etags --language=none \
+    --regex='/[ \t]*\(ARCHITECTURE\|CONFIGURATION\) +[^ ]* +OF/' \
+    --regex='/[ \t]*\(ATTRIBUTE\|ENTITY\|FUNCTION\|PACKAGE\
+    \( BODY\)?\|PROCEDURE\|PROCESS\|TYPE\)[ \t]+\([^ \t(]+\)/\3/'
+#+end_example
+
+--------------
+
+<<Select-Tags-Table>>
+**** 30.4.3 Selecting a Tags Table [[#Selecting-a-Tags-Table][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Selecting-a-Tags-Table
+:CLASS: subsection
+:END:
+Emacs has at any time at most one /selected/ tags table. All the commands for working with tags tables use the selected one first. To select a tags table, type M-x visit-tags-table, which reads the tags table file name as an argument, with =TAGS= defaulting to the first directory that contains a file named =TAGS= encountered when recursively searching upward from the default directory.
+
+Emacs does not actually read in the tags table contents until you try to use them; all =visit-tags-table= does is store the file name in the variable =tags-file-name=, and not much more. The variable's initial value is =nil=; that value tells all the commands for working with tags tables that they must ask for a tags table file name to use.
+
+In addition to the selected tags table, Emacs maintains the list of several tags tables that you use together. For example, if you are working on a program that uses a library, you may wish to have the tags tables of both the program and the library available, so that Emacs could easily find identifiers from both. If the selected tags table doesn't have the identifier or doesn't mention the source file a tags command needs, the command will try using all the other tags tables in the current list of tags tables.
+
+Using =visit-tags-table= to load a new tags table when another tags table is already loaded gives you a choice: you can add the new tags table to the current list of tags tables, or discard the current list and start a new list. If you start a new list, the new tags table is used /instead/ of others. If you add the new table to the current list, it is used /as well as/ the others.
+
+You can specify a precise list of tags tables by setting the variable =tags-table-list= to a list of directory names, like this:
+
+#+begin_example
+(setq tags-table-list
+      '("~/.emacs.d" "/usr/local/lib/emacs/src"))
+#+end_example
+
+This tells the tags commands to look at the =TAGS= files in your =~/.emacs.d= directory and in the =/usr/local/lib/emacs/src= directory. The order depends on which file you are in and which tags table mentions that file.
+
+Do not set both =tags-file-name= and =tags-table-list=.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF18][(18)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+A /tag/ is a synonym for identifier reference. Commands and features based on the =etags= package traditionally use “tag” with this meaning, and this subsection follows that tradition.
+
+--------------

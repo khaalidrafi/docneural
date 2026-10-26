@@ -1,0 +1,292 @@
+:PROPERTIES:
+:ID: org--Agenda-Commands
+:END:
+#+filetags: :org:
+#+title: Agenda Commands (The Org Manual)
+
+Next:
+
+<<Agenda-Commands>>
+Next: [[id:org--Custom-Agenda-Views][Custom Agenda Views]], Previous: [[id:org--Presentation-and-Sorting][Presentation and Sorting]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 11.5 Commands in the Agenda Buffer [[#Commands-in-the-Agenda-Buffer][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Commands-in-the-Agenda-Buffer
+:CLASS: section
+:END:
+Entries in the agenda buffer are linked back to the Org file or diary file where they originate. You are not allowed to edit the agenda buffer itself, but commands are provided to show and jump to the original entry location, and to edit the Org files “remotely” from the agenda buffer. In this way, all information is stored only once, removing the risk that your agenda and note files may diverge.
+
+Some commands can be executed with mouse clicks on agenda lines. For the other commands, point needs to be in the desired line.
+
+**** Motion [[#Motion-2][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Motion-2
+:CLASS: subheading
+:END:
+-  <<index-n-1>>n (=org-agenda-next-line=) [[#index-n-1][¶]] :: Next line (same as DOWN and C-n).
+
+-  <<index-p-1>>p (=org-agenda-previous-line=) [[#index-p-1][¶]] :: Previous line (same as UP and C-p).
+
+**** View/Go to Org file [[#View_002fGo-to-Org-file-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: View_002fGo-to-Org-file-1
+:CLASS: subheading
+:END:
+-  <<index-SPC-1>>SPC or mouse-3 (=org-agenda-show-and-scroll-up=) [[#index-SPC-1][¶]] :: Display the original location of the item in another window. With a prefix argument, make sure that drawers stay folded.
+
+- <<index-org_002dagenda_002drecenter>>L (=org-agenda-recenter=) [[#index-org_002dagenda_002drecenter][¶]] :: Display original location and recenter that window.
+
+-  <<index-TAB-6>>TAB or mouse-2 (=org-agenda-goto=) [[#index-TAB-6][¶]] :: Go to the original location of the item in another window.
+
+-  <<index-RET-4>>RET (=org-agenda-switch-to=) [[#index-RET-4][¶]] :: Go to the original location of the item and delete other windows.
+
+-  <<index-F>>F (=org-agenda-follow-mode=) [[#index-F][¶]] :: Toggle Follow mode. In Follow mode, as you move point through the agenda buffer, the other window always shows the corresponding location in the Org file. The initial setting for this mode in new agenda buffers can be set with the variable =org-agenda-start-with-follow-mode=.
+
+-  <<index-C_002dc-C_002dx-b-1>>C-c C-x b (=org-agenda-tree-to-indirect-buffer=) [[#index-C_002dc-C_002dx-b-1][¶]] :: Display the entire subtree of the current item in an indirect buffer. With a numeric prefix argument N, go up to level N and then take that tree. If N is negative, go up that many levels. With a C-u prefix, do not remove the previously used indirect buffer.
+
+-  <<index-C_002dc-C_002do-2>>C-c C-o (=org-agenda-open-link=) [[#index-C_002dc-C_002do-2][¶]] :: Follow a link in the entry. This offers a selection of any links in the text belonging to the referenced Org node. If there is only one link, follow it without a selection prompt.
+
+**** Change display [[#Change-display-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Change-display-1
+:CLASS: subheading
+:END:
+- <<index-A>>A [[#index-A][¶]] :: Interactively select another agenda view and append it to the current view.
+
+- <<index-o>>o [[#index-o][¶]] :: Delete other windows.
+
+-  <<index-v-d>>v d or short d (=org-agenda-day-view=) [[#index-v-d][¶]] :: Switch to day view. When switching to day view, this setting becomes the default for subsequent agenda refreshes. A numeric prefix argument may be used to jump directly to a specific day of the year. For example, 32 d jumps to February 1st. When setting day view, a year may be encoded in the prefix argument as well. For example, 200712 d jumps to January 12, 2007. If such a year specification has only one or two digits, it is expanded into one of the 30 next years or the last 69 years.
+
+-  <<index-v-w>>v w or short w (=org-agenda-week-view=) [[#index-v-w][¶]] :: Switch to week view. When switching week view, this setting becomes the default for subsequent agenda refreshes. A numeric prefix argument may be used to jump directly to a specific day of the ISO week. For example 9 w to ISO week number 9. When setting week view, a year may be encoded in the prefix argument as well. For example, 200712 w jumps to week 12 in 2007. If such a year specification has only one or two digits, it is expanded into one of the 30 next years or the last 69 years.
+
+-  <<index-v-m>>v m (=org-agenda-month-view=) [[#index-v-m][¶]] :: Switch to month view. Because month views are slow to create, they do not become the default for subsequent agenda refreshes. A numeric prefix argument may be used to jump directly to a specific day of the month. When setting month view, a year may be encoded in the prefix argument as well. For example, 200712 m jumps to December 2007. If such a year specification has only one or two digits, it is expanded into one of the 30 next years or the last 69 years.
+
+-  <<index-v-y>>v y (=org-agenda-year-view=) [[#index-v-y][¶]] :: Switch to year view. Because year views are slow to create, they do not become the default for subsequent agenda refreshes. A numeric prefix argument may be used to jump directly to a specific day of the year.
+
+-  <<index-v-SPC>>v SPC (=org-agenda-reset-view=) [[#index-v-SPC][¶]] :: Reset the current view to =org-agenda-span=.
+
+-  <<index-f>>f (=org-agenda-later=) [[#index-f][¶]] :: Go forward in time to display the span following the current one. For example, if the display covers a week, switch to the following week. With a prefix argument, repeat that many times.
+
+-  <<index-b>>b (=org-agenda-earlier=) [[#index-b][¶]] :: Go backward in time to display earlier dates.
+
+-  <<index-_002e-1>>. (=org-agenda-goto-today=) [[#index-_002e-1][¶]] :: Go to today.
+
+-  <<index-j>>j (=org-agenda-goto-date=) [[#index-j][¶]] :: Prompt for a date and go there.
+
+-  <<index-J>>J (=org-agenda-clock-goto=) [[#index-J][¶]] :: Go to the currently clocked-in task /in the agenda buffer/.
+
+-  <<index-D>>D (=org-agenda-toggle-diary=) [[#index-D][¶]] :: Toggle the inclusion of diary entries. See [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]].
+
+-  <<index-v-l>>v l or v L or short l (=org-agenda-log-mode=) [[#index-v-l][¶]] :: Toggle Logbook mode. In Logbook mode, entries that were marked as done while logging was on (see the variable =org-log-done=) are shown in the agenda, as are entries that have been clocked on that day. You can configure the entry types that should be included in log mode using the variable =org-agenda-log-mode-items=. When called with a C-u prefix argument, show all possible logbook entries, including state changes. When called with two prefix arguments C-u C-u, show only logging information, nothing else. v L is equivalent to C-u v l.
+
+-  <<index-v-_005b>>v [ or short [ (=org-agenda-manipulate-query-add=) [[#index-v-_005b][¶]] :: Include inactive timestamps into the current view. Only for weekly/daily agenda.
+
+-  <<index-v-a>>v a (=org-agenda-archives-mode=) [[#index-v-a][¶]] :: Toggle Archives mode. In Archives mode, trees that are archived (see [[id:org--Internal-archiving][Internal archiving]]) are also scanned when producing the agenda. To exit archives mode, press v a again. The initial setting for this mode in new agenda buffers can be set with the variable =org-agenda-start-with-archives-mode=, which can be set with the same values as =org-agenda-archives-mode=.
+
+- <<index-v-A>>v A [[#index-v-A][¶]] :: Toggle Archives mode. Include all archive files as well.
+
+-  <<index-v-R>>v R or short R (=org-agenda-clockreport-mode=) [[#index-v-R][¶]] :: Toggle Clockreport mode. In Clockreport mode, the daily/weekly agenda always shows a table with the clocked times for the time span and file scope covered by the current agenda view. The initial setting for this mode in new agenda buffers can be set with the variable =org-agenda-start-with-clockreport-mode=. By using a prefix argument when toggling this mode (i.e., C-u R), the clock table does not show contributions from entries that are hidden by agenda filtering[[#FOOT100][^{100}]]. See also the variables =org-clock-report-include-clocking-task= and =org-agenda-clock-report-header=.
+
+-  <<index-v-c>>v c [[#index-v-c][¶]] :: Show overlapping clock entries, clocking gaps, and other clocking problems in the current agenda range. You can then visit clocking lines and fix them manually. See the variable =org-agenda-clock-consistency-checks= for information on how to customize the definition of what constituted a clocking problem. To return to normal agenda display, press l to exit Logbook mode.
+
+-  <<index-v-E>>v E or short E (=org-agenda-entry-text-mode=) [[#index-v-E][¶]] :: Toggle entry text mode. In entry text mode, a number of lines from the Org heading referenced by an agenda line are displayed below the line. The maximum number of lines is given by the variable =org-agenda-entry-text-maxlines=. Calling this command with a numeric prefix argument temporarily modifies that number to the prefix value.
+
+-  <<index-G>>G (=org-agenda-toggle-time-grid=) [[#index-G][¶]] :: Toggle the time grid on and off. See also the variables =org-agenda-use-time-grid= and =org-agenda-time-grid=.
+
+-  <<index-r-2>>r (=org-agenda-redo=), g [[#index-r-2][¶]] :: Recreate the agenda buffer, for example to reflect the changes after modification of the timestamps of items with S-LEFT and S-RIGHT. When the buffer is the global TODO list, a prefix argument is interpreted to create a selective list for a specific TODO keyword.
+
+-  <<index-C_002dx-C_002ds-1>>C-x C-s or short s (=org-save-all-org-buffers=) [[#index-C_002dx-C_002ds-1][¶]] :: Save all Org buffers in the current Emacs session, and also the locations of IDs.
+
+-  <<index-C_002dc-C_002dx-C_002dc-1>>C-c C-x C-c (=org-agenda-columns=) [[#index-C_002dc-C_002dx-C_002dc-1][¶]] :: Invoke column view (see [[id:org--Column-View][Column View]]) in the agenda buffer. The column view format is taken from the entry at point, or, if there is no entry at point, from the first entry in the agenda view. So whatever the format for that entry would be in the original buffer (taken from a property, from a ‘=COLUMNS=' keyword, or from the default variable =org-columns-default-format=) is used in the agenda.
+
+-  <<index-C_002dc-C_002dx-_003e-1>>C-c C-x > (=org-agenda-remove-restriction-lock=) [[#index-C_002dc-C_002dx-_003e-1][¶]] :: Remove the restriction lock on the agenda, if it is currently restricted to a file or subtree (see [[id:org--Agenda-Files][Agenda Files]]).
+
+-  <<index-M_002dUP-5>>M-UP (=org-agenda-drag-line-backward=) [[#index-M_002dUP-5][¶]] :: Drag the line at point backward one line. With a numeric prefix argument, drag backward by that many lines.
+
+  Moving agenda lines does not persist after an agenda refresh and does not modify the contributing Org files.
+
+-  <<index-M_002dDOWN-5>>M-DOWN (=org-agenda-drag-line-forward=) [[#index-M_002dDOWN-5][¶]] :: Drag the line at point forward one line. With a numeric prefix argument, drag forward by that many lines.
+
+**** Remote editing [[#Remote-editing-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Remote-editing-1
+:CLASS: subheading
+:END:
+- 0--9 :: Digit argument.
+
+-  <<index-C_002d_005f>>C-_ (=org-agenda-undo=) [[#index-C_002d_005f][¶]] :: Undo a change due to a remote editing command. The change is undone both in the agenda buffer and in the remote buffer.
+
+-  <<index-t>>t (=org-agenda-todo=) [[#index-t][¶]] :: Change the TODO state of the item, both in the agenda and in the original Org file. A prefix argument is passed through to the =org-todo= command, so for example a C-u prefix are will trigger taking a note to document the state change.
+
+-  <<index-C_002dS_002dRIGHT-1>>C-S-RIGHT (=org-agenda-todo-nextset=) [[#index-C_002dS_002dRIGHT-1][¶]] :: Switch to the next set of TODO keywords.
+
+- <<index-C_002dS_002dLEFT-1>>C-S-LEFT, =org-agenda-todo-previousset= [[#index-C_002dS_002dLEFT-1][¶]] :: Switch to the previous set of TODO keywords.
+
+-  <<index-C_002dk>>C-k (=org-agenda-kill=) [[#index-C_002dk][¶]] :: Delete the current agenda item along with the entire subtree belonging to it in the original Org file. If the text to be deleted remotely is longer than one line, the kill needs to be confirmed by the user. See variable =org-agenda-confirm-kill=.
+
+-  <<index-C_002dc-C_002dw-2>>C-c C-w (=org-agenda-refile=) [[#index-C_002dc-C_002dw-2][¶]] :: Refile the entry at point.
+
+-  <<index-C_002dc-C_002dx-C_002da-1>>C-c C-x C-a or short a (=org-agenda-archive-default-with-confirmation=) [[#index-C_002dc-C_002dx-C_002da-1][¶]] :: Archive the subtree corresponding to the entry at point using the default archiving command set in =org-archive-default-command=. When using the a key, confirmation is required.
+
+-  <<index-C_002dc-C_002dx-a-1>>C-c C-x a (=org-agenda-toggle-archive-tag=) [[#index-C_002dc-C_002dx-a-1][¶]] :: Toggle the archive tag (see [[id:org--Internal-archiving][Internal archiving]]) for the current headline.
+
+-  <<index-C_002dc-C_002dx-A-1>>C-c C-x A (=org-agenda-archive-to-archive-sibling=) [[#index-C_002dc-C_002dx-A-1][¶]] :: Move the subtree corresponding to the current entry to its /archive sibling/.
+
+-  <<index-C_002dc-C_002dx-C_002ds-1>>C-c C-x C-s or short $ (=org-agenda-archive=) [[#index-C_002dc-C_002dx-C_002ds-1][¶]] :: Archive the subtree corresponding to the current headline. This means the entry is moved to the configured archive location, most likely a different file.
+
+-  <<index-T>>T (=org-agenda-show-tags=) [[#index-T][¶]] :: Show all tags associated with the current item. This is useful if you have turned off =org-agenda-show-inherited-tags=, but still want to see all tags of a headline occasionally.
+
+-  <<index-_003a>>: (=org-agenda-set-tags=) [[#index-_003a][¶]] :: Set tags for the current headline. If there is an active region in the agenda, change a tag for all headings in the region.
+
+-  <<index-_002c>>, (=org-agenda-priority=) [[#index-_002c][¶]] :: Set the priority for the current item. Org mode prompts for the priority character. If you reply with SPC, the priority cookie is removed from the entry.
+
+-  <<index-_002b>>+ or S-UP (=org-agenda-priority-up=) [[#index-_002b][¶]] :: Increase the priority of the current item. The priority is changed in the original buffer, but the agenda is not resorted. Use the r key for this.
+
+-  <<index-_002d>>- or S-DOWN (=org-agenda-priority-down=) [[#index-_002d][¶]] :: Decrease the priority of the current item.
+
+-  <<index-e-1>>C-c C-x e or short e (=org-agenda-set-effort=) [[#index-e-1][¶]] :: Set the effort property for the current item.
+
+-  <<index-z>>C-c C-z or short z (=org-agenda-add-note=) [[#index-z][¶]] :: Add a note to the entry. This note is recorded, and then filed to the same location where state change notes are put. Depending on =org-log-into-drawer=, this may be inside a drawer.
+
+-  <<index-C_002dc-C_002da-1>>C-c C-a (=org-attach=) [[#index-C_002dc-C_002da-1][¶]] :: Dispatcher for all command related to attachments.
+
+-  <<index-C_002dc-C_002ds-1>>C-c C-s (=org-agenda-schedule=) [[#index-C_002dc-C_002ds-1][¶]] :: Schedule this item. With a prefix argument, remove the scheduling timestamp
+
+-  <<index-C_002dc-C_002dd-1>>C-c C-d (=org-agenda-deadline=) [[#index-C_002dc-C_002dd-1][¶]] :: Set a deadline for this item. With a prefix argument, remove the deadline.
+
+-  <<index-S_002dRIGHT-10>>S-RIGHT (=org-agenda-do-date-later=) [[#index-S_002dRIGHT-10][¶]] :: Change the timestamp associated with the current line by one day into the future. If the date is in the past, the first call to this command moves it to today. With a numeric prefix argument, change it by that many days. For example, 3 6 5 S-RIGHT changes it by a year. With a C-u prefix, change the time by one hour. If you immediately repeat the command, it will continue to change hours even without the prefix argument. With a double C-u C-u prefix, do the same for changing minutes. The stamp is changed in the original Org file, but the change is not directly reflected in the agenda buffer. Use r or g to update the buffer.
+
+-  <<index-S_002dLEFT-10>>S-LEFT (=org-agenda-do-date-earlier=) [[#index-S_002dLEFT-10][¶]] :: Change the timestamp associated with the current line by one day into the past.
+
+-  <<index-_003e-2>>> (=org-agenda-date-prompt=) [[#index-_003e-2][¶]] :: Change the timestamp associated with the current line. The key > has been chosen, because it is the same as S-. on my keyboard.
+
+-  <<index-I>>I (=org-agenda-clock-in=) [[#index-I][¶]] :: Start the clock on the current item. If a clock is running already, it is stopped first.
+
+-  <<index-O>>O (=org-agenda-clock-out=) [[#index-O][¶]] :: Stop the previously started clock.
+
+-  <<index-X>>X (=org-agenda-clock-cancel=) [[#index-X][¶]] :: Cancel the currently running clock.
+
+-  <<index-J-1>>J (=org-agenda-clock-goto=) [[#index-J-1][¶]] :: Jump to the running clock in another window.
+
+-  <<index-k-1>>k (=org-agenda-capture=) [[#index-k-1][¶]] :: Like =org-capture=, but use the date at point as the default date for the capture template. See =org-capture-use-agenda-date= to make this the default behavior of =org-capture=.
+
+**** Bulk remote editing selected entries [[#Bulk-remote-editing-selected-entries-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Bulk-remote-editing-selected-entries-1
+:CLASS: subheading
+:END:
+-  <<index-m>>m (=org-agenda-bulk-mark=) [[#index-m][¶]] :: Mark the entry at point for bulk action. If there is an active region in the agenda, mark the entries in the region. With numeric prefix argument, mark that many successive entries.
+
+-  <<index-_002a>>* (=org-agenda-bulk-mark-all=) [[#index-_002a][¶]] :: Mark all visible agenda entries for bulk action.
+
+-  <<index-u>>u (=org-agenda-bulk-unmark=) [[#index-u][¶]] :: Unmark entry for bulk action.
+
+-  <<index-U>>U (=org-agenda-bulk-unmark-all=) [[#index-U][¶]] :: Unmark all marked entries for bulk action.
+
+-  <<index-M_002dm>>M-m (=org-agenda-bulk-toggle=) [[#index-M_002dm][¶]] :: Toggle mark of the entry at point for bulk action.
+
+-  <<index-M_002d_002a>>M-* (=org-agenda-bulk-toggle-all=) [[#index-M_002d_002a][¶]] :: Toggle mark of every entry for bulk action.
+
+-  <<index-_0025>>% (=org-agenda-bulk-mark-regexp=) [[#index-_0025][¶]] :: Mark entries matching a regular expression for bulk action.
+
+-  <<index-B>>B (=org-agenda-bulk-action=) [[#index-B][¶]] :: Bulk action: act on all marked entries in the agenda. This prompts for another key to select the action to be applied. The prefix argument to B is passed through to the s and d commands, to bulk-remove these special timestamps. By default, marks are removed after the bulk. If you want them to persist, set =org-agenda-bulk-persistent-marks= to =t= or hit p at the prompt.
+
+  - p :: Toggle persistent marks.
+
+  - $ :: Archive all selected entries.
+
+  - A :: Archive entries by moving them to their respective archive siblings.
+
+  - t :: Change TODO state. This prompts for a single TODO keyword and changes the state of all selected entries, bypassing blocking and suppressing logging notes---but not timestamps.
+
+  - + :: Add a tag to all selected entries.
+
+  - - :: Remove a tag from all selected entries.
+
+  - s :: Schedule all items to a new date. To shift existing schedule dates by a fixed number of days, use something starting with double plus at the prompt, for example ‘=++8d=' or ‘=++2w='.
+
+  - d :: Set deadline to a specific date.
+
+  - r :: Prompt for a single refile target and move all entries. The entries are no longer in the agenda; refresh (g) to bring them back.
+
+  - S :: Reschedule randomly into the coming N days. N is prompted for. With a prefix argument (C-u B S), scatter only across weekdays.
+
+  - <<index-org_002dagenda_002dbulk_002dcustom_002dfunctions-1>>f [[#index-org_002dagenda_002dbulk_002dcustom_002dfunctions-1][¶]] :: Apply a function[[#FOOT101][^{101}]] to marked entries. For example, the function below sets the ‘=CATEGORY=' property of the entries to ‘=web='.
+
+    #+begin_src lisp-preformatted
+    (defun set-category ()
+      (interactive "P")
+      (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                        (org-agenda-error))))
+        (org-with-point-at marker
+          (org-back-to-heading t)
+          (org-set-property "CATEGORY" "web"))))
+    #+end_src
+
+**** Calendar commands [[#Calendar-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Calendar-commands-1
+:CLASS: subheading
+:END:
+-  <<index-c>>c (=org-agenda-goto-calendar=) [[#index-c][¶]] :: Open the Emacs calendar and go to the date at point in the agenda.
+
+-  <<index-c-1>>c (=org-calendar-goto-agenda=) [[#index-c-1][¶]] :: When in the calendar, compute and show the Org agenda for the date at point.
+
+-  <<index-i>>i (=org-agenda-diary-entry=) [[#index-i][¶]] :: 
+
+  Insert a new entry into the diary, using the date at point and (for block entries) the date at the mark. This adds to the Emacs diary file[[#FOOT102][^{102}]], in a way similar to the i command in the calendar. The diary file pops up in another window, where you can add the entry.
+
+  If you configure =org-agenda-diary-file= to point to an Org file, Org creates entries in that file instead. Most entries are stored in a date-based outline tree that will later make it easy to archive appointments from previous months/years. The tree is built under an entry with a ‘=DATE_TREE=' property, or else with years as top-level entries. Emacs prompts you for the entry text---if you specify it, the entry is created in =org-agenda-diary-file= without further interaction. If you directly press RET at the prompt without typing text, the target file is shown in another window for you to finish the entry there. See also the k r command.
+
+-  <<index-M>>M (=org-agenda-phases-of-moon=) [[#index-M][¶]] :: Show the phases of the moon for the three months around current date.
+
+-  <<index-S-1>>S (=org-agenda-sunrise-sunset=) [[#index-S-1][¶]] :: Show sunrise and sunset times. The geographical location must be set with calendar variables, see the documentation for the Emacs calendar.
+
+-  <<index-C-1>>C (=org-agenda-convert-date=) [[#index-C-1][¶]] :: Convert the date at point into many other cultural and historic calendars.
+
+-  <<index-H>>H (=org-agenda-holidays=) [[#index-H][¶]] :: Show holidays for three months around point date.
+
+**** Quit and exit [[#Quit-and-exit-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quit-and-exit-1
+:CLASS: subheading
+:END:
+-  <<index-q-2>>q (=org-agenda-quit=) [[#index-q-2][¶]] :: Quit agenda, remove the agenda buffer.
+
+-  <<index-x>>x (=org-agenda-exit=) [[#index-x][¶]] :: 
+
+  Exit agenda, remove the agenda buffer and all buffers loaded by Emacs for the compilation of the agenda. Buffers created by the user to visit Org files are not removed.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF100][(100)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Only tags filtering is respected here, effort filtering is ignored.
+
+***** [[#DOCF101][(101)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+You can also create persistent custom functions through =org-agenda-bulk-custom-functions=.
+
+***** [[#DOCF102][(102)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+This file is parsed for the agenda when =org-agenda-include-diary= is set.
+
+--------------
+
+Next: [[id:org--Custom-Agenda-Views][Custom Agenda Views]], Previous: [[id:org--Presentation-and-Sorting][Presentation and Sorting]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

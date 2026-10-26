@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: guix--The-GCC-toolchain
+:END:
+#+filetags: :guix:
+#+title: The GCC toolchain
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<The-GCC-toolchain>>
+Next: [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], Previous: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 7.4 The GCC toolchain [[#The-GCC-toolchain-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-GCC-toolchain-1
+:CLASS: section
+:END:
+If you need a complete toolchain for compiling and linking C or C++ source code, use the =gcc-toolchain= package. This package provides a complete GCC toolchain for C/C++ development, including GCC itself, the GNU C Library (headers and binaries, plus debugging symbols in the =debug= output), Binutils, and a linker wrapper.
+
+The wrapper's purpose is to inspect the =-L= and =-l= switches passed to the linker, add corresponding =-rpath= arguments, and invoke the actual linker with this new set of arguments. You can instruct the wrapper to refuse to link against libraries not in the store by setting the =GUIX_LD_WRAPPER_ALLOW_IMPURITIES= environment variable to =no=.
+
+The package =gfortran-toolchain= provides a complete GCC toolchain for Fortran development. For other languages, please use ‘=guix search gcc toolchain=' (see [[id:guix--Invoking-guix-package::#guix_002dsearch][Invoking guix package]]).
+
+--------------
+
+Next: [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], Previous: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

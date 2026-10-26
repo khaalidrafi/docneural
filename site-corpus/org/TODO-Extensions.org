@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: org--TODO-Extensions
+:END:
+#+filetags: :org:
+#+title: TODO Extensions (The Org Manual)
+
+Next:
+
+<<TODO-Extensions>>
+Next: [[id:org--Progress-Logging][Progress Logging]], Previous: [[id:org--TODO-Basics][Basic TODO Functionality]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 5.2 Extended Use of TODO Keywords [[#Extended-Use-of-TODO-Keywords][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Extended-Use-of-TODO-Keywords
+:CLASS: section
+:END:
+By default, marked TODO entries have one of only two states: TODO and DONE. Org mode allows you to classify TODO items in more complex ways with /TODO keywords/ (stored in =org-todo-keywords=). With special setup, the TODO keyword system can work differently in different files.
+
+Note that /tags/ are another way to classify headlines in general and TODO items in particular (see [[id:org--Tags][Tags]]).
+
+- [[id:org--Workflow-states][TODO keywords as workflow states]]
+- [[id:org--TODO-types][TODO keywords as types]]
+- [[id:org--Multiple-sets-in-one-file][Multiple keyword sets in one file]]
+- [[id:org--Fast-access-to-TODO-states][Fast access to TODO states]]
+- [[id:org--Per_002dfile-keywords][Setting up keywords for individual files]]
+- [[id:org--Faces-for-TODO-keywords][Faces for TODO keywords]]
+- [[id:org--TODO-dependencies][TODO dependencies]]

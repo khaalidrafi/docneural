@@ -1,0 +1,141 @@
+:PROPERTIES:
+:ID: org--Plain-Lists
+:END:
+#+filetags: :org:
+#+title: Plain Lists (The Org Manual)
+
+Next:
+
+<<Plain-Lists>>
+Next: [[id:org--Drawers][Drawers]], Previous: [[id:org--Sparse-Trees][Sparse Trees]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 2.6 Plain Lists [[#Plain-Lists-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Plain-Lists-1
+:CLASS: section
+:END:
+Within an entry of the outline tree, hand-formatted lists can provide additional structure. They also provide a way to create lists of checkboxes (see [[id:org--Checkboxes][Checkboxes]]). Org supports editing such lists, and every exporter (see [[id:org--Exporting][Exporting]]) can parse and format them.
+
+Org knows ordered lists, unordered lists, and description lists.
+
+- /Unordered/ list items start with ‘=-=', ‘=+=', or ‘=*='[[#FOOT9][^{9}]] as bullets.
+-  /Ordered/ list items start with a numeral followed by either a period or a right parenthesis[[#FOOT10][^{10}]], such as ‘=1.=' or ‘=1)='[[#FOOT11][^{11}]] If you want a list to start with a different value---e.g., 20---start the text of the item with ‘=[@20]='[[#FOOT12][^{12}]]. Those constructs can be used in any item of the list in order to enforce a particular numbering.
+- /Description/ list items are unordered list items, and contain the separator ‘=::=' to distinguish the description /term/ from the description text.
+
+Items belonging to the same list must have the same indentation on the first line. In particular, if an ordered list reaches number ‘=10.=', then the 2-digit numbers must be written left-aligned with the other numbers in the list. An item ends before the next line that has an indentation less than or equal to its bullet/number.
+
+A list ends whenever every item has ended, which means before any line with an indentation less than or equal to that of the top-level items. It also ends before two blank lines. In that case, all items are closed. Here is an example:
+
+#+begin_example
+* Lord of the Rings
+My favorite scenes are (in this order)
+1. The attack of the Rohirrim
+2. Eowyn's fight with the witch king
+   + this was already my favorite scene in the book
+   + I really like Miranda Otto.
+3. Peter Jackson being shot by Legolas
+   - on DVD only
+   He makes a really funny face when it happens.
+8. [@8] <favorite scenes 4 to 8 are skipped for brevity>
+But in the end, no individual scenes matter but the film as a whole.
+Important actors in this film are:
+- Elijah Wood :: He plays Frodo
+- Sean Astin :: He plays Sam, Frodo's friend.  I still remember him
+     very well from his role as Mikey Walsh in /The Goonies/.
+#+end_src
+
+Org supports these lists by tuning filling and wrapping commands to deal with them correctly, and by exporting them properly (see [[id:org--Exporting][Exporting]]). Since indentation is what governs the structure of these lists, many structural constructs like ‘=#+BEGIN_=' blocks can be indented to signal that they belong to a particular item.
+
+If you find that using a different bullet for a sub-list---than that used for the current list-level---improves readability, customize the variable =org-list-demote-modify-bullet=. To get a greater difference of indentation between items and their sub-items, customize =org-list-indent-offset=.
+
+The following commands act on items when point is in the first line of an item---the line with the bullet or number. Some of them imply the application of automatic rules to keep list structure intact. If some of these actions get in your way, configure =org-list-automatic-rules= to disable them individually.
+
+-  <<index-cycling_002c-in-plain-lists>>TAB (=org-cycle=) [[#index-cycling_002c-in-plain-lists][¶]] :: Items can be folded just like headline levels. Normally this works only if point is on a plain list item. For more details, see the variable =org-cycle-include-plain-lists=. If this variable is set to =integrate=, plain list items are treated like low-level headlines. The level of an item is then given by the indentation of the bullet/number. Items are always subordinate to real headlines, however; the hierarchies remain completely separated. In a new item with no text yet, the first TAB demotes the item to become a child of the previous one. Subsequent TABs move the item to meaningful levels in the list and eventually get it back to its initial position.
+
+-  <<index-M_002dRET-1>>M-RET (=org-insert-item=) [[#index-M_002dRET-1][¶]] :: Insert new item at current level. With a prefix argument, force a new heading (see [[id:org--Structure-Editing][Structure Editing]]). If this command is used in the middle of an item, that item is /split/ in two, and the second part becomes the new item[[#FOOT13][^{13}]]. If this command is executed /before the item's body/, the new item is created /before/ the current one.
+
+- <<index-M_002dS_002dRET-1>>M-S-RET [[#index-M_002dS_002dRET-1][¶]] :: Insert a new item with a checkbox (see [[id:org--Checkboxes][Checkboxes]]).
+
+-  <<index-S_002dUP>>S-UP, S-DOWN [[#index-S_002dUP][¶]] :: Jump to the previous/next item in the current list, but only if =org-support-shift-select= is off[[#FOOT14][^{14}]]. If not, you can still use paragraph jumping commands like C-UP and C-DOWN to quite similar effect.
+
+-  <<index-M_002dUP-1>>M-UP, M-DOWN [[#index-M_002dUP-1][¶]] :: Move the item including sub-items up/down[[#FOOT15][^{15}]], i.e., swap with previous/next item of same indentation. If the list is ordered, renumbering is automatic.
+
+-  <<index-M_002dLEFT-1>>M-LEFT, M-RIGHT [[#index-M_002dLEFT-1][¶]] :: Decrease/increase the indentation of an item, leaving children alone.
+
+-  <<index-M_002dS_002dLEFT-1>>M-S-LEFT, M-S-RIGHT [[#index-M_002dS_002dLEFT-1][¶]] :: Decrease/increase the indentation of the item, including sub-items. Initially, the item tree is selected based on current indentation. When these commands are executed several times in direct succession, the initially selected region is used, even if the new indentation would imply a different hierarchy. To use the new hierarchy, break the command chain by moving point.
+
+  As a special case, using this command on the very first item of a list moves the whole list. This behavior can be disabled by configuring =org-list-automatic-rules=. The global indentation of a list has no influence on the text /after/ the list.
+
+- <<index-C_002dc-C_002dc>>C-c C-c [[#index-C_002dc-C_002dc][¶]] :: If there is a checkbox (see [[id:org--Checkboxes][Checkboxes]]) in the item line, toggle the state of the checkbox. In any case, verify bullets and indentation consistency in the whole list.
+
+-  <<index-C_002dc-_002d>>C-c - [[#index-C_002dc-_002d][¶]] :: Cycle the entire list level through the different itemize/enumerate bullets (‘=-=', ‘=+=', ‘=*=', ‘=1.=', ‘=1)=') or a subset of them, depending on =org-plain-list-ordered-item-terminator=, the type of list, and its indentation. With a numeric prefix argument N, select the Nth bullet from this list. If there is an active region when calling this, all lines are converted to list items. With a prefix argument, the selected text is changed into a single item. If the first line already was a list item, any item marker is removed from the list. Finally, even without an active region, a normal line is converted into a list item.
+
+- <<index-C_002dc-_002a-1>>C-c * [[#index-C_002dc-_002a-1][¶]] :: Turn a plain list item into a headline---so that it becomes a subheading at its location. See [[id:org--Structure-Editing][Structure Editing]] for a detailed explanation.
+
+- <<index-C_002dc-C_002d_002a>>C-c C-* [[#index-C_002dc-C_002d_002a][¶]] :: Turn the whole plain list into a subtree of the current heading. Checkboxes (see [[id:org--Checkboxes][Checkboxes]]) become ‘=TODO=' or ‘=DONE=' keywords when unchecked or checked, respectively.
+
+-  <<index-org_002dsupport_002dshift_002dselect-1>>S-LEFT, S-RIGHT [[#index-org_002dsupport_002dshift_002dselect-1][¶]] :: This command also cycles bullet styles when point is on the bullet or anywhere in an item line, with details depending on =org-support-shift-select=.
+
+-  <<index-C_002dc-_005e-1>>C-c ^ [[#index-C_002dc-_005e-1][¶]] :: Sort the plain list. Prompt for the sorting method: numerically, alphabetically, by time, or by custom function.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF9][(9)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+When using ‘=*=' as a bullet, lines must be indented so that they are not interpreted as headlines. Also, when you are hiding leading stars to get a clean outline view, plain list items starting with a star may be hard to distinguish from true headlines. In short: even though ‘=*=' is supported, it may be better to not use it for plain list items.
+
+***** [[#DOCF10][(10)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+You can filter out any of them by configuring =org-plain-list-ordered-item-terminator=.
+
+***** [[#DOCF11][(11)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+You can also get ‘=a.=', ‘=A.=', ‘=a)=' and ‘=A)=' by configuring =org-list-allow-alphabetical=. To minimize confusion with normal text, those are limited to one character only. Beyond that limit, bullets automatically become numbers.
+
+***** [[#DOCF12][(12)]]
+:PROPERTIES:
+:CUSTOM_ID: section-3
+:CLASS: footnote-body-heading
+:END:
+If there's a checkbox in the item, the cookie must be put /before/ the checkbox. If you have activated alphabetical lists, you can also use counters like ‘=[@b]='.
+
+***** [[#DOCF13][(13)]]
+:PROPERTIES:
+:CUSTOM_ID: section-4
+:CLASS: footnote-body-heading
+:END:
+If you do not want the item to be split, customize the variable =org-M-RET-may-split-line=.
+
+***** [[#DOCF14][(14)]]
+:PROPERTIES:
+:CUSTOM_ID: section-5
+:CLASS: footnote-body-heading
+:END:
+If you want to cycle around items that way, you may customize =org-list-use-circular-motion=.
+
+***** [[#DOCF15][(15)]]
+:PROPERTIES:
+:CUSTOM_ID: section-6
+:CLASS: footnote-body-heading
+:END:
+See =org-list-use-circular-motion= for a cyclic behavior.
+
+--------------
+
+Next: [[id:org--Drawers][Drawers]], Previous: [[id:org--Sparse-Trees][Sparse Trees]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

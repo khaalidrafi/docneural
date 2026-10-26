@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID: guix--Home-Configuration
+:END:
+#+filetags: :guix:
+#+title: Home Configuration
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Home-Configuration>>
+Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 13 Home Configuration [[#Home-Configuration-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Home-Configuration-1
+:CLASS: chapter
+:END:
+Guix supports declarative configuration of /home environments/ by utilizing the configuration mechanism described in the previous chapter (see [[id:guix--Defining-Services][Defining Services]]), but for user's dotfiles and packages. It works both on Guix System and foreign distros and allows users to declare all the packages and services that should be installed and configured for the user. Once a user has written a file containing a =home-environment= record, such a configuration can be /instantiated/ by an unprivileged user with the =guix home= command (see [[id:guix--Invoking-guix-home][Invoking =guix home=]]).
+
+The user's home environment usually consists of three basic parts: software, configuration, and state. Software in mainstream distros are usually installed system-wide, but with GNU Guix most software packages can be installed on a per-user basis without needing root privileges, and are thus considered part of the user's /home environment/. Packages on their own are not very useful in many cases, because often they require some additional configuration, usually config files that reside in =XDG_CONFIG_HOME= (=~/.config= by default) or other directories. Everything else can be considered state, like media files, application databases, and logs.
+
+Using Guix for managing home environments provides a number of advantages:
+
+- All software can be configured in one language (Guile Scheme), this gives users the ability to share values between configurations of different programs.
+- A well-defined home environment is self-contained and can be created in a declarative and reproducible way---there is no need to grab external binaries or manually edit some configuration file.
+- After every =guix home reconfigure= invocation, a new home environment generation will be created. This means that users can rollback to a previous home environment generation so they don't have to worry about breaking their configuration.
+- It is possible to manage stateful data with Guix Home, this includes the ability to automatically clone Git repositories on the initial setup of the machine, and periodically running commands like =rsync= to sync data with another host. This functionality is still in an experimental stage, though.
+
+- [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]]
+- [[id:guix--Configuring-the-Shell][Configuring the Shell]]
+- [[id:guix--home_002denvironment-Reference][=home-environment= Reference]]
+- [[id:guix--Home-Services][Home Services]]
+- [[id:guix--Invoking-guix-home][Invoking =guix home=]]
+
+--------------
+
+Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

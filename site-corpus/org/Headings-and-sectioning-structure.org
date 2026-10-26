@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID: org--Headings-and-sectioning-structure
+:END:
+#+filetags: :org:
+#+title: Headings and sectioning structure (The Org Manual)
+
+Next:
+
+<<Headings-and-sectioning-structure>>
+Next: [[id:org--Indices][Indices]], Previous: [[id:org--Info-directory-file][Info directory file]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.6 Headings and sectioning structure [[#Headings-and-sectioning-structure-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Headings-and-sectioning-structure-1
+:CLASS: subsection
+:END:
+The Texinfo export backend uses a pre-defined scheme to convert Org headlines to equivalent Texinfo structuring commands. A scheme like this maps top-level headlines to numbered chapters tagged as =@chapter= and lower-level headlines to unnumbered chapters tagged as =@unnumbered=. To override such mappings to introduce =@part= or other Texinfo structuring commands, define a new class in =org-texinfo-classes=. Activate the new class with the ‘=TEXINFO_CLASS=' keyword. When no new class is defined and activated, the Texinfo export backend defaults to the =org-texinfo-default-class=.
+
+If an Org headline's level has no associated Texinfo structuring command, or is below a certain threshold (see [[id:org--Export-Settings][Export Settings]]), then the Texinfo export backend makes it into a list item.
+
+The Texinfo export backend makes any headline with a non-=nil= ‘=APPENDIX=' property into an appendix. This happens independent of the Org headline level or the ‘=TEXINFO_CLASS=' keyword.
+
+The Texinfo export backend creates a menu entry after the Org headline for each regular sectioning structure. To override this with a shorter menu entry, use the ‘=ALT_TITLE=' property (see [[id:org--Table-of-Contents][Table of Contents]]). Texinfo menu entries also have an option for a longer ‘=DESCRIPTION=' property. Here's an example that uses both to override the default menu entry:
+
+#+begin_example
+* Controlling Screen Display
+  :PROPERTIES:
+  :ALT_TITLE: Display
+  :DESCRIPTION: Controlling Screen Display
+  :END:
+#+end_src
+
+The text before the first headline belongs to the /Top/ node, i.e., the node in which a reader enters an Info manual. As such, it is expected not to appear in printed output generated from the ‘=.texi=' file. See [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/The-Top-Node.html#The-Top-Node][(texinfo)The Top Node]], for more information.
+
+--------------
+
+Next: [[id:org--Indices][Indices]], Previous: [[id:org--Info-directory-file][Info directory file]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

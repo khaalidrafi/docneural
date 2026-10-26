@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID: guix--AppArmor-Support
+:END:
+#+filetags: :guix:
+#+title: AppArmor Support
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<AppArmor-Support>>
+Previous: [[id:guix--SELinux-Support][SELinux Support]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 2.2.4 AppArmor Support [[#AppArmor-Support-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: AppArmor-Support-1
+:CLASS: subsection
+:END:
+Guix includes an AppArmor profile for the build daemon in =etc/apparmor.d/guix-daemon= that can be installed on systems with strict AppArmor policies to allow it to run unprivileged (see [[id:guix--Build-Environment-Setup][Build Environment Setup]]). Indeed, the unprivileged daemon makes use of Linux user namespaces but these are disallowed without an AppArmor policy on some systems like Ubuntu.
+
+To know if this applies to you, check if the =kernel.apparmor_restrict_unprivileged_userns= kernel parameter is enabled.
+
+- [[#Installing-the-AppArmor-profile][Installing the AppArmor profile]]
+
+<<Installing-the-AppArmor-profile>>
+**** 2.2.4.1 Installing the AppArmor profile [[#Installing-the-AppArmor-profile][¶]]
+:PROPERTIES:
+:CUSTOM_ID: installing-the-apparmor-profile
+:CLASS: subsubsection
+:END:
+
+#+begin_quote
+*Note:* The =guix-install.sh= binary installation script offers to perform the steps below for you (see [[id:guix--Binary-Installation][Binary Installation]]).
+
+#+end_quote
+
+Run these commands as root to install the profile:
+
+#+begin_example
+export apparmor_sources=/var/guix/profiles/per-user/root/current-guix/etc/apparmor.d
+cp -f -t /etc/apparmor.d/tunables "$apparmor_sources/tunables/guix"
+cp -f -t /etc/apparmor.d "$apparmor_sources/guix-daemon"
+cp -f -t /etc/apparmor.d "$apparmor_sources/guix"
+apparmor_parser -r /etc/apparmor.d/guix-daemon
+apparmor_parser -r /etc/apparmor.d/guix
+#+end_example
+
+After this, the build daemon will be able to function correctly.
+
+--------------
+
+Previous: [[id:guix--SELinux-Support][SELinux Support]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

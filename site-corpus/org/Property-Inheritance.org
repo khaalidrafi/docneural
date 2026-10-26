@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--Property-Inheritance
+:END:
+#+filetags: :org:
+#+title: Property Inheritance (The Org Manual)
+
+Next:
+
+<<Property-Inheritance>>
+Next: [[id:org--Column-View][Column View]], Previous: [[id:org--Property-Searches][Property Searches]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 7.4 Property Inheritance [[#Property-Inheritance-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Property-Inheritance-1
+:CLASS: section
+:END:
+The outline structure of Org documents lends itself to an inheritance model of properties: if the parent in a tree has a certain property, the children can inherit this property. Org mode does not turn this on by default, because it can slow down property searches significantly and is often not needed. However, if you find inheritance useful, you can turn it on by setting the variable =org-use-property-inheritance=. It may be set to =t= to make all properties inherited from the parent, to a list of properties that should be inherited, or to a regular expression that matches inherited properties. If a property has the value =nil=, this is interpreted as an explicit un-define of the property, so that inheritance search stops at this value and returns =nil=.
+
+Org mode has a few properties for which inheritance is hard-coded, at least for the special applications for which they are used:
+
+- <<index-COLUMNS_002c-property>>=COLUMNS= [[#index-COLUMNS_002c-property][¶]] :: The ‘=COLUMNS=' property defines the format of column view (see [[id:org--Column-View][Column View]]). It is inherited in the sense that the level where a ‘=COLUMNS=' property is defined is used as the starting point for a column view table, independently of the location in the subtree from where columns view is turned on.
+
+- <<index-CATEGORY_002c-property>>=CATEGORY= [[#index-CATEGORY_002c-property][¶]] :: For agenda view, a category set through a ‘=CATEGORY=' property applies to the entire subtree.
+
+- <<index-ARCHIVE_002c-property>>=ARCHIVE= [[#index-ARCHIVE_002c-property][¶]] :: For archiving, the ‘=ARCHIVE=' property may define the archive location for the entire subtree (see [[id:org--Moving-subtrees][Moving a tree to an archive file]]).
+
+- <<index-LOGGING_002c-property-1>>=LOGGING= [[#index-LOGGING_002c-property-1][¶]] :: The ‘=LOGGING=' property may define logging settings for an entry or a subtree (see [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]]).
+
+--------------
+
+Next: [[id:org--Column-View][Column View]], Previous: [[id:org--Property-Searches][Property Searches]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

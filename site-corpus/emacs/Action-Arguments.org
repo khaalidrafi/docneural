@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID: emacs--Action-Arguments
+:END:
+#+filetags: :emacs:
+#+title: Action Arguments
+
+Next: [[id:emacs--Initial-Options][Initial Options]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Action-Arguments>>
+*** C.1 Action Arguments [[#Action-Arguments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Action-Arguments-1
+:CLASS: appendixsec
+:END:
+Here is a table of action arguments:
+
+-  <<index-visiting-files_002c-command_002dline-argument>>‘=file=' [[#index-visiting-files_002c-command_002dline-argument][¶]] :: 
+- ‘=--file===file=' :: 
+- ‘=--find-file===file=' :: 
+- ‘=--visit===file=' :: Visit the specified =file=. See [[id:emacs--Visiting][Visiting Files]].
+
+  When Emacs starts up, it displays the startup buffer in one window, and the buffer visiting =file= in another window (see [[id:emacs--Windows][Multiple Windows]]). If you supply more than one file argument, the displayed file is the last one specified on the command line; the other files are visited but their buffers are not shown.
+
+  If the startup buffer is disabled (see [[id:emacs--Entering-Emacs][Entering Emacs]]), then starting Emacs with one file argument displays the buffer visiting =file= in a single window. With two file arguments, Emacs displays the files in two different windows. With more than two file arguments, Emacs displays the last file specified in one window, plus another window with a Buffer Menu showing all the other files (see [[id:emacs--Several-Buffers][Operating on Several Buffers]]). To inhibit using the Buffer Menu for this, change the variable =inhibit-startup-buffer-menu= to =t=.
+
+- <<index-_002blinenum>>‘=+==linenum== ==file=' [[#index-_002blinenum][¶]] :: Visit the specified =file=, then go to line number =linenum= in it.
+
+- ‘=+==linenum==:==columnnum== ==file=' :: Visit the specified =file=, then go to line number =linenum= and put point at column number =columnnum=.
+
+-  <<index-_002d_002dload>>‘=-l ==file=' [[#index-_002d_002dload][¶]] :: 
+- ‘=--load===file=' :: Load a Lisp library named =file= with the function =load=. If =file= is not an absolute file name, Emacs first looks for it in the current directory, then in the directories listed in =load-path= (see [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]).
+
+  *Warning:* If previous command-line arguments have visited files, the current directory is the directory of the last file visited.
+
+- <<index-_002d_002ddirectory>>‘=-L ==dir=' [[#index-_002d_002ddirectory][¶]] :: 
+- ‘=--directory===dir=' :: Prepend directory =dir= to the variable =load-path=. If you specify multiple ‘=-L=' options, Emacs preserves the relative order; i.e., using ‘=-L /foo -L /bar=' results in a =load-path= of the form =("/foo" "/bar" …)=. If =dir= begins with ‘=:=', Emacs removes the ‘=:=' and appends (rather than prepends) the remainder to =load-path=. (On MS Windows, use ‘=;=' instead of ‘=:='; i.e., use the value of =path-separator=.)
+
+-  <<index-_002d_002dfuncall>>‘=-f ==function=' [[#index-_002d_002dfuncall][¶]] :: 
+- ‘=--funcall===function=' :: Call Lisp function =function=. If it is an interactive function (a command), it reads the arguments interactively just as if you had called the same function with a key sequence. Otherwise, it calls the function with no arguments.
+
+-  <<index-_002d_002dexecute>>‘=--eval===expression=' [[#index-_002d_002dexecute][¶]] :: 
+- ‘=--execute===expression=' :: Evaluate Lisp expression =expression=.
+
+-  <<index-_002d_002dinsert>>‘=--insert===file=' [[#index-_002d_002dinsert][¶]] :: Insert the contents of =file= into the buffer that is current when this command-line argument is processed. Usually, this is the =*scratch*= buffer (see [[id:emacs--Lisp-Interaction][Lisp Interaction Buffers]]), but if arguments earlier on the command line visit files or switch buffers, that might be a different buffer. The effect of this command-line argument is like what M-x insert-file does (see [[id:emacs--Misc-File-Ops][Miscellaneous File Operations]]).
+
+- <<index-_002d_002dkill>>‘=--kill=' [[#index-_002d_002dkill][¶]] :: Exit from Emacs without asking for confirmation.
+
+- <<index-_002d_002dhelp>>‘=--help=' [[#index-_002d_002dhelp][¶]] :: Print a usage message listing all available options, then exit successfully.
+
+- <<index-_002d_002dversion>>‘=--version=' [[#index-_002d_002dversion][¶]] :: Print Emacs version, then exit successfully.
+
+- <<index-_002d_002dfingerprint>>‘=--fingerprint=' [[#index-_002d_002dfingerprint][¶]] :: Print the Emacs “fingerprint”, which is used to uniquely identify the compiled version of Emacs.
+
+--------------

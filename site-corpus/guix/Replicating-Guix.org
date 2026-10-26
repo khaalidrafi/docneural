@@ -1,0 +1,82 @@
+:PROPERTIES:
+:ID: guix--Replicating-Guix
+:END:
+#+filetags: :guix:
+#+title: Replicating Guix
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Replicating-Guix>>
+Next: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Previous: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.3 Replicating Guix [[#Replicating-Guix-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Replicating-Guix-1
+:CLASS: section
+:END:
+The =guix describe= command shows precisely which commits were used to build the instance of Guix we're using (see [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]). We can replicate this instance on another machine or at a different point in time by providing a channel specification “pinned” to these commits that looks like this:
+
+#+begin_src lisp
+;; Deploy specific commits of my channels of interest.
+(list (channel
+       (name 'guix)
+       (url "https://git.guix.gnu.org/guix.git")
+       (commit "6298c3ffd9654d3231a6f25390b056483e8f407c"))
+      (channel
+       (name 'variant-packages)
+       (url "https://example.org/variant-packages.git")
+       (commit "dd3df5e2c8818760a8fc0bd699e55d3b69fef2bb")))
+#+end_src
+
+To obtain this pinned channel specification, the easiest way is to run =guix describe= and to save its output in the =channels= format in a file, like so:
+
+#+begin_example
+guix describe -f channels > channels.scm
+#+end_example
+
+The resulting =channels.scm= file can be passed to the =-C= option of =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]) or =guix time-machine= (see [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]]), as in this example:
+
+#+begin_example
+guix time-machine -C channels.scm -- shell python -- python3
+#+end_example
+
+Given the =channels.scm= file, the command above will always fetch the /exact same Guix instance/, then use that instance to run the exact same Python (see [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]). On any machine, at any time, it ends up running the exact same binaries, bit for bit.
+
+Pinned channels address a problem similar to “lock files” as implemented by some deployment tools---they let you pin and reproduce a set of packages. In the case of Guix though, you are effectively pinning the entire package set as defined at the given channel commits; in fact, you are pinning all of Guix, including its core modules and command-line tools. You're also getting strong guarantees that you are, indeed, obtaining the exact same software.
+
+This gives you super powers, allowing you to track the provenance of binary artifacts with very fine grain, and to reproduce software environments at will---some sort of “meta reproducibility” capabilities, if you will. See [[id:guix--Inferiors][Inferiors]], for another way to take advantage of these super powers.
+
+--------------
+
+Next: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Previous: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

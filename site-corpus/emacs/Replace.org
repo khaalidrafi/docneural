@@ -1,0 +1,194 @@
+:PROPERTIES:
+:ID: emacs--Replace
+:END:
+#+filetags: :emacs:
+#+title: Replace
+
+Next: [[id:emacs--Other-Repeating-Search][Other Search-and-Loop Commands]]   Previous: [[id:emacs--Lax-Search][Lax Matching During Searching]]   Up: [[id:emacs--Search][Searching and Replacement]]
+
+<<Replace>>
+*** 17.10 Replacement Commands [[#Replacement-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Replacement-Commands
+:CLASS: section
+:END:
+Emacs provides several commands for performing search-and-replace operations. In addition to the simple M-x replace-string command, there is M-% (=query-replace=), which presents each occurrence of the search pattern and asks you whether to replace it.
+
+The replace commands normally operate on the text from point to the end of the buffer. When the region is active, they operate on it instead (see [[id:emacs--Mark][The Mark and the Region]]). The basic replace commands replace one /search string/ (or regexp) with one /replacement string/. It is possible to perform several replacements in parallel, using the command =expand-region-abbrevs= (see [[id:emacs--Expanding-Abbrevs][Controlling Abbrev Expansion]]).
+
+--------------
+
+<<Unconditional-Replace>>
+**** 17.10.1 Unconditional Replacement [[#Unconditional-Replacement][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Unconditional-Replacement
+:CLASS: subsection
+:END:
+- M-x replace-string RET =string= RET =newstring= RET :: Replace every occurrence of =string= with =newstring=.
+
+To replace every instance of ‘=foo=' after point with ‘=bar=', use the command M-x replace-string with the two arguments ‘=foo=' and ‘=bar='. Replacement happens only in the text after point, so if you want to cover the whole buffer you must go to the beginning first. All occurrences up to the end of the buffer are replaced; to limit replacement to part of the buffer, activate the region around that part. When the region is active, replacement is limited to the region (see [[id:emacs--Mark][The Mark and the Region]]).
+
+When =replace-string= exits, it leaves point at the last occurrence replaced. It adds the prior position of point (where the =replace-string= command was issued) to the mark ring, without activating the mark; use C-u C-SPC to move back there. See [[id:emacs--Mark-Ring][The Mark Ring]].
+
+A prefix argument restricts replacement to matches that are surrounded by word boundaries.
+
+See [[#Replacement-and-Lax-Matches][Replace Commands and Lax Matches]], for details about case-sensitivity and character folding in replace commands.
+
+--------------
+
+<<Regexp-Replace>>
+**** 17.10.2 Regexp Replacement [[#Regexp-Replacement][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Regexp-Replacement
+:CLASS: subsection
+:END:
+The M-x replace-string command replaces exact matches for a single string. The similar command M-x replace-regexp replaces any match for a specified regular expression pattern (see [[id:emacs--Regexps][Syntax of Regular Expressions]]).
+
+- M-x replace-regexp RET =regexp= RET =newstring= RET :: Replace every match for =regexp= with =newstring=.
+
+In =replace-regexp=, the =newstring= need not be constant: it can refer to all or part of what is matched by the =regexp=. ‘=\&=' in =newstring= stands for the entire match being replaced. ‘=\==d=' in =newstring=, where =d= is a digit starting from 1, stands for whatever matched the =d=th parenthesized grouping in =regexp=. (This is called a “back reference”.) ‘=\#=' refers to the count of replacements already made in this command, as a decimal number. In the first replacement, ‘=\#=' stands for ‘=0='; in the second, for ‘=1='; and so on. For example,
+
+#+begin_example
+M-x replace-regexp RET c[ad]+r RET \&-safe RET
+#+end_example
+
+replaces (for example) ‘=cadr=' with ‘=cadr-safe=' and ‘=cddr=' with ‘=cddr-safe='.
+
+#+begin_example
+M-x replace-regexp RET \(c[ad]+r\)-safe RET \1 RET
+#+end_example
+
+performs the inverse transformation. To include a ‘=\=' in the text to replace with, you must enter ‘=\\='.
+
+If you want to enter part of the replacement string by hand each time, use ‘=\?=' in the replacement string. Each replacement will ask you to edit the replacement string in the minibuffer, putting point where the ‘=\?=' was.
+
+The remainder of this subsection is intended for specialized tasks and requires knowledge of Lisp. Most readers can skip it.
+
+You can use Lisp expressions to calculate parts of the replacement string. To do this, write ‘=\,=' followed by the expression in the replacement string. Each replacement calculates the value of the expression and converts it to text without quoting (if it's a string, this means using the string's contents), and uses it in the replacement string in place of the expression itself. If the expression is a symbol, one space in the replacement string after the symbol name goes with the symbol name, so the value replaces them both.
+
+Inside such an expression, you can use some special sequences. ‘=\&=' and ‘=\==d=' refer here, as usual, to the entire match as a string, and to a submatch as a string. =d= may be multiple digits, and the value of ‘=\==d=' is =nil= if the =d='th parenthesized grouping did not match. You can also use ‘=\#&=' and ‘=\#==d=' to refer to those matches as numbers (this is valid when the match or submatch has the form of a numeral). ‘=\#=' here too stands for the number of already-completed replacements.
+
+For example, we can exchange ‘=x=' and ‘=y=' this way:
+
+#+begin_example
+M-x replace-regexp RET \(x\)\|y RET
+\,(if \1 "y" "x") RET
+#+end_example
+
+For computing replacement strings for ‘=\,=', the =format= function is often useful (see [[../elisp_html/Formatting-Strings.html#Formatting-Strings][Formatting Strings]] in The Emacs Lisp Reference Manual). For example, to add consecutively numbered strings like ‘=ABC00042=' to columns 73 to 80 (unless they are already occupied), you can use
+
+#+begin_example
+M-x replace-regexp RET ^.\{0,72\}$ RET
+\,(format "%-72sABC%05d" \& \#) RET
+#+end_example
+
+--------------
+
+<<Replacement-and-Lax-Matches>>
+**** 17.10.3 Replace Commands and Lax Matches [[#Replace-Commands-and-Lax-Matches][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Replace-Commands-and-Lax-Matches
+:CLASS: subsection
+:END:
+This subsection describes the behavior of replace commands with respect to lax matches (see [[id:emacs--Lax-Search][Lax Matching During Searching]]) and how to customize it. In general, replace commands mostly default to stricter matching than their search counterparts.
+
+Unlike incremental search, the replacement commands do not use lax space matching (see [[id:emacs--Lax-Search][lax space matching]]) by default. To enable lax space matching for replacement, change the variable =replace-lax-whitespace= to non-=nil=. (This only affects how Emacs finds the text to replace, not the replacement text.)
+
+A companion variable =replace-regexp-lax-whitespace= controls whether =query-replace-regexp= uses lax whitespace matching when searching for patterns.
+
+If the first argument of a replace command is all lower case, the command ignores case while searching for occurrences to replace---provided =case-fold-search= is non-=nil= and =search-upper-case= is also non-=nil=. If =search-upper-case= (see [[id:emacs--Lax-Search][search-upper-case]]) is =nil=, whether searching ignores case is determined by =case-fold-search= alone, regardless of letter-case of the command's first argument. If =case-fold-search= is set to =nil=, case is always significant in all searches.
+
+In addition, when the second argument of a replace command is all or partly lower case, replacement commands try to preserve the case pattern of each occurrence. Thus, the command
+
+#+begin_example
+M-x replace-string RET foo RET bar RET
+#+end_example
+
+replaces a lower case ‘=foo=' with a lower case ‘=bar=', an all-caps ‘=FOO=' with ‘=BAR=', and a capitalized ‘=Foo=' with ‘=Bar='. (These three alternatives---lower case, all caps, and capitalized, are the only ones that =replace-string= can distinguish.) Note that Emacs decides whether to up-case or capitalize the replacement text by analyzing each word in the text being replaced, and will preserve the letter-case of the replaced text only if /all/ of its words use the same letter-case. Thus, the command
+
+#+begin_example
+M-x replace-string RET foo bar RET baz quux RET
+#+end_example
+
+replaces ‘=Foo Bar=' with ‘=Baz Quux=' because both words in ‘=Foo Bar=' are capitalized. By contrast, the same command replaces ‘=Foo bar=' with ‘=baz quux=', i.e. it leaves the letter-case of the replacement text unchanged, since the two words in ‘=Foo bar=' use different capitalization. What exactly is considered a “word” depends on the syntax tables that are in effect in the current buffer (see [[../elisp_html/Syntax-Tables.html#Syntax-Tables][Syntax Tables]] in The Emacs Lisp Reference Manual); thus, ‘=Foo_Bar=' is two words in Text mode, but could be a single word in some major mode that supports a programming language.
+
+If upper-case letters are used in the replacement string, they remain upper case every time that text is inserted. If upper-case letters are used in the first argument, the second argument is always substituted exactly as given, with no case conversion. Likewise, if either =case-replace= or =case-fold-search= is set to =nil=, replacement is done without case conversion.
+
+The replacement commands by default do not use character folding (see [[id:emacs--Lax-Search][character folding]]) when looking for the text to replace. To enable character folding for matching in =query-replace= and =replace-string=, set the variable =replace-char-fold= to a non-=nil= value. (This setting does not affect the replacement text, only how Emacs finds the text to replace. It also doesn't affect =replace-regexp=.)
+
+--------------
+
+<<Query-Replace>>
+**** 17.10.4 Query Replace [[#Query-Replace-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Query-Replace-1
+:CLASS: subsection
+:END:
+- M-% =string= RET =newstring= RET :: Replace some occurrences of =string= with =newstring=.
+
+- C-M-% =regexp= RET =newstring= RET :: Replace some matches for =regexp= with =newstring=.
+
+If you want to change only some of the occurrences of ‘=foo=' to ‘=bar=', not all of them, use M-% (=query-replace=). This command finds occurrences of ‘=foo=' one by one, displays each occurrence and asks you whether to replace it. Aside from querying, =query-replace= works just like =replace-string= (see [[#Unconditional-Replace][Unconditional Replacement]]). In particular, it preserves case provided that =case-replace= is non-=nil=, as it normally is (see [[#Replacement-and-Lax-Matches][Replace Commands and Lax Matches]]). A numeric argument means to consider only occurrences that are bounded by word-delimiter characters. A negative prefix argument replaces backward.
+
+C-M-% performs regexp search and replace (=query-replace-regexp=). It works like =replace-regexp= except that it queries like =query-replace=.
+
+You can reuse earlier replacements with these commands. When =query-replace= or =query-replace-regexp= prompts for the search string, use M-p and M-n to show previous replacements in the form ‘=from== -> ==to=', where =from= is the search pattern, =to= is its replacement, and the separator between them is determined by the value of the variable =query-replace-from-to-separator=. Type RET to select the desired replacement. If the value of this variable is =nil=, replacements are not added to the command history, and cannot be reused.
+
+These commands highlight the current match using the face =query-replace=. You can disable this highlight by setting the variable =query-replace-highlight= to =nil=. They highlight other matches using =lazy-highlight= just like incremental search (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]); this can be disabled by setting =query-replace-lazy-highlight= to =nil=. By default, =query-replace-regexp= will show the substituted replacement string for the current match in the minibuffer. If you want to keep special sequences ‘=\&=' and ‘=\==n=' unexpanded, customize =query-replace-show-replacement= variable. Like =search-highlight-submatches= highlights subexpressions in incremental search (see [[id:emacs--Search-Customizations][Tailoring Search to Your Needs]]), the variable =query-replace-highlight-submatches= defines whether to highlight subexpressions in the regexp replacement commands.
+
+The variable =query-replace-skip-read-only=, if set non-=nil=, will cause replacement commands to ignore matches in read-only text. The default is not to ignore them.
+
+The characters you can type when you are shown a match for the string or regexp are:
+
+- SPC\\
+  y :: to replace the occurrence with =newstring=.
+
+- DEL\\
+  Delete\\
+  BACKSPACE\\
+  n :: to skip to the next occurrence without replacing this one.
+
+- , (Comma) :: to replace this occurrence and display the result. You are then asked for another input character to say what to do next. Since the replacement has already been made, DEL and SPC are equivalent in this situation; both move to the next occurrence.
+
+  You can type C-r at this point (see below) to alter the replaced text. You can also undo the replacement with the =undo= command (e.g., type C-x u; see [[id:emacs--Undo][Undo]]); this exits the =query-replace=, so if you want to do further replacement you must use C-x ESC ESC RET to restart (see [[id:emacs--Repetition][Repeating Minibuffer Commands]]).
+
+- RET\\
+  q :: to exit without doing any more replacements.
+
+- . (Period) :: to replace this occurrence and then exit without searching for more occurrences.
+
+- ! :: to replace all remaining occurrences without asking again.
+
+- ^ :: to go back to the position of the previous occurrence (or what used to be an occurrence), in case you changed it by mistake or want to reexamine it.
+
+- u :: to undo the last replacement and go back to where that replacement was made.
+
+- U :: to undo all the replacements and go back to where the first replacement was made.
+
+- C-r :: to enter a recursive editing level, in case the occurrence needs to be edited rather than just replaced with =newstring=. When you are done, exit the recursive editing level with C-M-c to proceed to the next occurrence. See [[id:emacs--Recursive-Edit][Recursive Editing Levels]].
+
+- C-w :: to delete the occurrence, and then enter a recursive editing level as in C-r. Use the recursive edit to insert text to replace the deleted occurrence of =string=. When done, exit the recursive editing level with C-M-c to proceed to the next occurrence.
+
+- e :: to edit the replacement string in the minibuffer. When you exit the minibuffer by typing RET, the minibuffer contents replace the current occurrence of the pattern. They also become the new replacement string for any further occurrences.
+
+- E :: is like e, but the next replacement will be done with exact case. I.e., if you have a =query-replace= from ‘=foo=' to ‘=bar=', a text like ‘=Foo=' will be normally be replaced with ‘=Bar='. Use this command to do the current replacement with exact case.
+
+- C-l :: to redisplay the screen. Then you must type another character to specify what to do with this occurrence.
+
+- Y (Upper-case) :: to replace all remaining occurrences in all remaining buffers in multi-buffer replacements (like the Dired Q command that performs query replace on selected files). It answers this question and all subsequent questions in the series with “yes”, without further user interaction.
+
+- N (Upper-case) :: to skip to the next buffer in multi-buffer replacements without replacing remaining occurrences in the current buffer. It answers this question “no”, gives up on the questions for the current buffer, and continues to the next buffer in the sequence.
+
+- C-h\\
+  ?\\
+  F1 :: to display a message summarizing these options. Then you must type another character to specify what to do with this occurrence.
+
+Aside from this, any other character exits the =query-replace=, and is then reread as part of a key sequence. Thus, if you type C-k, it exits the =query-replace= and then kills to end of line. In particular, C-g simply exits the =query-replace=.
+
+To restart a =query-replace= once it is exited, use C-x ESC ESC, which repeats the =query-replace= because it used the minibuffer to read its arguments. See [[id:emacs--Repetition][C-x ESC ESC]].
+
+The option =search-invisible= determines how =query-replace= treats invisible text. See [[id:emacs--Outline-Mode::#Outline-Search][Outline Search]].
+
+See [[id:emacs--Operating-on-Files][Operating on Files]], for the Dired Q command which performs query replace on selected files. See also [[id:emacs--Transforming-File-Names][Transforming File Names in Dired]], for Dired commands to rename, copy, or link files by replacing regexp matches in file names.
+
+--------------

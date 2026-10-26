@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID: org--Texinfo-specific-export-settings
+:END:
+#+filetags: :org:
+#+title: Texinfo specific export settings (The Org Manual)
+
+Next:
+
+<<Texinfo-specific-export-settings>>
+Next: [[id:org--Texinfo-file-header][Texinfo file header]], Previous: [[id:org--Texinfo-export-commands][Texinfo export commands]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.2 Texinfo specific export settings [[#Texinfo-specific-export-settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Texinfo-specific-export-settings-1
+:CLASS: subsection
+:END:
+The Texinfo export backend has several additional keywords for customizing Texinfo output. Setting these keywords works similar to the general options (see [[id:org--Export-Settings][Export Settings]]).
+
+- <<index-SUBTITLE_002c-keyword-5>>‘=SUBTITLE=' [[#index-SUBTITLE_002c-keyword-5][¶]] :: The document subtitle.
+
+- <<index-SUBAUTHOR_002c-keyword>>‘=SUBAUTHOR=' [[#index-SUBAUTHOR_002c-keyword][¶]] :: Additional authors for the document.
+
+- <<index-TEXINFO_005fFILENAME_002c-keyword>>‘=TEXINFO_FILENAME=' [[#index-TEXINFO_005fFILENAME_002c-keyword][¶]] :: The Texinfo filename.
+
+-  <<index-TEXINFO_005fCLASS_002c-keyword>>‘=TEXINFO_CLASS=' [[#index-TEXINFO_005fCLASS_002c-keyword][¶]] :: The default document class (=org-texinfo-default-class=), which must be a member of =org-texinfo-classes=.
+
+- <<index-TEXINFO_005fHEADER_002c-keyword>>‘=TEXINFO_HEADER=' [[#index-TEXINFO_005fHEADER_002c-keyword][¶]] :: Arbitrary lines inserted at the end of the header.
+
+- <<index-TEXINFO_005fPOST_005fHEADER_002c-keyword>>‘=TEXINFO_POST_HEADER=' [[#index-TEXINFO_005fPOST_005fHEADER_002c-keyword][¶]] :: Arbitrary lines inserted after the end of the header.
+
+- <<index-TEXINFO_005fDIR_005fCATEGORY_002c-keyword>>‘=TEXINFO_DIR_CATEGORY=' [[#index-TEXINFO_005fDIR_005fCATEGORY_002c-keyword][¶]] :: The directory category of the document. Defaults to =Misc=.
+
+- <<index-TEXINFO_005fDIR_005fNAME_002c-keyword>>‘=TEXINFO_DIR_NAME=' [[#index-TEXINFO_005fDIR_005fNAME_002c-keyword][¶]] :: The directory name of the document. This is the short name under which the =m= command will find your manual in the main Info directory. It defaults to the base name of the Texinfo file.
+
+  The full form of the Texinfo entry is =* DIRNAME: NODE.= where =NODE= is usually just =(FILENAME)=. Normally this option only provides the =DIRNAME= part, but if you need more control, it can also be the full entry (recognized by the presence of parentheses or a leading ~* ~).
+
+- <<index-TEXINFO_005fDIR_005fDESC_002c-keyword>>‘=TEXINFO_DIR_DESC=' [[#index-TEXINFO_005fDIR_005fDESC_002c-keyword][¶]] :: The directory description of the document. Defaults to the title of the document.
+
+- <<index-TEXINFO_005fPRINTED_005fTITLE_002c-keyword>>‘=TEXINFO_PRINTED_TITLE=' [[#index-TEXINFO_005fPRINTED_005fTITLE_002c-keyword][¶]] :: The printed title of the document.
+
+--------------
+
+Next: [[id:org--Texinfo-file-header][Texinfo file header]], Previous: [[id:org--Texinfo-export-commands][Texinfo export commands]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

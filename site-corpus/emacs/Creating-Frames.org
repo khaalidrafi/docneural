@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID: emacs--Creating-Frames
+:END:
+#+filetags: :emacs:
+#+title: Creating Frames
+
+Next: [[id:emacs--Frame-Commands][Frame Commands]]   Previous: [[id:emacs--Mode-Line-Mouse][Mode Line Mouse Commands]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
+
+<<Creating-Frames>>
+*** 23.6 Creating Frames [[#Creating-Frames-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-Frames-1
+:CLASS: section
+:END:
+The prefix key C-x 5 is analogous to C-x 4. Whereas each C-x 4 command pops up a buffer in a different window in the selected frame (see [[id:emacs--Pop-Up-Window][Displaying in Another Window]]), the C-x 5 commands use a different frame. If an existing visible or iconified (a.k.a. “minimized”, see [[../elisp_html/Visibility-of-Frames.html#Visibility-of-Frames][Visibility of Frames]] in The Emacs Lisp Reference Manual) frame already displays the requested buffer, that frame is raised and deiconified (“un-minimized”); otherwise, a new frame is created on the current display terminal.
+
+The various C-x 5 commands differ in how they find or create the buffer to select:
+
+-  <<index-C_002dx-5-2>>C-x 5 2 [[#index-C_002dx-5-2][¶]] :: Create a new frame using the default frame parameters (=make-frame-command=).
+
+-  <<index-C_002dx-5-c>>C-x 5 c [[#index-C_002dx-5-c][¶]] :: Create a new frame using the window configuration and frame parameters of the current frame (=clone-frame=).
+
+- C-x 5 b =bufname= RET :: Select buffer =bufname= in another frame. This runs =switch-to-buffer-other-frame=.
+
+- C-x 5 f =filename= RET :: Visit file =filename= and select its buffer in another frame. This runs =find-file-other-frame=. See [[id:emacs--Visiting][Visiting Files]].
+
+- C-x 5 d =directory= RET :: Select a Dired buffer for directory =directory= in another frame. This runs =dired-other-frame=. See [[id:emacs--Dired][Dired, the Directory Editor]].
+
+- C-x 5 m :: Start composing a mail message in another frame. This runs =compose-mail-other-frame=. It is the other-frame variant of C-x m. See [[id:emacs--Sending-Mail][Sending Mail]].
+
+- C-x 5 . :: Find the definition of an identifier in another frame. This runs =xref-find-definitions-other-frame=, the multiple-frame variant of M-.. See [[id:emacs--Xref::#Xref][Find Identifier References]].
+
+-  <<index-C_002dx-5-r>>C-x 5 r =filename= RET [[#index-C_002dx-5-r][¶]] :: Visit file =filename= read-only, and select its buffer in another frame. This runs =find-file-read-only-other-frame=. See [[id:emacs--Visiting][Visiting Files]].
+
+- C-x 5 5 :: A more general prefix command that affects the buffer displayed by the next command invoked immediately after this prefix command (=other-frame-prefix=). It requests the buffer of the next command to be displayed in another frame.
+
+You can control the appearance and behavior of the newly-created frames by specifying /frame parameters/. See [[id:emacs--Frame-Parameters][Frame Parameters]].
+
+--------------

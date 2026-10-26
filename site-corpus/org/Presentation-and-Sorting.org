@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: org--Presentation-and-Sorting
+:END:
+#+filetags: :org:
+#+title: Presentation and Sorting (The Org Manual)
+
+Next:
+
+<<Presentation-and-Sorting>>
+Next: [[id:org--Agenda-Commands][Commands in the Agenda Buffer]], Previous: [[id:org--Built_002din-Agenda-Views][The Built-in Agenda Views]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 11.4 Presentation and Sorting [[#Presentation-and-Sorting-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Presentation-and-Sorting-1
+:CLASS: section
+:END:
+Before displaying items in an agenda view, Org mode visually prepares the items and sorts them. Each item occupies a single line. The line starts with a /prefix/ that contains the /category/ (see [[id:org--Categories][Categories]]) of the item and other important information. You can customize in which column tags are displayed through =org-agenda-tags-column=. You can also customize the prefix using the option =org-agenda-prefix-format=. This prefix is followed by a cleaned-up version of the outline headline associated with the item.
+
+- [[id:org--Categories][Categories]]
+- [[id:org--Time_002dof_002dday-specifications][Time-of-day specifications]]
+- [[id:org--Sorting-of-agenda-items][Sorting of agenda items]]
+- [[id:org--Filtering_002flimiting-agenda-items][Filtering/limiting agenda items]]

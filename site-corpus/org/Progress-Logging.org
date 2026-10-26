@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Progress-Logging
+:END:
+#+filetags: :org:
+#+title: Progress Logging (The Org Manual)
+
+Next:
+
+<<Progress-Logging>>
+Next: [[id:org--Priorities][Priorities]], Previous: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 5.3 Progress Logging [[#Progress-Logging-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Progress-Logging-1
+:CLASS: section
+:END:
+To record a timestamp and a note when changing a TODO state, call the command =org-todo= with a prefix argument.
+
+- <<index-C_002du-C_002dc-C_002dt>>C-u C-c C-t (=org-todo=) [[#index-C_002du-C_002dc-C_002dt][¶]] :: Prompt for a note and record the time of the TODO state change. The note is inserted as a list item below the headline, but can also be placed into a drawer, see [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]].
+
+If you want to be more systematic, Org mode can automatically record a timestamp and optionally a note when you mark a TODO item as DONE, or even each time you change the state of a TODO item. This system is highly configurable, settings can be on a per-keyword basis and can be localized to a file or even a subtree. For information on how to clock working time for a task, see [[id:org--Clocking-Work-Time][Clocking Work Time]].
+
+- [[id:org--Closing-items][Closing items]]
+- [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]]
+- [[id:org--Tracking-your-habits][Tracking your habits]]
+
+--------------
+
+Next: [[id:org--Priorities][Priorities]], Previous: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,136 @@
+:PROPERTIES:
+:ID: emacs--Mail-Commands
+:END:
+#+filetags: :emacs:
+#+title: Mail Commands
+
+Next: [[id:emacs--Mail-Signature][Mail Signature]]   Previous: [[id:emacs--Mail-Aliases][Mail Aliases]]   Up: [[id:emacs--Sending-Mail][Sending Mail]]
+
+<<Mail-Commands>>
+*** 34.4 Mail Commands [[#Mail-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mail-Commands-1
+:CLASS: section
+:END:
+The default major mode for the =*mail*= buffer is called Message mode. It behaves like Text mode in many ways, but provides several additional commands on the C-c prefix, which make editing a message more convenient.
+
+In this section, we will describe some of the most commonly-used commands available in Message mode. Message mode also has its own manual, where its features are described in greater detail. See [[../message_html/index.html#Top][Message]] in Message.
+
+--------------
+
+<<Mail-Sending>>
+**** 34.4.1 Mail Sending [[#Mail-Sending-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mail-Sending-1
+:CLASS: subsection
+:END:
+- C-c C-c :: Send the message, and bury the mail buffer (=message-send-and-exit=).
+
+- C-c C-s :: Send the message, and leave the mail buffer selected (=message-send=).
+
+The usual command to send a message is C-c C-c (=message-send-and-exit=). This sends the message and then buries the mail buffer, putting it at the lowest priority for reselection. If you want it to kill the mail buffer instead, change the variable =message-kill-buffer-on-exit= to =t=.
+
+The command C-c C-s (=message-send=) sends the message and leaves the buffer selected. Use this command if you want to modify the message (perhaps with new recipients) and send it again.
+
+Sending a message runs the hook =message-send-hook=. It also marks the mail buffer as unmodified, except if the mail buffer is also a file-visiting buffer (in that case, only saving the file does that, and you don't get a warning if you try to send the same message twice).
+
+The variable =message-send-mail-function= controls how the message is delivered (=send-mail-function= is used for Mail mode). The value of =send-mail-function= should be one of the following functions:
+
+- =sendmail-query-once= :: Query for a delivery method (one of the other entries in this list), and use that method for this message; then save the method to =send-mail-function=, so that it is used for future deliveries. This is the default, unless you have already set the variables for sending mail via =smtpmail-send-it= (see below).
+
+- =smtpmail-send-it= :: Send mail through an external mail host, such as your Internet service provider's outgoing SMTP mail server. If you have not told Emacs how to contact the SMTP server, it prompts for this information, which is saved in the =smtpmail-smtp-server= variable and the file =~/.authinfo=. See [[../smtpmail_html/index.html#Top][Emacs SMTP Library]] in Sending mail via SMTP.
+
+- =sendmail-send-it= :: Send mail using the system's default =sendmail= program, or equivalent. This requires the system to be set up for delivering mail directly via SMTP.
+
+- =mailclient-send-it= :: Pass the mail buffer on to the system's designated mail client. See the commentary section in the file =mailclient.el= for details.
+
+- =feedmail-send-it= :: This is similar to =sendmail-send-it=, but allows you to queue messages for later sending. See the commentary section in the file =feedmail.el= for details.
+
+When you send a message containing non-ASCII characters, they need to be encoded with a coding system (see [[id:emacs--Coding-Systems][Coding Systems]]). Usually the coding system is specified automatically by your chosen language environment (see [[id:emacs--Language-Environments][Language Environments]]). You can explicitly specify the coding system for outgoing mail by setting the variable =sendmail-coding-system= (see [[id:emacs--Recognize-Coding][Recognizing Coding Systems]]). If the coding system thus determined does not handle the characters in a particular message, Emacs asks you to select the coding system to use, showing a list of possible coding systems. See [[id:emacs--Output-Coding][Choosing Coding Systems for Output]].
+
+--------------
+
+<<Header-Editing>>
+**** 34.4.2 Mail Header Editing [[#Mail-Header-Editing][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mail-Header-Editing
+:CLASS: subsection
+:END:
+Message mode provides the following special commands to move to particular header fields and to complete addresses in headers.
+
+- C-c C-f C-t :: Move to the ‘=To=' header (=message-goto-to=).
+
+- C-c C-f C-s :: Move to the ‘=Subject=' header (=message-goto-subject=).
+
+- C-c C-f C-c :: Move to the ‘=CC=' header (=message-goto-cc=).
+
+- C-c C-f C-b :: Move to the ‘=BCC=' header (=message-goto-bcc=).
+
+- C-c C-f C-r :: Move to the ‘=Reply-To=' header (=message-goto-reply-to=).
+
+- C-c C-f C-f :: Move to the ‘=Mail-Followup-To=' header field (=message-goto-followup-to=).
+
+- C-c C-f C-w :: Add a new ‘=FCC=' header field, with file-name completion (=message-goto-fcc=).
+
+- C-c C-b :: Move to the start of the message body (=message-goto-body=).
+
+- TAB :: Complete a mailing address (=message-tab=).
+
+The commands to move point to particular header fields are all based on the prefix C-c C-f (‘=C-f=' is for “field”). If the field in question does not exist, the command creates one (the exception is =mail-fcc=, which creates a new field each time).
+
+The command C-c C-b (=message-goto-body=) moves point to just after the header separator line---that is, to the beginning of the body.
+
+While editing a header field that contains addresses, such as ‘=To:=', ‘=CC:=' and ‘=BCC:=', you can complete an address by typing TAB (=message-tab=). This attempts to insert the full name corresponding to the address based on a couple of methods, including EUDC, a library that recognizes a number of directory server protocols (see [[../eudc_html/index.html#Top][EUDC]] in The Emacs Unified Directory Client). Failing that, it attempts to expand the address as a mail alias (see [[id:emacs--Mail-Aliases][Mail Aliases]]). If point is on a header field that does not take addresses, or if it is in the message body, then TAB just inserts a tab character.
+
+--------------
+
+<<Citing-Mail>>
+**** 34.4.3 Citing Mail [[#Citing-Mail-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Citing-Mail-1
+:CLASS: subsection
+:END:
+- C-c C-y :: Yank the selected message from the mail reader, as a citation (=message-yank-original=).
+
+- C-c C-q :: Fill each paragraph cited from another message (=message-fill-yanked-message=).
+
+You can use the command C-c C-y (=message-yank-original=) to /cite/ a message that you are replying to. This inserts the text of that message into the mail buffer. This command works only if the mail buffer is invoked from a mail reader running in Emacs, such as Rmail.
+
+By default, Emacs inserts the string ‘=>=' in front of each line of the cited text; this prefix string is specified by the variable =message-yank-prefix=. If you call =message-yank-original= with a prefix argument, the citation prefix is not inserted.
+
+After using C-c C-y, you can type C-c C-q (=message-fill-yanked-message=) to fill the paragraphs of the cited message. One use of C-c C-q fills all such paragraphs, each one individually. To fill a single paragraph of the quoted message, use M-q. If filling does not automatically handle the type of citation prefix you use, try setting the fill prefix explicitly. See [[id:emacs--Filling::#Filling][Filling Text]].
+
+You can customize mail citation through the hook =mail-citation-hook=. For example, you can use the Supercite package, which provides more flexible citation (see [[../sc_html/Introduction.html#Introduction][Introduction]] in Supercite).
+
+--------------
+
+<<Mail-Misc>>
+**** 34.4.4 Mail Miscellany [[#Mail-Miscellany][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mail-Miscellany
+:CLASS: subsection
+:END:
+You can /attach/ a file to an outgoing message by typing C-c C-a (=mml-attach-file=) in the mail buffer. Attaching is done using the Multipurpose Internet Mail Extensions (MIME) standard.
+
+The =mml-attach-file= command prompts for the name of the file, and for the attachment's /content type/, /description/, and /disposition/. The content type is normally detected automatically; just type RET to accept the default. The description is a single line of text that the recipient will see next to the attachment; you may also choose to leave this empty. The disposition is either ‘=inline=', which means the recipient will see a link to the attachment within the message body, or ‘=attachment=', which means the link will be separate from the body.
+
+The =mml-attach-file= command is specific to Message mode; in Mail mode use mail-add-attachment instead. It will prompt only for the name of the file, and will determine the content type and the disposition automatically. If you want to include some description of the attached file, type that in the message body.
+
+The actual contents of the attached file are not inserted into the mail buffer. Instead, some placeholder text is inserted into the mail buffer, like this:
+
+#+begin_example
+<#part type="text/plain" filename="~/foo.txt" disposition=inline>
+<#/part>
+#+end_example
+
+When you type C-c C-c or C-c C-s to send the message, the attached file will be delivered with it.
+
+While composing a message, you can do spelling correction on the message text by typing M-x ispell-message. If you have yanked an incoming message into the outgoing draft, this command skips what was yanked, but it checks the text that you yourself inserted (it looks for indentation or =mail-yank-prefix= to distinguish the cited lines from your input). See [[id:emacs--Spelling][Checking and Correcting Spelling]].
+
+Turning on Message mode (which C-x m does automatically) runs the normal hooks =text-mode-hook= and =message-mode-hook=. Initializing a new outgoing message runs the normal hook =message-setup-hook=; you can use this hook if you want to make changes to the appearance of the mail buffer. See [[id:emacs--Variables::#Hooks][Hooks]].
+
+The main difference between these hooks is just when they are invoked. Whenever you type C-x m, =message-mode-hook= runs as soon as the mail buffer is created. Then the =message-setup= function inserts the default contents of the buffer. After these default contents are inserted, =message-setup-hook= runs.
+
+If you use C-x m to continue an existing composition, =message-mode-hook= runs immediately after switching to the mail buffer. If the buffer is unmodified, or if you decide to erase it and start again, =message-setup-hook= runs after the default contents are inserted.
+
+--------------

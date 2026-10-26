@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--Library-of-Babel
+:END:
+#+filetags: :org:
+#+title: Library of Babel (The Org Manual)
+
+Next:
+
+<<Library-of-Babel>>
+Next: [[id:org--Key-bindings-and-Useful-Functions][Key bindings and Useful Functions]], Previous: [[id:org--Noweb-Reference-Syntax][Noweb Reference Syntax]], Up: [[id:org--Working-with-Source-Code][Working with Source Code]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 16.12 Library of Babel [[#Library-of-Babel-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Library-of-Babel-1
+:CLASS: section
+:END:
+The “Library of Babel” is a collection of code blocks. Like a function library, these code blocks can be called from other Org files. A collection of useful code blocks is available on [[https://orgmode.org/worg/library-of-babel.html][Worg]]. For remote code block evaluation syntax, see [[id:org--Evaluating-Code-Blocks][Evaluating Code Blocks]].
+
+For any user to add code to the library, first save the code in regular code blocks of an Org file, and then load the Org file with =org-babel-lob-ingest=, which is bound to C-c C-v i.

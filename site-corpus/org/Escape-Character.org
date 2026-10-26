@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID: org--Escape-Character
+:END:
+#+filetags: :org:
+#+title: Escape Character (The Org Manual)
+
+Next:
+
+<<Escape-Character>>
+Next: [[id:org--Code-Evaluation-Security][Code Evaluation and Security Issues]], Previous: [[id:org--Documentation-Access][Context Dependent Documentation]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.12 Escape Character [[#Escape-Character-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Escape-Character-1
+:CLASS: section
+:END:
+You may sometimes want to write text that looks like Org syntax, but should really read as plain text. Org may use a specific escape character in some situations, i.e., a backslash in macros (see [[id:org--Macro-Replacement][Macro Replacement]]) and links (see [[id:org--Link-Format][Link Format]]), or a comma in source and example blocks (see [[id:org--Literal-Examples][Literal Examples]]). In the general case, however, we suggest using the zero width space. You can insert one with any of the following:
+
+#+begin_example
+C-x 8 <RET> zero width space <RET>
+C-x 8 <RET> 200B <RET>
+#+end_example
+
+For example, in order to write ‘=[[1,2]]=' as-is in your document, you may write instead
+
+#+begin_example
+[X[1,2]]
+#+end_example
+
+where ‘=X=' denotes the zero width space character.

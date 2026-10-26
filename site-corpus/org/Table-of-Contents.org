@@ -1,0 +1,92 @@
+:PROPERTIES:
+:ID: org--Table-of-Contents
+:END:
+#+filetags: :org:
+#+title: Table of Contents (The Org Manual)
+
+Next:
+
+<<Table-of-Contents>>
+Next: [[id:org--Include-Files][Include Files]], Previous: [[id:org--Export-Settings][Export Settings]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.3 Table of Contents [[#Table-of-Contents-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-of-Contents-1
+:CLASS: section
+:END:
+The table of contents includes all headlines in the document. Its depth is therefore the same as the headline levels in the file. If you need to use a different depth, or turn it off entirely, set the =org-export-with-toc= variable accordingly. You can achieve the same on a per-file basis, using the following ‘=toc=' item in ‘=OPTIONS=' keyword:
+
+#+begin_example
+#+OPTIONS: toc:2          (only include two levels in TOC)
+#+OPTIONS: toc:nil        (no default TOC at all)
+#+end_example
+
+Org includes both numbered and unnumbered headlines in the table of contents[[#FOOT131][^{131}]]. If you need to exclude an unnumbered headline, along with all its children, set the ‘=UNNUMBERED=' property to ‘=notoc=' value.
+
+#+begin_example
+* Subtree not numbered, not in table of contents either
+  :PROPERTIES:
+  :UNNUMBERED: notoc
+  :END:
+#+end_src
+
+Org normally inserts the table of contents in front of the exported document. To move the table of contents to a different location, first turn off the default with =org-export-with-toc= variable or with ‘=#+OPTIONS: toc:nil='. Then insert ‘=#+TOC: headlines N=' at the desired location(s).
+
+#+begin_example
+#+OPTIONS: toc:nil
+...
+#+TOC: headlines 2
+#+end_example
+
+To adjust the table of contents depth for a specific section of the Org document, append an additional ‘=local=' parameter. This parameter becomes a relative depth for the current level. The following example inserts a local table of contents, with direct children only.
+
+#+begin_example
+* Section
+#+TOC: headlines 1 local
+#+end_src
+
+Note that for this feature to work properly in LaTeX export, the Org file requires the inclusion of the titletoc package. Because of compatibility issues, titletoc has to be loaded /before/ hyperref. Customize the =org-latex-default-packages-alist= variable.
+
+The following example inserts a table of contents that links to the children of the specified target.
+
+#+begin_example
+* Target
+  :PROPERTIES:
+  :CUSTOM_ID: TargetSection
+  :END:
+** Heading A
+** Heading B
+* Another section
+#+TOC: headlines 1 :target #TargetSection
+#+end_src
+
+The ‘=:target=' attribute is supported in HTML, Markdown, ODT, and ASCII export.
+
+Use the ‘=TOC=' keyword to generate list of tables---respectively, all listings---with captions.
+
+#+begin_example
+#+TOC: listings
+#+TOC: tables
+#+end_example
+
+Normally Org uses the headline for its entry in the table of contents. But with ‘=ALT_TITLE=' property, a different entry can be specified for the table of contents.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF131][(131)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+At the moment, some export backends do not obey this specification. For example, LaTeX export excludes by default every unnumbered headline from the table of contents, unless you set the custom variable ‘=org-latex-toc-include-unnumbered=' to ‘=t=' or add ‘=:UNNUMBERED: toc=' to the section's properties.
+
+--------------
+
+Next: [[id:org--Include-Files][Include Files]], Previous: [[id:org--Export-Settings][Export Settings]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

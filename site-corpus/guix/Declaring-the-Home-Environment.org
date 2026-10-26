@@ -1,0 +1,121 @@
+:PROPERTIES:
+:ID: guix--Declaring-the-Home-Environment
+:END:
+#+filetags: :guix:
+#+title: Declaring the Home Environment
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Declaring-the-Home-Environment>>
+Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 13.1 Declaring the Home Environment [[#Declaring-the-Home-Environment-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Declaring-the-Home-Environment-1
+:CLASS: section
+:END:
+The home environment is configured by providing a =home-environment= declaration in a file that can be passed to the =guix home= command (see [[id:guix--Invoking-guix-home][Invoking =guix home=]]). The easiest way to get started is by generating an initial configuration with =guix home import=:
+
+#+begin_example
+guix home import ~/src/guix-config
+#+end_example
+
+The =guix home import= command reads some of the “dot files” such as =~/.bashrc= found in your home directory and copies them to the given directory, =~/src/guix-config= in this case; it also reads the contents of your profile, =~/.guix-profile=, and, based on that, it populates =~/src/guix-config/home-configuration.scm= with a Home configuration that resembles your current configuration.
+
+A simple setup can include Bash and a custom text configuration, like in the example below. Don't be afraid to declare home environment parts, which overlaps with your current dot files: before installing any configuration files, Guix Home will back up existing config files to a separate place in the home directory.
+
+#+begin_quote
+*Note:* It is highly recommended that you manage your shell or shells with Guix Home, because it will make sure that all the necessary scripts are sourced by the shell configuration file. Otherwise you will need to do it manually. (see [[id:guix--Configuring-the-Shell][Configuring the Shell]]).
+
+#+end_quote
+
+#+begin_src lisp
+(use-modules (gnu home)
+             (gnu home services)
+             (gnu home services shells)
+             (gnu services)
+             (gnu packages admin)
+             (guix gexp))
+
+
+(home-environment
+  (packages (list htop))
+  (services
+   (append (list
+            (service home-bash-service-type
+                     (home-bash-configuration
+                      (guix-defaults? #t)
+                      (variables
+                       `(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
+                         ("HISTSIZE" . "50000")))))
+
+            (simple-service 'test-config
+                            home-xdg-configuration-files-service-type
+                            (list `("test.conf"
+                                    ,(plain-file "tmp-file.txt"
+                                                 "the content of
+                                          ~/.config/test.conf")))))
+           %base-home-services)))
+#+end_src
+
+The =packages= field should be self-explanatory, it will install the list of packages into the user's profile. The most important field is =services=, it contains a list of /home services/, which are the basic building blocks of a home environment. See [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], for the full list of =home-environment= fields.
+
+There is no daemon (at least not necessarily) related to a home service, a home service is just an element that is used to declare part of home environment and extend other parts of it. The extension mechanism discussed in the previous chapter (see [[id:guix--Defining-Services][Defining Services]]) should not be confused with Shepherd services (see [[id:guix--Shepherd-Services][Shepherd Services]]). Using this extension mechanism and some Scheme code that glues things together gives the user the freedom to declare their own, very custom, home environments.
+
+Once the configuration looks good, you can first test it in a throw-away “container”:
+
+#+begin_example
+guix home container config.scm
+#+end_example
+
+The command above spawns a shell where your home environment is running. The shell runs in a container, meaning it's isolated from the rest of the system, so it's a good way to try out your configuration---you can see if configuration bits are missing or misbehaving, if daemons get started, and so on. Once you exit that shell, you're back to the prompt of your original shell “in the real world”.
+
+Once you have a configuration file that suits your needs, you can reconfigure your home by running:
+
+#+begin_example
+guix home reconfigure config.scm
+#+end_example
+
+This “builds” your home environment and creates =~/.guix-home= pointing to it. Voilà!
+
+#+begin_quote
+*Note:* Make sure the operating system has elogind, systemd, or a similar mechanism to create the XDG run-time directory and has the =XDG_RUNTIME_DIR= variable set. Failing that, the =on-first-login= script will not execute anything, and processes like user Shepherd and its descendants will not start.
+
+#+end_quote
+
+If you're using Guix System, you can embed your home configuration in your system configuration such that =guix system reconfigure= will deploy both the system /and/ your home at once! See [[id:guix--Guix-Services::#guix_002dhome_002dservice_002dtype][=guix-home-service-type=]], for how to do that.
+
+--------------
+
+Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

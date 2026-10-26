@@ -1,0 +1,80 @@
+:PROPERTIES:
+:ID: emacs--Colors-X
+:END:
+#+filetags: :emacs:
+#+title: Colors X
+
+Next: [[id:emacs--Window-Size-X][Options for Window Size and Position]]   Previous: [[id:emacs--Font-X][Font Specification Options]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Colors-X>>
+*** C.7 Window Color Options [[#Window-Color-Options][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Window-Color-Options
+:CLASS: appendixsec
+:END:
+You can use the following command-line options to specify the colors to use for various parts of the Emacs display. Colors may be specified using either color names or RGB triplets (see [[id:emacs--Colors][Colors for Faces]]).
+
+-  <<index-_002d_002dforeground_002dcolor>>‘=-fg ==color=' [[#index-_002d_002dforeground_002dcolor][¶]] :: 
+- ‘=--foreground-color===color=' :: Specify the foreground color, overriding the color specified by the =default= face (see [[id:emacs--Faces][Text Faces]]).
+
+-  <<index-_002d_002dbackground_002dcolor>>‘=-bg ==color=' [[#index-_002d_002dbackground_002dcolor][¶]] :: 
+- ‘=--background-color===color=' :: Specify the background color, overriding the color specified by the =default= face.
+
+-  <<index-_002d_002dborder_002dcolor>>‘=-bd ==color=' [[#index-_002d_002dborder_002dcolor][¶]] :: 
+- ‘=--border-color===color=' :: Specify the color of the border of the X window. This has no effect if Emacs is compiled with GTK+ support.
+
+-  <<index-_002d_002dcursor_002dcolor>>‘=-cr ==color=' [[#index-_002d_002dcursor_002dcolor][¶]] :: 
+- ‘=--cursor-color===color=' :: Specify the color of the Emacs cursor which indicates where point is.
+
+-  <<index-_002d_002dmouse_002dcolor>>‘=-ms ==color=' [[#index-_002d_002dmouse_002dcolor][¶]] :: 
+- ‘=--mouse-color===color=' :: Specify the color for the mouse cursor when the mouse is in the Emacs window.
+
+-  <<index-_002d_002dreverse_002dvideo>>‘=-r=' [[#index-_002d_002dreverse_002dvideo][¶]] :: 
+- ‘=-rv=' :: 
+- ‘=--reverse-video=' :: Reverse video: swap the foreground and background colors.
+
+-  <<index-_002d_002dcolor>>‘=--color===mode=' [[#index-_002d_002dcolor][¶]] :: Set the /color support mode/ when Emacs is run on a text terminal. This option overrides the number of supported colors that the character terminal advertises in its =termcap= or =terminfo= database. The parameter =mode= can be one of the following:
+
+  - ‘=never='\\
+    ‘=no=' :: Don't use colors even if the terminal's capabilities specify color support.
+
+  - ‘=default='\\
+    ‘=auto=' :: Same as when =--color= is not used at all: Emacs detects at startup whether the terminal supports colors, and if it does, turns on colored display.
+
+  - ‘=always='\\
+    ‘=yes='\\
+    ‘=ansi8=' :: Turn on the color support unconditionally, and use color commands specified by the ANSI escape sequences for the 8 standard colors.
+
+  - ‘=num=' :: Use color mode for =num= colors. If =num= is −1, turn off color support (equivalent to ‘=never='); if it is 0, use the default color support for this terminal (equivalent to ‘=auto='); otherwise use an appropriate standard mode for =num= colors. Depending on your terminal's capabilities, Emacs might be able to turn on a color mode for 8, 16, 88, or 256 as the value of =num=. If there is no mode that supports =num= colors, Emacs acts as if =num= were 0, i.e., it uses the terminal's default color support mode.
+
+  This option has no effect on MS-Windows and MS-DOS.
+
+  If =mode= is omitted, it defaults to =ansi8=.
+
+  The color mode can be changed dynamically during a running Emacs session: the current mode is available via the =tty-color-mode= frame parameter, and it can be changed by modifying that frame parameter.[[#FOOT29][^{29}]] This means you can also specify the initial value via =default-frame-alist= instead of the command-line option.
+
+For example, to use a coral mouse cursor and a slate blue text cursor, enter:
+
+#+begin_example
+emacs -ms coral -cr 'slate blue' &
+#+end_example
+
+You can reverse the foreground and background colors through the ‘=-rv=' option or with the X resource ‘=reverseVideo='.
+
+The ‘=-fg=', ‘=-bg=', and ‘=-rv=' options function on text terminals as well as on graphical displays.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF29][(29)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+This does not work on MS-Windows and MS-DOS text-mode terminals.
+
+--------------

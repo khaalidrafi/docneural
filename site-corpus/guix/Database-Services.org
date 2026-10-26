@@ -1,0 +1,285 @@
+:PROPERTIES:
+:ID: guix--Database-Services
+:END:
+#+filetags: :guix:
+#+title: Database Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Database-Services>>
+Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.13 Database Services [[#Database-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Database-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services databases)= module provides the following services.
+
+**** PostgreSQL [[#PostgreSQL][¶]]
+:PROPERTIES:
+:CUSTOM_ID: PostgreSQL
+:CLASS: subsubheading
+:END:
+- Variable: *postgresql-service-type* [[#index-postgresql_002dservice_002dtype][¶]] :: The service type for the PostgreSQL database server. Its value should be a valid =postgresql-configuration= object, documented below. The following example describes a PostgreSQL service with the default configuration.
+
+  #+begin_src lisp
+  (service postgresql-service-type
+           (postgresql-configuration
+            (postgresql postgresql)))
+  #+end_src
+
+  If the services fails to start, it may be due to an incompatible cluster already present in =data-directory=. Adjust it (or, if you don't need the cluster anymore, delete =data-directory=), then restart the service.
+
+  Peer authentication is used by default and the =postgres= user account has no shell (unless =allow-login?= is =#t=), which prevents the direct execution of =psql= commands as this user. To use =psql=, you can temporarily log in as =postgres= using a shell, create a PostgreSQL superuser with the same name as one of the system users and then create the associated database.
+
+  #+begin_example
+  sudo -u postgres -s /bin/sh
+  createuser --interactive
+  createdb $MY_USER_LOGIN      # Replace appropriately.
+#+end_example
+
+- Data Type: *postgresql-configuration* [[#index-postgresql_002dconfiguration][¶]] :: Data type representing the configuration for the =postgresql-service-type=.
+
+  - =postgresql= :: PostgreSQL package to use for the service.
+
+  - =port= (default: =5432=) :: Port on which PostgreSQL should listen.
+
+  - =locale= (default: ="en_US.utf8"=) :: Locale to use as the default when creating the database cluster.
+
+  - =config-file= (default: =(postgresql-config-file)=) :: The configuration file to use when running PostgreSQL. The default behaviour uses the postgresql-config-file record with the default values for the fields.
+
+  - =log-directory= (default: ="/var/log/postgresql"=) :: The directory where =pg_ctl= output will be written in a file named ="pg_ctl.log"=. This file can be useful to debug PostgreSQL configuration errors for instance.
+
+  - =data-directory= (default: ="/var/lib/postgresql/data"=) :: Directory in which to store the data.
+
+  - <<index-postgresql-extension_002dpackages>>=extension-packages= (default: ='()=) [[#index-postgresql-extension_002dpackages][¶]] :: Additional extensions are loaded from packages listed in =extension-packages=. Extensions are available at runtime. For instance, to create a geographic database using the =postgis= extension, a user can configure the postgresql-service as in this example:
+
+    #+begin_src lisp
+    (use-package-modules databases geo)
+
+    (operating-system
+      ...
+      ;; postgresql is required to run `psql' but postgis is not required for
+      ;; proper operation.
+      (packages (cons* postgresql %base-packages))
+      (services
+        (cons*
+          (service postgresql-service-type
+                   (postgresql-configuration
+                    (postgresql postgresql)
+                    (extension-packages (list postgis))))
+          %base-services)))
+    #+end_src
+
+    Then the extension becomes visible and you can initialise an empty geographic database in this way:
+
+    #+begin_example
+    psql -U postgres
+    > create database postgistest;
+    > \connect postgistest;
+    > create extension postgis;
+    > create extension postgis_topology;
+#+end_example
+
+    There is no need to add this field for contrib extensions such as hstore or dblink as they are already loadable by postgresql. This field is only required to add extensions provided by other packages.
+
+  - =create-account?= (default: =#t=) :: Whether or not the =postgres= user and group should be created.
+
+  - =allow-login?= (default: =#f=) :: Whether or not to allow login into the created account.
+
+  - =home-directory= (default: ="/var/empty"=) :: The home directory of the user. It is strongly advised to change this if you set =allow-login?= to =#t=.
+
+  - =uid= (default: =#f=) :: Explicitly specify the UID of the =postgres= daemon account. You normally do not need to specify this, in which case a free UID will be automatically assigned.
+
+    One situation where this option might be useful is if the =data-directory= is located on a mounted network share.
+
+  - =gid= (default: =#f=) :: Explicitly specify the GID of the =postgres= group.
+
+- Data Type: *postgresql-config-file* [[#index-postgresql_002dconfig_002dfile][¶]] :: Data type representing the PostgreSQL configuration file. As shown in the following example, this can be used to customize the configuration of PostgreSQL. Note that you can use any G-expression or filename in place of this record, if you already have a configuration file you'd like to use for example.
+
+  #+begin_src lisp
+  (service postgresql-service-type
+           (postgresql-configuration
+            (config-file
+             (postgresql-config-file
+              (log-destination "csvlog,stderr")
+              (hba-file
+               (plain-file "pg_hba.conf"
+                           "
+  local   all all         trust
+  host    all all 127.0.0.1/32    md5
+  host    all all ::1/128     md5"))
+              (extra-config
+               '(("session_preload_libraries"     "auto_explain")
+                 ("random_page_cost"              2)
+                 ("auto_explain.log_min_duration" "100 ms")
+                 ("work_mem"                      "500 MB")
+                 ("logging_collector"             #t)
+                 ("log_directory"                 "/var/log/postgresql")))))))
+  #+end_src
+
+  - =log-destination= (default: ="stderr"=) :: The logging method to use for PostgreSQL. Valid values are ="stderr"=, ="csvlog"=, ="jsonlog"=, ="syslog"= and ="eventlog"=. Multiple values are accepted, separated by commas.
+
+  - =hba-file= (default: =%default-postgres-hba=) :: Filename or G-expression for the host-based authentication configuration.
+
+  - =ident-file= (default: =%default-postgres-ident=) :: Filename or G-expression for the user name mapping configuration.
+
+  - =socket-directory= (default: ="/var/run/postgresql"=) :: Specifies the directory of the Unix-domain socket(s) on which PostgreSQL is to listen for connections from client applications. If set to =""= PostgreSQL does not listen on any Unix-domain sockets, in which case only TCP/IP sockets can be used to connect to the server.
+
+  - =extra-config= (default: ='()=) :: List of additional keys and values to include in the PostgreSQL config file. Each entry in the list should be a list where the first element is the key, and the remaining elements are the values.
+
+    The values can be numbers, booleans or strings and will be mapped to PostgreSQL parameters types =Boolean=, =String=, =Numeric=, =Numeric with Unit= and =Enumerated= described [[https://www.postgresql.org/docs/current/config-setting.html][here]].
+
+- Variable: *postgresql-role-service-type* [[#index-postgresql_002drole_002dservice_002dtype][¶]] :: This service allows to create PostgreSQL roles and databases after PostgreSQL service start. Here is an example of its use.
+
+  #+begin_src lisp
+  (service postgresql-role-service-type
+              (postgresql-role-configuration
+               (roles
+                (list (postgresql-role
+                       (name "test")
+                       (create-database? #t))))))
+  #+end_src
+
+  This service can be extended with extra roles, as in this example:
+
+  #+begin_src lisp
+  (service-extension postgresql-role-service-type
+                     (const (list
+                             (postgresql-role
+                              (name "alice")
+                              (create-database? #t)))))
+  #+end_src
+
+- Data Type: *postgresql-role* [[#index-postgresql_002drole][¶]] :: PostgreSQL manages database access permissions using the concept of roles. A role can be thought of as either a database user, or a group of database users, depending on how the role is set up. Roles can own database objects (for example, tables) and can assign privileges on those objects to other roles to control who has access to which objects.
+
+  - =name= :: The role name.
+
+  - =permissions= (default: ='(createdb login)=) :: The role permissions list. Supported permissions are =bypassrls=, =createdb=, =createrole=, =login=, =replication= and =superuser=.
+
+  - =create-database?= (default: =#f=) :: whether to create a database with the same name as the role.
+
+  - =password-file= (default: =#f=) :: A string representing the path of a file that contains the password to be set for the role.
+
+  - =encoding= (default: ="UTF8"=) :: The character set to use for storing text in the database.
+
+  - =collation= (default: ="en_US.utf8"=) :: The string sort order locale setting.
+
+  - =ctype= (default: ="en_US.utf8"=) :: The character classification locale setting.
+
+  - =template= (default: ="template1"=) :: The default template to copy the new database from when creating it. Use ="template0"= for a pristine database with no system-local modifications.
+
+- Data Type: *postgresql-role-configuration* [[#index-postgresql_002drole_002dconfiguration][¶]] :: Data type representing the configuration of =postgresql-role-service-type=.
+
+  - =host= (default: ="/var/run/postgresql"=) :: The PostgreSQL host to connect to.
+
+  - =log= (default: ="/var/log/postgresql_roles.log"=) :: File name of the log file.
+
+  - =shepherd-requirement= (default: ='(user-processes postgres)=) :: The Shepherd services dependencies to use. Add extra dependencies to =%default-postgresql-role-shepherd-requirement= to extend its value.
+
+  - =roles= (default: ='()=) :: The initial PostgreSQL roles to create.
+
+**** MariaDB/MySQL [[#MariaDB_002fMySQL][¶]]
+:PROPERTIES:
+:CUSTOM_ID: MariaDB_002fMySQL
+:CLASS: subsubheading
+:END:
+- Variable: *mysql-service-type* [[#index-mysql_002dservice_002dtype][¶]] :: This is the service type for a MySQL or MariaDB database server. Its value is a =mysql-configuration= object that specifies which package to use, as well as various settings for the =mysqld= daemon.
+
+- Data Type: *mysql-configuration* [[#index-mysql_002dconfiguration][¶]] :: Data type representing the configuration of =mysql-service-type=.
+
+  - =mysql= (default: =mariadb=) :: Package object of the MySQL database server, can be either =mariadb= or =mysql=.
+
+    For MySQL, a temporary root password will be displayed at activation time. For MariaDB, the root password is empty.
+
+  - =bind-address= (default: ="127.0.0.1"=) :: The IP on which to listen for network connections. Use ="0.0.0.0"= to bind to all available network interfaces.
+
+  - =port= (default: =3306=) :: TCP port on which the database server listens for incoming connections.
+
+  - =socket= (default: ="/run/mysqld/mysqld.sock"=) :: Socket file to use for local (non-network) connections.
+
+  - =extra-content= (default: =""=) :: Additional settings for the =my.cnf= configuration file.
+
+  - =extra-environment= (default: =#~'()=) :: List of environment variables passed to the =mysqld= process.
+
+  - =auto-upgrade?= (default: =#t=) :: Whether to automatically run =mysql_upgrade= after starting the service. This is necessary to upgrade the /system schema/ after “major” updates (such as switching from MariaDB 10.4 to 10.5), but can be disabled if you would rather do that manually.
+
+**** Memcached [[#Memcached][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Memcached
+:CLASS: subsubheading
+:END:
+- Variable: *memcached-service-type* [[#index-memcached_002dservice_002dtype][¶]] :: This is the service type for the [[https://memcached.org/][Memcached]] service, which provides a distributed in memory cache. The value for the service type is a =memcached-configuration= object.
+
+#+begin_src lisp
+(service memcached-service-type)
+#+end_src
+
+- Data Type: *memcached-configuration* [[#index-memcached_002dconfiguration][¶]] :: Data type representing the configuration of memcached.
+
+  - =memcached= (default: =memcached=) :: The Memcached package to use.
+
+  - =interfaces= (default: ='("0.0.0.0")=) :: Network interfaces on which to listen.
+
+  - =tcp-port= (default: =11211=) :: Port on which to accept connections.
+
+  - =udp-port= (default: =11211=) :: Port on which to accept UDP connections on, a value of 0 will disable listening on a UDP socket.
+
+  - =additional-options= (default: ='()=) :: Additional command line options to pass to =memcached=.
+
+**** Redis [[#Redis][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Redis
+:CLASS: subsubheading
+:END:
+[[https://redis.io/][Redis]] is an in-memory data store used by millions of developers as a cache, vector database, document database, streaming engine, and message broker. Redis has built-in replication and different levels of on-disk persistence. It supports complex data types (for example, strings, hashes, lists, sets, sorted sets, and JSON), with atomic operations defined on those data types.
+
+- Variable: *redis-service-type* [[#index-redis_002dservice_002dtype][¶]] :: Type of the service that runs =redis=, an in-memory data store. The value for this service is a =<redis-configuration>= object.
+
+- Data Type: *redis-configuration* [[#index-redis_002dconfiguration][¶]] :: Available =redis-configuration= fields are:
+
+  - =redis= (default: =redis=) (type: package) :: The Redis package to use.
+
+  - =bind= (default: ="127.0.0.1"=) (type: string) :: Network interface on which to listen.
+
+  - =port= (default: =6379=) (type: number) :: Port on which to accept connections on, a value of 0 will disable listening on a TCP socket.
+
+  - =working-directory= (default: ="/var/lib/redis"=) (type: string) :: Directory in which to store the database and related files.
+
+  - =config-file= (type: maybe-string) :: Default location for config file.
+
+--------------
+
+Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: org--Column-View
+:END:
+#+filetags: :org:
+#+title: Column View (The Org Manual)
+
+Next:
+
+<<Column-View>>
+Previous: [[id:org--Property-Inheritance][Property Inheritance]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 7.5 Column View [[#Column-View-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Column-View-1
+:CLASS: section
+:END:
+A great way to view and edit properties in an outline tree is /column view/. In column view, each heading is turned into a table row. Columns in this table provide access to properties of the entries. Org mode implements columns by overlaying a tabular structure over the headline of each item. While the headlines have been turned into a table row, you can still change the visibility of the outline tree. For example, you get a compact table by switching to “contents” view---S-TAB S-TAB, or simply c while column view is active---but you can still open, read, and edit the entry below each headline. Or, you can switch to column view after executing a sparse tree command and in this way get a table only for the selected items. Column view also works in agenda buffers (see [[id:org--Agenda-Views][Agenda Views]]) where queries have collected selected items, possibly from a number of files.
+
+- [[id:org--Defining-columns][Defining columns]]
+- [[id:org--Using-column-view][Using column view]]
+- [[id:org--Capturing-column-view][Capturing column view]]
+
+--------------
+
+Previous: [[id:org--Property-Inheritance][Property Inheritance]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

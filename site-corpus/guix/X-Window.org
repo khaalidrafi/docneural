@@ -1,0 +1,402 @@
+:PROPERTIES:
+:ID: guix--X-Window
+:END:
+#+filetags: :guix:
+#+title: X Window
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<X-Window>>
+Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.8 X Window [[#X-Window-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: X-Window-1
+:CLASS: subsection
+:END:
+Support for the X Window graphical display system---specifically Xorg---is provided by the =(gnu services xorg)= module. Note that there is no =xorg-service= procedure. Instead, the X server is started by the /login manager/, by default the GNOME Display Manager (GDM).
+
+GDM of course allows users to log in into window managers and desktop environments other than GNOME; for those using GNOME, GDM is required for features such as automatic screen locking.
+
+To use X11, you must install at least one /window manager/---for example the =windowmaker= or =openbox= packages---preferably by adding it to the =packages= field of your operating system definition (see [[id:guix--operating_002dsystem-Reference][system-wide packages]]).
+
+GDM also supports Wayland: it can itself use Wayland instead of X11 for its user interface, and it can also start Wayland sessions. Wayland support is enabled by default. To disable it, set =wayland?= to =#f= in =gdm-configuration=.
+
+- Variable: *gdm-service-type* [[#index-gdm_002dservice_002dtype][¶]] :: This is the type for the [[https://wiki.gnome.org/Projects/GDM/][GNOME Desktop Manager]] (GDM), a program that manages graphical display servers and handles graphical user logins. Its value must be a =gdm-configuration= (see below).
+
+  GDM looks for /session types/ described by the =.desktop= files in =/run/current-system/profile/share/xsessions= (for X11 sessions) and =/run/current-system/profile/share/wayland-sessions= (for Wayland sessions) and allows users to choose a session from the log-in screen. Packages such as =gnome=, =xfce=, =i3= and =sway= provide =.desktop= files; adding them to the system-wide set of packages automatically makes them available at the log-in screen.
+
+  In addition, =~/.xsession= files are honored. When available, =~/.xsession= must be an executable that starts a window manager and/or other X clients.
+
+- Data Type: *gdm-configuration* [[#index-gdm_002dconfiguration][¶]] :: - =auto-login?= (default: =#f=)\\
+    =default-user= (default: =#f=) :: When =auto-login?= is false, GDM presents a log-in screen.
+
+    When =auto-login?= is true, GDM logs in directly as =default-user=.
+
+  - =auto-suspend?= (default =#t=) :: When true, GDM will automatically suspend to RAM when nobody is physically connected. When a machine is used via remote desktop or SSH, this should be set to false to avoid GDM interrupting remote sessions or rendering the machine unavailable.
+
+  - =debug?= (default: =#f=) :: When true, GDM writes debug messages to its log.
+
+  - =gnome-shell-assets= (default: ...) :: List of GNOME Shell assets needed by GDM: icon theme, fonts, etc.
+
+  - =xorg-configuration= (default: =(xorg-configuration)=) :: Configuration of the Xorg graphical server.
+
+  - =x-session= (default: =(xinitrc)=) :: Script to run before starting a X session.
+
+  - =dbus-daemon= (default: =dbus-daemon-wrapper=) :: File name of the =dbus-daemon= executable.
+
+  - =gdm= (default: =gdm=) :: The GDM package to use.
+
+  - =wayland?= (default: =#t=) :: When true, enables Wayland in GDM, necessary to use Wayland sessions.
+
+  - =wayland-session= (default: =gdm-wayland-session-wrapper=) :: The Wayland session wrapper to use, needed to setup the environment.
+
+- Variable: *slim-service-type* [[#index-slim_002dservice_002dtype][¶]] :: This is the type for the SLiM graphical login manager for X11.
+
+  Like GDM, SLiM looks for session types described by =.desktop= files and allows users to choose a session from the log-in screen using F1. It also honors =~/.xsession= files.
+
+  Unlike GDM, SLiM does not spawn the user session on a different VT after logging in, which means that you can only start one graphical session. If you want to be able to run multiple graphical sessions at the same time you have to add multiple SLiM services to your system services. The following example shows how to replace the default GDM service with two SLiM services on tty7 and tty8.
+
+  #+begin_src lisp
+  (use-modules (gnu services)
+               (gnu services desktop)
+               (gnu services xorg))
+
+  (operating-system
+    ;; ...
+    (services (cons* (service slim-service-type (slim-configuration
+                                                 (display ":0")
+                                                 (vt "vt7")))
+                     (service slim-service-type (slim-configuration
+                                                 (display ":1")
+                                                 (vt "vt8")))
+                     (modify-services %desktop-services
+                       (delete gdm-service-type)))))
+  #+end_src
+
+- Data Type: *slim-configuration* [[#index-slim_002dconfiguration][¶]] :: Data type representing the configuration of =slim-service-type=.
+
+  - =allow-empty-passwords?= (default: =#t=) :: Whether to allow logins with empty passwords.
+
+  - =gnupg?= (default: =#f=) :: If enabled, =pam-gnupg= will attempt to automatically unlock the user's GPG keys with the login password via =gpg-agent=. The keygrips of all keys to be unlocked should be written to =~/.pam-gnupg=, and can be queried with =gpg -K --with-keygrip=. Presetting passphrases must be enabled by adding =allow-preset-passphrase= in =~/.gnupg/gpg-agent.conf=.
+
+  - =auto-login?= (default: =#f=)\\
+    =default-user= (default: =""=) :: When =auto-login?= is false, SLiM presents a log-in screen.
+
+    When =auto-login?= is true, SLiM logs in directly as =default-user=.
+
+  - =theme= (default: =%default-slim-theme=)\\
+    =theme-name= (default: =%default-slim-theme-name=) :: The graphical theme to use and its name.
+
+  - =auto-login-session= (default: =#f=) :: If true, this must be the name of the executable to start as the default session---e.g., =(file-append windowmaker "/bin/windowmaker")=.
+
+    If false, a session described by one of the available =.desktop= files in =/run/current-system/profile= and =~/.guix-profile= will be used.
+
+    #+begin_quote
+    *Note:* You must install at least one window manager in the system profile or in your user profile. Failing to do that, if =auto-login-session= is false, you will be unable to log in.
+
+    #+end_quote
+
+  - =xorg-configuration= (default =(xorg-configuration)=) :: Configuration of the Xorg graphical server.
+
+  - =display= (default =":0"=) :: The display on which to start the Xorg graphical server.
+
+  - =vt= (default ="vt7"=) :: The VT on which to start the Xorg graphical server.
+
+  - =xauth= (default: =xauth=) :: The XAuth package to use.
+
+  - =shepherd= (default: =shepherd=) :: The Shepherd package used when invoking =halt= and =reboot=.
+
+  - =sessreg= (default: =sessreg=) :: The sessreg package used in order to register the session.
+
+  - =slim= (default: =slim=) :: The SLiM package to use.
+
+- Variable: *%default-theme* [[#index-_0025default_002dtheme][¶]]\\
+  Variable: *%default-theme-name* [[#index-_0025default_002dtheme_002dname][¶]] :: The default SLiM theme and its name.
+
+- Variable: *sddm-service-type* [[#index-sddm_002dservice_002dtype][¶]] :: This is the type of the service to run the [[https://github.com/sddm/sddm][SDDM display manager]]. Its value must be a =sddm-configuration= record (see below).
+
+  Here's an example use:
+
+  #+begin_src lisp
+  (service sddm-service-type
+           (sddm-configuration
+             (auto-login-user "alice")
+             (auto-login-session "xfce.desktop")))
+  #+end_src
+
+- Data Type: *sddm-configuration* [[#index-sddm_002dconfiguration][¶]] :: This data type represents the configuration of the SDDM login manager. The available fields are:
+
+  - =sddm= (default: =sddm-qt5=) :: The SDDM package to use.
+
+  - =display-server= (default: "x11") :: Select display server to use for the greeter. Valid values are ‘="x11"=' or ‘="wayland"='.
+
+  - =numlock= (default: "on") :: Valid values are ‘="on"=', ‘="off"=' or ‘="none"='.
+
+  - =halt-command= (default =#~(string-append #$shepherd "/sbin/halt")=) :: Command to run when halting.
+
+  - =reboot-command= (default =#~(string-append #$shepherd "/sbin/reboot")=) :: Command to run when rebooting.
+
+  - =theme= (default "maldives") :: Theme to use. Default themes provided by SDDM are ‘="elarun"=', ‘="maldives"=' or ‘="maya"='.
+
+  - =themes-directory= (default "/run/current-system/profile/share/sddm/themes") :: Directory to look for themes.
+
+  - =faces-directory= (default "/run/current-system/profile/share/sddm/faces") :: Directory to look for faces.
+
+  - =default-path= (default "/run/current-system/profile/bin") :: Default PATH to use.
+
+  - =minimum-uid= (default: 1000) :: Minimum UID displayed in SDDM and allowed for log-in.
+
+  - =maximum-uid= (default: 2000) :: Maximum UID to display in SDDM.
+
+  - =remember-last-user?= (default #t) :: Remember last user.
+
+  - =remember-last-session?= (default #t) :: Remember last session.
+
+  - =hide-users= (default "") :: Usernames to hide from SDDM greeter.
+
+  - =hide-shells= (default =#~(string-append #$shadow "/sbin/nologin")=) :: Users with shells listed will be hidden from the SDDM greeter.
+
+  - =session-command= (default =#~(string-append #$sddm "/share/sddm/scripts/wayland-session")=) :: Script to run before starting a wayland session.
+
+  - =sessions-directory= (default "/run/current-system/profile/share/wayland-sessions") :: Directory to look for desktop files starting wayland sessions.
+
+  - =xorg-configuration= (default =(xorg-configuration)=) :: Configuration of the Xorg graphical server.
+
+  - =xauth-path= (default =#~(string-append #$xauth "/bin/xauth")=) :: Path to xauth.
+
+  - =xephyr-path= (default =#~(string-append #$xorg-server "/bin/Xephyr")=) :: Path to Xephyr.
+
+  - =xdisplay-start= (default =#~(string-append #$sddm "/share/sddm/scripts/Xsetup")=) :: Script to run after starting xorg-server.
+
+  - =xdisplay-stop= (default =#~(string-append #$sddm "/share/sddm/scripts/Xstop")=) :: Script to run before stopping xorg-server.
+
+  - =xsession-command= (default: =xinitrc=) :: Script to run before starting a X session.
+
+  - =xsessions-directory= (default: "/run/current-system/profile/share/xsessions") :: Directory to look for desktop files starting X sessions.
+
+  - =minimum-vt= (default: 7) :: Minimum VT to use.
+
+  - =auto-login-user= (default "") :: User account that will be automatically logged in. Setting this to the empty string disables auto-login.
+
+  - =auto-login-session= (default "") :: The =.desktop= file name to use as the auto-login session, or the empty string.
+
+  - =relogin?= (default #f) :: Relogin after logout.
+
+- Variable: *lightdm-service-type* [[#index-lightdm_002dservice_002dtype][¶]] :: This is the type of the service to run the [[https://github.com/canonical/lightdm][LightDM display manager]]. Its value must be a =lightdm-configuration= record, which is documented below. Among its distinguishing features are TigerVNC integration for easily remoting your desktop as well as support for the XDMCP protocol, which can be used by remote clients to start a session from the login manager.
+
+  In its most basic form, it can be used simply as:
+
+  #+begin_src lisp
+  (service lightdm-service-type)
+  #+end_src
+
+  A more elaborate example making use of the VNC capabilities and enabling more features and verbose logs could look like:
+
+  #+begin_src lisp
+  (service lightdm-service-type
+           (lightdm-configuration
+            (allow-empty-passwords? #t)
+            (xdmcp? #t)
+            (vnc-server? #t)
+            (vnc-server-command
+             (file-append tigervnc-server "/bin/Xvnc"
+                          "  -SecurityTypes None"))
+            (seats
+             (list (lightdm-seat-configuration
+                    (name "*")
+                    (user-session "ratpoison"))))))
+  #+end_src
+
+- Data Type: *lightdm-configuration* [[#index-lightdm_002dconfiguration][¶]] :: Available =lightdm-configuration= fields are:
+
+  - =lightdm= (default: =lightdm=) (type: file-like) :: The lightdm package to use.
+
+  - =allow-empty-passwords?= (default: =#f=) (type: boolean) :: Whether users not having a password set can login.
+
+  - =debug?= (default: =#f=) (type: boolean) :: Enable verbose output.
+
+  - =xorg-configuration= (type: xorg-configuration) :: The default Xorg server configuration to use to generate the Xorg server start script. It can be refined per seat via the =xserver-command= of the =<lightdm-seat-configuration>= record, if desired.
+
+  - =greeters= (type: list-of-greeter-configurations) :: The LightDM greeter configurations specifying the greeters to use.
+
+  - =seats= (type: list-of-seat-configurations) :: The seat configurations to use. A LightDM seat is akin to a user.
+
+  - =xdmcp?= (default: =#f=) (type: boolean) :: Whether a XDMCP server should listen on port UDP 177.
+
+  - =xdmcp-listen-address= (type: maybe-string) :: The host or IP address the XDMCP server listens for incoming connections. When unspecified, listen on for any hosts/IP addresses.
+
+  - =vnc-server?= (default: =#f=) (type: boolean) :: Whether a VNC server is started.
+
+  - =vnc-server-command= (type: file-like) :: The Xvnc command to use for the VNC server, it's possible to provide extra options not otherwise exposed along the command, for example to disable security:
+
+    #+begin_src lisp
+    (vnc-server-command (file-append tigervnc-server "/bin/Xvnc"
+                                     " -SecurityTypes None" ))
+    #+end_src
+
+    Or to set a PasswordFile for the classic (unsecure) VncAuth mechanism:
+
+    #+begin_src lisp
+    (vnc-server-command (file-append tigervnc-server "/bin/Xvnc"
+                                     " -PasswordFile /var/lib/lightdm/.vnc/passwd"))
+    #+end_src
+
+    The password file should be manually created using the =vncpasswd= command. Note that LightDM will create new sessions for VNC users, which means they need to authenticate in the same way as local users would.
+
+  - =vnc-server-listen-address= (type: maybe-string) :: The host or IP address the VNC server listens for incoming connections. When unspecified, listen for any hosts/IP addresses.
+
+  - =vnc-server-port= (default: =5900=) (type: number) :: The TCP port the VNC server should listen to.
+
+  - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the LightDM configuration file.
+
+- Data Type: *lightdm-gtk-greeter-configuration* [[#index-lightdm_002dgtk_002dgreeter_002dconfiguration][¶]] :: Available =lightdm-gtk-greeter-configuration= fields are:
+
+  - =lightdm-gtk-greeter= (default: =lightdm-gtk-greeter=) (type: file-like) :: The lightdm-gtk-greeter package to use.
+
+  - =assets= (default: =(adwaita-icon-theme gnome-themes-extra hicolor-icon-theme)=) (type: list-of-file-likes) :: The list of packages complementing the greeter, such as package providing icon themes.
+
+  - =theme-name= (default: ="Adwaita"=) (type: string) :: The name of the theme to use.
+
+  - =icon-theme-name= (default: ="Adwaita"=) (type: string) :: The name of the icon theme to use.
+
+  - =cursor-theme-name= (default: ="Adwaita"=) (type: string) :: The name of the cursor theme to use.
+
+  - =cursor-theme-size= (default: =16=) (type: number) :: The size to use for the cursor theme.
+
+  - =allow-debugging?= (type: maybe-boolean) :: Set to #t to enable debug log level.
+
+  - =background= (type: file-like) :: The background image to use.
+
+  - =at-spi-enabled?= (default: =#f=) (type: boolean) :: Enable accessibility support through the Assistive Technology Service Provider Interface (AT-SPI).
+
+  - =a11y-states= (default: =(contrast font keyboard reader)=) (type: list-of-a11y-states) :: The accessibility features to enable, given as list of symbols.
+
+  - =reader= (type: maybe-file-like) :: The command to use to launch a screen reader.
+
+  - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the LightDM GTK Greeter configuration file.
+
+- Data Type: *lightdm-seat-configuration* [[#index-lightdm_002dseat_002dconfiguration][¶]] :: Available =lightdm-seat-configuration= fields are:
+
+  - =name= (type: seat-name) :: The name of the seat. An asterisk (*) can be used in the name to apply the seat configuration to all the seat names it matches.
+
+  - =user-session= (type: maybe-string) :: The session to use by default. The session name must be provided as a lowercase string, such as ="gnome"=, ="ratpoison"=, etc.
+
+  - =type= (default: =local=) (type: seat-type) :: The type of the seat, either the =local= or =xremote= symbol.
+
+  - =autologin-user= (type: maybe-string) :: The username to automatically log in with by default.
+
+  - =greeter-session= (default: =lightdm-gtk-greeter=) (type: greeter-session) :: The greeter session to use, specified as a symbol. Currently, only =lightdm-gtk-greeter= is supported.
+
+  - =xserver-command= (type: maybe-file-like) :: The Xorg server command to run.
+
+  - =session-wrapper= (type: file-like) :: The xinitrc session wrapper to use.
+
+  - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the seat configuration section.
+
+- Data Type: *xorg-configuration* [[#index-xorg_002dconfiguration][¶]] :: This data type represents the configuration of the Xorg graphical display server. Note that there is no Xorg service; instead, the X server is started by a “display manager” such as GDM, SDDM, LightDM or SLiM. Thus, the configuration of these display managers aggregates an =xorg-configuration= record.
+
+  - =modules= (default: =%default-xorg-modules=) :: This is a list of /module packages/ loaded by the Xorg server---e.g., =xf86-video-vesa=, =xf86-input-libinput=, and so on.
+
+  - =fonts= (default: =%default-xorg-fonts=) :: This is a list of font directories to add to the server's /font path/.
+
+  - =drivers= (default: ='()=) :: This must be either the empty list, in which case Xorg chooses a graphics driver automatically, or a list of driver names that will be tried in this order---e.g., ='("modesetting" "vesa")=.
+
+  - =resolutions= (default: ='()=) :: When =resolutions= is the empty list, Xorg chooses an appropriate screen resolution. Otherwise, it must be a list of resolutions---e.g., ='((1024 768) (640 480))=.
+
+  -  <<index-keyboard-layout_002c-for-Xorg>>=keyboard-layout= (default: =#f=) [[#index-keyboard-layout_002c-for-Xorg][¶]] :: If this is =#f=, Xorg uses the default keyboard layout---usually US English (“qwerty”) for a 105-key PC keyboard.
+
+    Otherwise this must be a =keyboard-layout= object specifying the keyboard layout in use when Xorg is running. See [[id:guix--Keyboard-Layout][Keyboard Layout]], for more information on how to specify the keyboard layout.
+
+  - =extra-config= (default: ='()=) :: This is a list of strings or objects appended to the configuration file. It is used to pass extra text to be added verbatim to the configuration file.
+
+  - =server= (default: =xorg-server=) :: This is the package providing the Xorg server.
+
+  - =server-arguments= (default: =%default-xorg-server-arguments=) :: This is the list of command-line arguments to pass to the X server. The default is =-nolisten tcp=.
+
+- Procedure: *set-xorg-configuration* =config [login-manager-service-type]= [[#index-set_002dxorg_002dconfiguration-1][¶]] :: Tell the log-in manager (of type =login-manager-service-type=) to use =config=, an =<xorg-configuration>= record.
+
+  Since the Xorg configuration is embedded in the log-in manager's configuration---e.g., =gdm-configuration=---this procedure provides a shorthand to set the Xorg configuration.
+
+- Procedure: *xorg-start-command* =[config]= [[#index-xorg_002dstart_002dcommand][¶]] :: Return a =startx= script in which the modules, fonts, etc. specified in =config=, are available. The result should be used in place of =startx=.
+
+  Usually the X server is started by a login manager.
+
+- Procedure: *xorg-start-command-xinit* =[config]= [[#index-xorg_002dstart_002dcommand_002dxinit][¶]] :: Return a =startx= script in which the modules, fonts, etc. specified in =config= are available. The result should be used in place of =startx= and should be invoked by the user from a tty after login. Unlike =xorg-start-command=, this script calls xinit. Therefore it works well when executed from a tty. This script can be set up as =startx= using =startx-command-service-type= or =home-startx-command-service-type=. If you are using a desktop environment, you are unlikely to need this procedure.
+
+- Variable: *screen-locker-service-type* [[#index-screen_002dlocker_002dservice_002dtype][¶]] :: Type for a service that adds a package for a screen locker or screen saver to the set of privileged programs and/or add a PAM entry for it. The value for this service is a =<screen-locker-configuration>= object.
+
+  While the default behavior is to setup both a privileged program and PAM entry, these two methods are redundant. Screen locker programs may not execute when PAM is configured and =setuid= is set on their executable. In this case, =using-setuid?= can be set to =#f=.
+
+  For example, to make XlockMore usable:
+
+  #+begin_src lisp
+  (service screen-locker-service-type
+           (screen-locker-configuration
+             (name "xlock")
+             (program (file-append xlockmore "/bin/xlock"))))
+  #+end_src
+
+  makes the good ol' XlockMore usable.
+
+  For example, swaylock fails to execute when compiled with PAM support and setuid enabled. One can thus disable setuid:
+
+  #+begin_src lisp
+  (service screen-locker-service-type
+           (screen-locker-configuration
+             (name "swaylock")
+             (program (file-append swaylock "/bin/swaylock"))
+             (using-pam? #t)
+             (using-setuid? #f)))
+  #+end_src
+
+- Data Type: *screen-locker-configuration* [[#index-screen_002dlocker_002dconfiguration][¶]] :: Available =screen-locker-configuration= fields are:
+
+  - =name= (type: string) :: Name of the screen locker.
+
+  - =program= (type: file-like) :: Path to the executable for the screen locker as a G-Expression.
+
+  - =allow-empty-password?= (default: =#f=) (type: boolean) :: Whether to allow empty passwords.
+
+  - =using-pam?= (default: =#t=) (type: boolean) :: Whether to setup PAM entry.
+
+  - =using-setuid?= (default: =#t=) (type: boolean) :: Whether to setup program as setuid binary.
+
+- Variable: *startx-command-service-type* [[#index-startx_002dcommand_002dservice_002dtype][¶]] :: Add =startx= to the system profile putting it onto =PATH=.
+
+  The value for this service is a =<xorg-configuration>= object which is passed to the =xorg-start-command-xinit= procedure producing the =startx= used. Default value is =(xorg-configuration)=.
+
+--------------
+
+Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

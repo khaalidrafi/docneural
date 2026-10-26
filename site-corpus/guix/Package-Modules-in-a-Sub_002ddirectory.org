@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID: guix--Package-Modules-in-a-Sub_002ddirectory
+:END:
+#+filetags: :guix:
+#+title: Package Modules in a Sub-directory
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Package-Modules-in-a-Sub_002ddirectory>>
+Next: [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]], Previous: [[id:guix--Creating-a-Channel][Creating a Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.9 Package Modules in a Sub-directory [[#Package-Modules-in-a-Sub_002ddirectory-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Package-Modules-in-a-Sub_002ddirectory-1
+:CLASS: section
+:END:
+As a channel author, you may want to keep your channel modules in a sub-directory. If your modules are in the sub-directory =guix=, you must add a meta-data file =.guix-channel= that contains:
+
+#+begin_src lisp
+(channel
+  (version 0)
+  (directory "guix"))
+#+end_src
+
+The modules must be *underneath* the specified directory, as the =directory= changes Guile's =load-path=. For example, if =.guix-channel= has =(directory "base")=, then a module defined as =(define-module (gnu packages fun))= must be located at =base/gnu/packages/fun.scm=.
+
+Doing this allows for only parts of a repository to be used as a channel, as Guix expects valid Guile modules when pulling. For instance, =guix deploy= machine configuration files are not valid Guile modules, and treating them as such would make =guix pull= fail.

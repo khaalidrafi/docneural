@@ -1,0 +1,82 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-build
+:END:
+#+filetags: :guix:
+#+title: Invoking guix build
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-build>>
+Next: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.1 Invoking =guix build= [[#Invoking-guix-build-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-build-1
+:CLASS: section
+:END:
+The =guix build= command builds packages or derivations and their dependencies, and prints the resulting store paths. Note that it does not modify the user's profile---this is the job of the =guix package= command (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). Thus, it is mainly useful for distribution developers.
+
+The general syntax is:
+
+#+begin_example
+guix build options package-or-derivation...
+#+end_example
+
+As an example, the following command builds the latest versions of Emacs and of Guile, displays their build logs, and finally displays the resulting directories:
+
+#+begin_example
+guix build emacs guile
+#+end_example
+
+Similarly, the following command builds all the available packages:
+
+#+begin_example
+guix build --quiet --keep-going \
+  $(guix package -A | awk '{ print $1 "@" $2 }')
+#+end_example
+
+=package-or-derivation= may be either the name of a package found in the software distribution such as =coreutils= or =coreutils@8.20=, or a derivation such as =/gnu/store/…-coreutils-8.19.drv=. In the former case, a package with the corresponding name (and optionally version) is searched for among the GNU distribution modules (see [[id:guix--Package-Modules][Package Modules]]).
+
+Alternatively, the =--expression= option may be used to specify a Scheme expression that evaluates to a package; this is useful when disambiguating among several same-named packages or package variants is needed.
+
+There may be zero or more =options=. The available options are described in the subsections below.
+
+- [[id:guix--Common-Build-Options][Common Build Options]]
+- [[id:guix--Package-Transformation-Options][Package Transformation Options]]
+- [[id:guix--Additional-Build-Options][Additional Build Options]]
+- [[id:guix--Debugging-Build-Failures][Debugging Build Failures]]
+
+--------------
+
+Next: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

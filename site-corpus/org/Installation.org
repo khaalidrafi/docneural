@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: org--Installation
+:END:
+#+filetags: :org:
+#+title: Installation (The Org Manual)
+
+Next:
+
+<<Installation>>
+Next: [[id:org--Activation][Activation]], Previous: [[id:org--Summary][Summary]], Up: [[id:org--Introduction][Introduction]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 1.2 Installation [[#Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Installation-1
+:CLASS: section
+:END:
+Org is included in distributions of GNU Emacs, so you probably do not need to install it. Most users will simply activate Org and begin exploring its features.
+
+If, for one reason or another, you want to install Org on top of the pre-packaged version, you can use the Emacs package system or clone Org's Git repository. We *strongly recommend* sticking to a single installation method.
+
+When installing Org on top of the pre-packaged version, please note that Org stable versions are meant to be fully compatible with the last three stable versions of Emacs but not with older Emacsen.
+
+Some Org components also depend on third-party packages available through package archives. Org is only guaranteed to be compatible with the latest stable versions of these third-party packages.
+
+**** Using Emacs packaging system [[#Using-Emacs-packaging-system-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-Emacs-packaging-system-1
+:CLASS: subheading
+:END:
+Recent Emacs distributions include a packaging system which lets you install Elisp libraries. You can install Org from the “package menu”, with M-x list-packages. See [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Menu.html#Package-Menu][Package Menu]].
+
+#+begin_quote
+*Important:* You need to do this in a session where no ‘=.org=' file has been visited, i.e., where no Org built-in functions have been loaded. Otherwise, autoloaded Org functions will mess up the installation.
+
+#+end_quote
+
+To avoid interference with the built-in Org mode, you can use the command line (you need Emacs 30 or later):
+
+#+begin_example
+emacs -Q -batch -eval "(progn (package-refresh-contents) (package-upgrade 'org))"
+#+end_example
+
+This approach has the advantage of isolating the upgrade process from a running Emacs session, ensuring that version conflicts cannot arise.
+
+**** Using Org's Git repository [[#Using-Org_0027s-Git-repository-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-Org_0027s-Git-repository-1
+:CLASS: subheading
+:END:
+You can clone Org's repository and install Org like this:
+
+#+begin_example
+$ cd ~/src/
+$ git clone https://https.git.savannah.nongnu.org/git/org-mode.git
+$ # alternatively, you can use mirror
+$ # git clone https://git.sr.ht/~bzg/org-mode
+$ cd org-mode/
+$ make autoloads
+#+end_example
+
+Note that in this case, ‘=make autoloads=' is mandatory: it defines Org's version in ‘=org-version.el=' and Org's autoloads in ‘=org-loaddefs.el='.
+
+Make sure you set the load path correctly in your Emacs init file:
+
+#+begin_src lisp-preformatted
+(add-to-list 'load-path "~/src/org-mode/lisp")
+#+end_src
+
+You can also compile with ‘=make=', generate the documentation with ‘=make doc=', create a local configuration with ‘=make config=', and install Org with ‘=make install='. Please run ‘=make help=' to get the list of compilation/installation options.
+
+For more detailed explanations on Org's build system, please check the Org Build System page on [[https://orgmode.org/worg/dev/org-build-system.html][Worg]].
+
+**** Installing Org's contributed packages [[#Installing-Org_0027s-contributed-packages-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Installing-Org_0027s-contributed-packages-1
+:CLASS: subheading
+:END:
+Org's repository used to contain the ‘=contrib/=' directory for add-ons contributed by others. As of Org 9.5, the directory has been moved to the dedicated org-contrib [[https://git.sr.ht/~bzg/org-contrib][repository]], which you can install separately as a [[https://elpa.nongnu.org/nongnu/org-contrib.html][package]] from NonGNU ELPA.
+
+There are many valuable packages maintained outside the Org repository. Worg has a list of [[https://orgmode.org/worg/org-contrib/index.html][org-contrib and external packages]]; it is certainly not exhaustive.
+
+--------------
+
+Next: [[id:org--Activation][Activation]], Previous: [[id:org--Summary][Summary]], Up: [[id:org--Introduction][Introduction]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

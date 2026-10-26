@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID: emacs--Font-X
+:END:
+#+filetags: :emacs:
+#+title: Font X
+
+Next: [[id:emacs--Colors-X][Window Color Options]]   Previous: [[id:emacs--Display-X][Specifying the Display Name]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Font-X>>
+*** C.6 Font Specification Options [[#Font-Specification-Options][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Font-Specification-Options
+:CLASS: appendixsec
+:END:
+You can use the command line option ‘=-fn ==font=' (or ‘=--font=', which is an alias for ‘=-fn=') to specify a default font:
+
+-  <<index-_002d_002dfont>>‘=-fn ==font=' [[#index-_002d_002dfont][¶]] :: 
+- ‘=--font===font=' :: Use =font= as the default font.
+
+When passing a font name to Emacs on the command line, you may need to quote it, by enclosing it in quotation marks, if it contains characters that the shell treats specially (e.g., spaces). For example:
+
+#+begin_example
+emacs -fn "DejaVu Sans Mono-12"
+#+end_example
+
+See [[id:emacs--Fonts][Fonts]], for details about font names and other ways to specify the default font.
+
+--------------

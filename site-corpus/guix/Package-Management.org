@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID: guix--Package-Management
+:END:
+#+filetags: :guix:
+#+title: Package Management
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Package-Management>>
+Next: [[id:guix--Channels][Channels]], Previous: [[id:guix--Getting-Started][Getting Started]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 5 Package Management [[#Package-Management-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Package-Management-1
+:CLASS: chapter
+:END:
+The purpose of GNU Guix is to allow users to easily install, upgrade, and remove software packages, without having to know about their build procedures or dependencies. Guix also goes beyond this obvious set of features.
+
+This chapter describes the main features of Guix, as well as the package management tools it provides. Along with the command-line interface described below (see [[id:guix--Invoking-guix-package][=guix package=]]), you may also use the Emacs-Guix interface (see [[https://doc.guix.gnu.org/emacs-guix/latest/en/html_node/index.html#Top][The Emacs-Guix Reference Manual]]), after installing =emacs-guix= package (run M-x guix-help command to start with it):
+
+#+begin_example
+guix install emacs-guix
+#+end_example
+
+- [[id:guix--Features][Features]]
+- [[id:guix--Invoking-guix-package][Invoking =guix package=]]
+- [[id:guix--Substitutes][Substitutes]]
+- [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]
+- [[id:guix--Invoking-guix-locate][Invoking =guix locate=]]
+- [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]
+- [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]
+- [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]]
+- [[id:guix--Inferiors][Inferiors]]
+- [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]
+- [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]
+
+--------------
+
+Next: [[id:guix--Channels][Channels]], Previous: [[id:guix--Getting-Started][Getting Started]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

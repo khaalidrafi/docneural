@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-container
+:END:
+#+filetags: :guix:
+#+title: Invoking guix container
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-container>>
+Next: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Previous: [[id:guix--Invoking-guix-copy][Invoking =guix copy=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.14 Invoking =guix container= [[#Invoking-guix-container-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-container-1
+:CLASS: section
+:END:
+
+#+begin_quote
+*Note:* As of version ad54bd5, this tool is experimental. The interface is subject to radical change in the future.
+
+#+end_quote
+
+The purpose of =guix container= is to manipulate processes running within an isolated environment, commonly known as a “container”, typically created by the =guix shell= (see [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]) and =guix system container= (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]) commands.
+
+The general syntax is:
+
+#+begin_example
+guix container action options...
+#+end_example
+
+=action= specifies the operation to perform with a container, and =options= specifies the context-specific arguments for the action.
+
+The following actions are available:
+
+- =exec= :: Execute a command within the context of a running container.
+
+  The syntax is:
+
+  #+begin_example
+  guix container exec pid program arguments...
+#+end_example
+
+  =pid= specifies the process ID of the running container. =program= specifies an executable file name within the root file system of the container. =arguments= are the additional options that will be passed to =program=.
+
+  The following command launches an interactive login shell inside a Guix system container, started by =guix system container=, and whose process ID is 9001:
+
+  #+begin_example
+  guix container exec 9001 /run/current-system/profile/bin/bash --login
+#+end_example
+
+  Note that the =pid= cannot be the parent process of a container. It must be PID 1 of the container or one of its child processes.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Previous: [[id:guix--Invoking-guix-copy][Invoking =guix copy=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,141 @@
+:PROPERTIES:
+:ID: org--Handling-Links
+:END:
+#+filetags: :org:
+#+title: Handling Links (The Org Manual)
+
+Next:
+
+<<Handling-Links>>
+Next: [[id:org--Using-Links-Outside-Org][Using Links Outside Org]], Previous: [[id:org--External-Links][External Links]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 4.5 Handling Links [[#Handling-Links-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Handling-Links-1
+:CLASS: section
+:END:
+Org provides methods to create a link in the correct syntax, to insert it into an Org file, and to follow the link.
+
+The main function is =org-store-link=, called with M-x org-store-link. Because of its importance, we suggest binding it to a widely available key (see [[id:org--Activation][Activation]]). It stores a link to the current location. The link is stored for later insertion into an Org buffer---see below. The kind of link that is created depends on the current buffer:
+
+- /Org mode buffers/ :: For Org files, if there is a ‘=<<target>>=' at point, the link points to the target. If there is a named block (using ‘=#+name:=') at point, the link points to that name. Otherwise, it points to the current headline, which is also the description.
+
+  If the headline has a ‘=CUSTOM_ID=' property, store a link to this custom ID. In addition or alternatively, depending on the value of =org-id-link-to-org-use-id=, create and/or use a globally unique ‘=ID=' property for the link[[#FOOT30][^{30}]]. So using this command in Org buffers potentially creates two links: a human-readable link from the custom ID, and one that is globally unique and works even if the entry is moved from file to file. The ‘=ID=' property can be either a UUID (default) or a timestamp, depending on =org-id-method=. Later, when inserting the link, you need to decide which one to use.
+
+  When =org-id-link-consider-parent-id= is =t=[[#FOOT31][^{31}]], parent ‘=ID=' properties are considered. This allows linking to specific targets, named blocks, or headlines (which may not have a globally unique ‘=ID=' themselves) within the context of a parent headline or file which does.
+
+  For example, given this org file:
+
+  #+begin_example
+  * Parent
+  :PROPERTIES:
+  :ID: abc
+  :END:
+  ** Child 1
+  ** Child 2
+#+end_example
+
+  Storing a link with point at “Child 1” will produce a link ‘=<id:abc::*Child 1>=', which precisely links to the “Child 1” headline even though it does not have its own ID.
+
+- <<index-org_002dlink_002demail_002ddescription_002dformat>>/Email/News clients: VM, Rmail, Wanderlust, MH-E, Gnus/ [[#index-org_002dlink_002demail_002ddescription_002dformat][¶]] :: Pretty much all Emacs mail clients are supported. The link points to the current article, or, in some Gnus buffers, to the group. The description is constructed according to the variable =org-link-email-description-format=. By default, it refers to the addressee and the subject.
+
+- /Web browsers: W3M and EWW/ :: Here the link is the current URL, with the page title as the description.
+
+- /Contacts: BBDB/ :: Links created in a BBDB buffer point to the current entry.
+
+- <<index-org_002dirc_002dlinks_002dto_002dlogs>>/Chat: IRC/ [[#index-org_002dirc_002dlinks_002dto_002dlogs][¶]] :: For IRC links, if the variable =org-irc-link-to-logs= is non-=nil=, create a ‘=file=' style link to the relevant point in the logs for the current conversation. Otherwise, store an ‘=irc=' style link to the user/channel/server under the point.
+
+- /Other files/ :: For any other file, the link points to the file, with a search string (see [[id:org--Search-Options][Search Options in File Links]]) pointing to the contents of the current line. If there is an active region, the selected words form the basis of the search string. You can write custom Lisp functions to select the search string and perform the search for particular file types (see [[id:org--Custom-Searches][Custom Searches]]).
+
+  You can also define dedicated links to other files. See [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]].
+
+- /Agenda view/ :: When point is in an agenda view, the created link points to the entry referenced by the current line.
+
+From an Org buffer, the following commands create, navigate or, more generally, act on links.
+
+-  <<index-C_002dc-C_002dl>>C-c C-l (=org-insert-link=) [[#index-C_002dc-C_002dl][¶]] :: Insert a link[[#FOOT32][^{32}]]. This prompts for a link to be inserted into the buffer. You can just type a link, using text for an internal link, or one of the link type prefixes mentioned in the examples above. The link is inserted into the buffer, along with a descriptive text[[#FOOT33][^{33}]]. If some text was selected at this time, it becomes the default description.
+
+  - /Inserting stored links/ :: All links stored during the current session are part of the history for this prompt, so you can access them with UP and DOWN (or M-p, M-n).
+
+  - /Completion support/ :: Completion with TAB helps you to insert valid link prefixes like ‘=http=' or ‘=ftp=', including the prefixes defined through link abbreviations (see [[id:org--Link-Abbreviations][Link Abbreviations]]). If you press RET after inserting only the prefix, Org offers specific completion support for some link types[[#FOOT34][^{34}]]. For example, if you type f i l e RET---alternative access: C-u C-c C-l, see below---Org offers file name completion, and after b b d b RET you can complete contact names.
+
+-  <<index-file-name-completion>>C-u C-c C-l [[#index-file-name-completion][¶]] :: When C-c C-l is called with a C-u prefix argument, insert a link to a file. You may use file name completion to select the name of the file. The path to the file is inserted relative to the directory of the current Org file, if the linked file is in the current directory or in a subdirectory of it, or if the path is written relative to the current directory using ‘=../='. Otherwise, an absolute path is used, if possible with ‘=~/=' for your home directory. You can force an absolute path with two C-u prefixes.
+
+- <<index-following-links>>C-c C-l (with point on existing link) [[#index-following-links][¶]] :: When point is on an existing link, C-c C-l allows you to edit the link and description parts of the link.
+
+-  <<index-C_002dc-C_002do>>C-c C-o (=org-open-at-point=) [[#index-C_002dc-C_002do][¶]] :: Open link at point. This launches a web browser for URL (using =browse-url-at-point=), runs VM/MH-E/Wanderlust/Rmail/Gnus/BBDB for the corresponding links, and executes the command in a shell link. When point is on an internal link, this command runs the corresponding search. When point is on the tags part of a headline, it creates the corresponding tags view (see [[id:org--Matching-tags-and-properties][Matching tags and properties]]). If point is on a timestamp, it compiles the agenda for that date. Furthermore, it visits text and remote files in ‘=file=' links with Emacs and selects a suitable application for local non-text files. Classification of files is based on file extension only. See option =org-file-apps=. If you want to override the default application and visit the file with Emacs, use a C-u prefix. If you want to avoid opening in Emacs, use a C-u C-u prefix.
+
+  If point is on a headline, but not on a link, Org offers all links in the headline and entry text. If you want to set up the frame configuration for following links, customize =org-link-frame-setup=.
+
+-  <<index-org_002dreturn_002dfollows_002dlink>>RET [[#index-org_002dreturn_002dfollows_002dlink][¶]] :: When =org-return-follows-link= is set, RET also follows the link at point.
+
+-  <<index-mouse_002d2>>mouse-2 or mouse-1 [[#index-mouse_002d2][¶]] :: On links, mouse-1 and mouse-2 open the link just as C-c C-o does.
+
+-  <<index-org_002dlink_002duse_002dindirect_002dbuffer_002dfor_002dinternals>>mouse-3 [[#index-org_002dlink_002duse_002dindirect_002dbuffer_002dfor_002dinternals][¶]] :: Like mouse-2, but force file links to be opened with Emacs, and internal links to be displayed in another window[[#FOOT35][^{35}]].
+
+-  <<index-C_002dc-_0025>>C-c % (=org-mark-ring-push=) [[#index-C_002dc-_0025][¶]] :: Push the current position onto the Org mark ring, to be able to return easily. Commands following an internal link do this automatically.
+
+-  <<index-C_002dc-_0026>>C-c & (=org-mark-ring-goto=) [[#index-C_002dc-_0026][¶]] :: Jump back to a recorded position. A position is recorded by the commands following internal links, and by C-c %. Using this command several times in direct succession moves through a ring of previously recorded positions.
+
+-  <<index-C_002dc-C_002dx-C_002dp>>C-c C-x C-n (=org-next-link=), C-c C-x C-p (=org-previous-link=) [[#index-C_002dc-C_002dx-C_002dp][¶]] :: Move forward/backward to the next/previous link in the buffer. At the limit of the buffer, the search fails once, and then wraps around. The key bindings for this are really too long; you might want to bind this also to M-n and M-p.
+
+  #+begin_src lisp-preformatted
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "M-n") #'org-next-link)
+    (define-key org-mode-map (kbd "M-p") #'org-previous-link))
+  #+end_src
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF30][(30)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The =org-id= library must first be loaded, either through =org-customize=, by enabling =id= in =org-modules=, or by adding ‘=(require 'org-id)=' in your Emacs init file.
+
+***** [[#DOCF31][(31)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Also, =org-link-context-for-files= and =org-id-link-use-context= should be both enabled (which they are, by default).
+
+***** [[#DOCF32][(32)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+Note that you do not have to use this command to insert a link. Links in Org are plain text, and you can type or paste them straight into the buffer. By using this command, the links are automatically enclosed in double brackets, and you will be asked for the optional descriptive text.
+
+***** [[#DOCF33][(33)]]
+:PROPERTIES:
+:CUSTOM_ID: section-3
+:CLASS: footnote-body-heading
+:END:
+After insertion of a stored link, the link will be removed from the list of stored links. To keep it in the list for later use, use a triple C-u prefix argument to C-c C-l, or configure the option =org-link-keep-stored-after-insertion=.
+
+***** [[#DOCF34][(34)]]
+:PROPERTIES:
+:CUSTOM_ID: section-4
+:CLASS: footnote-body-heading
+:END:
+This works if a function has been defined in the =:complete= property of a link in =org-link-parameters=.
+
+***** [[#DOCF35][(35)]]
+:PROPERTIES:
+:CUSTOM_ID: section-5
+:CLASS: footnote-body-heading
+:END:
+See the variable =org-link-use-indirect-buffer-for-internals=.
+
+--------------
+
+Next: [[id:org--Using-Links-Outside-Org][Using Links Outside Org]], Previous: [[id:org--External-Links][External Links]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

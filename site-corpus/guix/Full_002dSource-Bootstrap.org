@@ -1,0 +1,97 @@
+:PROPERTIES:
+:ID: guix--Full_002dSource-Bootstrap
+:END:
+#+filetags: :guix:
+#+title: Full-Source Bootstrap
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Full_002dSource-Bootstrap>>
+Next: [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries][Preparing to Use the Bootstrap Binaries]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 20.1 The Full-Source Bootstrap [[#The-Full_002dSource-Bootstrap][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Full_002dSource-Bootstrap
+:CLASS: section
+:END:
+Guix---like other GNU/Linux distributions---is traditionally bootstrapped from a set of bootstrap binaries: Bourne shell, command-line tools provided by GNU Coreutils, Awk, Findutils, ‘sed', and ‘grep' and Guile, GCC, Binutils, and the GNU C Library (see [[id:guix--Bootstrapping][Bootstrapping]]). Usually, these bootstrap binaries are “taken for granted.”
+
+Taking the bootstrap binaries for granted means that we consider them to be a correct and trustworthy “seed” for building the complete system. Therein lies a problem: the combined size of these bootstrap binaries is about 250MB (see [[https://doc.guix.gnu.org/mes/latest/en/html_node/Bootstrappable-Builds.html#Bootstrappable-Builds][Bootstrappable Builds]] in GNU Mes). Auditing or even inspecting these is next to impossible.
+
+For =i686-linux= and =x86_64-linux=, Guix now features a /full-source bootstrap/. This bootstrap is rooted in =hex0-seed= from the [[https://savannah.gnu.org/projects/stage0][Stage0]] package. The hex0 program is minimalist assembler: it reads space-separated hexadecimal digits (nibbles) from a file, possibly including comments, and emits on standard output the bytes corresponding to those hexadecimal numbers. The source code of this initial hex0 program is a file called [[https://github.com/oriansj/bootstrap-seeds/blob/master/POSIX/x86/hex0_x86.hex0][=hex0_x86.hex0=]] and is written in the =hex0= language.
+
+Hex0 is self-hosting, which means that it can build itself:
+
+#+begin_example
+./hex0-seed hex0_x86.hex0 hex0
+#+end_example
+
+Hex0 it is the ASCII-equivalent of the binary program and can be produced by doing something much like:
+
+#+begin_example
+sed 's/[;#].*$//g' hex0_x86.hex0 | xxd -r -p > hex0
+chmod +x hex0
+#+end_example
+
+It is because of this ASCII-binary equivalence that we can bless this initial 357-byte binary as source, and hence ‘full-source bootstrap”.
+
+The bootstrap then continues: =hex0= builds =hex1= and then on to =M0=, =hex2=, =M1=, =mescc-tools= and finally =M2-Planet=. Then, using =mescc-tools=, =M2-Planet= we build Mes (see [[https://doc.guix.gnu.org/mes/latest/en/html_node/index.html#Top][GNU Mes Reference Manual]] in GNU Mes, a Scheme interpreter and C compiler in Scheme). From here on starts the more traditional =C=-based bootstrap of the GNU System.
+
+Another step that Guix has taken is to replace the shell and all its utilities with implementations in Guile Scheme, the /Scheme-only bootstrap/. Gash (see [[https://doc.guix.gnu.org/gash/latest/en/html_node/Gash.html#Gash][Gash]] in The Gash manual) is a POSIX-compatible shell that replaces Bash, and it comes with Gash Utils which has minimalist replacements for Awk, the GNU Core Utilities, Grep, Gzip, Sed, and Tar.
+
+Building the GNU System from source is currently only possible by adding some historical GNU packages as intermediate steps[[#FOOT41][^{41}]]. As Gash and Gash Utils mature, and GNU packages become more bootstrappable again (e.g., new releases of GNU Sed will also ship as gzipped tarballs again, as alternative to the hard to bootstrap =xz=-compression), this set of added packages can hopefully be reduced again.
+
+The graph below shows the resulting dependency graph for =gcc-core-mesboot0=, the bootstrap compiler used for the traditional bootstrap of the rest of the Guix System.
+
+Work is ongoing to bring these bootstraps to the =arm-linux= and =aarch64-linux= architectures and to the Hurd.
+
+If you are interested, join us on ‘=#bootstrappable=' on the Libera.Chat IRC network or discuss on [[mailto:bug-mes@gnu.org][bug-mes@gnu.org]] or [[mailto:gash-devel@nongnu.org][gash-devel@nongnu.org]].
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF41][(41)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Packages such as =gcc-2.95.3=, =binutils-2.14=, =glibc-2.2.5=, =gzip-1.2.4=, =tar-1.22=, and some others. For details, see =gnu/packages/commencement.scm=.
+
+--------------
+
+Next: [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries][Preparing to Use the Bootstrap Binaries]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

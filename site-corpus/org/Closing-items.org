@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: org--Closing-items
+:END:
+#+filetags: :org:
+#+title: Closing items (The Org Manual)
+
+Next:
+
+<<Closing-items>>
+Next: [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]], Up: [[id:org--Progress-Logging][Progress Logging]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 5.3.1 Closing items [[#Closing-items-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Closing-items-1
+:CLASS: subsection
+:END:
+The most basic automatic logging is to keep track of /when/ a certain TODO item was marked as done. This can be achieved with[[#FOOT42][^{42}]]
+
+#+begin_src lisp-preformatted
+(setq org-log-done 'time)
+#+end_src
+
+Then each time you turn an entry from a TODO (not-done) state into any of the DONE states, a line ‘=CLOSED: [timestamp]=' is inserted just after the headline. If you turn the entry back into a TODO item through further state cycling, that line is removed again. If you turn the entry back to a non-TODO state (by pressing C-c C-t SPC, for example), that line is also removed, unless you set =org-closed-keep-when-no-todo= to non-=nil=. If you want to record a note along with the timestamp, use[[#FOOT43][^{43}]]
+
+#+begin_src lisp-preformatted
+(setq org-log-done 'note)
+#+end_src
+
+You are then prompted for a note, and that note is stored below the entry with a ‘=Closing Note=' heading.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF42][(42)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The corresponding in-buffer setting is: ‘=#+STARTUP: logdone='.
+
+***** [[#DOCF43][(43)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The corresponding in-buffer setting is: ‘=#+STARTUP: lognotedone='.
+
+--------------
+
+Next: [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]], Up: [[id:org--Progress-Logging][Progress Logging]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID: org--Math-formatting-in-HTML-export
+:END:
+#+filetags: :org:
+#+title: Math formatting in HTML export (The Org Manual)
+
+Next:
+
+<<Math-formatting-in-HTML-export>>
+Next: [[id:org--Text-areas-in-HTML-export][Text areas in HTML export]], Previous: [[id:org--Images-in-HTML-export][Images in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.11 Math formatting in HTML export [[#Math-formatting-in-HTML-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Math-formatting-in-HTML-export-1
+:CLASS: subsection
+:END:
+LaTeX math snippets (see [[id:org--LaTeX-fragments][LaTeX fragments]]) can be displayed in two different ways on HTML pages. The default is to use the [[https://www.mathjax.org][MathJax]], which should work out of the box with Org[[#FOOT138][^{138}]][[#FOOT139][^{139}]]. Some MathJax options can be configured via =org-html-mathjax-options=, or in the buffer. For example, with the following settings,
+
+#+begin_example
+#+HTML_MATHJAX: align: left indent: 5em tagside: left
+#+end_example
+
+equation labels are displayed on the left margin and equations are five ems from the left margin.
+
+To use a local copy of MathJax, use ‘=path=' option:
+
+#+begin_example
+#+HTML_MATHJAX: path:the/path/to/mathjax.js
+#+end_example
+
+See the docstring of =org-html-mathjax-options= for all supported variables. The MathJax template can be configured via =org-html-mathjax-template=.
+
+If you prefer, you can also request that LaTeX fragments are processed into small images that will be inserted into the browser page. Before the availability of MathJax, this was the default method for Org files. This method requires that the dvipng program, dvisvgm or ImageMagick suite is available on your system. You can still get this processing with
+
+#+begin_example
+#+OPTIONS: tex:dvipng
+#+end_example
+
+#+begin_example
+#+OPTIONS: tex:dvisvgm
+#+end_example
+
+or
+
+#+begin_example
+#+OPTIONS: tex:imagemagick
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF138][(138)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+By default, Org loads MathJax from [[https://www.jsdelivr.com/][jsDelivr]], as recommended in [[https://docs.mathjax.org/en/latest/web/start.html][Getting Started with MathJax Components]].
+
+***** [[#DOCF139][(139)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Please note that exported formulas are part of an HTML document, and that signs such as ‘=<=', ‘=>=', or ‘=&=' have special meanings. See [[https://docs.mathjax.org/en/latest/input/tex/html.html#tex-and-latex-in-html-documents][MathJax TeX and LaTeX in HTML documents]].
+
+--------------
+
+Next: [[id:org--Text-areas-in-HTML-export][Text areas in HTML export]], Previous: [[id:org--Images-in-HTML-export][Images in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

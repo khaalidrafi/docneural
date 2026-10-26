@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID: guix--Primary-URL
+:END:
+#+filetags: :guix:
+#+title: Primary URL
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Primary-URL>>
+Next: [[id:guix--Writing-Channel-News][Writing Channel News]], Previous: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.12 Primary URL [[#Primary-URL-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Primary-URL-1
+:CLASS: section
+:END:
+Channel authors can indicate the primary URL of their channel's Git repository in the =.guix-channel= file, like so:
+
+#+begin_src lisp
+(channel
+  (version 0)
+  (url "https://example.org/guix.git"))
+#+end_src
+
+This allows =guix pull= to determine whether it is pulling code from a mirror of the channel; when that is the case, it warns the user that the mirror might be stale and displays the primary URL. That way, users cannot be tricked into fetching code from a stale mirror that does not receive security updates.
+
+This feature only makes sense for authenticated repositories, such as the official =guix= channel, for which =guix pull= ensures the code it fetches is authentic.

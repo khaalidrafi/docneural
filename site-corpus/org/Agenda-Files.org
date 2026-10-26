@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID: org--Agenda-Files
+:END:
+#+filetags: :org:
+#+title: Agenda Files (The Org Manual)
+
+Next:
+
+<<Agenda-Files>>
+Next: [[id:org--Agenda-Dispatcher][The Agenda Dispatcher]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 11.1 Agenda Files [[#Agenda-Files-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Agenda-Files-1
+:CLASS: section
+:END:
+The information to be shown is normally collected from all /agenda files/, the files listed in the variable =org-agenda-files=[[#FOOT92][^{92}]]. If a directory is part of this list, all files with the extension ‘=.org=' in this directory are part of the list.
+
+Thus, even if you only work with a single Org file, that file should be put into the list[[#FOOT93][^{93}]]. You can customize =org-agenda-files=, but the easiest way to maintain it is through the following commands
+
+-  <<index-C_002dc-_005b>>C-c [ (=org-agenda-file-to-front=) [[#index-C_002dc-_005b][¶]] :: Add current file to the list of agenda files. The file is added to the front of the list. If it was already in the list, it is moved to the front. With a prefix argument, file is added/moved to the end.
+
+-  <<index-C_002dc-_005d>>C-c ] (=org-remove-file=) [[#index-C_002dc-_005d][¶]] :: Remove current file from the list of agenda files.
+
+-  <<index-C_002d_0027>>C-' [[#index-C_002d_0027][¶]]\\
+  C-, (=org-cycle-agenda-files=) :: Cycle through agenda file list, visiting one file after the other.
+
+- <<index-org_002dswitchb>>M-x org-switchb [[#index-org_002dswitchb][¶]] :: Command to use an Iswitchb-like interface to switch to and between Org buffers.
+
+The Org menu contains the current list of files and can be used to visit any of them.
+
+If you would like to focus the agenda temporarily on a file not in this list, or on just one file in the list, or even on only a subtree in a file, then this can be done in different ways. For a single agenda command, you may press < once or several times in the dispatcher (see [[id:org--Agenda-Dispatcher][The Agenda Dispatcher]]). To restrict the agenda scope for an extended period, use the following commands:
+
+-  <<index-C_002dc-C_002dx-_003c>>C-c C-x < (=org-agenda-set-restriction-lock=) [[#index-C_002dc-C_002dx-_003c][¶]] :: Restrict the agenda to the current subtree. If there already is a restriction at point, remove it. When called with a universal prefix argument or with point before the first headline in a file, set the agenda scope to the entire file. This restriction remains in effect until removed with C-c C-x >, or by typing either < or > in the agenda dispatcher. If there is a window displaying an agenda view, the new restriction takes effect immediately.
+
+-  <<index-C_002dc-C_002dx-_003e>>C-c C-x > (=org-agenda-remove-restriction-lock=) [[#index-C_002dc-C_002dx-_003e][¶]] :: Remove the restriction created by C-c C-x <.
+
+When working with Speedbar, you can use the following commands in the Speedbar frame:
+
+- <<index-org_002dspeedbar_002dset_002dagenda_002drestriction>>< (=org-speedbar-set-agenda-restriction=) [[#index-org_002dspeedbar_002dset_002dagenda_002drestriction][¶]] :: Restrict the agenda to the item---either an Org file or a subtree in such a file---at point in the Speedbar frame. If agenda is already restricted there, remove the restriction. If there is a window displaying an agenda view, the new restriction takes effect immediately.
+
+- <<index-org_002dagenda_002dremove_002drestriction_002dlock-1>>> (=org-agenda-remove-restriction-lock=) [[#index-org_002dagenda_002dremove_002drestriction_002dlock-1][¶]] :: Remove the restriction.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF92][(92)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If the value of that variable is not a list, but a single file name, then the list of agenda files in maintained in that external file.
+
+***** [[#DOCF93][(93)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+When using the dispatcher, pressing < before selecting a command actually limits the command to the current file, and ignores =org-agenda-files= until the next dispatcher command.
+
+--------------
+
+Next: [[id:org--Agenda-Dispatcher][The Agenda Dispatcher]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

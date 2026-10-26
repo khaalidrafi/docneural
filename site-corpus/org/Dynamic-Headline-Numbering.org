@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Dynamic-Headline-Numbering
+:END:
+#+filetags: :org:
+#+title: Dynamic Headline Numbering (The Org Manual)
+
+Next:
+
+<<Dynamic-Headline-Numbering>>
+Next: [[id:org--The-Very-Busy-C_002dc-C_002dc-Key][The Very Busy C-c C-c Key]], Previous: [[id:org--Execute-commands-in-the-active-region][Execute commands in the active region]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.6 Dynamic Headline Numbering [[#Dynamic-Headline-Numbering-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Dynamic-Headline-Numbering-1
+:CLASS: section
+:END:
+The Org Num minor mode, toggled with M-x org-num-mode, displays outline numbering on top of headlines. It also updates it automatically upon changes to the structure of the document.
+
+By default, all headlines are numbered. You can limit numbering to specific headlines according to their level, tags, ‘=COMMENT=' keyword, or ‘=UNNUMBERED=' property. Set =org-num-max-level=, =org-num-skip-tags=, =org-num-skip-commented=, =org-num-skip-unnumbered=, or =org-num-skip-footnotes= accordingly.
+
+If =org-num-skip-footnotes= is non-=nil=, footnotes sections (see [[id:org--Creating-Footnotes][Creating Footnotes]]) are not numbered either.
+
+You can control how the numbering is displayed by setting =org-num-face= and =org-num-format-function=.
+
+You can also turn this mode globally for all Org files by setting the option =org-startup-numerated= to ‘=t=', or locally on a file by using ‘=#+startup: num='.
+
+--------------
+
+Next: [[id:org--The-Very-Busy-C_002dc-C_002dc-Key][The Very Busy C-c C-c Key]], Previous: [[id:org--Execute-commands-in-the-active-region][Execute commands in the active region]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

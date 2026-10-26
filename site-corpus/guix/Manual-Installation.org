@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID: guix--Manual-Installation
+:END:
+#+filetags: :guix:
+#+title: Manual Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Manual-Installation>>
+Next: [[id:guix--After-System-Installation][After System Installation]], Previous: [[id:guix--Guided-Graphical-Installation][Guided Graphical Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 3.6 Manual Installation [[#Manual-Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Manual-Installation-1
+:CLASS: section
+:END:
+This section describes how you would “manually” install GNU Guix System on your machine. This option requires familiarity with GNU/Linux, with the shell, and with common administration tools. If you think this is not for you, consider using the guided graphical installer (see [[id:guix--Guided-Graphical-Installation][Guided Graphical Installation]]).
+
+The installation system provides root shells on TTYs 3 to 6; press ctrl-alt-f3, ctrl-alt-f4, and so on to reach them. It includes many common tools needed to install the system, but is also a full-blown Guix System. This means that you can install additional packages, should you need it, using =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+- [[id:guix--Keyboard-Layout-and-Networking-and-Partitioning][Keyboard Layout, Networking, and Partitioning]]
+- [[id:guix--Proceeding-with-the-Installation][Proceeding with the Installation]]

@@ -1,0 +1,194 @@
+:PROPERTIES:
+:ID: guix--Building-from-Git
+:END:
+#+filetags: :guix:
+#+title: Building from Git
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Building-from-Git>>
+Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.2 Building from Git [[#Building-from-Git-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Building-from-Git-1
+:CLASS: section
+:END:
+If you want to hack Guix itself, it is recommended to use the latest version from the Git repository[[#FOOT44][^{44}]]:
+
+#+begin_example
+git clone https://git.guix.gnu.org/guix.git
+cd guix
+#+end_example
+
+How do you ensure that you obtained a genuine copy of the repository? To do that, run =guix git authenticate=, passing it the commit and OpenPGP fingerprint of the /channel introduction/ (see [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]]):
+
+#+begin_example
+guix git authenticate -k origin/keyring \
+   9edb3f66fd807b096b48283debdcddccfea34bad \
+  "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"
+#+end_example
+
+This command completes with exit code zero on success; it prints an error message and exits with a non-zero code otherwise.
+
+As you can see, there is a chicken-and-egg problem: you first need to have Guix installed. Typically you would install Guix System (see [[id:guix--System-Installation][System Installation]]) or Guix on top of another distro (see [[id:guix--Binary-Installation][Binary Installation]]); in either case, you would verify the OpenPGP signature on the installation medium. This “bootstraps” the trust chain.
+
+The easiest way to set up a development environment for Guix is, of course, by using Guix! The following command starts a new shell where all the dependencies and appropriate environment variables are set up to hack on Guix:
+
+#+begin_example
+guix shell -D guix --pure
+#+end_example
+
+or even, from within a Git worktree for Guix:
+
+#+begin_example
+echo $(pwd) >> ~/.config/guix/shell-authorized-directories
+guix shell --pure
+#+end_example
+
+If you are unable to use Guix when building Guix from a checkout, the following are the required packages in addition to those mentioned in the installation instructions (see [[id:guix--Requirements][Requirements]]).
+
+- [[https://gnu.org/software/autoconf/][GNU Autoconf]];
+- [[https://gnu.org/software/automake/][GNU Automake]];
+- [[https://gnu.org/software/gettext/][GNU Gettext]];
+- [[https://gnu.org/software/texinfo/][GNU Texinfo]];
+- [[https://www.graphviz.org/][Graphviz]];
+- [[https://www.gnu.org/software/help2man/][GNU Help2man (optional)]].
+
+On Guix, other development tools, like =strace=, can be included by giving them as extra arguments to =guix shell=:
+
+#+begin_example
+guix shell --pure -D guix strace
+#+end_example
+
+From there you can generate the build system infrastructure using Autoconf and Automake:
+
+#+begin_example
+./bootstrap
+#+end_example
+
+If you get an error like this one:
+
+#+begin_example
+configure.ac:46: error: possibly undefined macro: PKG_CHECK_MODULES
+#+end_example
+
+it probably means that Autoconf couldn't find =pkg.m4=, which is provided by pkg-config. Make sure that =pkg.m4= is available. The same holds for the =guile.m4= set of macros provided by Guile. For instance, if you installed Automake in =/usr/local=, it wouldn't look for =.m4= files in =/usr/share=. In that case, you have to invoke the following command:
+
+#+begin_example
+export ACLOCAL_PATH=/usr/share/aclocal
+#+end_example
+
+See [[https://www.gnu.org/software/automake/manual/html_node/Macro-Search-Path.html#Macro-Search-Path][Macro Search Path]] in The GNU Automake Manual, for more information.
+
+Then, run:
+
+#+begin_example
+./configure
+#+end_example
+
+Optionally, =--localstatedir= and =--sysconfdir= can also be provided as arguments. By default, =localstatedir= is =/var= (see [[id:guix--The-Store][The Store]], for information about this) and =sysconfdir= is =/etc=. Note that you will probably not run =make install= at the end (you don't have to) but it's still important to pass the right =localstatedir= and =sysconfdir= values, which get recorded in the =(guix config)= Guile module.
+
+Finally, you can build Guix and, if you feel so inclined, run the tests (depending on how you setup your environment, some tests might fail, see [[id:guix--Running-the-Test-Suite][Running the Test Suite]]):
+
+#+begin_example
+make
+make check
+#+end_example
+
+From there on, you can authenticate all the commits included in your checkout by running:
+
+#+begin_example
+guix git authenticate -k origin/keyring \
+  9edb3f66fd807b096b48283debdcddccfea34bad \
+  "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"
+#+end_example
+
+The first run takes a couple of minutes, but subsequent runs are faster. On subsequent runs, you can run the command without any arguments since the /introduction/ (the commit ID and OpenPGP fingerprints above) will have been recorded[[#FOOT45][^{45}]]:
+
+#+begin_example
+guix git authenticate
+#+end_example
+
+When your configuration for your local Git repository doesn't match the default one, you can provide the reference for the =keyring= branch /via/ the =-k= option. The following example assumes that you have a Git remote called ‘=myremote=' pointing to the official repository:
+
+#+begin_example
+guix git authenticate \
+  -k myremote/keyring \
+  9edb3f66fd807b096b48283debdcddccfea34bad \
+  "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"
+#+end_example
+
+See [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], for more information on this command.
+
+#+begin_quote
+*Note:* By default, hooks are installed such that =guix git authenticate= is invoked anytime you run =git pull= or =git push=.
+
+#+end_quote
+
+After updating the repository, =make= might fail with an error similar to the following example:
+
+#+begin_example
+error: failed to load 'gnu/packages/linux.scm':
+ice-9/eval.scm:293:34: In procedure abi-check: #<record-type <origin>>: record ABI mismatch; recompilation needed
+#+end_example
+
+This means that one of the record types that Guix defines (in this example, the =origin= record) has changed, and all of guix needs to be recompiled to take that change into account. To do so, run =make clean-go= followed by =make=.
+
+Should =make= fail with an Automake error message after updating, you need to repeat the steps outlined in this section, commencing with =./bootstrap=.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF44][(44)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Guix uses =master= as the default branch name. A proposal in 2025 to change the default branch name to =main= did not reach consensus. See [[https://codeberg.org/guix/guix-consensus-documents/src/branch/main/003-rename-default-branch.md][Guix Consensus Document 003]].
+
+***** [[#DOCF45][(45)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+This requires a recent version of Guix, from May 2024 or more recent.
+
+--------------
+
+Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

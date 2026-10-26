@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Abbrevs
+:END:
+#+filetags: :emacs:
+#+title: Abbrevs
+
+Next: [[id:emacs--Dired][Dired, the Directory Editor]]   Previous: [[id:emacs--Maintaining][Maintaining Large Programs]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Abbrevs>>
+** 31 Abbrevs [[#Abbrevs-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Abbrevs-1
+:CLASS: chapter
+:END:
+A defined /abbrev/ is a word which /expands/, if you insert it, into some different text. Abbrevs are defined by the user to expand in specific ways. For example, you might define ‘=foo=' as an abbrev expanding to ‘=find outer otter='. Then you could insert ‘=find outer otter =' into the buffer by typing f o o SPC.
+
+A second kind of abbreviation facility is called /dynamic abbrev expansion/. You use dynamic abbrev expansion with an explicit command to expand the letters in the buffer before point by looking for other words in the buffer that start with those letters. See [[id:emacs--Dynamic-Abbrevs][Dynamic Abbrev Expansion]].
+
+A third kind, /hippie expansion/, generalizes abbreviation expansion. See [[../autotype_html/Hippie-Expand.html#Hippie-Expand][Hippie Expansion]] in Features for Automatic Typing.
+
+--------------

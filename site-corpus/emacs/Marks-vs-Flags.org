@@ -1,0 +1,84 @@
+:PROPERTIES:
+:ID: emacs--Marks-vs-Flags
+:END:
+#+filetags: :emacs:
+#+title: Marks vs Flags
+
+Next: [[id:emacs--Operating-on-Files][Operating on Files]]   Previous: [[id:emacs--Dired-Visiting][Visiting Files in Dired]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
+
+<<Marks-vs-Flags>>
+*** 32.6 Dired Marks vs. Flags [[#Dired-Marks-vs_002e-Flags][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Dired-Marks-vs_002e-Flags
+:CLASS: section
+:END:
+Instead of flagging a file with ‘=D=', you can /mark/ the file with some other character (usually ‘=*='). Most Dired commands to operate on files use the files marked with ‘=*='. The only command that operates on flagged files is x, which deletes them.
+
+Here are some commands for marking with ‘=*=', for unmarking, and for operating on marks. (See [[id:emacs--Dired-Deletion][Deleting Files with Dired]], for commands to flag and unflag files.)
+
+-  <<index-m-_0028Dired_0029>>m [[#index-m-_0028Dired_0029][¶]]\\
+  ​* m :: Mark the current file with ‘=*=' (=dired-mark=). If the region is active, mark all files in the region instead; otherwise, if a numeric argument =n= is supplied, mark the next =n= files instead, starting with the current file (if =n= is negative, mark the previous −=n= files). If invoked on a subdirectory header line (see [[id:emacs--Subdirectories-in-Dired][Subdirectories in Dired]]), this command marks all the files in that subdirectory.
+
+-  <<index-_002a-N-_0028Dired_0029>>* N [[#index-_002a-N-_0028Dired_0029][¶]] :: Report what the number and size of the marked files are (=dired-number-of-marked-files=).
+
+-  <<index-_002a-_002a-_0028Dired_0029>>* * [[#index-_002a-_002a-_0028Dired_0029][¶]] :: Mark all executable files with ‘=*=' (=dired-mark-executables=). With a numeric argument, unmark all those files.
+
+-  <<index-_002a-_0040-_0028Dired_0029>>* @ [[#index-_002a-_0040-_0028Dired_0029][¶]] :: Mark all symbolic links with ‘=*=' (=dired-mark-symlinks=). With a numeric argument, unmark all those files.
+
+-  <<index-_002a-_002f-_0028Dired_0029>>* / [[#index-_002a-_002f-_0028Dired_0029][¶]] :: Mark with ‘=*=' all files which are directories, except for =.= and =..= (=dired-mark-directories=). With a numeric argument, unmark all those files.
+
+-  <<index-_002a-s-_0028Dired_0029>>* s [[#index-_002a-s-_0028Dired_0029][¶]] :: Mark all the files in the current subdirectory, aside from =.= and =..= (=dired-mark-subdir-files=).
+
+-  <<index-u-_0028Dired_0029>>u [[#index-u-_0028Dired_0029][¶]]\\
+  ​* u :: Remove any mark on this line (=dired-unmark=). If the region is active, unmark all files in the region instead; otherwise, if a numeric argument =n= is supplied, unmark the next =n= files instead, starting with the current file (if =n= is negative, unmark the previous −=n= files).
+
+-  <<index-_002a-DEL-_0028Dired_0029>>DEL [[#index-_002a-DEL-_0028Dired_0029][¶]]\\
+  ​* DEL :: Move point to previous line and remove any mark on that line (=dired-unmark-backward=). If the region is active, unmark all files in the region instead; otherwise, if a numeric argument =n= is supplied, unmark the =n= preceding files instead, starting with the current file (if =n= is negative, unmark the next −=n= files).
+
+-  <<index-_002a-_0021-_0028Dired_0029>>* ! [[#index-_002a-_0021-_0028Dired_0029][¶]]\\
+  U :: Remove all marks from all the files in this Dired buffer (=dired-unmark-all-marks=).
+
+-  <<index-_002a-_003f-_0028Dired_0029>>* ? =markchar= [[#index-_002a-_003f-_0028Dired_0029][¶]]\\
+  M-DEL :: Remove all marks that use the character =markchar= (=dired-unmark-all-files=). If invoked with M-DEL, the command prompts for =markchar=. That =markchar= is a single character---do not use RET to terminate it. See the description of the * c command below, which lets you replace one mark character with another.
+
+  With a numeric argument, this command queries about each marked file, asking whether to remove its mark. You can answer y meaning yes, n meaning no, or ! to remove the marks from the remaining files without asking about them.
+
+-  <<index-dired_002dnext_002dmarked_002dfile>>* C-n [[#index-dired_002dnext_002dmarked_002dfile][¶]]\\
+  M-} :: Move down to the next marked file (=dired-next-marked-file=). A file is “marked” if it has any kind of mark.
+
+-  <<index-dired_002dprev_002dmarked_002dfile>>* C-p [[#index-dired_002dprev_002dmarked_002dfile][¶]]\\
+  M-{ :: Move up to the previous marked file (=dired-prev-marked-file=).
+
+-  <<index-t-_0028Dired_0029>>t [[#index-t-_0028Dired_0029][¶]]\\
+  ​* t :: Toggle all marks (=dired-toggle-marks=): files marked with ‘=*=' become unmarked, and unmarked files are marked with ‘=*='. Files marked in any other way are not affected.
+
+-  <<index-_002a-c-_0028Dired_0029>>* c =old-markchar= =new-markchar= [[#index-_002a-c-_0028Dired_0029][¶]] :: Replace all marks that use the character =old-markchar= with marks that use the character =new-markchar= (=dired-change-marks=). This command is the primary way to create or use marks other than ‘=*=' or ‘=D='. The arguments are single characters---do not use RET to terminate them.
+
+  You can use almost any character as a mark character by means of this command, to distinguish various classes of files. If =old-markchar= is a space (‘= ='), then the command operates on all unmarked files; if =new-markchar= is a space, then the command unmarks the files it acts on.
+
+  To illustrate the power of this command, here is how to put ‘=D=' flags on all the files that have no marks, while unflagging all those that already have ‘=D=' flags:
+
+  #+begin_example
+  * c D t  * c SPC D  * c t SPC
+#+end_example
+
+  This assumes that no files were already marked with ‘=t='.
+
+-  <<index-dired_002dmark_002dfiles_002dregexp>>% m =regexp= RET [[#index-dired_002dmark_002dfiles_002dregexp][¶]]\\
+  ​* % =regexp= RET :: Mark (with ‘=*=') all files whose names match the regular expression =regexp= (=dired-mark-files-regexp=). This command is like % d, except that it marks files with ‘=*=' instead of flagging with ‘=D='.
+
+  Only the non-directory part of the file name is used in matching. Use ‘=^=' and ‘=$=' to anchor matches. You can exclude subdirectories by temporarily hiding them (see [[id:emacs--Hiding-Subdirectories][Hiding Subdirectories]]).
+
+-  <<index-dired_002dmark_002dfiles_002dcontaining_002dregexp>>% g =regexp= RET [[#index-dired_002dmark_002dfiles_002dcontaining_002dregexp][¶]] :: Mark (with ‘=*=') all files whose /contents/ contain a match for the regular expression =regexp= (=dired-mark-files-containing-regexp=). This command is like % m, except that it searches the file contents instead of the file name. Note that if a file is visited in an Emacs buffer, and =dired-always-read-filesystem= is =nil= (the default), this command will look in the buffer without revisiting the file, so the results might be inconsistent with the file on disk if its contents have changed since it was last visited. If you don't want this, you may wish to revert the files you have visited in your buffers, or to turn on Auto-Revert mode in those buffers, before invoking this command. See [[id:emacs--Reverting][Reverting a Buffer]]. If you prefer that this command should always revisit the file, without you having to revert the file or enable Auto-Revert mode, you might want to set =dired-always-read-filesystem= to non-=nil=.
+
+-  <<index-C_002d_005f-_0028Dired_0029>>C-/ [[#index-C_002d_005f-_0028Dired_0029][¶]]\\
+  C-x u\\
+  C-_ :: Undo changes in the Dired buffer, such as adding or removing marks (=dired-undo=). /This command does not revert the actual file operations, nor recover lost files!/ It just undoes changes in the buffer itself.
+
+  In some cases, using this after commands that operate on files can cause trouble. For example, after renaming one or more files, =dired-undo= restores the original names in the Dired buffer, which gets the Dired buffer out of sync with the actual contents of the directory.
+
+-  <<index-touchscreen_002dhold-_0028Dired_0029>>touchscreen-hold [[#index-touchscreen_002dhold-_0028Dired_0029][¶]] :: Enter a “click to select” mode, where using the mouse button mouse-2 on a file name will cause its mark to be toggled. This mode is useful when performing file management using a touch screen device.
+
+  It is enabled when a “hold” gesture (see [[id:emacs--Touchscreens][Using Emacs on Touchscreens]]) is detected over a file name, and is automatically disabled once a Dired command operates on the marked files.
+
+--------------

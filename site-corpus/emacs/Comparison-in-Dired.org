@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Comparison-in-Dired
+:END:
+#+filetags: :emacs:
+#+title: Comparison in Dired
+
+Next: [[id:emacs--Subdirectories-in-Dired][Subdirectories in Dired]]   Previous: [[id:emacs--Transforming-File-Names][Transforming File Names in Dired]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
+
+<<Comparison-in-Dired>>
+*** 32.11 File Comparison with Dired [[#File-Comparison-with-Dired][¶]]
+:PROPERTIES:
+:CUSTOM_ID: File-Comparison-with-Dired
+:CLASS: section
+:END:
+The = (=dired-diff=) command compares the current file (the file at point) with another file (read using the minibuffer) using the =diff= program. The file specified with the minibuffer is the first argument of =diff=, and file at point is the second argument. The output of the =diff= program is shown in a buffer using Diff mode (see [[id:emacs--Comparing-Files][Comparing Files]]).
+
+If the region is active, the default for the file read using the minibuffer is the file at the mark (i.e., the ordinary Emacs mark, not a Dired mark; see [[id:emacs--Setting-Mark][Setting the Mark]]). Otherwise, if the file at point has a backup file (see [[id:emacs--Saving::#Backup][Backup Files]]), that is the default.
+
+You could also compare files using =ediff-files=, see [[../ediff_html/Major-Entry-Points.html#Major-Entry-Points][Major Entry Points]] in Ediff User's Manual.
+
+--------------

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: org--Texinfo-file-header
+:END:
+#+filetags: :org:
+#+title: Texinfo file header (The Org Manual)
+
+Next:
+
+<<Texinfo-file-header>>
+Next: [[id:org--Texinfo-title-and-copyright-page][Texinfo title and copyright page]], Previous: [[id:org--Texinfo-specific-export-settings][Texinfo specific export settings]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.3 Texinfo file header [[#Texinfo-file-header-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Texinfo-file-header-1
+:CLASS: subsection
+:END:
+After creating the header for a Texinfo file, the Texinfo backend automatically generates a name and destination path for the Info file. To override this default with a more sensible path and name, specify the ‘=TEXINFO_FILENAME=' keyword.
+
+Along with the output's file name, the Texinfo header also contains language details (see [[id:org--Export-Settings][Export Settings]]) and encoding system as set in the =org-texinfo-coding-system= variable. Insert ‘=TEXINFO_HEADER=' keywords for each additional command in the header, for example:
+
+#+begin_example
+#+TEXINFO_HEADER: @synindex
+#+end_example
+
+Instead of repeatedly installing the same set of commands, define a class in =org-texinfo-classes= once, and then activate it in the document by setting the ‘=TEXINFO_CLASS=' keyword to that class.

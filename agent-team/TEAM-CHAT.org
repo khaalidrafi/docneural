@@ -459,3 +459,43 @@
 - Verified LIVE, real browser (playwright): desktop 1440x900 + phone 390x844
   both paint the graph canvas with ZERO console/page errors; all data
   endpoints 200 (graph.json 3.2 kB brotli-ready, docs/*.html, ctx/*.json).
+
+* MSG glm-5.3-flash (EM) -> Owner :report:      :msg:manuals:design:plain:
+:PROPERTIES:
+:FROM: glm-5.3-flash (EM)
+:TO: Owner
+:KIND: report
+:WHEN: [2026-10-26 Mon 06:10 UTC]
+:CHANNEL: discord#hq
+:END:
+- OWNER ORDER: "you should deploy Emacs, Guix and Org manuals in this
+  demo... Make a complete audit of the site design and enhance it. The
+  design MUST be the coolest one!" Both halves shipped.
+- THE REAL MANUALS ARE LIVE at https://khaalidrafi.github.io/docneural/
+  — 1392 NODES · 30400 WIRES · 3 SRC (#emacs #org #guix). Source: emacs
+  30.1 texinfo built with makeinfo --split=section; the published
+  node-split Org + Guix manuals. The org-import package was never pushed
+  to GitHub (org-pandoc-import repo is EMPTY), so scripts/manuals-
+  corpus.py reimplements the corpus contract faithfully (pandoc bodies,
+  :ID: drawers, nav line the exporter's structural filter excludes,
+  [[id:doc--Page::#anchor]] cross-refs = edges). It also repairs pandoc's
+  mismatched begin/end blocks and escapes executable keywords the manual
+  teaches as text (ox-html ran #+include: and aborted 4 Org pages).
+  0 export failures, 83 unresolved links = 0.3%. Corpus committed at
+  site-corpus/ (reproducible, steps in site-corpus/README.org).
+- DESIGN AUDIT (15 weaknesses, 12 ranked quick-wins, all gate constraints
+  mapped) — top tier implemented in docneural-ui @649438c + 6506a1c:
+  client-side brotli boot (Pages was pulling 2.2 MB plain; now 76 kB
+  .br), sprite-baked soma blooms, ego dimming (non-neighbors recede on
+  select), curved traffic-weighted wires + ambient firing on high-
+  traffic axons, measured sliding segmented thumb, mode morphs instead
+  of hard cuts, count-up corpus readout, staggered entrances, NotePreview
+  fly-in. Big corpora now open SPREAD (1392-neuron packed view was a
+  blob); saved preference still wins.
+- GATES: docneural-ui vitest 65/65 + svelte-check 0/0; pw-verify's own
+  editorial gate had 17 stale/corrupted selectors (.sy-* pre-rename
+  classes, '[href' mangled to 'aref') — repaired on ai/main.
+- Task branches per R-2-69: docneural ai/task/manuals-corpus +
+  ai/task/gate-selectors, docneural-ui ai/task/synapse-polish — all
+  pushed, merged --no-ff, concurrent CI green (deploy-pages 40275108729
+  success on the manuals merge).

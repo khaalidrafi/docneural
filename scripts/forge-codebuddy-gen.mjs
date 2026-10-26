@@ -4,31 +4,40 @@
 // this month. The credits are expiring!!"
 //
 // Pool law (canonical CANDIDATES.org @6a5653e): CodeBuddy = the WorkBuddy.ai
-// cloud pool (Owner confirmation 2026-10-20) — kimi-k3, gemini-3.8-flash,
-// glm-5.3/5.2, gpt-6-sol/luna, grok-4.7, step-5-preview, deepseek-v4.1-flash.
-// Owner EXCLUDED deepseek-v4.1-flash (free this month — no credits burned).
-// Pick rationale = PUBLIC design boards (bench/2026-10-27-public-benchmarks):
-// kimi-k3 Design Arena 1335 (#2 designer on the whole board), gemini-3.8-flash
-// ~1303 class, grok-4.7 (grok-4.3 was 1294 / Top 13%).
+// cloud pool (Owner confirmation 2026-10-20). Owner EXCLUDED
+// deepseek-v4.1-flash (free this month — no credits burned on it).
+// Model list evidence: CLI 2.177.0 --help (run 40378051072) — supported ids:
+// default/fast/balanced/primary/deep-model, hy4-preview, hy3,
+// deepseek-v4.1-flash, gpt-6-astra, gpt-5.6-sol/terra/luna, gpt-5.5/5.4,
+// gemini-3.5-flash, glm-5.3-flash, glm-5.3, glm-5.2, kimi-k3, kimi-k2.6,
+// kimi-k2.8-preview. Best PUBLIC designers drivable here:
+// kimi-k3 (Design Arena 1335, #2 on the whole board), gpt-6-astra (1327),
+// glm-5.2 (1285), kimi-k2.6 (1268).
 //
-// Mechanism: codebuddy CLI (npm @tencent-ai/codebuddy-code), CODEBUDDY_AUTH_TOKEN
-// sealed as an Actions secret. Agentic -p mode with -y (tool use) writes
-// index.html into a fresh staging dir; scripts/design-forge.mjs picks staged
-// entries up (FORGE_STAGED_ONLY=1 keeps the API lanes judge-only).
-//
-// Usage: node scripts/forge-codebuddy-gen.mjs "kimi-k3 gemini-3.8-flash grok-4.7"
+// Run-field evidence (runs 40377347452 / 40378051072 / 40378703437):
+//  - auth failure prints "Authentication required. Please use /login" and
+//    exits 0 — exit codes CANNOT be trusted; only a valid index.html counts.
+//  - the sealed token mapped into CODEBUDDY_API_KEY ("in non-interactive
+//    mode (-p) this key is always used", Tencent doc product/1316/84430)
+//    AUTHENTICATES: kimi-k3 generated for 2x8min (killed by the 480s
+//    per-attempt timeout mid-generation), gpt-6-astra + glm-5.2 were
+//    fast-rejected (~7s, silent) — account/model entitlement unknown.
+//  - therefore: stream stdout/stderr to per-attempt log files via spawn
+//    (evidence survives SIGTERM), raise the per-attempt budget to 25 min,
+//    and default to the single strongest designer (kimi-k3).
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 
 const STAGING = 'scripts/forge-staging';
-// Round-2 field is FRESH: the committed round-1 staging entries (incumbent +
-// gateway-plain) stay in git history but do not compete in this round.
+// Round field is FRESH: committed round-1 staging entries stay in git but do
+// not compete here. Failed dirs are KEPT (GEN.json + attempt logs = evidence);
+// design-forge only picks up dirs that contain a valid index.html.
 fs.rmSync(STAGING, { recursive: true, force: true });
 fs.mkdirSync(STAGING, { recursive: true });
 
-const models = (process.argv[2] || 'kimi-k3 gemini-3.8-flash')
+const models = (process.argv[2] || 'kimi-k3')
   .split(/\s+/).filter(Boolean)
   .filter(m => !/deepseek|ds[-_]?v4/i.test(m)); // Owner exclusion, hard-enforced
 if (models.length === 0) {
@@ -42,36 +51,45 @@ const prompt = `${brief}
 DELIVERABLE (strict): create ONE complete single-file HTML page (all CSS and JS inline, no external assets, no external fonts, no external images) implementing the brief EXACTLY, and SAVE it as index.html in the current working directory. Do not ask questions. Do not explain. Write the file and stop.`;
 
 const version = (() => {
-  try { return execFileSync('codebuddy', ['--version'], { encoding: 'utf8', timeout: 60000 }).trim(); }
-  catch (e) { return `version probe failed: ${String(e.message).slice(0, 80)}`; }
+  try { return execCapture(['--version'], 60000).out.trim(); }
+  catch (e) { return `version probe failed: ${e}`; }
 })();
 console.log(`codebuddy CLI: ${version}`);
-// Diagnostic (zero cost): dump auth-relevant CLI help so failures are actionable.
-try {
-  const help = execFileSync('codebuddy', ['--help'], { encoding: 'utf8', timeout: 60000, maxBuffer: 1024 * 1024 });
-  const authLines = help.split('\n').filter(l => /login|auth|token|model|api[-_ ]?key/i.test(l)).slice(0, 12);
-  console.log(`cli help (auth/model lines):\n${authLines.join('\n')}`);
-} catch { /* help optional */ }
 
-// Auth env matrix — run 40377347452 failed "Authentication required. Please
-// use /login" with CODEBUDDY_AUTH_TOKEN set: per Tencent docs (product 1316/
-// 84430) CODEBUDDY_AUTH_TOKEN is the platform token for -p mode, but the
-// CODEBUDDY_INTERNET_ENVIRONMENT must match the token's platform variant
-// (default/international vs 'internal' China). Try documented combos; a
-// failed auth burns NO credits, so probing is free.
-// The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) is mapped
-// into BOTH documented slots: CODEBUDDY_API_KEY ("in non-interactive mode
-// (-p) this key is ALWAYS used" — product/1316/84430) and CODEBUDDY_AUTH_TOKEN
-// (platform token). Run 40378051072 proved the CLI exits 0 even on auth
-// failure — exit code and success CANNOT be trusted; only a valid
-// index.html counts, and every env variant is tried until one produces it.
+function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
+  return new Promise((resolve) => {
+    const outFd = fs.openSync(logFile + '.out', 'w');
+    const errFd = fs.openSync(logFile + '.err', 'w');
+    const child = spawn('codebuddy', args, {
+      cwd,
+      env: { ...process.env, ...envExtra, DISABLE_AUTOUPDATER: '1' },
+      stdio: ['ignore', outFd, errFd],
+    });
+    let killed = false;
+    const timer = setTimeout(() => { killed = true; child.kill('SIGTERM'); }, timeoutMs);
+    child.on('close', (code, signal) => {
+      clearTimeout(timer);
+      fs.closeSync(outFd); fs.closeSync(errFd);
+      resolve({ code, signal, killed, out: safeRead(logFile + '.out'), err: safeRead(logFile + '.err') });
+    });
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      fs.closeSync(outFd); fs.closeSync(errFd);
+      resolve({ code: -1, signal: null, killed: false, out: '', err: String(e) });
+    });
+  });
+}
+const safeRead = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } };
+
+// The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) mapped into
+// both documented slots; run 40378703437 proved the API-key slot authenticates
+// (kimi-k3 generated for 16 min before the timeout kills).
 const TOKEN = process.env.CODEBUDDY_AUTH_TOKEN || process.env.CODEBUDDY_API_KEY || '';
 const ENV_MATRIX = [
   { label: 'api-key-slot', extra: { CODEBUDDY_API_KEY: TOKEN } },
   { label: 'auth-token-slot', extra: { CODEBUDDY_AUTH_TOKEN: TOKEN } },
-  { label: 'auth-token+internal-china', extra: { CODEBUDDY_AUTH_TOKEN: TOKEN, CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
 ];
-const AUTH_FAIL = /Authentication required|use \/login|login required|not authenticated|unauthorized|invalid.*(token|api.?key)/i;
+const ATTEMPT_BUDGET_MS = 25 * 60 * 1000; // kimi-k3 was still generating at 8 min
 
 const report = [];
 for (const model of models) {
@@ -79,37 +97,23 @@ for (const model of models) {
   const dir = path.join(STAGING, dirName);
   fs.mkdirSync(dir, { recursive: true });
   const t0 = Date.now();
-  let out = '', err = '', ok = false, how = 'none';
+  let ok = false, how = 'none', lastTail = '';
   const htmlPath = path.join(dir, 'index.html');
 
-  // EVERY env variant is tried until one yields a valid page. NO bare-default
-  // attempt: an unverified default model could burn credits on the WRONG
-  // model (deepseek-v4.1-flash is excluded by fiat) — model pinned both via
-  // the documented `--model` flag (confirmed by CLI 2.177.0 --help) and
-  // CODEBUDDY_MODEL env.
-  for (const envv of ENV_MATRIX) {
+  for (const [i, envv] of ENV_MATRIX.entries()) {
     if (fs.existsSync(htmlPath)) fs.rmSync(htmlPath);
-    let combined = '';
-    try {
-      out = execFileSync('codebuddy', ['-p', prompt, '-y', '--model', model], {
-        encoding: 'utf8', timeout: 480000, cwd: dir, maxBuffer: 64 * 1024 * 1024,
-        env: { ...process.env, ...envv.extra, CODEBUDDY_MODEL: model },
-      });
-      combined = String(out);
-    } catch (e) {
-      combined = `${e.stdout || ''}\n${e.stderr || ''}`;
-      err = `${String(e.message).slice(0, 200)}`;
-    }
-    // success = a real file on disk; else try the fenced block in stdout
-    if (!fs.existsSync(htmlPath)) {
-      const m = combined.match(/```(?:html)?\s*([\s\S]*?)```/);
-      if (m && /<html|<!DOCTYPE/i.test(m[1])) fs.writeFileSync(htmlPath, m[1]);
-    }
+    const logFile = path.join(dir, `attempt-${i + 1}-${envv.label}`);
+    const r = await execCapture(['-p', prompt, '-y', '--model', model], ATTEMPT_BUDGET_MS, dir,
+      envv.extra, logFile);
+    lastTail = (r.out + ' || ' + r.err).replace(/\s+/g, ' ').slice(-280);
+    // success = a real, valid index.html on disk (exit codes lie — auth
+    // failures exit 0; timeout kills leave partial work)
     const valid = fs.existsSync(htmlPath) && (() => { const h = fs.readFileSync(htmlPath, 'utf8'); return h.length >= 400 && /<html|<!DOCTYPE/i.test(h); })();
     if (valid) { ok = true; how = envv.label + ' (--model ' + model + ')'; break; }
-    const tail = combined.replace(/\s+/g, ' ').slice(-260);
-    console.log(`codebuddy ${model} [${envv.label}] no valid page${AUTH_FAIL.test(combined) ? ' (AUTH REJECTED)' : ''}: ${tail}`);
-    err += ` [${envv.label}] ${tail}`;
+    if (r.killed) console.log(`codebuddy ${model} [${envv.label}] TIMEOUT at ${ATTEMPT_BUDGET_MS / 1000}s — partial logs kept in ${logFile}.out/.err`);
+    else console.log(`codebuddy ${model} [${envv.label}] exit=${r.code} no valid page: ${lastTail || '(silent)'}`);
+    // no fenced-HTML fallback from stdout: agentic mode writes the file; chat
+    // output here was empty in every observed run
   }
 
   let status = 'FAIL';
@@ -117,15 +121,16 @@ for (const model of models) {
     const h = fs.readFileSync(htmlPath, 'utf8');
     status = (h.length >= 400 && /<html|<!DOCTYPE/i.test(h)) ? `OK ${h.length}B` : `NOT HTML (${h.length}B)`;
   }
-  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, ms: Date.now() - t0, status, err: err.slice(0, 900) }, null, 2));
+  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, ms: Date.now() - t0, status, lastTail }, null, 2));
   report.push({ model, dirName, status, how, ms: Date.now() - t0 });
   console.log(`codebuddy ${model}: ${status} via ${how} (${Date.now() - t0}ms)`);
 }
 
-fs.writeFileSync('forge-codebuddy-gen-report.json', JSON.stringify({ cli: version, excludedByOwner: 'deepseek-v4.1-flash (free this month)', report }, null, 2));
-
-// Drop failed/empty entries so the forge field stays clean; the report keeps the evidence.
-for (const r of report) {
-  if (!r.status.startsWith('OK')) fs.rmSync(path.join(STAGING, r.dirName), { recursive: true, force: true });
-}
-console.log('staging field:', fs.existsSync(STAGING) ? fs.readdirSync(STAGING).join(', ') : '(empty)');
+fs.writeFileSync('forge-codebuddy-gen-report.json', JSON.stringify({
+  cli: version,
+  excludedByOwner: 'deepseek-v4.1-flash (free this month)',
+  attemptBudgetMs: ATTEMPT_BUDGET_MS,
+  note: 'failed dirs KEPT as evidence (attempt logs + GEN.json); forge picks only valid index.html dirs',
+  report,
+}, null, 2));
+console.log('staging field:', fs.readdirSync(STAGING).join(', '));

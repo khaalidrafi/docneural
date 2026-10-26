@@ -16,8 +16,8 @@ on:
   workflow_dispatch:
     inputs:
       models:
-        description: 'codebuddy paid models, space-separated (CLI-supported list from --help; top public designers first)'
-        default: 'kimi-k3 gpt-6-astra glm-5.2'
+        description: 'codebuddy paid models (CLI-supported ids from --help; kimi-k3 = Design Arena 1335, #2 designer on the whole public board)'
+        default: 'kimi-k3'
         required: false
       seed:
         description: 'blind shuffle seed'
@@ -34,7 +34,7 @@ concurrency:
 jobs:
   forge:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 60
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
           # same secret in the documented API-key slot — "in non-interactive
           # mode (-p) this key is always used" (Tencent doc product/1316/84430)
           CODEBUDDY_API_KEY: ${{ secrets.CODEBUDDY_AUTH_TOKEN }}
-        run: node scripts/forge-codebuddy-gen.mjs "${{ github.event.inputs.models || 'kimi-k3 gpt-6-astra glm-5.2' }}"
+        run: node scripts/forge-codebuddy-gen.mjs "${{ github.event.inputs.models || 'kimi-k3' }}"
 
       - name: "render + objective + blind peer (antling/gemini judge-only) + composite"
         env:

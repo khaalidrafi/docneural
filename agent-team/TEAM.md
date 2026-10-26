@@ -49,6 +49,12 @@
     clock_in.py at dispatch — never the member; web/cloud lanes are the
     one manual exception); a TODO closed without clock evidence bounces
     at review.
+  - REVIEW CLOCK LAW (Owner 2026-10-26 10:55 #hq): finish time and
+    review time are separate clocks, each on its own TODO with its own
+    :EFFORT: — the review TODO nests one level under its parent
+    (`review: <parent title>'); the duty REVIEWER sets DONE on the
+    review TODO and then the parent when everything is clear; the
+    author never grades their own work.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

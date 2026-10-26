@@ -552,7 +552,7 @@ jobs:
           WORK_ITEM=$(grep -E '^\*+ (TODO|ONGOING|PENDING|WAIT|PROGRESS)' "$BOARD" | head -1 | sed 's/^[*]* //' || true)
           if [ -n "${WORK_ITEM:-}" ]; then
             curl -fsSL -H "Authorization: Bearer ${{ github.token }}" \
-              "https://raw.githubusercontent.com/khaalidrafi/agent-team.el/5bf6618b82ce22dc8e2c96b00b0dede23d044237/agent-team/tools/clock_in.py" \
+              "https://raw.githubusercontent.com/khaalidrafi/agent-team.el/396848263242bb3686f35c12615e5f7da9957e49/agent-team/tools/clock_in.py" \
               -o .clock_in.py \
             && python3 .clock_in.py "$BOARD" "$WORK_ITEM" >> "$SUMMARY" 2>&1 \
             && git add "$BOARD" \
@@ -603,6 +603,13 @@ jobs:
           your item in at dispatch — ${WORK_ITEM:-none}. NEVER edit
           :LOGBOOK: clock entries yourself; the automation owns them
           (manual clocking exists only for web/cloud lanes, not this CI).
+          REVIEW CLOCK LAW (Owner 2026-10-26 10:55Z): review time is a
+          SEPARATE clock on its own TODO — `review: <parent title>'
+          nested one level under the work item, its own :EFFORT: (in
+          :PROPERTIES:) and its own clock. The duty REVIEWER sets DONE —
+          on the review TODO first, then on the parent — when everything
+          is clear; the author never grades their own work (at delivery
+          you flip the item to REVIEW with :DELIVERED: evidence).
           WORK ORDER (board-first: agent-team/TODOS.org is the truth):
           take the FIRST item in P0 > P1 > P2 order that is not DONE, or
           continue the item you already moved to ONGOING. If the board is
@@ -631,7 +638,9 @@ jobs:
              peer's help IS encouraged — ping them directly.
           6. Append a :LOGBOOK: note to the board item you touched: what
              changed + evidence (file:line, commit sha). Never mark DONE
-             (that is the Lead's gate).
+             yourself — the duty REVIEWER sets DONE when everything is
+             clear (Owner 2026-10-26 10:55Z); at delivery, flip the item
+             to REVIEW with :DELIVERED: evidence.
           7. Commit everything on this branch with message 'turn(${SEAT}): ...'.
           8. REPORT: append your report to agent-team/TEAM-CHAT.org as
              '${SEAT} -> @lead :report:' (RESULT: DONE | PARTIAL | BLOCKED,

@@ -82,7 +82,7 @@ for (const ep of ENDPOINTS) {
   }
 }
 
-function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
+function execCapture(args, timeoutMs, cwd, envExtra, logFile, envUnset) {
   return new Promise((resolve) => {
     const outFd = fs.openSync(logFile + '.out', 'w');
     const errFd = fs.openSync(logFile + '.err', 'w');
@@ -94,9 +94,11 @@ function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
       fdsClosed = true;
       for (const fd of [outFd, errFd]) { try { fs.closeSync(fd); } catch { /* EBADF: already closed */ } }
     };
+    const childEnv = { ...process.env, ...envExtra, DISABLE_AUTOUPDATER: '1' };
+    for (const k of envUnset || []) delete childEnv[k]; // alt auth mode: remove the losing slot entirely
     const child = spawn('codebuddy', args, {
       cwd,
-      env: { ...process.env, ...envExtra, DISABLE_AUTOUPDATER: '1' },
+      env: childEnv,
       stdio: ['ignore', outFd, errFd],
     });
     let killed = false;
@@ -121,8 +123,19 @@ function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
 function safeRead(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 
 // The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) mapped into
-// both documented slots; run 40378703437 proved the API-key slot authenticates
-// (kimi-k3 generated for 16 min before the timeout kills).
+// both documented slots.
+// AUTH EVIDENCE REWRITE (run 40388548989, the FIRST real auth verdict from a
+// REACHABLE endpoint): with BOTH slots set the CLI chose Bearer custom-token
+// mode ("auth-type:custom-token,token-type:Bearer,token-length:1450") and
+// copilot.tencent.com returned 401 in 7s — 0 credits. The old proof that
+// "the API-key slot authenticates" (run 40378703437, 2x8min "generation") is
+// network-hang-contaminated: that run hit the UNREACHABLE intl endpoint, so
+// the CLI was looping on connect timeouts, never reaching an auth verdict.
+// Per the CLI's own note the two env vars are ALTERNATIVE auth modes — the
+// single allowed experiment is now API-KEY-ONLY on the reachable china
+// endpoint (AUTH_TOKEN unset in the child env). If this 401s too, the token
+// is intl-scoped and the burn moves to an Owner-side body — NO further
+// runner dispatches (spend law cap on 0-burn auth experiments: 2).
 //
 // SPEND LAW (Owner 2026-10-27 19:02 "Please note that I have limited credits
 // to run paid models on CodeBuddy"): EXACTLY ONE paid generation per model.
@@ -144,7 +157,7 @@ const TOKEN = process.env.CODEBUDDY_AUTH_TOKEN || process.env.CODEBUDDY_API_KEY 
 // the dispatch window, so the one allowed attempt goes to the reachable
 // endpoint first. The zero-cost endpoint probe above logs the evidence.
 const ENV_MATRIX = [
-  { label: 'api-key+internal-china', extra: { CODEBUDDY_API_KEY: TOKEN, CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
+  { label: 'api-key-ONLY+internal-china', extra: { CODEBUDDY_API_KEY: TOKEN, CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' }, unset: ['CODEBUDDY_AUTH_TOKEN'] },
 ];
 const ATTEMPT_BUDGET_MS = 25 * 60 * 1000; // kimi-k3 was still generating at 8 min
 const MAX_PAID_GENERATIONS = models.length; // spend cap: one real generation per model, hard
@@ -169,7 +182,7 @@ for (const model of models) {
     if (fs.existsSync(htmlPath)) fs.rmSync(htmlPath);
     const logFile = path.join(dir, `attempt-${i + 1}-${envv.label}`);
     const r = await execCapture(['-p', prompt, '-y', '--model', model], ATTEMPT_BUDGET_MS, dir,
-      envv.extra, logFile);
+      envv.extra, logFile, envv.unset);
     lastTail = (r.out + ' || ' + r.err).replace(/\s+/g, ' ').slice(-280);
     // success = a real, valid index.html on disk (exit codes lie — auth
     // failures exit 0; timeout kills leave partial work)

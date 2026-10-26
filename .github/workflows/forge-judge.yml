@@ -1,0 +1,44 @@
+name: forge-judge
+
+# Judge-only completion pass for the DESIGN forge (stage 2). Fills the missing
+# blind peer pairs from the COMMITTED renders so no crowned score rests on an
+# objective-only number. Keys stay in Actions secrets. Dispatched manually.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: forge-judge
+  cancel-in-progress: false
+
+jobs:
+  judge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: "complete the blind peer matrix — keys stay sealed"
+        env:
+          ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTLING_API_KEY: ${{ secrets.ANTLING_API_KEY }}
+          GMI_API_KEY: ${{ secrets.GMI_API_KEY }}
+          CLINE_API_KEY: ${{ secrets.CLINE_API_KEY }}
+        run: node scripts/forge-judge.mjs
+
+      - name: upload judge outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-judge-out
+          path: forge-judge-out/
+          retention-days: 7

@@ -1,0 +1,52 @@
+name: design-forge
+
+# DESIGN bake-off stage 2 — "hands, not eyes" (Owner challenge 2026-10-26:
+# "Designing means to be able develop creative, cool, stunning designs").
+# Every lane BUILDS a page from the identical brief, Chromium renders it,
+# objective checks + blind peer review score it. Keys stay in Actions secrets.
+# Dispatched manually; never runs on push.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: install playwright chromium
+        run: |
+          npm i --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: "run the forge — keys stay sealed"
+        env:
+          FORGE_SEED: '20261027'
+          ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTLING_API_KEY: ${{ secrets.ANTLING_API_KEY }}
+          GMI_API_KEY: ${{ secrets.GMI_API_KEY }}
+          CLINE_API_KEY: ${{ secrets.CLINE_API_KEY }}
+        run: node scripts/design-forge.mjs
+
+      - name: upload forge outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-out
+          path: forge-out/
+          retention-days: 7

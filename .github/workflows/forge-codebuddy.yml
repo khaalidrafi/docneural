@@ -1,0 +1,75 @@
+name: design-forge-codebuddy
+
+# PAID-CREDIT forge round (Owner order 2026-10-27): "quickly burn 75 credits
+# from codebuddy to perform some quality work with a good paid model, not ds
+# v4.1 flash which is free this month. The credits are expiring!!"
+#
+# CodeBuddy CLI (bodies law: BUILT-IN models only) generates forge entries
+# from the SAME brief as round 1; the sealed antling/gemini lanes judge;
+# scripts/design-forge.mjs does render + objective + blind peers + composite
+# (FORGE_STAGED_ONLY=1 — API lanes judge, never generate here).
+# deepseek-v4.1-flash is hard-excluded in the generator (Owner fiat).
+# Dispatched manually; never runs on push. Credits are money — keep the
+# model list short and purposeful.
+
+on:
+  workflow_dispatch:
+    inputs:
+      models:
+        description: 'codebuddy paid models, space-separated (default: top public designers in the pool)'
+        default: 'kimi-k3 gemini-3.8-flash grok-4.7'
+        required: false
+      seed:
+        description: 'blind shuffle seed'
+        default: '20261028'
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-forge-codebuddy
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: install codebuddy body + playwright chromium
+        run: |
+          npm i -g @tencent-ai/codebuddy-code
+          codebuddy --version || true
+          npm i --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: "generate entries via codebuddy — PAID credits burn here ( Owner-excluded: deepseek-v4.1-flash )"
+        env:
+          CODEBUDDY_AUTH_TOKEN: ${{ secrets.CODEBUDDY_AUTH_TOKEN }}
+          CODEBUDDY_API_KEY: ${{ secrets.CODEBUDDY_API_KEY }}
+        run: node scripts/forge-codebuddy-gen.mjs "${{ github.event.inputs.models || 'kimi-k3 gemini-3.8-flash grok-4.7' }}"
+
+      - name: "render + objective + blind peer (antling/gemini judge-only) + composite"
+        env:
+          FORGE_STAGED_ONLY: '1'
+          FORGE_SEED: ${{ github.event.inputs.seed || '20261028' }}
+          ANTLING_API_KEY: ${{ secrets.ANTLING_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/design-forge.mjs
+
+      - name: upload forge outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-out-codebuddy
+          path: |
+            forge-out/
+            forge-codebuddy-gen-report.json
+          retention-days: 7

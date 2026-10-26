@@ -169,7 +169,12 @@ const shuffle = (arr) => {
 
 // ---------------------------------------------------------------- 1+2 field
 const entries = [];
-for (const l of LANES) {
+// FORGE_STAGED_ONLY=1 — skip API generation entirely (staged entries only);
+// peer judging still runs. Used by forge-codebuddy (paid-credit rounds):
+// sealed API lanes contribute JUDGING, not generation.
+const STAGED_ONLY = process.env.FORGE_STAGED_ONLY === '1';
+if (STAGED_ONLY) console.log('FORGE_STAGED_ONLY=1 — API generation skipped (staged entries + judges only)');
+for (const l of STAGED_ONLY ? [] : LANES) {
   const r = await resolveModel(l);
   console.log(`lane ${l.lane}: model=${r.model ?? '(none)'} ${r.why ?? ''}${r.guessed ? ' (guess)' : ''}`);
   if (!r.model) { entries.push({ origin: l.lane, model: null, ok: false, why: r.why }); continue; }
@@ -346,7 +351,7 @@ for (const j of judgeLaneSpecs) {
               { type: 'text', text: RUBRIC },
             ],
           }],
-          max_tokens: 600,
+          max_tokens: 1500, // 600 truncated judge JSON mid-key (run 40367431379) — a4ff3fd fix ported
         }),
         signal: AbortSignal.timeout(120000),
       });

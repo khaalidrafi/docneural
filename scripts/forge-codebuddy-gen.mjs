@@ -46,6 +46,23 @@ const version = (() => {
   catch (e) { return `version probe failed: ${String(e.message).slice(0, 80)}`; }
 })();
 console.log(`codebuddy CLI: ${version}`);
+// Diagnostic (zero cost): dump auth-relevant CLI help so failures are actionable.
+try {
+  const help = execFileSync('codebuddy', ['--help'], { encoding: 'utf8', timeout: 60000, maxBuffer: 1024 * 1024 });
+  const authLines = help.split('\n').filter(l => /login|auth|token|model|api[-_ ]?key/i.test(l)).slice(0, 12);
+  console.log(`cli help (auth/model lines):\n${authLines.join('\n')}`);
+} catch { /* help optional */ }
+
+// Auth env matrix — run 40377347452 failed "Authentication required. Please
+// use /login" with CODEBUDDY_AUTH_TOKEN set: per Tencent docs (product 1316/
+// 84430) CODEBUDDY_AUTH_TOKEN is the platform token for -p mode, but the
+// CODEBUDDY_INTERNET_ENVIRONMENT must match the token's platform variant
+// (default/international vs 'internal' China). Try documented combos; a
+// failed auth burns NO credits, so probing is free.
+const ENV_MATRIX = [
+  { label: 'intl-default', extra: {} },
+  { label: 'internal-china', extra: { CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
+];
 
 const report = [];
 for (const model of models) {
@@ -55,22 +72,27 @@ for (const model of models) {
   const t0 = Date.now();
   let out = '', err = '', ok = false, how = 'none';
 
-  // Strategy 1: explicit --model flag; Strategy 2: default model + env pin.
-  for (const attempt of [
-    { args: ['-p', prompt, '-y', '--model', model], how: `--model ${model}` },
-    { args: ['-p', prompt, '-y'], how: 'default-model + CODEBUDDY_MODEL env pin' },
-  ]) {
-    try {
-      out = execFileSync('codebuddy', attempt.args, {
-        encoding: 'utf8', timeout: 540000, cwd: dir, maxBuffer: 64 * 1024 * 1024,
-        env: { ...process.env, CODEBUDDY_MODEL: model },
-      });
-      ok = true; how = attempt.how;
-      break;
-    } catch (e) {
-      err = `${String(e.message).slice(0, 300)} | stdout tail: ${String(e.stdout || '').slice(-300)}`;
-      console.log(`codebuddy ${model} [${attempt.how}] FAILED: ${String(e.message).slice(0, 150)}`);
+  // Strategy order: documented CODEBUDDY_MODEL env pin (per env variant).
+  // NO bare-default attempt: an unverified default model could burn the
+  // Owner's credits on the WRONG model (deepseek-v4.1-flash is excluded by
+  // fiat) — if the pin fails, we record FAIL, we do not guess.
+  for (const envv of ENV_MATRIX) {
+    for (const attempt of [
+      { args: ['-p', prompt, '-y'], how: `CODEBUDDY_MODEL=${model} [${envv.label}]`, extra: { CODEBUDDY_MODEL: model } },
+    ]) {
+      try {
+        out = execFileSync('codebuddy', attempt.args, {
+          encoding: 'utf8', timeout: 540000, cwd: dir, maxBuffer: 64 * 1024 * 1024,
+          env: { ...process.env, ...envv.extra, ...attempt.extra },
+        });
+        ok = true; how = attempt.how;
+        break;
+      } catch (e) {
+        err = `${String(e.message).slice(0, 200)} | stdout tail: ${String(e.stdout || '').slice(-400)}`;
+        console.log(`codebuddy ${model} [${attempt.how}] FAILED: ${String(e.stdout || e.message).slice(-200).replace(/\n/g, ' | ')}`);
+      }
     }
+    if (ok) break;
   }
 
   // Locate the HTML: written index.html, else first fenced block in stdout.

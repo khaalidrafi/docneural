@@ -7,6 +7,13 @@
 - CLINE_API_KEY SEALED 2026-10-26T02:29Z (Owner order "provide cline keys to both teams" + key pasted "store in vault"): burn-tested BEFORE sealing — GET api.cline.bot/api/v1/models = HTTP 200 / 472 ids (matches canonical 472/18 FREE probe); POST chat/completions poolside/laguna-s-2.1:free = HTTP 200, usage.cost = 0, reply "OK". Sealed to docneural + admincraft + agent-team.el the same minute (updated_at 02:29:39-42Z). Secret names per repo: 24 -> 25. Activated on seal: hire round 3's 2 cline API-route interns (cline/poolside-laguna-s-2.1:free@opencode, cline/nemotron-3.5-lightning:free@opencode) + the seat-liveness cline probe row (SKIP -> live). CLI route unchanged: CLINE_AUTH_JSON sealed since 2026-10-24. Raw keyfile shredded after seal; local copy in OWNER-KEYS.
 
 * IN-FLIGHT
+- LIVE SITE 2026-10-26: docneural deploys itself to GitHub Pages on every
+  ai/main push (deploy-pages.yml, concurrent with agent-team.yml) —
+  https://khaalidrafi.github.io/docneural/ renders the repo's own docs
+  corpus (11 nodes / 33 wires / 2 src) via scripts/gh-corpus-prep.py +
+  the unchanged emacs batch exporter (owner's ~/docs corpus untouched);
+  real-browser verified desktop+phone, zero console errors. Task branch
+  ai/task/gh-pages-site merged --no-ff after 3 CI iterations to green.
 - Board P0s verified + flipped DONE (agent-team/TODOS.org) — remaining work: P0 re-land is BLOCKED :OWN: (branches on the Owner's box, ai/agent-team frozen); sibling defect shelf blocked on sibling write scope; corpus UAT (pw-verify editorial gate) stays Owner-box.
 - R-2-69 acknowledged (b900aba + fixes 7ff6d95/3d3e7d9): coding tasks run ai/task/** branches — one branch per task, one member per task; work lands on ai/main via the existing gate.
 

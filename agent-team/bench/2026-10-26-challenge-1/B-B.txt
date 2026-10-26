@@ -1,0 +1,29 @@
+1.  **WHAT**: Header navigation links (`[ DOCS ]`, `[ SYNAPSES ]`), top-right stats, and utility buttons (`p`, `MK`, `?`, `FULL`).
+    **WHERE**: Top header bar (both images).
+    **Exact treatment**:
+    *   **Navigation Links**: Increase font size to `16px`. Change text color to `#00FFC2`. Add `text-shadow: 0 0 8px rgba(0, 255, 194, 0.6), 0 0 15px rgba(0, 255, 194, 0.3)` for a subtle neon glow effect.
+    *   **Top-Right Stats**: Increase font size to `13px`. Change color to `#E0E0E0` (light grey) for better readability. Ensure "WIRES" count remains in `#00FFC2`.
+    *   **Utility Buttons**: Apply `background: rgba(0, 255, 194, 0.1); border: 1px solid rgba(0, 255, 194, 0.3); padding: 4px 8px; border-radius: 2px;` to give them a distinct, clickable appearance.
+
+2.  **WHAT**: Data labels and numerical values within the "THIS CORPUS" box, and "pages - wires" counts in "SOURCES" boxes.
+    **WHERE**: Main content area below the description (Image 1).
+    **Exact treatment**:
+    *   **"THIS CORPUS" Labels (SOURCES, PAGES, NEURONS, SYNAPSES, ARTIFACTS)**: Font size `14px`, `font-weight: 600`, color `#B0B0B0`.
+    *   **"THIS CORPUS" Numerical Values (3, 1347, 1386, 30915)**: Font size `22px`, `font-weight: 700`, color `#00FFC2`. For "30915 firing", set "firing" to `14px`, `font-style: italic`, color `#FFAA00`.
+    *   **"SOURCES" Boxes (e.g., "Org", "GNU Emacs")**:
+        *   Main title (e.g., "Org"): Font size `18px`, `font-weight: 700`, color `#E0E0E0`.
+        *   Stats (e.g., "319 pages - 6732 wires"): Font size `15px`, color `#B0B0B0`. The numerical values (`319`, `6732`) should be color `#00FFC2` and `font-weight: 600`. The word "wires" should be `font-style: italic`, color `#FFAA00`.
+
+3.  **WHAT**: "FILTER CHAPTERS" title, "title contains..." input field, filter tags (`#emacs`, `#org`, `#guix`), and "titles: spread" button.
+    **WHERE**: Left sidebar of the graph view (Image 2).
+    **Exact treatment**:
+    *   **"FILTER CHAPTERS" Title**: Font size `20px`, `font-weight: 700`, color `#00FFC2`. Add `text-shadow: 0 0 10px rgba(0, 255, 194, 0.8)`.
+    *   **"title contains..." Input Field**: `background: rgba(0, 0, 0, 0.4); border: 1px solid #00FFC2; border-radius: 3px; padding: 10px 12px; color: #E0E0E0; font-size: 14px;`. Add `box-shadow: 0 0 5px rgba(0, 255, 194, 0.5)` on focus.
+    *   **Filter Tags**: `background: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 20px; font-size: 13px;`
+        *   `#emacs`: `border: 1px solid #00BFFF; color: #00BFFF;`
+        *   `#org`: `border: 1px solid #FF8C00; color: #FF8C00;`
+        *   `#guix`: `border: 1px solid #BF00FF; color: #BF00FF;`
+        *   On hover: `background: [corresponding_hue] linear-gradient(rgba(255,255,255,0.1), rgba(0,0,0,0.1)); box-shadow: 0 0 10px [corresponding_hue];`
+    *   **"titles: spread" Button**: `background: #00FFC2; color: #000000; padding: 10px 15px; border-radius: 4px; font-size: 15px; font-weight: 700; border: none;`. Add `box-shadow: 0 0 15px rgba(0, 255, 194, 0.8)` on hover.
+
+[latency=28293ms]

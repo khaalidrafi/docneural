@@ -1,0 +1,40 @@
+[
+  {
+    "code": "A",
+    "lane": "gmi",
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+    "ok": false,
+    "error": "HTTP 429: No available endpoints"
+  },
+  {
+    "code": "B",
+    "lane": "gemini",
+    "model": "models/gemini-2.5-flash",
+    "aMs": 23605,
+    "bMs": 28293,
+    "ok": true
+  },
+  {
+    "code": "C",
+    "lane": "cline",
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "aMs": 98388,
+    "bMs": 67550,
+    "ok": true
+  },
+  {
+    "code": "D",
+    "lane": "antling",
+    "model": "Ling-3.0-flash-VL",
+    "aMs": 22438,
+    "bMs": 23297,
+    "ok": true
+  },
+  {
+    "code": "-",
+    "lane": "zai",
+    "model": null,
+    "ok": false,
+    "error": "no vision-ish id in 11 listed"
+  }
+]

@@ -1,0 +1,13 @@
+1. **WHAT:** Chapter-title labels scattered across the neuron graph — tiny, unbroken white text that collides with dots and vanishes against the dark canvas.
+**WHERE:** Center graph canvas, Image 2 (Synapses view).
+**TREATMENT:** Switch label font to mono (JetBrains Mono), set size 15px (from ~10px), color #f2f7ff; apply `text-shadow: 0 0 6px #000, 0 0 2px #000`; wrap each label in a pill of `background: rgba(8,12,20,0.82)`, `padding: 2px 5px`, `radius: 2px`, `letter-spacing: 0.5px`. Enlarge node dots to 6px with 1px #000 stroke and per-source glow `0 0 8px`.
+
+2. **WHAT:** Hero body copy and accent lines (paragraph, cyan tagline, green status line) sit too dim on black, killing the cyberpunk hierarchy.
+**WHERE:** Center hero column, Image 1 (home).
+**TREATMENT:** Paragraph to #e2e8f0, 16px, line-height 1.7, max-width 720px; tagline "docs are neurons…" to #00eaff, 14px, with `text-shadow: 0 0 10px rgba(0,234,255,.5)`; status line "// KNOWLEDGE UPLINK · ONLINE" to #43f626, 12px, with `text-shadow: 0 0 8px rgba(67,246,38,.45)`.
+
+3. **WHAT:** Source-colored nodes are small, unlabeled and unlegendary — the color encoding (the site's core metaphor) reads as one blob.
+**WHERE:** Graph canvas + empty top-right zone, Image 2 (Synapses view).
+**TREATMENT:** Bump dots to 6px with 1px #000 stroke and `0 0 6px` glow in source hue: Org #ff7a45, Emacs #3ec8ff, Guix #ffd43b. Add legend row beneath the "select a neuron" box (11px mono, #c8d3e0 text) with 8px×8px swatches keyed to those hexes.
+
+[latency=23297ms]

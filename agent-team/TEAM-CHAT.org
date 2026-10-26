@@ -1,6 +1,37 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
+- One-line lead: NEW WEB DESIGNER — Ling-3.0-flash-VL@antling won the blind
+  multi-lane bake-off at 8.0/9 (incumbent glm-5v-turbo 5.5/9, gemini-2.5-flash
+  6.5/9); a non-GLM seat win, exactly per HIRE LAW.
+- HOW (Owner order 16:03 "hire again!!! Look for keys in khaalidrafi/vault
+  with the same PAT"): the vault repo was found EMPTY (size=0, zero branches,
+  keys never pushed — git.khalidrafi.tech/khaalidrafi/vault does not resolve
+  to a git repo either). The real key store = 25 sealed Actions secrets on
+  docneural (names read only). So the bake-off ran INSIDE Actions
+  (workflow_dispatch, run 40356936635, job green): keys never left the seal,
+  codes shuffled blind, identical planted shot + prompts + rubric as the
+  5.5/9 baseline.
+- THE FIELD: antling Ling-3.0-flash-VL 8.0/9 WINNER; gemini-2.5-flash 6.5/9;
+  cline nemotron-3.5-super-vl:free 0/9 (empty outputs, 98s); gmi
+  Nemotron-3.5-Super-VL 429 "No available endpoints"; zai official lane
+  listed 11 ids, none vision; opencode zen skipped (client_only lane law).
+- THE WINNER'S PROOF: recall 4/5 (contrast fail; button-overlap MECHANISM;
+  the 8px nav offset, measured ~9px; the clipped "MEMBERS 9,4"), zero decoy
+  false positives, actionability 2/2, critique specificity 2/2 (read the
+  per-source node hues off the canvas and proposed a legend row).
+- SEAT CHANGES (MEMBERS.org): Web Designer = Ling-3.0-flash-VL@antling
+  (BENCHMARKED; OWNER-KEYS ANTLING_API_KEY, api.ant-ling.com/v1);
+  glm-5v-turbo@zai demoted to first fallback; gemini-2.5-flash second.
+  Evidence: agent-team/bench/2026-10-26-challenge-1/ (SCORES.md + raw
+  outputs + key). Harness v2 (scripts/designer-bakeoff.mjs + the
+  workflow_dispatch workflow) is standing: any new vision lane reruns the
+  field same day; the seat never stops being contestable.
+- HOUSEKEEPING for the Owner: if you want the sandbox (not just Actions) to
+  reach the winner's lane for design consults, push the keys to
+  khaalidrafi/vault — it is empty right now.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
 - One-line lead: DELEGATION LAW recorded (design -> the best-scoring
   seat; the Owner holds the final vision gate) + review packet delivered
   for the Owner's own pass on the shipped cyberpunk build.

@@ -87,46 +87,39 @@
      risk) -> zai/glm-4.5-flash@unwired (no data -> intern-grade until
      measured)
 
-** Web Designer — glm-5v-turbo@zai (PROVISIONAL seat — canon row PROPOSED to the
-   DoE; ADD-FREEZE binds: the row below is a proposal with evidence, activation
-   under the Owner's standing hire order "Hire a good web designer if you don't
-   excel in it compared with other candidates" 2026-10-26)
-   - :last-dispatch: 2026-10-26 (cyberpunk-revamp round 3 — design brief +
-     after-review, both on the vision lane)
-   - body note: served by the z.ai sandbox's built-in SDK vision endpoint
-     (zai.chat.completions.createVision, model id glm-5v-turbo — verbatim from
-     the API response). The zai lane is an OWNER-KEYS lane (ZAI_API_KEY
-     sealed); the sandbox SDK is the same platform family as the EM seat
-     (glm-5.3-flash@chat.z.ai). NOT yet a CANDIDATES.org row — proposal filed
-     in TEAM-CHAT.org the same day; seat stands PROVISIONAL until the DoE
-     rules.
-   - board scope: design direction + critique loops on anything visual. It
-     SEES: screenshots in, structured spec out — the first seat that can
-     actually look at the product it designs for.
-   - why hired: Owner asked "Who's your designer, btw?" after two design
-     rounds he rejected. Probe evidence (2026-10-26): vision test image
-     (160x90, cyan #00E5FF field, black rectangle) -> "The image features a
-     **cyan** (or bright blue) background with a centered, vertical **black
-     rectangle**" — correct on both counts. Round-3 record: designer brief
-     consult #1 produced the token sheet + LOD zoom-band spec + 6 CSS-only
-     signature effects; review consult #2 verdict on the implemented build:
-     home PASS, desktop graph PASS, phone FIX (label size) — fix landed
-     (12.5px phone labels) same day.
-   - HIRE-LAW BENCHMARK (2026-10-26, standing harness
-     scripts/designer-bakeoff.mjs): planted-defect shot (5 known defects
-     + 3 intentional decoys) + deployed-shot critique, blind codes,
-     fixed 9-pt rubric, latency tie-break. Incumbent baseline =
-     5.5/9 — recall 2/5 (caught the low-contrast body text; half-credit
-     on the overlap + nav misalignment; missed the red-chip color spill
-     and the clipped stat), decoy FP -0.5, actionability 2/2, critique
-     specificity 2/2, latency 7.2s/9.5s. Field of one ON RECORD: the
+** Web Designer — Ling-3.0-flash-VL@antling (BENCHMARKED seat — won challenge #1
+   2026-10-26; lane OWNER-KEYS ANTLING_API_KEY, endpoint api.ant-ling.com/v1;
+   re-seat record: bench/2026-10-26-challenge-1/)
+   - :last-dispatch: 2026-10-26 (won the blind multi-lane bake-off; consults
+     run through the sealed-key Actions pattern — scripts/designer-bakeoff.mjs
+     v2 — until a consult lane is wired in the sandbox)
+   - seat history: glm-5v-turbo@zai held the seat PROVISIONAL (baseline
+     5.5/9, bench/2026-10-26); Owner ordered "hire again" at 16:03 pointing
+     at the OWNER-KEYS lanes; bake-off ran in Actions with keys sealed, blind
+     codes, identical planted shot + rubric. Ling-3.0-flash-VL scored 8.0/9
+     (recall 4/5, zero decoy FPs, actionability 2/2, critique 2/2) vs
+     gemini-2.5-flash 6.5/9, cline nemotron-vl:free 0/9 (empty outputs),
+     incumbent 5.5/9. Top score took the seat per HIRE LAW — no vendor bias.
+   - strength on record: defect recall (caught the overlap MECHANISM, the
+     8px nav offset, the clipped stat; missed one color spill), zero decoy
+     false positives, critique specificity 2/2.
+   - fallback chain: glm-5v-turbo@zai (5.5/9 baseline, sandbox gateway lane)
+     -> gemini-2.5-flash (GEMINI_API_KEY, 6.5/9). Lane failures on record
+     2026-10-26: gmi 429 "No available endpoints"; zai official listing had
+     no vision id; zen is client_only (never probed off-client per lane law).
+   - challenge protocol: standing. Any new vision lane/key reruns
+     scripts/designer-bakeoff.mjs (v2, multi-lane) with the same planted
+     shot + rubric; top score takes the seat.
+   - demoted incumbent record (glm-5v-turbo@zai, first fallback): served the
+     seat 2026-10-26 morning rounds — vision probe correct (cyan field +
+     black rectangle), round-3 record: consult #1 produced the token sheet +
+     LOD zoom-band spec + 6 CSS-only signature effects, consult #2 verdict
+     home PASS / desktop graph PASS / phone FIX (12.5px labels, landed same
+     day). Baseline 5.5/9 (recall 2/5, decoy FP −0.5, actionability 2/2,
+     critique 2/2, 7.2s/9.5s; bench/2026-10-26). Lane note: the SANDBOX
      gateway pins /chat/completions/vision to glm-5v-turbo (model param
-     ignored — echo-proved), zen 429 keyless, cline 401, pollinations
-     no-image. Seat HELD ON SCORE, not vendor; OPEN TO CHALLENGE the
-     moment an OWNER-KEYS VL lane (OPENCODE_API_KEY / CLINE_API_KEY)
-     lands.
-   - fallback chain: nemotron-3.5-super-vl-free@opencode (the free VL lane,
-     already seated as intern) -> gmi/nemotron-3.5-super-vl@unwired.
+     ignored, echo-proved); the official ZAI_API_KEY lane lists no vision id
+     as of the challenge run.
 
 ** QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY) + machine gate
    - body note (2026-10-26 notation fix): goose is BENCHED for this

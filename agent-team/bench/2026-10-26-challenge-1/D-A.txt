@@ -1,0 +1,12 @@
+- Left panel body text ("Technical manuals, wired as synapses." etc.) is nearly invisible against the dark card | mid left panel | FIX: color #9fb3c4
+- "ENTER GRAPH" button overlaps and hides the "wires live" portion of the right panel header | mid right panel | FIX: margin-top 20px
+- Nav item "MANUALS" sits ~9px lower than "DOCS", "SYNAPSES", "ABOUT" | top nav row | FIX: margin-top -9px
+- Rightmost stat "MEMBERS 9,4" is clipped by the viewport edge | bottom stats row | FIX: max-width 1248px
+
+INTENTIONAL
+- "DOCNEURAL" title uses red/cyan RGB-split glitch chromatic aberration
+- Faint vertical grid/scanline overlay across the entire background
+- Soft elliptical glow disc behind the bottom-left tag pills (#emacs, #org, #guix)
+- Cyan/red duotone accent system distinguishing links, stats, and actions
+
+[latency=22438ms]

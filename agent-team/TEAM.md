@@ -42,10 +42,13 @@
     canonical copy in khaalidrafi/agent-team.el, no local duplicate
     (Owner no-duplication law 2026-10-26); full skeleton +
     professional register; reviewers reject non-conforming letters.
-  - TIME LAW (Owner 2026-10-26 #hq): strict time discipline, Org-powered —
-    every lead-assigned TODO sets :EFFORT: (Effort_ALL ladder); members
-    clock actual work with :LOGBOOK: CLOCK entries; a TODO closed
-    without clock evidence bounces at review.
+  - TIME LAW (Owner 2026-10-26 10:42 #hq): strict time discipline,
+    Org-powered — every lead-assigned TODO sets :EFFORT: (Effort_ALL
+    ladder); the BEGINNING of a task is the exact prompt-send time and
+    AUTOMATION marks it (agent-org prompt-send hook in Emacs, CI
+    clock_in.py at dispatch — never the member; web/cloud lanes are the
+    one manual exception); a TODO closed without clock evidence bounces
+    at review.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

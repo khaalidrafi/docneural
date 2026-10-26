@@ -540,6 +540,28 @@ jobs:
           BRANCH="ai/turn-${REF_SLUG:-main}-$(date -u +%Y%m%d-%H%M%S)"   # R-2-69: ref-slug + seconds — parallel task chains never collide
           git checkout -b "$BRANCH"
           echo "TURN_BRANCH=$BRANCH" >> "$GITHUB_ENV"
+          # TIME LAW (Owner 2026-10-26 10:42Z #hq): the clock-in is
+          # AUTOMATED at the exact prompt-send moment. The HOST flips the
+          # item the WORK ORDER will assign (the first open item,
+          # oldest-first — the same one the BRIEF tells the member to
+          # take) to ONGOING and stamps the open clock BEFORE the agent
+          # body runs; members never clock. Canonical script:
+          # khaalidrafi/agent-team.el agent-team/tools/clock_in.py at a
+          # pinned sha (no-dup law); a failed fetch skips the clock,
+          # never the segment.
+          WORK_ITEM=$(grep -E '^\*+ (TODO|ONGOING|PENDING|WAIT|PROGRESS)' "$BOARD" | head -1 | sed 's/^[*]* //' || true)
+          if [ -n "${WORK_ITEM:-}" ]; then
+            curl -fsSL -H "Authorization: Bearer ${{ github.token }}" \
+              "https://raw.githubusercontent.com/khaalidrafi/agent-team.el/5bf6618b82ce22dc8e2c96b00b0dede23d044237/agent-team/tools/clock_in.py" \
+              -o .clock_in.py \
+            && python3 .clock_in.py "$BOARD" "$WORK_ITEM" >> "$SUMMARY" 2>&1 \
+            && git add "$BOARD" \
+            && git commit -q -m "board: TIME LAW automated clock-in at dispatch (Owner 2026-10-26 10:42Z)" \
+            || echo "clock-in: skipped (fetch/match/commit failed) — segment continues" >> "$SUMMARY"
+            rm -f .clock_in.py
+          else
+            echo "clock-in: no open board item — skipped" >> "$SUMMARY"
+          fi
 
           BRIEF="You are the on-turn member of the docneural Agent Team, seat ${SEAT}.
           TEAM OBJECTIVE (from agent-team/TEAM-CONTROL.org): ${OBJECTIVE}
@@ -577,6 +599,10 @@ jobs:
           mailbox/ is a frozen archive — NEVER write there.
           TOP BOARD ITEMS (oldest-first):
           ${TOP}
+          TIME LAW CLOCK-IN (Owner 2026-10-26 10:42Z): automation clocked
+          your item in at dispatch — ${WORK_ITEM:-none}. NEVER edit
+          :LOGBOOK: clock entries yourself; the automation owns them
+          (manual clocking exists only for web/cloud lanes, not this CI).
           WORK ORDER (board-first: agent-team/TODOS.org is the truth):
           take the FIRST item in P0 > P1 > P2 order that is not DONE, or
           continue the item you already moved to ONGOING. If the board is

@@ -1,0 +1,124 @@
+{
+  "field": [
+    {
+      "origin": "antling",
+      "model": "Ling-3.0-flash-VL",
+      "ok": true,
+      "genMs": 60334,
+      "finish": "stop",
+      "code": "A"
+    },
+    {
+      "origin": "gemini",
+      "model": "models/gemini-2.5-flash",
+      "ok": true,
+      "genMs": 69974,
+      "finish": "length",
+      "code": "D"
+    },
+    {
+      "origin": "zai",
+      "model": "glm-4.6",
+      "ok": false,
+      "why": "HTTP 429: {\"error\":{\"code\":\"1113\",\"message\":\"Insufficient balance or no resource package. Please recharge.\"}}"
+    },
+    {
+      "origin": "gmi",
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+      "ok": false,
+      "why": "HTTP 429: No available endpoints"
+    },
+    {
+      "origin": "cline",
+      "model": "nvidia/nemotron-3.5-super-vl:free",
+      "ok": false,
+      "why": "The operation was aborted due to timeout"
+    },
+    {
+      "origin": "staged:entry-1",
+      "model": "sandbox-gateway",
+      "ok": true,
+      "genMs": null,
+      "finish": "staged",
+      "code": "C"
+    },
+    {
+      "origin": "staged:entry-2",
+      "model": "sandbox-gateway",
+      "ok": true,
+      "genMs": null,
+      "finish": "staged",
+      "code": "B"
+    }
+  ],
+  "objectiveResults": {
+    "A": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 1,
+      "presence": 2,
+      "craft": 1,
+      "total": 8,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 3.74,
+        "presence": 6,
+        "styleLen": 9611,
+        "hasMotion": true
+      }
+    },
+    "B": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 2,
+      "presence": 2,
+      "craft": 1,
+      "total": 9,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 8.46,
+        "presence": 6,
+        "styleLen": 11045,
+        "hasMotion": true
+      }
+    },
+    "C": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 2,
+      "presence": 2,
+      "craft": 1,
+      "total": 9,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 8.46,
+        "presence": 6,
+        "styleLen": 17425,
+        "hasMotion": true
+      }
+    },
+    "D": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 0,
+      "presence": 0,
+      "craft": 0,
+      "total": 4,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 0,
+        "presence": 0,
+        "styleLen": 0,
+        "hasMotion": true
+      }
+    }
+  }
+}

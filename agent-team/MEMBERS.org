@@ -87,39 +87,61 @@
      risk) -> zai/glm-4.5-flash@unwired (no data -> intern-grade until
      measured)
 
-** Web Designer — Ling-3.0-flash-VL@antling (BENCHMARKED seat — won challenge #1
-   2026-10-26; lane OWNER-KEYS ANTLING_API_KEY, endpoint api.ant-ling.com/v1;
-   re-seat record: bench/2026-10-26-challenge-1/)
-   - :last-dispatch: 2026-10-26 (won the blind multi-lane bake-off; consults
-     run through the sealed-key Actions pattern — scripts/designer-bakeoff.mjs
-     v2 — until a consult lane is wired in the sandbox)
-   - seat history: glm-5v-turbo@zai held the seat PROVISIONAL (baseline
-     5.5/9, bench/2026-10-26); Owner ordered "hire again" at 16:03 pointing
-     at the OWNER-KEYS lanes; bake-off ran in Actions with keys sealed, blind
-     codes, identical planted shot + rubric. Ling-3.0-flash-VL scored 8.0/9
-     (recall 4/5, zero decoy FPs, actionability 2/2, critique 2/2) vs
-     gemini-2.5-flash 6.5/9, cline nemotron-vl:free 0/9 (empty outputs),
-     incumbent 5.5/9. Top score took the seat per HIRE LAW — no vendor bias.
-   - strength on record: defect recall (caught the overlap MECHANISM, the
-     8px nav offset, the clipped stat; missed one color spill), zero decoy
-     false positives, critique specificity 2/2.
-   - fallback chain: glm-5v-turbo@zai (5.5/9 baseline, sandbox gateway lane)
-     -> gemini-2.5-flash (GEMINI_API_KEY, 6.5/9). Lane failures on record
-     2026-10-26: gmi 429 "No available endpoints"; zai official listing had
-     no vision id; zen is client_only (never probed off-client per lane law).
-   - challenge protocol: standing. Any new vision lane/key reruns
-     scripts/designer-bakeoff.mjs (v2, multi-lane) with the same planted
-     shot + rubric; top score takes the seat.
-   - demoted incumbent record (glm-5v-turbo@zai, first fallback): served the
-     seat 2026-10-26 morning rounds — vision probe correct (cyan field +
-     black rectangle), round-3 record: consult #1 produced the token sheet +
-     LOD zoom-band spec + 6 CSS-only signature effects, consult #2 verdict
-     home PASS / desktop graph PASS / phone FIX (12.5px labels, landed same
-     day). Baseline 5.5/9 (recall 2/5, decoy FP −0.5, actionability 2/2,
-     critique 2/2, 7.2s/9.5s; bench/2026-10-26). Lane note: the SANDBOX
-     gateway pins /chat/completions/vision to glm-5v-turbo (model param
-     ignored, echo-proved); the official ZAI_API_KEY lane lists no vision id
-     as of the challenge run.
+** Web Designer — glm-5v-turbo@zai (RE-SEATED on the DESIGN forge 2026-10-27, 9.0/9
+   top score; PENDING OWNER VISUAL GATE on the blind gallery — bench/2026-10-27-forge/)
+   - stage-2 forge ("hands, not eyes", Owner challenge 2026-10-26 ~16:31:
+     "Designing means to be able develop creative, cool, stunning designs for
+     websites!!") — HIRE LAW reading: the benchmark must match the JOB, and
+     the designer job is CREATION, not defect-spotting. Every lane got the
+     IDENTICAL brief (scripts/forge-brief.md) and had to BUILD a complete
+     single-file cyberpunk page; Chromium rendered both viewports; objective
+     checks (AA contrast, overflow 1440/390, required sections, craft signal)
+     + blind peer review; FINAL = 0.4*obj + 0.6*peer.
+   - forge field (blind codes; KEY in bench/2026-10-27-forge/KEY.json):
+     C = glm-5v-turbo (staged entry via sealed gateway /vision) — 9.0/9,
+     ONLY entry with zero objective violations (minContrast 8.46:1, no
+     overflow at either viewport, 6/6 sections, 17.4KB style budget, motion);
+     peer pass incomplete — no independent judge completed (antling's judge
+     call failed, glm-4-plus excluded as staged:entry-2 is its own output),
+     so its 9.0 is objective-only and DISCLOSED as such. Owner gate decides.
+     A = Ling-3.0-flash-VL@antling — 8.6/9 (obj 8: minContrast 3.74:1 AA FAIL
+     on the magenta CTA — the exact defect class it aced SPOTTING in stage 1;
+     peer 9/9 from glm-5v-turbo judge). B = zai gateway-plain entry (echo
+     glm-4-plus) — 8.4/9 (obj 9, peer 8.0 avg: antling 7 "template-like",
+     glm-5v-turbo 9). D = gemini-2.5-flash — 1.6/9 DNF (finish=length,
+     truncated to a blank black page; both judges scored it 0).
+   - lane failures on record: zai official 429 "Insufficient balance", gmi 429
+     "No available endpoints", cline 300s timeout.
+   - seat reading per HIRE LAW: glm-5v-turbo re-takes the DESIGN CRAFT seat on
+     the forge top score; Ling-3.0-flash-VL holds the DESIGN QA crown (stage-1
+     critique bench 8.0/9 — strongest EYES in the field). FINAL call belongs
+     to the Owner's eyes on the blind gallery (DELEGATION LAW) — his pick
+     crowns the seat and unblinds the gallery.
+   - prior record (challenge #1, bench/2026-10-26-challenge-1/): Ling won the
+     critique bake-off 8.0/9 vs incumbent 5.5/9; glm-5v-turbo demoted then.
+   - :last-dispatch: 2026-10-27 (forge entry generated sandbox-side through
+     the sealed gateway /vision lane + judge pass on rivals' renders; design
+     consults route through the same lane — no key ever leaves the seal)
+   - seat history: glm-5v-turbo@zai held the seat PROVISIONAL (critique
+     baseline 5.5/9, bench/2026-10-26); Owner ordered "hire again" at 16:03
+     pointing at the OWNER-KEYS lanes; challenge #1 (Actions, keys sealed,
+     blind codes, planted shot) went to Ling-3.0-flash-VL 8.0/9 vs incumbent
+     5.5/9, gemini-2.5-flash 6.5/9, cline nemotron-vl:free 0/9; Owner then
+     challenged the CRITERION itself (critique ≠ creation) -> forge stage 2
+     re-measured the field on CREATION and the incumbent topped it (9.0/9,
+     pending Owner gate as recorded above).
+   - DESIGN QA crown (Ling-3.0-flash-VL@antling, challenge #1 evidence):
+     defect recall 4/5 (caught the overlap MECHANISM, the 8px nav offset, the
+     clipped stat; missed one color spill), zero decoy false positives,
+     critique specificity 2/2. All design REVIEWS route to the QA crown.
+   - fallback chain (forge-2 scores): Ling-3.0-flash-VL 8.6 -> zai
+     gateway-plain entry (echo glm-4-plus, self-reported) 8.4 -> gemini-2.5-
+     flash 1.6 (DNF). Lane failure log 2026-10-26/27: gmi 429 "No available
+     endpoints"; zai official 429 "Insufficient balance"; cline timeout;
+     zen is client_only (never probed off-client per lane law).
+   - challenge protocol: standing, BOTH benches. Any new lane/key reruns
+     scripts/designer-bakeoff.mjs (eyes) AND scripts/design-forge.mjs
+     (hands); top relevant score takes the seat.
 
 ** QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY) + machine gate
    - body note (2026-10-26 notation fix): goose is BENCHED for this

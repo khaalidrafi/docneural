@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCNEURAL — Cyberpunk Docs Organism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #0a0e16;
+            --panel: #10151f;
+            --primary: #00e5ff;
+            --secondary: #ff2d78;
+            --accent: #ffb454;
+            --text: #9fb3c4;
+            --text-bright: #c9d1d9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--canvas);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Scanlines effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(16, 21, 31, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .wordmark {
+            font-family: 'Electrolize', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--canvas);
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 2px;
+            font-family: 'Electrolize', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 229, 255, 0.3);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+        
+        .mobile-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--primary);
+            transition: 0.3s;
+        }
+        
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
+        }
+        
+        .kicker {
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Electrolize', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.2;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .subline {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero-button {
+            padding: 1rem 2rem;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-family: 'Electrolize', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .hero-button:hover::before {
+            left: 0;
+        }
+        
+        .hero-button:hover {
+            color: var(--canvas);
+            border-color: var(--primary);
+        }
+        
+        .terminal {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(16, 21, 31, 0.8);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .terminal-line {
+            color: var(--accent);
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Stats Row */
+        .stats {
+            padding: 3rem 2rem;
+            background: var(--panel);
+            border-top: 1px solid rgba(0, 229, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        
+        .stats-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Electrolize', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .stat-label {
+            color: var(--text);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        
+        /* Graph Section */
+        .graph-section {
+            padding: 4rem 2rem;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        
+        .graph-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: var(--panel);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        #networkCanvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .legend {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        /* Manual Cards */
+        .manuals {
+            padding: 4rem 2rem;
+            background: var(--panel);
+        }
+        
+        .manuals-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .manual-card {
+            background: rgba(16, 21, 31, 0.6);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .manual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .manual-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
+        }
+        
+        .manual-card:hover::before {
+            transform: translateX(0);
+        }
+        
+        .manual-title {
+            font-family: 'Electrolize', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .manual-excerpt {
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .manual-meta {
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text);
+            border-top: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 390px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-container {
+                gap: 2rem;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="wordmark">DOCNEURAL</div>
+            <ul class="nav-links">
+                <li><a href="#manuals">MANUALS</a></li>
+                <li><a href="#graph">GRAPH</a></li>
+                <li><a href="#pipeline">PIPELINE</a></li>
+                <li><a href="#about">ABOUT</a></li>
+            </ul>
+            <button class="cta-button">BOOT TERMINAL</button>
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <p class="kicker">SYSTEM ONLINE</p>
+        <h1>Neural Network<br>of Knowledge</h1>
+        <p class="subline">Explore 1,392 interconnected nodes across 304 sections in this living documentation organism</p>
+        <div class="hero-buttons">
+            <button class="hero-button">Explore Graph</button>
+            <button class="hero-button">Browse Manuals</button>
+        </div>
+        <div class="terminal">
+            <div class="terminal-line">Initializing neural pathways...</div>
+            <div class="terminal-line" style="animation-delay: 0.5s">Loading 30400 connections...</div>
+            <div class="terminal-line" style="animation-delay: 1s">System ready.</div>
+        </div>
+    </section>
+
+    <!-- Stats Row -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-number">1,392</div>
+                <div class="stat-label">NODES</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">30,400</div>
+                <div class="stat-label">EDGES</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">304</div>
+                <div class="stat-label">SECTIONS</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Graph Section -->
+    <section class="graph-section" id="graph">
+        <div class="graph-container">
+            <canvas id="networkCanvas"></canvas>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff7a45;"></div>
+                <span>Org</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #3ec8ff;"></div>
+                <span>Emacs</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffd43b;"></div>
+                <span>Guix</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manual Cards -->
+    <section class="manuals" id="manuals">
+        <div class="manuals-container">
+            <div class="manual-card">
+                <h3 class="manual-title">Network Fundamentals</h3>
+                <p class="manual-excerpt">Understanding the core principles of neural network documentation systems and their emergent properties.</p>
+                <p class="manual-meta">3 hops from root</p>
+            </div>
+            <div class="manual-card">
+                <h3 class="manual-title">Org-Ram Integration</h3>
+                <p class="manual-excerpt">Deep dive into connecting your org-mode files with the neural graph for enhanced knowledge navigation.</p>
+                <p class="manual-meta">5 hops from root</p>
+            </div>
+            <div class="manual-card">
+                <h3 class="manual-title">Pipeline Optimization</h3>
+                <p class="manual-excerpt">Advanced techniques for optimizing your documentation pipeline and maximizing neural network performance.</p>
+                <p class="manual-meta">7 hops from root</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        © 2024 DOCNEURAL — Neural Documentation System v2.0.4
+    </footer>
+
+    <script>
+        // Animated Network Graph
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Node class
+        class Node {
+            constructor(x, y, radius, color, type) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.type = type;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.pulse = 0;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < this.radius || this.x > canvas.width - this.radius) {
+                    this.vx *= -1;
+                }
+                if (this.y < this.radius || this.y > canvas.height - this.radius) {
+                    this.vy *= -1;
+                }
+                
+                this.pulse = (this.pulse + 0.02) % (Math.PI * 2);
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse) * 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = this.color;
+                ctx.stroke();
+            }
+        }
+        
+        // Create nodes
+        const nodes = [];
+        const nodeTypes = [
+            { color: '#ff7a45', count: 15 },
+            { color: '#3ec8ff', count: 10 },
+            { color: '#ffd43b', count: 5 }
+        ];
+        
+        nodeTypes.forEach(type => {
+            for (let i = 0; i < type.count; i++) {
+                const radius = Math.random() * 8 + 6;
+                const x = Math.random() * (canvas.width - radius * 2) + radius;
+                const y = Math.random() * (canvas.height - radius * 2) + radius;
+                nodes.push(new Node(x, y, radius, type.color, type.color));
+            }
+        });
+        
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = '#10151f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections
+            ctx.strokeStyle = 'rgba(0, 229, 255, 0.1)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Update and draw nodes
+            nodes.forEach(node => {
+                node.update();
+                node.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Terminal typing effect
+        const terminalLines = document.querySelectorAll('.terminal-line');
+        let lineIndex = 0;
+        
+        function typeNextLine() {
+            if (lineIndex < terminalLines.length) {
+                terminalLines[lineIndex].style.opacity = '1';
+                lineIndex++;
+                setTimeout(typeNextLine, 500);
+            }
+        }
+        
+        setTimeout(typeNextLine, 1000);
+        
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

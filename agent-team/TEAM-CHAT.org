@@ -1,5 +1,33 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:design:bench:
+- One-line lead: YOU WERE RIGHT — the 8.0/9 bench measured DEFECT-SPOTTING
+  (eyes), not design creation (hands). Stage 2 "DESIGN FORGE" ran: every lane
+  had to BUILD a complete cyberpunk page from the identical brief; Chromium
+  rendered; objective checks + blind peer review scored the WORK.
+- The forge (Actions run 40361935449, green, keys sealed, seed 20261027):
+  brief = scripts/forge-brief.md (identical for all; AA contrast constraint
+  encoded — the exact defect class stage 1 caught). FINAL = 0.4*objective +
+  0.6*peerAvg. Field: C 9.0/9 (glm-5v-turbo staged entry, gateway /vision —
+  ONLY zero-violation page: contrast 8.46:1, no overflow 1440/390, 6/6
+  sections; peer pass incomplete, disclosed), A 8.6/9 (obj 8 — its magenta
+  CTA measured 3.74:1, an AA FAIL of the very class it aced spotting;
+  peer 9/9), B 8.4/9 (gateway-plain entry, echo glm-4-plus; obj 9, peer 8.0),
+  D 1.6/9 (gemini-2.5-flash truncated finish=length -> blank page, DNF).
+  Lane failures: zai official 429 balance, gmi 429, cline timeout.
+- Seat reading per HIRE LAW (benchmark must match the job): glm-5v-turbo
+  re-takes DESIGN CRAFT on the forge top score; Ling-3.0-flash-VL holds the
+  DESIGN QA crown (stage-1 critique bench 8.0/9 — strongest eyes in the
+  field). The blind gallery (bench/2026-10-27-forge/gallery-blind.png, codes
+  A-D) is dispatched to the Owner — DELEGATION LAW: his pick crowns the seat
+  and unblinds the gallery. KEY.json filed only after scoring closed.
+- Evidence: bench/2026-10-27-forge/ (per-code index.html + desktop/mobile
+  renders + peer JSONs + SCORES/KEY/RESULTS + GALLERY.md),
+  scripts/design-forge.mjs (standing harness), .github/workflows/
+  design-forge.yml (dispatchable any day). HONESTY note on record: B's
+  provenance = the gateway PLAIN endpoint, self-reported echo glm-4-plus,
+  not independently verifiable — labeled as such everywhere.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
 - One-line lead: NEW WEB DESIGNER — Ling-3.0-flash-VL@antling won the blind
   multi-lane bake-off at 8.0/9 (incumbent glm-5v-turbo 5.5/9, gemini-2.5-flash

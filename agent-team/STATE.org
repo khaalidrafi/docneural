@@ -1,6 +1,19 @@
 #+TITLE: STATE.org — cross-session state (Owner pastes back at session start)
 
 * DONE
+- DESIGN FORGE stage 2 "hands, not eyes" 2026-10-27 (Actions run
+  40361935449): Owner challenged the hire criterion ("Designing means to be
+  able develop creative, cool, stunning designs for websites!!") — stage-1
+  bench measured defect-spotting only. Every lane BUILT a full single-file
+  cyberpunk page from the identical brief (scripts/forge-brief.md); Chromium
+  rendered 1440x900 + 390x844; objective checks (AA contrast, overflow,
+  sections, craft) + blind peer review; FINAL = 0.4*obj + 0.6*peer. Result:
+  C glm-5v-turbo 9.0 (zero violations, peer incomplete — disclosed), A Ling
+  8.6 (AA fail 3.74:1 on its own CTA), B gateway-plain/echo glm-4-plus 8.4,
+  D gemini 1.6 DNF (truncated blank). Seat: glm-5v-turbo re-takes DESIGN
+  CRAFT, Ling holds DESIGN QA (critique bench 8.0/9); Owner's pick on the
+  blind gallery crowns it (DELEGATION LAW). Evidence: bench/2026-10-27-forge/
+  + scripts/design-forge.mjs + MEMBERS.org Web Designer block.
 - DESIGN ROUND 3 "cyberpunk-revamp" 2026-10-26 (docneural-ui ai/main 289e146):
   Owner rejected the signal-design look ("isn't much good... sci-fi,
   cyberpunk style") and asked who the designer is. WEB DESIGNER seat hired —

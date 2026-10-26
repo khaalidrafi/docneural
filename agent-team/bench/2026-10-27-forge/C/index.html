@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCNEURAL — Neural Documentation Universe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-canvas: #0a0e16;
+            --bg-panel: #10151f;
+            --primary: #00e5ff;
+            --secondary: #ff2d78;
+            --accent: #ffb454;
+            --text-body: #9fb3c4;
+            --text-heading: #ffffff;
+            --border-subtle: rgba(159, 179, 196, 0.15);
+            --font-display: 'Electrolize', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Scanline overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 229, 255, 0.01) 2px,
+                rgba(0, 229, 255, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Grid background pattern */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            background: rgba(10, 14, 22, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 1000;
+        }
+
+        .wordmark {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            color: var(--text-heading);
+            text-decoration: none;
+        }
+
+        .wordmark span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-body);
+            text-decoration: none;
+            transition: color 0.25s ease, text-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary) !important;
+            padding: 8px 18px !important;
+            border-radius: 3px;
+            transition: all 0.25s ease !important;
+            cursor: pointer;
+        }
+
+        .cta-nav::after { display: none !important; }
+
+        .cta-nav:hover {
+            background: var(--primary) !important;
+            color: var(--bg-canvas) !important;
+            box-shadow: 0 0 24px rgba(0, 229, 255, 0.35);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 120px clamp(24px, 5vw, 80px) 80px;
+            position: relative;
+        }
+
+        .kicker {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .kicker::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--secondary);
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 6vw, 4.8rem);
+            font-weight: 400;
+            color: var(--text-heading);
+            line-height: 1.1;
+            max-width: 900px;
+            margin-bottom: 28px;
+            letter-spacing: 0.02em;
+        }
+
+        h1 .highlight {
+            color: var(--primary);
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+        }
+
+        .subline {
+            font-size: 1rem;
+            max-width: 600px;
+            margin-bottom: 44px;
+            color: var(--text-body);
+            line-height: 1.75;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 56px;
+        }
+
+        .btn-primary {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 16px 32px;
+            background: var(--primary);
+            color: var(--bg-canvas);
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 36px rgba(0, 229, 255, 0.45);
+        }
+
+        .btn-secondary {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--text-heading);
+            border: 1px solid var(--border-subtle);
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 0 20px rgba(255, 45, 120, 0.2);
+        }
+
+        /* Terminal Accent */
+        .terminal-accent {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 20px 24px;
+            max-width: 520px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-accent::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 32px;
+            background: rgba(0, 229, 255, 0.03);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .terminal-dots {
+            position: absolute;
+            top: 12px;
+            left: 14px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .terminal-dots span:nth-child(1) { background: #ff5f57; }
+        .terminal-dots span:nth-child(2) { background: #febc2e; }
+        .terminal-dots span:nth-child(3) { background: #28c840; }
+
+        .terminal-line {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt {
+            color: var(--primary);
+            user-select: none;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 17px;
+            background: var(--primary);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: clamp(32px, 6vw, 80px);
+            padding: 48px clamp(24px, 5vw, 80px);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            color: var(--text-heading);
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value.cyan { color: var(--primary); text-shadow: 0 0 20px rgba(0, 229, 255, 0.3); }
+        .stat-value.magenta { color: var(--secondary); text-shadow: 0 0 20px rgba(255, 45, 120, 0.3); }
+        .stat-value.amber { color: var(--accent); text-shadow: 0 0 20px rgba(255, 180, 84, 0.3); }
+
+        .stat-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-body);
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        /* Graph Section */
+        .graph-section {
+            padding: 80px clamp(24px, 5vw, 80px);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            color: var(--text-heading);
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            opacity: 0.8;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .canvas-container::before,
+        .canvas-container::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-color: var(--primary);
+            border-style: solid;
+            opacity: 0.5;
+        }
+
+        .canvas-container::before {
+            top: 12px; left: 12px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .canvas-container::after {
+            bottom: 12px; right: 12px;
+            border-width: 0 2px 2px 0;
+        }
+
+        #neuralCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .legend-row {
+            display: flex;
+            justify-content: center;
+            gap: clamp(24px, 4vw, 48px);
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.org { background: #ff7a45; box-shadow: 0 0 8px rgba(255, 122, 69, 0.6); }
+        .legend-dot.emacs { background: #3ec8ff; box-shadow: 0 0 8px rgba(62, 200, 255, 0.6); }
+        .legend-dot.guix { background: #ffd43b; box-shadow: 0 0 8px rgba(255, 212, 59, 0.6); }
+
+        /* Manual Cards */
+        .manuals-section {
+            padding: 80px clamp(24px, 5vw, 80px);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 32px 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 229, 255, 0.06);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 14px;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--text-heading);
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .card p {
+            font-size: 0.88rem;
+            color: var(--text-body);
+            margin-bottom: 20px;
+            line-height: 1.65;
+        }
+
+        .card-meta {
+            font-size: 0.72rem;
+            color: var(--text-body);
+            opacity: 0.6;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-meta svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            padding: 32px clamp(24px, 5vw, 80px);
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            color: var(--text-body);
+            opacity: 0.55;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0; right: 0;
+                background: rgba(10, 14, 22, 0.98);
+                flex-direction: column;
+                padding: 24px;
+                gap: 20px;
+                transform: translateY(-110%);
+                transition: transform 0.35s ease;
+                border-bottom: 1px solid var(--border-subtle);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero {
+                padding-top: 100px;
+                min-height: auto;
+            }
+
+            .stats-row {
+                gap: 24px 40px;
+            }
+
+            .canvas-container {
+                aspect-ratio: 4 / 3;
+            }
+        }
+
+        @media (max-width: 390px) {
+            nav {
+                padding: 0 16px;
+                height: 64px;
+            }
+
+            .wordmark {
+                font-size: 1.2rem;
+                letter-spacing: 0.15em;
+            }
+
+            .hero {
+                padding: 88px 16px 60px;
+            }
+
+            .subline {
+                font-size: 0.9rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .terminal-accent {
+                padding: 16px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation">
+        <a href="#" class="wordmark">DOC<span>NEURAL</span></a>
+        <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#manuals">Manuals</a></li>
+            <li><a href="#graph">Graph</a></li>
+            <li><a href="#pipeline">Pipeline</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#" class="cta-nav">Boot Terminal</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="kicker">Org-Roam Neural Engine v3.2.1</div>
+        <h1>Your Knowledge Base is a<br><span class="highlight">Living Organism</span></h1>
+        <p class="subline">DOCNEURAL renders your org-roam documentation universe as an interactive neural graph — 1,392 nodes pulsing with semantic connections, traversable in real-time through our terminal interface.</p>
+        
+        <div class="hero-actions">
+            <button class="btn-primary">Explore the Graph</button>
+            <button class="btn-secondary">Read Documentation</button>
+        </div>
+
+        <div class="terminal-accent" aria-label="Live terminal output">
+            <div class="terminal-dots"><span></span><span></span><span></span></div>
+            <div class="terminal-line">
+                <span class="prompt">$ docneural --init</span>
+                <span id="typingText"></span><span class="cursor-blink"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Row -->
+    <section class="stats-row" aria-label="System statistics">
+        <div class="stat-item">
+            <div class="stat-value cyan">1,392</div>
+            <div class="stat-label">Nodes</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value magenta">30,400</div>
+            <div class="stat-label">Edges</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value amber">304</div>
+            <div class="stat-label">Sections</div>
+        </div>
+    </section>
+
+    <!-- Graph Section -->
+    <section class="graph-section" id="graph">
+        <div class="section-header">
+            <h2>Neural Graph Visualization</h2>
+            <p>Real-time force-directed layout of interconnected documentation nodes</p>
+        </div>
+        <div class="canvas-container">
+            <canvas id="neuralCanvas" aria-label="Animated neural network graph visualization"></canvas>
+        </div>
+        <div class="legend-row">
+            <div class="legend-item">
+                <span class="legend-dot org"></span>
+                <span>Org Mode</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot emacs"></span>
+                <span>Emacs</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot guix"></span>
+                <span>Guix</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manual Cards -->
+    <section class="manuals-section" id="manuals">
+        <div class="section-header">
+            <h2>Core Manuals</h2>
+            <p>Navigable documentation clusters from the neural network</p>
+        </div>
+        <div class="cards-grid">
+            <article class="card">
+                <span class="card-tag">System Core</span>
+                <h3>Org-Roam Architecture</h3>
+                <p>Deep dive into the node database schema, bidirectional linking protocols, and the query engine that powers traversal across 30K+ edges.</p>
+                <div class="card-meta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    47 hops from root
+                </div>
+            </article>
+            <article class="card">
+                <span class="card-tag">Integration</span>
+                <h3>Emacs Ecosystem Bridge</h3>
+                <p>How DOCNEURAL interfaces with Emacs Lisp runtime, captures buffer states, and synchronizes live edits to the persistent graph structure.</p>
+                <div class="card-meta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    23 hops from root
+                </div>
+            </article>
+            <article class="card">
+                <span class="card-tag">Infrastructure</span>
+                <h3>Guix Deployment Pipeline</h3>
+                <p>Reproducible build manifests for deploying DOCNEURAL nodes across distributed infrastructure with full dependency resolution.</p>
+                <div class="card-meta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    31 hops from root
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        DOCNEURAL // Org-Roam Neural Documentation System // Built for hackers who think in graphs
+    </footer>
+
+    <script>
+        // Initialize variables first
+        const typingTextElement = document.getElementById('typingText');
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Typing effect
+        const terminalText = 'Initializing neural graph... 1392 nodes loaded. Connection matrix ready.';
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < terminalText.length && typingTextElement) {
+                typingTextElement.textContent += terminalText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 38 + Math.random() * 24);
+            }
+        }
+
+        setTimeout(typeWriter, 800);
+
+        // Mobile menu
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Canvas setup and resize handling
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+            canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+            
+            ctx.scale(dpr, dpr);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Node colors matching legend
+        const nodeColors = [
+            '#ff7a45', // Org
+            '#3ec8ff', // Emacs  
+            '#ffd43b'  // Guix
+        ];
+
+        // Initialize nodes array
+        const nodes = [];
+        const nodeCount = 45;
+        const eps = 0.001;
+
+        function initNodes() {
+            nodes.length = 0;
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const w = Math.max(100, rect.width);
+            const h = Math.max(100, rect.height);
+
+            for (let i = 0; i < nodeCount; i++) {
+                nodes.push({
+                    x: Math.max(eps, Math.min(w - eps, 40 + Math.random() * (w - 80))),
+                    y: Math.max(eps, Math.min(h - eps, 40 + Math.random() * (h - 80))),
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.max(eps, 2 + Math.random() * 4),
+                    color: nodeColors[Math.floor(Math.random() * nodeColors.length)],
+                    pulsePhase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        initNodes();
+
+        // Animation frame tracking
+        let animationId = null;
+        let lastTime = 0;
+
+        function drawNetwork(timestamp) {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const w = Math.max(1, rect.width);
+            const h = Math.max(1, rect.height);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const connectionDist = 150;
+            const dt = Math.min(0.05, (timestamp - lastTime) / 1000 || 0.016);
+            lastTime = timestamp;
+
+            // Update and draw edges
+            for (let i = 0; i < nodes.length; i++) {
+                const a = nodes[i];
+                
+                // Update position
+                a.x += a.vx;
+                a.y += a.vy;
+                
+                // Bounce off walls with padding
+                const pad = a.radius + 5;
+                if (a.x < pad) { a.x = pad; a.vx *= -0.8; }
+                if (a.x > w - pad) { a.x = w - pad; a.vx *= -0.8; }
+                if (a.y < pad) { a.y = pad; a.vy *= -0.8; }
+                if (a.y > h - pad) { a.y = h - pad; a.vy *= -0.8; }
+
+                // Add slight drift
+                a.vx += (Math.random() - 0.5) * 0.02;
+                a.vy += (Math.random() - 0.5) * 0.02;
+                
+                // Damping
+                a.vx *= 0.995;
+                a.vy *= 0.995;
+
+                // Clamp velocity
+                a.vx = Math.max(-1.5, Math.min(1.5, a.vx));
+                a.vy = Math.max(-1.5, Math.min(1.5, a.vy));
+
+                // Draw connections
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const b = nodes[j];
+                    const dx = b.x - a.x;
+                    const dy = b.y - a.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDist && dist > eps) {
+                        const alpha = Math.max(0, Math.min(1, (1 - dist / connectionDist) * 0.35));
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.strokeStyle = 'rgba(0, 229, 255, ' + alpha.toFixed(3) + ')';
+                        ctx.lineWidth = Math.max(0.5, 1 - dist / connectionDist);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw nodes
+            for (let i = 0; i < nodes.length; i++) {
+                const n = nodes[i];
+                n.pulsePhase += 0.03;
+                const pulse = 1 + Math.sin(n.pulsePhase) * 0.15;
+                const drawRadius = Math.max(eps, n.radius * pulse);
+
+                // Glow effect
+                const glowRadius = Math.max(eps, drawRadius * 3);
+                const gradient = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowRadius);
+                gradient.addColorStop(0, n.color);
+                gradient.addColorStop(0.4, n.color.replace(')', ', 0.3)').replace('rgb', 'rgba'));
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, glowRadius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // Core node
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, drawRadius, 0, Math.PI * 2);
+                ctx.fillStyle = n.color;
+                ctx.fill();
+
+                // Inner highlight
+                ctx.beginPath();
+                ctx.arc(n.x - drawRadius * 0.25, n.y - drawRadius * 0.25, Math.max(eps, drawRadius * 0.35), 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fill();
+            }
+
+            animationId = requestAnimationFrame(drawNetwork);
+        }
+
+        // Start animation
+        animationId = requestAnimationFrame(drawNetwork);
+
+        // Cleanup on page hide
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            } else if (!document.hidden && !animationId) {
+                lastTime = performance.now();
+                animationId = requestAnimationFrame(drawNetwork);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -41,6 +41,9 @@ jobs:
         with: { repository: khaalidrafi/docneural-ui, ref: ai/main, path: docneural-ui }
       - uses: actions/checkout@v4
         with: { repository: khaalidrafi/org-roam-lite-ui, ref: ai/main, path: org-roam-lite-ui }
+        # org-roam-lite-ui is PRIVATE: GITHUB_TOKEN is docneural-scoped,
+        # so this checkout rides the repo's cross-repo GH_PAT secret.
+        token: ${{ secrets.GH_PAT }}
 
       - name: Install Emacs (batch exporter) + Node 20
         run: |

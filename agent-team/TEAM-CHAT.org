@@ -1,5 +1,31 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:public-benchmarks:
+- One-line lead: Owner ordered "look at CANDIDATES.org and their scores in
+  web design on the best benchmarks ONLINE as well as trusted reviews
+  ONLINE" — done; every wired design candidate is now cross-checked
+  against Design Arena + WebDev Arena + Artificial Analysis, filed at
+  bench/2026-10-27-public-benchmarks/RESEARCH.md with sources and snapshot
+  dates.
+- The public numbers: Design Arena Website Elo — glm-5v-turbo 1229 (48.8%
+  win) > nemotron-3.5-super-vl 1169 > gemini-2.5-flash 1113; Ling-VL and
+  glm-4-plus have NO public design row (disclosed). WebDev Arena
+  (151 models): glm-5v-turbo #97 / 1401 — while wired TEXT lanes out-score
+  it: glm-5.3-flash #30 / 1608, glm-5.3 #23 / 1623; gemini-3.x-flash class
+  rates ~1303 on design boards. Frontier designers (Kimi K3 1335, GPT-6
+  Astra 1327, Claude Opus 5.5 1326) are NOT on wired lanes.
+- Judgment, stated plainly: the forge crown HOLDS but is honestly
+  re-scoped — glm-5v-turbo is the best AVAILABLE (wired vision) designer,
+  publicly mid-upper, ~75-130 Elo under the world's best; the forge still
+  measures what no public board can (our brief, our artifact, objective
+  Chromium checks + blind peers). Ling's QA crown rests on in-house
+  evidence only (zero public design data exists either way).
+- Pre-registered consequence: forge ROUND 2 vs text challengers
+  (glm-5.3-flash, gemini-3.8-flash, nemotron-3.5-super-vl) — same brief,
+  same harness, runs on Owner go or at the next design consult. If a text
+  lane beats the incumbent blind, the generation half of the seat moves to
+  it and vision critique stays with Ling (QA).
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:crown:unblind:
 - One-line lead: CROWNED — glm-5v-turbo@zai holds the DESIGN CRAFT seat at
   9.0/9 on a COMPLETE blind matrix; the Owner delegated the call ("You

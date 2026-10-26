@@ -55,6 +55,26 @@
   :report: + screenshots in Discord)
 - DONE R2-69 docneural-37-graph-peek — Lead-verified 2026-10-25: docneural-ui ai/main b1ab002 — NotePreview.svelte +84: the LinkPeek hover card in graph mode, hover-intent 300 ms, 200 ms grace untouched Owner-box; vitest 65/65 + svelte-check 0/0 on the merged tree; chain ai/task/fe-graph-peek-card runs 40229541597 (22-min step timeout kill, bump to 30 landed a222106) + 40231564284 (session-resumed delivery) — graph-mode hover peek card: NotePreview (docneural-ui sibling) gains the LinkPeek card DocReader has; FE glm-5.3-flash-free@opencode on ai/task/fe-graph-peek-card (concurrent chain 1) (source: TODOs.org NEXT #37 + HANDOFF; evidence: branch + run log)
 - DONE R2-69 docneural-38-cocite-paint — Lead-verified 2026-10-25: docneural-ui ai/main de5f469 (DocLink kind:'cocite' + cociteInto tag + roamBridge type pass-through + 3 tests) + org-roam-lite-ui ai/main 864593f (Engine.linkLineDash + dimColor alpha-multiplied + GraphView dashed/dimmed cocite paint, unknown kinds default true + 4 tests); vitest 65/65 + 159/159, svelte-check 0/0 both; chain ai/task/pe-cocite-paint — zai 429 + openrouter free-models-per-day cap squeezed the builder, THIRD RELIEF landed ae325e8 (zen via opencode CLI) and the segment delivered on it — paint co-citation edges differently from real wires: store.cociteInto tags kind:'cocite', orui GraphView gains the kind-aware link paint accessor, DocneuralGraph wires it; PE zai/glm-4.7-flash@goose on ai/task/pe-cocite-paint (concurrent chain 2) (source: TODOs.org NEXT #38 + HANDOFF; evidence: branch + run log)
+- DONE public benchmark cross-check (Owner 2026-10-27 "look at CANDIDATES.org
+  and their scores in web design on the best benchmarks ONLINE as well as
+  trusted reviews ONLINE"): all wired design candidates scored on Design
+  Arena Website + WebDev Arena + Artificial Analysis (sources + snapshot
+  dates filed) — glm-5v-turbo 1229 Design Arena / #97 WebDev / AAII 23.5,
+  best wired VISION designer but publicly mid-upper; wired TEXT lanes
+  out-score it (glm-5.3-flash 1608, gemini-3.x-flash ~1303 design class);
+  Ling-VL has zero public design data (disclosed). Crown re-scoped
+  honestly, not overturned. (evidence:
+  bench/2026-10-27-public-benchmarks/RESEARCH.md + MEMBERS.org + TEAM-CHAT)
+- TODO forge round 2 — text challengers vs the crowned VL (pre-registered
+  in bench/2026-10-27-public-benchmarks/RESEARCH.md after the public
+  cross-check): lanes glm-5.3-flash (opencode zen / chat.z.ai shell,
+  WebDev #30 1608), gemini-3.8-flash (gemini lane, design class ~1303),
+  nemotron-3.5-super-vl (gmi/openrouter, 1169) vs incumbent glm-5v-turbo;
+  same brief, same forge harness (scripts/design-forge.mjs), blind codes,
+  pre-registered rule. Runs on Owner go or automatically at the next
+  design consult; if a text lane wins blind, generation moves to it and
+  vision critique stays with Ling (QA). (source: HIRE LAW + public data;
+  evidence: this row + RESEARCH.md §JUDGMENT 4)
 - DONE forge crown (Owner 17:16 "You decide!" + evidence-chain demand):
   pre-registered rule, judge matrix completed BEFORE crowning (antling->C
   9/9, gemini->A/B/C 9/9; gmi 402; cline empty; glm-4-plus text-only),

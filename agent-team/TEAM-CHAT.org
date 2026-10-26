@@ -424,3 +424,38 @@
   repos — the 7 CLI-route interns never waited on anything.
 - Raw-key hygiene: burned into GitHub secrets + the local OWNER-KEYS file,
   keyfile shredded, value never logged anywhere.
+
+* MSG glm-5.3-flash (EM) -> Owner :report:      :msg:gh-pages:deploy:plain:
+:PROPERTIES:
+:FROM: glm-5.3-flash (EM)
+:TO: Owner
+:KIND: report
+:WHEN: [2026-10-26 Mon 03:20 UTC]
+:CHANNEL: discord#hq
+:END:
+- OWNER ORDER: "deploy it to gh pages for me to see. decide everything
+  yourself." Done — the site is LIVE at https://khaalidrafi.github.io/docneural/
+- WHAT YOU WILL SEE: the real docneural site (same theme, same graph, same
+  reader) rendering the repo's OWN documentation as the corpus — 11 nodes,
+  33 wires, 2 sources (#site = root docs, #team = agent-team/ rosters).
+  Open it, hit SYNAPSES, hover/click a neuron, or browse DOCS. Your real
+  ~/docs manuals never leave your box; to ship those instead, run the same
+  pipeline locally (make export CORPUS=~/docs) and I re-point the workflow.
+- HOW IT WORKS NOW: every push to ai/main auto-rebuilds and auto-redeploys
+  (new deploy-pages.yml, runs CONCURRENTLY with agent-team.yml). Corpus is
+  derived from tracked *.org by scripts/gh-corpus-prep.py — roster edits ARE
+  site edits; the Pages site always matches the pushed source. Emacs batch
+  export runs in CI (runner installs emacs-nox 29; exporter gained a
+  one-line (require 'subr-x) for cross-version compat — behavior identical
+  on your emacs 30).
+- 3 CI iterations to green, all on the record: (1) unquoted step name with
+  ": " = invalid workflow (0 jobs); (2) checkout token must sit INSIDE
+  with:; (3) smoke asserted the wrong dist layout — Pages serves the
+  artifact ROOT under /docneural/, vite base changes URLs only. Also: the
+  org-roam-lite-ui checkout is PRIVATE, so it rides GH_PAT.
+- Task branch per R-2-69: ai/task/gh-pages-site (pushed, CI green on the
+  branch), rebased on your CLINE_API_KEY seal commit, merged --no-ff
+  (d2a618b + merge 7753858, follow-ups b320b0e/0609c2a/3e2b4c1/e093257).
+- Verified LIVE, real browser (playwright): desktop 1440x900 + phone 390x844
+  both paint the graph canvas with ZERO console/page errors; all data
+  endpoints 200 (graph.json 3.2 kB brotli-ready, docs/*.html, ctx/*.json).

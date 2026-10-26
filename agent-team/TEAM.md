@@ -70,6 +70,19 @@
     OWNER holds the final vision gate: shipped visual work is not done
     until the Owner's own review passes; his FIX list outranks every
     internal verdict and enters the next designer consult unedited.
+  - PAID-LANE SPEND LAW (Owner 2026-10-27 19:02 #docneural-site, CodeBuddy
+    credits: "I have limited credits to run paid models"): paid lanes
+    burn OWNER-BUDGETED, EXPIRING money. Exactly ONE paid generation per
+    model per dispatch — no env-variant spray, no timeout retries (a
+    killed generation is pure waste: run 40378703437 burned 2x8min of
+    real kimi-k3 generation to a too-short timeout). Every paid prompt
+    is pre-validated sandbox-side or against free evidence first; auth
+    failures are verified 0-burn paths and classified as such in a
+    spend ledger filed with every paid run; the CLI reports no credit
+    balance, so generation-seconds are the recorded exposure proxy.
+    Owner fiat exclusions (e.g. deepseek-v4.1-flash free-tier) are
+    hard-enforced in code. Any burn beyond the single shot of a
+    standing dispatch needs the Owner's explicit go.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

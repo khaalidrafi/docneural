@@ -10,7 +10,10 @@ name: design-forge-codebuddy
 # (FORGE_STAGED_ONLY=1 — API lanes judge, never generate here).
 # deepseek-v4.1-flash is hard-excluded in the generator (Owner fiat).
 # Dispatched manually; never runs on push. Credits are money — keep the
-# model list short and purposeful.
+# model list short and purposeful. PAID-LANE SPEND LAW (TEAM.md, Owner
+# 2026-10-27 19:02 "limited credits"): the generator fires EXACTLY ONE paid
+# generation per model (no env-variant spray, no retries, spend cap
+# hard-enforced) and files a spend ledger in forge-codebuddy-gen-report.json.
 
 on:
   workflow_dispatch:

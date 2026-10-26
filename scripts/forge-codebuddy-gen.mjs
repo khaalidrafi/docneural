@@ -84,12 +84,21 @@ const safeRead = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch { ret
 // The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) mapped into
 // both documented slots; run 40378703437 proved the API-key slot authenticates
 // (kimi-k3 generated for 16 min before the timeout kills).
+//
+// SPEND LAW (Owner 2026-10-27 19:02 "Please note that I have limited credits
+// to run paid models on CodeBuddy"): EXACTLY ONE paid generation per model.
+// The old 2-variant env matrix is DELETED: forge-codebuddy.yml injects
+// CODEBUDDY_API_KEY at job level into EVERY attempt, so a second "variant"
+// is the identical env re-billed — a timeout retry would DOUBLE the burn for
+// a near-duplicate page. Auth failures burn nothing (proven 40377347452:
+// auth fails before any model call) and are classified 0-burn in the ledger.
 const TOKEN = process.env.CODEBUDDY_AUTH_TOKEN || process.env.CODEBUDDY_API_KEY || '';
 const ENV_MATRIX = [
   { label: 'api-key-slot', extra: { CODEBUDDY_API_KEY: TOKEN } },
-  { label: 'auth-token-slot', extra: { CODEBUDDY_AUTH_TOKEN: TOKEN } },
 ];
 const ATTEMPT_BUDGET_MS = 25 * 60 * 1000; // kimi-k3 was still generating at 8 min
+const MAX_PAID_GENERATIONS = models.length; // spend cap: one real generation per model, hard
+let paidAttempts = 0;
 
 const report = [];
 for (const model of models) {
@@ -97,10 +106,16 @@ for (const model of models) {
   const dir = path.join(STAGING, dirName);
   fs.mkdirSync(dir, { recursive: true });
   const t0 = Date.now();
-  let ok = false, how = 'none', lastTail = '';
+  let ok = false, how = 'none', lastTail = '', attempts = 0;
   const htmlPath = path.join(dir, 'index.html');
 
   for (const [i, envv] of ENV_MATRIX.entries()) {
+    if (paidAttempts >= MAX_PAID_GENERATIONS) {
+      console.log(`SPEND CAP hit (${paidAttempts}/${MAX_PAID_GENERATIONS} paid generations) — ${model} NOT attempted, zero credits exposed`);
+      lastTail = 'skipped: spend cap';
+      break;
+    }
+    attempts++; paidAttempts++;
     if (fs.existsSync(htmlPath)) fs.rmSync(htmlPath);
     const logFile = path.join(dir, `attempt-${i + 1}-${envv.label}`);
     const r = await execCapture(['-p', prompt, '-y', '--model', model], ATTEMPT_BUDGET_MS, dir,
@@ -109,11 +124,14 @@ for (const model of models) {
     // success = a real, valid index.html on disk (exit codes lie — auth
     // failures exit 0; timeout kills leave partial work)
     const valid = fs.existsSync(htmlPath) && (() => { const h = fs.readFileSync(htmlPath, 'utf8'); return h.length >= 400 && /<html|<!DOCTYPE/i.test(h); })();
+    const authFail = /authentication required|please use \/login/i.test(r.out + r.err);
     if (valid) { ok = true; how = envv.label + ' (--model ' + model + ')'; break; }
-    if (r.killed) console.log(`codebuddy ${model} [${envv.label}] TIMEOUT at ${ATTEMPT_BUDGET_MS / 1000}s — partial logs kept in ${logFile}.out/.err`);
+    if (authFail) console.log(`codebuddy ${model} [${envv.label}] AUTH-FAIL (0 credits burned) after ${Math.round((Date.now() - t0) / 1000)}s`);
+    else if (r.killed) console.log(`codebuddy ${model} [${envv.label}] TIMEOUT at ${ATTEMPT_BUDGET_MS / 1000}s — partial logs kept in ${logFile}.out/.err`);
     else console.log(`codebuddy ${model} [${envv.label}] exit=${r.code} no valid page: ${lastTail || '(silent)'}`);
     // no fenced-HTML fallback from stdout: agentic mode writes the file; chat
-    // output here was empty in every observed run
+    // output here was empty in every observed run. NO RETRY: spend law — a
+    // failed attempt is terminal for this model this dispatch.
   }
 
   let status = 'FAIL';
@@ -121,15 +139,23 @@ for (const model of models) {
     const h = fs.readFileSync(htmlPath, 'utf8');
     status = (h.length >= 400 && /<html|<!DOCTYPE/i.test(h)) ? `OK ${h.length}B` : `NOT HTML (${h.length}B)`;
   }
-  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, ms: Date.now() - t0, status, lastTail }, null, 2));
-  report.push({ model, dirName, status, how, ms: Date.now() - t0 });
+  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, attempts, ms: Date.now() - t0, status, lastTail }, null, 2));
+  report.push({ model, dirName, status, how, attempts, genSeconds: Math.round((Date.now() - t0) / 1000), ms: Date.now() - t0 });
   console.log(`codebuddy ${model}: ${status} via ${how} (${Date.now() - t0}ms)`);
 }
 
+const authFails = report.filter(r => r.attempts > 0 && r.status === 'FAIL' && r.how === 'none' && r.genSeconds < 30).length;
 fs.writeFileSync('forge-codebuddy-gen-report.json', JSON.stringify({
   cli: version,
   excludedByOwner: 'deepseek-v4.1-flash (free this month)',
   attemptBudgetMs: ATTEMPT_BUDGET_MS,
+  spendLedger: {
+    law: 'ONE paid generation per model; no variant spray, no retries (Owner limited-credits note 2026-10-27)',
+    spawnedProcesses: paidAttempts,
+    capMax: MAX_PAID_GENERATIONS,
+    probableAuthFailsZeroBurn: authFails,
+    creditTruth: 'the CLI does not report credit balances; generation seconds per model = exposure proxy',
+  },
   note: 'failed dirs KEPT as evidence (attempt logs + GEN.json); forge picks only valid index.html dirs',
   report,
 }, null, 2));

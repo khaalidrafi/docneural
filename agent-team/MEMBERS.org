@@ -87,8 +87,10 @@
      risk) -> zai/glm-4.5-flash@unwired (no data -> intern-grade until
      measured)
 
-** Web Designer — glm-5v-turbo@zai (RE-SEATED on the DESIGN forge 2026-10-27, 9.0/9
-   top score; PENDING OWNER VISUAL GATE on the blind gallery — bench/2026-10-27-forge/)
+** Web Designer — glm-5v-turbo@zai (CROWNED on the DESIGN forge 2026-10-27: 9.0/9
+   with a COMPLETE blind matrix — objective 9/9 + antling 9/9 + gemini 9/9;
+   Owner delegated the final call 2026-10-26 17:16 "You decide!"; record:
+   bench/2026-10-27-forge/SCORES.md v2)
    - stage-2 forge ("hands, not eyes", Owner challenge 2026-10-26 ~16:31:
      "Designing means to be able develop creative, cool, stunning designs for
      websites!!") — HIRE LAW reading: the benchmark must match the JOB, and
@@ -97,26 +99,31 @@
      single-file cyberpunk page; Chromium rendered both viewports; objective
      checks (AA contrast, overflow 1440/390, required sections, craft signal)
      + blind peer review; FINAL = 0.4*obj + 0.6*peer.
-   - forge field (blind codes; KEY in bench/2026-10-27-forge/KEY.json):
+   - forge field (KEY in bench/2026-10-27-forge/KEY.json):
      C = glm-5v-turbo (staged entry via sealed gateway /vision) — 9.0/9,
      ONLY entry with zero objective violations (minContrast 8.46:1, no
      overflow at either viewport, 6/6 sections, 17.4KB style budget, motion);
-     peer pass incomplete — no independent judge completed (antling's judge
-     call failed, glm-4-plus excluded as staged:entry-2 is its own output),
-     so its 9.0 is objective-only and DISCLOSED as such. Owner gate decides.
+     peer matrix COMPLETED by the judge-only pass (run 40367906151): antling
+     9/9 "spec-flawless... genuinely memorable", gemini 9/9. Crowned per the
+     PRE-REGISTERED rule after the Owner delegated the call ("You decide!").
      A = Ling-3.0-flash-VL@antling — 8.6/9 (obj 8: minContrast 3.74:1 AA FAIL
      on the magenta CTA — the exact defect class it aced SPOTTING in stage 1;
-     peer 9/9 from glm-5v-turbo judge). B = zai gateway-plain entry (echo
-     glm-4-plus) — 8.4/9 (obj 9, peer 8.0 avg: antling 7 "template-like",
-     glm-5v-turbo 9). D = gemini-2.5-flash — 1.6/9 DNF (finish=length,
+     peers glm-5v-turbo 9/9 + gemini 9/9). B = zai gateway-plain entry (echo
+     glm-4-plus) — 8.6/9 (obj 9, peers antling 7 "template-like" + glm-turbo 9
+     + gemini 9). D = gemini-2.5-flash — 1.6/9 DNF (finish=length,
      truncated to a blank black page; both judges scored it 0).
+   - judge-matrix gaps disclosed: gmi judge 402 quota-exhausted; cline judge
+     empty outputs (consistent with stage-1); gateway-plain is a TEXT-ONLY
+     endpoint (HTTP 1210 on image input) so glm-4-plus could not judge;
+     gemini judge INFLATION on record (9/9/9 across A,B,C — non-discriminating);
+     the discriminating judges were antling (7 vs 9s) and glm-5v-turbo (9,9 vs 0).
    - lane failures on record: zai official 429 "Insufficient balance", gmi 429
      "No available endpoints", cline 300s timeout.
-   - seat reading per HIRE LAW: glm-5v-turbo re-takes the DESIGN CRAFT seat on
-     the forge top score; Ling-3.0-flash-VL holds the DESIGN QA crown (stage-1
-     critique bench 8.0/9 — strongest EYES in the field). FINAL call belongs
-     to the Owner's eyes on the blind gallery (DELEGATION LAW) — his pick
-     crowns the seat and unblinds the gallery.
+   - seat reading per HIRE LAW: glm-5v-turbo holds the DESIGN CRAFT seat on
+     the completed-matrix top score (Owner delegated: "You decide!");
+     Ling-3.0-flash-VL holds the DESIGN QA crown (stage-1 critique bench
+     8.0/9 — strongest EYES in the field, and the strictest judge in the
+     forge matrix: it gave B the only sub-9 peer score of the round).
    - prior record (challenge #1, bench/2026-10-26-challenge-1/): Ling won the
      critique bake-off 8.0/9 vs incumbent 5.5/9; glm-5v-turbo demoted then.
    - :last-dispatch: 2026-10-27 (forge entry generated sandbox-side through

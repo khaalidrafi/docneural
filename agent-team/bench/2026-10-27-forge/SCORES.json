@@ -1,110 +1,195 @@
 {
-  "rubric": "FINAL = 0.4*objective(9) + 0.6*peerAvg(9); objective: stability2+overflow2+contrast2+presence2+craft1; peer: aesthetics3+originality2+spec2+craft2; judges: antling/gemini/gmi/cline (CI, vision-capable, never own entry) + glm-5v-turbo (sandbox pass)",
-  "seed": 20261027,
+  "rule": "PRE-REGISTERED: FINAL = 0.4*objective + 0.6*mean(all completed blind peer sums); crown = highest FINAL, tie-break = higher objective; Owner delegated the call 2026-10-26 17:16 (\"You decide!\")",
+  "matrix_note": "gmi judge: HTTP 402 quota-exhausted; cline judge: empty outputs (consistent with stage-1); gateway-plain (glm-4-plus): text-only endpoint, cannot take images; gemini judge INFLATION disclosed (9/9/9/9 across A,B,C \u2014 non-discriminating); antling + glm-5v-turbo are the discriminating judges.",
   "scores": [
     {
       "code": "C",
-      "origin": "staged:entry-1",
-      "model": "sandbox-gateway",
+      "identity": "glm-5v-turbo @ zai (incumbent lane, /vision pinned, echo-verified)",
       "objective": 9,
-      "peerAvg": null,
-      "peerCount": 0,
-      "final": 9,
-      "finish": "staged",
-      "genMs": null,
-      "oneLiners": [],
-      "peers_all": []
-    },
-    {
-      "code": "A",
-      "origin": "antling",
-      "model": "Ling-3.0-flash-VL",
-      "objective": 8,
-      "peerAvg": 9.0,
-      "peerCount": 1,
-      "final": 8.6,
-      "finish": "stop",
-      "genMs": 60334,
-      "oneLiners": [],
-      "peers_all": [
+      "objective_detail": {
+        "stability": 2,
+        "overflow": 2,
+        "contrast": 2,
+        "presence": 2,
+        "craft": 1,
+        "total": 9,
+        "detail": {
+          "errors": [],
+          "ovD": true,
+          "ovM": true,
+          "minContrast": 8.46,
+          "presence": 6,
+          "styleLen": 17425,
+          "hasMotion": true
+        }
+      },
+      "peers": [
         {
+          "judge": "gemini",
           "aesthetics": 3,
           "originality": 2,
           "spec": 2,
           "craft": 2,
-          "oneLine": "A masterclass in cyberpunk UI design\u2014flawless execution with stunning visual hierarchy, perfect color discipline, and a living, breathing aesthetic that feels both technical and artistic.",
           "sum": 9,
-          "judge": "glm-5v-turbo"
+          "oneLine": "This design masterfully delivers on the cyberpunk brief, boasting stunning aesthetics, exceptional craft, and a memorable execution of a complex theme."
+        },
+        {
+          "judge": "antling",
+          "aesthetics": 3,
+          "originality": 2,
+          "spec": 2,
+          "craft": 2,
+          "sum": 9,
+          "oneLine": "A spec-flawless cyberpunk docs homepage whose glowing neural graph, disciplined cyan-magenta-amber palette, and playful terminal/hop-count details make it genuinely memorable."
         }
-      ]
+      ],
+      "peerAvg": 9.0,
+      "peerCount": 2,
+      "final": 9.0
+    },
+    {
+      "code": "A",
+      "identity": "Ling-3.0-flash-VL @ antling (stage-1 QA champion)",
+      "objective": 8,
+      "objective_detail": {
+        "stability": 2,
+        "overflow": 2,
+        "contrast": 1,
+        "presence": 2,
+        "craft": 1,
+        "total": 8,
+        "detail": {
+          "errors": [],
+          "ovD": true,
+          "ovM": true,
+          "minContrast": 3.74,
+          "presence": 6,
+          "styleLen": 9611,
+          "hasMotion": true
+        }
+      },
+      "peers": [
+        {
+          "judge": "glm-5v-turbo",
+          "aesthetics": 3,
+          "originality": 2,
+          "spec": 2,
+          "craft": 2,
+          "sum": 9,
+          "oneLine": "A masterclass in cyberpunk UI design\u2014flawless execution with stunning visual hierarchy, perfect color discipline, and a living, breathing aesthetic that feels both technical and artistic."
+        },
+        {
+          "judge": "gemini",
+          "aesthetics": 3,
+          "originality": 2,
+          "spec": 2,
+          "craft": 2,
+          "sum": 9,
+          "oneLine": "A meticulously crafted design that perfectly embodies the cyberpunk brief with stunning visuals, original touches, and exceptional attention to detail."
+        }
+      ],
+      "peerAvg": 9.0,
+      "peerCount": 2,
+      "final": 8.6
     },
     {
       "code": "B",
-      "origin": "staged:entry-2",
-      "model": "sandbox-gateway",
+      "identity": "zai gateway PLAIN endpoint (self-reported echo: glm-4-plus)",
       "objective": 9,
-      "peerAvg": 8.0,
-      "peerCount": 2,
-      "final": 8.4,
-      "finish": "staged",
-      "genMs": null,
-      "oneLiners": [
-        "A competent cyberpunk docs landing that nails the brief with terminal boot box, stats and live graph, but the wide display headline and template-like phrasing keep the wow factor from reaching the top tier."
-      ],
-      "peers_all": [
+      "objective_detail": {
+        "stability": 2,
+        "overflow": 2,
+        "contrast": 2,
+        "presence": 2,
+        "craft": 1,
+        "total": 9,
+        "detail": {
+          "errors": [],
+          "ovD": true,
+          "ovM": true,
+          "minContrast": 8.46,
+          "presence": 6,
+          "styleLen": 11045,
+          "hasMotion": true
+        }
+      },
+      "peers": [
         {
           "judge": "antling",
           "aesthetics": 2,
           "originality": 1,
           "spec": 2,
           "craft": 2,
-          "oneLine": "A competent cyberpunk docs landing that nails the brief with terminal boot box, stats and live graph, but the wide display headline and template-like phrasing keep the wow factor from reaching the top tier.",
-          "sum": 7
+          "sum": 7,
+          "oneLine": "A competent cyberpunk docs landing that nails the brief with terminal boot box, stats and live graph, but the wide display headline and template-like phrasing keep the wow factor from reaching the top tier."
         },
         {
+          "judge": "glm-5v-turbo",
           "aesthetics": 3,
           "originality": 2,
           "spec": 2,
           "craft": 2,
-          "oneLine": "A masterclass in cyberpunk UI design with impeccable typography hierarchy, disciplined color usage, and a living network visualization that perfectly embodies the neural documentation concept.",
           "sum": 9,
-          "judge": "glm-5v-turbo"
+          "oneLine": "A masterclass in cyberpunk UI design with impeccable typography hierarchy, disciplined color usage, and a living network visualization that perfectly embodies the neural documentation concept."
+        },
+        {
+          "judge": "gemini",
+          "aesthetics": 3,
+          "originality": 2,
+          "spec": 2,
+          "craft": 2,
+          "sum": 9,
+          "oneLine": "This design masterfully blends a strong cyberpunk aesthetic with excellent information architecture and detailed craft, creating a compelling and functional docs-site homepage."
         }
-      ]
+      ],
+      "peerAvg": 8.33,
+      "peerCount": 3,
+      "final": 8.6
     },
     {
       "code": "D",
-      "origin": "gemini",
-      "model": "models/gemini-2.5-flash",
+      "identity": "gemini-2.5-flash @ gemini (truncated -> blank, DNF)",
       "objective": 4,
-      "peerAvg": 0.0,
-      "peerCount": 2,
-      "final": 1.6,
-      "finish": "length",
-      "genMs": 69974,
-      "oneLiners": [
-        "A completely blank black canvas with zero visible design elements\u2014no typography, layout, accents, or content to evaluate."
-      ],
-      "peers_all": [
+      "objective_detail": {
+        "stability": 2,
+        "overflow": 2,
+        "contrast": 0,
+        "presence": 0,
+        "craft": 0,
+        "total": 4,
+        "detail": {
+          "errors": [],
+          "ovD": true,
+          "ovM": true,
+          "minContrast": 0,
+          "presence": 0,
+          "styleLen": 0,
+          "hasMotion": true
+        }
+      },
+      "peers": [
         {
           "judge": "antling",
           "aesthetics": 0,
           "originality": 0,
           "spec": 0,
           "craft": 0,
-          "oneLine": "A completely blank black canvas with zero visible design elements\u2014no typography, layout, accents, or content to evaluate.",
-          "sum": 0
+          "sum": 0,
+          "oneLine": "A completely blank black canvas with zero visible design elements\u2014no typography, layout, accents, or content to evaluate."
         },
         {
+          "judge": "glm-5v-turbo",
           "aesthetics": 0,
           "originality": 0,
           "spec": 0,
           "craft": 0,
-          "oneLine": "The submission is a completely black/empty image with no visible content, rendering it non-functional and unscoreable.",
           "sum": 0,
-          "judge": "glm-5v-turbo"
+          "oneLine": "The submission is a completely black/empty image with no visible content, rendering it non-functional and unscoreable."
         }
-      ]
+      ],
+      "peerAvg": 0.0,
+      "peerCount": 2,
+      "final": 1.6
     }
   ]
 }

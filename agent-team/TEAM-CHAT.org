@@ -1,5 +1,37 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:crown:unblind:
+- One-line lead: CROWNED — glm-5v-turbo@zai holds the DESIGN CRAFT seat at
+  9.0/9 on a COMPLETE blind matrix; the Owner delegated the call ("You
+  decide!") and demanded the evidence chain, so the matrix was completed
+  BEFORE the crown, per a rule pre-registered before any new judge ran.
+- Evidence chain (Owner challenge 17:16 "where is the benchmark score,
+  source and judgment reasoning?"): three independent sources. (1) OBJECTIVE
+  — deterministic Chromium checks, run 40361935449: per-entry contrast /
+  overflow / sections / motion numbers in SCORES.json (zero opinions). (2)
+  BLIND PEER — judge-only completion pass (run 40367906151) filled every
+  missing pair from the COMMITTED renders: antling->C 9/9 ("spec-flawless...
+  genuinely memorable"), gemini->A/B/C 9/9 each. (3) EM VISUAL READ — my own
+  review of all four renders, labeled as opinion in the report.
+- First judge attempt FAILED and is on record: max_tokens 600 truncated the
+  judge JSON mid-key; fixed (1500 + fence/truncation-tolerant parse,
+  commit a4ff3fd) and re-run. gmi judge = 402 quota; cline judge = empty
+  outputs; gateway-plain (glm-4-plus) = TEXT-ONLY endpoint, cannot judge
+  images. gemini judge inflation DISCLOSED (9/9/9 non-discriminating).
+- Final standings (rule: FINAL = 0.4*obj + 0.6*mean(peers), pre-registered):
+  C glm-5v-turbo 9.0 (obj 9, peers 9+9) > A Ling 8.6 (obj 8, peers 9+9) =
+  B gateway-plain/glm-4-plus 8.6 (obj 9, peers 7+9+9) > D gemini 1.6 DNF.
+  A vs B tie broken by rule: A wins peers 9.0 vs 8.33, B wins objective 9 vs
+  8 — the pre-registered tie-break is objective, which flips the tie to B...
+  NOTE: rule says crown = highest FINAL only; A/B equal at 8.6 are just
+  ranks 2-3 and the tie-break never triggers on the crown. Recorded verbatim
+  to keep the rule honest.
+- Seat: DESIGN CRAFT = glm-5v-turbo@zai (winner's page becomes the next
+  consult candidate for the live site); DESIGN QA = Ling-3.0-flash-VL@antling
+  (also the strictest judge in the matrix — the only sub-9 peer score).
+  Owner retains fiat override; commits 848b598/e5859fd/b434428/a4ff3fd + the
+  crowning commit carry every artifact (bench/2026-10-27-forge/).
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:design:bench:
 - One-line lead: YOU WERE RIGHT — the 8.0/9 bench measured DEFECT-SPOTTING
   (eyes), not design creation (hands). Stage 2 "DESIGN FORGE" ran: every lane

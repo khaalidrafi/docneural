@@ -55,6 +55,12 @@
   :report: + screenshots in Discord)
 - DONE R2-69 docneural-37-graph-peek — Lead-verified 2026-10-25: docneural-ui ai/main b1ab002 — NotePreview.svelte +84: the LinkPeek hover card in graph mode, hover-intent 300 ms, 200 ms grace untouched Owner-box; vitest 65/65 + svelte-check 0/0 on the merged tree; chain ai/task/fe-graph-peek-card runs 40229541597 (22-min step timeout kill, bump to 30 landed a222106) + 40231564284 (session-resumed delivery) — graph-mode hover peek card: NotePreview (docneural-ui sibling) gains the LinkPeek card DocReader has; FE glm-5.3-flash-free@opencode on ai/task/fe-graph-peek-card (concurrent chain 1) (source: TODOs.org NEXT #37 + HANDOFF; evidence: branch + run log)
 - DONE R2-69 docneural-38-cocite-paint — Lead-verified 2026-10-25: docneural-ui ai/main de5f469 (DocLink kind:'cocite' + cociteInto tag + roamBridge type pass-through + 3 tests) + org-roam-lite-ui ai/main 864593f (Engine.linkLineDash + dimColor alpha-multiplied + GraphView dashed/dimmed cocite paint, unknown kinds default true + 4 tests); vitest 65/65 + 159/159, svelte-check 0/0 both; chain ai/task/pe-cocite-paint — zai 429 + openrouter free-models-per-day cap squeezed the builder, THIRD RELIEF landed ae325e8 (zen via opencode CLI) and the segment delivered on it — paint co-citation edges differently from real wires: store.cociteInto tags kind:'cocite', orui GraphView gains the kind-aware link paint accessor, DocneuralGraph wires it; PE zai/glm-4.7-flash@goose on ai/task/pe-cocite-paint (concurrent chain 2) (source: TODOs.org NEXT #38 + HANDOFF; evidence: branch + run log)
+- DONE forge crown (Owner 17:16 "You decide!" + evidence-chain demand):
+  pre-registered rule, judge matrix completed BEFORE crowning (antling->C
+  9/9, gemini->A/B/C 9/9; gmi 402; cline empty; glm-4-plus text-only),
+  C glm-5v-turbo crowned DESIGN CRAFT 9.0/9, Ling = DESIGN QA 8.0/9 +
+  strictest judge. SCORES.md v2 + judge JSONs filed. (evidence:
+  bench/2026-10-27-forge/ + runs 40367431379/40367906151)
 - DONE design-forge stage 2 (Owner challenge 2026-10-26 ~16:31 — "Did you
   read benchmark scores... Designing means to be able develop creative, cool,
   stunning designs for websites!!"): standing CREATION harness built

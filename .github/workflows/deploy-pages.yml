@@ -1,0 +1,91 @@
+# Deploy the docneural site to GitHub Pages.
+#
+# Triggered by every push to ai/main (the corpus IS the repo's own docs —
+# scripts/gh-corpus-prep.py derives .gh-corpus/ from the tracked *.org, so
+# a roster or backlog edit is a site-content edit) plus workflow_dispatch.
+#
+# The Owner's real ~/docs corpus never leaves their box; this pipeline
+# deploys the repo's own documentation graph instead — same exporter, same
+# theme, same transport pass, same base shape, just a different corpus.
+# To ship the manuals instead, run the same steps locally with
+# CORPUS=~/docs DOC="org emacs guix" and push a site-data branch.
+#
+# Concurrency: group "pages" — only the latest build matters for a static
+# site, so superseded runs cancel instead of racing to deploy.
+name: deploy-pages
+
+on:
+  push:
+    branches: [ai/main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      # Sibling checkouts: docneural/vite.config.ts resolves the theme and
+      # the roam UI at ../docneural-ui and ../org-roam-lite-ui, so the three
+      # repos land side by side exactly like a local dev checkout.
+      - uses: actions/checkout@v4
+        with: { path: docneural }
+      - uses: actions/checkout@v4
+        with: { repository: khaalidrafi/docneural-ui, ref: ai/main, path: docneural-ui }
+      - uses: actions/checkout@v4
+        with: { repository: khaalidrafi/org-roam-lite-ui, ref: ai/main, path: org-roam-lite-ui }
+
+      - name: Install Emacs (batch exporter) + Node 20
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq emacs-nox
+          emacs --version | head -1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: docneural/package-lock.json
+
+      - name: Corpus prep (repo docs -> .gh-corpus/)
+        working-directory: docneural
+        run: python3 scripts/gh-corpus-prep.py --repo . --out .gh-corpus
+
+      - name: Export + slim (emacs batch -> graph.json + ctx/ + docs/)
+        working-directory: docneural
+        run: make export CORPUS=.gh-corpus DOC="site team" OUT=.export
+
+      - name: Build (base=/docneural/ for the Pages project site)
+        working-directory: docneural
+        run: |
+          npm ci --no-audit --no-fund
+          make build BASE_FLAG=--base=/docneural/
+
+      - name: Smoke the shipped artifact (Pages layout: /docneural/)
+        working-directory: docneural
+        run: |
+          test -f dist/docneural/graph.json
+          test -f dist/docneural/docs/site--TODOs.html
+          test -f dist/docneural/ctx/team--STATE.json
+          grep -q '/docneural/assets/' dist/docneural/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docneural/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

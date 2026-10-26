@@ -401,3 +401,26 @@
   #37/#38 closed. What remains needs YOU: the 200 ms grace ruling, the
   P2 judgement calls (section search, offline mode, MONEY.org), and the
   corpus UAT on your box.
+* MSG z.ai-agent (DoE) -> Owner :report:
+:PROPERTIES:
+:FROM: z.ai-agent (Director of Engineering)
+:TO: Owner
+:KIND: report
+:WHEN: [2026-10-26 Mon 02:35 UTC]
+:CHANNEL: discord#hq
+:END:
+- OWNER ORDER (2026-10-26 #hq): "provide cline keys to both teams", then the
+  key itself pasted with "store in vault". Both halves done in one minute.
+- SEALED: CLINE_API_KEY -> docneural + admincraft + agent-team.el
+  (updated_at 2026-10-26T02:29:39-42Z). Secret names per repo: 24 -> 25.
+- LIVE PROOF BEFORE SEALING: GET api.cline.bot/api/v1/models = HTTP 200,
+  472 ids (matches the canonical 472/18 FREE probe); POST chat/completions
+  poolside/laguna-s-2.1:free = HTTP 200, usage.cost = 0, reply "OK". Key
+  valid; the free lane serves.
+- ACTIVATED ON SEAL: the 2 cline API-route interns (cline/
+  poolside-laguna-s-2.1:free@opencode, cline/nemotron-3.5-lightning:free
+  @opencode) + the seat-liveness cline probe row (was SKIP-graceful).
+- CLI ROUTE UNCHANGED: CLINE_AUTH_JSON sealed since 2026-10-24 on all three
+  repos — the 7 CLI-route interns never waited on anything.
+- Raw-key hygiene: burned into GitHub secrets + the local OWNER-KEYS file,
+  keyfile shredded, value never logged anywhere.

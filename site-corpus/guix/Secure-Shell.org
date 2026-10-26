@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Secure-Shell>>
-Next: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Previous: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Previous: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.6 Secure Shell [[#Secure-Shell-1][¶]]
+<<Secure-Shell-1>>
+**** 13.3.6 Secure Shell
 :PROPERTIES:
-:CUSTOM_ID: Secure-Shell-1
+:CUSTOM_ID: secure-shell
 :CLASS: subsection
 :END:
+<<index-secure-shell-client_002c-configuration>> <<index-SSH-client_002c-configuration>>
 The [[https://www.openssh.com][OpenSSH package]] includes a client, the =ssh= command, that allows you to connect to remote machines using the SSH (secure shell) protocol. With the =(gnu home services ssh)= module, you can set up OpenSSH so that it works in a predictable fashion, almost independently of state on the local machine. To do that, you instantiate =home-openssh-service-type= in your Home configuration, as explained below.
 
-- Variable: *home-openssh-service-type* [[#index-home_002dopenssh_002dservice_002dtype][¶]] :: This is the type of the service to set up the OpenSSH client. It takes care of several things:
+- Variable: home-openssh-service-type  :: This is the type of the service to set up the OpenSSH client. It takes care of several things:
 
   - providing a =~/.ssh/config= file based on your configuration so that =ssh= knows about hosts you regularly connect to and their associated parameters;
   - providing a =~/.ssh/authorized_keys=, which lists public keys that the local SSH server, =sshd=, may accept to connect to this user account;
@@ -72,7 +75,7 @@ The [[https://www.openssh.com][OpenSSH package]] includes a client, the =ssh= co
 
   The value associated with a =home-openssh-service-type= instance must be a =home-openssh-configuration= record, as describe below.
 
-- Data Type: *home-openssh-configuration* [[#index-home_002dopenssh_002dconfiguration][¶]] :: This is the datatype representing the OpenSSH client and server configuration in one's home environment. It contains the following fields:
+- Data Type: home-openssh-configuration  :: This is the datatype representing the OpenSSH client and server configuration in one's home environment. It contains the following fields:
 
   - =hosts= (default: ='()=) :: A list of =openssh-host= records specifying host names and associated connection parameters (see below). This host list goes into =~/.ssh/config=, which =ssh= reads at startup.
 
@@ -85,17 +88,13 @@ The [[https://www.openssh.com][OpenSSH package]] includes a client, the =ssh= co
 
     If you instead provide a list of host keys upfront in the =known-hosts= field, your configuration becomes self-contained and stateless: it can be replicated elsewhere or at another point in time. Preparing this list can be relatively tedious though, which is why =*unspecified*= is kept as a default.
 
-  - =known-hosts2= (default: =*unspecified*=) :: Either =*unspecified*= or a list of file-like objects containing known host keys. When specified, these files will be concatenated and installed as =~/.ssh/known_hosts2=. This allows for declaratively manage known hosts (stored in =known_hosts2=), while leaving the primary =known_hosts= file unmanaged by Guix.
-
-    The SSH client by default reads both =known-hosts= and =known-hosts2= for host key verification. If only =known-hosts2= is specified in Guix Home, =known_hosts= remains as a regular file that SSH can modify, while =known_hosts2= contains the declaratively managed host keys.
-
   - =authorized-keys= (default: =#false=) :: The default =#false= value means: Leave any =~/.ssh/authorized_keys= file alone. Otherwise, this must be a list of file-like objects, each of which containing an SSH public key that should be authorized to connect to this machine.
 
     Concretely, these files are concatenated and made available as =~/.ssh/authorized_keys=. If an OpenSSH server, =sshd=, is running on this machine, then it /may/ take this file into account: this is what =sshd= does by default, but be aware that it can also be configured to ignore it.
 
   - =add-keys-to-agent= (default: =no=) :: This string specifies whether keys should be automatically added to a running ssh-agent. If this option is set to =yes= and a key is loaded from a file, the key and its passphrase are added to the agent with the default lifetime, as if by =ssh-add=. If this option is set to =ask=, =ssh= will require confirmation. If this option is set to =confirm=, each use of the key must be confirmed. If this option is set to =no=, no keys are added to the agent. Alternately, this option may be specified as a time interval to specify the key's lifetime in =ssh-agent=, after which it will automatically be removed. The argument must be =no=, =yes=, =confirm= (optionally followed by a time interval), =ask= or a time interval.
 
-- Data Type: *openssh-host* [[#index-openssh_002dhost][¶]] :: Available =openssh-host= fields are:
+- Data Type: openssh-host  :: Available =openssh-host= fields are:
 
   - =name= (type: string) :: Name of this host declaration. A =openssh-host= must define only =name= or =match-criteria=. Use host-name =\"*\"= for top-level options.
 
@@ -123,7 +122,7 @@ The [[https://www.openssh.com][OpenSSH package]] includes a client, the =ssh= co
 
     As an example, a =proxy-command= to connect via an HTTP proxy at 192.0.2.0 would be constructed with: =(proxy-command "nc -X connect -x 192.0.2.0:8080 %h %p")=.
 
-    - Data Type: *proxy-jump* [[#index-proxy_002djump][¶]] :: Available =proxy-jump= fields are:
+    - Data Type: proxy-jump  :: Available =proxy-jump= fields are:
 
       - =user= (type: maybe-string) :: User name on the remote host.
 
@@ -135,18 +134,9 @@ The [[https://www.openssh.com][OpenSSH package]] includes a client, the =ssh= co
 
   - =accepted-key-types= (type: maybe-string-list) :: The list of accepted user public key types.
 
-  - =control-master= (type: maybe-symbol) :: Enables the sharing of multiple sessions over a single network connection. Acceptable values are ='no=, ='yes=, ='auto=, ='ask=, and ='autoask=.
-
-  - =control-file-name= (type: maybe-string) :: The file name of the control socket used for connection sharing, or ="none"= to disable connection sharing.
-
-  - =control-persist= (type: maybe-string) :: When used in conjunction with =control-master=, specifies that the master connection should remain open in the background (waiting for future client connections) after the initial client connection has been closed.
-
-  - =sent-environment-variables= (type: maybe-env-list) :: Specifies which variables from the local environment should be sent to the server. The server must also support it, and the server must be configured to accept those environment variables.
-
-  - =environment-variables= (type: maybe-string-alist) :: List of environment variables with corresponding values to send to the server, as an alist of strings of the form ='("==variable==" . "==value==")=. The server must also support it, and the server must be configured to accept those environment variables.
-
   - =extra-content= (default: =""=) (type: raw-configuration-string) :: Extra content appended as-is to this =Host= block in =~/.ssh/config=.
 
+<<index-Parcimonie_002c-Home-service>>
 The =parcimonie= service runs a daemon that slowly refreshes a GnuPG public key from a keyserver. It refreshes one key at a time; between every key update parcimonie sleeps a random amount of time, long enough for the previously used Tor circuit to expire. This process is meant to make it hard for an attacker to correlate the multiple key update.
 
 As an example, here is how you would configure =parcimonie= to refresh the keys in your GnuPG keyring, as well as those keyrings created by Guix, such as when running =guix import=:
@@ -161,9 +151,9 @@ This assumes that the Tor anonymous routing daemon is already running on your sy
 
 The service reference is given below.
 
-- Variable: *parcimonie-service-type* [[#index-parcimonie_002dservice_002dtype][¶]] :: This is the service type for =parcimonie= ([[https://salsa.debian.org/intrigeri/parcimonie][Parcimonie's web site]]). Its value must be a =home-parcimonie-configuration=, as shown below.
+- Variable: parcimonie-service-type  :: This is the service type for =parcimonie= ([[https://salsa.debian.org/intrigeri/parcimonie][Parcimonie's web site]]). Its value must be a =home-parcimonie-configuration=, as shown below.
 
-- Data Table: *home-parcimonie-configuration* [[#index-home_002dparcimonie_002dconfiguration][¶]] :: Available =home-parcimonie-configuration= fields are:
+- Data Table: home-parcimonie-configuration  :: Available =home-parcimonie-configuration= fields are:
 
   - =parcimonie= (default: =parcimonie=) (type: file-like) :: The parcimonie package to use.
 
@@ -175,6 +165,7 @@ The service reference is given below.
 
   - =extra-content= (default: =#f=) (type: raw-configuration-string) :: Raw content to add to the parcimonie command.
 
+<<index-ssh_002dagent>>
 The [[https://www.openssh.com][OpenSSH package]] includes a daemon, the =ssh-agent= command, that manages keys to connect to remote machines using the SSH (secure shell) protocol. With the =(gnu home services ssh)= service, you can configure the OpenSSH ssh-agent to run upon login. See [[id:guix--GNU-Privacy-Guard][=home-gpg-agent-service-type=]], for an alternative to OpenSSH's =ssh-agent=.
 
 Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
@@ -185,9 +176,9 @@ Here is an example of a service and its configuration that you could add to the 
           (extra-options '("-t" "1h30m"))))
 #+end_src
 
-- Variable: *home-ssh-agent-service-type* [[#index-home_002dssh_002dagent_002dservice_002dtype][¶]] :: This is the type of the =ssh-agent= home service, whose value is a =home-ssh-agent-configuration= object.
+- Variable: home-ssh-agent-service-type  :: This is the type of the =ssh-agent= home service, whose value is a =home-ssh-agent-configuration= object.
 
-- Data Type: *home-ssh-agent-configuration* [[#index-home_002dssh_002dagent_002dconfiguration][¶]] :: Available =home-ssh-agent-configuration= fields are:
+- Data Type: home-ssh-agent-configuration  :: Available =home-ssh-agent-configuration= fields are:
 
   - =openssh= (default: =openssh=) (type: file-like) :: The OpenSSH package to use.
 
@@ -197,4 +188,4 @@ Here is an example of a service and its configuration that you could add to the 
 
 --------------
 
-Next: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Previous: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Previous: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

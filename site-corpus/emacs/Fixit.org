@@ -7,6 +7,9 @@
 Next: [[id:emacs--Keyboard-Macros][Keyboard Macros]]   Previous: [[id:emacs--Search][Searching and Replacement]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Fixit>>
+
+--------------
+
 ** 18 Commands for Fixing Typos [[#Commands-for-Fixing-Typos][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Commands-for-Fixing-Typos
@@ -16,4 +19,7 @@ In this chapter we describe commands that are useful when you catch a mistake wh
 
 Aside from the commands described here, you can erase text using deletion commands such as DEL (=delete-backward-char=). These were described earlier in this manual. See [[id:emacs--Erasing][Erasing Text]].
 
---------------
+- [[id:emacs--Undo][Undo]]
+- [[id:emacs--Transpose][Transposing Text]]
+- [[id:emacs--Fixing-Case][Case Conversion]]
+- [[id:emacs--Spelling][Checking and Correcting Spelling]]

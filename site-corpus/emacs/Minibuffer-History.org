@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Minibuffer History
 
-Next: [[id:emacs--Repetition][Repeating Minibuffer Commands]]   Previous: [[id:emacs--Completion#Completion][Completion]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
+Next: [[id:emacs--Repetition][Repeating Minibuffer Commands]]   Previous: [[id:emacs--Completion][Completion]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
 
 <<Minibuffer-History>>
+
+--------------
+
 *** 10.5 Minibuffer History [[#Minibuffer-History-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Minibuffer-History-1
@@ -37,7 +40,7 @@ If you edit the text inserted by the M-p or M-n minibuffer history commands, thi
 
 You can use M-r (=previous-matching-history-element=) to search through older elements in the history list, and M-s (=next-matching-history-element=) to search through newer entries. Each of these commands asks for a /regular expression/ as an argument, and fetches the first matching entry into the minibuffer. See [[id:emacs--Regexps][Syntax of Regular Expressions]], for an explanation of regular expressions. A numeric prefix argument =n= means to fetch the =n=th matching entry. These commands are unusual, in that they use the minibuffer to read the regular expression argument, even though they are invoked from the minibuffer. An upper-case letter in the regular expression makes the search case-sensitive (see [[id:emacs--Lax-Search][Lax Matching During Searching]]).
 
-You can also search through the history using an incremental search. See [[id:emacs--Incremental-Search::#Isearch-Minibuffer][Searching the Minibuffer]].
+You can also search through the history using an incremental search. See [[id:emacs--Isearch-Minibuffer][Searching the Minibuffer]].
 
 Emacs keeps separate history lists for several different kinds of arguments. For example, there is a list for file names, used by all the commands that read file names. Other history lists include buffer names, command names (used by M-x), and command arguments (used by commands like =query-replace=).
 

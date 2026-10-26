@@ -36,26 +36,32 @@ Next:
 [[../..][]]
 
 <<Build-Systems>>
-Next: [[id:guix--Build-Phases][Build Phases]], Previous: [[id:guix--Writing-Manifests][Writing Manifests]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Build-Phases][Build Phases]], Previous: [[id:guix--Writing-Manifests][Writing Manifests]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.5 Build Systems [[#Build-Systems-1][¶]]
+<<Build-Systems-1>>
+*** 8.5 Build Systems
 :PROPERTIES:
-:CUSTOM_ID: Build-Systems-1
+:CUSTOM_ID: build-systems
 :CLASS: section
 :END:
+<<index-build-system>>
 Each package definition specifies a /build system/ and arguments for that build system (see [[id:guix--Defining-Packages][Defining Packages]]). This =build-system= field represents the build procedure of the package, as well as implicit dependencies of that build procedure.
 
 Build systems are =<build-system>= objects. The interface to create and manipulate them is provided by the =(guix build-system)= module, and actual build systems are exported by specific modules.
 
+<<index-bag-_0028low_002dlevel-package-representation_0029>>
 Under the hood, build systems first compile package objects to /bags/. A /bag/ is like a package, but with less ornamentation---in other words, a bag is a lower-level representation of a package, which includes all the inputs of that package, including some that were implicitly added by the build system. This intermediate representation is then compiled to a derivation (see [[id:guix--Derivations][Derivations]]). The =package-with-c-toolchain= is an example of a way to change the implicit inputs that a package's build system pulls in (see [[id:guix--package-Reference][=package-with-c-toolchain=]]).
 
-Build systems accept an optional list of /arguments/. In package definitions, these are passed /via/ the =arguments= field (see [[id:guix--Defining-Packages][Defining Packages]]). They are typically keyword arguments (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Optional-Arguments.html#Optional-Arguments][keyword arguments in Guile]] in GNU Guile Reference Manual). The value of these arguments is usually evaluated in the /build stratum/---i.e., by a Guile process launched by the daemon (see [[id:guix--Derivations][Derivations]]).
+Build systems accept an optional list of /arguments/. In package definitions, these are passed /via/ the =arguments= field (see [[id:guix--Defining-Packages][Defining Packages]]). They are typically keyword arguments (see [[https://www.gnu.org/software/guile/manual/html_node/Optional-Arguments.html#Optional-Arguments][keyword arguments in Guile]] in GNU Guile Reference Manual). The value of these arguments is usually evaluated in the /build stratum/---i.e., by a Guile process launched by the daemon (see [[id:guix--Derivations][Derivations]]).
 
 The main build system is =gnu-build-system=, which implements the standard build procedure for GNU and many other packages. It is provided by the =(guix build-system gnu)= module.
 
-- Variable: *gnu-build-system* [[#index-gnu_002dbuild_002dsystem][¶]] :: =gnu-build-system= represents the GNU Build System, and variants thereof (see [[https://www.gnu.org/prep/standards/html_node/Configuration.html#Configuration][configuration and makefile conventions]] in GNU Coding Standards).
+- Variable: gnu-build-system  :: =gnu-build-system= represents the GNU Build System, and variants thereof (see [[https://www.gnu.org/prep/standards/html_node/Configuration.html#Configuration][configuration and makefile conventions]] in GNU Coding Standards).
+
+  <<index-build-phases>>
 
   In a nutshell, packages using it are configured, built, and installed with the usual =./configure && make && make check && make install= command sequence. In practice, a few additional steps are often needed. All these steps are split up in separate /phases/. See [[id:guix--Build-Phases][Build Phases]], for more info on build phases and ways to customize them.
 
@@ -80,7 +86,9 @@ The main build system is =gnu-build-system=, which implements the standard build
   - =#:parallel-build?=\\
     =#:parallel-tests?= :: These Boolean values specify whether to build, respectively run the test suite, in parallel, with the =-j= flag of =make=. When they are true, =make= is passed =-j==n=, where =n= is the number specified as the =--cores= option of =guix-daemon= or that of the =guix= client command (see [[id:guix--Common-Build-Options][=--cores=]]).
 
-  - <<index-RUNPATH_002c-validation>>=#:validate-runpath?= [[#index-RUNPATH_002c-validation][¶]] :: This Boolean, =#t= by default, determines whether to “validate” the =RUNPATH= of ELF binaries (=.so= shared libraries as well as executables) previously installed by the =install= phase. See [[id:guix--Build-Phases::#phase_002dvalidate_002drunpath][the =validate-runpath= phase]], for details.
+    <<index-RUNPATH_002c-validation>>
+
+  - =#:validate-runpath?= :: This Boolean, =#t= by default, determines whether to “validate” the =RUNPATH= of ELF binaries (=.so= shared libraries as well as executables) previously installed by the =install= phase. See [[id:guix--Build-Phases::#phase_002dvalidate_002drunpath][the =validate-runpath= phase]], for details.
 
   - =#:substitutable?= :: This Boolean, =#t= by default, tells whether the package outputs should be substitutable---i.e., whether users should be able to obtain substitutes for them instead of building locally (see [[id:guix--Substitutes][Substitutes]]).
 
@@ -89,30 +97,11 @@ The main build system is =gnu-build-system=, which implements the standard build
 
     This is useful to ensure that a package does not erroneously keep a reference to some of it build-time inputs, in cases where doing so would, for example, unnecessarily increase its size (see [[id:guix--Invoking-guix-size][Invoking =guix size=]]).
 
-  - =#:modules= :: This argument specifies the list of modules in scope for build-side code. This is required because Guile /does not/ support the usage of =use-modules= in non-top-level forms.
-
-    Users that need to import additional modules in build-side code, for example in a phase (see above), /must/ rely on the =#:modules= argument instead.
-
-    For example, for a package where =ice-9 match= is needed on the build side, one could write:
-
-    #+begin_src lisp
-    #:modules `((ice-9 match) ,@%default-gnu-modules)
-    #+end_src
-
-  - =#:imported-modules= :: This argument lists modules to be imported on the build side; it is equivalent to =with-imported-modules= (see [[id:guix--G_002dExpressions][G-Expressions]]). This is required for modules not provided by Guile. For instance, users /can/ use modules from =ice-9= or SRFI libraries that are provided along the =guile= package whilst to use modules from a library or another build system, one should add them to this list.
-
-    For example, to combine modules from the =cargo-build-system= with modules from the =meson-build-system=, one could write:
-
-    #+begin_src lisp
-    #:imported-modules `(,@%meson-build-system-modules
-                         ,@%cargo-build-system-modules)
-    #+end_src
-
   Most other build systems support these keyword arguments.
 
 Other =<build-system>= objects are defined to support other conventions and tools used by free software packages. They inherit most of =gnu-build-system=, and differ mainly in the set of inputs implicitly added to the build process, and in the list of phases executed. Some of these build systems are listed below.
 
-- Variable: *agda-build-system* [[#index-agda_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system agda)=. It implements a build procedure for Agda libraries.
+- Variable: agda-build-system  :: This variable is exported by =(guix build-system agda)=. It implements a build procedure for Agda libraries.
 
   It adds =agda= to the set of inputs. A different Agda can be specified with the =#:agda= key.
 
@@ -120,19 +109,17 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   When the library uses Haskell to generate a file containing all imports, the convenience =#:gnu-and-haskell?= can be set to =#t= to add =ghc= and the standard inputs of =gnu-build-system= to the input list. You will still need to manually add a phase or tweak the ='build= phase, as in the definition of =agda-stdlib=.
 
-- Variable: *ant-build-system* [[#index-ant_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system ant)=. It implements the build procedure for Java packages that can be built with [[https://ant.apache.org/][Ant build tool]].
+- Variable: ant-build-system  :: This variable is exported by =(guix build-system ant)=. It implements the build procedure for Java packages that can be built with [[https://ant.apache.org/][Ant build tool]].
 
   It adds both =ant= and the /Java Development Kit/ (JDK) as provided by the =icedtea= package to the set of inputs. Different packages can be specified with the =#:ant= and =#:jdk= parameters, respectively.
 
-  When the original package does not provide a suitable Ant build file, the parameter =#:jar-name= can be used to generate a minimal Ant build file =build.xml= with tasks to build the specified jar archive. In this case the parameter =#:source-dir= can be used to specify the source sub-directory, defaulting to “src”, and the parameter =#:test-dir= can be used to specify the test sub-directory, defaulting to “src/test”.
+  When the original package does not provide a suitable Ant build file, the parameter =#:jar-name= can be used to generate a minimal Ant build file =build.xml= with tasks to build the specified jar archive. In this case the parameter =#:source-dir= can be used to specify the source sub-directory, defaulting to “src”.
 
-  The =#:main-class= parameter can be used with the minimal ant buildfile to specify the main class of the resulting jar. This makes the jar file executable. The =#:test-include= parameter can be used to specify the list of junit tests to run. It defaults to =(list "**/*Test.java")=. The =#:test-exclude= can be used to disable some tests. It defaults to =(list "**/Abstract*.java")=, because abstract classes cannot be run as tests. When the =#:use-java-modules?= parameter is true, the minimal build file passes dependencies on the Java module path in addition to the class path.
+  The =#:main-class= parameter can be used with the minimal ant buildfile to specify the main class of the resulting jar. This makes the jar file executable. The =#:test-include= parameter can be used to specify the list of junit tests to run. It defaults to =(list "**/*Test.java")=. The =#:test-exclude= can be used to disable some tests. It defaults to =(list "**/Abstract*.java")=, because abstract classes cannot be run as tests.
 
-  The parameter =#:build-target= can be used to specify the Ant task that should be run during the =build= phase. By default the “jar” task will be run. Likewise, the parameter =#:test-target= specifies the Ant task run during the =check= phase; it defaults to “check”.
+  The parameter =#:build-target= can be used to specify the Ant task that should be run during the =build= phase. By default the “jar” task will be run.
 
-  The minimal build file has no installation task, so packages using =#:jar-name= usually replace the =install= phase with one of the procedures provided by the =(guix build java-utils)= module: =install-jars= copies the jar files from a directory to =share/java=, while =install-from-pom= also installs the jar and its =pom.xml= into the Maven repository layout under =lib/m2=, so that packages built with =maven-build-system= can find them. When upstream provides no =pom.xml=, one can be created with =generate-pom.xml=; a POM-only artifact, such as a parent POM, can be installed with =install-pom-file=.
-
-- Variable: *android-ndk-build-system* [[#index-android_002dndk_002dbuild_002dsystem][¶]] :: 
+- Variable: android-ndk-build-system  :: <<index-Android-distribution>> <<index-Android-NDK-build-system>>
 
   This variable is exported by =(guix build-system android-ndk)=. It implements a build procedure for Android NDK (native development kit) packages using a Guix-specific build process.
 
@@ -142,10 +129,10 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   For the time being, cross-compilation is not supported - so right now the libraries and header files are assumed to be host tools.
 
-- Variable: *asdf-build-system/source* [[#index-asdf_002dbuild_002dsystem_002fsource][¶]]\\
-  Variable: *asdf-build-system/sbcl* [[#index-asdf_002dbuild_002dsystem_002fsbcl][¶]]\\
-  Variable: *asdf-build-system/ecl* [[#index-asdf_002dbuild_002dsystem_002fecl][¶]]\\
-  Variable: *asdf-build-system/clasp* [[#index-asdf_002dbuild_002dsystem_002fclasp][¶]] :: These variables, exported by =(guix build-system asdf)=, implement build procedures for Common Lisp packages using [[https://common-lisp.net/project/asdf/][“ASDF”]]. ASDF is a system definition facility for Common Lisp programs and libraries.
+- Variable: asdf-build-system/source \\
+  Variable: asdf-build-system/sbcl \\
+  Variable: asdf-build-system/ecl \\
+  Variable: asdf-build-system/clasp  :: These variables, exported by =(guix build-system asdf)=, implement build procedures for Common Lisp packages using [[https://common-lisp.net/project/asdf/][“ASDF”]]. ASDF is a system definition facility for Common Lisp programs and libraries.
 
   The =asdf-build-system/source= system installs the packages in source form, and can be loaded using any common lisp implementation, via ASDF. The others, such as =asdf-build-system/sbcl=, install binary systems in the format which a particular implementation understands. These build systems can also be used to produce executable programs, or lisp images which contain a set of packages pre-loaded.
 
@@ -155,11 +142,11 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   In order to create executable programs and images, the build-side procedures =build-program= and =build-image= can be used. They should be called in a build phase after the =create-asdf-configuration= phase, so that the system which was just built can be used within the resulting image. =build-program= requires a list of Common Lisp expressions to be passed as the =#:entry-program= argument.
 
-  ASDF discovers the systems available for building by scanning all =.asd= files present in the package's source. The systems that will actually be built by Guix are specified by the parameter =#:asd-systems=. Its default value contains a single system whose name is derived from the package name with the implementation prefix removed, e.g. =cl-stencl= for the package =sbcl-cl-stencl=. If the Guix package must be named in a different way than the naming conventions suggest, or if several systems must be compiled, the =#:asd-systems= parameter can be used to specify the list of system names.
+  By default, all the =.asd= files present in the sources are read to find system definitions. The =#:asd-files= parameter can be used to specify the list of =.asd= files to read. Furthermore, if the package defines a system for its tests in a separate file, it will be loaded before the tests are run if it is specified by the =#:test-asd-file= parameter. If it is not set, the files =<system>-tests.asd=, =<system>-test.asd=, =tests.asd=, and =test.asd= will be tried if they exist.
 
-  The parameter =#:asd-test-systems= lists the systems for which tests will be run. Its default value is the value of =#:asd-systems=.
+  If for some reason the package must be named in a different way than the naming conventions suggest, or if several systems must be compiled, the =#:asd-systems= parameter can be used to specify the list of system names.
 
-- Variable: *cargo-build-system* [[#index-cargo_002dbuild_002dsystem][¶]] :: 
+- Variable: cargo-build-system  :: <<index-Rust-programming-language>> <<index-Cargo-_0028Rust-build-system_0029>>
 
   This variable is exported by =(guix build-system cargo)=. It supports builds of packages using Cargo, the build tool of the [[https://www.rust-lang.org][Rust programming language]].
 
@@ -176,7 +163,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   See [[id:guix--Rust-Crates][Rust Crates]], for packaging guidelines.
 
-- Variable: *chicken-build-system* [[#index-chicken_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system chicken)=. It builds [[https://call-cc.org/][CHICKEN Scheme]] modules, also called “eggs” or “extensions”. CHICKEN generates C source code, which then gets compiled by a C compiler, in this case GCC.
+- Variable: chicken-build-system  :: This variable is exported by =(guix build-system chicken)=. It builds [[https://call-cc.org/][CHICKEN Scheme]] modules, also called “eggs” or “extensions”. CHICKEN generates C source code, which then gets compiled by a C compiler, in this case GCC.
 
   This build system adds =chicken= to the package inputs, as well as the packages of =gnu-build-system=.
 
@@ -190,7 +177,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   Egg dependencies must be defined in =propagated-inputs=, not =inputs= because CHICKEN doesn't embed absolute references in compiled eggs. Test dependencies should go to =native-inputs=, as usual.
 
-- Variable: *copy-build-system* [[#index-copy_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system copy)=. It supports builds of simple packages that don't require much compiling, mostly just moving files around.
+- Variable: copy-build-system  :: This variable is exported by =(guix build-system copy)=. It supports builds of simple packages that don't require much compiling, mostly just moving files around.
 
   It adds much of the =gnu-build-system= packages to the set of inputs. Because of this, the =copy-build-system= does not require all the boilerplate code often needed for the =trivial-build-system=.
 
@@ -220,7 +207,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
   - =("foo/sub" "share/my-app" #:include ("file"))=: Install =foo/sub/file= to =share/my-app/file=.
   - =("foo/doc" "share/my-app/doc" #:output "doc")=: Install ="foo/doc"= to ="share/my-app/doc"= within the ="doc"= output.
 
-- Variable: *vim-build-system* [[#index-vim_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system vim)=. It is an extension of the =copy-build-system=, installing Vim and Neovim plugins into locations where these two text editors know to find their plugins, using their packpaths.
+- Variable: vim-build-system  :: This variable is exported by =(guix build-system vim)=. It is an extension of the =copy-build-system=, installing Vim and Neovim plugins into locations where these two text editors know to find their plugins, using their packpaths.
 
   Packages which are prefixed with =vim-= will be installed in Vim's packpath, while those prefixed with =neovim-= will be installed in Neovim's packpath. If there is a =doc= directory with the plugin then helptags will be generated automatically.
 
@@ -232,7 +219,8 @@ Other =<build-system>= objects are defined to support other conventions and tool
   - With =#:neovim= it is possible to add this package to Neovim's packpath, in addition to if it is added automatically because of the =neovim-= prefix in the package's name.
   - With =#:mode= it is possible to adjust the path which the plugin is installed into. By default the plugin is installed into =start= and other options are available, including =opt=. Adding a plugin into =opt= will mean you will need to run, for example, =:packadd foo= to load the =foo= plugin from inside of Vim.
 
-- Variable: *clojure-build-system* [[#index-clojure_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system clojure)=. It implements a simple build procedure for [[https://clojure.org/][Clojure]] packages using plain old =compile= in Clojure. Cross-compilation is not supported yet.
+<<index-Clojure-_0028programming-language_0029>> <<index-simple-Clojure-build-system>>
+- Variable: clojure-build-system  :: This variable is exported by =(guix build-system clojure)=. It implements a simple build procedure for [[https://clojure.org/][Clojure]] packages using plain old =compile= in Clojure. Cross-compilation is not supported yet.
 
   It adds =clojure=, =icedtea= and =zip= to the set of inputs. Different packages can be specified with the =#:clojure=, =#:jdk= and =#:zip= parameters, respectively.
 
@@ -250,7 +238,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   - =install-doc= :: This phase installs all top-level files with base name matching =%doc-regex=. A different regex can be specified with the =#:doc-regex= parameter. All files (recursively) inside the documentation directories specified in =#:doc-dirs= are installed as well.
 
-- Variable: *cmake-build-system* [[#index-cmake_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system cmake)=. It implements the build procedure for packages using the [[https://www.cmake.org][CMake build tool]].
+- Variable: cmake-build-system  :: This variable is exported by =(guix build-system cmake)=. It implements the build procedure for packages using the [[https://www.cmake.org][CMake build tool]].
 
   This build system adds the following keyword parameters to the ones defined by =gnu-build-system=:
 
@@ -266,13 +254,13 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   - =#:test-repeat-until-pass-count= :: When =#:test-repeat-until-pass?= is enabled this parameter sets the maximum number of failures for each test. The default is =5=.
 
-- Variable: *composer-build-system* [[#index-composer_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system composer)=. It implements the build procedure for packages using [[https://getcomposer.org/][Composer]], the PHP package manager.
+- Variable: composer-build-system  :: This variable is exported by =(guix build-system composer)=. It implements the build procedure for packages using [[https://getcomposer.org/][Composer]], the PHP package manager.
 
   It automatically adds the =php= package to the set of inputs. Which package is used can be specified with the =#:php= parameter.
 
   The =#:test-target= parameter is used to control which script is run for the tests. By default, the =test= script is run if it exists. If the script does not exist, the build system will run =phpunit= from the source directory, assuming there is a =phpunit.xml= file.
 
-- Variable: *dune-build-system* [[#index-dune_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system dune)=. It supports builds of packages using [[https://dune.build/][Dune]], a build tool for the OCaml programming language. It is implemented as an extension of the =ocaml-build-system= which is described below. As such, the =#:ocaml= and =#:findlib= parameters can be passed to this build system.
+- Variable: dune-build-system  :: This variable is exported by =(guix build-system dune)=. It supports builds of packages using [[https://dune.build/][Dune]], a build tool for the OCaml programming language. It is implemented as an extension of the =ocaml-build-system= which is described below. As such, the =#:ocaml= and =#:findlib= parameters can be passed to this build system.
 
   It automatically adds the =dune= package to the set of inputs. Which package is used can be specified with the =#:dune= parameter.
 
@@ -282,7 +270,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   The =#:package= parameter can be passed to specify a package name, which is useful when a package contains multiple packages and you want to build only one of them. This is equivalent to passing the =-p= argument to =dune=.
 
-- Variable: *elm-build-system* [[#index-elm_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system elm)=. It implements a build procedure for [[https://elm-lang.org][Elm]] packages similar to ‘=elm install='.
+- Variable: elm-build-system  :: This variable is exported by =(guix build-system elm)=. It implements a build procedure for [[https://elm-lang.org][Elm]] packages similar to ‘=elm install='.
 
   The build system adds an Elm compiler package to the set of inputs. The default compiler package (currently =elm-sans-reactor=) can be overridden using the =#:elm= argument. Additionally, Elm packages needed by the build system itself are added as implicit inputs if they are not already present: to suppress this behavior, use the =#:implicit-elm-package-inputs?= argument, which is primarily useful for bootstrapping.
 
@@ -296,7 +284,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
   - Elm supports multiple versions of a package coexisting simultaneously under =ELM_HOME=, but this does not yet work well with =elm-build-system=. This limitation primarily affects Elm applications, because they specify exact versions for their dependencies, whereas Elm packages specify supported version ranges. As a workaround, the example applications mentioned above use the =patch-application-dependencies= procedure provided by =(guix build elm-build-system)= to rewrite their =elm.json= files to refer to the package versions actually present in the build environment. Alternatively, Guix package transformations (see [[id:guix--Defining-Package-Variants][Defining Package Variants]]) could be used to rewrite an application's entire dependency graph.
   - We are not yet able to run tests for Elm projects because neither [[https://github.com/mpizenberg/elm-test-rs][=elm-test-rs=]] nor the Node.js-based [[https://github.com/rtfeldman/node-test-runner][=elm-test=]] runner has been packaged for Guix yet.
 
-- Variable: *go-build-system* [[#index-go_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system go)=. It implements a build procedure for Go packages using the standard [[https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies][Go build mechanisms]].
+- Variable: go-build-system  :: This variable is exported by =(guix build-system go)=. It implements a build procedure for Go packages using the standard [[https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies][Go build mechanisms]].
 
   The user is expected to provide a value for the key =#:import-path= and, in some cases, =#:unpack-path=. The [[https://golang.org/doc/code.html#ImportPaths][import path]] corresponds to the file system path expected by the package's build scripts and any referring packages, and provides a unique way to refer to a Go package. It is typically based on a combination of the package source code's remote URI and file system hierarchy structure. In some cases, you will need to unpack the package's source code to a different directory structure than the one indicated by the import path, and =#:unpack-path= should be used in such cases.
 
@@ -310,7 +298,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   The key =#:embed-files=, default is ='()=, provides a list of future embedded files or regexps matching files. They will be copied to build directory after =unpack= phase. See [[https://pkg.go.dev/embed]] for more details.
 
-- Variable: *glib-or-gtk-build-system* [[#index-glib_002dor_002dgtk_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system glib-or-gtk)=. It is intended for use with packages making use of GLib or GTK+.
+- Variable: glib-or-gtk-build-system  :: This variable is exported by =(guix build-system glib-or-gtk)=. It is intended for use with packages making use of GLib or GTK+.
 
   This build system adds the following two phases to the ones defined by =gnu-build-system=:
 
@@ -322,13 +310,13 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   Both phases are executed after the =install= phase.
 
-- Variable: *guile-build-system* [[#index-guile_002dbuild_002dsystem][¶]] :: This build system is for Guile packages that consist exclusively of Scheme code and that are so lean that they don't even have a makefile, let alone a =configure= script. It compiles Scheme code using =guild compile= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Compilation.html#Compilation][Compilation]] in GNU Guile Reference Manual) and installs the =.scm= and =.go= files in the right place. It also installs documentation.
+- Variable: guile-build-system  :: This build system is for Guile packages that consist exclusively of Scheme code and that are so lean that they don't even have a makefile, let alone a =configure= script. It compiles Scheme code using =guild compile= (see [[https://www.gnu.org/software/guile/manual/html_node/Compilation.html#Compilation][Compilation]] in GNU Guile Reference Manual) and installs the =.scm= and =.go= files in the right place. It also installs documentation.
 
   This build system supports cross-compilation by using the =--target= option of ‘=guild compile='.
 
   Packages built with =guile-build-system= must provide a Guile package in their =native-inputs= field.
 
-- Variable: *julia-build-system* [[#index-julia_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system julia)=. It implements the build procedure used by [[https://julialang.org/][julia]] packages, which essentially is similar to running ‘=julia -e 'using Pkg; Pkg.add(package)'=' in an environment where =JULIA_LOAD_PATH= contains the paths to all Julia package inputs. Tests are run by calling =/test/runtests.jl=.
+- Variable: julia-build-system  :: This variable is exported by =(guix build-system julia)=. It implements the build procedure used by [[https://julialang.org/][julia]] packages, which essentially is similar to running ‘=julia -e 'using Pkg; Pkg.add(package)'=' in an environment where =JULIA_LOAD_PATH= contains the paths to all Julia package inputs. Tests are run by calling =/test/runtests.jl=.
 
   The Julia package name and uuid is read from the file =Project.toml=. These values can be overridden by passing the argument =#:julia-package-name= (which must be correctly capitalized) or =#:julia-package-uuid=.
 
@@ -353,27 +341,29 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   Some older packages that aren't using =Project.toml= yet, will require this file to be created, too. It is internally done if the arguments =#:julia-package-name= and =#:julia-package-uuid= are provided.
 
-- Variable: *maven-build-system* [[#index-maven_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system maven)=. It implements a build procedure for [[https://maven.apache.org][Maven]] packages. Maven is a dependency and lifecycle management tool for Java. A user of Maven specifies dependencies and plugins in a =pom.xml= file that Maven reads. When Maven does not have one of the dependencies or plugins in its repository, it will download them and use them to build the package.
+- Variable: maven-build-system  :: This variable is exported by =(guix build-system maven)=. It implements a build procedure for [[https://maven.apache.org][Maven]] packages. Maven is a dependency and lifecycle management tool for Java. A user of Maven specifies dependencies and plugins in a =pom.xml= file that Maven reads. When Maven does not have one of the dependencies or plugins in its repository, it will download them and use them to build the package.
 
   The maven build system ensures that maven will not try to download any dependency by running in offline mode. Maven will fail if a dependency is missing. Before running Maven, the =pom.xml= (and subprojects) are modified to specify the version of dependencies and plugins that match the versions available in the guix build environment. Dependencies and plugins must be installed in the fake maven repository at =lib/m2=, and are symlinked into a proper repository before maven is run. Maven is instructed to use that repository for the build and installs built artifacts there. Changed files are copied to the =lib/m2= directory of the package output.
 
+  You can specify a =pom.xml= file with the =#:pom-file= argument, or let the build system use the default =pom.xml= file in the sources.
+
   In case you need to specify a dependency's version manually, you can use the =#:local-packages= argument. It takes an association list where the key is the groupId of the package and its value is an association list where the key is the artifactId of the package and its value is the version you want to override in the =pom.xml=.
 
-  Some packages use dependencies or plugins that are not useful at runtime nor at build time in Guix. You can alter the =pom.xml= file to remove them using the =#:exclude= argument. Its value is an association list where the key is the groupId of the plugin or dependency you want to remove, and the value is a list of artifactId you want to remove. It defaults to removing the =maven-release-plugin= and =maven-site-plugin= plugins of the =org.apache.maven.plugins= group; when overriding it, you may want to keep these entries.
+  Some packages use dependencies or plugins that are not useful at runtime nor at build time in Guix. You can alter the =pom.xml= file to remove them using the =#:exclude= argument. Its value is an association list where the key is the groupId of the plugin or dependency you want to remove, and the value is a list of artifactId you want to remove.
 
   You can override the default =jdk= and =maven= packages with the corresponding argument, =#:jdk= and =#:maven=.
 
   The =#:maven-plugins= argument is a list of maven plugins used during the build, with the same format as the =inputs= fields of the package declaration. Its default value is =(default-maven-plugins)= which is also exported.
 
-- Variable: *minetest-mod-build-system* [[#index-minetest_002dmod_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system minetest)=. It implements a build procedure for [[https://www.minetest.net][Minetest]] mods, which consists of copying Lua code, images and other resources to the location Minetest searches for mods. The build system also minimises PNG images and verifies that Minetest can load the mod without errors.
+- Variable: minetest-mod-build-system  :: This variable is exported by =(guix build-system minetest)=. It implements a build procedure for [[https://www.minetest.net][Minetest]] mods, which consists of copying Lua code, images and other resources to the location Minetest searches for mods. The build system also minimises PNG images and verifies that Minetest can load the mod without errors.
 
-- Variable: *minify-build-system* [[#index-minify_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system minify)=. It implements a minification procedure for simple JavaScript packages.
+- Variable: minify-build-system  :: This variable is exported by =(guix build-system minify)=. It implements a minification procedure for simple JavaScript packages.
 
   It adds =uglify-js= to the set of inputs and uses it to compress all JavaScript files in the =src= directory. A different minifier package can be specified with the =#:uglify-js= parameter, but it is expected that the package writes the minified code to the standard output.
 
   When the input JavaScript files are not all located in the =src= directory, the parameter =#:javascript-files= can be used to specify a list of file names to feed to the minifier.
 
-- Variable: *mix-build-system* [[#index-mix_002dbuild_002dsystem][¶]] :: This is a variable exported by =guix build-system mix=. It implements the standard build procedure used by Elixir programs with [[https://hexdocs.pm/mix/Mix.html][Mix]], which consists of running =mix compile=, thereby creating bytecode.
+- Variable: mix-build-system  :: This is a variable exported by =guix build-system mix=. It implements the standard build procedure used by Elixr programs with [[https://hexdocs.pm/mix/Mix.html][Mix]], which consists of running =mix compile=, thereby creating bytecode.
 
   The API is similar to the =gnu-build-system=, with some specifics for Elixir:
 
@@ -382,9 +372,9 @@ Other =<build-system>= objects are defined to support other conventions and tool
   - =#:mix-exs=, changes the full path to the =mix.exs= file. It defaults to ="mix.exs"=. Please refer to [[https://hexdocs.pm/mix/Mix.html#module-environment-variables][upstream]] documentation for more details.
   - =#:mix-path=, appends extra code paths. It defaults to =#f=. Please refer to [[https://hexdocs.pm/mix/Mix.html#module-environment-variables][upstream]] documentation for more details.
 
-- Variable: *mozilla-build-system* [[#index-mozilla_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system mozilla)=. It sets the =--target= and =--host= configuration flags to what software developed by Mozilla expects -- due to historical reasons, Mozilla software expects =--host= to be the system that is cross-compiled from and =--target= to be the system that is cross-compiled to, contrary to the standard Autotools conventions.
+- Variable: mozilla-build-system  :: This variable is exported by =(guix build-system mozilla)=. It sets the =--target= and =--host= configuration flags to what software developed by Mozilla expects -- due to historical reasons, Mozilla software expects =--host= to be the system that is cross-compiled from and =--target= to be the system that is cross-compiled to, contrary to the standard Autotools conventions.
 
-- Variable: *ocaml-build-system* [[#index-ocaml_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system ocaml)=. It implements a build procedure for [[https://ocaml.org][OCaml]] packages, which consists of choosing the correct set of commands to run for each package. OCaml packages can expect many different commands to be run. This build system will try some of them.
+- Variable: ocaml-build-system  :: This variable is exported by =(guix build-system ocaml)=. It implements a build procedure for [[https://ocaml.org][OCaml]] packages, which consists of choosing the correct set of commands to run for each package. OCaml packages can expect many different commands to be run. This build system will try some of them.
 
   When the package has a =setup.ml= file present at the top-level, it will run =ocaml setup.ml -configure=, =ocaml setup.ml -build= and =ocaml setup.ml -install=. The build system will assume that this file was generated by [[http://oasis.forge.ocamlcore.org/][OASIS]] and will take care of setting the prefix and enabling tests if they are not disabled. You can pass configure and build flags with the =#:configure-flags= and =#:build-flags=. The =#:test-flags= key can be passed to change the set of flags used to enable tests. The =#:use-make?= key can be used to bypass this system in the build and install phases.
 
@@ -396,7 +386,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   Note that most OCaml packages assume they will be installed in the same directory as OCaml, which is not what we want in guix. In particular, they will install =.so= files in their module's directory, which is usually fine because it is in the OCaml compiler directory. In guix though, these libraries cannot be found and we use =CAML_LD_LIBRARY_PATH=. This variable points to =lib/ocaml/site-lib/stubslibs= and this is where =.so= libraries should be installed.
 
-- Variable: *python-build-system* [[#index-python_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system python)=. It implements the more or less standard build procedure used by Python packages, which consists in running =python setup.py build= and then =python setup.py install --prefix=/gnu/store/…=.
+- Variable: python-build-system  :: This variable is exported by =(guix build-system python)=. It implements the more or less standard build procedure used by Python packages, which consists in running =python setup.py build= and then =python setup.py install --prefix=/gnu/store/…=.
 
   For packages that install stand-alone Python programs under =bin/=, it takes care of wrapping these programs so that their =GUIX_PYTHONPATH= environment variable points to all the Python libraries they depend on.
 
@@ -406,7 +396,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   If a ="python"= output is available, the package is installed into it instead of the default ="out"= output. This is useful for packages that include a Python package as only a part of the software, and thus want to combine the phases of =python-build-system= with another build system. Python bindings are a common usecase.
 
-- Variable: *pyproject-build-system* [[#index-pyproject_002dbuild_002dsystem][¶]] :: This is a variable exported by =guix build-system pyproject=. It is based on =python-build-system=, and adds support for =pyproject.toml= and [[https://peps.python.org/pep-0517/][PEP 517]]. It also supports a variety of build backends and test frameworks.
+- Variable: pyproject-build-system  :: This is a variable exported by =guix build-system pyproject=. It is based on =python-build-system=, and adds support for =pyproject.toml= and [[https://peps.python.org/pep-0517/][PEP 517]]. It also supports a variety of build backends and test frameworks.
 
   The API is slightly different from =python-build-system=:
 
@@ -421,19 +411,19 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   Eventually this build system will be deprecated and merged back into =python-build-system=, probably some time in 2024.
 
-- Variable: *perl-build-system* [[#index-perl_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system perl)=. It implements the standard build procedure for Perl packages, which either consists in running =perl Build.PL --prefix=/gnu/store/…=, followed by =Build= and =Build install=; or in running =perl Makefile.PL PREFIX=/gnu/store/…=, followed by =make= and =make install=, depending on which of =Build.PL= or =Makefile.PL= is present in the package distribution. Preference is given to the former if both =Build.PL= and =Makefile.PL= exist in the package distribution. This preference can be reversed by specifying =#t= for the =#:make-maker?= parameter.
+- Variable: perl-build-system  :: This variable is exported by =(guix build-system perl)=. It implements the standard build procedure for Perl packages, which either consists in running =perl Build.PL --prefix=/gnu/store/…=, followed by =Build= and =Build install=; or in running =perl Makefile.PL PREFIX=/gnu/store/…=, followed by =make= and =make install=, depending on which of =Build.PL= or =Makefile.PL= is present in the package distribution. Preference is given to the former if both =Build.PL= and =Makefile.PL= exist in the package distribution. This preference can be reversed by specifying =#t= for the =#:make-maker?= parameter.
 
   The initial =perl Makefile.PL= or =perl Build.PL= invocation passes flags specified by the =#:make-maker-flags= or =#:module-build-flags= parameter, respectively.
 
   Which Perl package is used can be specified with =#:perl=.
 
-- Variable: *renpy-build-system* [[#index-renpy_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system renpy)=. It implements the more or less standard build procedure used by Ren'py games, which consists of loading =#:game= once, thereby creating bytecode for it.
+- Variable: renpy-build-system  :: This variable is exported by =(guix build-system renpy)=. It implements the more or less standard build procedure used by Ren'py games, which consists of loading =#:game= once, thereby creating bytecode for it.
 
   It further creates a wrapper script in =bin/= and a desktop entry in =share/applications=, both of which can be used to launch the game.
 
   Which Ren'py package is used can be specified with =#:renpy=. Games can also be installed in outputs other than “out” by using =#:output=.
 
-- Variable: *qt-build-system* [[#index-qt_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system qt)=. It is intended for use with applications using Qt or KDE.
+- Variable: qt-build-system  :: This variable is exported by =(guix build-system qt)=. It is intended for use with applications using Qt or KDE.
 
   This build system adds the following two phases to the ones defined by =cmake-build-system=:
 
@@ -447,13 +437,13 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
     This phase is added after the =install= phase.
 
-- Variable: *r-build-system* [[#index-r_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system r)=. It implements the build procedure used by [[https://r-project.org][R]] packages, which essentially is little more than running ‘=R CMD INSTALL --library=/gnu/store/…=' in an environment where =R_LIBS_SITE= contains the paths to all R package inputs. Tests are run after installation using the R function =tools::testInstalledPackage=.
+- Variable: r-build-system  :: This variable is exported by =(guix build-system r)=. It implements the build procedure used by [[https://r-project.org][R]] packages, which essentially is little more than running ‘=R CMD INSTALL --library=/gnu/store/…=' in an environment where =R_LIBS_SITE= contains the paths to all R package inputs. Tests are run after installation using the R function =tools::testInstalledPackage=.
 
-- Variable: *rakudo-build-system* [[#index-rakudo_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system rakudo)=. It implements the build procedure used by [[https://rakudo.org/][Rakudo]] for [[https://perl6.org/][Perl6]] packages. It installs the package to =/gnu/store/…/NAME-VERSION/share/perl6= and installs the binaries, library files and the resources, as well as wrap the files under the =bin/= directory. Tests can be skipped by passing =#f= to the =tests?= parameter.
+- Variable: rakudo-build-system  :: This variable is exported by =(guix build-system rakudo)=. It implements the build procedure used by [[https://rakudo.org/][Rakudo]] for [[https://perl6.org/][Perl6]] packages. It installs the package to =/gnu/store/…/NAME-VERSION/share/perl6= and installs the binaries, library files and the resources, as well as wrap the files under the =bin/= directory. Tests can be skipped by passing =#f= to the =tests?= parameter.
 
   Which rakudo package is used can be specified with =rakudo=. Which perl6-tap-harness package used for the tests can be specified with =#:prove6= or removed by passing =#f= to the =with-prove6?= parameter. Which perl6-zef package used for tests and installing can be specified with =#:zef= or removed by passing =#f= to the =with-zef?= parameter.
 
-- Variable: *rebar-build-system* [[#index-rebar_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system rebar)=. It implements a build procedure around [[https://rebar3.org][rebar3]], a build system for programs written in the Erlang language.
+- Variable: rebar-build-system  :: This variable is exported by =(guix build-system rebar)=. It implements a build procedure around [[https://rebar3.org][rebar3]], a build system for programs written in the Erlang language.
 
   It adds both =rebar3= and the =erlang= to the set of inputs. Different packages can be specified with the =#:rebar= and =#:erlang= parameters, respectively.
 
@@ -470,7 +460,7 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   - =install= :: This installs the files created in the /default/ profile, or some other profile specified with =#:install-profile=.
 
-- Variable: *texlive-build-system* [[#index-texlive_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system texlive)=. It is used to build TeX packages in batch mode with a specified engine. The build system sets the =TEXINPUTS= variable to find all TeX source files in the inputs.
+- Variable: texlive-build-system  :: This variable is exported by =(guix build-system texlive)=. It is used to build TeX packages in batch mode with a specified engine. The build system sets the =TEXINPUTS= variable to find all TeX source files in the inputs.
 
   By default it tries to run =luatex= on all =.ins= files, and if it fails to find any, on all =.dtx= files. A different engine and format can be specified with, respectively, the =#:tex-engine= and =#:tex-format= arguments. Different build targets can be specified with the =#:build-targets= argument, which expects a list of file names.
 
@@ -480,17 +470,17 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   The package =texlive-latex-bin=, from the same module, contains most of the tools for building TeX Live packages; for convenience, it is also added by default to the native inputs. However, this can be troublesome when building a dependency of =texlive-latex-bin= itself. In this particular situation, the =#:texlive-latex-bin?= argument should be set to =#f=.
 
-- Variable: *ruby-build-system* [[#index-ruby_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system ruby)=. It implements the RubyGems build procedure used by Ruby packages, which involves running =gem build= followed by =gem install=.
+- Variable: ruby-build-system  :: This variable is exported by =(guix build-system ruby)=. It implements the RubyGems build procedure used by Ruby packages, which involves running =gem build= followed by =gem install=.
 
   The =source= field of a package that uses this build system typically references a gem archive, since this is the format that Ruby developers use when releasing their software. The build system unpacks the gem archive, potentially patches the source, runs the test suite, repackages the gem, and installs it. Additionally, directories and tarballs may be referenced to allow building unreleased gems from Git or a traditional source release tarball.
 
   Which Ruby package is used can be specified with the =#:ruby= parameter. A list of additional flags to be passed to the =gem= command can be specified with the =#:gem-flags= parameter.
 
-- Variable: *waf-build-system* [[#index-waf_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system waf)=. It implements a build procedure around the =waf= script. The common phases---=configure=, =build=, and =install=---are implemented by passing their names as arguments to the =waf= script.
+- Variable: waf-build-system  :: This variable is exported by =(guix build-system waf)=. It implements a build procedure around the =waf= script. The common phases---=configure=, =build=, and =install=---are implemented by passing their names as arguments to the =waf= script.
 
   The =waf= script is executed by the Python interpreter. Which Python package is used to run the script can be specified with the =#:python= parameter.
 
-- Variable: *zig-build-system* [[#index-zig_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system zig)=. It implements the build procedures for the [[https://ziglang.org/][Zig]] build system (=zig build= command).
+- Variable: zig-build-system  :: This variable is exported by =(guix build-system zig)=. It implements the build procedures for the [[https://ziglang.org/][Zig]] build system (=zig build= command).
 
   Selecting this build system adds =zig= to the package inputs, in addition to the packages of =gnu-build-system=.
 
@@ -504,11 +494,11 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   The optional =#:zig-release-type= parameter declares the type of release. Possible values are: ="safe"=, ="fast"=, or ="small"=. The default value is =#f=, which causes the release flag to be omitted from the =zig= command and results in a ="debug"= build.
 
-- Variable: *scons-build-system* [[#index-scons_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system scons)=. It implements the build procedure used by the SCons software construction tool. This build system runs =scons= to build the package, =scons test= to run tests, and then =scons install= to install the package.
+- Variable: scons-build-system  :: This variable is exported by =(guix build-system scons)=. It implements the build procedure used by the SCons software construction tool. This build system runs =scons= to build the package, =scons test= to run tests, and then =scons install= to install the package.
 
   Additional flags to be passed to =scons= can be specified with the =#:scons-flags= parameter. The default build and install targets can be overridden with =#:build-targets= and =#:install-targets= respectively. The version of Python used to run SCons can be specified by selecting the appropriate SCons package with the =#:scons= parameter.
 
-- Variable: *hare-build-system* [[#index-hare_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system hare)=. It implements the Makefile build process typically used by Hare packages, removing the =configure= phase used by =gnu-build-system= and modifying existing phases to set the Hare architecture tag, module path, and package install destinations appropriately.
+- Variable: hare-build-system  :: This variable is exported by =(guix build-system hare)=. It implements the Makefile build process typically used by Hare packages, removing the =configure= phase used by =gnu-build-system= and modifying existing phases to set the Hare architecture tag, module path, and package install destinations appropriately.
 
   This relies on the package's Makefile supporting, at minimum, the variables =HAREFLAGS= and =THIRDPARTYDIR=. Packages may set =make-flags= to override or supplement these variables.
 
@@ -516,21 +506,22 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   =(guix build-system hare)= also provides utility definitions for creating Hare packages. The variable =%hare-supported-systems= is the list of build targets currently supported by =hare=, for use in =supported-systems= (see [[id:guix--package-Reference][=package= Reference]]). The procedure =target->hare-arch= may be used to get the Hare architecture tag for a given (supported) Guix target or system.
 
-- Variable: *haskell-build-system* [[#index-haskell_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system haskell)=. It implements the Cabal build procedure used by Haskell packages, which involves running =runhaskell Setup.hs configure --prefix=/gnu/store/…= and =runhaskell Setup.hs build=. Instead of installing the package by running =runhaskell Setup.hs install=, to avoid trying to register libraries in the read-only compiler store directory, the build system uses =runhaskell Setup.hs copy=, followed by =runhaskell Setup.hs register=. In addition, the build system generates the package documentation by running =runhaskell Setup.hs haddock=, unless =#:haddock? #f= is passed. Optional Haddock parameters can be passed with the help of the =#:haddock-flags= parameter. If the file =Setup.hs= is not found, the build system looks for =Setup.lhs= instead.
+- Variable: haskell-build-system  :: This variable is exported by =(guix build-system haskell)=. It implements the Cabal build procedure used by Haskell packages, which involves running =runhaskell Setup.hs configure --prefix=/gnu/store/…= and =runhaskell Setup.hs build=. Instead of installing the package by running =runhaskell Setup.hs install=, to avoid trying to register libraries in the read-only compiler store directory, the build system uses =runhaskell Setup.hs copy=, followed by =runhaskell Setup.hs register=. In addition, the build system generates the package documentation by running =runhaskell Setup.hs haddock=, unless =#:haddock? #f= is passed. Optional Haddock parameters can be passed with the help of the =#:haddock-flags= parameter. If the file =Setup.hs= is not found, the build system looks for =Setup.lhs= instead.
 
   Which Haskell compiler is used can be specified with the =#:haskell= parameter which defaults to =ghc=.
 
-- Variable: *dub-build-system* [[#index-dub_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system dub)=. It implements the Dub build procedure used by D packages, which involves running =dub build= and =dub run=. Installation is done by copying the files manually.
+- Variable: dub-build-system  :: This variable is exported by =(guix build-system dub)=. It implements the Dub build procedure used by D packages, which involves running =dub build= and =dub run=. Installation is done by copying the files manually.
 
   Which D compiler is used can be specified with the =#:ldc= parameter which defaults to =ldc=.
 
-- Variable: *emacs-build-system* [[#index-emacs_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system emacs)=. It implements an installation procedure similar to the packaging system of Emacs itself (see [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Packages.html#Packages][Packages]] in The GNU Emacs Manual).
+<<emacs_002dbuild_002dsystem>>
+- Variable: emacs-build-system  :: This variable is exported by =(guix build-system emacs)=. It implements an installation procedure similar to the packaging system of Emacs itself (see [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Packages.html#Packages][Packages]] in The GNU Emacs Manual).
 
   It first creates the =package==-autoloads.el= file, then it byte compiles all Emacs Lisp files. Differently from the Emacs packaging system, the Info documentation files are moved to the standard documentation directory and the =dir= file is deleted. The Elisp package files are installed directly under =share/emacs/site-lisp=.
 
-- Variable: *font-build-system* [[#index-font_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system font)=. It implements an installation procedure for font packages where upstream provides pre-compiled TrueType, OpenType, etc. font files that merely need to be copied into place. It copies font files to standard locations in the output directory.
+- Variable: font-build-system  :: This variable is exported by =(guix build-system font)=. It implements an installation procedure for font packages where upstream provides pre-compiled TrueType, OpenType, etc. font files that merely need to be copied into place. It copies font files to standard locations in the output directory.
 
-- Variable: *meson-build-system* [[#index-meson_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system meson)=. It implements the build procedure for packages that use [[https://mesonbuild.com][Meson]] as their build system.
+- Variable: meson-build-system  :: This variable is exported by =(guix build-system meson)=. It implements the build procedure for packages that use [[https://mesonbuild.com][Meson]] as their build system.
 
   It adds both Meson and [[https://ninja-build.org/][Ninja]] to the set of inputs, and they can be changed with the parameters =#:meson= and =#:ninja= if needed.
 
@@ -552,7 +543,9 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   - =glib-or-gtk-compile-schemas= :: This phase is the phase provided by =glib-or-gtk-build-system=, and it is not enabled by default. It can be enabled with =#:glib-or-gtk?=.
 
-- Variable: *linux-module-build-system* [[#index-linux_002dmodule_002dbuild_002dsystem][¶]] :: =linux-module-build-system= allows building Linux kernel modules.
+- Variable: linux-module-build-system  :: =linux-module-build-system= allows building Linux kernel modules.
+
+  <<index-build-phases-1>>
 
   This build system is an extension of =gnu-build-system=, but with the following phases changed:
 
@@ -564,40 +557,23 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
   It is possible and useful to specify the Linux kernel to use for building the module (in the =arguments= form of a package using the =linux-module-build-system=, use the key =#:linux= to specify it).
 
-- Variable: *node-build-system* [[#index-node_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system node)=. It implements the build procedure used by [[https://nodejs.org][Node.js]], which implements an approximation of the =npm install= command, followed by an =npm test= command.
+- Variable: node-build-system  :: This variable is exported by =(guix build-system node)=. It implements the build procedure used by [[https://nodejs.org][Node.js]], which implements an approximation of the =npm install= command, followed by an =npm test= command.
 
   Which Node.js package is used to interpret the =npm= commands can be specified with the =#:node= parameter which defaults to =node=.
 
-- Variable: *tree-sitter-build-system* [[#index-tree_002dsitter_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system tree-sitter)=. It implements procedures to compile grammars for the [[https://tree-sitter.github.io/tree-sitter/][Tree-sitter]] parsing library. It essentially runs =tree-sitter generate= to translate =grammar.js= grammars to JSON and then to C. Which it then compiles to native code.
+- Variable: tree-sitter-build-system  :: This variable is exported by =(guix build-system tree-sitter)=. It implements procedures to compile grammars for the [[https://tree-sitter.github.io/tree-sitter/][Tree-sitter]] parsing library. It essentially runs =tree-sitter generate= to translate =grammar.js= grammars to JSON and then to C. Which it then compiles to native code.
 
   Tree-sitter packages may support multiple grammars, so this build system supports a =#:grammar-directories= keyword to specify a list of locations where a =grammar.js= file may be found.
 
   Grammars sometimes depend on each other, such as C++ depending on C and TypeScript depending on JavaScript. You may use inputs to declare such dependencies.
 
-- Variable: *trivial-build-system* [[#index-trivial_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system trivial)=.
+Lastly, for packages that do not need anything as sophisticated, a “trivial” build system is provided. It is trivial in the sense that it provides basically no support: it does not pull any implicit inputs, and does not have a notion of build phases.
 
-  This build system requires a =#:builder= argument; it is “trivial” in the sense that it does nothing but what =#:builder= specifies, and in particular it lacks the notion of build phases commonly found in other build systems and provides zero implicit inputs. The =#:builder= argument must be a gexp that builds the package output(s) (see [[id:guix--G_002dExpressions][G-Expressions]]).
+- Variable: trivial-build-system  :: This variable is exported by =(guix build-system trivial)=.
 
-  The example below produces an empty package:
+  This build system requires a =#:builder= argument. This argument must be a Scheme expression that builds the package output(s)---as with =build-expression->derivation= (see [[id:guix--Derivations][=build-expression->derivation=]]).
 
-  #+begin_src lisp
-  (package
-    (name "empty")
-    (version "0")
-    (source #f)      ;no source
-    (build-system trivial-build-system)
-    (arguments
-      ;; Create the output directory and nothing more.
-      (list #:builder #~(mkdir #$output)))
-    ;; ...
-    (license #f))
-  #+end_src
-
-  This build system is useful to create /meta-packages/ as empty packages that propagate a number of packages---thus installing one such meta-package in a profile also installs all these other packages.
-
-  See [[#copy_002dbuild_002dsystem][=copy-build-system=]], for a slightly more elaborate build system that makes it easy to copy files from package source to package output.
-
-- Variable: *channel-build-system* [[#index-channel_002dbuild_002dsystem][¶]] :: This variable is exported by =(guix build-system channel)=.
+- Variable: channel-build-system  :: This variable is exported by =(guix build-system channel)=.
 
   This build system is meant primarily for internal use. A package using this build system must have a channel specification as its =source= field (see [[id:guix--Channels][Channels]]); alternatively, its source can be a directory name, in which case an additional =#:commit= argument must be supplied to specify the commit being built (a hexadecimal string).
 
@@ -607,4 +583,4 @@ Other =<build-system>= objects are defined to support other conventions and tool
 
 --------------
 
-Next: [[id:guix--Build-Phases][Build Phases]], Previous: [[id:guix--Writing-Manifests][Writing Manifests]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Build-Phases][Build Phases]], Previous: [[id:guix--Writing-Manifests][Writing Manifests]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

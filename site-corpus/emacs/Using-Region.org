@@ -7,6 +7,9 @@
 Next: [[id:emacs--Mark-Ring][The Mark Ring]]   Previous: [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]]   Up: [[id:emacs--Mark][The Mark and the Region]]
 
 <<Using-Region>>
+
+--------------
+
 *** 13.3 Operating on the Region [[#Operating-on-the-Region][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Operating-on-the-Region
@@ -15,12 +18,12 @@ Next: [[id:emacs--Mark-Ring][The Mark Ring]]   Previous: [[id:emacs--Marking-Obj
 Once you have a region, here are some of the ways you can operate on it:
 
 - Kill it with C-w (see [[id:emacs--Killing][Killing and Moving Text]]).
-- Copy it to the kill ring with M-w (see [[id:emacs--Yanking::#Yanking][Yanking]]).
+- Copy it to the kill ring with M-w (see [[id:emacs--Yanking][Yanking]]).
 - Convert case with C-x C-l or C-x C-u (see [[id:emacs--Case][Case Conversion Commands]]).
 - Undo changes within it using C-u C-/ (see [[id:emacs--Undo][Undo]]).
-- Replace text within it using M-% (see [[id:emacs--Replace::#Query-Replace][Query Replace]]).
+- Replace text within it using M-% (see [[id:emacs--Query-Replace][Query Replace]]).
 - Indent it with C-x TAB or C-M-\ (see [[id:emacs--Indentation][Indentation]]).
-- Fill it as text with M-x fill-region (see [[id:emacs--Filling::#Filling][Filling Text]]).
+- Fill it as text with M-x fill-region (see [[id:emacs--Filling][Filling Text]]).
 - Check the spelling of words within it with M-$ (see [[id:emacs--Spelling][Checking and Correcting Spelling]]).
 - Evaluate it as Lisp code with M-x eval-region (see [[id:emacs--Lisp-Eval][Evaluating Emacs Lisp Expressions]]).
 - Save it in a register with C-x r s (see [[id:emacs--Registers][Registers]]).

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Grep-Searching][Searching with Grep under Emacs]]   Previous: [[id:emacs--Compilation-Mode][Compilation Mode]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
 
 <<Compilation-Shell>>
+
+--------------
+
 *** 29.3 Subshells for Compilation [[#Subshells-for-Compilation][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Subshells-for-Compilation
@@ -44,6 +47,6 @@ If the background process does not output to the compilation buffer, so you only
 nohup command; sleep 1
 #+end_example
 
-On MS-DOS, asynchronous subprocesses are not supported, so M-x compile runs the compilation command synchronously (i.e., you must wait until the command finishes before you can do anything else in Emacs). See [[id:emacs--MS_002dDOS::#MS_002dDOS][Emacs and MS-DOS]].
+On MS-DOS, asynchronous subprocesses are not supported, so M-x compile runs the compilation command synchronously (i.e., you must wait until the command finishes before you can do anything else in Emacs). See [[id:emacs--MS_002dDOS][Emacs and MS-DOS]].
 
 --------------

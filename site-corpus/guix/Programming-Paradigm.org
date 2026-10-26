@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Programming-Paradigm>>
-Next: [[id:guix--Modules][Modules]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Modules][Modules]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.8.1 Programming Paradigm [[#Programming-Paradigm-1][¶]]
+<<Programming-Paradigm-1>>
+**** 22.9.1 Programming Paradigm
 :PROPERTIES:
-:CUSTOM_ID: Programming-Paradigm-1
+:CUSTOM_ID: programming-paradigm
 :CLASS: subsection
 :END:
 Scheme code in Guix is written in a purely functional style. One exception is code that involves input/output, and procedures that implement low-level concepts, such as the =memoize= procedure.

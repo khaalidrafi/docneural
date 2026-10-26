@@ -7,6 +7,9 @@
 Next: [[id:emacs--Entering-Emacs][Entering Emacs]]   Previous: [[id:emacs--Commands][Keys and Commands]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Other-Input>>
+
+--------------
+
 ** 6 Touchscreen Input and Virtual Keyboards [[#Touchscreen-Input-and-Virtual-Keyboards][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Touchscreen-Input-and-Virtual-Keyboards
@@ -16,4 +19,5 @@ Emacs was first written assuming that its users were to use it from a desktop co
 
 Emacs is also capable of receiving input from alternative sources of input, enabling users to interact with it even if it is installed on a computer that substitutes such input sources for the customary combination of keyboard and mouse.
 
---------------
+- [[id:emacs--Touchscreens][Using Emacs on Touchscreens]]
+- [[id:emacs--On_002dScreen-Keyboards][Using Emacs with Virtual Keyboards]]

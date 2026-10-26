@@ -36,28 +36,32 @@ Next:
 [[../..][]]
 
 <<Swap-Space>>
-Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.6 Swap Space [[#Swap-Space-1][¶]]
+<<Swap-Space-1>>
+*** 11.6 Swap Space
 :PROPERTIES:
-:CUSTOM_ID: Swap-Space-1
+:CUSTOM_ID: swap-space
 :CLASS: section
 :END:
+<<index-swap-space>>
 Swap space, as it is commonly called, is a disk area specifically designated for paging: the process in charge of memory management (the Linux kernel or Hurd's default pager) can decide that some memory pages stored in RAM which belong to a running program but are unused should be stored on disk instead. It unloads those from the RAM, freeing up precious fast memory, and writes them to the swap space. If the program tries to access that very page, the memory management process loads it back into memory for the program to use.
 
 A common misconception about swap is that it is only useful when small amounts of RAM are available to the system. However, it should be noted that kernels often use all available RAM for disk access caching to make I/O faster, and thus paging out unused portions of program memory will expand the RAM available for such caching.
 
-For a more detailed description of how memory is managed from the viewpoint of a monolithic kernel, see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Memory-Concepts.html#Memory-Concepts][Memory Concepts]] in The GNU C Library Reference Manual.
+For a more detailed description of how memory is managed from the viewpoint of a monolithic kernel, see [[https://www.gnu.org/software/libc/manual/html_node/Memory-Concepts.html#Memory-Concepts][Memory Concepts]] in The GNU C Library Reference Manual.
 
 The Linux kernel has support for swap partitions and swap files: the former uses a whole disk partition for paging, whereas the second uses a file on a file system for that (the file system driver needs to support it). On a comparable setup, both have the same performance, so one should consider ease of use when deciding between them. Partitions are “simpler” and do not need file system support, but need to be allocated at disk formatting time (logical volumes notwithstanding), whereas files can be allocated and deallocated at any time.
 
-Swap space is also required to put the system into /hibernation/ (also called /suspend to disk/), whereby memory is dumped to swap before shutdown so it can be restored when the machine is eventually restarted. Hibernation uses at most half the size of the RAM in the configured swap space. The Linux kernel needs to know about the swap space to be used to resume from hibernation on boot (/via/ a kernel argument). When using a swap file, its offset in the device holding it also needs to be given to the kernel; that value has to be updated if the file is initialized again as swap---e.g., because its size was changed. See [[id:guix--Initial-RAM-Disk][Initial RAM Disk]] for details about the kernel arguments.
+<<index-hibernation>> <<index-suspend-to-disk>>
+Swap space is also required to put the system into /hibernation/ (also called /suspend to disk/), whereby memory is dumped to swap before shutdown so it can be restored when the machine is eventually restarted. Hibernation uses at most half the size of the RAM in the configured swap space. The Linux kernel needs to know about the swap space to be used to resume from hibernation on boot (/via/ a kernel argument). When using a swap file, its offset in the device holding it also needs to be given to the kernel; that value has to be updated if the file is initialized again as swap---e.g., because its size was changed.
 
 Note that swap space is not zeroed on shutdown, so sensitive data (such as passwords) may linger on it if it was paged out. As such, you should consider having your swap reside on an encrypted device (see [[id:guix--Mapped-Devices][Mapped Devices]]).
 
-- Data Type: *swap-space* [[#index-swap_002dspace][¶]] :: Objects of this type represent swap spaces. They contain the following members:
+- Data Type: swap-space  :: Objects of this type represent swap spaces. They contain the following members:
 
   - =target= :: The device or file to use, either a UUID, a =file-system-label= or a string, as in the definition of a =file-system= (see [[id:guix--File-Systems][File Systems]]).
 
@@ -142,18 +146,11 @@ Filesystem type is: ef53
 File size of /swapfile is 2463842304 (601524 blocks of 4096 bytes)
  ext:     logical_offset:        physical_offset: length:   expected: flags:
    0:        0..    2047:   92514304..  92516351:   2048:
-...
+…
 $ sudo filefrag -e /swapfile | grep '^ *0:' | cut -d: -f3 | cut -d. -f1
    92514304
 #+end_example
 
-Note that if the swap file is on a Btrfs file system use =btrfs inspect-internal map-swapfile -r= instead of =filefrag= to get the offset as the latter will not give the right offset.
-
-#+begin_example
-$ sudo btrfs inspect-internal map-swapfile -r /swapfile
-   163845376
-#+end_example
-
 --------------
 
-Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

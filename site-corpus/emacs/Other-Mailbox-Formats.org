@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Remote-Mailboxes][Retrieving Mail from Remote Mailboxes]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Other-Mailbox-Formats>>
+
+--------------
+
 *** 35.20 Retrieving Mail from Local Mailboxes in Various Formats [[#Retrieving-Mail-from-Local-Mailboxes-in-Various-Formats][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Retrieving-Mail-from-Local-Mailboxes-in-Various-Formats
@@ -17,5 +20,3 @@ If your incoming mail is stored on a local machine in a format other than Unix m
 #+begin_example
 maildir:///var/spool/mail/in
 #+end_example
-
---------------

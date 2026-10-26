@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<Configuring-the-Shell>>
-Next: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Home-Services][Home Services]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 13.2 Configuring the Shell [[#Configuring-the-Shell-1][¶]]
+<<Configuring-the-Shell-1>>
+*** 13.2 Configuring the Shell
 :PROPERTIES:
-:CUSTOM_ID: Configuring-the-Shell-1
+:CUSTOM_ID: configuring-the-shell
 :CLASS: section
 :END:
 This section is safe to skip if your shell or shells are managed by Guix Home. Otherwise, read it carefully.
 
-There are a few scripts that must be evaluated by a login shell to activate the home environment. The shell startup files only read by login shells often have =profile= suffix. For more information about login shells see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Invoking-Bash.html#Invoking-Bash][Invoking Bash]] in The GNU Bash Reference Manual and see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual.
+There are a few scripts that must be evaluated by a login shell to activate the home environment. The shell startup files only read by login shells often have =profile= suffix. For more information about login shells see [[https://www.gnu.org/software/bash/manual/html_node/Invoking-Bash.html#Invoking-Bash][Invoking Bash]] in The GNU Bash Reference Manual and see [[https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual.
 
 The first script that needs to be sourced is =setup-environment=, which sets all the necessary environment variables (including variables declared by the user) and the second one is =on-first-login=, which starts Shepherd for the current user and performs actions declared by other home services that extends =home-run-on-first-login-service-type=.
 
@@ -70,4 +72,4 @@ To make your shell respect =~/.profile=, add =. ~/.profile= or =source ~/.profil
 
 --------------
 
-Next: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Home-Services][Home Services]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

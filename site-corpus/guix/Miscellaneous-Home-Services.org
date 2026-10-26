@@ -36,25 +36,29 @@ Next:
 [[../..][]]
 
 <<Miscellaneous-Home-Services>>
-Previous: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.22 Miscellaneous Home Services [[#Miscellaneous-Home-Services-1][¶]]
+<<Miscellaneous-Home-Services-1>>
+**** 13.3.21 Miscellaneous Home Services
 :PROPERTIES:
-:CUSTOM_ID: Miscellaneous-Home-Services-1
+:CUSTOM_ID: miscellaneous-home-services
 :CLASS: subsection
 :END:
 This section lists Home services that lack a better place.
 
-**** Beets Service [[#Beets-Service][¶]]
+<<Beets-Service>>
+**** Beets Service
 :PROPERTIES:
-:CUSTOM_ID: Beets-Service
+:CUSTOM_ID: beets-service
 :CLASS: subsubheading
 :END:
+<<index-Beets-service_002c-for-Home>>
 The =(gnu home services music)= module provides the following service:
 
-- Variable: *home-beets-service-type* [[#index-home_002dbeets_002dservice_002dtype][¶]] :: [[https://beets.io][Beets]] is a music file and metadata manager that can be used via its command-line interface, =beet=. Beets requires a YAML configuration file and this Guix Home service is to create such file.
+- Variable: home-beets-service-type  :: [[https://beets.io][Beets]] is a music file and metadata manager that can be used via its command-line interface, =beet=. Beets requires a YAML configuration file and this Guix Home service is to create such file.
 
 The service can be used as follows:
 
@@ -74,14 +78,16 @@ import:
   move: yes"))))
 #+end_src
 
-**** Dictionary Service [[#Dictionary-Service-1][¶]]
+<<Dictionary-Service-1>>
+**** Dictionary Service
 :PROPERTIES:
-:CUSTOM_ID: Dictionary-Service-1
+:CUSTOM_ID: dictionary-service
 :CLASS: subsubheading
 :END:
+<<index-dictionary-service_002c-for-Home>>
 The =(gnu home services dict)= module provides the following service:
 
-- Variable: *home-dicod-service-type* [[#index-home_002ddicod_002dservice_002dtype][¶]] :: This is the type of the service that runs the =dicod= daemon, an implementation of DICT server (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Dicod.html#Dicod][Dicod]] in GNU Dico Manual).
+- Variable: home-dicod-service-type  :: This is the type of the service that runs the =dicod= daemon, an implementation of DICT server (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Dicod.html#Dicod][Dicod]] in GNU Dico Manual).
 
   You can add =open localhost= to your =~/.dico= file to make =localhost= the default server for =dico= client (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Initialization-File.html#Initialization-File][Initialization File]] in GNU Dico Manual).
 
@@ -96,17 +102,19 @@ You may specify a custom configuration by providing a =dicod-configuration= reco
 #+begin_src lisp
 (service home-dicod-service-type
          (for-home
-          (dicod-configuration ...)))
+          (dicod-configuration …)))
 #+end_src
 
-**** ReadyMedia Service [[#ReadyMedia-Service][¶]]
+<<ReadyMedia-Service>>
+**** ReadyMedia Service
 :PROPERTIES:
-:CUSTOM_ID: ReadyMedia-Service
+:CUSTOM_ID: readymedia-service
 :CLASS: subheading
 :END:
+<<index-ReadyMedia_002c-DLNA_002fUPnP-Service>>
 The =(gnu home services upnp)= module provides a service to set up the [[https://minidlna.sourceforge.net/][ReadyMedia]] DLNA (Digital Living Network Alliance) UPnP (Universal Plug and Play) media server.
 
-- Variable: *home-readymedia-service-type* [[#index-home_002dreadymedia_002dservice_002dtype][¶]] :: This is the service type for the =minidlnad= daemon; it is the Home counterpart of the =readymedia-service-type= system service (see [[id:guix--Miscellaneous-Services][=readymedia-service-type=]]). The value for this service type is a =readymedia-configuration=.
+- Variable: home-readymedia-service-type  :: This is the service type for the =minidlnad= daemon; it is the Home counterpart of the =readymedia-service-type= system service (see [[id:guix--Miscellaneous-Services][=readymedia-service-type=]]). The value for this service type is a =readymedia-configuration=.
 
 The service can be used with a =readymedia-configuration= wrapped in =for-home= like this:
 
@@ -115,26 +123,28 @@ The service can be used with a =readymedia-configuration= wrapped in =for-home= 
          (for-home
           (readymedia-configuration
             (media-directories
-             (list (readymedia-media-directory
+             (list (readymedia-directory
                      (path "/path/to/media/audio")
                      (types '(A)))
-                   (readymedia-media-directory
+                   (readymedia-directory
                      (path "/path/to/media/video")
                      (types '(V)))
-                   (readymedia-media-directory
+                   (readymedia-directory
                      (path "/path/to/media/misc")))))))
 #+end_src
 
 For details about =readymedia-configuration=, check out the documentation of the system service (see [[id:guix--Miscellaneous-Services][=readymedia-service-type=]]).
 
-**** OCI backed services [[#OCI-backed-services-1][¶]]
+<<OCI-backed-services-1>>
+**** OCI backed services
 :PROPERTIES:
-:CUSTOM_ID: OCI-backed-services-1
+:CUSTOM_ID: oci-backed-services
 :CLASS: subsubheading
 :END:
+<<index-OCI_002dbacked_002c-for-Home>>
 The =(gnu home services containers)= module provides the following service:
 
-- Variable: *home-oci-service-type* [[#index-home_002doci_002dservice_002dtype][¶]] :: This is the type of the service that allows to manage your OCI containers with the same consistent interface you use for your other Home Shepherd services.
+- Variable: home-oci-service-type  :: This is the type of the service that allows to manage your OCI containers with the same consistent interface you use for your other Home Shepherd services.
 
 This service is a direct mapping of the =oci-service-type= system service (see [[id:guix--Miscellaneous-Services][OCI backed services]]). You can use it like this:
 
@@ -235,29 +245,6 @@ You may specify a custom configuration by providing a =oci-configuration= record
                        '(("grafana:/var/lib/grafana"))))))))
 #+end_src
 
-**** git-annex assistant Service [[#git_002dannex-assistant-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: git_002dannex-assistant-Service
-:CLASS: subsubheading
-:END:
-The =(gnu home services git-annex-assistant)= module provides a service to run the [[https://git-annex.branchable.com/assistant/][git-annex assistant]].
-
-- Variable: *home-git-annex-assistant-service-type* [[#index-home_002dgit_002dannex_002dassistant_002dservice_002dtype][¶]] :: This is the type of the service that runs the assistant. You must supply a =<home-git-annex-assistant-configuration>=.
-
-  The service runs one assistant for each directory provided. For example:
-
-  #+begin_src lisp
-  (service home-git-annex-assistant-service-type
-           (home-git-annex-assistant-configuration
-             (directories '("/path/to/foo" "/path/to/bar"))))
-  #+end_src
-
-- Data Type: *home-git-annex-assistant-configuration* [[#index-home_002dgit_002dannex_002dassistant_002dconfiguration][¶]] :: Available =home-git-annex-assistant-configuration= fields are:
-
-  - =package= (default: =git-annex=) (type: package) :: Package that provides =git-annex=.
-
-  - =directories= (default: =()=) (type: list-of-strings) :: List of directories.
-
 --------------
 
-Previous: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

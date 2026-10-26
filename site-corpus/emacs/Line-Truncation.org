@@ -7,6 +7,9 @@
 Next: [[id:emacs--Visual-Line-Mode][Visual Line Mode]]   Previous: [[id:emacs--Cursor-Display][Displaying the Cursor]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Line-Truncation>>
+
+--------------
+
 *** 16.22 Line Truncation [[#Line-Truncation-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Line-Truncation-1
@@ -19,5 +22,3 @@ Horizontal scrolling automatically causes line truncation (see [[id:emacs--Horiz
 Since line truncation and word wrap (described in the next section) are contradictory, =toggle-truncate-lines= disables word wrap when it turns on line truncation.
 
 If a split window becomes too narrow, Emacs may automatically enable line truncation. See [[id:emacs--Split-Window][Splitting Windows]], for the variable =truncate-partial-width-windows= which controls this.
-
---------------

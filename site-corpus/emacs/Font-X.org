@@ -7,6 +7,9 @@
 Next: [[id:emacs--Colors-X][Window Color Options]]   Previous: [[id:emacs--Display-X][Specifying the Display Name]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
 
 <<Font-X>>
+
+--------------
+
 *** C.6 Font Specification Options [[#Font-Specification-Options][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Font-Specification-Options
@@ -24,5 +27,3 @@ emacs -fn "DejaVu Sans Mono-12"
 #+end_example
 
 See [[id:emacs--Fonts][Fonts]], for details about font names and other ways to specify the default font.
-
---------------

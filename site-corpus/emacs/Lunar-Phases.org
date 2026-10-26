@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Lunar Phases
 
-Next: [[id:emacs--Other-Calendars#Other-Calendars][Conversion To and From Other Calendars]]   Previous: [[id:emacs--Sunrise_002fSunset][Times of Sunrise and Sunset]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
+Next: [[id:emacs--Other-Calendars][Conversion To and From Other Calendars]]   Previous: [[id:emacs--Sunrise_002fSunset][Times of Sunrise and Sunset]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
 
 <<Lunar-Phases>>
+
+--------------
+
 *** 33.8 Phases of the Moon [[#Phases-of-the-Moon][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Phases-of-the-Moon
@@ -23,5 +26,3 @@ Within the calendar, use the M (=calendar-lunar-phases=) command to display a se
 Outside the calendar, use the command M-x lunar-phases to display the list of the phases of the moon for the current month and the preceding and succeeding months. For information about a different month, use C-u M-x lunar-phases, which prompts for the month and year.
 
 The dates and times given for the phases of the moon are given in local time (corrected for daylight saving, when appropriate). See the discussion in the previous section (see [[id:emacs--Sunrise_002fSunset][Times of Sunrise and Sunset]]).
-
---------------

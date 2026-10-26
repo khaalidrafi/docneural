@@ -7,6 +7,9 @@
 Next: [[id:emacs--Building][Compiling and Testing Programs]]   Previous: [[id:emacs--Text][Commands for Human Languages]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Programs>>
+
+--------------
+
 ** 28 Editing Programs [[#Editing-Programs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Editing-Programs
@@ -14,10 +17,23 @@ Next: [[id:emacs--Building][Compiling and Testing Programs]]   Previous: [[id:em
 :END:
 This chapter describes Emacs features for facilitating editing programs. Some of the things these features can do are:
 
-- Find or move over top-level definitions (see [[id:emacs--Defuns::#Defuns][Top-Level Definitions, or Defuns]]).
-- Apply the usual indentation conventions of the language (see [[id:emacs--Program-Indent::#Program-Indent][Indentation for Programs]]).
-- Balance parentheses (see [[id:emacs--Parentheses::#Parentheses][Commands for Editing with Parentheses]]).
-- Insert, kill or align comments (see [[id:emacs--Comments::#Comments][Manipulating Comments]]).
-- Highlight program syntax (see [[id:emacs--Font-Lock::#Font-Lock][Font Lock mode]]).
+- Find or move over top-level definitions (see [[id:emacs--Defuns][Top-Level Definitions, or Defuns]]).
+- Apply the usual indentation conventions of the language (see [[id:emacs--Program-Indent][Indentation for Programs]]).
+- Balance parentheses (see [[id:emacs--Parentheses][Commands for Editing with Parentheses]]).
+- Insert, kill or align comments (see [[id:emacs--Comments][Manipulating Comments]]).
+- Highlight program syntax (see [[id:emacs--Font-Lock][Font Lock mode]]).
 
---------------
+- [[id:emacs--Program-Modes][Major Modes for Programming Languages]]
+- [[id:emacs--Defuns][Top-Level Definitions, or Defuns]]
+- [[id:emacs--Program-Indent][Indentation for Programs]]
+- [[id:emacs--Parentheses][Commands for Editing with Parentheses]]
+- [[id:emacs--Comments][Manipulating Comments]]
+- [[id:emacs--Documentation][Documentation Lookup]]
+- [[id:emacs--Hideshow][Hideshow minor mode]]
+- [[id:emacs--Symbol-Completion][Completion for Symbol Names]]
+- [[id:emacs--MixedCase-Words][MixedCase Words]]
+- [[id:emacs--Semantic][Semantic]]
+- [[id:emacs--Misc-for-Programs][Other Features Useful for Editing Programs]]
+- [[id:emacs--C-Modes][C and Related Modes]]
+- [[id:emacs--Asm-Mode][Asm Mode]]
+- [[id:emacs--Fortran][Fortran Mode]]

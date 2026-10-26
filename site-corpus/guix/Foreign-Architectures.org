@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Foreign-Architectures>>
-Next: [[id:guix--System-Configuration][System Configuration]], Previous: [[id:guix--Utilities][Utilities]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--System-Configuration][System Configuration]], Previous: [[id:guix--Utilities][Utilities]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 10 Foreign Architectures [[#Foreign-Architectures-1][¶]]
+<<Foreign-Architectures-1>>
+** 10 Foreign Architectures
 :PROPERTIES:
-:CUSTOM_ID: Foreign-Architectures-1
+:CUSTOM_ID: foreign-architectures
 :CLASS: chapter
 :END:
 You can target computers of different CPU architectures when producing packages (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]), packs (see [[id:guix--Invoking-guix-pack][Invoking =guix pack=]]) or full systems (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).

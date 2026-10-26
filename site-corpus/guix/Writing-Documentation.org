@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Writing-Documentation>>
-Next: [[id:guix--Translating-Guix][Translating Guix]], Previous: [[id:guix--Deprecation-Policy][Deprecation Policy]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Translating-Guix][Translating Guix]], Previous: [[id:guix--Deprecation-Policy][Deprecation Policy]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.18 Writing Documentation [[#Writing-Documentation-1][¶]]
+<<Writing-Documentation-1>>
+*** 22.18 Writing Documentation
 :PROPERTIES:
-:CUSTOM_ID: Writing-Documentation-1
+:CUSTOM_ID: writing-documentation
 :CLASS: section
 :END:
 Guix is documented using the Texinfo system. If you are not yet familiar with it, we accept contributions for documentation in most formats. That includes plain text, Markdown, Org, etc.
@@ -60,6 +62,4 @@ To render documentation, you must first make sure that you ran =./configure= in 
 - ‘=make doc/guix-cookbook.info=' for the cookbook Info manual.
 - ‘=make doc/guix-cookbook.html=' for the cookbook HTML version.
 
---------------
-
-Next: [[id:guix--Translating-Guix][Translating Guix]], Previous: [[id:guix--Deprecation-Policy][Deprecation Policy]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+<<index-translation>> <<index-l10n>> <<index-i18n>> <<index-native-language-support>>

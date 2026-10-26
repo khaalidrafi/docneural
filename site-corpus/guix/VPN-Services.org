@@ -36,40 +36,45 @@ Next:
 [[../..][]]
 
 <<VPN-Services>>
-Next: [[id:guix--DAV-Services][DAV Services]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Network-File-System][Network File System]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.26 VPN Services [[#VPN-Services-1][¶]]
+<<VPN-Services-1>>
+**** 11.10.25 VPN Services
 :PROPERTIES:
-:CUSTOM_ID: VPN-Services-1
+:CUSTOM_ID: vpn-services
 :CLASS: subsection
 :END:
+<<index-VPN-_0028virtual-private-network_0029>> <<index-virtual-private-network-_0028VPN_0029>>
 The =(gnu services vpn)= module provides services related to /virtual private networks/ (VPNs).
 
-**** Bitmask [[#Bitmask][¶]]
+<<Bitmask>>
+**** Bitmask
 :PROPERTIES:
-:CUSTOM_ID: Bitmask
+:CUSTOM_ID: bitmask
 :CLASS: subsubheading
 :END:
-- Variable: *bitmask-service-type* [[#index-bitmask_002dservice_002dtype][¶]] :: A service type for the [[https://bitmask.net][Bitmask]] VPN client. It makes the client available in the system and loads its polkit policy. Please note that the client expects an active polkit-agent, which is either run by your desktop-environment or should be run manually.
+- Variable: bitmask-service-type  :: A service type for the [[https://bitmask.net][Bitmask]] VPN client. It makes the client available in the system and loads its polkit policy. Please note that the client expects an active polkit-agent, which is either run by your desktop-environment or should be run manually.
 
-**** OpenVPN [[#OpenVPN][¶]]
+<<OpenVPN>>
+**** OpenVPN
 :PROPERTIES:
-:CUSTOM_ID: OpenVPN
+:CUSTOM_ID: openvpn
 :CLASS: subsubheading
 :END:
 It provides a /client/ service for your machine to connect to a VPN, and a /server/ service for your machine to host a VPN. Both =openvpn-client-service-type= and =openvpn-server-service-type= can be run simultaneously.
 
-- Variable: *openvpn-client-service-type* [[#index-openvpn_002dclient_002dservice_002dtype][¶]] :: Type of the service that runs =openvpn=, a VPN daemon, as a client.
+- Variable: openvpn-client-service-type  :: Type of the service that runs =openvpn=, a VPN daemon, as a client.
 
   The value for this service is a =<openvpn-client-configuration>= object.
 
-- Variable: *openvpn-server-service-type* [[#index-openvpn_002dserver_002dservice_002dtype][¶]] :: Type of the service that runs =openvpn=, a VPN daemon, as a server.
+- Variable: openvpn-server-service-type  :: Type of the service that runs =openvpn=, a VPN daemon, as a server.
 
   The value for this service is a =<openvpn-server-configuration>= object.
 
-- Data Type: *openvpn-client-configuration* [[#index-openvpn_002dclient_002dconfiguration][¶]] :: Available =openvpn-client-configuration= fields are:
+- Data Type: openvpn-client-configuration  :: Available =openvpn-client-configuration= fields are:
 
   - =openvpn= (default: =openvpn=) (type: file-like) :: The OpenVPN package.
 
@@ -107,13 +112,13 @@ It provides a /client/ service for your machine to connect to a VPN, and a /serv
 
   - =remote= (default: ='()=) (type: openvpn-remote-list) :: A list of remote servers to connect to.
 
-    - Data Type: *openvpn-remote-configuration* [[#index-openvpn_002dremote_002dconfiguration][¶]] :: Available =openvpn-remote-configuration= fields are:
+    - Data Type: openvpn-remote-configuration  :: Available =openvpn-remote-configuration= fields are:
 
       - =name= (default: ="my-server"=) (type: string) :: Server name.
 
       - =port= (default: =1194=) (type: number) :: Port number the server listens to.
 
-- Data Type: *openvpn-server-configuration* [[#index-openvpn_002dserver_002dconfiguration][¶]] :: Available =openvpn-server-configuration= fields are:
+- Data Type: openvpn-server-configuration  :: Available =openvpn-server-configuration= fields are:
 
   - =openvpn= (default: =openvpn=) (type: file-like) :: The OpenVPN package.
 
@@ -163,14 +168,15 @@ It provides a /client/ service for your machine to connect to a VPN, and a /serv
 
   - =client-config-dir= (default: ='()=) (type: openvpn-ccd-list) :: The list of configuration for some clients.
 
-**** strongSwan [[#strongSwan][¶]]
+<<strongSwan>>
+**** strongSwan
 :PROPERTIES:
-:CUSTOM_ID: strongSwan
+:CUSTOM_ID: strongswan
 :CLASS: subheading
 :END:
 Currently, the strongSwan service only provides legacy-style configuration with =ipsec.conf= and =ipsec.secrets= files.
 
-- Variable: *strongswan-service-type* [[#index-strongswan_002dservice_002dtype][¶]] :: A service type for configuring strongSwan for IPsec VPN (Virtual Private Networking). Its value must be a =strongswan-configuration= record as in this example:
+- Variable: strongswan-service-type  :: A service type for configuring strongSwan for IPsec VPN (Virtual Private Networking). Its value must be a =strongswan-configuration= record as in this example:
 
   #+begin_src lisp
   (service strongswan-service-type
@@ -179,7 +185,7 @@ Currently, the strongSwan service only provides legacy-style configuration with 
             (ipsec-secrets "/etc/ipsec.secrets")))
   #+end_src
 
-- Data Type: *strongswan-configuration* [[#index-strongswan_002dconfiguration][¶]] :: Data type representing the configuration of the StrongSwan service.
+- Data Type: strongswan-configuration  :: Data type representing the configuration of the StrongSwan service.
 
   - =strongswan= :: The strongSwan package to use for this service.
 
@@ -187,12 +193,13 @@ Currently, the strongSwan service only provides legacy-style configuration with 
 
   - =ipsec-secrets= (default =#f=) :: The file name of your =ipsec.secrets=. If not =#f=, then this and =ipsec-conf= must both be strings.
 
-**** Wireguard [[#Wireguard][¶]]
+<<Wireguard>>
+**** Wireguard
 :PROPERTIES:
-:CUSTOM_ID: Wireguard
+:CUSTOM_ID: wireguard
 :CLASS: subsubheading
 :END:
-- Variable: *wireguard-service-type* [[#index-wireguard_002dservice_002dtype][¶]] :: A service type for a Wireguard tunnel interface. Its value must be a =wireguard-configuration= record as in this example:
+- Variable: wireguard-service-type  :: A service type for a Wireguard tunnel interface. Its value must be a =wireguard-configuration= record as in this example:
 
   #+begin_src lisp
   (service wireguard-service-type
@@ -206,7 +213,7 @@ Currently, the strongSwan service only provides legacy-style configuration with 
                (allowed-ips '("10.0.0.2/32")))))))
   #+end_src
 
-- Data Type: *wireguard-configuration* [[#index-wireguard_002dconfiguration][¶]] :: Data type representing the configuration of the Wireguard service.
+- Data Type: wireguard-configuration  :: Data type representing the configuration of the Wireguard service.
 
   - =wireguard= :: The wireguard package to use for this service.
 
@@ -218,11 +225,11 @@ Currently, the strongSwan service only provides legacy-style configuration with 
 
   - =dns= (default: ='())=) :: List of strings or G-expressions which represent the DNS server(s) to announce to VPN clients via DHCP.
 
-  - =mtu= (default: =#f=) :: An optional integer to define the largest packet size (in bytes) that can be sent over the VPN tunnel without fragmentation.
+  - =monitor-ips?= (default: =#f=) [[#index-Dynamic-IP_002c-with-Wireguard][¶]] :: <<index-dyndns_002c-usage-with-Wireguard>>
 
-  -  <<index-Dynamic-IP_002c-with-Wireguard>>=monitor-ips?= (default: =#f=) [[#index-Dynamic-IP_002c-with-Wireguard][¶]] :: Whether to monitor the resolved Internet addresses (IPs) of the endpoints of the configured peers, resetting the peer endpoints using an IP address that no longer correspond to their freshly resolved host name. Set this to =#t= if one or more endpoints use host names provided by a dynamic DNS service to keep the sessions alive.
+    Whether to monitor the resolved Internet addresses (IPs) of the endpoints of the configured peers, resetting the peer endpoints using an IP address that no longer correspond to their freshly resolved host name. Set this to =#t= if one or more endpoints use host names provided by a dynamic DNS service to keep the sessions alive.
 
-  - =monitor-ips-interval= (default: ="*/5 * * * *"=) :: This is the monitoring schedule, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+  - =monitor-ips-interval= (default: ="*/5 * * * *"=) :: This is the monitoring schedule, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
 
   - =private-key= (default: ="/etc/wireguard/private.key"=) :: The private key file for the interface. It is automatically generated if the file does not exist. If this field is =#f=, a private key is not automatically created and the path is not serialized to the configuration file.
 
@@ -255,7 +262,7 @@ Currently, the strongSwan service only provides legacy-style configuration with 
 
   - =auto-start?= (default: =#t"=) :: Whether the Wireguard network should be started automatically by the Shepherd. If it is =#f= the service has to be started manually with =herd start wireguard-$interface= (for example: =herd start wireguard-wg0=).
 
-- Data Type: *wireguard-peer* [[#index-wireguard_002dpeer][¶]] :: Data type representing a Wireguard peer attached to a given interface.
+- Data Type: wireguard-peer  :: Data type representing a Wireguard peer attached to a given interface.
 
   - =name= :: The peer name.
 
@@ -271,4 +278,4 @@ Currently, the strongSwan service only provides legacy-style configuration with 
 
 --------------
 
-Next: [[id:guix--DAV-Services][DAV Services]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Network-File-System][Network File System]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

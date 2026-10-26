@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<image-Reference>>
-Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 16.1 =image= Reference [[#image-Reference-1][¶]]
+<<image-Reference-1>>
+*** 16.1 =image= Reference
 :PROPERTIES:
-:CUSTOM_ID: image-Reference-1
+:CUSTOM_ID: image-reference
 :CLASS: section
 :END:
 The =image= record, described right after, allows you to define a customized bootable system image.
 
-- Data Type: *image* [[#index-image][¶]] :: This is the data type representing a system image.
+- Data Type: image  :: This is the data type representing a system image.
 
   - =name= (default: =#false=) :: The image name as a symbol, ='my-iso9660= for instance. The name is optional and it defaults to =#false=.
 
@@ -86,4 +88,4 @@ The =image= record, described right after, allows you to define a customized boo
 
 --------------
 
-Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

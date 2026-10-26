@@ -36,21 +36,22 @@ Next:
 [[../..][]]
 
 <<GNU-Free-Documentation-License>>
-Next: [[id:guix--Concept-Index][Concept Index]], Previous: [[id:guix--Acknowledgments][Acknowledgments]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Concept-Index][Concept Index]], Previous: [[id:guix--Acknowledgments][Acknowledgments]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** Appendix A GNU Free Documentation License [[#GNU-Free-Documentation-License-1][¶]]
+<<GNU-Free-Documentation-License-1>>
+** Appendix A GNU Free Documentation License
 :PROPERTIES:
-:CUSTOM_ID: GNU-Free-Documentation-License-1
+:CUSTOM_ID: appendix-a-gnu-free-documentation-license
 :CLASS: appendix
 :END:
+<<index-license_002c-GNU-Free-Documentation-License>>
 
-#+begin_center
 Version 1.3, 3 November 2008
-#+end_center
 
-#+begin_src display-preformatted
+#+begin_src display
 Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
 https://fsf.org/
 
@@ -188,9 +189,10 @@ of this license document, but changing it is not allowed.
 
     The operator of an MMC Site may republish an MMC contained in the site under CC-BY-SA on the same site at any time before August 1, 2009, provided the MMC is eligible for relicensing.
 
-*** ADDENDUM: How to use this License for your documents [[#ADDENDUM_003a-How-to-use-this-License-for-your-documents][¶]]
+<<ADDENDUM_003a-How-to-use-this-License-for-your-documents>>
+*** ADDENDUM: How to use this License for your documents
 :PROPERTIES:
-:CUSTOM_ID: ADDENDUM_003a-How-to-use-this-License-for-your-documents
+:CUSTOM_ID: addendum-how-to-use-this-license-for-your-documents
 :CLASS: heading
 :END:
 To use this License in a document you have written, include a copy of the License in the document and put the following copyright and license notices just after the title page:
@@ -219,4 +221,4 @@ If your document contains nontrivial examples of program code, we recommend rele
 
 --------------
 
-Next: [[id:guix--Concept-Index][Concept Index]], Previous: [[id:guix--Acknowledgments][Acknowledgments]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Concept-Index][Concept Index]], Previous: [[id:guix--Acknowledgments][Acknowledgments]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Updating-the-Guix-Package>>
-Next: [[id:guix--Deprecation-Policy][Deprecation Policy]], Previous: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Deprecation-Policy][Deprecation Policy]], Previous: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.16 Updating the Guix Package [[#Updating-the-Guix-Package-1][¶]]
+<<Updating-the-Guix-Package-1>>
+*** 22.16 Updating the Guix Package
 :PROPERTIES:
-:CUSTOM_ID: Updating-the-Guix-Package-1
+:CUSTOM_ID: updating-the-guix-package
 :CLASS: section
 :END:
+<<index-update_002dguix_002dpackage_002c-updating-the-guix-package>>
 It is sometimes desirable to update the =guix= package itself (the package defined in =(gnu packages package-management)=), for example to make new daemon features available for use by the =guix-service-type= service type. In order to simplify this task, the following command can be used:
 
 #+begin_example
@@ -62,7 +65,3 @@ To validate that the updated =guix= package hashes are correct and that it can b
 To guard against accidentally updating the =guix= package to a commit that others can't refer to, a check is made that the commit used has already been pushed to the Codeberg-hosted Guix Git repository.
 
 This check can be disabled, /at your own peril/, by setting the =GUIX_ALLOW_ME_TO_USE_PRIVATE_COMMIT= environment variable. When this variable is set, the updated package source is also added to the store. This is used as part of the release process of Guix.
-
---------------
-
-Next: [[id:guix--Deprecation-Policy][Deprecation Policy]], Previous: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

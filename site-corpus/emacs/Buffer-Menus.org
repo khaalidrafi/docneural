@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: Buffer Menus
 
-Next:
+Next:   Previous: [[id:emacs--Icomplete][Fast minibuffer selection]]   Up: [[id:emacs--Buffer-Convenience][Convenience Features and Customization of Buffer Handling]]
 
-The node you are looking for is at [[id:emacs--Buffer-Convenience::#Buffer-Menus][Buffer Menus]].
+<<Buffer-Menus>>
+
+--------------
+
+**** 21.7.3 Customizing Buffer Menus [[#Customizing-Buffer-Menus][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-Buffer-Menus
+:CLASS: subsection
+:END:
+- M-x bs-show :: Make a list of buffers similarly to M-x list-buffers but customizable.
+
+- M-x ibuffer :: Make a list of buffers and operate on them in Dired-like fashion.
+
+M-x bs-show pops up a buffer list similar to the one normally displayed by C-x C-b, but whose display you can customize in a more flexible fashion. For example, you can specify the list of buffer attributes to show, the minimum and maximum width of buffer name column, a regexp for names of buffers that will never be shown and those which will always be shown, etc. If you prefer this to the usual buffer list, you can bind this command to C-x C-b. To customize this buffer list, use the =bs= Custom group (see [[id:emacs--Easy-Customization][Easy Customization Interface]]), or invoke bs-customize.
+
+MSB global minor mode (“MSB” stands for “mouse select buffer”) provides a different and customizable mouse buffer menu which you may prefer. It replaces the =mouse-buffer-menu= commands, normally bound to C-Down-mouse-1 and C-F10, with its own commands, and also modifies the menu-bar buffer menu. You can customize the menu in the =msb= Custom group.
+
+IBuffer is a major mode for viewing a list of buffers and operating on them in a way analogous to that of Dired (see [[id:emacs--Dired][Dired, the Directory Editor]]), including filtering, marking, sorting in various ways, and acting on buffers.
+
+--------------

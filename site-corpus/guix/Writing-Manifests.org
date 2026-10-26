@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Writing-Manifests>>
-Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.4 Writing Manifests [[#Writing-Manifests-1][¶]]
+<<Writing-Manifests-1>>
+*** 8.4 Writing Manifests
 :PROPERTIES:
-:CUSTOM_ID: Writing-Manifests-1
+:CUSTOM_ID: writing-manifests
 :CLASS: section
 :END:
+<<index-manifest>> <<index-bill-of-materials-_0028manifests_0029>>
 =guix= commands let you specify package lists on the command line. This is convenient, but as the command line becomes longer and less trivial, it quickly becomes more convenient to have that package list in what we call a /manifest/. A manifest is some sort of a “bill of materials” that defines a package set. You would typically come up with a code snippet that builds the manifest, store it in a file, say =manifest.scm=, and then pass that file to the =-m= (or =--manifest=) option that many =guix= commands support. For example, here's what a manifest for a simple package set might look like:
 
 #+begin_src lisp
@@ -103,7 +106,7 @@ Let's assume you want a manifest to deploy a custom variant of GDB, the GNU Debu
 (define gdb-sans-guile
   (package
     (inherit gdb)
-    (inputs (modify-inputs inputs
+    (inputs (modify-inputs (package-inputs gdb)
               (delete "guile")))))
 
 ;; Return a manifest containing that one package plus Git.
@@ -114,13 +117,13 @@ Note that in this example, the manifest directly refers to the =gdb= and =git= v
 
 The data type for manifests as well as supporting procedures are defined in the =(guix profiles)= module, which is automatically available to code passed to =-m=. The reference follows.
 
-- Data Type: *manifest* [[#index-manifest-1][¶]] :: Data type representing a manifest.
+- Data Type: manifest  :: Data type representing a manifest.
 
   It currently has one field:
 
   - =entries= :: This must be a list of =manifest-entry= records---see below.
 
-- Data Type: *manifest-entry* [[#index-manifest_002dentry][¶]] :: Data type representing a manifest entry. A manifest entry contains essential metadata: a name and version string, the object (usually a package) for that entry, the desired output (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and a number of optional pieces of information detailed below.
+- Data Type: manifest-entry  :: Data type representing a manifest entry. A manifest entry contains essential metadata: a name and version string, the object (usually a package) for that entry, the desired output (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and a number of optional pieces of information detailed below.
 
   Most of the time, you won't build a manifest entry directly; instead, you will pass a package to =package->manifest-entry=, described below. In some unusual cases though, you might want to create manifest entries for things that are /not/ packages, as in this example:
 
@@ -161,9 +164,9 @@ The data type for manifests as well as supporting procedures are defined in the 
 
     This is used as a hint to provide context when reporting an error related to a manifest entry coming from a =dependencies= field.
 
-- Procedure: *concatenate-manifests* =lst= [[#index-concatenate_002dmanifests][¶]] :: Concatenate the manifests listed in =lst= and return the resulting manifest.
+- Procedure: concatenate-manifests lst :: Concatenate the manifests listed in =lst= and return the resulting manifest.
 
-- Procedure: *package->manifest-entry* =package [output] [#:properties]= [[#index-package_002d_003emanifest_002dentry][¶]] :: Return a manifest entry for the =output= of package =package=, where =output= defaults to ="out"=, and with the given =properties=. By default =properties= is the empty list or, if one or more package transformations were applied to =package=, it is an association list representing those transformations, suitable as an argument to =options->transformation= (see [[id:guix--Defining-Package-Variants][=options->transformation=]]).
+- Procedure: package->manifest-entry package [output] [#:properties] :: Return a manifest entry for the =output= of package =package=, where =output= defaults to ="out"=, and with the given =properties=. By default =properties= is the empty list or, if one or more package transformations were applied to =package=, it is an association list representing those transformations, suitable as an argument to =options->transformation= (see [[id:guix--Defining-Package-Variants][=options->transformation=]]).
 
   The code snippet below builds a manifest with an entry for the default output and the =send-email= output of the =git= package:
 
@@ -174,7 +177,7 @@ The data type for manifests as well as supporting procedures are defined in the 
                   (package->manifest-entry git "send-email")))
   #+end_src
 
-- Procedure: *packages->manifest* =packages= [[#index-packages_002d_003emanifest-1][¶]] :: Return a list of manifest entries, one for each item listed in =packages=. Elements of =packages= can be either package objects or package/string tuples denoting a specific output of a package.
+- Procedure: packages->manifest packages :: Return a list of manifest entries, one for each item listed in =packages=. Elements of =packages= can be either package objects or package/string tuples denoting a specific output of a package.
 
   Using this procedure, the manifest above may be rewritten more concisely:
 
@@ -184,7 +187,8 @@ The data type for manifests as well as supporting procedures are defined in the 
   (packages->manifest (list git `(,git "send-email")))
   #+end_src
 
-- Procedure: *package->development-manifest* =package [system] [#:target]= [[#index-package_002d_003edevelopment_002dmanifest][¶]] :: Return a manifest for the /development inputs/ of =package= for =system=, optionally when cross-compiling to =target=. Development inputs include both explicit and implicit inputs of =package=.
+<<package_002ddevelopment_002dmanifest>>
+- Procedure: package->development-manifest package [system] [#:target] :: Return a manifest for the /development inputs/ of =package= for =system=, optionally when cross-compiling to =target=. Development inputs include both explicit and implicit inputs of =package=.
 
   Like the =-D= option of =guix shell= (see [[id:guix--Invoking-guix-shell::#shell_002ddevelopment_002doption][=guix shell -D=]]), the resulting manifest describes the environment in which one can develop =package=. For example, suppose you're willing to set up a development environment for Inkscape, with the addition of Git for version control; you can describe that “bill of materials” with the following manifest:
 
@@ -201,7 +205,7 @@ The data type for manifests as well as supporting procedures are defined in the 
 
 Last, the =(gnu packages)= module provides higher-level facilities to build manifests. In particular, it lets you look up packages by name---see below.
 
-- Procedure: *specifications->manifest* =specs= [[#index-specifications_002d_003emanifest][¶]] :: Given =specs=, a list of specifications such as ="emacs@25.2"= or ="guile:debug"=, return a manifest. Specs have the format that command-line tools such as =guix install= and =guix package= understand (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+- Procedure: specifications->manifest specs :: Given =specs=, a list of specifications such as ="emacs@25.2"= or ="guile:debug"=, return a manifest. Specs have the format that command-line tools such as =guix install= and =guix package= understand (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
 
   As an example, it lets you rewrite the Git manifest that we saw earlier like this:
 
@@ -211,16 +215,6 @@ Last, the =(gnu packages)= module provides higher-level facilities to build mani
 
   Notice that we do not need to worry about =use-modules=, importing the right set of modules, and referring to the right variables. Instead, we directly refer to packages in the same way as on the command line, which can often be more convenient.
 
-- Procedure: *build-system->manifest* =build-system [system] [#:target]= [[#index-build_002dsystem_002d_003emanifest][¶]] :: Given =build-system=, a variable referring to a build system value suitable for the =build-system= field in the =package= record type, return a manifest providing all the packages required by the build system, for =system=, optionally when cross-compiling to =target=.
-
-  In order to be able to use a build system variable, the corresponding module must be loaded, as in the following example:
-
-  #+begin_src lisp
-  (use-modules (guix build-system cmake))
-
-  (build-system->manifest cmake-build-system)
-  #+end_src
-
 --------------
 
-Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

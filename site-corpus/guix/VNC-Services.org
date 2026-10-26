@@ -36,25 +36,29 @@ Next:
 [[../..][]]
 
 <<VNC-Services>>
-Next: [[id:guix--VPN-Services][VPN Services]], Previous: [[id:guix--DNS-Services][DNS Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--VPN-Services][VPN Services]], Previous: [[id:guix--DNS-Services][DNS Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.25 VNC Services [[#VNC-Services-1][¶]]
+<<VNC-Services-1>>
+**** 11.10.24 VNC Services
 :PROPERTIES:
-:CUSTOM_ID: VNC-Services-1
+:CUSTOM_ID: vnc-services
 :CLASS: subsection
 :END:
+<<index-VNC-_0028virtual-network-computing_0029>> <<index-XDMCP-_0028x-display-manager-control-protocol_0029>>
 The =(gnu services vnc)= module provides services related to /Virtual Network Computing/ (VNC), which makes it possible to locally use graphical Xorg applications running on a remote machine. Combined with a graphical manager that supports the /X Display Manager Control Protocol/, such as GDM (see [[id:guix--X-Window::#gdm][gdm]]) or LightDM (see [[id:guix--X-Window::#lightdm][lightdm]]), it is possible to remote an entire desktop for a multi-user environment.
 
-**** Xvnc [[#Xvnc][¶]]
+<<Xvnc>>
+**** Xvnc
 :PROPERTIES:
-:CUSTOM_ID: Xvnc
+:CUSTOM_ID: xvnc
 :CLASS: subsubheading
 :END:
 Xvnc is a VNC server that spawns its own X window server; which means it can run on headless servers. The Xvnc implementations provided by the =tigervnc-server= and =turbovnc= aim to be fast and efficient.
 
-- Variable: *xvnc-service-type* [[#index-xvnc_002dservice_002dtype][¶]] :: The =xvnc-service-type= service can be configured via the =xvnc-configuration= record, documented below. A second virtual display could be made available on a remote machine via the following configuration:
+- Variable: xvnc-service-type  :: The =xvnc-service-type= service can be configured via the =xvnc-configuration= record, documented below. A second virtual display could be made available on a remote machine via the following configuration:
 
 #+begin_src lisp
 (service xvnc-service-type
@@ -71,7 +75,7 @@ ssh -L5910:localhost:5910 your-host -- guix shell xclock \
 guix shell tigervnc-client -- vncviewer localhost:5910
 #+end_example
 
-The following configuration combines XDMCP and Inetd to allow multiple users to concurrently use the remote system and login graphically via the LightDM display manager:
+The following configuration combines XDMCP and Inetd to allow multiple users to concurrently use the remote system and login graphically via the GDM display manager:
 
 #+begin_src lisp
 (operating-system
@@ -79,14 +83,15 @@ The following configuration combines XDMCP and Inetd to allow multiple users to 
   (services (cons*
              [...]
              (service xvnc-service-type (xvnc-configuration
-                                          (display-number 5)
-                                          (localhost? #f)
-                                          (xdmcp? #t)
-                                          (inetd? #t)))
-             (service lightdm-service-type (lightdm-configuration
-                                             (xdmcp? #t)))
+                                         (display-number 5)
+                                         (localhost? #f)
+                                         (xdmcp? #t)
+                                         (inetd? #t)))
              (modify-services %desktop-services
-               (delete gdm-service-type)))))
+               (gdm-service-type config => (gdm-configuration
+                                            (inherit config)
+                                            (auto-suspend? #f)
+                                            (xdmcp? #t)))))))
 #+end_src
 
 A remote user could then connect to it by using the =vncviewer= command or a compatible VNC client and start a desktop session of their choosing:
@@ -100,11 +105,11 @@ vncviewer remote-host:5905
 
 #+end_quote
 
-- Data Type: *xvnc-configuration* [[#index-xvnc_002dconfiguration][¶]] :: Available =xvnc-configuration= fields are:
+- Data Type: xvnc-configuration  :: Available =xvnc-configuration= fields are:
 
   - =xvnc= (default: =tigervnc-server=) (type: file-like) :: The package that provides the Xvnc binary.
 
-  - =display-number= (default: =0=) (type: number) :: The display number used by Xvnc. You should set this to a number not already used by the Xorg server.
+  - =display-number= (default: =0=) (type: number) :: The display number used by Xvnc. You should set this to a number not already used a Xorg server.
 
   - =geometry= (default: ="1024x768"=) (type: string) :: The size of the desktop to be created.
 
@@ -134,4 +139,4 @@ vncviewer remote-host:5905
 
 --------------
 
-Next: [[id:guix--VPN-Services][VPN Services]], Previous: [[id:guix--DNS-Services][DNS Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--VPN-Services][VPN Services]], Previous: [[id:guix--DNS-Services][DNS Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--DocView-Conversion][DocView Conversion]]   Previous: [[id:emacs--DocView-Searching][DocView Searching]]   Up: [[id:emacs--Document-View][Document Viewing]]
 
 <<DocView-Slicing>>
+
+--------------
+
 *** 39.3 DocView Slicing [[#DocView-Slicing-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: DocView-Slicing-1
@@ -23,5 +26,3 @@ A more convenient graphical way to specify the slice is with c m (=doc-view-set-
 The most convenient way is to set the optimal slice by using BoundingBox information automatically determined from the document by typing c b (=doc-view-set-slice-from-bounding-box=).
 
 To cancel the selected slice, type c r (=doc-view-reset-slice=). Then DocView shows the entire page including its entire margins.
-
---------------

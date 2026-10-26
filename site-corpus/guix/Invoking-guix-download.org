@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-download>>
-Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.3 Invoking =guix download= [[#Invoking-guix-download-1][¶]]
+<<Invoking-guix-download-1>>
+*** 9.3 Invoking =guix download=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-download-1
+:CUSTOM_ID: invoking-guix-download
 :CLASS: section
 :END:
+<<index-guix-download>> <<index-downloading-package-sources>>
 When writing a package definition, developers typically need to download a source tarball, compute its SHA256 hash, and write that hash in the package definition (see [[id:guix--Defining-Packages][Defining Packages]]). The =guix download= tool helps with this task: it downloads a file from the given URI, adds it to the store, and prints both its file name in the store and its SHA256 hash.
 
 The fact that the downloaded file is added to the store saves bandwidth: when the developer eventually tries to build the newly defined package with =guix build=, the source tarball will not have to be downloaded again because it is already in the store. It is also a convenient way to temporarily stash files, which may be deleted eventually (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]).
@@ -86,4 +89,4 @@ The following options are available:
 
 --------------
 
-Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

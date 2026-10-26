@@ -7,6 +7,9 @@
 Next: [[id:emacs--Search][Searching and Replacement]]   Previous: [[id:emacs--Registers][Registers]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Display>>
+
+--------------
+
 ** 16 Controlling the Display [[#Controlling-the-Display][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Controlling-the-Display
@@ -14,4 +17,27 @@ Next: [[id:emacs--Search][Searching and Replacement]]   Previous: [[id:emacs--Re
 :END:
 Since only part of a large buffer fits in the window, Emacs has to show only a part of it. This chapter describes commands and variables that let you specify which part of the text you want to see, and how the text is displayed.
 
---------------
+- [[id:emacs--Scrolling][Scrolling]]
+- [[id:emacs--Recentering][Recentering]]
+- [[id:emacs--Auto-Scrolling][Automatic Scrolling]]
+- [[id:emacs--Horizontal-Scrolling][Horizontal Scrolling]]
+- [[id:emacs--Narrowing][Narrowing]]
+- [[id:emacs--View-Mode][View Mode]]
+- [[id:emacs--Follow-Mode][Follow Mode]]
+- [[id:emacs--Faces][Text Faces]]
+- [[id:emacs--Colors][Colors for Faces]]
+- [[id:emacs--Standard-Faces][Standard Faces]]
+- [[id:emacs--Icons][Icons]]
+- [[id:emacs--Text-Scale][Text Scale]]
+- [[id:emacs--Font-Lock][Font Lock mode]]
+- [[id:emacs--Highlight-Interactively][Interactive Highlighting]]
+- [[id:emacs--Fringes][Window Fringes]]
+- [[id:emacs--Displaying-Boundaries][Displaying Boundaries]]
+- [[id:emacs--Useless-Whitespace][Useless Whitespace]]
+- [[id:emacs--Selective-Display][Selective Display]]
+- [[id:emacs--Optional-Mode-Line][Optional Mode Line Features]]
+- [[id:emacs--Text-Display][How Text Is Displayed]]
+- [[id:emacs--Cursor-Display][Displaying the Cursor]]
+- [[id:emacs--Line-Truncation][Line Truncation]]
+- [[id:emacs--Visual-Line-Mode][Visual Line Mode]]
+- [[id:emacs--Display-Custom][Customization of Display]]

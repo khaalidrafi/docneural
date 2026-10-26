@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: MS-DOS Printing
 
-Next:
+Next: [[id:emacs--MS_002dDOS-and-MULE][International Support on MS-DOS]]   Previous: [[id:emacs--MS_002dDOS-File-Names][File Names on MS-DOS]]   Up: [[id:emacs--MS_002dDOS][Emacs and MS-DOS]]
 
-The node you are looking for is at [[id:emacs--MS_002dDOS::#MS_002dDOS-Printing][MS-DOS Printing]].
+<<MS_002dDOS-Printing>>
+
+--------------
+
+**** I.12.5 Printing and MS-DOS [[#Printing-and-MS_002dDOS][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Printing-and-MS_002dDOS
+:CLASS: subsection
+:END:
+Printing commands, such as =lpr-buffer= (see [[id:emacs--Printing][Printing Hard Copies]]) and =ps-print-buffer= (see [[id:emacs--PostScript][PostScript Hardcopy]]) can work on MS-DOS by sending the output to one of the printer ports, if a POSIX-style =lpr= program is unavailable. The same Emacs variables control printing on all systems, but in some cases they have different default values on MS-DOS.
+
+See [[id:emacs--Windows-Printing][Printing and MS-Windows]], for details about setting up printing to a networked printer.
+
+Some printers expect DOS codepage encoding of non-ASCII text, even though they are connected to a Windows machine that uses a different encoding for the same locale. For example, in the Latin-1 locale, DOS uses codepage 850 whereas Windows uses codepage 1252. See [[id:emacs--MS_002dDOS-and-MULE][International Support on MS-DOS]]. When you print to such printers from Windows, you can use the C-x RET c (=universal-coding-system-argument=) command before M-x lpr-buffer; Emacs will then convert the text to the DOS codepage that you specify. For example, C-x RET c cp850-dos RET M-x lpr-region RET will print the region while converting it to the codepage 850 encoding.
+
+For backwards compatibility, the value of =dos-printer= (=dos-ps-printer=), if it has a value, overrides the value of =printer-name= (=ps-printer-name=), on MS-DOS.

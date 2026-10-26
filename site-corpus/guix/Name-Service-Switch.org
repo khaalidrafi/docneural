@@ -36,19 +36,23 @@ Next:
 [[../..][]]
 
 <<Name-Service-Switch>>
-Next: [[id:guix--Initial-RAM-Disk][Initial RAM Disk]], Previous: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Initial-RAM-Disk][Initial RAM Disk]], Previous: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.13 Name Service Switch [[#Name-Service-Switch-2][¶]]
+<<Name-Service-Switch-2>>
+*** 11.13 Name Service Switch
 :PROPERTIES:
-:CUSTOM_ID: Name-Service-Switch-2
+:CUSTOM_ID: name-service-switch
 :CLASS: section
 :END:
-The =(gnu system nss)= module provides bindings to the configuration file of the libc /name service switch/ or /NSS/ (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Library Reference Manual). In a nutshell, the NSS is a mechanism that allows libc to be extended with new “name” lookup methods for system databases, which includes host names, service names, user accounts, and more (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Name-Service-Switch.html#Name-Service-Switch][System Databases and Name Service Switch]] in The GNU C Library Reference Manual).
+<<index-name-service-switch>> <<index-NSS>>
+The =(gnu system nss)= module provides bindings to the configuration file of the libc /name service switch/ or /NSS/ (see [[https://www.gnu.org/software/libc/manual/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Library Reference Manual). In a nutshell, the NSS is a mechanism that allows libc to be extended with new “name” lookup methods for system databases, which includes host names, service names, user accounts, and more (see [[https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html#Name-Service-Switch][System Databases and Name Service Switch]] in The GNU C Library Reference Manual).
 
 The NSS configuration specifies, for each system database, which lookup method is to be used, and how the various methods are chained together---for instance, under which circumstances NSS should try the next method in the list. The NSS configuration is given in the =name-service-switch= field of =operating-system= declarations (see [[id:guix--operating_002dsystem-Reference][=name-service-switch=]]).
 
+<<index-nss_002dmdns>> <<index-_002elocal_002c-host-name-lookup>>
 As an example, the declaration below configures the NSS to use the [[https://0pointer.de/lennart/projects/nss-mdns/][=nss-mdns= back-end]], which supports host name lookups over multicast DNS (mDNS) for host names ending in =.local=:
 
 #+begin_src lisp
@@ -81,17 +85,17 @@ Note that, in this case, in addition to setting the =name-service-switch= of the
 
 For convenience, the following variables provide typical NSS configurations.
 
-- Variable: *%default-nss* [[#index-_0025default_002dnss][¶]] :: This is the default name service switch configuration, a =name-service-switch= object.
+- Variable: %default-nss  :: This is the default name service switch configuration, a =name-service-switch= object.
 
-- Variable: *%mdns-host-lookup-nss* [[#index-_0025mdns_002dhost_002dlookup_002dnss][¶]] :: This is the name service switch configuration with support for host name lookup over multicast DNS (mDNS) for host names ending in =.local=.
+- Variable: %mdns-host-lookup-nss  :: This is the name service switch configuration with support for host name lookup over multicast DNS (mDNS) for host names ending in =.local=.
 
 Furthermore, mDNS lookups could be restricted to IPv4 or IPv6 protocols using the procedure =mdns-host-lookup-nss=.
 
-- Procedure: *mdns-host-lookup-nss* =[#:ipv6? #t] [#:ipv4? #t]= [[#index-mdns_002dhost_002dlookup_002dnss][¶]] :: Return a =name-service-switch= object with mDNS lookup restricted to specified protocols.
+- Procedure: mdns-host-lookup-nss [#:ipv6? #t] [#:ipv4? #t] :: Return a =name-service-switch= object with mDNS lookup restricted to specified protocols.
 
-The reference for name service switch configuration is given below. It is a direct mapping of the configuration file format of the C library , so please refer to the C library manual for more information (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Library Reference Manual). Compared to the configuration file format of libc NSS, it has the advantage not only of adding this warm parenthetic feel that we like, but also static checks: you will know about syntax errors and typos as soon as you run =guix system=.
+The reference for name service switch configuration is given below. It is a direct mapping of the configuration file format of the C library , so please refer to the C library manual for more information (see [[https://www.gnu.org/software/libc/manual/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Library Reference Manual). Compared to the configuration file format of libc NSS, it has the advantage not only of adding this warm parenthetic feel that we like, but also static checks: you will know about syntax errors and typos as soon as you run =guix system=.
 
-- Data Type: *name-service-switch* [[#index-name_002dservice_002dswitch][¶]] :: This is the data type representation the configuration of libc's name service switch (NSS). Each field below represents one of the supported system databases.
+- Data Type: name-service-switch  :: This is the data type representation the configuration of libc's name service switch (NSS). Each field below represents one of the supported system databases.
 
   - =aliases=\\
     =ethers=\\
@@ -102,19 +106,18 @@ The reference for name service switch configuration is given below. It is a dire
     =netgroup=\\
     =networks=\\
     =password=\\
-    =protocols=\\
     =public-key=\\
     =rpc=\\
     =services=\\
     =shadow= :: The system databases handled by the NSS. Each of these fields must be a list of =<name-service>= objects (see below).
 
-- Data Type: *name-service* [[#index-name_002dservice][¶]] :: This is the data type representing an actual name service and the associated lookup action.
+- Data Type: name-service  :: This is the data type representing an actual name service and the associated lookup action.
 
-  - =name= :: A string denoting the name service (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Services-in-the-NSS-configuration.html#Services-in-the-NSS-configuration][Services in the NSS configuration]] in The GNU C Library Reference Manual).
+  - =name= :: A string denoting the name service (see [[https://www.gnu.org/software/libc/manual/html_node/Services-in-the-NSS-configuration.html#Services-in-the-NSS-configuration][Services in the NSS configuration]] in The GNU C Library Reference Manual).
 
-    Note that name services listed here must be visible to nscd. This is achieved by providing the list of packages implementing the needed services via the =name-services= field of the =nscd-configuration= record to be used with the =nscd-service-type= service (see [[id:guix--Base-Services][=nscd-configuration=]]).
+    Note that name services listed here must be visible to nscd. This is achieved by passing the =#:name-services= argument to =nscd-service= the list of packages providing the needed name services (see [[id:guix--Base-Services][=nscd-service=]]).
 
-  - =reaction= :: An action specified using the =lookup-specification= macro (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Actions-in-the-NSS-configuration.html#Actions-in-the-NSS-configuration][Actions in the NSS configuration]] in The GNU C Library Reference Manual). For example:
+  - =reaction= :: An action specified using the =lookup-specification= macro (see [[https://www.gnu.org/software/libc/manual/html_node/Actions-in-the-NSS-configuration.html#Actions-in-the-NSS-configuration][Actions in the NSS configuration]] in The GNU C Library Reference Manual). For example:
 
     #+begin_src lisp
     (lookup-specification (unavailable => continue)
@@ -123,4 +126,4 @@ The reference for name service switch configuration is given below. It is a dire
 
 --------------
 
-Next: [[id:guix--Initial-RAM-Disk][Initial RAM Disk]], Previous: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Initial-RAM-Disk][Initial RAM Disk]], Previous: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Channel-Authentication>>
-Next: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Previous: [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Previous: [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.6 Channel Authentication [[#Channel-Authentication-1][¶]]
+<<Channel-Authentication-1>>
+*** 6.5 Channel Authentication
 :PROPERTIES:
-:CUSTOM_ID: Channel-Authentication-1
+:CUSTOM_ID: channel-authentication
 :CLASS: section
 :END:
+<<channel_002dauthentication>><<index-authentication_002c-of-channel-code-1>>
 The =guix pull= and =guix time-machine= commands /authenticate/ the code retrieved from channels: they make sure each commit that is fetched is signed by an authorized developer. The goal is to protect from unauthorized modifications to the channel that would lead users to run malicious code.
 
 As a user, you must provide a /channel introduction/ in your channels file so that Guix knows how to authenticate its first commit. A channel specification, including its introduction, looks something along these lines:
@@ -65,7 +68,3 @@ The specification above shows the name and URL of the channel. The call to =make
 For the main channel, called =guix=, you automatically get that information from your Guix installation. For other channels, include the channel introduction provided by the channel authors in your =channels.scm= file. Make sure you retrieve the channel introduction from a trusted source since that is the root of your trust.
 
 If you're curious about the authentication mechanics, read on!
-
---------------
-
-Next: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Previous: [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

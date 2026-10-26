@@ -7,6 +7,9 @@
 Next: [[id:emacs--Remote-Files][Remote Files]]   Previous: [[id:emacs--Compressed-Files][Accessing Compressed Files]]   Up: [[id:emacs--Files][File Handling]]
 
 <<File-Archives>>
+
+--------------
+
 *** 20.14 File Archives [[#File-Archives-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: File-Archives-1
@@ -30,6 +33,6 @@ A separate but similar Archive mode is used for =arc=, =jar=, =lzh=, =zip=, =rar
 
 The key bindings of Archive mode are similar to those in Tar mode, with the addition of the m key which marks a file for subsequent operations, and M-DEL which unmarks all the marked files. Also, the a key toggles the display of detailed file information, for those archive types where it won't fit in a single line. Operations such as renaming a subfile, or changing its mode or owner, are supported only for some of the archive formats.
 
-Unlike Tar mode, Archive mode runs the archiving programs to unpack and repack archives. However, you don't need these programs to look at the archive table of contents, only to extract or manipulate the subfiles in the archive. Details of the program names and their options can be set in the ‘=Archive=' Customize group (see [[id:emacs--Easy-Customization::#Customization-Groups][Customization Groups]]).
+Unlike Tar mode, Archive mode runs the archiving programs to unpack and repack archives. However, you don't need these programs to look at the archive table of contents, only to extract or manipulate the subfiles in the archive. Details of the program names and their options can be set in the ‘=Archive=' Customize group (see [[id:emacs--Customization-Groups][Customization Groups]]).
 
 --------------

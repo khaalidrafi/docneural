@@ -7,12 +7,15 @@
 Next: [[id:emacs--Hyperlinking][Hyperlinking and Web Navigation Features]]   Previous: [[id:emacs--Saving-Emacs-Sessions][Saving Emacs Sessions]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Recursive-Edit>>
+
+--------------
+
 ** 47 Recursive Editing Levels [[#Recursive-Editing-Levels][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Recursive-Editing-Levels
 :CLASS: chapter section-level-set-chapter
 :END:
-A /recursive edit/ is a situation in which you are using Emacs commands to perform arbitrary editing while in the middle of another Emacs command. For example, when you type C-r inside of a =query-replace=, you enter a recursive edit in which you can change the current buffer. On exiting from the recursive edit, you go back to the =query-replace=. See [[id:emacs--Replace::#Query-Replace][Query Replace]].
+A /recursive edit/ is a situation in which you are using Emacs commands to perform arbitrary editing while in the middle of another Emacs command. For example, when you type C-r inside of a =query-replace=, you enter a recursive edit in which you can change the current buffer. On exiting from the recursive edit, you go back to the =query-replace=. See [[id:emacs--Query-Replace][Query Replace]].
 
 /Exiting/ the recursive edit means returning to the unfinished command, which continues execution. The command to exit is C-M-c (=exit-recursive-edit=).
 

@@ -36,21 +36,20 @@ Next:
 [[../..][]]
 
 <<Official-Substitute-Servers>>
-Next: [[id:guix--Volunteer-Run-Mirrors][Volunteer Run Mirrors]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Substitute-Server-Authorization][Substitute Server Authorization]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 5.3.1 Official Substitute Servers [[#Official-Substitute-Servers-1][¶]]
+<<Official-Substitute-Servers-1>>
+**** 5.3.1 Official Substitute Servers
 :PROPERTIES:
-:CUSTOM_ID: Official-Substitute-Servers-1
+:CUSTOM_ID: official-substitute-servers
 :CLASS: subsection
 :END:
+<<index-build-farm>>
 =bordeaux.guix.gnu.org= and =ci.guix.gnu.org= are both front-ends to official build farms that build packages from Guix continuously for some architectures, and make them available as substitutes. These are the default source of substitutes; which can be overridden by passing the =--substitute-urls= option either to =guix-daemon= (see [[id:guix--Invoking-guix_002ddaemon::#daemon_002dsubstitute_002durls][=guix-daemon --substitute-urls=]]) or to client tools such as =guix package= (see [[id:guix--Common-Build-Options::#client_002dsubstitute_002durls][client =--substitute-urls= option]]).
 
 Substitute URLs can be either HTTP or HTTPS. HTTPS is recommended because communications are encrypted; conversely, using HTTP makes all communications visible to an eavesdropper, who could use the information gathered to determine, for instance, whether your system has unpatched security vulnerabilities.
 
-Substitutes from the official build farms are enabled by default when using Guix System (see [[id:guix--GNU-Distribution][GNU Distribution]]). However, they are disabled by default when using Guix on a foreign distribution, unless you have explicitly enabled them via one of the recommended installation steps (see [[id:guix--Installation][Installation]]). Please see [[id:guix--Substitute-Server-Authorization][Substitute Server Authorization]] on how to enable or disable substitutes for the official build farm; the same procedure can also be used to enable substitutes for any other substitute server.
-
---------------
-
-Next: [[id:guix--Volunteer-Run-Mirrors][Volunteer Run Mirrors]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Substitutes from the official build farms are enabled by default when using Guix System (see [[id:guix--GNU-Distribution][GNU Distribution]]). However, they are disabled by default when using Guix on a foreign distribution, unless you have explicitly enabled them via one of the recommended installation steps (see [[id:guix--Installation][Installation]]). The following paragraphs describe how to enable or disable substitutes for the official build farm; the same procedure can also be used to enable substitutes for any other substitute server.

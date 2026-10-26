@@ -7,6 +7,9 @@
 Next: [[id:emacs--Icons-X][Icons]]   Previous: [[id:emacs--Borders-X][Internal and Outer Borders]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
 
 <<Title-X>>
+
+--------------
+
 *** C.10 Frame Titles [[#Frame-Titles][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Frame-Titles
@@ -20,5 +23,3 @@ You can specify a non-default title for the initial Emacs frame with a command l
 - ‘=--title===title=' :: Specify =title= as the title for the initial Emacs frame.
 
 The ‘=--name=' option (see [[id:emacs--Resources][X Resources]]) also specifies the title for the initial Emacs frame.
-
---------------

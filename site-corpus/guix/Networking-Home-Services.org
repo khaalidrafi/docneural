@@ -36,25 +36,29 @@ Next:
 [[../..][]]
 
 <<Networking-Home-Services>>
-Next: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Previous: [[id:guix--Sway-window-manager][Sway window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Previous: [[id:guix--Sway-window-manager][Sway window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.20 Networking Home Services [[#Networking-Home-Services-1][¶]]
+<<Networking-Home-Services-1>>
+**** 13.3.19 Networking Home Services
 :PROPERTIES:
-:CUSTOM_ID: Networking-Home-Services-1
+:CUSTOM_ID: networking-home-services
 :CLASS: subsection
 :END:
 This section lists services somewhat networking-related that you may use with Guix Home.
 
-**** Syncthing Service [[#Syncthing-Service][¶]]
+<<Syncthing-Service>>
+**** Syncthing Service
 :PROPERTIES:
-:CUSTOM_ID: Syncthing-Service
+:CUSTOM_ID: syncthing-service
 :CLASS: subheading
 :END:
+<<index-Syncthing_002c-file-synchronization-service-1>> <<index-backup-service_002c-Syncthing-1>>
 The =(gnu home services syncthing)= module provides a service to set up the [[file:Syncthing][https://syncthing.net]] continuous file backup service.
 
-- Variable: *home-syncthing-service-type* [[#index-home_002dsyncthing_002dservice_002dtype][¶]] :: This is the service type for the =syncthing= daemon; it is the Home counterpart of the =syncthing-service-type= system service (see [[id:guix--Networking-Services][=syncthing-service-type=]]). The value for this service type is a =syncthing-configuration=.
+- Variable: home-syncthing-service-type  :: This is the service type for the =syncthing= daemon; it is the Home counterpart of the =syncthing-service-type= system service (see [[id:guix--Networking-Services][=syncthing-service-type=]]). The value for this service type is a =syncthing-configuration=.
 
   Here is how you would set it up with the default configuration:
 
@@ -71,7 +75,3 @@ The =(gnu home services syncthing)= module provides a service to set up the [[fi
   #+end_src
 
   For details about =syncthing-configuration=, check out the documentation of the system service (see [[id:guix--Networking-Services][=syncthing-service-type=]]).
-
---------------
-
-Next: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Previous: [[id:guix--Sway-window-manager][Sway window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Certificate-Services>>
-Next: [[id:guix--DNS-Services][DNS Services]], Previous: [[id:guix--High-Availability-Services][High Availability Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--DNS-Services][DNS Services]], Previous: [[id:guix--High-Availability-Services][High Availability Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.23 Certificate Services [[#Certificate-Services-1][¶]]
+<<Certificate-Services-1>>
+**** 11.10.22 Certificate Services
 :PROPERTIES:
-:CUSTOM_ID: Certificate-Services-1
+:CUSTOM_ID: certificate-services
 :CLASS: subsection
 :END:
+<<index-Web>> <<index-HTTP_002c-HTTPS>> <<index-Let_0027s-Encrypt>> <<index-TLS-certificates>>
 The =(gnu services certbot)= module provides a service to automatically obtain a valid TLS certificate from the Let's Encrypt certificate authority. These certificates can then be used to serve content securely over HTTPS or other TLS-based protocols, with the knowledge that the client will be able to verify the server's authenticity.
 
 [[https://letsencrypt.org/][Let's Encrypt]] provides the =certbot= tool to automate the certification process. This tool first securely generates a key on the server. It then makes a request to the Let's Encrypt certificate authority (CA) to sign the key. The CA checks that the request originates from the host in question by using a challenge-response protocol, requiring the server to provide its response over HTTP. If that protocol completes successfully, the CA signs the key, resulting in a certificate. That certificate is valid for a limited period of time, and therefore to continue to provide TLS services, the server needs to periodically ask the CA to renew its signature.
@@ -55,7 +58,7 @@ Certbot is run twice a day, at a random minute within the hour. It won't do anyt
 
 By using this service, you agree to the ACME Subscriber Agreement, which can be found there: [[https://acme-v02.api.letsencrypt.org/directory]].
 
-- Variable: *certbot-service-type* [[#index-certbot_002dservice_002dtype][¶]] :: A service type for the =certbot= Let's Encrypt client. Its value must be a =certbot-configuration= record as in this example:
+- Variable: certbot-service-type  :: A service type for the =certbot= Let's Encrypt client. Its value must be a =certbot-configuration= record as in this example:
 
   #+begin_src lisp
   (service certbot-service-type
@@ -71,7 +74,7 @@ By using this service, you agree to the ACME Subscriber Agreement, which can be 
 
   See below for details about =certbot-configuration=.
 
-- Data Type: *certbot-configuration* [[#index-certbot_002dconfiguration][¶]] :: Data type representing the configuration of the =certbot= service. This type has the following parameters:
+- Data Type: certbot-configuration  :: Data type representing the configuration of the =certbot= service. This type has the following parameters:
 
   - =package= (default: =certbot=) :: The certbot package to use.
 
@@ -93,7 +96,7 @@ By using this service, you agree to the ACME Subscriber Agreement, which can be 
 
     Pass =#f= to not issue a default location.
 
-- Data Type: *certificate-configuration* [[#index-certificate_002dconfiguration][¶]] :: Data type representing the configuration of a certificate. This type has the following parameters:
+- Data Type: certificate-configuration  :: Data type representing the configuration of a certificate. This type has the following parameters:
 
   - =name= (default: /see below/) :: This name is used by Certbot for housekeeping and in file paths; it doesn't affect the content of the certificate itself. To see certificate names, run =certbot certificates=.
 
@@ -143,4 +146,4 @@ For each =certificate-configuration=, the certificate is saved to =/etc/certs/==
 
 --------------
 
-Next: [[id:guix--DNS-Services][DNS Services]], Previous: [[id:guix--High-Availability-Services][High Availability Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--DNS-Services][DNS Services]], Previous: [[id:guix--High-Availability-Services][High Availability Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

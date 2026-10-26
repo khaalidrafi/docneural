@@ -7,6 +7,9 @@
 Next: [[id:emacs--Windows-Processes][Subprocesses on Windows 9X/ME and Windows NT/2K/XP/Vista/7/8/10]]   Previous: [[id:emacs--Windows-Keyboard][Keyboard Usage on MS-Windows]]   Up: [[id:emacs--Microsoft-Windows][Emacs and Microsoft Windows/MS-DOS]]
 
 <<Windows-Mouse>>
+
+--------------
+
 *** I.7 Mouse Usage on MS-Windows [[#Mouse-Usage-on-MS_002dWindows][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Mouse-Usage-on-MS_002dWindows
@@ -19,5 +22,3 @@ The variable =w32-mouse-button-tolerance= specifies the time interval, in millis
 If the variable =w32-pass-extra-mouse-buttons-to-system= is non-=nil=, Emacs passes the fourth and fifth mouse buttons to Windows.
 
 The variable =w32-swap-mouse-buttons= controls which of the 3 mouse buttons generates the mouse-2 events. When it is =nil= (the default), the middle button generates mouse-2 and the right button generates mouse-3 events. If this variable is non-=nil=, the roles of these two buttons are reversed.
-
---------------

@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Enriched Text
 
-Next: [[id:emacs--Text-Based-Tables#Text-Based-Tables][Editing Text-based Tables]]   Previous: [[id:emacs--Nroff-Mode][Nroff Mode]]   Up: [[id:emacs--Text][Commands for Human Languages]]
+Next: [[id:emacs--Text-Based-Tables][Editing Text-based Tables]]   Previous: [[id:emacs--Nroff-Mode][Nroff Mode]]   Up: [[id:emacs--Text][Commands for Human Languages]]
 
 <<Enriched-Text>>
+
+--------------
+
 *** 27.14 Enriched Text [[#Enriched-Text-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Enriched-Text-1
@@ -14,159 +17,14 @@ Next: [[id:emacs--Text-Based-Tables#Text-Based-Tables][Editing Text-based Tables
 :END:
 Enriched mode is a minor mode for editing formatted text files in a WYSIWYG (What You See Is What You Get) fashion. When Enriched mode is enabled, you can apply various formatting properties to the text in the buffer, such as fonts and colors; upon saving the buffer, those properties are saved together with the text, using the MIME ‘=text/enriched=' file format.
 
-Enriched mode is typically used with Text mode (see [[id:emacs--Text-Mode][Text Mode]]). It is /not/ compatible with Font Lock mode, which is used by many major modes, including most programming language modes, for syntax highlighting (see [[id:emacs--Font-Lock::#Font-Lock][Font Lock mode]]). Unlike Enriched mode, Font Lock mode assigns text properties automatically, based on the current buffer contents; those properties are not saved to disk.
+Enriched mode is typically used with Text mode (see [[id:emacs--Text-Mode][Text Mode]]). It is /not/ compatible with Font Lock mode, which is used by many major modes, including most programming language modes, for syntax highlighting (see [[id:emacs--Font-Lock][Font Lock mode]]). Unlike Enriched mode, Font Lock mode assigns text properties automatically, based on the current buffer contents; those properties are not saved to disk.
 
 The file =enriched.txt= in Emacs's =data-directory= serves as an example of the features of Enriched mode.
 
---------------
-
-<<Enriched-Mode>>
-**** 27.14.1 Enriched Mode [[#Enriched-Mode-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Enriched-Mode-1
-:CLASS: subsection
-:END:
-Enriched mode is a buffer-local minor mode (see [[id:emacs--Minor-Modes][Minor Modes]]). When you visit a file that has been saved in the ‘=text/enriched=' format, Emacs automatically enables Enriched mode, and applies the formatting information in the file to the buffer text. When you save a buffer with Enriched mode enabled, it is saved using the ‘=text/enriched=' format, including the formatting information.
-
-To create a new file of formatted text, visit the nonexistent file and type M-x enriched-mode. This command actually toggles Enriched mode. With a prefix argument, it enables Enriched mode if the argument is positive, and disables Enriched mode otherwise. If you disable Enriched mode, Emacs no longer saves the buffer using the ‘=text/enriched=' format; any formatting properties that have been added to the buffer remain in the buffer, but they are not saved to disk.
-
-Enriched mode does not save all Emacs text properties, only those specified in the variable =enriched-translations=. These include properties for fonts, colors, indentation, and justification.
-
-If you visit a file and Emacs fails to recognize that it is in the ‘=text/enriched=' format, type M-x format-decode-buffer. This command prompts for a file format, and re-reads the file in that format. Specifying the ‘=text/enriched=' format automatically enables Enriched mode.
-
-To view a ‘=text/enriched=' file in raw form (as plain text with markup tags rather than formatted text), use M-x find-file-literally (see [[id:emacs--Visiting][Visiting Files]]).
-
-See [[../elisp_html/Format-Conversion.html#Format-Conversion][Format Conversion]] in the Emacs Lisp Reference Manual, for details of how Emacs recognizes and converts file formats like ‘=text/enriched='. See [[../elisp_html/Text-Properties.html#Text-Properties][Text Properties]] in the Emacs Lisp Reference Manual, for more information about text properties.
-
---------------
-
-<<Hard-and-Soft-Newlines>>
-**** 27.14.2 Hard and Soft Newlines [[#Hard-and-Soft-Newlines-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Hard-and-Soft-Newlines-1
-:CLASS: subsection
-:END:
-In Enriched mode, Emacs distinguishes between two different kinds of newlines, /hard/ newlines and /soft/ newlines. You can also enable or disable this feature in other buffers, by typing M-x use-hard-newlines.
-
-Hard newlines are used to separate paragraphs, or anywhere there needs to be a line break regardless of how the text is filled; soft newlines are used for filling. The RET (=newline=) and C-o (=open-line=) commands insert hard newlines. The fill commands, including Auto Fill (see [[id:emacs--Filling::#Auto-Fill][Auto Fill Mode]]), insert only soft newlines and delete only soft newlines, leaving hard newlines alone.
-
-Thus, when editing with Enriched mode, you should not use RET or C-o to break lines in the middle of filled paragraphs. Use Auto Fill mode or explicit fill commands (see [[id:emacs--Filling::#Fill-Commands][Explicit Fill Commands]]) instead. Use RET or C-o where line breaks should always remain, such as in tables and lists. For such lines, you may also want to set the justification style to =unfilled= (see [[#Enriched-Justification][Justification in Enriched Text]]).
-
---------------
-
-<<Editing-Format-Info>>
-**** 27.14.3 Editing Format Information [[#Editing-Format-Information][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Editing-Format-Information
-:CLASS: subsection
-:END:
-The easiest way to alter properties is with the ‘=Text Properties=' menu. You can get to this menu from the ‘=Edit=' menu in the menu bar (see [[id:emacs--Menu-Bar][The Menu Bar]]), or with C-mouse-2 (see [[id:emacs--Menu-Mouse-Clicks][Mouse Clicks for Menus]]). Some of the commands in the ‘=Text Properties=' menu are listed below (you can also invoke them with M-x):
-
-- <<index-facemenu_002dremove_002dface_002dprops>>=Remove Face Properties= [[#index-facemenu_002dremove_002dface_002dprops][¶]] :: Remove face properties from the region (=facemenu-remove-face-props=).
-
-- <<index-facemenu_002dremove_002dall>>=Remove Text Properties= [[#index-facemenu_002dremove_002dall][¶]] :: Remove all text properties from the region, including face properties (=facemenu-remove-all=).
-
--  <<index-describe_002dtext_002dproperties>>=Describe Properties= [[#index-describe_002dtext_002dproperties][¶]] :: List all text properties and other information about the character following point (=describe-text-properties=).
-
-- =Display Faces= :: Display a list of defined faces (=list-faces-display=). See [[id:emacs--Faces][Text Faces]].
-
-- =Display Colors= :: Display a list of defined colors (=list-colors-display=). See [[id:emacs--Colors][Colors for Faces]].
-
-The other menu entries are described in the following sections.
-
---------------
-
-<<Enriched-Faces>>
-**** 27.14.4 Faces in Enriched Text [[#Faces-in-Enriched-Text][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Faces-in-Enriched-Text
-:CLASS: subsection
-:END:
-The following commands can be used to add or remove faces (see [[id:emacs--Faces][Text Faces]]). Each applies to the text in the region if the mark is active, and to the next self-inserting character if the mark is inactive. With a prefix argument, each command applies to the next self-inserting character even if the region is active.
-
--  <<index-M_002do-d-_0028Enriched-mode_0029>>M-o d [[#index-M_002do-d-_0028Enriched-mode_0029][¶]] :: Remove all =face= properties (=facemenu-set-default=).
-
--  <<index-M_002do-b-_0028Enriched-mode_0029>>M-o b [[#index-M_002do-b-_0028Enriched-mode_0029][¶]] :: Apply the =bold= face (=facemenu-set-bold=).
-
--  <<index-M_002do-i-_0028Enriched-mode_0029>>M-o i [[#index-M_002do-i-_0028Enriched-mode_0029][¶]] :: Apply the =italic= face (=facemenu-set-italic=).
-
--  <<index-M_002do-l-_0028Enriched-mode_0029>>M-o l [[#index-M_002do-l-_0028Enriched-mode_0029][¶]] :: Apply the =bold-italic= face (=facemenu-set-bold-italic=).
-
--  <<index-M_002do-u-_0028Enriched-mode_0029>>M-o u [[#index-M_002do-u-_0028Enriched-mode_0029][¶]] :: Apply the =underline= face (=facemenu-set-underline=).
-
--  <<index-M_002do-o-_0028Enriched-mode_0029>>M-o o =face= RET [[#index-M_002do-o-_0028Enriched-mode_0029][¶]] :: Apply the face =face= (=facemenu-set-face=).
-
-- <<index-facemenu_002dset_002dforeground>>M-x facemenu-set-foreground [[#index-facemenu_002dset_002dforeground][¶]] :: Prompt for a color (see [[id:emacs--Colors][Colors for Faces]]), and apply it as a foreground color.
-
-- <<index-facemenu_002dset_002dbackground>>M-x facemenu-set-background [[#index-facemenu_002dset_002dbackground][¶]] :: Prompt for a color, and apply it as a background color.
-
-These commands are also available via the Text Properties menu.
-
-A self-inserting character normally inherits the face properties (and most other text properties) from the preceding character in the buffer. If you use one of the above commands to specify the face for the next self-inserting character, that character will not inherit the faces properties from the preceding character, but it will still inherit other text properties.
-
-Enriched mode defines two additional faces: =excerpt= and =fixed=. These correspond to codes used in the text/enriched file format. The =excerpt= face is intended for quotations; by default, it appears the same as =italic=. The =fixed= face specifies fixed-width text; by default, it appears the same as =bold=.
-
---------------
-
-<<Enriched-Indentation>>
-**** 27.14.5 Indentation in Enriched Text [[#Indentation-in-Enriched-Text][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Indentation-in-Enriched-Text
-:CLASS: subsection
-:END:
-In Enriched mode, you can specify different amounts of indentation for the right or left margin of a paragraph or a part of a paragraph. These margins also affect fill commands such as M-q (see [[id:emacs--Filling::#Filling][Filling Text]]).
-
-The Indentation submenu of Text Properties offers commands for specifying indentation:
-
--  <<index-C_002dx-TAB-_0028Enriched-mode_0029>>=Indent More= [[#index-C_002dx-TAB-_0028Enriched-mode_0029][¶]] :: Indent the region by 4 columns (=increase-left-margin=). In Enriched mode, this command is also available on C-x TAB; if you supply a numeric argument, that says how many columns to add to the margin (a negative argument reduces the number of columns).
-
-- =Indent Less= :: Remove 4 columns of indentation from the region.
-
-- =Indent Right More= :: Make the text narrower by indenting 4 columns at the right margin.
-
-- =Indent Right Less= :: Remove 4 columns of indentation from the right margin.
-
-The variable =standard-indent= specifies how many columns these commands should add to or subtract from the indentation. The default value is 4. The default right margin for Enriched mode is controlled by the variable =fill-column=, as usual.
-
-You can also type C-c [ (=set-left-margin=) and C-c ] (=set-right-margin=) to set the left and right margins. You can specify the margin width with a numeric argument; otherwise these commands prompt for a value via the minibuffer.
-
-The fill prefix, if any, works in addition to the specified paragraph indentation: C-x . does not include the specified indentation's whitespace in the new value for the fill prefix, and the fill commands look for the fill prefix after the indentation on each line. See [[id:emacs--Filling::#Fill-Prefix][The Fill Prefix]].
-
---------------
-
-<<Enriched-Justification>>
-**** 27.14.6 Justification in Enriched Text [[#Justification-in-Enriched-Text][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Justification-in-Enriched-Text
-:CLASS: subsection
-:END:
-In Enriched mode, you can use the following commands to specify various /justification styles/ for filling. These commands apply to the paragraph containing point, or, if the region is active, to all paragraphs overlapping the region.
-
--  <<index-M_002dj-l-_0028Enriched-mode_0029>>M-j l [[#index-M_002dj-l-_0028Enriched-mode_0029][¶]] :: Align lines to the left margin (=set-justification-left=).
-
--  <<index-M_002dj-r-_0028Enriched-mode_0029>>M-j r [[#index-M_002dj-r-_0028Enriched-mode_0029][¶]] :: Align lines to the right margin (=set-justification-right=).
-
--  <<index-M_002dj-b-_0028Enriched-mode_0029>>M-j b [[#index-M_002dj-b-_0028Enriched-mode_0029][¶]] :: Align lines to both margins, inserting spaces in the middle of the line to achieve this (=set-justification-full=).
-
--  <<index-M_002dj-c-_0028Enriched-mode_0029>>M-j c [[#index-M_002dj-c-_0028Enriched-mode_0029][¶]]\\
-  M-S :: Center lines between the margins (=set-justification-center=).
-
--  <<index-M_002dj-u-_0028Enriched-mode_0029>>M-j u [[#index-M_002dj-u-_0028Enriched-mode_0029][¶]] :: Turn off filling entirely (=set-justification-none=). The fill commands do nothing on text with this setting. You can, however, still indent the left margin.
-
-You can also specify justification styles using the Justification submenu in the Text Properties menu. The default justification style is specified by the per-buffer variable =default-justification=. Its value should be one of the symbols =left=, =right=, =full=, =center=, or =none=; their meanings correspond to the commands above.
-
---------------
-
-<<Enriched-Properties>>
-**** 27.14.7 Setting Other Text Properties [[#Setting-Other-Text-Properties][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Setting-Other-Text-Properties
-:CLASS: subsection
-:END:
-The Special Properties submenu of Text Properties has entries for adding or removing four other text properties: =read-only=, (which disallows alteration of the text), =invisible= (which hides text), =intangible= (which disallows moving point within the text), and =charset= (which is important for selecting a proper font to display a character). The ‘=Remove Special=' menu item removes all of these special properties from the text in the region.
-
-The =invisible= and =intangible= properties are not saved.
-
-Enriched mode also supports saving and restoring =display= properties (see [[../elisp_html/Display-Property.html#Display-Property][Display Property]] in the Emacs Lisp Reference Manual), which affect how text is displayed on the screen, and also allow displaying images and strings that come from sources other than buffer text. The =display= properties also support execution of arbitrary Lisp forms as part of processing the property for display, thus providing a means to dynamically tailor the display to some conditions that can only be known at display time. Since execution of arbitrary Lisp opens Emacs to potential attacks, especially when the source of enriched text is outside of Emacs or even outside of your system (e.g., if it was received in an email message), such execution is by default disabled in Enriched mode. You can enable it by customizing the variable =enriched-allow-eval-in-display-props= to a non-=nil= value.
-
---------------
+- [[id:emacs--Enriched-Mode][Enriched Mode]]
+- [[id:emacs--Hard-and-Soft-Newlines][Hard and Soft Newlines]]
+- [[id:emacs--Editing-Format-Info][Editing Format Information]]
+- [[id:emacs--Enriched-Faces][Faces in Enriched Text]]
+- [[id:emacs--Enriched-Indentation][Indentation in Enriched Text]]
+- [[id:emacs--Enriched-Justification][Justification in Enriched Text]]
+- [[id:emacs--Enriched-Properties][Setting Other Text Properties]]

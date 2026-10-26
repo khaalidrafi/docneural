@@ -36,26 +36,30 @@ Next:
 [[../..][]]
 
 <<Scheduled-Job-Execution>>
-Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.2 Scheduled Job Execution [[#Scheduled-Job-Execution-1][¶]]
+<<Scheduled-Job-Execution-1>>
+**** 11.10.2 Scheduled Job Execution
 :PROPERTIES:
-:CUSTOM_ID: Scheduled-Job-Execution-1
+:CUSTOM_ID: scheduled-job-execution
 :CLASS: subsection
 :END:
+<<index-cron>> <<index-scheduling-jobs>>
 It is often useful to have system tasks run periodically. This can be achieved by defining Shepherd /timers/ or by using the historical and somewhat less flexible mcron service.
 
 - [[#Shepherd-Timers][Shepherd Timers]]
 - [[#Mcron][Mcron]]
 
 <<Shepherd-Timers>>
-**** 11.10.2.1 Shepherd Timers [[#Shepherd-Timers][¶]]
+**** 11.10.2.1 Shepherd Timers
 :PROPERTIES:
 :CUSTOM_ID: shepherd-timers
 :CLASS: subsubsection
 :END:
+<<index-timers_002c-Shepherd>> <<index-Shepherd-timers>>
 The Shepherd supports running jobs periodically by defining /timers/, a special kind of service. A Shepherd timer can be defined like another Shepherd service, but with specific =start= and =stop= methods (see [[id:guix--Shepherd-Services][Shepherd Services]]):
 
 #+begin_src lisp
@@ -85,7 +89,8 @@ This is quite some boilerplate so you can instead use this equivalent shorthand 
 
 This procedure is defined as follows.
 
-- Procedure: *shepherd-timer* =provision== ==schedule== ==command== [#:requirement ’()] [#:documentation %default-timer-documentation]= [[#index-shepherd_002dtimer][¶]] :: Return a Shepherd service with the given =provision= periodically running =command=, a list-valued gexp, according to =schedule=, a string in Vixie cron syntax or a gexp providing a Shepherd calendar event. =documentation= is the string that appears when running =herd doc ==service=.
+<<shepherd_002dtimer_002dprocedure>>
+- Procedure: shepherd-timer =provision= =schedule= =command= [#:requirement '()] [#:documentation %default-timer-documentation] :: Return a Shepherd service with the given =provision= periodically running =command=, a list-valued gexp, according to =schedule=, a string in Vixie cron syntax or a gexp providing a Shepherd calendar event. =documentation= is the string that appears when running =herd doc ==service=.
 
 The example below shows how to define a timer and to add it to your operating system configuration.
 
@@ -111,7 +116,7 @@ The example below shows how to define a timer and to add it to your operating sy
                   #:requirement '(guix-daemon)))
 
 (operating-system
-  ;; ...
+  ;; …
 
   ;; Extend the Shepherd service with additional timers
   ;; using 'simple-service'.
@@ -128,14 +133,17 @@ The resulting system contains these two services, which can be inspected with =h
 herd trigger garbage-collection
 #+end_example
 
-See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual for more information on Shepherd timers.
+See [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual for more information on Shepherd timers.
+
+<<mcron_002dservice>>
 
 <<Mcron>>
-**** 11.10.2.2 Mcron [[#Mcron][¶]]
+**** 11.10.2.2 Mcron
 :PROPERTIES:
 :CUSTOM_ID: mcron
 :CLASS: subsubsection
 :END:
+<<index-mcron>>
 Alternatively, the =(gnu services mcron)= module provides an interface to GNU mcron, a daemon to run jobs at scheduled times (see [[https://www.gnu.org/software/mcron/manual/html_node/index.html#Top][GNU mcron]]). GNU mcron is similar to the traditional Unix =cron= daemon; the main difference is that it is implemented in Guile Scheme. It is overall less convenient than Shepherd timers: individual jobs cannot depend on specific Shepherd services, logging is coarse-grain (one file for all the jobs), jobs may not be inspected, updated, or triggered manually.
 
 #+begin_quote
@@ -172,7 +180,7 @@ The example below defines an operating system that runs the =updatedb= (see [[ht
          #:user "charlie"))
 
 (operating-system
-  ;; ...
+  ;; …
 
   ;; %BASE-SERVICES already includes an instance of
   ;; 'mcron-service-type', which we extend with additional
@@ -241,11 +249,11 @@ The example above lists the next five tasks that will be executed, but you can a
 # herd schedule mcron 10
 #+end_example
 
-- Variable: *mcron-service-type* [[#index-mcron_002dservice_002dtype][¶]] :: This is the type of the =mcron= service, whose value is an =mcron-configuration= object.
+- Variable: mcron-service-type  :: This is the type of the =mcron= service, whose value is an =mcron-configuration= object.
 
   This service type can be the target of a service extension that provides additional job specifications (see [[id:guix--Service-Composition][Service Composition]]). In other words, it is possible to define services that provide additional mcron jobs to run.
 
-- Data Type: *mcron-configuration* [[#index-mcron_002dconfiguration][¶]] :: Available =mcron-configuration= fields are:
+- Data Type: mcron-configuration  :: Available =mcron-configuration= fields are:
 
   - =mcron= (default: =mcron=) (type: file-like) :: The mcron package to use.
 
@@ -261,4 +269,4 @@ The example above lists the next five tasks that will be executed, but you can a
 
 --------------
 
-Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Log-Rotation][Log Rotation]], Previous: [[id:guix--Base-Services][Base Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

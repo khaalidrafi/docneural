@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Build-Environment-Setup>>
-Next: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 2.2.1 Build Environment Setup [[#Build-Environment-Setup-1][¶]]
+<<Build-Environment-Setup-1>>
+**** 2.2.1 Build Environment Setup
 :PROPERTIES:
-:CUSTOM_ID: Build-Environment-Setup-1
+:CUSTOM_ID: build-environment-setup
 :CLASS: subsection
 :END:
+<<index-build-environment>>
 In a standard multi-user setup, Guix and its daemon---the =guix-daemon= program---are installed by the system administrator. Unprivileged users may use Guix tools to build packages or otherwise access the store, and the daemon will do it on their behalf, ensuring that the store is kept in a consistent state, and allowing built packages to be shared among users.
 
 There are currently two ways to set up and run the build daemon:
@@ -60,11 +63,12 @@ The sections below describe each of these two configurations in more detail and 
 - [[#The-Isolated-Build-Environment][The Isolated Build Environment]]
 
 <<Daemon-Running-as-Root>>
-**** Daemon Running as Root [[#Daemon-Running-as-Root][¶]]
+**** Daemon Running as Root
 :PROPERTIES:
 :CUSTOM_ID: daemon-running-as-root
 :CLASS: unnumberedsubsubsec
 :END:
+<<index-build-users>>
 When =guix-daemon= runs as =root=, you may not want package build processes themselves to run as =root= too, for obvious security reasons. To avoid that, a special pool of /build users/ should be created for use by build processes started by the daemon. Having several such users allows the daemon to launch distinct build processes under separate UIDs, which guarantees that they do not interfere with each other---an essential feature since builds are regarded as pure functions (see [[id:guix--Introduction][Introduction]]).
 
 On a GNU/Linux system, a build user pool may be created like this (using Bash syntax and the =shadow= commands):
@@ -91,11 +95,12 @@ The =guix-daemon= program may then be run as =root= with the following command[[
 In this setup, =/gnu/store= is owned by =root=.
 
 <<Daemon-Running-Without-Privileges>>
-**** Daemon Running Without Privileges [[#Daemon-Running-Without-Privileges][¶]]
+**** Daemon Running Without Privileges
 :PROPERTIES:
 :CUSTOM_ID: daemon-running-without-privileges
 :CLASS: unnumberedsubsubsec
 :END:
+<<index-rootless-build-daemon>> <<index-unprivileged-build-daemon>> <<index-build-daemon_002c-unprivileged>>
 The second and preferred option is to run =guix-daemon= /as an unprivileged user/. It has the advantage of reducing the harm that can be done should a build process manage to exploit a vulnerability in the daemon. This option requires the use of Linux's unprivileged user namespace mechanism; today it is available and enabled by most GNU/Linux distributions but can still be disabled. The installation script automatically determines whether this option is available on your system (see [[id:guix--Binary-Installation][Binary Installation]]).
 
 When using this option, you only need to create one user account, and =guix-daemon= will run with the authority of that account:
@@ -115,12 +120,15 @@ When using this option, you only need to create one user account, and =guix-daem
 
 In this configuration, =/gnu/store= is owned by the =guix-daemon= user.
 
+<<unprivileged_002ddaemon_002dmigration>>
+
 <<Migrating-to-the-Unprivileged-Daemon>>
-**** Migrating to the Unprivileged Daemon [[#Migrating-to-the-Unprivileged-Daemon][¶]]
+**** Migrating to the Unprivileged Daemon
 :PROPERTIES:
 :CUSTOM_ID: migrating-to-the-unprivileged-daemon
 :CLASS: unnumberedsubsubsec
 :END:
+<<index-unprivileged-daemon_002c-migration>> <<index-rootless-daemon_002c-migration>>
 To switch an existing installation to the unprivileged execution mode, a number of steps must be taken: creating a new dedicated =guix-daemon= user account, changing ownership of the relevant files to =guix-daemon=, and ensuring that the =guix-daemon= program runs as =guix-daemon=.
 
 On Guix System, these steps are carried out automatically when you set the =privileged?= field of the =guix-configuration= record to =#f= and reconfigure (see [[id:guix--Base-Services::#guix_002dconfiguration_002dtype][=guix-configuration=]]).
@@ -177,11 +185,12 @@ If that command does not show the =User=guix-daemon= line, then run =guix pull= 
 #+end_quote
 
 <<The-Isolated-Build-Environment>>
-**** The Isolated Build Environment [[#The-Isolated-Build-Environment][¶]]
+**** The Isolated Build Environment
 :PROPERTIES:
 :CUSTOM_ID: the-isolated-build-environment
 :CLASS: unnumberedsubsubsec
 :END:
+<<index-chroot>> <<index-build-environment-isolation>> <<index-isolated-build-environment>> <<index-hermetic-build-environment>>
 In both cases, privileged and unprivileged, the daemon starts build processes without privileges in an /isolated/ or /hermetic/ build environment---a “chroot”. On GNU/Linux, by default, the build environment contains nothing but:
 
 - a minimal =/dev= directory, created mostly independently from the host =/dev=[[#FOOT6][^{6}]];
@@ -197,6 +206,7 @@ All this is usually enough to ensure details of the environment do not influence
 
 You can influence the directory where the daemon stores build trees /via/ the =TMPDIR= environment variable. However, the build tree within the chroot is always called =/tmp/guix-build-==name==.drv-0=, where =name= is the derivation name---e.g., =coreutils-8.24=. This way, the value of =TMPDIR= does not leak inside build environments, which avoids discrepancies in cases where build processes capture the name of their build tree.
 
+<<index-http_005fproxy>> <<index-https_005fproxy>>
 The daemon also honors the =http_proxy= and =https_proxy= environment variables for HTTP and HTTPS downloads it performs, be it for fixed-output derivations (see [[id:guix--Derivations][Derivations]]) or for substitutes (see [[id:guix--Substitutes][Substitutes]]).
 
 --------------
@@ -209,17 +219,15 @@ The daemon also honors the =http_proxy= and =https_proxy= environment variables 
 ***** [[#DOCF5][(5)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 If your machine uses the systemd init system, copying the =prefix==/lib/systemd/system/guix-daemon.service= file to =/etc/systemd/system= will ensure that =guix-daemon= is automatically started. Similarly, if your machine uses the Upstart init system, copy the =prefix==/lib/upstart/system/guix-daemon.conf= file to =/etc/init=.
 
 ***** [[#DOCF6][(6)]]
 :PROPERTIES:
 :CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 “Mostly”, because while the set of files that appear in the chroot's =/dev= is fixed, most of these files can only be created if the host has them.
 
 --------------
 
-Next: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

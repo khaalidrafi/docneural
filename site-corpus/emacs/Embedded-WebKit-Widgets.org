@@ -7,6 +7,9 @@
 Next: [[id:emacs--Browse_002dURL][Following URLs]]   Previous: [[id:emacs--EWW][Web Browsing with EWW]]   Up: [[id:emacs--Hyperlinking][Hyperlinking and Web Navigation Features]]
 
 <<Embedded-WebKit-Widgets>>
+
+--------------
+
 *** 48.2 Embedded WebKit Widgets [[#Embedded-WebKit-Widgets-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Embedded-WebKit-Widgets-1
@@ -18,7 +21,7 @@ By default, typing a self-inserting character inside an xwidget webkit buffer wi
 
 You can also enable =xwidget-webkit-edit-mode= by typing e inside the xwidget webkit buffer.
 
-=xwidget-webkit-isearch-mode= is a minor mode that behaves similarly to incremental search (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]), but operates on the contents of a WebKit widget instead of the current buffer. It is bound to C-s and C-r inside xwidget-webkit buffers. When it is invoked by C-r, the initial search will be performed in reverse direction.
+=xwidget-webkit-isearch-mode= is a minor mode that behaves similarly to incremental search (see [[id:emacs--Incremental-Search][Incremental Search]]), but operates on the contents of a WebKit widget instead of the current buffer. It is bound to C-s and C-r inside xwidget-webkit buffers. When it is invoked by C-r, the initial search will be performed in reverse direction.
 
 Typing any self-inserting character will cause the character to be inserted into the current search query. Typing C-s will cause the WebKit widget to display the next search result, while typing C-r will cause it to display the previous one.
 

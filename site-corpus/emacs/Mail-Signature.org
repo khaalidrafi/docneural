@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Mail Signature
 
-Next: [[id:emacs--Mail-Amusements][Mail Amusements]]   Previous: [[id:emacs--Mail-Commands#Mail-Commands][Mail Commands]]   Up: [[id:emacs--Sending-Mail][Sending Mail]]
+Next: [[id:emacs--Mail-Amusements][Mail Amusements]]   Previous: [[id:emacs--Mail-Commands][Mail Commands]]   Up: [[id:emacs--Sending-Mail][Sending Mail]]
 
 <<Mail-Signature>>
+
+--------------
+
 *** 34.5 Mail Signature [[#Mail-Signature-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Mail-Signature-1
@@ -23,5 +26,3 @@ If you change =message-signature= to =nil=, Emacs will not insert your mail sign
 If you use Mail mode rather than Message mode for composing your mail, the corresponding variables that determine how your signature is sent are =mail-signature= and =mail-signature-file= instead.
 
 By convention, a mail signature should be marked by a line whose contents are ‘=-- ='. If your signature lacks this prefix, it is added for you. The remainder of your signature should be no more than four lines.
-
---------------

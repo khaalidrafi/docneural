@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Tab-Line][Window Tab Line]]   Up: [[id:emacs--Windows][Multiple Windows]]
 
 <<Window-Tool-Bar>>
+
+--------------
+
 *** 22.9 Window Tool Bar [[#Window-Tool-Bar-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Window-Tool-Bar-1
@@ -14,7 +17,7 @@ Next:   Previous: [[id:emacs--Tab-Line][Window Tab Line]]   Up: [[id:emacs--Wind
 :END:
 The command =global-window-tool-bar-mode= toggles the display of a tool bar at the top of each window. When enabled, multiple windows can display their own tool bar simultaneously. To conserve space, a window tool bar is hidden if there are no buttons to show, i.e. if =tool-bar-map= is =nil=.
 
-If you want to toggle the display of a window tool bar for only some buffers, run the command =window-tool-bar-mode= in those buffers. This is useful to put in a mode hook. For example, if you want the window tool bar to appear only for buffers that do not represent files and have a custom tool bar, you could add the following code to your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]):
+If you want to toggle the display of a window tool bar for only some buffers, run the command =window-tool-bar-mode= in those buffers. This is useful to put in a mode hook. For example, if you want the window tool bar to appear only for buffers that do not represent files and have a custom tool bar, you could add the following code to your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]):
 
 #+begin_example
 (add-hook 'special-mode-hook 'window-tool-bar-mode)
@@ -23,5 +26,3 @@ If you want to toggle the display of a window tool bar for only some buffers, ru
 Emacs can also display a single tool bar at the top of frames (see [[id:emacs--Tool-Bars][Tool Bars]]).
 
 Note that the window tool bar displays in the same space as the tab line, so only one of them can be displayed at any given time, unless you customize the value of =tab-line-format= to add =(:eval (window-tool-bar-string))= to =tab-line-format=. See [[../elisp_html/Mode-Line-Format.html#Mode-Line-Format][Mode Line Format]] in The Emacs Lisp Reference Manual.
-
---------------

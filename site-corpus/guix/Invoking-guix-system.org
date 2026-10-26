@@ -36,24 +36,29 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-system>>
-Next: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Previous: [[id:guix--Bootloader-Configuration][Bootloader Configuration]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Previous: [[id:guix--Bootloader-Configuration][Bootloader Configuration]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.16 Invoking =guix system= [[#Invoking-guix-system-1][¶]]
+<<Invoking-guix-system-1>>
+*** 11.16 Invoking =guix system=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-system-1
+:CUSTOM_ID: invoking-guix-system
 :CLASS: section
 :END:
+<<index-guix-system>>
 Once you have written an operating system declaration as seen in the previous section, it can be /instantiated/ using the =guix system= command. The synopsis is:
 
 #+begin_example
-guix system options... action file
+guix system options… action file
 #+end_example
 
 =file= must be the name of a file containing an =operating-system= declaration. =action= specifies how the operating system is instantiated. Currently the following values are supported:
 
 - =search= :: Display available service type definitions that match the given regular expressions, sorted by relevance:
+
+  <<index-HDPI-1>> <<index-HiDPI-1>> <<index-resolution-1>>
 
   #+begin_example
   $ guix system search console
@@ -87,20 +92,22 @@ guix system options... action file
   + configuration value, a `login-configuration' object.
   relevance: 2
 
-  ...
-#+end_example
+  …
+  #+end_example
 
-  As for =guix package --search=, the result is written in =recutils= format, which makes it easy to filter the output (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
+  As for =guix package --search=, the result is written in =recutils= format, which makes it easy to filter the output (see [[https://www.gnu.org/software/recutils/manual/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
 
--  <<index-service-type-definition_002c-editing>>=edit= [[#index-service-type-definition_002c-editing][¶]] :: Edit or view the definition of the given service types.
+  <<index-service-type-definition_002c-editing>> <<index-editing_002c-service-type-definition>>
+
+- =edit= :: Edit or view the definition of the given service types.
 
   For example, the command below opens your editor, as specified by the =EDITOR= environment variable, on the definition of the =openssh= service type:
 
   #+begin_example
   guix system edit openssh
-#+end_example
+  #+end_example
 
-- =reconfigure= :: Build the operating system described in =file=, activate it, and switch to it[[#FOOT39][^{39}]].
+- =reconfigure= :: Build the operating system described in =file=, activate it, and switch to it[[#FOOT37][^{37}]].
 
   #+begin_quote
   *Note:* It is highly recommended to run =guix pull= once before you run =guix system reconfigure= for the first time (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]). Failing to do that you would see an older version of Guix once =reconfigure= has completed.
@@ -113,13 +120,17 @@ guix system options... action file
 
   It adds a bootloader menu entry for the new OS configuration, ---unless =--no-bootloader= is passed. For GRUB, it moves entries for older configurations to a submenu, allowing you to choose an older system generation at boot time should you need it.
 
-  On Linux, =guix system reconfigure= also loads the new system for fast reboot /via/ kexec: running =reboot --kexec= will boot the new system by directly executing its kernel, thus bypassing the BIOS initialization phase and bootloader (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Invoking-reboot.html#Invoking-reboot][Invoking reboot]] in The GNU Shepherd Manual). You can avoid this behavior by passing the =--no-kexec= option.
+  <<index-kexec_002c-for-fast-reboots>> <<index-rebooting-via-Linux-kexec>>
+
+  On Linux, =guix system reconfigure= also loads the new system for fast reboot /via/ kexec: running =reboot --kexec= will boot the new system by directly executing its kernel, thus bypassing the BIOS initialization phase and bootloader (see [[https://www.gnu.org/software/shepherd/manual/html_node/Invoking-reboot.html#Invoking-reboot][Invoking reboot]] in The GNU Shepherd Manual). You can avoid this behavior by passing the =--no-kexec= option.
+
+  <<index-provenance-tracking_002c-of-the-operating-system>>
 
   Upon completion, the new system is deployed under =/run/current-system=. This directory contains /provenance meta-data/: the list of channels in use (see [[id:guix--Channels][Channels]]) and =file= itself, when available. You can view it by running:
 
   #+begin_example
   guix system describe
-#+end_example
+  #+end_example
 
   This information is useful should you later want to inspect how this particular generation was built. In fact, assuming =file= is self-contained, you can later rebuild generation =n= of your operating system with:
 
@@ -128,13 +139,13 @@ guix system options... action file
     -C /var/guix/profiles/system-n-link/channels.scm -- \
     system reconfigure \
     /var/guix/profiles/system-n-link/configuration.scm
-#+end_example
+  #+end_example
 
   You can think of it as some sort of built-in version control! Your system is not just a binary artifact: /it carries its own source/. See [[id:guix--Service-Reference][=provenance-service-type=]], for more information on provenance tracking.
 
   By default, =reconfigure= /prevents you from downgrading your system/, which could (re)introduce security vulnerabilities and also cause problems with “stateful” services such as database management systems. You can override that behavior by passing =--allow-downgrades=.
 
-- <<index-generations-3>>=switch-generation= [[#index-generations-3][¶]] :: Switch to an existing system generation. This action atomically switches the system profile to the specified system generation. It also rearranges the system's existing bootloader menu entries. It makes the menu entry for the specified system generation the default, and it moves the entries for the other generations to a submenu, if supported by the bootloader being used. The next time the system boots, it will use the specified system generation.
+- =switch-generation= [[#index-generations-3][¶]] :: Switch to an existing system generation. This action atomically switches the system profile to the specified system generation. It also rearranges the system's existing bootloader menu entries. It makes the menu entry for the specified system generation the default, and it moves the entries for the other generations to a submenu, if supported by the bootloader being used. The next time the system boots, it will use the specified system generation.
 
   The bootloader itself is not being reinstalled when using this command. Thus, the installed bootloader is used with an updated configuration file.
 
@@ -142,35 +153,37 @@ guix system options... action file
 
   #+begin_example
   guix system switch-generation 7
-#+end_example
+  #+end_example
 
   The target generation can also be specified relative to the current generation with the form =+N= or =-N=, where =+3= means “3 generations ahead of the current generation,” and =-1= means “1 generation prior to the current generation.” When specifying a negative value such as =-1=, you must precede it with =--= to prevent it from being parsed as an option. For example:
 
   #+begin_example
   guix system switch-generation -- -1
-#+end_example
+  #+end_example
 
   Currently, the effect of invoking this action is /only/ to switch the system profile to an existing generation and rearrange the bootloader menu entries. To actually start using the target system generation, you must reboot after running this action. In the future, it will be updated to do the same things as =reconfigure=, like activating and deactivating services.
 
   This action will fail if the specified generation does not exist.
 
-- <<index-rolling-back-2>>=roll-back= [[#index-rolling-back-2][¶]] :: Switch to the preceding system generation. The next time the system boots, it will use the preceding system generation. This is the inverse of =reconfigure=, and it is exactly the same as invoking =switch-generation= with an argument of =-1=.
+- =roll-back= [[#index-rolling-back-2][¶]] :: Switch to the preceding system generation. The next time the system boots, it will use the preceding system generation. This is the inverse of =reconfigure=, and it is exactly the same as invoking =switch-generation= with an argument of =-1=.
 
   Currently, as with =switch-generation=, you must reboot after running this action to actually start using the preceding system generation.
 
--  <<index-deleting-system-generations>>=delete-generations= [[#index-deleting-system-generations][¶]] :: Delete system generations, making them candidates for garbage collection (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for information on how to run the “garbage collector”).
+- =delete-generations= [[#index-deleting-system-generations][¶]] :: <<index-saving-space>>
+
+  Delete system generations, making them candidates for garbage collection (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for information on how to run the “garbage collector”).
 
   This works in the same way as ‘=guix package --delete-generations=' (see [[id:guix--Invoking-guix-package][=--delete-generations=]]). With no arguments, all system generations but the current one are deleted:
 
   #+begin_example
   guix system delete-generations
-#+end_example
+  #+end_example
 
   You can also select the generations you want to delete. The example below deletes all the system generations that are more than two months old:
 
   #+begin_example
   guix system delete-generations 2m
-#+end_example
+  #+end_example
 
   Running this command automatically reinstalls the bootloader with an updated list of menu entries---e.g., the “old generations” sub-menu in GRUB no longer lists the generations that have been deleted.
 
@@ -180,7 +193,7 @@ guix system options... action file
 
   #+begin_example
   guix system init my-os-config.scm /mnt
-#+end_example
+  #+end_example
 
   copies to =/mnt= all the store items required by the configuration specified in =my-os-config.scm=. This includes configuration files, packages, and so on. It also creates other essential files needed for the system to operate correctly---e.g., the =/etc=, =/var=, and =/run= directories, and the =/bin/sh= file.
 
@@ -190,14 +203,14 @@ guix system options... action file
 
   #+begin_example
   guix system installer --dry-run
-#+end_example
+  #+end_example
 
   #+begin_quote
   *Note:* If you do not use =--dry-run= then you need to run as root. Be /very careful/ when running the installer as root, it can cause data loss or render your system unbootable!
 
   #+end_quote
 
--  <<index-virtual-machine>>=vm= [[#index-virtual-machine][¶]] :: 
+- =vm= [[#index-virtual-machine][¶]] :: <<index-VM>> <<guix-system-vm>>
 
   Build a virtual machine (VM) that contains the operating system declared in =file=, and return a script to run that VM.
 
@@ -209,14 +222,14 @@ guix system options... action file
   Arguments given to the script are passed to QEMU as in the example below, which enables networking and requests 1 GiB of RAM for the emulated machine:
 
   #+begin_example
-  $ /gnu/store/...-run-vm.sh -m 1024 -smp 2 -nic user,model=virtio-net-pci
-#+end_example
+  $ /gnu/store/…-run-vm.sh -m 1024 -smp 2 -nic user,model=virtio-net-pci
+  #+end_example
 
   It's possible to combine the two steps into one:
 
   #+begin_example
   $ $(guix system vm my-config.scm) -m 1024 -smp 2 -nic user,model=virtio-net-pci
-#+end_example
+  #+end_example
 
   The VM shares its store with the host system.
 
@@ -229,7 +242,7 @@ guix system options... action file
   #+begin_example
   guix system vm my-config.scm \
      --expose=$HOME --share=$HOME/tmp=/exchange
-#+end_example
+  #+end_example
 
   On GNU/Linux, the default is to boot directly to the kernel; this has the advantage of requiring only a very tiny root disk image since the store of the host can then be mounted.
 
@@ -239,30 +252,32 @@ guix system options... action file
 
   The =--no-graphic= option will instruct =guix system= to spawn a headless VM that will use the invoking tty for IO. Among other things, this enables copy-pasting, and scrollback. Use the ctrl-a prefix to issue QEMU commands; e.g. ctrl-a h prints a help, ctrl-a x quits the VM, and ctrl-a c switches between the QEMU monitor and the VM.
 
-  The =--spice= option instructs =guix system= to spawn a VM with [[https://www.spice-space.org][Spice]] support. This enables features such as clipboard sharing and automatic resolution resizing of the guest VM.
+  <<index-System-images_002c-creation-in-various-formats>> <<index-Creating-system-images-in-various-formats>>
 
-  This option ensures that the =spice-vdagent-service-type= is present in the VM system configuration and that QEMU is started with the necessary flags for communicating with the Spice agent. A compatible Spice viewer application will need to be available from the environment, such as the =remote-viewer= command provided by the =virt-viewer= package.
-
--  <<index-image_002c-creating-disk-images>>=image= [[#index-image_002c-creating-disk-images][¶]] :: The =image= command can produce various image types. The image type can be selected using the =--image-type= option. It defaults to =mbr-hybrid-raw=. When its value is =iso9660=, the =--label= option can be used to specify a volume ID with =image=. By default, the root file system of a disk image is mounted non-volatile; the =--volatile= option can be provided to make it volatile instead. When using =image=, the bootloader installed on the generated image is taken from the provided =operating-system= definition. The following example demonstrates how to generate an image that uses the =grub-efi-bootloader= bootloader and boot it with QEMU:
+- =image= [[#index-image_002c-creating-disk-images][¶]] :: The =image= command can produce various image types. The image type can be selected using the =--image-type= option. It defaults to =mbr-hybrid-raw=. When its value is =iso9660=, the =--label= option can be used to specify a volume ID with =image=. By default, the root file system of a disk image is mounted non-volatile; the =--volatile= option can be provided to make it volatile instead. When using =image=, the bootloader installed on the generated image is taken from the provided =operating-system= definition. The following example demonstrates how to generate an image that uses the =grub-efi-bootloader= bootloader and boot it with QEMU:
 
   #+begin_example
-  image=$(guix system image --image-type=qcow2-gpt \
+  image=$(guix system image --image-type=qcow2 \
           gnu/system/examples/lightweight-desktop.tmpl)
   cp $image /tmp/my-image.qcow2
   chmod +w /tmp/my-image.qcow2
   qemu-system-x86_64 -enable-kvm -hda /tmp/my-image.qcow2 -m 1000 \
                      -bios $(guix build ovmf-x86-64)/share/firmware/ovmf_x64.bin
-#+end_example
+  #+end_example
 
   When using the =mbr-hybrid-raw= image type, a raw disk image is produced; it can be copied as is to a USB stick, for instance. Assuming =/dev/sdc= is the device corresponding to a USB stick, one can copy the image to it using the following command:
 
   #+begin_example
   # dd if=$(guix system image my-os.scm) of=/dev/sdc status=progress
-#+end_example
+  #+end_example
 
   The =--list-image-types= command lists all the available image types.
 
+  <<index-creating-virtual-machine-images>>
+
   When using the =qcow2= image type, the returned image is in qcow2 format, which the QEMU emulator can efficiently use. See [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], for more information on how to run the image in a virtual machine. The =grub-bootloader= bootloader is always used independently of what is declared in the =operating-system= file passed as argument. This is to make it easier to work with QEMU, which uses the SeaBIOS BIOS by default, expecting a bootloader to be installed in the Master Boot Record (MBR). In case the virtual machine is going to be AArch64, you might want to take a look at =qcow2-gpt= image type that installs bootloader only in EFI.
+
+  <<index-docker_002dimage_002c-creating-docker-images>>
 
   When using the =docker= image type, a Docker image is produced. Guix builds the image from scratch, not from a pre-existing Docker base image. As a result, it contains /exactly/ what you define in the operating system configuration file. You can then load the image and launch a Docker container using commands like the following:
 
@@ -270,13 +285,13 @@ guix system options... action file
   image_id="$(docker load < guix-system-docker-image.tar.gz)"
   container_id="$(docker create $image_id)"
   docker start $container_id
-#+end_example
+  #+end_example
 
   This command starts a new Docker container from the specified image. It will boot the Guix system in the usual manner, which means it will start any services you have defined in the operating system configuration. You can get an interactive shell running in the container using =docker exec=:
 
   #+begin_example
   docker exec -ti $container_id /run/current-system/profile/bin/bash --login
-#+end_example
+  #+end_example
 
   Depending on what you run in the Docker container, it may be necessary to give the container additional permissions. For example, if you intend to build software using Guix inside of the Docker container, you may need to pass the =--privileged= option to =docker create=.
 
@@ -291,7 +306,7 @@ guix system options... action file
   #+begin_example
   guix system container my-config.scm \
      --expose=$HOME --share=$HOME/tmp=/exchange
-#+end_example
+  #+end_example
 
   The =--share= and =--expose= options can also be passed to the generated script to bind-mount additional directories into the container.
 
@@ -315,11 +330,13 @@ guix system options... action file
 - =--derivation=\\
   =-d= :: Return the derivation file name of the given operating system without building anything.
 
-- <<index-provenance-tracking_002c-of-the-operating-system-1>>=--save-provenance= [[#index-provenance-tracking_002c-of-the-operating-system-1][¶]] :: As discussed above, =guix system init= and =guix system reconfigure= always save provenance information /via/ a dedicated service (see [[id:guix--Service-Reference][=provenance-service-type=]]). However, other commands don't do that by default. If you wish to, say, create a virtual machine image that contains provenance information, you can run:
+  <<index-provenance-tracking_002c-of-the-operating-system-1>>
+
+- =--save-provenance= :: As discussed above, =guix system init= and =guix system reconfigure= always save provenance information /via/ a dedicated service (see [[id:guix--Service-Reference][=provenance-service-type=]]). However, other commands don't do that by default. If you wish to, say, create a virtual machine image that contains provenance information, you can run:
 
   #+begin_example
   guix system image -t qcow2 --save-provenance config.scm
-#+end_example
+  #+end_example
 
   That way, the resulting image will effectively “embed its own source” in the form of meta-data in =/run/current-system=. With that information, one can rebuild the image to make sure it really contains what it pretends to contain; or they could use that to derive a variant of the image.
 
@@ -327,6 +344,8 @@ guix system options... action file
   =-t ==type= :: For the =image= action, create an image with given =type=.
 
   When this option is omitted, =guix system= uses the =mbr-hybrid-raw= image type.
+
+  <<index-ISO_002d9660-format>> <<index-CD-image-format>> <<index-DVD-image-format>>
 
   =--image-type=iso9660= produces an ISO-9660 image, suitable for burning on CDs and DVDs.
 
@@ -353,13 +372,15 @@ guix system options... action file
 
   #+end_quote
 
--  <<index-on_002derror>>=--on-error===strategy= [[#index-on_002derror][¶]] :: Apply =strategy= when an error occurs when reading =file=. =strategy= may be one of the following:
+  <<index-on_002derror>> <<index-on_002derror-strategy>> <<index-error-strategy>>
+
+- =--on-error===strategy= :: Apply =strategy= when an error occurs when reading =file=. =strategy= may be one of the following:
 
   - =nothing-special= :: Report the error concisely and exit. This is the default strategy.
 
   - =backtrace= :: Likewise, but also display a backtrace.
 
-  - =debug= :: Report the error and enter Guile's debugger. From there, you can run commands such as =,bt= to get a backtrace, =,locals= to display local variable values, and more generally inspect the state of the program. See [[https://doc.guix.gnu.org/guile/latest/en/html_node/Debug-Commands.html#Debug-Commands][Debug Commands]] in GNU Guile Reference Manual, for a list of available debugging commands.
+  - =debug= :: Report the error and enter Guile's debugger. From there, you can run commands such as =,bt= to get a backtrace, =,locals= to display local variable values, and more generally inspect the state of the program. See [[https://www.gnu.org/software/guile/manual/html_node/Debug-Commands.html#Debug-Commands][Debug Commands]] in GNU Guile Reference Manual, for a list of available debugging commands.
 
 Once you have built, configured, re-configured, and re-re-configured your Guix installation, you may find it useful to list the operating system generations available on disk---and that you can choose from the bootloader boot menu:
 
@@ -380,19 +401,20 @@ Once you have built, configured, re-configured, and re-re-configured your Guix i
 
   #+begin_example
   $ guix system list-generations 10d
-#+end_example
+  #+end_example
 
   The =--list-installed= flag may also be specified, with the same syntax that is used in =guix package --list-installed=. This may be helpful if trying to determine when a package was added to the system.
 
 The =guix system= command has even more to offer! The following sub-commands allow you to visualize how your system services relate to each other:
 
+<<system_002dextension_002dgraph>>
 - =extension-graph= :: Emit to standard output the /service extension graph/ of the operating system defined in =file= (see [[id:guix--Service-Composition][Service Composition]], for more information on service extensions). By default the output is in Dot/Graphviz format, but you can choose a different format with =--graph-backend=, as with =guix graph= (see [[id:guix--Invoking-guix-graph][=--backend=]]):
 
   The command:
 
   #+begin_example
   $ guix system extension-graph file | xdot -
-#+end_example
+  #+end_example
 
   shows the extension relations among services.
 
@@ -400,6 +422,8 @@ The =guix system= command has even more to offer! The following sub-commands all
   *Note:* The =dot= program is provided by the =graphviz= package.
 
   #+end_quote
+
+  <<system_002dshepherd_002dgraph>>
 
 - =shepherd-graph= :: Emit to standard output the /dependency graph/ of shepherd services of the operating system defined in =file=. See [[id:guix--Shepherd-Services][Shepherd Services]], for more information and for an example graph.
 
@@ -412,13 +436,12 @@ The =guix system= command has even more to offer! The following sub-commands all
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF39][(39)]]
+***** [[#DOCF37][(37)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 This action (and the related actions =switch-generation= and =roll-back=) are usable only on systems already running Guix System.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Previous: [[id:guix--Bootloader-Configuration][Bootloader Configuration]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Previous: [[id:guix--Bootloader-Configuration][Bootloader Configuration]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

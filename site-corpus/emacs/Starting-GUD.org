@@ -4,6 +4,43 @@
 #+filetags: :emacs:
 #+title: Starting GUD
 
-Next:
+Next: [[id:emacs--Debugger-Operation][Debugger Operation]]   Up: [[id:emacs--Debuggers][Running Debuggers Under Emacs]]
 
-The node you are looking for is at [[id:emacs--Debuggers::#Starting-GUD][Starting GUD]].
+<<Starting-GUD>>
+
+--------------
+
+**** 29.6.1 Starting GUD [[#Starting-GUD-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Starting-GUD-1
+:CLASS: subsection
+:END:
+There are several commands for starting a debugger subprocess, each corresponding to a particular debugger program.
+
+- <<index-gdb>>M-x gdb [[#index-gdb][¶]] :: Run GDB as a subprocess, and interact with it via an IDE-like Emacs interface. See [[id:emacs--GDB-Graphical-Interface][GDB Graphical Interface]], for more information about this command.
+
+- <<index-gud_002dgdb>>M-x gud-gdb [[#index-gud_002dgdb][¶]] :: Run GDB, using a GUD interaction buffer for input and output to the GDB subprocess (see [[id:emacs--Debugger-Operation][Debugger Operation]]). If such a buffer already exists, switch to it; otherwise, create the buffer and switch to it.
+
+  The other commands in this list do the same, for other debugger programs.
+
+- <<index-lldb>>M-x lldb [[#index-lldb][¶]] :: Run the LLDB debugger.
+
+- <<index-perldb>>M-x perldb [[#index-perldb][¶]] :: Run the Perl interpreter in debug mode.
+
+- <<index-jdb>>M-x jdb [[#index-jdb][¶]] :: Run the Java debugger.
+
+- <<index-pdb>>M-x pdb [[#index-pdb][¶]] :: Run the Python debugger.
+
+- <<index-guiler>>M-x guiler [[#index-guiler][¶]] :: Run Guile REPL for debugging Guile Scheme programs.
+
+- <<index-dbx>>M-x dbx [[#index-dbx][¶]] :: Run the DBX debugger.
+
+-  <<index-xdb>>M-x xdb [[#index-xdb][¶]] :: Run the XDB debugger.
+
+- <<index-sdb>>M-x sdb [[#index-sdb][¶]] :: Run the SDB debugger.
+
+Each of these commands reads a command line to invoke the debugger, using the minibuffer. The minibuffer's initial contents contain the standard executable name and options for the debugger, and sometimes also a guess for the name of the executable file you want to debug. Shell wildcards and variables are not allowed in this command line. Emacs assumes that the first command argument which does not start with a ‘=-=' is the executable file name.
+
+Tramp provides a facility for remote debugging, whereby both the debugger and the program being debugged are on the same remote host. See [[../tramp_html/Running-a-debugger-on-a-remote-host.html#Running-a-debugger-on-a-remote-host][Running a debugger on a remote host]] in The Tramp Manual, for details. This is separate from GDB's remote debugging feature, where the program and the debugger run on different machines (see [[../gdb_html/Remote-Debugging.html#Remote-Debugging][Debugging Remote Programs]] in The GNU debugger).
+
+--------------

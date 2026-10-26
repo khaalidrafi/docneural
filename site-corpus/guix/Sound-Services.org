@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Sound-Services>>
-Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.11 Sound Services [[#Sound-Services-1][¶]]
+<<Sound-Services-1>>
+**** 11.10.10 Sound Services
 :PROPERTIES:
-:CUSTOM_ID: Sound-Services-1
+:CUSTOM_ID: sound-services
 :CLASS: subsection
 :END:
+<<index-sound-support>> <<index-ALSA>> <<index-PulseAudio_002c-sound-support>>
 The =(gnu services sound)= module provides a service to configure the Advanced Linux Sound Architecture (ALSA) system, which makes PulseAudio the preferred ALSA output driver.
 
-- Variable: *alsa-service-type* [[#index-alsa_002dservice_002dtype][¶]] :: This is the type for the [[https://alsa-project.org/][Advanced Linux Sound Architecture]] (ALSA) system, which generates the =/etc/asound.conf= configuration file. The value for this type is a =alsa-configuration= record as in this example:
+- Variable: alsa-service-type  :: This is the type for the [[https://alsa-project.org/][Advanced Linux Sound Architecture]] (ALSA) system, which generates the =/etc/asound.conf= configuration file. The value for this type is a =alsa-configuration= record as in this example:
 
   #+begin_src lisp
   (service alsa-service-type)
@@ -55,27 +58,15 @@ The =(gnu services sound)= module provides a service to configure the Advanced L
 
   See below for details about =alsa-configuration=.
 
-- Data Type: *alsa-pcm-configuration* [[#index-alsa_002dpcm_002dconfiguration][¶]] :: Data type representing an ALSA =pcm= block.
+- Data Type: alsa-configuration  :: Data type representing the configuration for =alsa-service=.
 
-  - =alsa-pcm-configuration-type= (type: symbol) :: The type of the PCM (if not builtin to alsa, should be introduced via a “pcm_type” block).
+  - =alsa-plugins= (default: =alsa-plugins=) :: =alsa-plugins= package to use.
 
-  - =alsa-pcm-configuration-hint= (type: maybe-string) :: A human-readable description of the PCM.
+  - =pulseaudio?= (default: =#t=) :: Whether ALSA applications should transparently be made to use the [[https://www.pulseaudio.org/][PulseAudio]] sound server.
 
-  - =alsa-pcm-configuration-configuration= (type: list-of-string) :: Raw additional configuration. Each item will be printed on a separate line.
+    Using PulseAudio allows you to run several sound-producing applications at the same time and to individual control them /via/ =pavucontrol=, among other things.
 
-- Data Type: *alsa-ctl-configuration* [[#index-alsa_002dctl_002dconfiguration][¶]] :: Data type representing an ALSA =ctl= block.
-
-  - =alsa-pcm-configuration-type= (type: symbol) :: The type of the ctl (if not builtin to alsa, should be introduced via a “ctl_type” block).
-
-  - =alsa-pcm-configuration-configuration= (type: list-of-string) :: Raw additional configuration. Each item will be printed on a separate line.
-
-- Data Type: *alsa-configuration* [[#index-alsa_002dconfiguration][¶]] :: Data type representing the configuration for =alsa-service=.
-
-  - =default-pcm= (default: #f) :: The configuration to use for the default =pcm=.
-
-  - =default-ctl= (default: #f) :: The configuration to use for the default =ctl=.
-
-  - =options= (default: '()) (type: list-of-strings) :: Additional configuration strings to append to the =/etc/asound.conf= file.
+  - =extra-options= (default: =""=) :: String to append to the =/etc/asound.conf= file.
 
 Individual users who want to override the system configuration of ALSA can do it with the =~/.asoundrc= file:
 
@@ -110,9 +101,7 @@ pcm.!default {
 
 See [[https://www.alsa-project.org/main/index.php/Asoundrc]] for the details.
 
-Services can likewise extend alsa-service-type to add options and configure the default PCM and CTL. One service, which transparently extends alsa-service-type to make use of the [[https://www.pulseaudio.org/][PulseAudio]] sound server, is the pulseaudio-service-type, shown below.
-
-- Variable: *pulseaudio-service-type* [[#index-pulseaudio_002dservice_002dtype][¶]] :: This is the type for the [[https://www.pulseaudio.org/][PulseAudio]] sound server. It exists to allow system overrides of the default settings via =pulseaudio-configuration=, see below.
+- Variable: pulseaudio-service-type  :: This is the type for the [[https://www.pulseaudio.org/][PulseAudio]] sound server. It exists to allow system overrides of the default settings via =pulseaudio-configuration=, see below.
 
   #+begin_quote
   *Warning:* This service overrides per-user configuration files. If you want PulseAudio to honor configuration files in =~/.config/pulse=, you have to unset the environment variables =PULSE_CONFIG= and =PULSE_CLIENTCONFIG= in your =~/.bash_profile=.
@@ -124,7 +113,7 @@ Services can likewise extend alsa-service-type to add options and configure the 
 
   #+end_quote
 
-- Data Type: *pulseaudio-configuration* [[#index-pulseaudio_002dconfiguration][¶]] :: Data type representing the configuration for =pulseaudio-service=.
+- Data Type: pulseaudio-configuration  :: Data type representing the configuration for =pulseaudio-service=.
 
   - =client-conf= (default: ='()=) :: List of settings to set in =client.conf=. Accepts a list of strings or symbol-value pairs. A string will be inserted as-is with a newline added. A pair will be formatted as “key = value”, again with a newline added.
 
@@ -135,8 +124,6 @@ Services can likewise extend alsa-service-type to add options and configure the 
   - =extra-script-files= (default: ='()=) :: A list of file-like objects defining extra PulseAudio scripts to run at the initialization of the =pulseaudio= daemon, after the main =script-file=. The scripts are deployed to the =/etc/pulse/default.pa.d= directory; they should have the ‘=.pa=' file name extension. For a reference of the available commands, refer to =man pulse-cli-syntax=.
 
   - =system-script-file= (default: =(file-append pulseaudio "/etc/pulse/system.pa")=) :: Script file to use as =system.pa=.
-
-  - =alsa-lib= :: The alsa-lib package to use for defining the “pulse” pcm_type and ctl_type.
 
   The example below sets the default PulseAudio card profile, the default sink and the default source to use for a old SoundBlaster Audigy sound card:
 
@@ -153,7 +140,7 @@ Services can likewise extend alsa-service-type to add options and configure the 
 
   Note that =pulseaudio-service-type= is part of =%desktop-services=; if your operating system declaration was derived from one of the desktop templates, you'll want to adjust the above example to modify the existing =pulseaudio-service-type= via =modify-services= (see [[id:guix--Service-Reference][=modify-services=]]), instead of defining a new one.
 
-- Variable: *ladspa-service-type* [[#index-ladspa_002dservice_002dtype][¶]] :: This service sets the =LADSPA_PATH= variable, so that programs, which respect it, e.g. PulseAudio, can load LADSPA plugins.
+- Variable: ladspa-service-type  :: This service sets the =LADSPA_PATH= variable, so that programs, which respect it, e.g. PulseAudio, can load LADSPA plugins.
 
   The following example will setup the service to enable modules from the =swh-plugins= package:
 
@@ -164,29 +151,15 @@ Services can likewise extend alsa-service-type to add options and configure the 
 
   See [[http://plugin.org.uk/ladspa-swh/docs/ladspa-swh.html]] for the details.
 
-**** ALSA Volume Persistence Service [[#ALSA-Volume-Persistence-Service][¶]]
+<<Speaker-Safety-Daemon-System-Service>>
+**** Speaker Safety Daemon System Service
 :PROPERTIES:
-:CUSTOM_ID: ALSA-Volume-Persistence-Service
-:CLASS: subsubheading
-:END:
-ALSA requires a custom service to persist volume levels across reboots.
-
-- Variable: *alsa-persistence-service-type* [[#index-alsa_002dpersistence_002dservice_002dtype][¶]] :: The =alsa-persistence-service-type= service reads =/var/lib/alsa/asound.state= on boot and writes updated values on shutdown.
-
-  This service is only required when using ALSA directly, it is not required when using PipeWire or PulseAudio. The service can be enabled as follows:
-
-  #+begin_src lisp
-  (service alsa-persistence-service-type)
-  #+end_src
-
-**** Speaker Safety Daemon System Service [[#Speaker-Safety-Daemon-System-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Speaker-Safety-Daemon-System-Service
+:CUSTOM_ID: speaker-safety-daemon-system-service
 :CLASS: subsubheading
 :END:
 [[https://github.com/AsahiLinux/speakersafetyd][Speaker Safety Daemon]] is a user-space daemon that implements an analogue of the Texas Instruments Smart Amp speaker protection model. It can be used to protect the speakers on Apple Silicon devices.
 
-- Variable: *speakersafetyd-service-type* [[#index-speakersafetyd_002dservice_002dtype][¶]] :: This is the type for the =speakersafetyd= system service, whose value is a =speakersafetyd-configuration= record.
+- Variable: speakersafetyd-service-type  :: This is the type for the =speakersafetyd= system service, whose value is a =speakersafetyd-configuration= record.
 
   #+begin_src lisp
   (service speakersafetyd-service-type)
@@ -194,7 +167,7 @@ ALSA requires a custom service to persist volume levels across reboots.
 
   See below for details about =speakersafetyd-configuration=.
 
-- Data Type: *speakersafetyd-configuration* [[#index-speakersafetyd_002dconfiguration][¶]] :: Available =speakersafetyd-configuration= fields are:
+- Data Type: speakersafetyd-configuration  :: Available =speakersafetyd-configuration= fields are:
 
   - =blackbox-directory= (default: ="/var/lib/speakersafetyd/blackbox"=) (type: string) :: The directory to which blackbox files are written when the speakers are getting too hot. The blackbox files contain audio and debug information which the developers of =speakersafetyd= might ask for when reporting bugs.
 
@@ -212,4 +185,4 @@ ALSA requires a custom service to persist volume levels across reboots.
 
 --------------
 
-Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

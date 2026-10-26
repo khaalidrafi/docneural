@@ -36,27 +36,31 @@ Next:
 [[../..][]]
 
 <<Kerberos-Services>>
-Next: [[id:guix--LDAP-Services][LDAP Services]], Previous: [[id:guix--Monitoring-Services][Monitoring Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--LDAP-Services][LDAP Services]], Previous: [[id:guix--Monitoring-Services][Monitoring Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.19 Kerberos Services [[#Kerberos-Services-1][¶]]
+<<Kerberos-Services-1>>
+**** 11.10.18 Kerberos Services
 :PROPERTIES:
-:CUSTOM_ID: Kerberos-Services-1
+:CUSTOM_ID: kerberos-services
 :CLASS: subsection
 :END:
+<<index-Kerberos>>
 The =(gnu services kerberos)= module provides services relating to the authentication protocol /Kerberos/.
 
-**** Krb5 Service [[#Krb5-Service][¶]]
+<<Krb5-Service>>
+**** Krb5 Service
 :PROPERTIES:
-:CUSTOM_ID: Krb5-Service
+:CUSTOM_ID: krb5-service
 :CLASS: subsubheading
 :END:
 Programs using a Kerberos client library normally expect a configuration file in =/etc/krb5.conf=. This service generates such a file from a definition provided in the operating system declaration. It does not cause any daemon to be started.
 
 No “keytab” files are provided by this service---you must explicitly create them. This service is known to work with the MIT client library, =mit-krb5=. Other implementations have not been tested.
 
-- Variable: *krb5-service-type* [[#index-krb5_002dservice_002dtype][¶]] :: A service type for Kerberos 5 clients.
+- Variable: krb5-service-type  :: A service type for Kerberos 5 clients.
 
 Here is an example of its use:
 
@@ -84,28 +88,31 @@ This example provides a Kerberos 5 client configuration which:
 
 The =krb5-realm= and =krb5-configuration= types have many fields. Only the most commonly used ones are described here. For a full list, and more detailed explanation of each, see the MIT [[https://web.mit.edu/kerberos/krb5-devel/doc/admin/conf_files/krb5_conf.html][krb5.conf]] documentation.
 
-- Data Type: *krb5-realm* [[#index-krb5_002drealm][¶]] :: - =name= :: This field is a string identifying the name of the realm. A common convention is to use the fully qualified DNS name of your organization, converted to upper case.
+- Data Type: krb5-realm  :: <<index-realm_002c-kerberos>>
+  - =name= :: This field is a string identifying the name of the realm. A common convention is to use the fully qualified DNS name of your organization, converted to upper case.
 
   - =admin-server= :: This field is a string identifying the host where the administration server is running.
 
   - =kdc= :: This field is a string identifying the key distribution center for the realm.
 
-- Data Type: *krb5-configuration* [[#index-krb5_002dconfiguration][¶]] :: - =allow-weak-crypto?= (default: =#f=) :: If this flag is =#t= then services which only offer encryption algorithms known to be weak will be accepted.
+- Data Type: krb5-configuration  :: - =allow-weak-crypto?= (default: =#f=) :: If this flag is =#t= then services which only offer encryption algorithms known to be weak will be accepted.
 
   - =default-realm= (default: =#f=) :: This field should be a string identifying the default Kerberos realm for the client. You should set this field to the name of your Kerberos realm. If this value is =#f= then a realm must be specified with every Kerberos principal when invoking programs such as =kinit=.
 
   - =realms= :: This should be a non-empty list of =krb5-realm= objects, which clients may access. Normally, one of them will have a =name= field matching the =default-realm= field.
 
-**** PAM krb5 Service [[#PAM-krb5-Service][¶]]
+<<PAM-krb5-Service>>
+**** PAM krb5 Service
 :PROPERTIES:
-:CUSTOM_ID: PAM-krb5-Service
+:CUSTOM_ID: pam-krb5-service
 :CLASS: subsubheading
 :END:
+<<index-pam_002dkrb5>>
 The =pam-krb5= service allows for login authentication and password management via Kerberos. You will need this service if you want PAM enabled applications to authenticate users using Kerberos.
 
-- Variable: *pam-krb5-service-type* [[#index-pam_002dkrb5_002dservice_002dtype][¶]] :: A service type for the Kerberos 5 PAM module.
+- Variable: pam-krb5-service-type  :: A service type for the Kerberos 5 PAM module.
 
-- Data Type: *pam-krb5-configuration* [[#index-pam_002dkrb5_002dconfiguration][¶]] :: Data type representing the configuration of the Kerberos 5 PAM module. This type has the following parameters:
+- Data Type: pam-krb5-configuration  :: Data type representing the configuration of the Kerberos 5 PAM module. This type has the following parameters:
 
   - =pam-krb5= (default: =pam-krb5=) :: The pam-krb5 package to use.
 
@@ -113,4 +120,4 @@ The =pam-krb5= service allows for login authentication and password management v
 
 --------------
 
-Next: [[id:guix--LDAP-Services][LDAP Services]], Previous: [[id:guix--Monitoring-Services][Monitoring Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--LDAP-Services][LDAP Services]], Previous: [[id:guix--Monitoring-Services][Monitoring Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

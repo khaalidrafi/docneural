@@ -4,6 +4,19 @@
 #+filetags: :emacs:
 #+title: ForIndent Num
 
-Next:
+Next: [[id:emacs--ForIndent-Conv][Syntactic Conventions]]   Previous: [[id:emacs--ForIndent-Cont][Continuation Lines]]   Up: [[id:emacs--Fortran-Indent][Fortran Indentation]]
 
-The node you are looking for is at [[id:emacs--Fortran::#ForIndent-Num][ForIndent Num]].
+<<ForIndent-Num>>
+
+--------------
+
+**** 28.14.2.3 Line Numbers [[#Line-Numbers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Line-Numbers
+:CLASS: subsubsection
+:END:
+If a number is the first non-whitespace in the line, Fortran indentation assumes it is a line number and moves it to columns 0 through 4. (Columns always count from 0 in Emacs, but setting =column-number-indicator-zero-based= to =nil= can change that, see [[id:emacs--Optional-Mode-Line][Optional Mode Line Features]].)
+
+Line numbers of four digits or less are normally indented one space. The variable =fortran-line-number-indent= controls this; it specifies the maximum indentation a line number can have. The default value of the variable is 1. Fortran mode tries to prevent line number digits passing column 4, reducing the indentation below the specified maximum if necessary. If =fortran-line-number-indent= has the value 5, line numbers are right-justified to end in column 4.
+
+Simply inserting a line number is enough to indent it according to these rules. As each digit is inserted, the indentation is recomputed. To turn off this feature, set the variable =fortran-electric-line-number= to =nil=.

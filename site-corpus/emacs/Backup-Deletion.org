@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: Backup Deletion
 
-Next:
+Next: [[id:emacs--Backup-Copying][Copying vs. Renaming]]   Previous: [[id:emacs--Backup-Names][Single or Numbered Backups]]   Up: [[id:emacs--Backup][Backup Files]]
 
-The node you are looking for is at [[id:emacs--Saving::#Backup-Deletion][Backup Deletion]].
+<<Backup-Deletion>>
+
+--------------
+
+**** 20.3.2.2 Automatic Deletion of Backups [[#Automatic-Deletion-of-Backups][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Automatic-Deletion-of-Backups
+:CLASS: subsubsection
+:END:
+To prevent excessive consumption of disk space, Emacs can delete numbered backup versions automatically. Generally Emacs keeps the first few backups and the latest few backups, deleting any in between. This happens every time a new backup is made.
+
+The two variables =kept-old-versions= and =kept-new-versions= control this deletion. Their values are, respectively, the number of oldest (lowest-numbered) backups to keep and the number of newest (highest-numbered) ones to keep, each time a new backup is made. The backups in the middle (excluding those oldest and newest) are the excess middle versions---those backups are deleted. These variables' values are used when it is time to delete excess versions, just after a new backup version is made; the newly made backup is included in the count in =kept-new-versions=. By default, both variables are 2.
+
+If =delete-old-versions= is =t=, Emacs deletes the excess backup files silently. If it is =nil=, the default, Emacs asks you whether it should delete the excess backup versions. If it has any other value, then Emacs never automatically deletes backups.
+
+Dired's . (Period) command can also be used to delete old versions. See [[id:emacs--Flagging-Many-Files][Flagging Many Files at Once]].

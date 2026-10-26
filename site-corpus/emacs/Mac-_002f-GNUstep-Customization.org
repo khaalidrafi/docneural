@@ -7,12 +7,19 @@
 Next: [[id:emacs--Mac-_002f-GNUstep-Events][Windowing System Events under macOS / GNUstep]]   Previous: [[id:emacs--Mac-_002f-GNUstep-Basics][Basic Emacs usage under macOS and GNUstep]]   Up: [[id:emacs--Mac-OS-_002f-GNUstep][Emacs and macOS / GNUstep]]
 
 <<Mac-_002f-GNUstep-Customization>>
+
+--------------
+
 *** F.2 Mac / GNUstep Customization [[#Mac-_002f-GNUstep-Customization-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Mac-_002f-GNUstep-Customization-1
 :CLASS: section
 :END:
 There are a few customization options that are specific to the Nextstep port. For example, they affect things such as the modifier keys and the fullscreen behavior. To see all such options, use M-x customize-group RET ns RET.
+
+- [[#Modifier-keys][Modifier keys]]
+- [[#Frame-Variables][Frame Variables]]
+- [[#macOS-Trackpad_002fMousewheel-Variables][macOS Trackpad/Mousewheel Variables]]
 
 <<Modifier-keys>>
 **** F.2.1 Modifier keys [[#Modifier-keys][¶]]

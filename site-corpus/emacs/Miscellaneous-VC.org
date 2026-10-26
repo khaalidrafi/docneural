@@ -4,6 +4,22 @@
 #+filetags: :emacs:
 #+title: Miscellaneous VC
 
-Next:
+Next: [[id:emacs--Customizing-VC][Customizing VC]]   Previous: [[id:emacs--Branches][Version Control Branches]]   Up: [[id:emacs--Version-Control][Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Miscellaneous-VC][Miscellaneous VC]].
+<<Miscellaneous-VC>>
+
+--------------
+
+**** 30.1.12 Miscellaneous Commands and Features of VC [[#Miscellaneous-Commands-and-Features-of-VC][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Miscellaneous-Commands-and-Features-of-VC
+:CLASS: subsection
+:END:
+This section explains the less-frequently-used features of VC.
+
+- [[id:emacs--Change-Logs-and-VC][Change Logs and VC]]
+- [[id:emacs--VC-Delete_002fRename][Deleting and Renaming Version-Controlled Files]]
+- [[id:emacs--Revision-Tags][Revision Tags]]
+- [[id:emacs--Version-Headers][Inserting Version Control Headers]]
+- [[id:emacs--Editing-VC-Commands][Editing VC Commands]]
+- [[id:emacs--Preparing-Patches][Preparing Patches]]

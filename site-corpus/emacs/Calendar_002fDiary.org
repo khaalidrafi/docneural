@@ -7,6 +7,9 @@
 Next: [[id:emacs--Sending-Mail][Sending Mail]]   Previous: [[id:emacs--Dired][Dired, the Directory Editor]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Calendar_002fDiary>>
+
+--------------
+
 ** 33 The Calendar and the Diary [[#The-Calendar-and-the-Diary][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Calendar-and-the-Diary
@@ -18,4 +21,16 @@ To enter the calendar, type M-x calendar. This displays a three-month calendar c
 
 mouse-3 in the calendar brings up a menu of operations on a particular date; mouse-2 brings up a menu of commonly used calendar features that are independent of any particular date. To exit the calendar, type q.
 
---------------
+- [[id:emacs--Calendar-Motion][Movement in the Calendar]]
+- [[id:emacs--Scroll-Calendar][Scrolling in the Calendar]]
+- [[id:emacs--Counting-Days][Counting Days]]
+- [[id:emacs--General-Calendar][Miscellaneous Calendar Commands]]
+- [[id:emacs--Writing-Calendar-Files][Writing Calendar Files]]
+- [[id:emacs--Holidays][Holidays]]
+- [[id:emacs--Sunrise_002fSunset][Times of Sunrise and Sunset]]
+- [[id:emacs--Lunar-Phases][Phases of the Moon]]
+- [[id:emacs--Other-Calendars][Conversion To and From Other Calendars]]
+- [[id:emacs--Diary][The Diary]]
+- [[id:emacs--Daylight-Saving][Daylight Saving Time]]
+- [[id:emacs--Time-Intervals][Summing Time Intervals]]
+- [[id:emacs--Advanced-Calendar_002fDiary-Usage][More advanced features of the Calendar and Diary]]

@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Instantiate-an-Image>>
-Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 16.2 Instantiate an Image [[#Instantiate-an-Image-1][¶]]
+<<Instantiate-an-Image-1>>
+*** 16.2 Instantiate an Image
 :PROPERTIES:
-:CUSTOM_ID: Instantiate-an-Image-1
+:CUSTOM_ID: instantiate-an-image
 :CLASS: section
 :END:
 Let's say you would like to create an MBR image with three distinct partitions:
@@ -104,7 +106,7 @@ to instantiate the =image= definition. That produces a disk image which has the 
 
 #+begin_example
 $ parted $(guix system image my-image.scm) print
-...
+…
 Model:  (file)
 Disk /gnu/store/yhylv1bp5b2ypb97pd3bbhz6jk5nbhxw-disk-image: 1714MB
 Sector size (logical/physical): 512B/512B
@@ -121,17 +123,17 @@ The size of the =boot= partition has been inferred to =1619MB= so that it is lar
 
 You can also use existing =image= record definitions and inherit from them to simplify the =image= definition. The =(gnu system image)= module provides the following =image= definition variables.
 
-- Variable: *mbr-disk-image* [[#index-mbr_002ddisk_002dimage][¶]] :: An MBR disk-image composed of a single ROOT partition. The ROOT partition starts at a 1 MiB offset so that the bootloader can install itself in the post-MBR gap.
+- Variable: mbr-disk-image  :: An MBR disk-image composed of a single ROOT partition. The ROOT partition starts at a 1 MiB offset so that the bootloader can install itself in the post-MBR gap.
 
-- Variable: *mbr-hybrid-disk-image* [[#index-mbr_002dhybrid_002ddisk_002dimage][¶]] :: An MBR disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. The ESP partition starts at a 1 MiB offset so that a BIOS compatible bootloader can install itself in the post-MBR gap. The image can be used by =x86_64= and =i686= machines supporting only legacy BIOS booting. The ESP partition ensures that it can also be used by newer machines relying on UEFI booting, hence the /hybrid/ denomination.
+- Variable: mbr-hybrid-disk-image  :: An MBR disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. The ESP partition starts at a 1 MiB offset so that a BIOS compatible bootloader can install itself in the post-MBR gap. The image can be used by =x86_64= and =i686= machines supporting only legacy BIOS booting. The ESP partition ensures that it can also be used by newer machines relying on UEFI booting, hence the /hybrid/ denomination.
 
-- Variable: *efi-disk-image* [[#index-efi_002ddisk_002dimage][¶]] :: A GPT disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. This image can be used on most =x86_64= and =i686= machines, supporting BIOS or UEFI booting.
+- Variable: efi-disk-image  :: A GPT disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. This image can be used on most =x86_64= and =i686= machines, supporting BIOS or UEFI booting.
 
-- Variable: *efi32-disk-image* [[#index-efi32_002ddisk_002dimage][¶]] :: Same as =efi-disk-image= but with a 32 bits EFI partition.
+- Variable: efi32-disk-image  :: Same as =efi-disk-image= but with a 32 bits EFI partition.
 
-- Variable: *iso9660-image* [[#index-iso9660_002dimage][¶]] :: An ISO-9660 image composed of a single bootable partition. This image can also be used on most =x86_64= and =i686= machines.
+- Variable: iso9660-image  :: An ISO-9660 image composed of a single bootable partition. This image can also be used on most =x86_64= and =i686= machines.
 
-- Variable: *docker-image* [[#index-docker_002dimage][¶]] :: A Docker image that can be used to spawn a Docker container.
+- Variable: docker-image  :: A Docker image that can be used to spawn a Docker container.
 
 Using the =efi-disk-image= we can simplify our previous =image= declaration this way:
 
@@ -170,4 +172,4 @@ This will give the exact same =image= instantiation but the =image= declaration 
 
 --------------
 
-Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -4,6 +4,41 @@
 #+filetags: :emacs:
 #+title: Tags Tables
 
-Next:
+Next: [[id:emacs--Select-Tags-Table][Selecting a Tags Table]]   Previous: [[id:emacs--Find-Identifiers][Find Identifiers]]   Up: [[id:emacs--Xref][Find Identifier References]]
 
-The node you are looking for is at [[id:emacs--Xref::#Tags-Tables][Tags Tables]].
+<<Tags-Tables>>
+
+--------------
+
+**** 30.4.2 Tags Tables [[#Tags-Tables-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tags-Tables-1
+:CLASS: subsection
+:END:
+A /tags table/ records the tags[[#FOOT18][^{18}]] extracted by scanning the source code of a certain program or a certain document. Tags extracted from generated files reference the original files, rather than the generated files that were scanned during tag extraction. Examples of generated files include C files generated from Cweb source files, from a Yacc parser, or from Lex scanner definitions; =.i= preprocessed C files; and Fortran files produced by preprocessing =.fpp= source files.
+
+To produce a tags table, you run the =etags= shell command on a document or the source code file. The ‘=etags=' program writes the tags to a /tags table file/, or /tags file/ in short. The conventional name for a tags file is =TAGS=. See [[id:emacs--Create-Tags-Table][Creating Tags Tables]]. (It is also possible to create a tags table by using one of the commands from other packages that can produce such tables in the same format.)
+
+Emacs uses the tags tables via the =etags= package as one of the supported backends for =xref=. Because tags tables are produced by the =etags= command that is part of an Emacs distribution, we describe tags tables in more detail here.
+
+The Ebrowse facility is similar to =etags= but specifically tailored for C++. See [[../ebrowse_html/index.html#Top][Ebrowse]] in Ebrowse User's Manual. The Semantic package provides another way to generate and use tags, separate from the =etags= facility. See [[id:emacs--Semantic][Semantic]].
+
+- [[id:emacs--Tag-Syntax][Source File Tag Syntax]]
+- [[id:emacs--Create-Tags-Table][Creating Tags Tables]]
+- [[id:emacs--Etags-Regexps][Etags Regexps]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF18][(18)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+A /tag/ is a synonym for identifier reference. Commands and features based on the =etags= package traditionally use “tag” with this meaning, and this subsection follows that tradition.
+
+--------------

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Basic-Undo][Undoing Changes]]   Previous: [[id:emacs--Moving-Point][Changing the Location of Point]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
 
 <<Erasing>>
+
+--------------
+
 *** 9.3 Erasing Text [[#Erasing-Text][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Erasing-Text
@@ -36,7 +39,7 @@ The Delete (=delete-forward-char=) command deletes in the opposite direction: it
 
 C-d (=delete-char=) deletes the character after point, similar to Delete, but regardless of whether the region is active.
 
-See [[id:emacs--Deletion-and-Killing::#Deletion][Deletion]], for more detailed information about the above deletion commands.
+See [[id:emacs--Deletion][Deletion]], for more detailed information about the above deletion commands.
 
 C-k (=kill-line=) erases (kills) a line at a time. If you type C-k at the beginning or middle of a line, it kills all the text up to the end of the line. If you type C-k at the end of a line, it joins that line with the following line.
 

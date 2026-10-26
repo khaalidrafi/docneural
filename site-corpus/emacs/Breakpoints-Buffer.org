@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: Breakpoints Buffer
 
-Next:
+Next: [[id:emacs--Threads-Buffer][Threads Buffer]]   Previous: [[id:emacs--Source-Buffers][Source Buffers]]   Up: [[id:emacs--GDB-Graphical-Interface][GDB Graphical Interface]]
 
-The node you are looking for is at [[id:emacs--Debuggers::#Breakpoints-Buffer][Breakpoints Buffer]].
+<<Breakpoints-Buffer>>
+
+--------------
+
+**** 29.6.5.3 Breakpoints Buffer [[#Breakpoints-Buffer-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Breakpoints-Buffer-1
+:CLASS: subsubsection
+:END:
+The GDB Breakpoints buffer shows the breakpoints, watchpoints and catchpoints in the debugger session. See [[../gdb_html/Breakpoints.html#Breakpoints][Breakpoints]] in The GNU debugger. It provides the following commands, which mostly apply to the /current breakpoint/ (the breakpoint which point is on):
+
+-  <<index-SPC-_0028GDB-Breakpoints-buffer_0029>>SPC [[#index-SPC-_0028GDB-Breakpoints-buffer_0029][¶]] :: Enable/disable current breakpoint (=gdb-toggle-breakpoint=). On a graphical display, this changes the color of the dot in the fringe of the source buffer at that line. The dot is red when the breakpoint is enabled, and gray when it is disabled.
+
+-  <<index-D-_0028GDB-Breakpoints-buffer_0029>>D [[#index-D-_0028GDB-Breakpoints-buffer_0029][¶]] :: Delete the current breakpoint (=gdb-delete-breakpoint=).
+
+-  <<index-RET-_0028GDB-Breakpoints-buffer_0029>>RET [[#index-RET-_0028GDB-Breakpoints-buffer_0029][¶]] :: Visit the source line for the current breakpoint (=gdb-goto-breakpoint=).
+
+- <<index-mouse_002d2-_0028GDB-Breakpoints-buffer_0029>>mouse-2 [[#index-mouse_002d2-_0028GDB-Breakpoints-buffer_0029][¶]] :: Visit the source line for the breakpoint you click on (=gdb-goto-breakpoint=).
+
+When =gdb-many-windows= is non-=nil=, the GDB Breakpoints buffer shares its window with the GDB Threads buffer. To switch from one to the other click with mouse-1 on the relevant button in the header line. If =gdb-show-threads-by-default= is non-=nil=, the GDB Threads buffer is the one shown by default.

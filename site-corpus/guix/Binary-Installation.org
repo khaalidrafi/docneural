@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Binary-Installation>>
-Next: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 2.1 Binary Installation [[#Binary-Installation-1][¶]]
+<<Binary-Installation-1>>
+*** 2.1 Binary Installation
 :PROPERTIES:
-:CUSTOM_ID: Binary-Installation-1
+:CUSTOM_ID: binary-installation
 :CLASS: section
 :END:
+<<index-installing-Guix-from-binaries>> <<index-installer-script>>
 This section describes how to install Guix from a self-contained tarball providing binaries for Guix and for all its dependencies. This is often quicker than installing from source, described later (see [[id:guix--Building-from-Git][Building from Git]]).
 
 #+begin_quote
@@ -67,13 +70,15 @@ When you're done installing Guix, see [[id:guix--Application-Setup][Application 
 
 The script goes through the following steps:
 
-1. Downloading the binary tarball from ‘=https://ftpmirror.gnu.org/gnu/guix/guix-binary-ad54bd5.x86_64-linux.tar.xz=' (where =x86_64-linux= can be replaced with =i686-linux= for an =i686= (32-bits) machine already running the kernel Linux, and so on---see [[id:guix--GNU-Distribution][GNU Distribution]]) and extracting it.
+1. Downloading the binary tarball from ‘=https://ftpmirror.gnu.org/gnu/guix/guix-binary-1.5.0.x86_64-linux.tar.xz=' (where =x86_64-linux= can be replaced with =i686-linux= for an =i686= (32-bits) machine already running the kernel Linux, and so on---see [[id:guix--GNU-Distribution][GNU Distribution]]) and extracting it.
 2. Setting up the build daemon (see [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]).
 3. Making the =guix= command available to non-root users.
 4. Configuring substitute servers (see [[id:guix--Official-Substitute-Servers][Official Substitute Servers]]).
 
 #+begin_quote
 *Note:* By default, =guix-install.sh= will configure Guix to download pre-built package binaries, called /substitutes/ (see [[id:guix--Substitutes][Substitutes]]), from the project's build farms. If you choose not to permit this, Guix will build /everything/ from source, making each installation and upgrade very expensive. See [[id:guix--On-Trusting-Binaries][On Trusting Binaries]] for a discussion of why you may want to build packages from source.
+
+<<index-substitutes_002c-authorization-thereof>>
 
 To use substitutes from =bordeaux.guix.gnu.org=, =ci.guix.gnu.org= or a mirror, you must authorize them. For example,
 
@@ -104,6 +109,7 @@ See [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], for more info on this
 
 #+end_quote
 
+<<index-uninstalling-Guix>> <<index-uninstallation_002c-of-Guix>>
 Should you eventually want to uninstall Guix, run the same script with the =--uninstall= flag:
 
 #+begin_example
@@ -112,12 +118,10 @@ Should you eventually want to uninstall Guix, run the same script with the =--un
 
 With =--uninstall=, the script irreversibly deletes all the Guix files, configuration, and services.
 
-Some GNU/Linux distributions, such as openSUSE, Alpine and NixOS provide Guix through their own package managers. The version of Guix may be older than ad54bd5 but you can update it afterwards by running =guix pull=.
+Some GNU/Linux distributions, such as openSUSE, Alpine and NixOS provide Guix through their own package managers. The version of Guix may be older than 1.5.0 but you can update it afterwards by running =guix pull=.
 
 We advise system administrators who install Guix, both from the installation script or /via/ the native package manager of their foreign distribution, to also regularly read and follow security notices, as shown by =guix pull=.
 
-- [[id:guix--Installation-with-a-pre_002dmounted-store][Installation with a pre-mounted store]]
-
 --------------
 
-Next: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Title-X][Frame Titles]]   Previous: [[id:emacs--Window-Size-X][Options for Window Size and Position]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
 
 <<Borders-X>>
+
+--------------
+
 *** C.9 Internal and Outer Borders [[#Internal-and-Outer-Borders][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Internal-and-Outer-Borders
@@ -23,5 +26,3 @@ An Emacs frame has an internal border and an outer border. The internal border i
 When you specify the size of the frame, that does not count the borders. The frame's position is measured from the outside edge of the external border.
 
 Use the ‘=-ib ==n=' option to specify an internal border =n= pixels wide. The default is 1. Use ‘=-bw ==n=' to specify the width of the outer border (though the window manager may not pay attention to what you specify). The default width of the outer border is 2.
-
---------------

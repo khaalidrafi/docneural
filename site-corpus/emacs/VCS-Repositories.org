@@ -4,6 +4,19 @@
 #+filetags: :emacs:
 #+title: VCS Repositories
 
-Next:
+Next: [[id:emacs--Types-of-Log-File][Types of Log File]]   Previous: [[id:emacs--VCS-Changesets][Changeset-based vs File-based Version Control]]   Up: [[id:emacs--Introduction-to-VC][Introduction to Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#VCS-Repositories][VCS Repositories]].
+<<VCS-Repositories>>
+
+--------------
+
+**** 30.1.1.6 Decentralized vs Centralized Repositories [[#Decentralized-vs-Centralized-Repositories][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Decentralized-vs-Centralized-Repositories
+:CLASS: subsubsection
+:END:
+Early version control systems were designed around a /centralized/ model in which each project has only one repository used by all developers. SCCS, RCS, CVS, Subversion, and SRC share this kind of model. One of its drawbacks is that the repository is a choke point for reliability and efficiency.
+
+GNU Arch pioneered the concept of /distributed/ or /decentralized/ version control, later implemented in Git, Mercurial, and Bazaar. A project may have several different repositories, and these systems support a sort of super-merge between repositories that tries to reconcile their change histories. In effect, there is one repository for each developer, and repository merges take the place of commit operations.
+
+VC helps you manage the traffic between your personal workfiles and a repository. Whether the repository is a single master, or one of a network of peer repositories, is not something VC has to care about.

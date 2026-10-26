@@ -4,6 +4,17 @@
 #+filetags: :emacs:
 #+title: Auto Reverting the Buffer Menu
 
-Next:
+Next: [[id:emacs--Auto-Reverting-Dired][Auto Reverting Dired buffers]]   Up: [[id:emacs--Non_002dFile-Buffers][Auto Reverting Non-File Buffers]]
 
-The node you are looking for is at [[id:emacs--Auto-Revert::#Auto-Reverting-the-Buffer-Menu][Auto Reverting the Buffer Menu]].
+<<Auto-Reverting-the-Buffer-Menu>>
+
+--------------
+
+**** 20.5.1.1 Auto Reverting the Buffer Menu [[#Auto-Reverting-the-Buffer-Menu-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Auto-Reverting-the-Buffer-Menu-1
+:CLASS: subsubsection
+:END:
+If auto-reverting of non-file buffers is enabled, the Buffer Menu (see [[id:emacs--Several-Buffers][Operating on Several Buffers]]) automatically reverts every =auto-revert-interval= seconds, whether there is a need for it or not. (It would probably take longer to check whether there is a need than to actually revert.)
+
+If the Buffer Menu inappropriately gets marked modified, just revert it manually using g and auto-reverting will resume. However, if you marked certain buffers to get deleted or to be displayed, you have to be careful, because reverting erases all marks. The fact that adding marks sets the buffer's modified flag prevents Auto Revert from automatically erasing the marks.

@@ -4,6 +4,31 @@
 #+filetags: :emacs:
 #+title: Move to Beginning or End
 
-Next:
+Next: [[id:emacs--Specified-Dates][Specified Dates]]   Previous: [[id:emacs--Calendar-Unit-Motion][Motion by Standard Lengths of Time]]   Up: [[id:emacs--Calendar-Motion][Movement in the Calendar]]
 
-The node you are looking for is at [[id:emacs--Calendar-Motion::#Move-to-Beginning-or-End][Move to Beginning or End]].
+<<Move-to-Beginning-or-End>>
+
+--------------
+
+**** 33.1.2 Beginning or End of Week, Month or Year [[#Beginning-or-End-of-Week_002c-Month-or-Year][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Beginning-or-End-of-Week_002c-Month-or-Year
+:CLASS: subsection
+:END:
+A week (or month, or year) is not just a quantity of days; we think of weeks (months, years) as starting on particular dates. So Calendar mode provides commands to move to the start or end of a week, month or year:
+
+-  <<index-C_002da-_0028Calendar-mode_0029>>C-a [[#index-C_002da-_0028Calendar-mode_0029][¶]] :: Move point to start of week (=calendar-beginning-of-week=).
+
+- C-e :: Move point to end of week (=calendar-end-of-week=).
+
+- M-a :: Move point to start of month (=calendar-beginning-of-month=).
+
+- M-e :: Move point to end of month (=calendar-end-of-month=).
+
+- M-< :: Move point to start of year (=calendar-beginning-of-year=).
+
+- M-> :: Move point to end of year (=calendar-end-of-year=).
+
+These commands also take numeric arguments as repeat counts, with the repeat count indicating how many weeks, months, or years to move backward or forward.
+
+By default, weeks begin on Sunday. To make them begin on Monday instead, set the variable =calendar-week-start-day= to 1. To change which day headers are highlighted as weekend days, set the variable =calendar-weekend-days=.

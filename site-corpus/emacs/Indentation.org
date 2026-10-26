@@ -7,14 +7,17 @@
 Next: [[id:emacs--Text][Commands for Human Languages]]   Previous: [[id:emacs--Modes][Major and Minor Modes]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Indentation>>
+
+--------------
+
 ** 26 Indentation [[#Indentation-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Indentation-1
 :CLASS: chapter
 :END:
-/Indentation/ refers to inserting or adjusting /whitespace characters/ (space and/or tab characters) at the beginning of a line of text. This chapter documents indentation commands and options which are common to Text mode and related modes, as well as programming language modes. See [[id:emacs--Program-Indent::#Program-Indent][Indentation for Programs]], for additional documentation about indenting in programming modes.
+/Indentation/ refers to inserting or adjusting /whitespace characters/ (space and/or tab characters) at the beginning of a line of text. This chapter documents indentation commands and options which are common to Text mode and related modes, as well as programming language modes. See [[id:emacs--Program-Indent][Indentation for Programs]], for additional documentation about indenting in programming modes.
 
-The simplest way to perform indentation is the TAB key. In most major modes, this runs the command =indent-for-tab-command=. (In C and related modes, TAB runs the command =c-indent-line-or-region=, which behaves similarly, see [[id:emacs--Program-Indent::#C-Indent][Commands for C Indentation]]).
+The simplest way to perform indentation is the TAB key. In most major modes, this runs the command =indent-for-tab-command=. (In C and related modes, TAB runs the command =c-indent-line-or-region=, which behaves similarly, see [[id:emacs--C-Indent][Commands for C Indentation]]).
 
 - TAB :: Insert whitespace, or indent the current line, in a mode-appropriate way (=indent-for-tab-command=). If the region is active, indent all the lines within it.
 
@@ -23,5 +26,11 @@ The exact behavior of TAB depends on the major mode. In Text mode and related ma
 In programming modes, TAB indents the current line of code in a way that makes sense given the code in the preceding lines. If the region is active, all the lines in the region are indented this way. If point was initially within the current line's indentation, it is repositioned to the first non-whitespace character on the line.
 
 If you just want to insert a tab character in the buffer, type C-q TAB (see [[id:emacs--Inserting-Text][Inserting Text]]).
+
+- [[id:emacs--Indentation-Commands][Indentation Commands]]
+- [[id:emacs--Tab-Stops][Tab Stops]]
+- [[id:emacs--Just-Spaces][Tabs vs. Spaces]]
+- [[id:emacs--Indent-Convenience][Convenience Features for Indentation]]
+- [[id:emacs--Code-Alignment][Code Alignment]]
 
 --------------

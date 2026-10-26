@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Day_002dto_002dDay-System-Administration>>
-Next: [[id:guix--On_002dSite-Intervention][On-Site Intervention]], Previous: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--On_002dSite-Intervention][On-Site Intervention]], Previous: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.20.3 Day-to-Day System Administration [[#Day_002dto_002dDay-System-Administration-1][¶]]
+<<Day_002dto_002dDay-System-Administration-1>>
+**** 22.20.3 Day-to-Day System Administration
 :PROPERTIES:
-:CUSTOM_ID: Day_002dto_002dDay-System-Administration-1
+:CUSTOM_ID: day-to-day-system-administration
 :CLASS: subsection
 :END:
 We're also looking for people who'd be willing to have SSH access to some of the infrastructure to help with day-to-day maintenance: restarting a build, restarting the occasional service that has gone wild (that can happen), reconfiguring/upgrading a machine, rebooting, etc.

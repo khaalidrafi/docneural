@@ -7,6 +7,9 @@
 Next: [[id:emacs--Movemail][movemail program]]   Previous: [[id:emacs--Rmail-Digest][Digest Messages]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Rmail-Rot13>>
+
+--------------
+
 *** 35.17 Reading Rot13 Messages [[#Reading-Rot13-Messages][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Reading-Rot13-Messages
@@ -17,5 +20,3 @@ Mailing list messages that might offend or annoy some readers are sometimes enco
 To view a buffer that uses the rot13 code, use the command M-x rot13-other-window. This displays the current buffer in another window which applies the code when displaying the text.
 
 If you are only interested in a region, the command M-x rot13-region might be preferable. This will encrypt/decrypt the active region in-place. If the buffer is read-only, it will attempt to display the plain text in the echo area. If the text is too long for the echo area, the command will pop up a temporary buffer with the encrypted/decrypted text.
-
---------------

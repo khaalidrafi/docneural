@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Deprecation-Policy>>
-Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.17 Deprecation Policy [[#Deprecation-Policy-1][¶]]
+<<Deprecation-Policy-1>>
+*** 22.17 Deprecation Policy
 :PROPERTIES:
-:CUSTOM_ID: Deprecation-Policy-1
+:CUSTOM_ID: deprecation-policy
 :CLASS: section
 :END:
+<<index-deprecation-policy>>
 As any lively project with a broad scope, Guix changes all the time and at all levels. Because it's user-extensible and programmable, incompatible changes can directly impact users and make their life harder. It is thus important to reduce user-visible incompatible changes to a minimum and, when such changes are deemed necessary, to clearly communicate them through a /deprecation period/ so everyone can adapt with minimum hassle. This section defines the project's commitments for smooth deprecation and describes procedures and mechanisms to honor them.
 
 There are several ways to use Guix; how to handle deprecation will depend on each use case. Those can be roughly categorized like this:
@@ -62,9 +65,11 @@ These use cases form a spectrum with varying degrees of coupling---from “dista
 
   Because of the broad impact of such a change, we recommend conducting a user survey before enacting a plan.
 
-- <<index-package-deprecation>>Package name changes [[#index-package-deprecation][¶]] :: When a package name changes, it must remain available under its old name for *at least six months*; the deprecation date should be stated in a comment in the code to ease the final removal.
+  <<index-package-deprecation>>
 
-  For example, =go-ipfs= was renamed to =kubo= following a decision made upstream; to communicate the name change to users, the package module provided this definition:
+- Package name changes :: When a package name changes, it must remain available under its old name for *at least one year*. For example, =go-ipfs= was renamed to =kubo= following a decision made upstream; to communicate the name change to users, the package module provided this definition:
+
+  <<index-deprecated_002dpackage>> <<index-define_002ddeprecated_002dpackage>>
 
   #+begin_src lisp
   (define-deprecated-package go-ipfs
@@ -75,41 +80,34 @@ These use cases form a spectrum with varying degrees of coupling---from “dista
 
   Under the hood, =define-deprecated-package= combines =define-deprecated/public-alias= to mark the variable as deprecated (see below), and the =deprecated-package= procedure to mark the package name as deprecated.
 
-- Package removal :: How packages may be removed depends on their build status and on their position in the package graph.
+  <<index-package-removal-policy>> <<package_002dremoval_002dpolicy>>
 
-  - Removal of packages that do not build
+- Package removal :: Packages whose upstream developers have declared as having reached “end of life” or being unmaintained may be removed; likewise, packages that have been *failing to build for two months or more* may be removed.
 
-    A package that does not build becomes a removal candidate immediately. A pull request removing such a package should be filed on Codeberg with the ‘=deprecation=' label. Additional justification for the (non-)importance, obsolescence etc. of the package is welcome, but not required. Such a pull request may be merged *at least three weeks* later if there is no opposition to the removal or if nobody has volunteered to repair the affected packages.
+  There is no formal deprecation mechanism for this case, unless a replacement exists, in which case the =define-deprecated-package= macro mentioned above can be used.
 
-  - Removal of building packages
-
-    There are various reasons why packages may become removal candidates although they still build: For instance we may have a newer version of the same package in Guix, maintenance has stopped upstream, or the package is not adequately maintained in Guix.
-
-    - Removal candidates that are building leaf packages :: Leaf packages may be removed following the above process, assuming that there is no opposition to the removal or that consensus for the removal has been reached. Leaf packages that are typically installed into user profiles (for instance applications, but also packages used in a service) should not be removed unless there are particularly good reasons, such as security implications.
-
-    - Removal candidates that are building packages with dependents :: Removing building packages on which other packages depend causes more disruption than removing leaf packages, since at the same time all dependent packages need to be removed. This may still be desirable for overarching reasons. For instance, we want to remove older versions of packages for which newer versions are already packaged, remove packages that are unmaintained or have reached end of life upstream, or that suffer from security vulnerabilities.
-
-      In this case, the removal candidate may be removed together with all packages depending on it following the above procedure. If the removal candidate falls into the realm of a team, this team must be notified, and consensus shall be sought about the removal in particular with this team. Reasonable efforts shall be made beforehand to update or otherwise preserve dependent packages.
+  If the package being removed is a “leaf” (no other packages depend on it), it may be removed after a *one-month review period* of the patch removing it (this applies even when the removal has additional motivations such as security problems affecting the package).
 
   #+begin_quote
-  *Note:* Learn about pending package removals by checking [[https://codeberg.org/guix/guix/pulls?labels=445131][pull requests with the ‘=deprecation=' label]].
+  *Note:* Learn about pending package removals by checking [[https://codeberg.org/guix/guix/issues?labels=445131][issues and pull requests with the ‘=deprecation=' label]].
 
   #+end_quote
 
-- Moving packages between modules :: When a package is moved from one module to another one, the corresponding variable =name= should be marked as deprecated in the old location for *at least six months*, for instance by adding
+  If the package has many dependent packages---as is the case for example with Python version 2---the relevant team must propose a deprecation removal agenda and seek consensus with other packagers for *at least one month*. It may also invite feedback from the broader user community, for example through a survey. Removal of all impacted packages may be gradual, spanning multiple months, to accommodate all use cases.
 
-  #+begin_src lisp
-  (define-deprecated/public-alias name
-    (@ (gnu packages new-module) name))
-  #+end_src
+  When the package being removed is considered popular, whether or not it is a leaf, its deprecation must be announced as an entry in =etc/news.scm=.
 
-  in =gnu/packages/old-module.scm=.
+- Package upgrade :: In the case of packages with many dependents and/or many users, an upgrade may be treated like the /removal/ of the previous version.
 
-- Package additions :: Packages submitted for inclusion must not fulfill the criteria to become a removal candidate immediately after addition.
+  Examples include major version upgrades of programming language implementations, as we've seen above with Python, and major upgrades of “big” libraries such as Qt or GTK.
 
-- <<index-service-deprecation>>Services [[#index-service-deprecation][¶]] :: Changes to services for Guix Home and Guix System have a direct impact on user configuration. For a user, adjusting to interface changes is rarely rewarding, which is why any such change must be clearly communicated in advance through deprecation warnings and documentation.
+  <<index-service-deprecation>>
+
+- Services :: Changes to services for Guix Home and Guix System have a direct impact on user configuration. For a user, adjusting to interface changes is rarely rewarding, which is why any such change must be clearly communicated in advance through deprecation warnings and documentation.
 
   Renaming of variables related to service, home, or system configuration must be communicated for at least six months before removal using the =(guix deprecation)= mechanisms. For example, renaming of =murmur-configuration= to =mumble-server-configuration= was communicated through a series of definitions like this one:
+
+  <<index-define_002ddeprecated_002fpublic_002dalias>>
 
   #+begin_src lisp
   (define-deprecated/public-alias
@@ -118,6 +116,8 @@ These use cases form a spectrum with varying degrees of coupling---from “dista
   #+end_src
 
   Procedures slated for removal may be defined like this:
+
+  <<index-define_002ddeprecated>>
 
   #+begin_src lisp
   (define-deprecated (elogind-service #:key (config (elogind-configuration)))
@@ -129,7 +129,7 @@ These use cases form a spectrum with varying degrees of coupling---from “dista
 
   #+begin_src lisp
   (define-record-type* <operating-system>
-    ;; ...
+    ;; …
     (hosts-file %operating-system-hosts-file         ;deprecated
                 (default #f)
                 (sanitize warn-hosts-file-field-deprecation)))
@@ -141,20 +141,24 @@ These use cases form a spectrum with varying degrees of coupling---from “dista
 
   When deprecating interfaces in =operating-system=, =home-environment=, =(gnu services)=, or any popular service, the deprecation must come with an entry in =etc/news.scm=.
 
-- <<index-deprecation-of-programming-interfaces>>Core interfaces [[#index-deprecation-of-programming-interfaces][¶]] :: Core programming interfaces, in particular the =(guix ...)= modules, may be relied on by a variety of external tools and channels. Any incompatible change must be formally deprecated with =define-deprecated=, as shown above, for *at least one year* before removal. The manual must clearly document the new interface and, except in obvious cases, explain how to migrate from the old one.
+  <<index-deprecation-of-programming-interfaces>>
+
+- Core interfaces :: Core programming interfaces, in particular the =(guix ...)= modules, may be relied on by a variety of external tools and channels. Any incompatible change must be formally deprecated with =define-deprecated=, as shown above, for *at least one year* before removal. The manual must clearly document the new interface and, except in obvious cases, explain how to migrate from the old one.
 
   As an example, the =build-expression->derivation= procedure was superseded by =gexp->derivation= and remained available as a deprecated symbol:
 
   #+begin_src lisp
   (define-deprecated (build-expression->derivation store name exp
-                                                   #:key ...)
+                                                   #:key …)
     gexp->derivation
-    ...)
+    …)
   #+end_src
 
   Sometimes bindings are moved from one module to another. In those cases, bindings must be reexported from the original module for at least one year.
 
 This section does not cover all possible situations but hopefully allows users to know what to expect and developers to stick to its spirit. Please email [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] for any questions.
+
+<<index-documentation-1>>
 
 --------------
 
@@ -166,10 +170,9 @@ This section does not cover all possible situations but hopefully allows users t
 ***** [[#DOCF54][(54)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 For more details on the =guix shell= transition, see [[https://guix.gnu.org/en/blog/2021/from-guix-environment-to-guix-shell/]].
 
 --------------
 
-Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

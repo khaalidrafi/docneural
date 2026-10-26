@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<Separate-Debug-Info>>
-Next: [[id:guix--Rebuilding-Debug-Info][Rebuilding Debug Info]], Up: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Rebuilding-Debug-Info][Rebuilding Debug Info]], Up: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 17.1 Separate Debug Info [[#Separate-Debug-Info-1][¶]]
+<<Separate-Debug-Info-1>>
+*** 17.1 Separate Debug Info
 :PROPERTIES:
-:CUSTOM_ID: Separate-Debug-Info-1
+:CUSTOM_ID: separate-debug-info
 :CLASS: section
 :END:
 The problem with debugging information is that it takes up a fair amount of disk space. For example, debugging information for the GNU C Library weighs in at more than 60 MiB. Thus, as a user, keeping all the debugging info of all the installed programs is usually not an option. Yet, space savings should not come at the cost of an impediment to debugging---especially in the GNU system, which should make it easier for users to exert their computing freedom (see [[id:guix--GNU-Distribution][GNU Distribution]]).
 
-Thankfully, the GNU Binary Utilities (Binutils) and GDB provide a mechanism that allows users to get the best of both worlds: debugging information can be stripped from the binaries and stored in separate files. GDB is then able to load debugging information from those files, when they are available (see [[https://doc.guix.gnu.org/gdb/latest/en/html_node/Separate-Debug-Files.html#Separate-Debug-Files][Separate Debug Files]] in Debugging with GDB).
+Thankfully, the GNU Binary Utilities (Binutils) and GDB provide a mechanism that allows users to get the best of both worlds: debugging information can be stripped from the binaries and stored in separate files. GDB is then able to load debugging information from those files, when they are available (see [[https://sourceware.org/gdb/current/onlinedocs/gdb/Separate-Debug-Files.html#Separate-Debug-Files][Separate Debug Files]] in Debugging with GDB).
 
 The GNU distribution takes advantage of this by storing debugging information in the =lib/debug= sub-directory of a separate package output unimaginatively called =debug= (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]). Users can choose to install the =debug= output of a package when they need it. For instance, the following command installs the debugging information for the GNU C Library and for GNU Guile:
 
@@ -55,7 +57,7 @@ The GNU distribution takes advantage of this by storing debugging information in
 guix install glibc:debug guile:debug
 #+end_example
 
-GDB must then be told to look for debug files in the user's profile, by setting the =debug-file-directory= variable (consider setting it from the =~/.gdbinit= file, see [[https://doc.guix.gnu.org/gdb/latest/en/html_node/Startup.html#Startup][Startup]] in Debugging with GDB):
+GDB must then be told to look for debug files in the user's profile, by setting the =debug-file-directory= variable (consider setting it from the =~/.gdbinit= file, see [[https://sourceware.org/gdb/current/onlinedocs/gdb/Startup.html#Startup][Startup]] in Debugging with GDB):
 
 #+begin_example
 (gdb) set debug-file-directory ~/.guix-profile/lib/debug
@@ -74,7 +76,7 @@ guile
 end
 #+end_example
 
-In addition, you will most likely want GDB to be able to show the source code being debugged. To do that, you will have to unpack the source code of the package of interest (obtained with =guix build --source=, see [[id:guix--Invoking-guix-build][Invoking =guix build=]]), and to point GDB to that source directory using the =directory= command (see [[https://doc.guix.gnu.org/gdb/latest/en/html_node/Source-Path.html#Source-Path][=directory=]] in Debugging with GDB).
+In addition, you will most likely want GDB to be able to show the source code being debugged. To do that, you will have to unpack the source code of the package of interest (obtained with =guix build --source=, see [[id:guix--Invoking-guix-build][Invoking =guix build=]]), and to point GDB to that source directory using the =directory= command (see [[https://sourceware.org/gdb/current/onlinedocs/gdb/Source-Path.html#Source-Path][=directory=]] in Debugging with GDB).
 
 The =debug= output mechanism in Guix is implemented by the =gnu-build-system= (see [[id:guix--Build-Systems][Build Systems]]). Currently, it is opt-in---debugging information is available only for the packages with definitions explicitly declaring a =debug= output. To check whether a package has a =debug= output, use =guix package --list-available= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
 
@@ -82,4 +84,4 @@ Read on for how to deal with packages lacking a =debug= output.
 
 --------------
 
-Next: [[id:guix--Rebuilding-Debug-Info][Rebuilding Debug Info]], Up: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Rebuilding-Debug-Info][Rebuilding Debug Info]], Up: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

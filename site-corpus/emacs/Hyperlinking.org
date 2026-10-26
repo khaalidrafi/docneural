@@ -7,6 +7,9 @@
 Next: [[id:emacs--Amusements][Games and Other Amusements]]   Previous: [[id:emacs--Recursive-Edit][Recursive Editing Levels]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Hyperlinking>>
+
+--------------
+
 ** 48 Hyperlinking and Web Navigation Features [[#Hyperlinking-and-Web-Navigation-Features][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Hyperlinking-and-Web-Navigation-Features
@@ -14,4 +17,8 @@ Next: [[id:emacs--Amusements][Games and Other Amusements]]   Previous: [[id:emac
 :END:
 The following subsections describe convenience features for handling URLs and other types of links occurring in Emacs buffer text.
 
---------------
+- [[id:emacs--EWW][Web Browsing with EWW]]
+- [[id:emacs--Embedded-WebKit-Widgets][Embedded WebKit Widgets]]
+- [[id:emacs--Browse_002dURL][Following URLs]]
+- [[id:emacs--Goto-Address-mode][Activating URLs]]
+- [[id:emacs--FFAP][Finding Files and URLs at Point]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Minor-Modes][Minor Modes]]   Up: [[id:emacs--Modes][Major and Minor Modes]]
 
 <<Major-Modes>>
+
+--------------
+
 *** 25.1 Major Modes [[#Major-Modes-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Major-Modes-1
@@ -22,7 +25,7 @@ Usually, the major mode is automatically set by Emacs, when you first visit a fi
 
 The value of the buffer-local variable =major-mode= is a symbol with the same name as the major mode command (e.g., =lisp-mode=). This variable is set automatically; you should not change it yourself.
 
-The default value of =major-mode= determines the major mode to use for files that do not specify a major mode, and for new buffers created with C-x b. Normally, this default value is the symbol =fundamental-mode=, which specifies Fundamental mode. You can change this default value via the Customization interface (see [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]]), or by adding a line like this to your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]):
+The default value of =major-mode= determines the major mode to use for files that do not specify a major mode, and for new buffers created with C-x b. Normally, this default value is the symbol =fundamental-mode=, which specifies Fundamental mode. You can change this default value via the Customization interface (see [[id:emacs--Easy-Customization][Easy Customization Interface]]), or by adding a line like this to your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]):
 
 #+begin_example
 (setq-default major-mode 'text-mode)
@@ -30,13 +33,13 @@ The default value of =major-mode= determines the major mode to use for files tha
 
 If the default value of =major-mode= is =nil=, the major mode is taken from the previously current buffer.
 
-Specialized major modes often change the meanings of certain keys to do something more suitable for the mode. For instance, programming language modes bind TAB to indent the current line according to the rules of the language (see [[id:emacs--Indentation][Indentation]]). The keys that are commonly changed are TAB, DEL, and C-j. Many modes also define special commands of their own, usually bound to key sequences whose prefix key is C-c (see [[id:emacs--Keys][Keys]]). Major modes can also alter user options and variables; for instance, programming language modes typically set a buffer-local value for the variable =comment-start=, which determines how source code comments are delimited (see [[id:emacs--Comments::#Comments][Manipulating Comments]]).
+Specialized major modes often change the meanings of certain keys to do something more suitable for the mode. For instance, programming language modes bind TAB to indent the current line according to the rules of the language (see [[id:emacs--Indentation][Indentation]]). The keys that are commonly changed are TAB, DEL, and C-j. Many modes also define special commands of their own, usually bound to key sequences whose prefix key is C-c (see [[id:emacs--Keys][Keys]]). Major modes can also alter user options and variables; for instance, programming language modes typically set a buffer-local value for the variable =comment-start=, which determines how source code comments are delimited (see [[id:emacs--Comments][Manipulating Comments]]).
 
 To view the documentation for the current major mode, including a list of its key bindings, type C-h m (=describe-mode=). See [[id:emacs--Misc-Help][Other Help Commands]].
 
-Every major mode, apart from Fundamental mode, defines a /mode hook/, a customizable list of Lisp functions to run each time the mode is enabled in a buffer. See [[id:emacs--Variables::#Hooks][Hooks]], for more information about hooks. Each mode hook is named after its major mode, e.g., Fortran mode has =fortran-mode-hook=. Furthermore, all text-based major modes run =text-mode-hook=, and many programming language modes [[#FOOT11][^{11}]] (including all those distributed with Emacs) run =prog-mode-hook=, prior to running their own mode hooks. Hook functions can look at the value of the variable =major-mode= to see which mode is actually being entered.
+Every major mode, apart from Fundamental mode, defines a /mode hook/, a customizable list of Lisp functions to run each time the mode is enabled in a buffer. See [[id:emacs--Hooks][Hooks]], for more information about hooks. Each mode hook is named after its major mode, e.g., Fortran mode has =fortran-mode-hook=. Furthermore, all text-based major modes run =text-mode-hook=, and many programming language modes [[#FOOT11][^{11}]] (including all those distributed with Emacs) run =prog-mode-hook=, prior to running their own mode hooks. Hook functions can look at the value of the variable =major-mode= to see which mode is actually being entered.
 
-Mode hooks are commonly used to enable minor modes (see [[id:emacs--Minor-Modes][Minor Modes]]). For example, you can put the following lines in your init file to enable Flyspell minor mode in all text-based major modes (see [[id:emacs--Spelling][Checking and Correcting Spelling]]), and ElDoc minor mode in Emacs Lisp mode (see [[id:emacs--Documentation::#Programming-Language-Doc][Programming Language Documentation Lookup]]):
+Mode hooks are commonly used to enable minor modes (see [[id:emacs--Minor-Modes][Minor Modes]]). For example, you can put the following lines in your init file to enable Flyspell minor mode in all text-based major modes (see [[id:emacs--Spelling][Checking and Correcting Spelling]]), and ElDoc minor mode in Emacs Lisp mode (see [[id:emacs--Programming-Language-Doc][Programming Language Documentation Lookup]]):
 
 #+begin_example
 (add-hook 'text-mode-hook 'flyspell-mode)

@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Indirect Buffers
 
-Next: [[id:emacs--Buffer-Convenience#Buffer-Convenience][Convenience Features and Customization of Buffer Handling]]   Previous: [[id:emacs--Several-Buffers][Operating on Several Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
+Next: [[id:emacs--Buffer-Convenience][Convenience Features and Customization of Buffer Handling]]   Previous: [[id:emacs--Several-Buffers][Operating on Several Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
 
 <<Indirect-Buffers>>
+
+--------------
+
 *** 21.6 Indirect Buffers [[#Indirect-Buffers-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Indirect-Buffers-1
@@ -24,7 +27,7 @@ The text of the indirect buffer is always identical to the text of its base buff
 
 An indirect buffer cannot visit a file, but its base buffer can. If you try to save the indirect buffer, that actually works by saving the base buffer. Killing the base buffer effectively kills the indirect buffer, but killing an indirect buffer has no effect on its base buffer.
 
-One way to use indirect buffers is to display multiple views of an outline. See [[id:emacs--Outline-Mode::#Outline-Views][Viewing One Outline in Multiple Views]].
+One way to use indirect buffers is to display multiple views of an outline. See [[id:emacs--Outline-Views][Viewing One Outline in Multiple Views]].
 
 A quick and handy way to make an indirect buffer is with the command C-x 4 c (=clone-indirect-buffer-other-window=). It creates and selects an indirect buffer whose base buffer is the current buffer. With a numeric argument, it prompts for the name of the indirect buffer; otherwise it uses the name of the current buffer, with a ‘=<==n==>=' suffix added.
 

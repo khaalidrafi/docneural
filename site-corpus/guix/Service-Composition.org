@@ -36,27 +36,33 @@ Next:
 [[../..][]]
 
 <<Service-Composition>>
-Next: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.19.1 Service Composition [[#Service-Composition-1][¶]]
+<<Service-Composition-1>>
+**** 11.19.1 Service Composition
 :PROPERTIES:
-:CUSTOM_ID: Service-Composition-1
+:CUSTOM_ID: service-composition
 :CLASS: subsection
 :END:
+<<index-services-1>> <<index-daemons>>
 Here we define a /service/ as, broadly, something that extends the functionality of the operating system. Often a service is a process---a /daemon/---started when the system boots: a secure shell server, a Web server, the Guix build daemon, etc. Sometimes a service is a daemon whose execution can be triggered by another daemon---e.g., an FTP server started by =inetd= or a D-Bus service activated by =dbus-daemon=. Occasionally, a service does not map to a daemon. For instance, the “account” service collects user accounts and makes sure they exist when the system runs; the “udev” service collects device management rules and makes them available to the eudev daemon; the =/etc= service populates the =/etc= directory of the system.
 
+<<index-service-extensions>>
 Guix system services are connected by /extensions/. For instance, the secure shell service /extends/ the Shepherd---the initialization system, running as PID 1---by giving it the command lines to start and stop the secure shell daemon (see [[id:guix--Networking-Services][=openssh-service-type=]]); the UPower service extends the D-Bus service by passing it its =.service= specification, and extends the udev service by passing it device management rules (see [[id:guix--Desktop-Services][=upower-service=]]); the Guix daemon service extends the Shepherd by passing it the command lines to start and stop the daemon, and extends the account service by passing it a list of required build user accounts (see [[id:guix--Base-Services][Base Services]]).
 
 All in all, services and their “extends” relations form a directed acyclic graph (DAG). If we represent services as boxes and extensions as arrows, a typical system might provide something like this:
 
+<<index-system-service>>
 At the bottom, we see the /system service/, which produces the directory containing everything to run and boot the system, as returned by the =guix system build= command. See [[id:guix--Service-Reference][Service Reference]], to learn about the other service types shown here. See [[id:guix--Invoking-guix-system::#system_002dextension_002dgraph][the =guix system extension-graph= command]], for information on how to generate this representation for a particular operating system definition.
 
+<<index-service-types>>
 Technically, developers can define /service types/ to express these relations. There can be any number of services of a given type on the system, for instance when running two instances with different parameters.
 
 The following section describes the programming interface for service types and services.
 
 --------------
 
-Next: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

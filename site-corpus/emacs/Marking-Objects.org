@@ -7,6 +7,9 @@
 Next: [[id:emacs--Using-Region][Operating on the Region]]   Previous: [[id:emacs--Setting-Mark][Setting the Mark]]   Up: [[id:emacs--Mark][The Mark and the Region]]
 
 <<Marking-Objects>>
+
+--------------
+
 *** 13.2 Commands to Mark Textual Objects [[#Commands-to-Mark-Textual-Objects][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Commands-to-Mark-Textual-Objects
@@ -30,9 +33,9 @@ M-@ (=mark-word=) sets the mark at the end of the next word (see [[id:emacs--Wor
 
 This command also accepts a numeric argument =n=, which tells it to advance the mark by =n= words. A negative argument −=n= moves the mark back by =n= words.
 
-Similarly, C-M-@ (=mark-sexp=) puts the mark at the end of the next balanced expression (see [[id:emacs--Parentheses::#Expressions][Expressions with Balanced Parentheses]]). Repeated invocations extend the region to subsequent expressions, while positive or negative numeric arguments move the mark forward or backward by the specified number of expressions.
+Similarly, C-M-@ (=mark-sexp=) puts the mark at the end of the next balanced expression (see [[id:emacs--Expressions][Expressions with Balanced Parentheses]]). Repeated invocations extend the region to subsequent expressions, while positive or negative numeric arguments move the mark forward or backward by the specified number of expressions.
 
-The other commands in the above list set both point and mark, so as to delimit an object in the buffer. M-h (=mark-paragraph=) marks paragraphs (see [[id:emacs--Paragraphs][Paragraphs]]), C-M-h (=mark-defun=) marks top-level definitions (see [[id:emacs--Defuns::#Moving-by-Defuns][Moving by Defuns]]), and C-x C-p (=mark-page=) marks pages (see [[id:emacs--Pages][Pages]]). Repeated invocations again play the same role, extending the region to consecutive objects; similarly, numeric arguments specify how many objects to move the mark by.
+The other commands in the above list set both point and mark, so as to delimit an object in the buffer. M-h (=mark-paragraph=) marks paragraphs (see [[id:emacs--Paragraphs][Paragraphs]]), C-M-h (=mark-defun=) marks top-level definitions (see [[id:emacs--Moving-by-Defuns][Moving by Defuns]]), and C-x C-p (=mark-page=) marks pages (see [[id:emacs--Pages][Pages]]). Repeated invocations again play the same role, extending the region to consecutive objects; similarly, numeric arguments specify how many objects to move the mark by.
 
 C-x h (=mark-whole-buffer=) sets up the entire buffer as the region, by putting point at the beginning and the mark at the end.
 

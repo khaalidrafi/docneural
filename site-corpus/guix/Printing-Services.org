@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Printing-Services>>
-Next: [[id:guix--Desktop-Services][Desktop Services]], Previous: [[id:guix--X-Window][X Window]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Desktop-Services][Desktop Services]], Previous: [[id:guix--X-Window][X Window]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.9 Printing Services [[#Printing-Services-1][¶]]
+<<Printing-Services-1>>
+**** 11.10.8 Printing Services
 :PROPERTIES:
-:CUSTOM_ID: Printing-Services-1
+:CUSTOM_ID: printing-services
 :CLASS: subsection
 :END:
+<<index-printer-support-with-CUPS>>
 The =(gnu services cups)= module provides a Guix service definition for the CUPS printing service. To add printer support to a Guix system, add a =cups-service= to the operating system definition:
 
-- Variable: *cups-service-type* [[#index-cups_002dservice_002dtype][¶]] :: The service type for the CUPS print server. Its value should be a valid CUPS configuration (see below). To use the default settings, simply write:
+- Variable: cups-service-type  :: The service type for the CUPS print server. Its value should be a valid CUPS configuration (see below). To use the default settings, simply write:
 
   #+begin_src lisp
   (service cups-service-type)
@@ -74,33 +77,33 @@ The available configuration parameters follow. Each parameter definition is prec
 
 Available =cups-configuration= fields are:
 
-- =cups-configuration= parameter: =package= *cups* [[#index-cups][¶]] :: The CUPS package.
+- =cups-configuration= parameter: /package/ *cups* [[#index-cups][¶]] :: The CUPS package.
 
-- =cups-configuration= parameter: =package-list= *extensions* =(default: ==(list brlaser cups-filters epson-inkjet-printer-escpr foomatic-filters hplip-minimal splix)==)= [[#index-extensions][¶]] :: Drivers and other extensions to the CUPS package.
+- =cups-configuration= parameter: /package-list/ *extensions* /(default: =(list brlaser cups-filters epson-inkjet-printer-escpr foomatic-filters hplip-minimal splix)=)/ [[#index-extensions][¶]] :: Drivers and other extensions to the CUPS package.
 
-- =cups-configuration= parameter: =files-configuration= *files-configuration* [[#index-files_002dconfiguration][¶]] :: Configuration of where to write logs, what directories to use for print spools, and related privileged configuration parameters.
+- =cups-configuration= parameter: /files-configuration/ *files-configuration* [[#index-files_002dconfiguration][¶]] :: Configuration of where to write logs, what directories to use for print spools, and related privileged configuration parameters.
 
   Available =files-configuration= fields are:
 
-  - =files-configuration= parameter: =log-location= *access-log* [[#index-access_002dlog][¶]] :: Defines the access log filename. Specifying a blank filename disables access log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-access_log=.
+  - =files-configuration= parameter: /log-location/ *access-log* [[#index-access_002dlog][¶]] :: Defines the access log filename. Specifying a blank filename disables access log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-access_log=.
 
     Defaults to ‘="/var/log/cups/access_log"='.
 
-  - =files-configuration= parameter: =file-name= *cache-dir* [[#index-cache_002ddir][¶]] :: Where CUPS should cache data.
+  - =files-configuration= parameter: /file-name/ *cache-dir* [[#index-cache_002ddir][¶]] :: Where CUPS should cache data.
 
     Defaults to ‘="/var/cache/cups"='.
 
-  - =files-configuration= parameter: =string= *config-file-perm* [[#index-config_002dfile_002dperm][¶]] :: Specifies the permissions for all configuration files that the scheduler writes.
+  - =files-configuration= parameter: /string/ *config-file-perm* [[#index-config_002dfile_002dperm][¶]] :: Specifies the permissions for all configuration files that the scheduler writes.
 
     Note that the permissions for the printers.conf file are currently masked to only allow access from the scheduler user (typically root). This is done because printer device URIs sometimes contain sensitive authentication information that should not be generally known on the system. There is no way to disable this security feature.
 
     Defaults to ‘="0640"='.
 
-  - =files-configuration= parameter: =log-location= *error-log* [[#index-error_002dlog][¶]] :: Defines the error log filename. Specifying a blank filename disables error log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-error_log=.
+  - =files-configuration= parameter: /log-location/ *error-log* [[#index-error_002dlog][¶]] :: Defines the error log filename. Specifying a blank filename disables error log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-error_log=.
 
     Defaults to ‘="/var/log/cups/error_log"='.
 
-  - =files-configuration= parameter: =string= *fatal-errors* [[#index-fatal_002derrors][¶]] :: Specifies which errors are fatal, causing the scheduler to exit. The kind strings are:
+  - =files-configuration= parameter: /string/ *fatal-errors* [[#index-fatal_002derrors][¶]] :: Specifies which errors are fatal, causing the scheduler to exit. The kind strings are:
 
     - =none= :: No errors are fatal.
 
@@ -118,329 +121,329 @@ Available =cups-configuration= fields are:
 
     Defaults to ‘="all -browse"='.
 
-  - =files-configuration= parameter: =boolean= *file-device?* [[#index-file_002ddevice_003f][¶]] :: Specifies whether the file pseudo-device can be used for new printer queues. The URI [[file:///dev/null]] is always allowed.
+  - =files-configuration= parameter: /boolean/ *file-device?* [[#index-file_002ddevice_003f][¶]] :: Specifies whether the file pseudo-device can be used for new printer queues. The URI [[file:///dev/null]] is always allowed.
 
     Defaults to ‘=#f='.
 
-  - =files-configuration= parameter: =string= *group* [[#index-group][¶]] :: Specifies the group name or ID that will be used when executing external programs.
+  - =files-configuration= parameter: /string/ *group* [[#index-group][¶]] :: Specifies the group name or ID that will be used when executing external programs.
 
     Defaults to ‘="lp"='.
 
-  - =files-configuration= parameter: =string= *log-file-group* [[#index-log_002dfile_002dgroup][¶]] :: Specifies the group name or ID that will be used for log files.
+  - =files-configuration= parameter: /string/ *log-file-group* [[#index-log_002dfile_002dgroup][¶]] :: Specifies the group name or ID that will be used for log files.
 
     Defaults to ‘="lpadmin"='.
 
-  - =files-configuration= parameter: =string= *log-file-perm* [[#index-log_002dfile_002dperm][¶]] :: Specifies the permissions for all log files that the scheduler writes.
+  - =files-configuration= parameter: /string/ *log-file-perm* [[#index-log_002dfile_002dperm][¶]] :: Specifies the permissions for all log files that the scheduler writes.
 
     Defaults to ‘="0644"='.
 
-  - =files-configuration= parameter: =log-location= *page-log* [[#index-page_002dlog][¶]] :: Defines the page log filename. Specifying a blank filename disables page log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-page_log=.
+  - =files-configuration= parameter: /log-location/ *page-log* [[#index-page_002dlog][¶]] :: Defines the page log filename. Specifying a blank filename disables page log generation. The value =stderr= causes log entries to be sent to the standard error file when the scheduler is running in the foreground, or to the system log daemon when run in the background. The value =syslog= causes log entries to be sent to the system log daemon. The server name may be included in filenames using the string =%s=, as in =/var/log/cups/%s-page_log=.
 
     Defaults to ‘="/var/log/cups/page_log"='.
 
-  - =files-configuration= parameter: =string= *remote-root* [[#index-remote_002droot][¶]] :: Specifies the username that is associated with unauthenticated accesses by clients claiming to be the root user. The default is =remroot=.
+  - =files-configuration= parameter: /string/ *remote-root* [[#index-remote_002droot][¶]] :: Specifies the username that is associated with unauthenticated accesses by clients claiming to be the root user. The default is =remroot=.
 
     Defaults to ‘="remroot"='.
 
-  - =files-configuration= parameter: =file-name= *request-root* [[#index-request_002droot][¶]] :: Specifies the directory that contains print jobs and other HTTP request data.
+  - =files-configuration= parameter: /file-name/ *request-root* [[#index-request_002droot][¶]] :: Specifies the directory that contains print jobs and other HTTP request data.
 
     Defaults to ‘="/var/spool/cups"='.
 
-  - =files-configuration= parameter: =sandboxing= *sandboxing* [[#index-sandboxing][¶]] :: Specifies the level of security sandboxing that is applied to print filters, backends, and other child processes of the scheduler; either =relaxed= or =strict=. This directive is currently only used/supported on macOS.
+  - =files-configuration= parameter: /sandboxing/ *sandboxing* [[#index-sandboxing][¶]] :: Specifies the level of security sandboxing that is applied to print filters, backends, and other child processes of the scheduler; either =relaxed= or =strict=. This directive is currently only used/supported on macOS.
 
     Defaults to ‘=strict='.
 
-  - =files-configuration= parameter: =file-name= *server-keychain* [[#index-server_002dkeychain][¶]] :: Specifies the location of TLS certificates and private keys. CUPS will look for public and private keys in this directory: =.crt= files for PEM-encoded certificates and corresponding =.key= files for PEM-encoded private keys.
+  - =files-configuration= parameter: /file-name/ *server-keychain* [[#index-server_002dkeychain][¶]] :: Specifies the location of TLS certificates and private keys. CUPS will look for public and private keys in this directory: =.crt= files for PEM-encoded certificates and corresponding =.key= files for PEM-encoded private keys.
 
     Defaults to ‘="/etc/cups/ssl"='.
 
-  - =files-configuration= parameter: =file-name= *server-root* [[#index-server_002droot][¶]] :: Specifies the directory containing the server configuration files.
+  - =files-configuration= parameter: /file-name/ *server-root* [[#index-server_002droot][¶]] :: Specifies the directory containing the server configuration files.
 
     Defaults to ‘="/etc/cups"='.
 
-  - =files-configuration= parameter: =boolean= *sync-on-close?* [[#index-sync_002don_002dclose_003f][¶]] :: Specifies whether the scheduler calls fsync(2) after writing configuration or state files.
+  - =files-configuration= parameter: /boolean/ *sync-on-close?* [[#index-sync_002don_002dclose_003f][¶]] :: Specifies whether the scheduler calls fsync(2) after writing configuration or state files.
 
     Defaults to ‘=#f='.
 
-  - =files-configuration= parameter: =space-separated-string-list= *system-group* [[#index-system_002dgroup][¶]] :: Specifies the group(s) to use for =@SYSTEM= group authentication.
+  - =files-configuration= parameter: /space-separated-string-list/ *system-group* [[#index-system_002dgroup][¶]] :: Specifies the group(s) to use for =@SYSTEM= group authentication.
 
-  - =files-configuration= parameter: =file-name= *temp-dir* [[#index-temp_002ddir][¶]] :: Specifies the directory where temporary files are stored.
+  - =files-configuration= parameter: /file-name/ *temp-dir* [[#index-temp_002ddir][¶]] :: Specifies the directory where temporary files are stored.
 
     Defaults to ‘="/var/spool/cups/tmp"='.
 
-  - =files-configuration= parameter: =string= *user* [[#index-user][¶]] :: Specifies the user name or ID that is used when running external programs.
+  - =files-configuration= parameter: /string/ *user* [[#index-user][¶]] :: Specifies the user name or ID that is used when running external programs.
 
     Defaults to ‘="lp"='.
 
-  - =files-configuration= parameter: =string= *set-env* [[#index-set_002denv][¶]] :: Set the specified environment variable to be passed to child processes.
+  - =files-configuration= parameter: /string/ *set-env* [[#index-set_002denv][¶]] :: Set the specified environment variable to be passed to child processes.
 
     Defaults to ‘="variable value"='.
 
-- =cups-configuration= parameter: =access-log-level= *access-log-level* [[#index-access_002dlog_002dlevel][¶]] :: Specifies the logging level for the AccessLog file. The =config= level logs when printers and classes are added, deleted, or modified and when configuration files are accessed or updated. The =actions= level logs when print jobs are submitted, held, released, modified, or canceled, and any of the conditions for =config=. The =all= level logs all requests.
+- =cups-configuration= parameter: /access-log-level/ *access-log-level* [[#index-access_002dlog_002dlevel][¶]] :: Specifies the logging level for the AccessLog file. The =config= level logs when printers and classes are added, deleted, or modified and when configuration files are accessed or updated. The =actions= level logs when print jobs are submitted, held, released, modified, or canceled, and any of the conditions for =config=. The =all= level logs all requests.
 
   Defaults to ‘=actions='.
 
-- =cups-configuration= parameter: =boolean= *auto-purge-jobs?* [[#index-auto_002dpurge_002djobs_003f][¶]] :: Specifies whether to purge job history data automatically when it is no longer required for quotas.
+- =cups-configuration= parameter: /boolean/ *auto-purge-jobs?* [[#index-auto_002dpurge_002djobs_003f][¶]] :: Specifies whether to purge job history data automatically when it is no longer required for quotas.
 
   Defaults to ‘=#f='.
 
-- =cups-configuration= parameter: =comma-separated-string-list= *browse-dns-sd-sub-types* [[#index-browse_002ddns_002dsd_002dsub_002dtypes][¶]] :: Specifies a list of DNS-SD sub-types to advertise for each shared printer.
+- =cups-configuration= parameter: /comma-separated-string-list/ *browse-dns-sd-sub-types* [[#index-browse_002ddns_002dsd_002dsub_002dtypes][¶]] :: Specifies a list of DNS-SD sub-types to advertise for each shared printer.
 
   The default ‘=(list "_cups" "_print" "_universal")=' tells clients that CUPS sharing, IPP Everywhere, AirPrint, and Mopria are supported.
 
-- =cups-configuration= parameter: =browse-local-protocols= *browse-local-protocols* [[#index-browse_002dlocal_002dprotocols][¶]] :: Specifies which protocols to use for local printer sharing.
+- =cups-configuration= parameter: /browse-local-protocols/ *browse-local-protocols* [[#index-browse_002dlocal_002dprotocols][¶]] :: Specifies which protocols to use for local printer sharing.
 
   Defaults to ‘=dnssd='.
 
-- =cups-configuration= parameter: =boolean= *browse-web-if?* [[#index-browse_002dweb_002dif_003f][¶]] :: Specifies whether the CUPS web interface is advertised.
+- =cups-configuration= parameter: /boolean/ *browse-web-if?* [[#index-browse_002dweb_002dif_003f][¶]] :: Specifies whether the CUPS web interface is advertised.
 
   Defaults to ‘=#f='.
 
-- =cups-configuration= parameter: =boolean= *browsing?* [[#index-browsing_003f][¶]] :: Specifies whether shared printers are advertised.
+- =cups-configuration= parameter: /boolean/ *browsing?* [[#index-browsing_003f][¶]] :: Specifies whether shared printers are advertised.
 
   Defaults to ‘=#f='.
 
-- =cups-configuration= parameter: =default-auth-type= *default-auth-type* [[#index-default_002dauth_002dtype][¶]] :: Specifies the default type of authentication to use.
+- =cups-configuration= parameter: /default-auth-type/ *default-auth-type* [[#index-default_002dauth_002dtype][¶]] :: Specifies the default type of authentication to use.
 
   Defaults to ‘=Basic='.
 
-- =cups-configuration= parameter: =default-encryption= *default-encryption* [[#index-default_002dencryption][¶]] :: Specifies whether encryption will be used for authenticated requests.
+- =cups-configuration= parameter: /default-encryption/ *default-encryption* [[#index-default_002dencryption][¶]] :: Specifies whether encryption will be used for authenticated requests.
 
   Defaults to ‘=Required='.
 
-- =cups-configuration= parameter: =string= *default-language* [[#index-default_002dlanguage][¶]] :: Specifies the default language to use for text and web content.
+- =cups-configuration= parameter: /string/ *default-language* [[#index-default_002dlanguage][¶]] :: Specifies the default language to use for text and web content.
 
   Defaults to ‘="en"='.
 
-- =cups-configuration= parameter: =string= *default-paper-size* [[#index-default_002dpaper_002dsize][¶]] :: Specifies the default paper size for new print queues. ‘="Auto"=' uses a locale-specific default, while ‘="None"=' specifies there is no default paper size. Specific size names are typically ‘="Letter"=' or ‘="A4"='.
+- =cups-configuration= parameter: /string/ *default-paper-size* [[#index-default_002dpaper_002dsize][¶]] :: Specifies the default paper size for new print queues. ‘="Auto"=' uses a locale-specific default, while ‘="None"=' specifies there is no default paper size. Specific size names are typically ‘="Letter"=' or ‘="A4"='.
 
   Defaults to ‘="Auto"='.
 
-- =cups-configuration= parameter: =string= *default-policy* [[#index-default_002dpolicy][¶]] :: Specifies the default access policy to use.
+- =cups-configuration= parameter: /string/ *default-policy* [[#index-default_002dpolicy][¶]] :: Specifies the default access policy to use.
 
   Defaults to ‘="default"='.
 
-- =cups-configuration= parameter: =boolean= *default-shared?* [[#index-default_002dshared_003f][¶]] :: Specifies whether local printers are shared by default.
+- =cups-configuration= parameter: /boolean/ *default-shared?* [[#index-default_002dshared_003f][¶]] :: Specifies whether local printers are shared by default.
 
   Defaults to ‘=#t='.
 
-- =cups-configuration= parameter: =non-negative-integer= *dirty-clean-interval* [[#index-dirty_002dclean_002dinterval][¶]] :: Specifies the delay for updating of configuration and state files, in seconds. A value of 0 causes the update to happen as soon as possible, typically within a few milliseconds.
+- =cups-configuration= parameter: /non-negative-integer/ *dirty-clean-interval* [[#index-dirty_002dclean_002dinterval][¶]] :: Specifies the delay for updating of configuration and state files, in seconds. A value of 0 causes the update to happen as soon as possible, typically within a few milliseconds.
 
   Defaults to ‘=30='.
 
-- =cups-configuration= parameter: =error-policy= *error-policy* [[#index-error_002dpolicy][¶]] :: Specifies what to do when an error occurs. Possible values are =abort-job=, which will discard the failed print job; =retry-job=, which will retry the job at a later time; =retry-current-job=, which retries the failed job immediately; and =stop-printer=, which stops the printer.
+- =cups-configuration= parameter: /error-policy/ *error-policy* [[#index-error_002dpolicy][¶]] :: Specifies what to do when an error occurs. Possible values are =abort-job=, which will discard the failed print job; =retry-job=, which will retry the job at a later time; =retry-current-job=, which retries the failed job immediately; and =stop-printer=, which stops the printer.
 
   Defaults to ‘=stop-printer='.
 
-- =cups-configuration= parameter: =non-negative-integer= *filter-limit* [[#index-filter_002dlimit][¶]] :: Specifies the maximum cost of filters that are run concurrently, which can be used to minimize disk, memory, and CPU resource problems. A limit of 0 disables filter limiting. An average print to a non-PostScript printer needs a filter limit of about 200. A PostScript printer needs about half that (100). Setting the limit below these thresholds will effectively limit the scheduler to printing a single job at any time.
+- =cups-configuration= parameter: /non-negative-integer/ *filter-limit* [[#index-filter_002dlimit][¶]] :: Specifies the maximum cost of filters that are run concurrently, which can be used to minimize disk, memory, and CPU resource problems. A limit of 0 disables filter limiting. An average print to a non-PostScript printer needs a filter limit of about 200. A PostScript printer needs about half that (100). Setting the limit below these thresholds will effectively limit the scheduler to printing a single job at any time.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *filter-nice* [[#index-filter_002dnice][¶]] :: Specifies the scheduling priority of filters that are run to print a job. The nice value ranges from 0, the highest priority, to 19, the lowest priority.
+- =cups-configuration= parameter: /non-negative-integer/ *filter-nice* [[#index-filter_002dnice][¶]] :: Specifies the scheduling priority of filters that are run to print a job. The nice value ranges from 0, the highest priority, to 19, the lowest priority.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =host-name-lookups= *host-name-lookups* [[#index-host_002dname_002dlookups][¶]] :: Specifies whether to do reverse lookups on connecting clients. The =double= setting causes =cupsd= to verify that the hostname resolved from the address matches one of the addresses returned for that hostname. Double lookups also prevent clients with unregistered addresses from connecting to your server. Only set this option to =#t= or =double= if absolutely required.
+- =cups-configuration= parameter: /host-name-lookups/ *host-name-lookups* [[#index-host_002dname_002dlookups][¶]] :: Specifies whether to do reverse lookups on connecting clients. The =double= setting causes =cupsd= to verify that the hostname resolved from the address matches one of the addresses returned for that hostname. Double lookups also prevent clients with unregistered addresses from connecting to your server. Only set this option to =#t= or =double= if absolutely required.
 
   Defaults to ‘=#f='.
 
-- =cups-configuration= parameter: =non-negative-integer= *job-kill-delay* [[#index-job_002dkill_002ddelay][¶]] :: Specifies the number of seconds to wait before killing the filters and backend associated with a canceled or held job.
+- =cups-configuration= parameter: /non-negative-integer/ *job-kill-delay* [[#index-job_002dkill_002ddelay][¶]] :: Specifies the number of seconds to wait before killing the filters and backend associated with a canceled or held job.
 
   Defaults to ‘=30='.
 
-- =cups-configuration= parameter: =non-negative-integer= *job-retry-interval* [[#index-job_002dretry_002dinterval][¶]] :: Specifies the interval between retries of jobs in seconds. This is typically used for fax queues but can also be used with normal print queues whose error policy is =retry-job= or =retry-current-job=.
+- =cups-configuration= parameter: /non-negative-integer/ *job-retry-interval* [[#index-job_002dretry_002dinterval][¶]] :: Specifies the interval between retries of jobs in seconds. This is typically used for fax queues but can also be used with normal print queues whose error policy is =retry-job= or =retry-current-job=.
 
   Defaults to ‘=30='.
 
-- =cups-configuration= parameter: =non-negative-integer= *job-retry-limit* [[#index-job_002dretry_002dlimit][¶]] :: Specifies the number of retries that are done for jobs. This is typically used for fax queues but can also be used with normal print queues whose error policy is =retry-job= or =retry-current-job=.
+- =cups-configuration= parameter: /non-negative-integer/ *job-retry-limit* [[#index-job_002dretry_002dlimit][¶]] :: Specifies the number of retries that are done for jobs. This is typically used for fax queues but can also be used with normal print queues whose error policy is =retry-job= or =retry-current-job=.
 
   Defaults to ‘=5='.
 
-- =cups-configuration= parameter: =boolean= *keep-alive?* [[#index-keep_002dalive_003f][¶]] :: Specifies whether to support HTTP keep-alive connections.
+- =cups-configuration= parameter: /boolean/ *keep-alive?* [[#index-keep_002dalive_003f][¶]] :: Specifies whether to support HTTP keep-alive connections.
 
   Defaults to ‘=#t='.
 
-- =cups-configuration= parameter: =non-negative-integer= *limit-request-body* [[#index-limit_002drequest_002dbody][¶]] :: Specifies the maximum size of print files, IPP requests, and HTML form data. A limit of 0 disables the limit check.
+- =cups-configuration= parameter: /non-negative-integer/ *limit-request-body* [[#index-limit_002drequest_002dbody][¶]] :: Specifies the maximum size of print files, IPP requests, and HTML form data. A limit of 0 disables the limit check.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =multiline-string-list= *listen* [[#index-listen][¶]] :: Listens on the specified interfaces for connections. Valid values are of the form =address=:=port=, where =address= is either an IPv6 address enclosed in brackets, an IPv4 address, or =*= to indicate all addresses. Values can also be file names of local UNIX domain sockets. The Listen directive is similar to the Port directive but allows you to restrict access to specific interfaces or networks.
+- =cups-configuration= parameter: /multiline-string-list/ *listen* [[#index-listen][¶]] :: Listens on the specified interfaces for connections. Valid values are of the form =address=:=port=, where =address= is either an IPv6 address enclosed in brackets, an IPv4 address, or =*= to indicate all addresses. Values can also be file names of local UNIX domain sockets. The Listen directive is similar to the Port directive but allows you to restrict access to specific interfaces or networks.
 
-- =cups-configuration= parameter: =location-access-control-list= *location-access-controls* [[#index-location_002daccess_002dcontrols][¶]] :: Specifies a set of additional access controls.
+- =cups-configuration= parameter: /location-access-control-list/ *location-access-controls* [[#index-location_002daccess_002dcontrols][¶]] :: Specifies a set of additional access controls.
 
   Available =location-access-controls= fields are:
 
-  - =location-access-controls= parameter: =file-name= *path* [[#index-path][¶]] :: Specifies the URI path to which the access control applies.
+  - =location-access-controls= parameter: /file-name/ *path* [[#index-path][¶]] :: Specifies the URI path to which the access control applies.
 
-  - =location-access-controls= parameter: =access-control-list= *access-controls* [[#index-access_002dcontrols][¶]] :: Access controls for all access to this path, in the same format as the =access-controls= of =operation-access-control=.
+  - =location-access-controls= parameter: /access-control-list/ *access-controls* [[#index-access_002dcontrols][¶]] :: Access controls for all access to this path, in the same format as the =access-controls= of =operation-access-control=.
 
     Defaults to ‘='()='.
 
-  - =location-access-controls= parameter: =method-access-control-list= *method-access-controls* [[#index-method_002daccess_002dcontrols][¶]] :: Access controls for method-specific access to this path.
+  - =location-access-controls= parameter: /method-access-control-list/ *method-access-controls* [[#index-method_002daccess_002dcontrols][¶]] :: Access controls for method-specific access to this path.
 
     Defaults to ‘='()='.
 
     Available =method-access-controls= fields are:
 
-    - =method-access-controls= parameter: =boolean= *reverse?* [[#index-reverse_003f][¶]] :: If =#t=, apply access controls to all methods except the listed methods. Otherwise apply to only the listed methods.
+    - =method-access-controls= parameter: /boolean/ *reverse?* [[#index-reverse_003f][¶]] :: If =#t=, apply access controls to all methods except the listed methods. Otherwise apply to only the listed methods.
 
       Defaults to ‘=#f='.
 
-    - =method-access-controls= parameter: =method-list= *methods* [[#index-methods][¶]] :: Methods to which this access control applies.
+    - =method-access-controls= parameter: /method-list/ *methods* [[#index-methods][¶]] :: Methods to which this access control applies.
 
       Defaults to ‘='()='.
 
-    - =method-access-controls= parameter: =access-control-list= *access-controls* [[#index-access_002dcontrols-1][¶]] :: Access control directives, as a list of strings. Each string should be one directive, such as ‘="Order allow,deny"='.
+    - =method-access-controls= parameter: /access-control-list/ *access-controls* [[#index-access_002dcontrols-1][¶]] :: Access control directives, as a list of strings. Each string should be one directive, such as ‘="Order allow,deny"='.
 
       Defaults to ‘='()='.
 
-- =cups-configuration= parameter: =non-negative-integer= *log-debug-history* [[#index-log_002ddebug_002dhistory][¶]] :: Specifies the number of debugging messages that are retained for logging if an error occurs in a print job. Debug messages are logged regardless of the LogLevel setting.
+- =cups-configuration= parameter: /non-negative-integer/ *log-debug-history* [[#index-log_002ddebug_002dhistory][¶]] :: Specifies the number of debugging messages that are retained for logging if an error occurs in a print job. Debug messages are logged regardless of the LogLevel setting.
 
   Defaults to ‘=100='.
 
-- =cups-configuration= parameter: =log-level= *log-level* [[#index-log_002dlevel][¶]] :: Specifies the level of logging for the ErrorLog file. The value =none= stops all logging while =debug2= logs everything.
+- =cups-configuration= parameter: /log-level/ *log-level* [[#index-log_002dlevel][¶]] :: Specifies the level of logging for the ErrorLog file. The value =none= stops all logging while =debug2= logs everything.
 
   Defaults to ‘=info='.
 
-- =cups-configuration= parameter: =log-time-format= *log-time-format* [[#index-log_002dtime_002dformat][¶]] :: Specifies the format of the date and time in the log files. The value =standard= logs whole seconds while =usecs= logs microseconds.
+- =cups-configuration= parameter: /log-time-format/ *log-time-format* [[#index-log_002dtime_002dformat][¶]] :: Specifies the format of the date and time in the log files. The value =standard= logs whole seconds while =usecs= logs microseconds.
 
   Defaults to ‘=standard='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-clients* [[#index-max_002dclients][¶]] :: Specifies the maximum number of simultaneous clients that are allowed by the scheduler.
+- =cups-configuration= parameter: /non-negative-integer/ *max-clients* [[#index-max_002dclients][¶]] :: Specifies the maximum number of simultaneous clients that are allowed by the scheduler.
 
   Defaults to ‘=100='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-clients-per-host* [[#index-max_002dclients_002dper_002dhost][¶]] :: Specifies the maximum number of simultaneous clients that are allowed from a single address.
+- =cups-configuration= parameter: /non-negative-integer/ *max-clients-per-host* [[#index-max_002dclients_002dper_002dhost][¶]] :: Specifies the maximum number of simultaneous clients that are allowed from a single address.
 
   Defaults to ‘=100='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-copies* [[#index-max_002dcopies][¶]] :: Specifies the maximum number of copies that a user can print of each job.
+- =cups-configuration= parameter: /non-negative-integer/ *max-copies* [[#index-max_002dcopies][¶]] :: Specifies the maximum number of copies that a user can print of each job.
 
   Defaults to ‘=9999='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-hold-time* [[#index-max_002dhold_002dtime][¶]] :: Specifies the maximum time a job may remain in the =indefinite= hold state before it is canceled. A value of 0 disables cancellation of held jobs.
+- =cups-configuration= parameter: /non-negative-integer/ *max-hold-time* [[#index-max_002dhold_002dtime][¶]] :: Specifies the maximum time a job may remain in the =indefinite= hold state before it is canceled. A value of 0 disables cancellation of held jobs.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-jobs* [[#index-max_002djobs][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed. Set to 0 to allow an unlimited number of jobs.
+- =cups-configuration= parameter: /non-negative-integer/ *max-jobs* [[#index-max_002djobs][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed. Set to 0 to allow an unlimited number of jobs.
 
   Defaults to ‘=500='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-jobs-per-printer* [[#index-max_002djobs_002dper_002dprinter][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed per printer. A value of 0 allows up to =max-jobs= per printer.
+- =cups-configuration= parameter: /non-negative-integer/ *max-jobs-per-printer* [[#index-max_002djobs_002dper_002dprinter][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed per printer. A value of 0 allows up to =max-jobs= per printer.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-jobs-per-user* [[#index-max_002djobs_002dper_002duser][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed per user. A value of 0 allows up to =max-jobs= per user.
+- =cups-configuration= parameter: /non-negative-integer/ *max-jobs-per-user* [[#index-max_002djobs_002dper_002duser][¶]] :: Specifies the maximum number of simultaneous jobs that are allowed per user. A value of 0 allows up to =max-jobs= per user.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-job-time* [[#index-max_002djob_002dtime][¶]] :: Specifies the maximum time a job may take to print before it is canceled, in seconds. Set to 0 to disable cancellation of “stuck” jobs.
+- =cups-configuration= parameter: /non-negative-integer/ *max-job-time* [[#index-max_002djob_002dtime][¶]] :: Specifies the maximum time a job may take to print before it is canceled, in seconds. Set to 0 to disable cancellation of “stuck” jobs.
 
   Defaults to ‘=10800='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-log-size* [[#index-max_002dlog_002dsize][¶]] :: Specifies the maximum size of the log files before they are rotated, in bytes. The value 0 disables log rotation.
+- =cups-configuration= parameter: /non-negative-integer/ *max-log-size* [[#index-max_002dlog_002dsize][¶]] :: Specifies the maximum size of the log files before they are rotated, in bytes. The value 0 disables log rotation.
 
   Defaults to ‘=1048576='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-subscriptions* [[#index-max_002dsubscriptions][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed. Set to ‘=0=' to allow an unlimited number of subscriptions.
+- =cups-configuration= parameter: /non-negative-integer/ *max-subscriptions* [[#index-max_002dsubscriptions][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed. Set to ‘=0=' to allow an unlimited number of subscriptions.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-subscriptions-per-job* [[#index-max_002dsubscriptions_002dper_002djob][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per job. A value of ‘=0=' allows up to =max-subscriptions= per job.
+- =cups-configuration= parameter: /non-negative-integer/ *max-subscriptions-per-job* [[#index-max_002dsubscriptions_002dper_002djob][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per job. A value of ‘=0=' allows up to =max-subscriptions= per job.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-subscriptions-per-printer* [[#index-max_002dsubscriptions_002dper_002dprinter][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per printer. A value of ‘=0=' allows up to =max-subscriptions= per printer.
+- =cups-configuration= parameter: /non-negative-integer/ *max-subscriptions-per-printer* [[#index-max_002dsubscriptions_002dper_002dprinter][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per printer. A value of ‘=0=' allows up to =max-subscriptions= per printer.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *max-subscriptions-per-user* [[#index-max_002dsubscriptions_002dper_002duser][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per user. A value of ‘=0=' allows up to =max-subscriptions= per user.
+- =cups-configuration= parameter: /non-negative-integer/ *max-subscriptions-per-user* [[#index-max_002dsubscriptions_002dper_002duser][¶]] :: Specifies the maximum number of simultaneous event subscriptions that are allowed per user. A value of ‘=0=' allows up to =max-subscriptions= per user.
 
   Defaults to ‘=0='.
 
-- =cups-configuration= parameter: =non-negative-integer= *multiple-operation-timeout* [[#index-multiple_002doperation_002dtimeout][¶]] :: Specifies the maximum amount of time to allow between files in a multiple file print job, in seconds.
+- =cups-configuration= parameter: /non-negative-integer/ *multiple-operation-timeout* [[#index-multiple_002doperation_002dtimeout][¶]] :: Specifies the maximum amount of time to allow between files in a multiple file print job, in seconds.
 
   Defaults to ‘=900='.
 
-- =cups-configuration= parameter: =environment-variables= *environment-variables* [[#index-environment_002dvariables][¶]] :: Passes the specified environment variable(s) to child processes; a list of strings.
+- =cups-configuration= parameter: /environment-variables/ *environment-variables* [[#index-environment_002dvariables][¶]] :: Passes the specified environment variable(s) to child processes; a list of strings.
 
   Defaults to ‘='()='.
 
-- =cups-configuration= parameter: =policy-configuration-list= *policies* [[#index-policies][¶]] :: Specifies named access control policies.
+- =cups-configuration= parameter: /policy-configuration-list/ *policies* [[#index-policies][¶]] :: Specifies named access control policies.
 
   Available =policy-configuration= fields are:
 
-  - =policy-configuration= parameter: =string= *name* [[#index-name][¶]] :: Name of the policy.
+  - =policy-configuration= parameter: /string/ *name* [[#index-name][¶]] :: Name of the policy.
 
-  - =policy-configuration= parameter: =string= *job-private-access* [[#index-job_002dprivate_002daccess][¶]] :: Specifies an access list for a job's private values. =@ACL= maps to the printer's requesting-user-name-allowed or requesting-user-name-denied values. =@OWNER= maps to the job's owner. =@SYSTEM= maps to the groups listed for the =system-group= field of the =files-configuration=, which is reified into the =cups-files.conf(5)= file. Other possible elements of the access list include specific user names, and =@==group= to indicate members of a specific group. The access list may also be simply =all= or =default=.
+  - =policy-configuration= parameter: /string/ *job-private-access* [[#index-job_002dprivate_002daccess][¶]] :: Specifies an access list for a job's private values. =@ACL= maps to the printer's requesting-user-name-allowed or requesting-user-name-denied values. =@OWNER= maps to the job's owner. =@SYSTEM= maps to the groups listed for the =system-group= field of the =files-configuration=, which is reified into the =cups-files.conf(5)= file. Other possible elements of the access list include specific user names, and =@==group= to indicate members of a specific group. The access list may also be simply =all= or =default=.
 
     Defaults to ‘="@OWNER @SYSTEM"='.
 
-  - =policy-configuration= parameter: =string= *job-private-values* [[#index-job_002dprivate_002dvalues][¶]] :: Specifies the list of job values to make private, or =all=, =default=, or =none=.
+  - =policy-configuration= parameter: /string/ *job-private-values* [[#index-job_002dprivate_002dvalues][¶]] :: Specifies the list of job values to make private, or =all=, =default=, or =none=.
 
     Defaults to ‘="job-name job-originating-host-name job-originating-user-name phone"='.
 
-  - =policy-configuration= parameter: =string= *subscription-private-access* [[#index-subscription_002dprivate_002daccess][¶]] :: Specifies an access list for a subscription's private values. =@ACL= maps to the printer's requesting-user-name-allowed or requesting-user-name-denied values. =@OWNER= maps to the job's owner. =@SYSTEM= maps to the groups listed for the =system-group= field of the =files-configuration=, which is reified into the =cups-files.conf(5)= file. Other possible elements of the access list include specific user names, and =@==group= to indicate members of a specific group. The access list may also be simply =all= or =default=.
+  - =policy-configuration= parameter: /string/ *subscription-private-access* [[#index-subscription_002dprivate_002daccess][¶]] :: Specifies an access list for a subscription's private values. =@ACL= maps to the printer's requesting-user-name-allowed or requesting-user-name-denied values. =@OWNER= maps to the job's owner. =@SYSTEM= maps to the groups listed for the =system-group= field of the =files-configuration=, which is reified into the =cups-files.conf(5)= file. Other possible elements of the access list include specific user names, and =@==group= to indicate members of a specific group. The access list may also be simply =all= or =default=.
 
     Defaults to ‘="@OWNER @SYSTEM"='.
 
-  - =policy-configuration= parameter: =string= *subscription-private-values* [[#index-subscription_002dprivate_002dvalues][¶]] :: Specifies the list of job values to make private, or =all=, =default=, or =none=.
+  - =policy-configuration= parameter: /string/ *subscription-private-values* [[#index-subscription_002dprivate_002dvalues][¶]] :: Specifies the list of job values to make private, or =all=, =default=, or =none=.
 
     Defaults to ‘="notify-events notify-pull-method notify-recipient-uri notify-subscriber-user-name notify-user-data"='.
 
-  - =policy-configuration= parameter: =operation-access-control-list= *access-controls* [[#index-access_002dcontrols-2][¶]] :: Access control by IPP operation.
+  - =policy-configuration= parameter: /operation-access-control-list/ *access-controls* [[#index-access_002dcontrols-2][¶]] :: Access control by IPP operation.
 
     Defaults to ‘='()='.
 
-- =cups-configuration= parameter: =boolean-or-non-negative-integer= *preserve-job-files* [[#index-preserve_002djob_002dfiles][¶]] :: Specifies whether job files (documents) are preserved after a job is printed. If a numeric value is specified, job files are preserved for the indicated number of seconds after printing. Otherwise a boolean value applies indefinitely.
+- =cups-configuration= parameter: /boolean-or-non-negative-integer/ *preserve-job-files* [[#index-preserve_002djob_002dfiles][¶]] :: Specifies whether job files (documents) are preserved after a job is printed. If a numeric value is specified, job files are preserved for the indicated number of seconds after printing. Otherwise a boolean value applies indefinitely.
 
   Defaults to ‘=86400='.
 
-- =cups-configuration= parameter: =boolean-or-non-negative-integer= *preserve-job-history* [[#index-preserve_002djob_002dhistory][¶]] :: Specifies whether the job history is preserved after a job is printed. If a numeric value is specified, the job history is preserved for the indicated number of seconds after printing. If =#t=, the job history is preserved until the MaxJobs limit is reached.
+- =cups-configuration= parameter: /boolean-or-non-negative-integer/ *preserve-job-history* [[#index-preserve_002djob_002dhistory][¶]] :: Specifies whether the job history is preserved after a job is printed. If a numeric value is specified, the job history is preserved for the indicated number of seconds after printing. If =#t=, the job history is preserved until the MaxJobs limit is reached.
 
   Defaults to ‘=#t='.
 
-- =cups-configuration= parameter: =comma-separated-string-list-or-#f= *ready-paper-sizes* [[#index-ready_002dpaper_002dsizes][¶]] :: Specifies a list of potential paper sizes that are reported as ready, that is: loaded. The actual list will contain only the sizes that each printer supports.
+- =cups-configuration= parameter: /comma-separated-string-list-or-#f/ *ready-paper-sizes* [[#index-ready_002dpaper_002dsizes][¶]] :: Specifies a list of potential paper sizes that are reported as ready, that is: loaded. The actual list will contain only the sizes that each printer supports.
 
   The default value of =#f= is a special case: CUPS will use ‘=(list \"Letter\" \"Legal\" \"Tabloid\" \"4x6\" \"Env10\")=' if the default paper size is \"Letter\", and ‘=(list \"A3\" \"A4\" \"A5\" \"A6\" \"EnvDL\")=' otherwise.
 
-- =cups-configuration= parameter: =non-negative-integer= *reload-timeout* [[#index-reload_002dtimeout][¶]] :: Specifies the amount of time to wait for job completion before restarting the scheduler.
+- =cups-configuration= parameter: /non-negative-integer/ *reload-timeout* [[#index-reload_002dtimeout][¶]] :: Specifies the amount of time to wait for job completion before restarting the scheduler.
 
   Defaults to ‘=30='.
 
-- =cups-configuration= parameter: =string= *server-admin* [[#index-server_002dadmin][¶]] :: Specifies the email address of the server administrator.
+- =cups-configuration= parameter: /string/ *server-admin* [[#index-server_002dadmin][¶]] :: Specifies the email address of the server administrator.
 
   Defaults to ‘="root@localhost.localdomain"='.
 
-- =cups-configuration= parameter: =host-name-list-or-*= *server-alias* [[#index-server_002dalias][¶]] :: The ServerAlias directive is used for HTTP Host header validation when clients connect to the scheduler from external interfaces. Using the special name =*= can expose your system to known browser-based DNS rebinding attacks, even when accessing sites through a firewall. If the auto-discovery of alternate names does not work, we recommend listing each alternate name with a ServerAlias directive instead of using =*=.
+- =cups-configuration= parameter: /host-name-list-or-*/ *server-alias* [[#index-server_002dalias][¶]] :: The ServerAlias directive is used for HTTP Host header validation when clients connect to the scheduler from external interfaces. Using the special name =*= can expose your system to known browser-based DNS rebinding attacks, even when accessing sites through a firewall. If the auto-discovery of alternate names does not work, we recommend listing each alternate name with a ServerAlias directive instead of using =*=.
 
   Defaults to ‘=*='.
 
-- =cups-configuration= parameter: =string= *server-name* [[#index-server_002dname][¶]] :: Specifies the fully-qualified host name of the server.
+- =cups-configuration= parameter: /string/ *server-name* [[#index-server_002dname][¶]] :: Specifies the fully-qualified host name of the server.
 
   Defaults to ‘="localhost"='.
 
-- =cups-configuration= parameter: =server-tokens= *server-tokens* [[#index-server_002dtokens][¶]] :: Specifies what information is included in the Server header of HTTP responses. =None= disables the Server header. =ProductOnly= reports =CUPS=. =Major= reports =CUPS 2=. =Minor= reports =CUPS 2.0=. =Minimal= reports =CUPS 2.0.0=. =OS= reports =CUPS 2.0.0 (==uname==)= where =uname= is the output of the =uname= command. =Full= reports =CUPS 2.0.0 (==uname==) IPP/2.0=.
+- =cups-configuration= parameter: /server-tokens/ *server-tokens* [[#index-server_002dtokens][¶]] :: Specifies what information is included in the Server header of HTTP responses. =None= disables the Server header. =ProductOnly= reports =CUPS=. =Major= reports =CUPS 2=. =Minor= reports =CUPS 2.0=. =Minimal= reports =CUPS 2.0.0=. =OS= reports =CUPS 2.0.0 (==uname==)= where =uname= is the output of the =uname= command. =Full= reports =CUPS 2.0.0 (==uname==) IPP/2.0=.
 
   Defaults to ‘=Minimal='.
 
-- =cups-configuration= parameter: =multiline-string-list= *ssl-listen* [[#index-ssl_002dlisten][¶]] :: Listens on the specified interfaces for encrypted connections. Valid values are of the form =address=:=port=, where =address= is either an IPv6 address enclosed in brackets, an IPv4 address, or =*= to indicate all addresses.
+- =cups-configuration= parameter: /multiline-string-list/ *ssl-listen* [[#index-ssl_002dlisten][¶]] :: Listens on the specified interfaces for encrypted connections. Valid values are of the form =address=:=port=, where =address= is either an IPv6 address enclosed in brackets, an IPv4 address, or =*= to indicate all addresses.
 
   Defaults to ‘='()='.
 
-- =cups-configuration= parameter: =ssl-options= *ssl-options* [[#index-ssl_002doptions][¶]] :: Sets encryption options. By default, CUPS only supports encryption using TLS v1.0 or higher using known secure cipher suites. Security is reduced when =Allow= options are used, and enhanced when =Deny= options are used. The =AllowRC4= option enables the 128-bit RC4 cipher suites, which are required for some older clients. The =AllowSSL3= option enables SSL v3.0, which is required for some older clients that do not support TLS v1.0. The =DenyCBC= option disables all CBC cipher suites. The =DenyTLS1.0= option disables TLS v1.0 support - this sets the minimum protocol version to TLS v1.1.
+- =cups-configuration= parameter: /ssl-options/ *ssl-options* [[#index-ssl_002doptions][¶]] :: Sets encryption options. By default, CUPS only supports encryption using TLS v1.0 or higher using known secure cipher suites. Security is reduced when =Allow= options are used, and enhanced when =Deny= options are used. The =AllowRC4= option enables the 128-bit RC4 cipher suites, which are required for some older clients. The =AllowSSL3= option enables SSL v3.0, which is required for some older clients that do not support TLS v1.0. The =DenyCBC= option disables all CBC cipher suites. The =DenyTLS1.0= option disables TLS v1.0 support - this sets the minimum protocol version to TLS v1.1.
 
   Defaults to ‘='()='.
 
-- =cups-configuration= parameter: =boolean= *strict-conformance?* [[#index-strict_002dconformance_003f][¶]] :: Specifies whether the scheduler requires clients to strictly adhere to the IPP specifications.
+- =cups-configuration= parameter: /boolean/ *strict-conformance?* [[#index-strict_002dconformance_003f][¶]] :: Specifies whether the scheduler requires clients to strictly adhere to the IPP specifications.
 
   Defaults to ‘=#f='.
 
-- =cups-configuration= parameter: =non-negative-integer= *timeout* [[#index-timeout][¶]] :: Specifies the HTTP request timeout, in seconds.
+- =cups-configuration= parameter: /non-negative-integer/ *timeout* [[#index-timeout][¶]] :: Specifies the HTTP request timeout, in seconds.
 
   Defaults to ‘=900='.
 
-- =cups-configuration= parameter: =boolean= *web-interface?* [[#index-web_002dinterface_003f][¶]] :: Specifies whether the web interface is enabled.
+- =cups-configuration= parameter: /boolean/ *web-interface?* [[#index-web_002dinterface_003f][¶]] :: Specifies whether the web interface is enabled.
 
   Defaults to ‘=#f='.
 
@@ -448,11 +451,11 @@ At this point you're probably thinking “oh dear, Guix manual, I like you but y
 
 Available =opaque-cups-configuration= fields are:
 
-- =opaque-cups-configuration= parameter: =package= *cups* [[#index-cups-1][¶]] :: The CUPS package.
+- =opaque-cups-configuration= parameter: /package/ *cups* [[#index-cups-1][¶]] :: The CUPS package.
 
-- =opaque-cups-configuration= parameter: =string= *cupsd.conf* [[#index-cupsd_002econf][¶]] :: The contents of the =cupsd.conf=, as a string.
+- =opaque-cups-configuration= parameter: /string/ *cupsd.conf* [[#index-cupsd_002econf][¶]] :: The contents of the =cupsd.conf=, as a string.
 
-- =opaque-cups-configuration= parameter: =string= *cups-files.conf* [[#index-cups_002dfiles_002econf][¶]] :: The contents of the =cups-files.conf= file, as a string.
+- =opaque-cups-configuration= parameter: /string/ *cups-files.conf* [[#index-cups_002dfiles_002econf][¶]] :: The contents of the =cups-files.conf= file, as a string.
 
 For example, if your =cupsd.conf= and =cups-files.conf= are in strings of the same name, you could instantiate a CUPS service like this:
 
@@ -465,4 +468,4 @@ For example, if your =cupsd.conf= and =cups-files.conf= are in strings of the sa
 
 --------------
 
-Next: [[id:guix--Desktop-Services][Desktop Services]], Previous: [[id:guix--X-Window][X Window]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Desktop-Services][Desktop Services]], Previous: [[id:guix--X-Window][X Window]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,21 +7,24 @@
 Next: [[id:emacs--MixedCase-Words][MixedCase Words]]   Previous: [[id:emacs--Hideshow][Hideshow minor mode]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Symbol-Completion>>
+
+--------------
+
 *** 28.8 Completion for Symbol Names [[#Completion-for-Symbol-Names][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Completion-for-Symbol-Names
 :CLASS: section
 :END:
-Completion is normally done in the minibuffer (see [[id:emacs--Completion::#Completion][Completion]]), but you can also complete symbol names in ordinary Emacs buffers.
+Completion is normally done in the minibuffer (see [[id:emacs--Completion][Completion]]), but you can also complete symbol names in ordinary Emacs buffers.
 
 In most programming language modes, C-M-i (or M-TAB[[#FOOT16][^{16}]]) invokes the command =completion-at-point=, which generates the list of possible completions for the symbol at point. This command uses the available support facilities to come up with the completion candidates:
 
-- If Eglot is activated for the current buffer's project (see [[id:emacs--Projects::#Projects][Working with Projects]]) and the current buffer's major mode, the command tries to use the corresponding language server for producing the list of completion candidates. See [[../eglot_html/Eglot-Features.html#Eglot-Features][Eglot Features]] in Eglot: The Emacs LSP Client.
+- If Eglot is activated for the current buffer's project (see [[id:emacs--Projects][Working with Projects]]) and the current buffer's major mode, the command tries to use the corresponding language server for producing the list of completion candidates. See [[../eglot_html/Eglot-Features.html#Eglot-Features][Eglot Features]] in Eglot: The Emacs LSP Client.
 - If Semantic mode is enabled (see [[id:emacs--Semantic][Semantic]]), the command tries to use the Semantic parser data for completion.
-- If Semantic mode is not enabled or fails at performing completion, the command tries to complete using the selected tags table (see [[id:emacs--Xref::#Tags-Tables][Tags Tables]]); you need to visit the tags table with M-x visit-tags-table for that to work.
+- If Semantic mode is not enabled or fails at performing completion, the command tries to complete using the selected tags table (see [[id:emacs--Tags-Tables][Tags Tables]]); you need to visit the tags table with M-x visit-tags-table for that to work.
 - In Emacs Lisp mode, the command performs completion using the function, variable, or property names defined in the current Emacs session.
 
-In all other respects, in-buffer symbol completion behaves like minibuffer completion. For instance, if Emacs cannot complete to a unique symbol, it displays a list of completion alternatives in another window. Then you can use the keys M-DOWN and M-UP to navigate through the completions displayed in the completions buffer without leaving the original buffer, and the key M-RET to insert the currently highlighted completion to the buffer. See [[id:emacs--Completion::#Completion][Completion]].
+In all other respects, in-buffer symbol completion behaves like minibuffer completion. For instance, if Emacs cannot complete to a unique symbol, it displays a list of completion alternatives in another window. Then you can use the keys M-DOWN and M-UP to navigate through the completions displayed in the completions buffer without leaving the original buffer, and the key M-RET to insert the currently highlighted completion to the buffer. See [[id:emacs--Completion][Completion]].
 
 In Text mode and related modes, M-TAB completes words based on the spell-checker's dictionary. See [[id:emacs--Spelling][Checking and Correcting Spelling]].
 

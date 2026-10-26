@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<On-Trusting-Binaries>>
-Previous: [[id:guix--Substitution-Failure][Substitution Failure]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Substitution-Failure][Substitution Failure]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 5.3.8 On Trusting Binaries [[#On-Trusting-Binaries-1][¶]]
+<<On-Trusting-Binaries-1>>
+**** 5.3.7 On Trusting Binaries
 :PROPERTIES:
-:CUSTOM_ID: On-Trusting-Binaries-1
+:CUSTOM_ID: on-trusting-binaries
 :CLASS: subsection
 :END:
+<<index-trust_002c-of-pre_002dbuilt-binaries>>
 Today, each individual's control over their own computing is at the mercy of institutions, corporations, and groups with enough power and determination to subvert the computing infrastructure and exploit its weaknesses. While using substitutes can be convenient, we encourage users to also build on their own, or even run their own build farm, such that the project run substitute servers are less of an interesting target. One way to help is by publishing the software you build using =guix publish= so that others have one more choice of server to download substitutes from (see [[id:guix--Invoking-guix-publish][Invoking =guix publish=]]).
 
 Guix has the foundations to maximize build reproducibility (see [[id:guix--Features][Features]]). In most cases, independent builds of a given package or derivation should yield bit-identical results. Thus, through a diverse set of independent package builds, we can strengthen the integrity of our systems. The =guix challenge= command aims to help users assess substitute servers, and to assist developers in finding out about non-deterministic package builds (see [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]]). Similarly, the =--check= option of =guix build= allows users to check whether previously-installed substitutes are genuine by rebuilding them locally (see [[id:guix--Additional-Build-Options::#build_002dcheck][=guix build --check=]]). To force a full rebuild of a package (ignoring security updates via grafts (see [[id:guix--Security-Updates][Security Updates]]), if any grafts exist---which is not always the case), use =--check= together with =--no-grafts= (see [[id:guix--Common-Build-Options][=--no-grafts=]]). Because grafts are built as their own derivation, if the package you want to rebuild is subject to being grafted, merely using =--check= will only rebuild the grafting derivation, and not actually recompile the package.
@@ -53,4 +56,4 @@ In the future, we want Guix to have support to publish and retrieve binaries to/
 
 --------------
 
-Previous: [[id:guix--Substitution-Failure][Substitution Failure]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Substitution-Failure][Substitution Failure]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

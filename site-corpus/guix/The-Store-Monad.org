@@ -36,19 +36,23 @@ Next:
 [[../..][]]
 
 <<The-Store-Monad>>
-Next: [[id:guix--G_002dExpressions][G-Expressions]], Previous: [[id:guix--Derivations][Derivations]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--G_002dExpressions][G-Expressions]], Previous: [[id:guix--Derivations][Derivations]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.11 The Store Monad [[#The-Store-Monad-1][¶]]
+<<The-Store-Monad-1>>
+*** 8.11 The Store Monad
 :PROPERTIES:
-:CUSTOM_ID: The-Store-Monad-1
+:CUSTOM_ID: the-store-monad
 :CLASS: section
 :END:
+<<index-monad>>
 The procedures that operate on the store described in the previous sections all take an open connection to the build daemon as their first argument. Although the underlying model is functional, they either have side effects or depend on the current state of the store.
 
 The former is inconvenient: the connection to the build daemon has to be carried around in all those functions, making it impossible to compose functions that do not take that parameter with functions that do. The latter can be problematic: since store operations have side effects and/or depend on external state, they have to be properly sequenced.
 
+<<index-monadic-values>> <<index-monadic-functions>>
 This is where the =(guix monads)= module comes in. This module provides a framework for working with /monads/, and a particularly useful monad for our uses, the /store monad/. Monads are a construct that allows two things: associating “context” with values (in our case, the context is the store), and building sequences of computations (here computations include accesses to the store). Values in a monad---values that carry this additional context---are called /monadic values/; procedures that return such values are called /monadic procedures/.
 
 Consider this “normal” procedure:
@@ -96,7 +100,7 @@ Note that the =(guix monad-repl)= module extends the Guile REPL with new “comm
 
 #+begin_example
 scheme@(guile-user)> ,run-in-store (package->derivation hello)
-$1 = #<derivation /gnu/store/...-hello-2.9.drv => ...>
+$1 = #<derivation /gnu/store/…-hello-2.9.drv => …>
 #+end_example
 
 The latter enters a recursive REPL, where all the return values are automatically run through the store:
@@ -104,9 +108,9 @@ The latter enters a recursive REPL, where all the return values are automaticall
 #+begin_example
 scheme@(guile-user)> ,enter-store-monad
 store-monad@(guile-user) [1]> (package->derivation hello)
-$2 = #<derivation /gnu/store/...-hello-2.9.drv => ...>
+$2 = #<derivation /gnu/store/…-hello-2.9.drv => …>
 store-monad@(guile-user) [1]> (text-file "foo" "Hello!")
-$3 = "/gnu/store/...-foo"
+$3 = "/gnu/store/…-foo"
 store-monad@(guile-user) [1]> ,q
 scheme@(guile-user)>
 #+end_example
@@ -117,11 +121,11 @@ Other meta-commands are available at the REPL, such as =,build= to build a file-
 
 The main syntactic forms to deal with monads in general are provided by the =(guix monads)= module and are described below.
 
-- Macro: *with-monad* =monad body …= [[#index-with_002dmonad][¶]] :: Evaluate any =>>== or =return= forms in =body= as being in =monad=.
+- Macro: with-monad monad body ... :: Evaluate any =>>== or =return= forms in =body= as being in =monad=.
 
-- Macro: *return* =val= [[#index-return][¶]] :: Return a monadic value that encapsulates =val=.
+- Macro: return val :: Return a monadic value that encapsulates =val=.
 
-- Macro: *>>=* =mval mproc …= [[#index-_003e_003e_003d][¶]] :: /Bind/ monadic value =mval=, passing its “contents” to monadic procedures =mproc=...[[#FOOT22][^{22}]]. There can be one =mproc= or several of them, as in this example:
+- Macro: >>= mval mproc ... :: /Bind/ monadic value =mval=, passing its “contents” to monadic procedures =mproc=...[[#FOOT22][^{22}]]. There can be one =mproc= or several of them, as in this example:
 
   #+begin_src lisp
   (run-with-state
@@ -135,22 +139,23 @@ The main syntactic forms to deal with monads in general are provided by the =(gu
   ⇒ some-state
   #+end_src
 
-- Macro: *mlet* =monad ((var mval) …) body …= [[#index-mlet][¶]]\\
-  Macro: *mlet** =monad ((var mval) …) body …= [[#index-mlet_002a][¶]] :: Bind the variables =var= to the monadic values =mval= in =body=, which is a sequence of expressions. As with the bind operator, this can be thought of as “unpacking” the raw, non-monadic value “contained” in =mval= and making =var= refer to that raw, non-monadic value within the scope of the =body=. The form (=var= -> =val=) binds =var= to the “normal” value =val=, as per =let=. The binding operations occur in sequence from left to right. The last expression of =body= must be a monadic expression, and its result will become the result of the =mlet= or =mlet*= when run in the =monad=.
+- Macro: mlet monad ((var mval) ...) body ...\\
+  Macro: mlet* monad ((var mval) ...) body ... :: Bind the variables =var= to the monadic values =mval= in =body=, which is a sequence of expressions. As with the bind operator, this can be thought of as “unpacking” the raw, non-monadic value “contained” in =mval= and making =var= refer to that raw, non-monadic value within the scope of the =body=. The form (=var= -> =val=) binds =var= to the “normal” value =val=, as per =let=. The binding operations occur in sequence from left to right. The last expression of =body= must be a monadic expression, and its result will become the result of the =mlet= or =mlet*= when run in the =monad=.
 
-  =mlet*= is to =mlet= what =let*= is to =let= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Local-Bindings.html#Local-Bindings][Local Bindings]] in GNU Guile Reference Manual).
+  =mlet*= is to =mlet= what =let*= is to =let= (see [[https://www.gnu.org/software/guile/manual/html_node/Local-Bindings.html#Local-Bindings][Local Bindings]] in GNU Guile Reference Manual).
 
-- Macro: *mbegin* =monad mexp …= [[#index-mbegin][¶]] :: Bind =mexp= and the following monadic expressions in sequence, returning the result of the last expression. Every expression in the sequence must be a monadic expression.
+- Macro: mbegin monad mexp ... :: Bind =mexp= and the following monadic expressions in sequence, returning the result of the last expression. Every expression in the sequence must be a monadic expression.
 
   This is akin to =mlet=, except that the return values of the monadic expressions are ignored. In that sense, it is analogous to =begin=, but applied to monadic expressions.
 
-- Macro: *mwhen* =condition mexp0 mexp* …= [[#index-mwhen][¶]] :: When =condition= is true, evaluate the sequence of monadic expressions =mexp0=..=mexp*= as in an =mbegin=. When =condition= is false, return =*unspecified*= in the current monad. Every expression in the sequence must be a monadic expression.
+- Macro: mwhen condition mexp0 mexp* ... :: When =condition= is true, evaluate the sequence of monadic expressions =mexp0=..=mexp*= as in an =mbegin=. When =condition= is false, return =*unspecified*= in the current monad. Every expression in the sequence must be a monadic expression.
 
-- Macro: *munless* =condition mexp0 mexp* …= [[#index-munless][¶]] :: When =condition= is false, evaluate the sequence of monadic expressions =mexp0=..=mexp*= as in an =mbegin=. When =condition= is true, return =*unspecified*= in the current monad. Every expression in the sequence must be a monadic expression.
+- Macro: munless condition mexp0 mexp* ... :: When =condition= is false, evaluate the sequence of monadic expressions =mexp0=..=mexp*= as in an =mbegin=. When =condition= is true, return =*unspecified*= in the current monad. Every expression in the sequence must be a monadic expression.
 
+<<index-state-monad>>
 The =(guix monads)= module provides the /state monad/, which allows an additional value---the state---to be /threaded/ through monadic procedure calls.
 
-- Variable: *%state-monad* [[#index-_0025state_002dmonad][¶]] :: The state monad. Procedures in the state monad can access and change the state that is threaded.
+- Variable: %state-monad  :: The state monad. Procedures in the state monad can access and change the state that is threaded.
 
   Consider the example below. The =square= procedure returns a value in the state monad. It returns the square of its argument, but also increments the current state value:
 
@@ -168,29 +173,29 @@ The =(guix monads)= module provides the /state monad/, which allows an additiona
 
   When “run” through =%state-monad=, we obtain that additional state value, which is the number of =square= calls.
 
-- Monadic Procedure: *current-state* [[#index-current_002dstate][¶]] :: Return the current state as a monadic value.
+- Monadic Procedure: current-state  :: Return the current state as a monadic value.
 
-- Monadic Procedure: *set-current-state* =value= [[#index-set_002dcurrent_002dstate][¶]] :: Set the current state to =value= and return the previous state as a monadic value.
+- Monadic Procedure: set-current-state =value= :: Set the current state to =value= and return the previous state as a monadic value.
 
-- Monadic Procedure: *state-push* =value= [[#index-state_002dpush][¶]] :: Push =value= to the current state, which is assumed to be a list, and return the previous state as a monadic value.
+- Monadic Procedure: state-push =value= :: Push =value= to the current state, which is assumed to be a list, and return the previous state as a monadic value.
 
-- Monadic Procedure: *state-pop* [[#index-state_002dpop][¶]] :: Pop a value from the current state and return it as a monadic value. The state is assumed to be a list.
+- Monadic Procedure: state-pop  :: Pop a value from the current state and return it as a monadic value. The state is assumed to be a list.
 
-- Procedure: *run-with-state* =mval [state]= [[#index-run_002dwith_002dstate][¶]] :: Run monadic value =mval= starting with =state= as the initial state. Return two values: the resulting value, and the resulting state.
+- Procedure: run-with-state mval [state] :: Run monadic value =mval= starting with =state= as the initial state. Return two values: the resulting value, and the resulting state.
 
 The main interface to the store monad, provided by the =(guix store)= module, is as follows.
 
-- Variable: *%store-monad* [[#index-_0025store_002dmonad][¶]] :: The store monad---an alias for =%state-monad=.
+- Variable: %store-monad  :: The store monad---an alias for =%state-monad=.
 
   Values in the store monad encapsulate accesses to the store. When its effect is needed, a value of the store monad must be “evaluated” by passing it to the =run-with-store= procedure (see below).
 
-- Procedure: *run-with-store* =store mval [#:guile-for-build] [#:system (%current-system)]= [[#index-run_002dwith_002dstore][¶]] :: Run =mval=, a monadic value in the store monad, in =store=, an open store connection.
+- Procedure: run-with-store store mval [#:guile-for-build] [#:system (%current-system)] :: Run =mval=, a monadic value in the store monad, in =store=, an open store connection.
 
-- Monadic Procedure: *text-file* =name== ==text== [==references==]= [[#index-text_002dfile][¶]] :: Return as a monadic value the absolute file name in the store of the file containing =text=, a string. =references= is a list of store items that the resulting text file refers to; it defaults to the empty list.
+- Monadic Procedure: text-file =name= =text= [=references=] :: Return as a monadic value the absolute file name in the store of the file containing =text=, a string. =references= is a list of store items that the resulting text file refers to; it defaults to the empty list.
 
-- Monadic Procedure: *binary-file* =name== ==data== [==references==]= [[#index-binary_002dfile][¶]] :: Return as a monadic value the absolute file name in the store of the file containing =data=, a bytevector. =references= is a list of store items that the resulting binary file refers to; it defaults to the empty list.
+- Monadic Procedure: binary-file =name= =data= [=references=] :: Return as a monadic value the absolute file name in the store of the file containing =data=, a bytevector. =references= is a list of store items that the resulting binary file refers to; it defaults to the empty list.
 
-- Monadic Procedure: *interned-file* =file== [==name==] [#:recursive? #t] [#:select? (const #t)]= [[#index-interned_002dfile][¶]] :: Return the name of =file= once interned in the store. Use =name= as its store name, or the basename of =file= if =name= is omitted.
+- Monadic Procedure: interned-file =file= [=name=] [#:recursive? #t] [#:select? (const #t)] :: Return the name of =file= once interned in the store. Use =name= as its store name, or the basename of =file= if =name= is omitted.
 
   When =recursive?= is true, the contents of =file= are added recursively; if =file= designates a flat file and =recursive?= is true, its contents are added, and its permission bits are kept.
 
@@ -204,17 +209,17 @@ The main interface to the store monad, provided by the =(guix store)= module, is
                         (b (interned-file "README" "LEGU-MIN")))
       (return (list a b))))
 
-  ⇒ ("/gnu/store/rwm...-README" "/gnu/store/44i...-LEGU-MIN")
+  ⇒ ("/gnu/store/rwm…-README" "/gnu/store/44i…-LEGU-MIN")
   #+end_src
 
 The =(guix packages)= module exports the following package-related monadic procedures:
 
-- Monadic Procedure: *package-file* =package== [==file==] [#:system (%current-system)] [#:target #f] [#:output "out"]= [[#index-package_002dfile][¶]] :: Return as a monadic value in the absolute file name of =file= within the =output= directory of =package=. When =file= is omitted, return the name of the =output= directory of =package=. When =target= is true, use it as a cross-compilation target triplet.
+- Monadic Procedure: package-file =package= [=file=] [#:system (%current-system)] [#:target #f] [#:output "out"] :: Return as a monadic value in the absolute file name of =file= within the =output= directory of =package=. When =file= is omitted, return the name of the =output= directory of =package=. When =target= is true, use it as a cross-compilation target triplet.
 
   Note that this procedure does /not/ build =package=. Thus, the result might or might not designate an existing file. We recommend not using this procedure unless you know what you are doing.
 
-- Monadic Procedure: *package->derivation* =package== [==system==]= [[#index-package_002d_003ederivation][¶]]\\
-  Monadic Procedure: *package->cross-derivation* =package== ==target== [==system==]= [[#index-package_002d_003ecross_002dderivation][¶]] :: Monadic version of =package-derivation= and =package-cross-derivation= (see [[id:guix--Defining-Packages][Defining Packages]]).
+- Monadic Procedure: package->derivation =package= [=system=]\\
+  Monadic Procedure: package->cross-derivation =package= =target= [=system=] :: Monadic version of =package-derivation= and =package-cross-derivation= (see [[id:guix--Defining-Packages][Defining Packages]]).
 
 --------------
 
@@ -226,10 +231,9 @@ The =(guix packages)= module exports the following package-related monadic proce
 ***** [[#DOCF22][(22)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 This operation is commonly referred to as “bind”, but that name denotes an unrelated procedure in Guile. Thus we use this somewhat cryptic symbol inherited from the Haskell language.
 
 --------------
 
-Next: [[id:guix--G_002dExpressions][G-Expressions]], Previous: [[id:guix--Derivations][Derivations]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--G_002dExpressions][G-Expressions]], Previous: [[id:guix--Derivations][Derivations]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

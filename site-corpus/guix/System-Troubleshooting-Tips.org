@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<System-Troubleshooting-Tips>>
-Next: [[id:guix--Home-Configuration][Home Configuration]], Previous: [[id:guix--System-Configuration][System Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Home-Configuration][Home Configuration]], Previous: [[id:guix--System-Configuration][System Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 12 System Troubleshooting Tips [[#System-Troubleshooting-Tips-1][¶]]
+<<System-Troubleshooting-Tips-1>>
+** 12 System Troubleshooting Tips
 :PROPERTIES:
-:CUSTOM_ID: System-Troubleshooting-Tips-1
+:CUSTOM_ID: system-troubleshooting-tips
 :CLASS: chapter
 :END:
 Guix System allows rebooting into a previous generation should the last one be malfunctioning, which makes it quite robust against being broken irreversibly. This feature depends on GRUB being correctly functioning though, which means that if for whatever reasons your GRUB installation becomes corrupted during a system reconfiguration, you may not be able to easily boot into a previous generation. A technique that can be used in this case is to /chroot/ into your broken system and reconfigure it from there. Such technique is explained below.
 
+<<index-chroot_002c-guix-system>> <<index-chrooting_002c-guix-system>> <<index-repairing-GRUB_002c-via-chroot>>
 - [[id:guix--Chrooting-into-an-existing-system][Chrooting into an existing system]]

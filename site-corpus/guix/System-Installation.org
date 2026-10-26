@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<System-Installation>>
-Next: [[id:guix--Getting-Started][Getting Started]], Previous: [[id:guix--Installation][Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Getting-Started][Getting Started]], Previous: [[id:guix--Installation][Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 3 System Installation [[#System-Installation-1][¶]]
+<<System-Installation-1>>
+** 3 System Installation
 :PROPERTIES:
-:CUSTOM_ID: System-Installation-1
+:CUSTOM_ID: system-installation
 :CLASS: chapter
 :END:
+<<index-installing-Guix-System>> <<index-Guix-System_002c-installation>>
 This section explains how to install Guix System on a machine. Guix, as a package manager, can also be installed on top of a running GNU/Linux system, see [[id:guix--Installation][Installation]].
 
 - [[id:guix--Limitations][Limitations]]

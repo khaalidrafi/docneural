@@ -7,6 +7,9 @@
 Next: [[id:emacs--Dired][Dired, the Directory Editor]]   Previous: [[id:emacs--Maintaining][Maintaining Large Programs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Abbrevs>>
+
+--------------
+
 ** 31 Abbrevs [[#Abbrevs-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Abbrevs-1
@@ -18,4 +21,11 @@ A second kind of abbreviation facility is called /dynamic abbrev expansion/. You
 
 A third kind, /hippie expansion/, generalizes abbreviation expansion. See [[../autotype_html/Hippie-Expand.html#Hippie-Expand][Hippie Expansion]] in Features for Automatic Typing.
 
---------------
+- [[id:emacs--Abbrev-Concepts][Abbrev Concepts]]
+- [[id:emacs--Defining-Abbrevs][Defining Abbrevs]]
+- [[id:emacs--Expanding-Abbrevs][Controlling Abbrev Expansion]]
+- [[id:emacs--Abbrevs-Suggestions][Abbrevs Suggestions]]
+- [[id:emacs--Editing-Abbrevs][Examining and Editing Abbrevs]]
+- [[id:emacs--Saving-Abbrevs][Saving Abbrevs]]
+- [[id:emacs--Dynamic-Abbrevs][Dynamic Abbrev Expansion]]
+- [[id:emacs--Dabbrev-Customization][Customizing Dynamic Abbreviation]]

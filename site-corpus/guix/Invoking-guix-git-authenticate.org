@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-git-authenticate>>
-Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 7.5 Invoking =guix git authenticate= [[#Invoking-guix-git-authenticate-1][¶]]
+<<Invoking-guix-git-authenticate-1>>
+*** 7.5 Invoking =guix git authenticate=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-git-authenticate-1
+:CUSTOM_ID: invoking-guix-git-authenticate
 :CLASS: section
 :END:
+<<index-guix-git-authenticate>> <<index-authentication_002c-of-Git-checkouts>> <<index-Git-checkout-authentication>>
 The =guix git authenticate= command authenticates a Git checkout following the same rule as for channels (see [[id:guix--Channel-Authentication::#channel_002dauthentication][channel authentication]]). That is, starting from a given commit, it ensures that all subsequent commits are signed by an OpenPGP key whose fingerprint appears in the =.guix-authorizations= file of its parent commit(s).
 
 You will find this command useful if you maintain a channel. But in fact, this authentication mechanism is useful in a broader context, so you might want to use it for Git repositories that have nothing to do with Guix.
@@ -52,13 +55,14 @@ You will find this command useful if you maintain a channel. But in fact, this a
 The general syntax is:
 
 #+begin_example
-guix git authenticate commit signer [options...]
+guix git authenticate commit signer [options…]
 #+end_example
 
+<<index-introduction_002c-for-Git-authentication>>
 By default, this command authenticates the Git checkout in the current directory; it outputs nothing and exits with exit code zero on success and non-zero on failure. =commit= above denotes the first commit where authentication takes place, and =signer= is the OpenPGP fingerprint of public key used to sign =commit=. Together, they form a /channel introduction/ (see [[id:guix--Channel-Authentication::#channel_002dauthentication][channel introduction]]). On your first successful run, the introduction is recorded in the =.git/config= file of your checkout, allowing you to omit them from subsequent invocations:
 
 #+begin_example
-guix git authenticate [options...]
+guix git authenticate [options…]
 #+end_example
 
 Should you have branches that require different introductions, you can specify them directly in =.git/config=. For example, if the branch called =personal-fork= has a different introduction than other branches, you can extend =.git/config= along these lines:
@@ -90,4 +94,4 @@ The command-line options described below allow you to fine-tune the process.
 
 --------------
 
-Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

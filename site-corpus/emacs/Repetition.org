@@ -7,6 +7,9 @@
 Next: [[id:emacs--Passwords][Entering passwords]]   Previous: [[id:emacs--Minibuffer-History][Minibuffer History]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
 
 <<Repetition>>
+
+--------------
+
 *** 10.6 Repeating Minibuffer Commands [[#Repeating-Minibuffer-Commands][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Repeating-Minibuffer-Commands
@@ -24,7 +27,7 @@ C-x ESC ESC works by turning the previous command into a Lisp expression and the
 
 Once inside the minibuffer for C-x ESC ESC, you can use the usual minibuffer history commands (see [[id:emacs--Minibuffer-History][Minibuffer History]]) to move through the history list. After finding the desired previous command, you can edit its expression as usual and then execute it by typing RET.
 
-Incremental search does not, strictly speaking, use the minibuffer. Therefore, although it behaves like a complex command, it normally does not appear in the history list for C-x ESC ESC. You can make incremental search commands appear in the history by setting =isearch-resume-in-command-history= to a non-=nil= value. See [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]].
+Incremental search does not, strictly speaking, use the minibuffer. Therefore, although it behaves like a complex command, it normally does not appear in the history list for C-x ESC ESC. You can make incremental search commands appear in the history by setting =isearch-resume-in-command-history= to a non-=nil= value. See [[id:emacs--Incremental-Search][Incremental Search]].
 
 The list of previous minibuffer-using commands is stored as a Lisp list in the variable =command-history=. Each element is a Lisp expression that describes one command and its arguments. Lisp programs can re-execute a command by calling =eval= with the =command-history= element.
 

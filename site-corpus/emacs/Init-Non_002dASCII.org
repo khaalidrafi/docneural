@@ -4,6 +4,29 @@
 #+filetags: :emacs:
 #+title: Init Non-ASCII
 
-Next:
+Next: [[id:emacs--Early-Init-File][The Early Init File]]   Previous: [[id:emacs--Find-Init][How Emacs Finds Your Init File]]   Up: [[id:emacs--Init-File][The Emacs Initialization File]]
 
-The node you are looking for is at [[id:emacs--Init-File::#Init-Non_002dASCII][Init Non-ASCII]].
+<<Init-Non_002dASCII>>
+
+--------------
+
+**** 51.4.5 Non-ASCII Characters in Init Files [[#Non_002dASCII-Characters-in-Init-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Non_002dASCII-Characters-in-Init-Files
+:CLASS: subsection
+:END:
+Language and coding systems may cause problems if your init file contains non-ASCII characters, such as accented letters, in strings or key bindings.
+
+If you want to use non-ASCII characters in your init file, you should put a ‘=-*-coding: ==coding-system==-*-=' tag on the first line of the init file, and specify a coding system that supports the character(s) in question. See [[id:emacs--Recognize-Coding][Recognizing Coding Systems]]. This is because the defaults for decoding non-ASCII text might not yet be set up by the time Emacs reads those parts of your init file which use such strings, possibly leading Emacs to decode those strings incorrectly. You should then avoid adding Emacs Lisp code that modifies the coding system in other ways, such as calls to =set-language-environment=.
+
+An alternative to using non-ASCII characters directly is to use one of the character escape syntaxes described in see [[../elisp_html/General-Escape-Syntax.html#General-Escape-Syntax][General Escape Syntax]] in The Emacs Lisp Reference Manual, as they allow all Unicode codepoints to be specified using only ASCII characters.
+
+To bind non-ASCII keys, you must use a vector (see [[id:emacs--Init-Rebinding][Rebinding Keys in Your Init File]]). The string syntax cannot be used, since the non-ASCII characters will be interpreted as meta keys. For instance:
+
+#+begin_example
+(global-set-key [?char] 'some-function)
+#+end_example
+
+Type C-q, followed by the key you want to bind, to insert =char=.
+
+--------------

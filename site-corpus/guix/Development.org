@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Development>>
-Next: [[id:guix--Programming-Interface][Programming Interface]], Previous: [[id:guix--Channels][Channels]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Programming-Interface][Programming Interface]], Previous: [[id:guix--Channels][Channels]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 7 Development [[#Development-1][¶]]
+<<Development-1>>
+** 7 Development
 :PROPERTIES:
-:CUSTOM_ID: Development-1
+:CUSTOM_ID: development
 :CLASS: chapter
 :END:
+<<index-software-development>>
 If you are a software developer, Guix provides tools that you should find helpful---independently of the language you're developing in. This is what this chapter is about.
 
 The =guix shell= command provides a convenient way to set up one-off software environments, be it for development purposes or to run a command without installing it in your profile. The =guix pack= command allows you to create /application bundles/ that can be easily distributed to users who do not run Guix.

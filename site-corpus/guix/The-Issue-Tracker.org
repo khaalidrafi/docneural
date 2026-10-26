@@ -36,13 +36,31 @@ Next:
 [[../..][]]
 
 <<The-Issue-Tracker>>
-Next: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.11.1 The Issue Tracker [[#The-Issue-Tracker-1][¶]]
+<<The-Issue-Tracker-1>>
+**** 22.11.1 The Issue Tracker
 :PROPERTIES:
-:CUSTOM_ID: The-Issue-Tracker-1
+:CUSTOM_ID: the-issue-tracker
 :CLASS: subsection
 :END:
+<<index-bug-reports_002c-tracking>> <<index-patch-submissions_002c-tracking>> <<index-issue-tracking>> <<index-Debbugs_002c-issue-tracking-system>>
 Bug reports (/issues/) and patch submissions (/pull requests/) are currently tracked at the [[https://codeberg.org/guix/guix][project's home at Codeberg]].
+
+Before May 25th, 2025, bug reports and patches were exclusively tracked using the Debbugs instance at [[https://bugs.gnu.org]]; it may still be used for these purposes until December 31st, 2025, after which Codeberg will become the sole option to report new bugs and propose new changes[[#FOOT47][^{47}]]. With Debbugs, bug reports are sent by email to [[mailto:bug-guix@gnu.org][bug-guix@gnu.org]] and patches are sent to [[mailto:guix-patches@gnu.org][guix-patches@gnu.org]] (see [[id:guix--Submitting-Patches][Submitting Patches]]).
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF47][(47)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:END:
+Check out [[https://codeberg.org/guix/guix-consensus-documents/src/branch/main/002-codeberg.md][Guix Consensus Document 002]] for details on this decision.

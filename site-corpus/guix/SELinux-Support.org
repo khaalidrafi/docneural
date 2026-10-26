@@ -36,26 +36,30 @@ Next:
 [[../..][]]
 
 <<SELinux-Support>>
-Next: [[id:guix--AppArmor-Support][AppArmor Support]], Previous: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--AppArmor-Support][AppArmor Support]], Previous: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 2.2.3 SELinux Support [[#SELinux-Support-1][¶]]
+<<SELinux-Support-1>>
+**** 2.2.3 SELinux Support
 :PROPERTIES:
-:CUSTOM_ID: SELinux-Support-1
+:CUSTOM_ID: selinux-support
 :CLASS: subsection
 :END:
+<<index-SELinux_002c-daemon-policy>> <<index-mandatory-access-control_002c-SELinux>> <<index-security_002c-guix_002ddaemon>>
 Guix includes an SELinux policy file at =etc/guix-daemon.cil= that can be installed on a system where SELinux is enabled, in order to label Guix files and to specify the expected behavior of the daemon. Since Guix System does not provide an SELinux base policy, the daemon policy cannot be used on Guix System.
 
 - [[#Installing-the-SELinux-policy][Installing the SELinux policy]]
 - [[#Limitations-1][Limitations]]
 
 <<Installing-the-SELinux-policy>>
-**** 2.2.3.1 Installing the SELinux policy [[#Installing-the-SELinux-policy][¶]]
+**** 2.2.3.1 Installing the SELinux policy
 :PROPERTIES:
 :CUSTOM_ID: installing-the-selinux-policy
 :CLASS: subsubsection
 :END:
+<<index-SELinux_002c-policy-installation>>
 
 #+begin_quote
 *Note:* The =guix-install.sh= binary installation script offers to perform the steps below for you (see [[id:guix--Binary-Installation][Binary Installation]]).
@@ -90,11 +94,12 @@ ps -Zax | grep guix-daemon
 Monitor the SELinux log files as you run a command like =guix build hello= to convince yourself that SELinux permits all necessary operations.
 
 <<Limitations-1>>
-**** 2.2.3.2 Limitations [[#Limitations-1][¶]]
+**** 2.2.3.2 Limitations
 :PROPERTIES:
 :CUSTOM_ID: limitations
 :CLASS: subsubsection
 :END:
+<<index-SELinux_002c-limitations>>
 This policy is not perfect. Here is a list of limitations or quirks that should be considered when deploying the provided SELinux policy for the Guix daemon.
 
 1. =guix_daemon_socket_t= isn't actually used. None of the socket operations involve contexts that have anything to do with =guix_daemon_socket_t=. It doesn't hurt to have this unused label, but it would be preferable to define socket rules for only this label.
@@ -111,4 +116,4 @@ This policy is not perfect. Here is a list of limitations or quirks that should 
 
 --------------
 
-Next: [[id:guix--AppArmor-Support][AppArmor Support]], Previous: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--AppArmor-Support][AppArmor Support]], Previous: [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

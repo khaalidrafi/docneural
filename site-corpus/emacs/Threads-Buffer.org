@@ -4,6 +4,43 @@
 #+filetags: :emacs:
 #+title: Threads Buffer
 
-Next:
+Next: [[id:emacs--Stack-Buffer][Stack Buffer]]   Previous: [[id:emacs--Breakpoints-Buffer][Breakpoints Buffer]]   Up: [[id:emacs--GDB-Graphical-Interface][GDB Graphical Interface]]
 
-The node you are looking for is at [[id:emacs--Debuggers::#Threads-Buffer][Threads Buffer]].
+<<Threads-Buffer>>
+
+--------------
+
+**** 29.6.5.4 Threads Buffer [[#Threads-Buffer-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Threads-Buffer-1
+:CLASS: subsubsection
+:END:
+The GDB Threads buffer displays a summary of the threads in the debugged program. See [[../gdb_html/Threads.html#Threads][Debugging programs with multiple threads]] in The GNU debugger. To select a thread, move point there and press RET (=gdb-select-thread=), or click on it with mouse-2. This also displays the associated source buffer, and updates the contents of the other GDB buffers.
+
+You can customize variables in the =gdb-buffers= group to select fields included in GDB Threads buffer.
+
+- <<index-gdb_002dthread_002dbuffer_002dverbose_002dnames>>=gdb-thread-buffer-verbose-names= [[#index-gdb_002dthread_002dbuffer_002dverbose_002dnames][¶]] :: Show long thread names like ‘=Thread 0x4e2ab70 (LWP 1983)='.
+
+- <<index-gdb_002dthread_002dbuffer_002darguments>>=gdb-thread-buffer-arguments= [[#index-gdb_002dthread_002dbuffer_002darguments][¶]] :: Show arguments of thread top frames.
+
+- <<index-gdb_002dthread_002dbuffer_002dlocations>>=gdb-thread-buffer-locations= [[#index-gdb_002dthread_002dbuffer_002dlocations][¶]] :: Show file information or library names.
+
+- <<index-gdb_002dthread_002dbuffer_002daddresses>>=gdb-thread-buffer-addresses= [[#index-gdb_002dthread_002dbuffer_002daddresses][¶]] :: Show addresses for thread frames in threads buffer.
+
+To view information for several threads simultaneously, use the following commands from the GDB Threads buffer.
+
+-  <<index-d-_0028GDB-threads-buffer_0029>>d [[#index-d-_0028GDB-threads-buffer_0029][¶]] :: Display disassembly buffer for the thread at current line (=gdb-display-disassembly-for-thread=).
+
+-  <<index-f-_0028GDB-threads-buffer_0029>>f [[#index-f-_0028GDB-threads-buffer_0029][¶]] :: Display the GDB Stack buffer for the thread at current line (=gdb-display-stack-for-thread=).
+
+-  <<index-l-_0028GDB-threads-buffer_0029>>l [[#index-l-_0028GDB-threads-buffer_0029][¶]] :: Display the GDB Locals buffer for the thread at current line (=gdb-display-locals-for-thread=).
+
+-  <<index-r-_0028GDB-threads-buffer_0029>>r [[#index-r-_0028GDB-threads-buffer_0029][¶]] :: Display the GDB Registers buffer for the thread at current line (=gdb-display-registers-for-thread=).
+
+Their upper-case counterparts, D, F ,L and R, display the corresponding buffer in a new frame.
+
+When you create a buffer showing information about some specific thread, it becomes bound to that thread and keeps showing actual information while you debug your program. The mode indicator for each GDB buffer shows the number of the thread whose information that buffer displays. The thread number is also included in the name of each bound buffer.
+
+Further commands are available in the GDB Threads buffer which depend on the mode of GDB that is used for controlling execution of your program. See [[id:emacs--Multithreaded-Debugging][Multithreaded Debugging]].
+
+--------------

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Contributing][Contributing to Emacs Development]]   Previous: [[id:emacs--Lossage][Dealing with Emacs Trouble]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Bugs>>
+
+--------------
+
 ** 54 Reporting Bugs [[#Reporting-Bugs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Reporting-Bugs
@@ -22,5 +25,11 @@ The general procedure when you find something that could be a bug is as follows:
 - Next, see [[id:emacs--Checklist][Checklist for Bug Reports]], where we describe in detail how to submit a bug report and what information to include in it. In a nutshell, you submit a bug report via electronic mail using the Emacs command =report-emacs-bug=, which assists you in doing so. Submitting a bug report starts the process of investigating and fixing the bug, where you will receive copies of email messages discussing the bug, in which we might ask you to provide more information, test possible fixes, etc.
 -  If you think you may have found a security issue that needs to be communicated privately, please contact the GNU Emacs maintainers directly. See the file =admin/MAINTAINERS= in the Emacs distribution for their contact details.
 - Finally, if you want to propose specific changes to Emacs, whether to fix a bug, add a new feature, or improve our documentation, please see [[id:emacs--Sending-Patches][Sending Patches for GNU Emacs]], for details about submitting such changes.
+
+- [[id:emacs--Known-Problems][Reading Existing Bug Reports and Known Problems]]
+- [[id:emacs--Bug-Criteria][When Is There a Bug]]
+- [[id:emacs--Understanding-Bug-Reporting][Understanding Bug Reporting]]
+- [[id:emacs--Checklist][Checklist for Bug Reports]]
+- [[id:emacs--Sending-Patches][Sending Patches for GNU Emacs]]
 
 --------------

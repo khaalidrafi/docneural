@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Emergency-Escape][Emergency Escape]]   Up: [[id:emacs--Lossage][Dealing with Emacs Trouble]]
 
 <<DEL-Does-Not-Delete>>
+
+--------------
+
 *** 53.8 If DEL Fails to Delete [[#If-DEL-Fails-to-Delete][¶]]
 :PROPERTIES:
 :CUSTOM_ID: If-DEL-Fails-to-Delete
@@ -22,7 +25,7 @@ On a text terminal, if you find that BACKSPACE prompts for a Help command, like 
 
 In all of those cases, the immediate remedy is the same: use the command M-x normal-erase-is-backspace-mode. This toggles between the two modes that Emacs supports for handling DEL, so if Emacs starts in the wrong mode, this should switch to the right mode. On a text terminal, if you want to ask for help when BS is treated as DEL, use F1 instead of C-h; C-? may also work, if it sends character code 127.
 
-To fix the problem in every Emacs session, put one of the following lines into your initialization file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). For the first case above, where BACKSPACE deletes forwards instead of backwards, use this line to make BACKSPACE act as DEL:
+To fix the problem in every Emacs session, put one of the following lines into your initialization file (see [[id:emacs--Init-File][The Emacs Initialization File]]). For the first case above, where BACKSPACE deletes forwards instead of backwards, use this line to make BACKSPACE act as DEL:
 
 #+begin_src lisp-preformatted
 (normal-erase-is-backspace-mode 0)
@@ -34,6 +37,6 @@ For the other two cases, use this line:
 (normal-erase-is-backspace-mode 1)
 #+end_src
 
-Another way to fix the problem for every Emacs session is to customize the variable =normal-erase-is-backspace=: the value =t= specifies the mode where BS or BACKSPACE is DEL, and =nil= specifies the other mode. See [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]].
+Another way to fix the problem for every Emacs session is to customize the variable =normal-erase-is-backspace=: the value =t= specifies the mode where BS or BACKSPACE is DEL, and =nil= specifies the other mode. See [[id:emacs--Easy-Customization][Easy Customization Interface]].
 
 --------------

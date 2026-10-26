@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Backup-Home-Services>>
-Next: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Previous: [[id:guix--Guix-Home-Services][Guix Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Previous: [[id:guix--Guix-Home-Services][Guix Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.11 Backup Services [[#Backup-Services][¶]]
+<<Backup-Services>>
+**** 13.3.10 Backup Services
 :PROPERTIES:
-:CUSTOM_ID: Backup-Services
+:CUSTOM_ID: backup-services
 :CLASS: subsection
 :END:
 The =(gnu home services backup)= module offers services for backing up file system trees. For now, it provides the =home-restic-backup-service-type=.
@@ -52,15 +54,15 @@ With =home-restic-backup-service-type=, you can periodically back up directories
 #+begin_src lisp
 (use-modules (gnu home services backup) ;for 'restic-backup-job', 'home-restic-backup-service-type'
              (gnu packages sync)        ;for 'rclone'
-             ...)
+             …)
 
 (home-environment
 
   (packages (list rclone    ;for use by restic
-                  ...))
+                  …))
   (services
     (list
-      ...
+      …
       (simple-service 'backup-jobs
                       home-restic-backup-service-type
                       (list (restic-backup-job
@@ -83,23 +85,19 @@ For a custom configuration, wrap your =restic-backup-configuration= in =for-home
              (gnu services backup)      ;for 'restic-backup-job' and 'restic-backup-configuration'
              (gnu home services backup) ;for 'home-restic-backup-service-type'
              (gnu packages sync)        ;for 'rclone'
-             ...)
+             …)
 
 (home-environment
 
   (packages (list rclone    ;for use by restic
-                  ...))
+                  …))
   (services
     (list
-      ...
+      …
       (service home-restic-backup-service-type
                (for-home
                 (restic-backup-configuration
-                 (jobs (list ...))))))))
+                 (jobs (list …))))))))
 #+end_src
 
 You can refer to see [[id:guix--Miscellaneous-Services][=restic-backup-service-type=]] for details about =restic-backup-configuration= and =restic-backup-job=. The only difference is that the =home-restic-backup-service-type= will ignore the =user= and =group= field of =restic-backup-job=.
-
---------------
-
-Next: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Previous: [[id:guix--Guix-Home-Services][Guix Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

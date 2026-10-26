@@ -7,6 +7,9 @@
 Next: [[id:emacs--Basic-Help][Help]]   Previous: [[id:emacs--Basic-Undo][Undoing Changes]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
 
 <<Basic-Files>>
+
+--------------
+
 *** 9.5 Files [[#Files-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Files-1
@@ -27,5 +30,3 @@ Emacs obeys this command by /visiting/ the file: it creates a buffer, copies the
 To create a file, just visit it with C-x C-f as if it already existed. This creates an empty buffer, in which you can insert the text you want to put in the file. Emacs actually creates the file the first time you save this buffer with C-x C-s.
 
 To learn more about using files in Emacs, see [[id:emacs--Files][File Handling]].
-
---------------

@@ -36,23 +36,28 @@ Next:
 [[../..][]]
 
 <<Teams>>
-Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.12 Teams [[#Teams-1][¶]]
+<<Teams-1>>
+*** 22.12 Teams
 :PROPERTIES:
-:CUSTOM_ID: Teams-1
+:CUSTOM_ID: teams
 :CLASS: section
 :END:
+<<index-teams-1>>
 To organize work on Guix, including but not just development efforts, the project has a set of /teams/. Each team has its own focus and interests and is the primary contact point for questions and contributions in those areas. A team's primary mission is to coordinate and review the work of individuals in its scope (see [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]]); it can make decisions within its scope, in agreement with other teams whenever there is overlap or a close connection, and in accordance with other project rules such as seeking consensus (see [[id:guix--Making-Decisions][Making Decisions]]).
 
 As an example, the Python team is responsible for core Python packaging matters; it can decide to upgrade core Python packages in a dedicated =python-team= branch, in collaboration with any team whose scope is directly dependent on Python---e.g., the Science team---and following branching rules (see [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]]). The Documentation team helps review changes to the documentation and can initiate overarching documentation changes. The Translations team organizes translation of Guix and its manual and coordinates efforts in that area. The Core team is responsible for the development of core functionality and interfaces of Guix; because of its central nature, some of its work may require soliciting input from the community at large and seeking consensus before enacting decisions that would affect the entire community.
 
 Teams are defined in the =etc/teams.scm= file in the Guix repository. The scope of each team is defined, when applicable, as a set of files or as a regular expression matching file names.
 
+<<index-team-membership>>
 Anyone with interest in a team's domain and willing to contribute to its work can apply to become a member by contacting current members by email; commit access is not a precondition. Membership is formalized by adding the person's name and email address to =etc/teams.scm=. Members who have not been participating in the team's work for one year or more may be removed; they are free to reapply for membership later.
 
+<<index-team-creation>>
 One or more people may propose the creation of a new team by reaching out to the community by email at [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]], clarifying the intended scope and purpose. When consensus is reached on the creation of this team, someone with commit access formalizes its creation by adding it and its initial members to =etc/teams.scm=.
 
 To list existing teams, run the following command from a Guix checkout:
@@ -64,9 +69,25 @@ name: Mentors
 description: A group of mentors who chaperone contributions by newcomers.
 members:
 + Charlie Smith <charlie@example.org>
-...
+…
 #+end_example
 
+<<index-mentoring>>
+You can run the following command to have the Mentors team put in CC of a patch series:
+
+#+begin_example
+$ git send-email --to=ISSUE_NUMBER@debbugs.gnu.org \
+  --header-cmd='etc/teams.scm cc-mentors-header-cmd' *.patch
+#+end_example
+
+The appropriate team or teams can also be inferred from the modified files. For instance, if you want to send the two latest commits of the current Git repository to review, you can run:
+
+#+begin_example
+$ guix shell -D guix
+[env]$ git send-email --to=ISSUE_NUMBER@debbugs.gnu.org -2
+#+end_example
+
+<<index-teams_002c-on-Codeberg>>
 To generate a =CODEOWNERS= file, which Forgejo---the software behind Codeberg---uses to determine which team or person should review changes to a given set of files, run:
 
 #+begin_example
@@ -83,4 +104,4 @@ Teams defined in =etc/teams.scm= are reflected [[https://codeberg.org/guix/guix]
 
 --------------
 
-Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

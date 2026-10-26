@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Contributing-to-Guix_0027s-Infrastructure>>
-Previous: [[id:guix--Translating-Guix][Translating Guix]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Translating-Guix][Translating Guix]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.20 Contributing to Guix's Infrastructure [[#Contributing-to-Guix_0027s-Infrastructure-1][¶]]
+<<Contributing-to-Guix_0027s-Infrastructure-1>>
+*** 22.20 Contributing to Guix's Infrastructure
 :PROPERTIES:
-:CUSTOM_ID: Contributing-to-Guix_0027s-Infrastructure-1
+:CUSTOM_ID: contributing-to-guixs-infrastructure
 :CLASS: section
 :END:
 Since its inception, the Guix project has always valued its autonomy, and that reflects in its infrastructure: our servers run Guix System and exclusively free software, and are administered by volunteers.

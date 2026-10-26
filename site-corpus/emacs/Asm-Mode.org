@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Asm Mode
 
-Next: [[id:emacs--Fortran#Fortran][Fortran Mode]]   Previous: [[id:emacs--C-Modes#C-Modes][C and Related Modes]]   Up: [[id:emacs--Programs][Editing Programs]]
+Next: [[id:emacs--Fortran][Fortran Mode]]   Previous: [[id:emacs--C-Modes][C and Related Modes]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Asm-Mode>>
+
+--------------
+
 *** 28.13 Asm Mode [[#Asm-Mode-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Asm-Mode-1
@@ -23,5 +26,3 @@ Asm mode is a major mode for editing files of assembler code. It defines these c
 - ; :: Insert or align a comment.
 
 The variable =asm-comment-char= specifies which character starts comments in assembler syntax.
-
---------------

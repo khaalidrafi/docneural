@@ -7,6 +7,9 @@
 Next: [[id:emacs--Lisp-Eval][Evaluating Emacs Lisp Expressions]]   Previous: [[id:emacs--Executing-Lisp][Executing Lisp Expressions]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
 
 <<Lisp-Libraries>>
+
+--------------
+
 *** 29.8 Libraries of Lisp Code for Emacs [[#Libraries-of-Lisp-Code-for-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Libraries-of-Lisp-Code-for-Emacs
@@ -26,7 +29,7 @@ Emacs Lisp programs usually load Emacs Lisp files using the =load= function. Thi
 
 The Emacs Lisp load path is specified by the variable =load-path=. Its value should be a list of directories (strings). These directories are searched, in the specified order, by the M-x load-library command, the lower-level =load= function, and other Emacs functions that find Emacs Lisp libraries. An entry in =load-path= can also have the special value =nil=, which stands for the current default directory, but it is almost always a bad idea to use this, because its meaning will depend on the buffer that is current when =load-path= is used by Emacs. (If you find yourself wishing that =nil= were in the list, most likely what you really want is to use M-x load-file.)
 
-The default value of =load-path= is a list of directories where the Lisp code for Emacs itself is stored. If you have libraries of your own in another directory, you can add that directory to the load path. Unlike most other variables described in this manual, =load-path= cannot be changed via the Customize interface (see [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]]), but you can add a directory to it by putting a line like this in your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]):
+The default value of =load-path= is a list of directories where the Lisp code for Emacs itself is stored. If you have libraries of your own in another directory, you can add that directory to the load path. Unlike most other variables described in this manual, =load-path= cannot be changed via the Customize interface (see [[id:emacs--Easy-Customization][Easy Customization Interface]]), but you can add a directory to it by putting a line like this in your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]):
 
 #+begin_example
 (add-to-list 'load-path "/path/to/my/lisp/library")

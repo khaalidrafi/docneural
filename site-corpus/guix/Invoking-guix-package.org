@@ -36,21 +36,25 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-package>>
-Next: [[id:guix--Substitutes][Substitutes]], Previous: [[id:guix--Features][Features]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Substitutes][Substitutes]], Previous: [[id:guix--Features][Features]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.2 Invoking =guix package= [[#Invoking-guix-package-1][¶]]
+<<Invoking-guix-package-1>>
+*** 5.2 Invoking =guix package=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-package-1
+:CUSTOM_ID: invoking-guix-package
 :CLASS: section
 :END:
+<<index-installing-packages>> <<index-removing-packages>> <<index-package-installation>> <<index-package-removal>> <<index-profile-1>> <<index-guix-package>>
 The =guix package= command is the tool that allows users to install, upgrade, and remove packages, as well as rolling back to previous configurations. These operations work on a user /profile/---a directory of installed packages. Each user has a default profile in =$HOME/.guix-profile=. The command operates only on the user's own profile, and works with normal user privileges (see [[id:guix--Features][Features]]). Its syntax is:
 
 #+begin_example
 guix package options
 #+end_example
 
+<<index-transactions-1>>
 Primarily, =options= specifies the operations to be performed during the transaction. Upon completion, a new profile is created, but previous /generations/ of the profile remain available, should the user want to roll back.
 
 For example, to remove =lua= and install =guile= and =guile-cairo= in a single transaction:
@@ -59,6 +63,7 @@ For example, to remove =lua= and install =guile= and =guile-cairo= in a single t
 guix package -r lua -i guile guile-cairo
 #+end_example
 
+<<index-aliases_002c-for-guix-package>>
 For your convenience, we also provide the following aliases:
 
 - =guix search= is an alias for =guix package -s=,
@@ -71,7 +76,8 @@ These aliases are less expressive than =guix package= and provide fewer options,
 
 =guix package= also supports a /declarative approach/ whereby the user specifies the exact set of packages to be available and passes it /via/ the =--manifest= option (see [[#profile_002dmanifest][=--manifest=]]).
 
-For each user, a symlink to the user's default profile is automatically created in =$HOME/.guix-profile=. This symlink always points to the current generation of the user's default profile. Thus, users can add =$HOME/.guix-profile/bin= to their =PATH= environment variable, and so on. If you are not using Guix System, consider adding the following lines to your =~/.bash_profile= (see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual) so that newly-spawned shells get all the right environment variable definitions:
+<<index-profile-2>>
+For each user, a symlink to the user's default profile is automatically created in =$HOME/.guix-profile=. This symlink always points to the current generation of the user's default profile. Thus, users can add =$HOME/.guix-profile/bin= to their =PATH= environment variable, and so on. <<index-search-paths>> If you are not using Guix System, consider adding the following lines to your =~/.bash_profile= (see [[https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual) so that newly-spawned shells get all the right environment variable definitions:
 
 #+begin_example
 GUIX_PROFILE="$HOME/.guix-profile" ; \
@@ -93,7 +99,11 @@ The =options= can be among the following:
 
   Alternatively, a =package= can directly specify a store file name such as =/gnu/store/...-guile-3.0.7=, as produced by, e.g., =guix build=.
 
+  <<index-propagated-inputs>>
+
   Sometimes packages have /propagated inputs/: these are dependencies that automatically get installed along with the required package (see [[id:guix--package-Reference::#package_002dpropagated_002dinputs][=propagated-inputs= in =package= objects]], for information about propagated inputs in package definitions).
+
+  <<package_002dcmd_002dpropagated_002dinputs>>
 
   An example is the GNU MPC library: its C header files refer to those of the GNU MPFR library, which in turn refer to those of the GMP library. Thus, when installing MPC, the MPFR and GMP libraries also get installed in the profile; removing MPC also removes MPFR and GMP---unless they had also been explicitly installed by the user.
 
@@ -176,16 +186,18 @@ The =options= can be among the following:
 
   As for =--install=, each =package= may specify a version number and/or output name in addition to the package name. For instance, ‘=-r glibc:debug=' would remove the =debug= output of =glibc=.
 
-- <<index-upgrading-packages>>=--upgrade[===regexp== …]= [[#index-upgrading-packages][¶]]\\
+- =--upgrade[===regexp== …]= [[#index-upgrading-packages][¶]]\\
   =-u [==regexp== …]= :: Upgrade all the installed packages. If one or more =regexp=s are specified, upgrade only installed packages whose name matches a =regexp=. Also see the =--do-not-upgrade= option below.
 
   Note that this upgrades package to the latest version of packages found in the distribution currently installed. To update your distribution, you should regularly run =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]).
+
+  <<index-package-transformations_002c-upgrades>>
 
   When upgrading, package transformations that were originally applied when creating the profile are automatically re-applied (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]). For example, assume you first installed Emacs from the tip of its development branch with:
 
   #+begin_example
   guix install emacs-next --with-branch=emacs-next=master
-#+end_example
+  #+end_example
 
   Next time you run =guix upgrade=, Guix will again pull the tip of the Emacs development branch and build =emacs-next= from that checkout.
 
@@ -193,20 +205,24 @@ The =options= can be among the following:
 
   #+begin_example
   guix install package
-#+end_example
+  #+end_example
 
 - =--do-not-upgrade[===regexp== …]= :: When used together with the =--upgrade= option, do /not/ upgrade any packages whose name matches a =regexp=. For example, to upgrade all packages in the current profile except those containing the substring “emacs”:
 
   #+begin_example
   $ guix package --upgrade . --do-not-upgrade emacs
-#+end_example
+  #+end_example
 
--  <<index-profile-declaration>>=--manifest===file= [[#index-profile-declaration][¶]]\\
-  =-m ==file= :: Create a new generation of the profile from the manifest object returned by the Scheme code in =file=. This option can be repeated several times, in which case the manifests are concatenated.
+- <<profile_002dmanifest>>=--manifest===file= [[#index-profile-declaration][¶]]\\
+  =-m ==file= :: <<index-profile-manifest>>
+
+  Create a new generation of the profile from the manifest object returned by the Scheme code in =file=. This option can be repeated several times, in which case the manifests are concatenated.
 
   This allows you to /declare/ the profile's contents rather than constructing it through a sequence of =--install= and similar commands. The advantage is that =file= can be put under version control, copied to different machines to reproduce the same profile, and so on.
 
   =file= must return a /manifest/ object, which is roughly a list of packages:
+
+  <<index-packages_002d_003emanifest>>
 
   #+begin_src lisp
   (use-package-modules guile emacs)
@@ -220,7 +236,9 @@ The =options= can be among the following:
 
   See [[id:guix--Writing-Manifests][Writing Manifests]], for information on how to write a manifest. See [[#export_002dmanifest][=--export-manifest=]], to learn how to obtain a manifest file from an existing profile.
 
--  <<index-rolling-back>>=--roll-back= [[#index-rolling-back][¶]] :: Roll back to the previous /generation/ of the profile---i.e., undo the last transaction.
+- =--roll-back= [[#index-rolling-back][¶]] :: <<index-undoing-transactions>> <<index-transactions_002c-undoing>>
+
+  Roll back to the previous /generation/ of the profile---i.e., undo the last transaction.
 
   When combined with options such as =--install=, roll back occurs before any other actions.
 
@@ -228,14 +246,14 @@ The =options= can be among the following:
 
   After having rolled back, installing, removing, or upgrading packages overwrites previous future generations. Thus, the history of the generations in a profile is always linear.
 
-- <<index-generations>>=--switch-generation===pattern= [[#index-generations][¶]]\\
+- =--switch-generation===pattern= [[#index-generations][¶]]\\
   =-S ==pattern= :: Switch to a particular generation defined by =pattern=.
 
   =pattern= may be either a generation number or a number prefixed with “+” or “-”. The latter means: move forward/backward by a specified number of generations. For example, if you want to return to the latest generation after =--roll-back=, use =--switch-generation=+1=.
 
   The difference between =--roll-back= and =--switch-generation=-1= is that =--switch-generation= will not make a zeroth generation, so if a specified generation does not exist, the current generation will not be changed.
 
-- <<index-search-paths-1>>=--search-paths[===kind==]= [[#index-search-paths-1][¶]] :: Report environment variable definitions, in Bash syntax, that may be needed in order to use the set of installed packages. These environment variables are used to specify /search paths/ for files used by some of the installed packages.
+- =--search-paths[===kind==]= [[#index-search-paths-1][¶]] :: Report environment variable definitions, in Bash syntax, that may be needed in order to use the set of installed packages. These environment variables are used to specify /search paths/ for files used by some of the installed packages.
 
   For example, GCC needs the =CPATH= and =LIBRARY_PATH= environment variables to be defined so it can look for headers and libraries in the user's profile (see [[https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html#Environment-Variables][Environment Variables]] in Using the GNU Compiler Collection (GCC)). If GCC and, say, the C library are installed in the profile, then =--search-paths= will suggest setting these variables to =profile==/include= and =profile==/lib=, respectively (see [[id:guix--Search-Paths][Search Paths]], for info on search path specifications associated with packages.)
 
@@ -243,7 +261,7 @@ The =options= can be among the following:
 
   #+begin_example
   $ eval $(guix package --search-paths)
-#+end_example
+  #+end_example
 
   =kind= may be one of =exact=, =prefix=, or =suffix=, meaning that the returned environment variable definitions will either be exact settings, or prefixes or suffixes of the current value of these variables. When omitted, =kind= defaults to =exact=.
 
@@ -253,27 +271,29 @@ The =options= can be among the following:
   $ guix package -p foo -i guile
   $ guix package -p bar -i guile-json
   $ guix package -p foo -p bar --search-paths
-#+end_example
+  #+end_example
 
   The last command above reports about the =GUILE_LOAD_PATH= variable, even though, taken individually, neither =foo= nor =bar= would lead to that recommendation.
 
-- <<index-profile_002c-choosing>>=--profile===profile= [[#index-profile_002c-choosing][¶]]\\
+  <<index-profile_002c-choosing>>
+
+- =--profile===profile=\\
   =-p ==profile= :: Use =profile= instead of the user's default profile.
 
   =profile= must be the name of a file that will be created upon completion. Concretely, =profile= will be a mere symbolic link (“symlink”) pointing to the actual profile where packages are installed:
 
   #+begin_example
   $ guix install hello -p ~/code/my-profile
-  ...
+  …
   $ ~/code/my-profile/bin/hello
   Hello, world!
-#+end_example
+  #+end_example
 
   All it takes to get rid of the profile is to remove this symlink and its siblings that point to specific generations:
 
   #+begin_example
   $ rm ~/code/my-profile ~/code/my-profile-*-link
-#+end_example
+  #+end_example
 
 - =--list-profiles= :: List all the user's profiles:
 
@@ -283,11 +303,13 @@ The =options= can be among the following:
   /home/charlie/code/my-profile
   /home/charlie/code/devel-profile
   /home/charlie/tmp/test
-#+end_example
+  #+end_example
 
   When running as root, list all the profiles of all the users.
 
--  <<index-collisions_002c-in-a-profile>>=--allow-collisions= [[#index-collisions_002c-in-a-profile][¶]] :: Allow colliding packages in the new profile. Use at your own risk!
+  <<index-collisions_002c-in-a-profile>> <<index-colliding-packages-in-profiles>> <<index-profile-collisions>>
+
+- =--allow-collisions= :: Allow colliding packages in the new profile. Use at your own risk!
 
   By default, =guix package= reports as an error /collisions/ in the profile. Collisions happen when two or more different versions or variants of a given package end up in the profile.
 
@@ -296,9 +318,9 @@ The =options= can be among the following:
 In addition to these actions, =guix package= supports the following options to query the current state of a profile, or the availability of packages:
 
 - =--search===regexp=\\
-  =-s ==regexp= :: 
+  =-s ==regexp= :: <<guix_002dsearch>><<index-searching-for-packages>>
 
-  List the available packages whose name, synopsis, or description matches =regexp= (in a case-insensitive fashion), sorted by relevance. Print all the metadata of matching packages in =recutils= format (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
+  List the available packages whose name, synopsis, or description matches =regexp= (in a case-insensitive fashion), sorted by relevance. Print all the metadata of matching packages in =recutils= format (see [[https://www.gnu.org/software/recutils/manual/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
 
   This allows specific fields to be extracted using the =recsel= command, for instance:
 
@@ -315,7 +337,7 @@ In addition to these actions, =guix package= supports the following options to q
   name: libgc
   version: 7.6.0
   relevance: 1
-#+end_example
+  #+end_example
 
   Similarly, to show the name of all the packages available under the terms of the GNU LGPL version 3:
 
@@ -324,16 +346,16 @@ In addition to these actions, =guix package= supports the following options to q
   name: elfutils
 
   name: gmp
-  ...
-#+end_example
+  …
+  #+end_example
 
   It is also possible to refine search results using several =-s= flags to =guix package=, or several arguments to =guix search=. For example, the following command returns a list of board games (this time using the =guix search= alias):
 
   #+begin_example
   $ guix search '\<board\>' game | recsel -p name
   name: gnubg
-  ...
-#+end_example
+  …
+  #+end_example
 
   If we were to omit =-s game=, we would also get software packages that deal with printed circuit boards; removing the angle brackets around =board= would further add packages that have to do with keyboards.
 
@@ -342,11 +364,11 @@ In addition to these actions, =guix package= supports the following options to q
   #+begin_example
   $ guix search crypto library | \
       recsel -e '! (name ~ "^(ghc|perl|python|ruby)")' -p name,synopsis
-#+end_example
+  #+end_example
 
-  See [[https://doc.guix.gnu.org/recutils/latest/en/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual, for more information on /selection expressions/ for =recsel -e=.
+  See [[https://www.gnu.org/software/recutils/manual/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual, for more information on /selection expressions/ for =recsel -e=.
 
-- =--show===package= :: Show details about =package=, taken from the list of available packages, in =recutils= format (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
+- =--show===package= :: Show details about =package=, taken from the list of available packages, in =recutils= format (see [[https://www.gnu.org/software/recutils/manual/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
 
   #+begin_example
   $ guix package --show=guile | recsel -p name,version
@@ -358,8 +380,8 @@ In addition to these actions, =guix package= supports the following options to q
 
   name: guile
   version: 2.2.7
-  ...
-#+end_example
+  …
+  #+end_example
 
   You may also specify the full name of a package to only get details about a specific version of it (this time using the =guix show= alias):
 
@@ -367,7 +389,7 @@ In addition to these actions, =guix package= supports the following options to q
   $ guix show guile@3.0.5 | recsel -p name,version
   name: guile
   version: 3.0.5
-#+end_example
+  #+end_example
 
 - =--list-installed[===regexp==]=\\
   =-I [==regexp==]= :: List the currently installed packages in the specified profile, with the most recently installed packages shown last. When =regexp= is specified, list only installed packages whose name matches =regexp=.
@@ -379,7 +401,7 @@ In addition to these actions, =guix package= supports the following options to q
 
   For each package, print the following items separated by tabs: its name, its version string, the parts of the package (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and the source location of its definition.
 
-- <<index-generations-1>>=--list-generations[===pattern==]= [[#index-generations-1][¶]]\\
+- =--list-generations[===pattern==]= [[#index-generations-1][¶]]\\
   =-l [==pattern==]= :: Return a list of generations along with their creation dates; for each generation, show the installed packages, with the most recently installed packages shown last. Note that the zeroth generation is never shown.
 
   For each installed package, print the following items, separated by tabs: the name of a package, its version string, the part of the package that is installed (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and the location of this package in the store.
@@ -405,6 +427,8 @@ In addition to these actions, =guix package= supports the following options to q
 
   Note that deleting generations prevents rolling back to them. Consequently, this command must be used with care.
 
+  <<index-manifest_002c-exporting>> <<export_002dmanifest>>
+
 - =--export-manifest= :: Write to standard output a manifest suitable for =--manifest= corresponding to the chosen profile(s).
 
   This option is meant to help you migrate from the “imperative” operating mode---running =guix install=, =guix upgrade=, etc.---to the declarative mode that =--manifest= offers.
@@ -413,7 +437,9 @@ In addition to these actions, =guix package= supports the following options to q
 
   Keep in mind that a manifest is purely symbolic: it only contains package names and possibly versions, and their meaning varies over time. If you wish to “pin” channels to the revisions that were used to build the profile(s), see =--export-channels= below.
 
-- <<index-pinning_002c-channel-revisions-of-a-profile>>=--export-channels= [[#index-pinning_002c-channel-revisions-of-a-profile][¶]] :: Write to standard output the list of channels used by the chosen profile(s), in a format suitable for =guix pull --channels= or =guix time-machine --channels= (see [[id:guix--Channels][Channels]]).
+  <<index-pinning_002c-channel-revisions-of-a-profile>>
+
+- =--export-channels= :: Write to standard output the list of channels used by the chosen profile(s), in a format suitable for =guix pull --channels= or =guix time-machine --channels= (see [[id:guix--Channels][Channels]]).
 
   Together with =--export-manifest=, this option provides information allowing you to replicate the current profile (see [[id:guix--Replicating-Guix][Replicating Guix]]).
 
@@ -425,4 +451,4 @@ Finally, since =guix package= may actually start build processes, it supports al
 
 --------------
 
-Next: [[id:guix--Substitutes][Substitutes]], Previous: [[id:guix--Features][Features]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Substitutes][Substitutes]], Previous: [[id:guix--Features][Features]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

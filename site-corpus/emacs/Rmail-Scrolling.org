@@ -7,6 +7,9 @@
 Next: [[id:emacs--Rmail-Motion][Moving Among Messages]]   Previous: [[id:emacs--Rmail-Basics][Basic Concepts of Rmail]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Rmail-Scrolling>>
+
+--------------
+
 *** 35.2 Scrolling Within a Message [[#Scrolling-Within-a-Message][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Scrolling-Within-a-Message
@@ -26,5 +29,3 @@ When Rmail displays a message that does not fit on the screen, you must scroll t
 Since the most common thing to do while reading a message is to scroll through it by screenfuls, Rmail makes SPC and DEL (or S-SPC) do the same as C-v (=scroll-up-command=) and M-v (=scroll-down-command=) respectively.
 
 The command . (=rmail-beginning-of-message=) scrolls back to the beginning of the selected message. This is not quite the same as M-<: for one thing, it does not set the mark; for another, it resets the buffer boundaries of the current message if you have changed them (e.g., by editing, see [[id:emacs--Rmail-Editing][Editing Within a Message]]). Similarly, the command / (=rmail-end-of-message=) scrolls forward to the end of the selected message.
-
---------------

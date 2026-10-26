@@ -36,25 +36,26 @@ Next:
 [[../..][]]
 
 <<Hardware-Considerations>>
-Next: [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]], Previous: [[id:guix--Limitations][Limitations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]], Previous: [[id:guix--Limitations][Limitations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 3.2 Hardware Considerations [[#Hardware-Considerations-1][¶]]
+<<Hardware-Considerations-1>>
+*** 3.2 Hardware Considerations
 :PROPERTIES:
-:CUSTOM_ID: Hardware-Considerations-1
+:CUSTOM_ID: hardware-considerations
 :CLASS: section
 :END:
+<<index-hardware-support-on-Guix-System>>
 GNU Guix focuses on respecting the user's computing freedom. It builds around the kernel Linux-libre, which means that only hardware for which free software drivers and firmware exist is supported. Nowadays, a wide range of off-the-shelf hardware is supported on GNU/Linux-libre---from keyboards to graphics cards to scanners and Ethernet controllers. Unfortunately, there are still areas where hardware vendors deny users control over their own computing, and such hardware is not supported on Guix System.
 
+<<index-WiFi_002c-hardware-support>>
 One of the main areas where free drivers or firmware are lacking is WiFi devices. WiFi devices known to work include those using Atheros chips (AR9271 and AR7010), which corresponds to the =ath9k= Linux-libre driver, and those using Broadcom/AirForce chips (BCM43xx with Wireless-Core Revision 5), which corresponds to the =b43-open= Linux-libre driver. Free firmware exists for both and is available out-of-the-box on Guix System, as part of =%base-firmware= (see [[id:guix--operating_002dsystem-Reference][=firmware=]]).
 
 The installer warns you early on if it detects devices that are known /not/ to work due to the lack of free firmware or free drivers.
 
+<<index-RYF_002c-Respects-Your-Freedom>>
 The [[https://www.fsf.org/][Free Software Foundation]] runs [[https://www.fsf.org/ryf][/Respects Your Freedom/]] (RYF), a certification program for hardware products that respect your freedom and your privacy and ensure that you have control over your device. We encourage you to check the list of RYF-certified devices.
 
 Another useful resource is the [[https://www.h-node.org/][H-Node]] web site. It contains a catalog of hardware devices with information about their support in GNU/Linux.
-
---------------
-
-Next: [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]], Previous: [[id:guix--Limitations][Limitations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Service][How To Get Help with GNU Emacs]]   Previous: [[id:emacs--Bugs][Reporting Bugs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Contributing>>
+
+--------------
+
 ** 55 Contributing to Emacs Development [[#Contributing-to-Emacs-Development][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Contributing-to-Emacs-Development
@@ -46,5 +49,8 @@ For documentation on Emacs (to understand how to implement your desired change),
 - See [[../elisp_html/index.html#Top][Emacs Lisp Reference Manual]].
 - [[https://www.gnu.org/software/emacs]]
 - [[https://www.emacswiki.org/]]
+
+- [[id:emacs--Coding-Standards][Coding Standards]]
+- [[id:emacs--Copyright-Assignment][Copyright Assignment]]
 
 --------------

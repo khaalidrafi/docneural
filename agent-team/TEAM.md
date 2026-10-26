@@ -37,6 +37,10 @@
   - Keys and PATs never enter files, commits, board, or chat.
   - Every board item is judged by the two TODOs.org rules: usability
     first, design second; instant means on a phone.
+  - LETTER LAW (Owner 2026-10-26 #hq): any message this team addresses
+    to another team or a client follows agent-team/COMMS-FORMAT.org —
+    full skeleton + professional register; reviewers reject
+    non-conforming letters.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

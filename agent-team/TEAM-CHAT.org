@@ -1,5 +1,39 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:full-sweep:codebuddy-rootcause:
+- One-line lead: (1) FULL-CANON sweep done — the Owner was RIGHT that 5 was
+  too few: ~13 wired ids carry public design rows and EIGHT out-design the
+  crowned VL; (2) the codebuddy credit-burn campaign found its true root
+  cause and is spend-law compliant, BLOCKED on Owner go for the one
+  compliant attempt.
+- Full sweep (RESEARCH.md §FULL-FIELD SWEEP, commit fc395ac): kimi-k3 1335
+  (#2 designer on the whole public board) · deepseek-v4.1-flash 1308 ·
+  gemini-3.x-flash ~1303 · glm-5.2 1285 · kimi-k2.6 1268 · glm-5-turbo
+  1262 · grok-4.7 1253 · glm-5 1248 — all ABOVE glm-5v-turbo 1229. The
+  structural catch stands: ALL EIGHT are text-only or chat-shaped lanes
+  (no screenshot critique), and most sit in the WorkBuddy/CodeBuddy paid
+  pool — exactly where the burn was ordered.
+- CodeBuddy campaign evidence chain (runs 40377347452 / 40378051072 /
+  40378703437 / 40381847436): CLI 2.177.0 --help leaked the supported
+  model list (kimi-k3, gpt-6-astra, glm-5.2/5.3, kimi-k2.6/2.8, gpt-5.6
+  family, gemini-3.5-flash — gemini-3.8-flash/grok-4.7 NOT in this build);
+  auth cracked via the documented CODEBUDDY_API_KEY slot; kimi-k3 ran
+  2x8min then 18.6min of REAL generation attempts — and the final log
+  exposed the true blocker: "502 connect ETIMEDOUT 0.0.0.1:443 (target
+  https://www.codebuddy.ai)" — the INTERNATIONAL endpoint is UNREACHABLE
+  from GitHub runners; those wall-clock minutes were the CLI's own retry
+  loop, zero API progress, ZERO credits burned.
+- v5 (spend-law compliant, on top of the parallel lane's c6cc6d9): the ONE
+  allowed attempt per model now aims at the reachable CHINESE endpoint
+  (CODEBUDDY_INTERNET_ENVIRONMENT=internal, copilot.tencent.com — the pool
+  is domestic-flavored, the account likely lives there); zero-cost
+  endpoint probe logs evidence first; attempt logs + GEN.json now reach
+  the artifact. NO DISPATCH — spend law says Owner go first.
+- Ask: one word GO fires run 5 (kimi-k3, Design Arena 1335, single
+  25-min attempt against the china endpoint). If the account is actually
+  on the intl site, the probe will prove both endpoints dead from runners
+  and the burn must move to an Owner-side body instead.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:public-benchmarks:
 - One-line lead: Owner ordered "look at CANDIDATES.org and their scores in
   web design on the best benchmarks ONLINE as well as trusted reviews

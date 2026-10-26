@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID: guix--Channels
+:END:
+#+filetags: :guix:
+#+title: Channels
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Channels>>
+Next: [[id:guix--Development][Development]], Previous: [[id:guix--Package-Management][Package Management]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 6 Channels [[#Channels-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Channels-1
+:CLASS: chapter
+:END:
+Guix and its package collection are updated by running =guix pull=. By default =guix pull= downloads and deploys Guix itself from the official GNU Guix repository. This can be customized by providing a file specifying the set of /channels/ to pull from (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]). A channel specifies the URL and branch of a Git repository to be deployed, and =guix pull= can be instructed to pull from one or more channels. In other words, channels can be used to /customize/ and to /extend/ Guix, as we will see below. Guix is able to take into account security concerns and deal with authenticated updates.
+
+- [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]]
+- [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]]
+- [[id:guix--Replicating-Guix][Replicating Guix]]
+- [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]]
+- [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]]
+- [[id:guix--Channel-Authentication][Channel Authentication]]
+- [[id:guix--Channels-with-Substitutes][Channels with Substitutes]]
+- [[id:guix--Creating-a-Channel][Creating a Channel]]
+- [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]]
+- [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]]
+- [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]]
+- [[id:guix--Primary-URL][Primary URL]]
+- [[id:guix--Writing-Channel-News][Writing Channel News]]
+
+--------------
+
+Next: [[id:guix--Development][Development]], Previous: [[id:guix--Package-Management][Package Management]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

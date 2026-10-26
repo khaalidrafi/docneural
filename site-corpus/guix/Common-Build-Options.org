@@ -1,0 +1,123 @@
+:PROPERTIES:
+:ID: guix--Common-Build-Options
+:END:
+#+filetags: :guix:
+#+title: Common Build Options
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Common-Build-Options>>
+Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 9.1.1 Common Build Options [[#Common-Build-Options-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Common-Build-Options-1
+:CLASS: subsection
+:END:
+A number of options that control the build process are common to =guix build= and other commands that can spawn builds, such as =guix package= or =guix archive=. These are the following:
+
+- =--load-path===directory=\\
+  =-L ==directory= :: Add =directory= to the front of the package module search path (see [[id:guix--Package-Modules][Package Modules]]).
+
+  This allows users to define their own packages and make them visible to the command-line tools.
+
+- =--keep-failed=\\
+  =-K= :: Keep the build tree of failed builds. Thus, if a build fails, its build tree is kept under =/tmp=, in a directory whose name is shown at the end of the build log. This is useful when debugging build issues. See [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], for tips and tricks on how to debug build issues.
+
+  This option implies =--no-offload=, and it has no effect when connecting to a remote daemon with a =guix://= URI (see [[id:guix--The-Store][the =GUIX_DAEMON_SOCKET= variable]]).
+
+- =--keep-going=\\
+  =-k= :: Keep going when some of the derivations fail to build; return only once all the builds have either completed or failed.
+
+  The default behavior is to stop as soon as one of the specified derivations has failed.
+
+- =--dry-run=\\
+  =-n= :: Do not build the derivations.
+
+- =--fallback= :: When substituting a pre-built binary fails, fall back to building packages locally (see [[id:guix--Substitution-Failure][Substitution Failure]]).
+
+- =--substitute-urls===urls= :: 
+
+  Consider =urls= the whitespace-separated list of substitute source URLs, overriding the default list of URLs of =guix-daemon= (see [[id:guix--Invoking-guix_002ddaemon::#daemon_002dsubstitute_002durls][=guix-daemon= URLs]]).
+
+  This means that substitutes may be downloaded from =urls=, provided they are signed by a key authorized by the system administrator (see [[id:guix--Substitutes][Substitutes]]).
+
+  When =urls= is the empty string, substitutes are effectively disabled.
+
+- =--no-substitutes= :: Do not use substitutes for build products. That is, always build things locally instead of allowing downloads of pre-built binaries (see [[id:guix--Substitutes][Substitutes]]).
+
+- =--no-grafts= :: Do not “graft” packages. In practice, this means that package updates available as grafts are not applied. See [[id:guix--Security-Updates][Security Updates]], for more information on grafts.
+
+- =--rounds===n= :: Build each derivation =n= times in a row, and raise an error if consecutive build results are not bit-for-bit identical.
+
+  This is a useful way to detect non-deterministic builds processes. Non-deterministic build processes are a problem because they make it practically impossible for users to /verify/ whether third-party binaries are genuine. See [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], for more.
+
+  When used in conjunction with =--keep-failed=, the differing output is kept in the store, under =/gnu/store/…-check=. This makes it easy to look for differences between the two results.
+
+- =--no-offload= :: Do not use offload builds to other machines (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]). That is, always build things locally instead of offloading builds to remote machines.
+
+- =--max-silent-time===seconds= :: When the build or substitution process remains silent for more than =seconds=, terminate it and report a build failure.
+
+  By default, the daemon's setting is honored (see [[id:guix--Invoking-guix_002ddaemon][=--max-silent-time=]]).
+
+- =--timeout===seconds= :: Likewise, when the build or substitution process lasts for more than =seconds=, terminate it and report a build failure.
+
+  By default, the daemon's setting is honored (see [[id:guix--Invoking-guix_002ddaemon][=--timeout=]]).
+
+-  <<index-verbosity_002c-of-the-command_002dline-tools>>=-v ==level= [[#index-verbosity_002c-of-the-command_002dline-tools][¶]]\\
+  =--verbosity===level= :: Use the given verbosity =level=, an integer. Choosing 0 means that no output is produced, 1 is for quiet output; 2 is similar to 1 but it additionally displays download URLs; 3 shows all the build log output on standard error.
+
+- =--cores===n=\\
+  =-c ==n= :: Allow the use of up to =n= CPU cores for the build. The special value =0= means to use as many CPU cores as available.
+
+- =--max-jobs===n=\\
+  =-M ==n= :: Allow at most =n= build jobs in parallel. See [[id:guix--Invoking-guix_002ddaemon][=--max-jobs=]], for details about this option and the equivalent =guix-daemon= option.
+
+- =--debug===level= :: Produce debugging output coming from the build daemon. =level= must be an integer between 0 and 5; higher means more verbose output. Setting a level of 4 or more may be helpful when debugging setup issues with the build daemon.
+
+Behind the scenes, =guix build= is essentially an interface to the =package-derivation= procedure of the =(guix packages)= module, and to the =build-derivations= procedure of the =(guix derivations)= module.
+
+In addition to options explicitly passed on the command line, =guix build= and other =guix= commands that support building honor the =GUIX_BUILD_OPTIONS= environment variable.
+
+- Environment Variable: *GUIX_BUILD_OPTIONS* [[#index-GUIX_005fBUILD_005fOPTIONS][¶]] :: Users can define this variable to a list of command line options that will automatically be used by =guix build= and other =guix= commands that can perform builds, as in the example below:
+
+  #+begin_example
+  $ export GUIX_BUILD_OPTIONS="--no-substitutes -c 2 -L /foo/bar"
+#+end_example
+
+  These options are parsed independently, and the result is appended to the parsed command-line options.
+
+--------------
+
+Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

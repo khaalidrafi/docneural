@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: org--HTML-preamble-and-postamble
+:END:
+#+filetags: :org:
+#+title: HTML preamble and postamble (The Org Manual)
+
+Next:
+
+<<HTML-preamble-and-postamble>>
+Next: [[id:org--Bare-HTML][Exporting to minimal HTML]], Previous: [[id:org--HTML-doctypes][HTML doctypes]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.4 HTML preamble and postamble [[#HTML-preamble-and-postamble-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: HTML-preamble-and-postamble-1
+:CLASS: subsection
+:END:
+The HTML exporter has delineations for preamble and postamble. The default value for =org-html-preamble= is =t=, which makes the HTML exporter insert the preamble. See the variable =org-html-preamble-format= for the format string.
+
+Set =org-html-preamble= to a string to override the default format string. If set to a function, the HTML exporter expects the function to return a string upon execution. The HTML exporter inserts this string in the preamble. The HTML exporter does not insert a preamble if =org-html-preamble= is set =nil=.
+
+The above also applies to =org-html-postamble= and =org-html-postamble-format=. In addition, =org-html-postamble= can be set to =auto= (its default value), which makes the HTML exporter build a postamble from looking up author's name, email address, creator's name, and date.
+
+--------------
+
+Next: [[id:org--Bare-HTML][Exporting to minimal HTML]], Previous: [[id:org--HTML-doctypes][HTML doctypes]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

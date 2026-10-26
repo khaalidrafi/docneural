@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID: org--Inserting-deadline_002fschedule
+:END:
+#+filetags: :org:
+#+title: Inserting deadline/schedule (The Org Manual)
+
+Next:
+
+<<Inserting-deadline_002fschedule>>
+Next: [[id:org--Repeated-tasks][Repeated tasks]], Up: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 8.3.1 Inserting deadlines or schedules [[#Inserting-deadlines-or-schedules][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Inserting-deadlines-or-schedules
+:CLASS: subsection
+:END:
+The following commands allow you to quickly insert a deadline or to schedule an item:[[#FOOT67][^{67}]]
+
+-  <<index-C_002dc-C_002dd>>C-c C-d (=org-deadline=) [[#index-C_002dc-C_002dd][¶]] :: Insert ‘=DEADLINE=' keyword along with a stamp. The insertion happens in the line directly following the headline. Remove any ‘=CLOSED=' timestamp. When called with a prefix argument, also remove any existing deadline from the entry. Depending on the variable =org-log-redeadline=, take a note when changing an existing deadline[[#FOOT68][^{68}]].
+
+-  <<index-C_002dc-C_002ds>>C-c C-s (=org-schedule=) [[#index-C_002dc-C_002ds][¶]] :: Insert ‘=SCHEDULED=' keyword along with a stamp. The insertion happens in the line directly following the headline. Remove any ‘=CLOSED=' timestamp. When called with a prefix argument, also remove the scheduling date from the entry. Depending on the variable =org-log-reschedule=, take a note when changing an existing scheduling time[[#FOOT69][^{69}]].
+
+-  <<index-C_002dc-_002f-d>>C-c / d (=org-check-deadlines=) [[#index-C_002dc-_002f-d][¶]] :: Create a sparse tree with all deadlines that are either past-due, or which will become due within =org-deadline-warning-days=. With C-u prefix, show all deadlines in the file. With a numeric prefix, check that many days. For example, C-1 C-c / d shows all deadlines due tomorrow.
+
+-  <<index-C_002dc-_002f-b>>C-c / b (=org-check-before-date=) [[#index-C_002dc-_002f-b][¶]] :: Sparse tree for deadlines and scheduled items before a given date.
+
+-  <<index-C_002dc-_002f-a>>C-c / a (=org-check-after-date=) [[#index-C_002dc-_002f-a][¶]] :: Sparse tree for deadlines and scheduled items after a given date.
+
+Note that =org-schedule= and =org-deadline= supports setting the date by indicating a relative time e.g., ‘=+1d=' sets the date to the next day after today, and ‘=--1w=' sets the date to the previous week before any current timestamp.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF67][(67)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The ‘=SCHEDULED=' and ‘=DEADLINE=' dates are inserted on the line right below the headline. Do not put any text between this line and the headline.
+
+***** [[#DOCF68][(68)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Note the corresponding ‘=STARTUP=' options ‘=logredeadline=', ‘=lognoteredeadline=', and ‘=nologredeadline='.
+
+***** [[#DOCF69][(69)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+Note the corresponding ‘=STARTUP=' options ‘=logreschedule=', ‘=lognotereschedule=', and ‘=nologreschedule='.
+
+--------------
+
+Next: [[id:org--Repeated-tasks][Repeated tasks]], Up: [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

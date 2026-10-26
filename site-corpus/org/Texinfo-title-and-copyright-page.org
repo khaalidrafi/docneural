@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID: org--Texinfo-title-and-copyright-page
+:END:
+#+filetags: :org:
+#+title: Texinfo title and copyright page (The Org Manual)
+
+Next:
+
+<<Texinfo-title-and-copyright-page>>
+Next: [[id:org--Info-directory-file][Info directory file]], Previous: [[id:org--Texinfo-file-header][Texinfo file header]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.4 Texinfo title and copyright page [[#Texinfo-title-and-copyright-page-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Texinfo-title-and-copyright-page-1
+:CLASS: subsection
+:END:
+The default template for hard copy output has a title page with ‘=TITLE=' and ‘=AUTHOR=' keywords (see [[id:org--Export-Settings][Export Settings]]). To replace the regular title with something different for the printed version, use the ‘=TEXINFO_PRINTED_TITLE=' and ‘=SUBTITLE=' keywords. Both expect raw Texinfo code for setting their values.
+
+If one ‘=AUTHOR=' line is not sufficient, add multiple ‘=SUBAUTHOR=' keywords. They have to be set in raw Texinfo code.
+
+#+begin_example
+#+AUTHOR: Jane Smith
+#+SUBAUTHOR: John Doe
+#+TEXINFO_PRINTED_TITLE: This Long Title@@inlinefmt{tex,@*} Is Broken in @TeX{}
+#+end_example
+
+Copying material is defined in a dedicated headline with a non-=nil= ‘=COPYING=' property. The backend inserts the contents within a ‘=@copying=' command at the beginning of the document. The heading itself does not appear in the structure of the document.
+
+Copyright information is printed on the back of the title page.
+
+#+begin_example
+* Legalese
+  :PROPERTIES:
+  :COPYING: t
+  :END:
+
+  This is a short example of a complete Texinfo file, version 1.0.
+
+  Copyright \copy 2016 Free Software Foundation, Inc.
+#+end_src
+
+--------------
+
+Next: [[id:org--Info-directory-file][Info directory file]], Previous: [[id:org--Texinfo-file-header][Texinfo file header]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

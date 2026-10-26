@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID: org--Publishing
+:END:
+#+filetags: :org:
+#+title: Publishing (The Org Manual)
+
+Next:
+
+<<Publishing>>
+Next: [[id:org--Citation-handling][Citation handling]], Previous: [[id:org--Exporting][Exporting]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 14 Publishing [[#Publishing-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Publishing-1
+:CLASS: chapter
+:END:
+Org includes a publishing management system that allows you to configure automatic HTML conversion of /projects/ composed of interlinked Org files. You can also configure Org to automatically upload your exported HTML pages and related attachments, such as images and source code files, to a web server.
+
+You can also use Org to convert files into PDF, or even combine HTML and PDF conversion so that files are available in both formats on the server.
+
+Publishing has been contributed to Org by David O'Toole.
+
+- [[id:org--Configuration][Configuration]]
+- [[id:org--Uploading-Files][Uploading Files]]
+- [[id:org--Sample-Configuration][Sample Configuration]]
+- [[id:org--Triggering-Publication][Triggering Publication]]

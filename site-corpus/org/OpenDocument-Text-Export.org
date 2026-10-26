@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID: org--OpenDocument-Text-Export
+:END:
+#+filetags: :org:
+#+title: OpenDocument Text Export (The Org Manual)
+
+Next:
+
+<<OpenDocument-Text-Export>>
+Next: [[id:org--Org-Export][Org Export]], Previous: [[id:org--Markdown-Export][Markdown Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.12 OpenDocument Text Export [[#OpenDocument-Text-Export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: OpenDocument-Text-Export-1
+:CLASS: section
+:END:
+The ODT export backend handles creating of OpenDocument Text (ODT) format. Documents created by this exporter use the OpenDocument-v1.2 specification[[#FOOT145][^{145}]] and are compatible with LibreOffice 3.4.
+
+- [[id:org--Pre_002drequisites-for-ODT-export][Pre-requisites for ODT export]]
+- [[id:org--ODT-export-commands][ODT export commands]]
+- [[id:org--ODT-specific-export-settings][ODT specific export settings]]
+- [[id:org--Extending-ODT-export][Extending ODT export]]
+- [[id:org--Applying-custom-styles][Applying custom styles]]
+- [[id:org--Links-in-ODT-export][Links in ODT export]]
+- [[id:org--Tables-in-ODT-export][Tables in ODT export]]
+- [[id:org--Images-in-ODT-export][Images in ODT export]]
+- [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]]
+- [[id:org--Labels-and-captions-in-ODT-export][Labels and captions in ODT export]]
+- [[id:org--Literal-examples-in-ODT-export][Literal examples in ODT export]]
+- [[id:org--Advanced-topics-in-ODT-export][Advanced topics in ODT export]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF145][(145)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See [[https://docs.oasis-open.org/office/v1.2/OpenDocument-v1.2.html][Open Document Format for Office Applications (OpenDocument) Version 1.2]].

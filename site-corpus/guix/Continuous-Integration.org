@@ -1,0 +1,308 @@
+:PROPERTIES:
+:ID: guix--Continuous-Integration
+:END:
+#+filetags: :guix:
+#+title: Continuous Integration
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Continuous-Integration>>
+Next: [[id:guix--Power-Management-Services][Power Management Services]], Previous: [[id:guix--Samba-Services][Samba Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.30 Continuous Integration [[#Continuous-Integration-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Continuous-Integration-1
+:CLASS: subsection
+:END:
+[[https://guix.gnu.org/cuirass/][Cuirass]] is a continuous integration tool for Guix. It can be used both for development and for providing substitutes to others (see [[id:guix--Substitutes][Substitutes]]).
+
+The =(gnu services cuirass)= module provides the following service.
+
+- Procedure: *cuirass-service-type* [[#index-cuirass_002dservice_002dtype][¶]] :: The type of the Cuirass service. Its value must be a =cuirass-configuration= object, as described below.
+
+To add build jobs, you have to set the =specifications= field of the configuration. For instance, the following example will build all the packages provided by the =my-channel= channel.
+
+#+begin_src lisp
+(define %cuirass-specs
+  #~(list (specification
+           (name 'my-channel)
+           (build '(channels my-channel))
+           (channels
+            (cons (channel
+                   (name 'my-channel)
+                   (url "https://my-channel.git"))
+                  %default-channels)))))
+
+(service cuirass-service-type
+         (cuirass-configuration
+          (specifications %cuirass-specs)))
+#+end_src
+
+To build the =linux-libre= package defined by the default Guix channel, one can use the following configuration.
+
+#+begin_src lisp
+(define %cuirass-specs
+  #~(list (specification
+           (name 'my-linux)
+           (build '(packages "linux-libre")))))
+
+(service cuirass-service-type
+         (cuirass-configuration
+          (specifications %cuirass-specs)))
+#+end_src
+
+The other configuration possibilities, as well as the specification record itself are described in the Cuirass manual (see [[https://doc.guix.gnu.org/cuirass/latest/en/html_node/Specifications.html#Specifications][Specifications]] in Cuirass).
+
+While information related to build jobs is located directly in the specifications, global settings for the =cuirass= process are accessible in other =cuirass-configuration= fields.
+
+- Data Type: *cuirass-configuration* [[#index-cuirass_002dconfiguration][¶]] :: Data type representing the configuration of Cuirass.
+
+  - =cuirass= (default: =cuirass=) :: The Cuirass package to use.
+
+  - =log-file= (default: ="/var/log/cuirass.log"=) :: Location of the log file.
+
+  - =web-log-file= (default: ="/var/log/cuirass-web.log"=) :: Location of the log file used by the web interface.
+
+  - =cache-directory= (default: ="/var/cache/cuirass"=) :: Location of the repository cache.
+
+  - =user= (default: ="cuirass"=) :: Owner of the =cuirass= process.
+
+  - =group= (default: ="cuirass"=) :: Owner's group of the =cuirass= process.
+
+  - =interval= (default: =300=) :: Number of seconds between the poll of the repositories followed by the Cuirass jobs, by default.
+
+    Note that individual jobset specifications may override this in their =period= field; the value specified here is only used for specifications that use the default =period= value, which is zero.
+
+  - =parallel-evaluations= (default: =#f=) :: Maximum number of jobset evaluations that may run concurrently. If =#f=, that number is determined based on a number of CPU cores, with an upper bound of 8.
+
+  - =ttl= (default: =2592000=) :: Duration to keep build results' GC roots alive, in seconds.
+
+  - =evaluation-ttl= (default: 24 months) :: Number of seconds after which an evaluation may be deleted from the database.
+
+  - =build-expiry= (default: 4 months) :: Duration in seconds after which pending builds are canceled. This helps ensure that the backlog does not grow indefinitely.
+
+  - =threads= (default: =#f=)\\
+    =web-threads= (default: =#f=) :: Number of kernel threads to use for Cuirass (main process) and for the web interface (the =cuirass web= program). The default value should be appropriate for most cases.
+
+  - =parameters= (default: =#f=) :: Read parameters from the given =parameters= file. The supported parameters are described here (see [[https://doc.guix.gnu.org/cuirass/latest/en/html_node/Parameters.html#Parameters][Parameters]] in Cuirass).
+
+  - =remote-server= (default: =#f=) :: A =cuirass-remote-server-configuration= record to use the build remote mechanism or =#f= to use the default build mechanism.
+
+  - =database= (default: ="dbname=cuirass host=/var/run/postgresql"=) :: Use =database= as the database containing the jobs and the past build results. Since Cuirass uses PostgreSQL as a database engine, =database= must be a string such as ="dbname=cuirass host=localhost"=.
+
+  - =port= (default: =8081=) :: Port number used by the HTTP server.
+
+  - =host= (default: ="localhost"=) :: Listen on the network interface for =host=. The default is to accept connections from localhost.
+
+  - =specifications= (default: =#~'()=) :: A gexp (see [[id:guix--G_002dExpressions][G-Expressions]]) that evaluates to a list of specifications records. The specification record is described in the Cuirass manual (see [[https://doc.guix.gnu.org/cuirass/latest/en/html_node/Specifications.html#Specifications][Specifications]] in Cuirass).
+
+  - =one-shot?= (default: =#f=) :: Only evaluate specifications and build derivations once.
+
+  - =fallback?= (default: =#f=) :: When substituting a pre-built binary fails, fall back to building packages locally.
+
+  - =extra-options= (default: ='()=) :: Extra options to pass when running the =cuirass register= process.
+
+  - =web-extra-options= (default: ='()=) :: Extra options to pass when running the =cuirass web= process.
+
+**** Cuirass remote building [[#Cuirass-remote-building][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Cuirass-remote-building
+:CLASS: subsubheading
+:END:
+Cuirass supports two mechanisms to build derivations.
+
+- Using the local Guix daemon. This is the default build mechanism. Once the build jobs are evaluated, they are sent to the local Guix daemon. Cuirass then listens to the Guix daemon output to detect the various build events.
+- Using the remote build mechanism. The build jobs are not submitted to the local Guix daemon. Instead, one “remote server” dispatches build requests to the connected “remote workers”, according to the build priorities.
+
+To enable this build mode a =cuirass-remote-server-configuration= record must be passed as =remote-server= argument of the =cuirass-configuration= record. The =cuirass-remote-server-configuration= record is described below.
+
+This build mode scales way better than the default build mode. This is the build mode that is used on the GNU Guix build farm at [[https://ci.guix.gnu.org]]. It should be preferred when using Cuirass to build large amount of packages.
+
+- Data Type: *cuirass-remote-server-configuration* [[#index-cuirass_002dremote_002dserver_002dconfiguration][¶]] :: Data type representing the configuration of the Cuirass remote-server.
+
+  - =backend-port= (default: =5555=) :: The TCP port for communicating with =remote-worker= processes using ZMQ. It defaults to =5555=.
+
+  - =log-port= (default: =5556=) :: The TCP port of the log server. It defaults to =5556=.
+
+  - =publish-port= (default: =5557=) :: The TCP port of the publish server. It defaults to =5557=.
+
+  - =log-file= (default: ="/var/log/cuirass-remote-server.log"=) :: Location of the log file.
+
+  - =cache= (default: ="/var/cache/cuirass/remote"=) :: Use =cache= directory to cache build log files.
+
+  - =log-expiry= (default: 6 months) :: The duration in seconds after which build logs collected by =cuirass remote-worker= may be deleted.
+
+  - =trigger-url= (default: =#f=) :: Once a substitute is successfully fetched, trigger substitute baking at =trigger-url=.
+
+  - =publish?= (default: =#t=) :: If set to false, do not start a publish server and ignore the =publish-port= argument. This can be useful if there is already a standalone publish server standing next to the remote server.
+
+  - =public-key=\\
+    =private-key= :: Use the specific =file=s as the public/private key pair used to sign the store items being published.
+
+At least one remote worker must also be started on any machine of the local network to actually perform the builds and report their status.
+
+- Data Type: *cuirass-remote-worker-configuration* [[#index-cuirass_002dremote_002dworker_002dconfiguration][¶]] :: Data type representing the configuration of the Cuirass remote-worker.
+
+  - =cuirass= (default: =cuirass=) :: The Cuirass package to use.
+
+  - =workers= (default: =1=) :: Start =workers= parallel workers.
+
+  - =server= (default: =#f=) :: Do not use Avahi discovery and connect to the given =server= IP address instead.
+
+  - =systems= (default: =(list (%current-system))=) :: Only request builds for the given =systems=.
+
+  - =minimum-disk-space= (default: =5=) :: Minimum disk space (in GiB) that must be available in the store and in =/tmp= before starting a build.
+
+  - =log-file= (default: ="/var/log/cuirass-remote-worker.log"=) :: Location of the log file.
+
+  - =publish-port= (default: =5558=) :: The TCP port of the publish server. It defaults to =5558=.
+
+  - =substitute-urls= (default: =%default-substitute-urls=) :: The list of URLs where to look for substitutes by default.
+
+  - =public-key=\\
+    =private-key= :: Use the specific =file=s as the public/private key pair used to sign the store items being published.
+
+**** Laminar [[#Laminar][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Laminar
+:CLASS: subsubheading
+:END:
+[[https://laminar.ohwg.net/][Laminar]] is a lightweight and modular Continuous Integration service. It doesn't have a configuration web UI instead uses version-controllable configuration files and scripts.
+
+Laminar encourages the use of existing tools such as bash and cron instead of reinventing them.
+
+- Variable: *laminar-service-type* [[#index-laminar_002dservice_002dtype][¶]] :: The type of the Laminar service. Its value must be a =laminar-configuration= object, as described below.
+
+  All configuration values have defaults, a minimal configuration to get Laminar running is shown below. By default, the web interface is available on port 8080.
+
+  #+begin_src lisp
+  (service laminar-service-type)
+  #+end_src
+
+- Data Type: *laminar-configuration* [[#index-laminar_002dconfiguration][¶]] :: Data type representing the configuration of Laminar.
+
+  - =laminar= (default: =laminar=) :: The Laminar package to use.
+
+  - =home-directory= (default: ="/var/lib/laminar"=) :: The directory for job configurations and run directories.
+
+  - =supplementary-groups= (default: =()=) :: Supplementary groups for the Laminar user account.
+
+  - =bind-http= (default: ="*:8080"=) :: The interface/port or unix socket on which laminard should listen for incoming connections to the web frontend.
+
+  - =bind-rpc= (default: ="unix-abstract:laminar"=) :: The interface/port or unix socket on which laminard should listen for incoming commands such as build triggers.
+
+  - =title= (default: ="Laminar"=) :: The page title to show in the web frontend.
+
+  - =keep-rundirs= (default: =0=) :: Set to an integer defining how many rundirs to keep per job. The lowest-numbered ones will be deleted. The default is 0, meaning all run dirs will be immediately deleted.
+
+  - =archive-url= (default: =#f=) :: The web frontend served by laminard will use this URL to form links to artefacts archived jobs.
+
+  - =base-url= (default: =#f=) :: Base URL to use for links to laminar itself.
+
+**** Forgejo Runner [[#Forgejo-Runner][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Forgejo-Runner
+:CLASS: subsubheading
+:END:
+The =(gnu services ci)= also provides a service for [[https://code.forgejo.org/forgejo/runner][Forgejo Runner]], a daemon that connects to an instance of the [[https://forgejo.org][Forgejo code collaboration tool]] and runs jobs for continuous integration.
+
+A minimal configuration mostly with default values that can be added to the =services= field of your operating system looks like this:
+
+#+begin_src lisp
+(service forgejo-runner-service-type
+         (forgejo-runner-configuration
+          (name "my-runner")
+          (labels '("guix" "linux"))))
+#+end_src
+
+This provides a =forgejo-runner= Shepherd service. That service will initially fail to start; you will have to manually /register/ the runner against the Forgejo server by running a command like:
+
+#+begin_example
+herd register forgejo-runner url token
+#+end_example
+
+... where the arguments are as follows:
+
+- =url= :: the URL of the Forgejo server---e.g., ‘=https://codeberg.org=';
+
+- =token= :: an access token [[https://forgejo.org/docs/latest/admin/runner-installation/#standard-registration][provided by the Forgejo server]].
+
+Once registration has succeeded, you can start the runner:
+
+#+begin_example
+herd enable forgejo-runner
+herd start forgejo-runner
+#+end_example
+
+The runner then receives orders from the Forgejo server to execute /actions/. Actions are commands and workflows specified by YAML files in the =.forgejo/workflows= directory of source code repositories---see [[https://forgejo.org/docs/v7.0/user/actions/][the Forgejo Action documentation]] for more info.
+
+Note that at the moment =forgejo-runner-service-type= lets you run only one runner. Details about the configuration of this service follow.
+
+- Variable: *forgejo-runner-service-type* [[#index-forgejo_002drunner_002dservice_002dtype][¶]] :: This is the service type for Forgejo Runner. Its value must be a =forgejo-runner-configuration= record, documented below.
+
+- Data Type: *forgejo-runner-configuration* [[#index-forgejo_002drunner_002dconfiguration][¶]] :: This data type represents the configuration of an instance of =forgejo-runner-service-type=. It contains the following fields:
+
+  - =package= (default: =forgejo-runner=) :: The Forgejo Runner package to use.
+
+  - =extra-shepherd-requirement= (default: ='(dockerd)=) :: This is a list of symbols naming extra Shepherd services that Forgejo Runner will depend on.
+
+  - =user= (default: ="forgejo-runner"=) :: User to use for Forgejo Runner.
+
+  - =group= (default: ="forgejo-runner"=) :: Group to use for Forgejo Runner.
+
+  - =supplementary-groups= (default: ='("docker")=) :: Supplementary groups for the Forgejo Runner user account.
+
+  - =name= (default: =#~(gethostname)=) :: Name of the runner as will be shown in the runner management interface of Forgejo.
+
+  - =labels= (default: ='("guix:host")=) :: List of [[https://forgejo.org/docs/latest/admin/actions/#choosing-labels][labels]] representing the type of environment the runner provides and that actions may refer to.
+
+  - =capacity= (default: =1=) :: Number of tasks to be executed concurrently.
+
+  - =timeout= (default: =(* 3 3600)=) :: Maximum duration of a job, in seconds.
+
+  - =fetch-timeout= (default: =5=) :: Maximum duration for fetching the job from the Forgejo server, in seconds.
+
+  - =fetch-interval= (default: =2=) :: Interval (in seconds) for fetching the job from the Forgejo server.
+
+  - =report-interval= (default: =1=) :: Interval (in seconds) for reporting the job status and log to the Forgejo server.
+
+  - =data-directory= (default: ="/var/lib/forgejo-runner"=) :: Directory where =forgejo-runner= will store persistent data such as its configuration and access token.
+
+  - =run-directory= (default: ="/var/run/forgejo-runner"=) :: Directory where =forgejo-runner= stores cached data.
+
+  - =log-file= (default: ="/var/log/forgejo-runner.log"=) :: Name of the =forgejo-runner= log file.
+
+--------------
+
+Next: [[id:guix--Power-Management-Services][Power Management Services]], Previous: [[id:guix--Samba-Services][Samba Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

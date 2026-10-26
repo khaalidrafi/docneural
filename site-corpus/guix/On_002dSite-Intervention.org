@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: guix--On_002dSite-Intervention
+:END:
+#+filetags: :guix:
+#+title: On-Site Intervention
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<On_002dSite-Intervention>>
+Next: [[id:guix--Hosting][Hosting]], Previous: [[id:guix--Day_002dto_002dDay-System-Administration][Day-to-Day System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.20.4 On-Site Intervention [[#On_002dSite-Intervention-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: On_002dSite-Intervention-1
+:CLASS: subsection
+:END:
+The first front-end is currently generously hosted by the Max Delbrück Center (MDC), a research institute in Berlin, Germany. Only authorized personnel can physically access it.
+
+The second one, bordeaux.guix.gnu.org, is hosted in Bordeaux, France, in a professional data center shared with non-profit ISP Aquilenet. If you live in the region of Bordeaux and would like to help out when we need to go on-site, please make yourself known by emailing [[mailto:guix-sysadmin@gnu.org][guix-sysadmin@gnu.org]].
+
+On-site interventions are rare, but they're usually in response to an emergency.

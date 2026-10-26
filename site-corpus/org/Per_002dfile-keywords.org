@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID: org--Per_002dfile-keywords
+:END:
+#+filetags: :org:
+#+title: Per-file keywords (The Org Manual)
+
+Next:
+
+<<Per_002dfile-keywords>>
+Next: [[id:org--Faces-for-TODO-keywords][Faces for TODO keywords]], Previous: [[id:org--Fast-access-to-TODO-states][Fast access to TODO states]], Up: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 5.2.5 Setting up keywords for individual files [[#Setting-up-keywords-for-individual-files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-up-keywords-for-individual-files
+:CLASS: subsection
+:END:
+It can be very useful to use different aspects of the TODO mechanism in different files. For file-local settings, you need to add special lines to the file which set the keywords and interpretation for that file only. For example, to set one of the two examples discussed above, you need one of the following lines, starting in column zero anywhere in the file:
+
+#+begin_example
+#+TODO: TODO FEEDBACK VERIFY | DONE CANCELED
+#+end_example
+
+You may also write ‘=#+SEQ_TODO=' to be explicit about the interpretation, but it means the same as ‘=#+TODO=', or
+
+#+begin_example
+#+TYP_TODO: Fred Sara Lucy Mike | DONE
+#+end_example
+
+A setup for using several sets in parallel would be:
+
+#+begin_example
+#+TODO: TODO(t) | DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+#+end_example
+
+To make sure you are using the correct keyword, type ‘=#+=' into the buffer and then use M-TAB to complete it (see [[id:org--Completion][Completion]]).
+
+Remember that the keywords after the vertical bar---or the last keyword if no bar is there---must always mean that the item is DONE, although you may use a different word. After changing one of these lines, use C-c C-c with point still in the line to make the changes known to Org mode[[#FOOT41][^{41}]].
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF41][(41)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Org mode parses these lines only when Org mode is activated after visiting a file. C-c C-c with point in a line starting with ‘=#+=' is simply restarting Org mode for the current buffer.
+
+--------------
+
+Next: [[id:org--Faces-for-TODO-keywords][Faces for TODO keywords]], Previous: [[id:org--Fast-access-to-TODO-states][Fast access to TODO states]], Up: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

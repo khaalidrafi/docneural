@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID: emacs--Shell-Mode
+:END:
+#+filetags: :emacs:
+#+title: Shell Mode
+
+Next: [[id:emacs--Shell-Prompts][Shell Prompts]]   Previous: [[id:emacs--Interactive-Shell][Interactive Subshell]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
+
+<<Shell-Mode>>
+*** 40.3 Shell Mode [[#Shell-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shell-Mode-1
+:CLASS: section subsection-level-set-section
+:END:
+The major mode for Shell buffers is Shell mode. Many of its special commands are bound to the C-c prefix, and resemble the usual editing and job control characters present in ordinary shells, except that you must type C-c first. Here is a list of Shell mode commands:
+
+-  <<index-RET-_0028Shell-mode_0029>>RET [[#index-RET-_0028Shell-mode_0029][¶]] :: Send the current line as input to the subshell (=comint-send-input=). Any shell prompt at the beginning of the line is omitted (see [[id:emacs--Shell-Prompts][Shell Prompts]]). If point is at the end of buffer, this is like submitting the command line in an ordinary interactive shell. However, you can also invoke RET elsewhere in the shell buffer to submit the current line as input.
+
+-  <<index-TAB-_0028Shell-mode_0029>>TAB [[#index-TAB-_0028Shell-mode_0029][¶]] :: Complete the command name or file name before point in the shell buffer (=completion-at-point=). This uses the usual Emacs completion rules (see [[id:emacs--Completion::#Completion][Completion]]), with the completion alternatives being file names, environment variable names, the shell command history, and history references (see [[id:emacs--Shell-History::#History-References][Shell History References]]). For options controlling the completion, see [[id:emacs--Shell-Options][Shell Mode Options]].
+
+-  <<index-M_002d_003f-_0028Shell-mode_0029>>M-? [[#index-M_002d_003f-_0028Shell-mode_0029][¶]] :: Display temporarily a list of the possible completions of the file name before point (=comint-dynamic-list-filename-completions=).
+
+-  <<index-C_002dd-_0028Shell-mode_0029>>C-d [[#index-C_002dd-_0028Shell-mode_0029][¶]] :: Either delete a character or send EOF (=comint-delchar-or-maybe-eof=). Typed at the end of the shell buffer, this sends EOF to the subshell. Typed at any other position in the buffer, this deletes a character as usual.
+
+-  <<index-C_002dc-C_002da-_0028Shell-mode_0029>>C-c C-a [[#index-C_002dc-C_002da-_0028Shell-mode_0029][¶]] :: Move to the beginning of the line, but after the prompt if any (=comint-bol-or-process-mark=). If you repeat this command twice in a row, the second time it moves back to the process mark, which is the beginning of the input that you have not yet sent to the subshell. (Normally that is the same place---the end of the prompt on this line---but after C-c SPC the process mark may be in a previous line.)
+
+- C-c SPC :: Accumulate multiple lines of input, then send them together (=comint-accumulate=). This command inserts a newline before point, but does not send the preceding text as input to the subshell---at least, not yet. Both lines, the one before this newline and the one after, will be sent together (along with the newline that separates them), when you type RET.
+
+-  <<index-C_002dc-C_002du-_0028Shell-mode_0029>>C-c C-u [[#index-C_002dc-C_002du-_0028Shell-mode_0029][¶]] :: Kill all text pending at end of buffer to be sent as input (=comint-kill-input=). If point is not at end of buffer, this only kills the part of this text that precedes point.
+
+- <<index-C_002dc-C_002dw-_0028Shell-mode_0029>>C-c C-w [[#index-C_002dc-C_002dw-_0028Shell-mode_0029][¶]] :: Kill a word before point (=backward-kill-word=).
+
+-  <<index-C_002dc-C_002dc-_0028Shell-mode_0029>>C-c C-c [[#index-C_002dc-C_002dc-_0028Shell-mode_0029][¶]] :: Interrupt the shell or its current subjob if any (=comint-interrupt-subjob=). This command also kills any shell input pending in the shell buffer and not yet sent.
+
+-  <<index-C_002dc-C_002dz-_0028Shell-mode_0029>>C-c C-z [[#index-C_002dc-C_002dz-_0028Shell-mode_0029][¶]] :: Stop the shell or its current subjob if any (=comint-stop-subjob=). This command also kills any shell input pending in the shell buffer and not yet sent.
+
+-  <<index-comint_002dquit_002dsubjob>>C-c C-\ [[#index-comint_002dquit_002dsubjob][¶]] :: Send quit signal to the shell or its current subjob if any (=comint-quit-subjob=). This command also kills any shell input pending in the shell buffer and not yet sent.
+
+-  <<index-C_002dc-C_002do-_0028Shell-mode_0029>>C-c C-o [[#index-C_002dc-C_002do-_0028Shell-mode_0029][¶]] :: Delete the last batch of output from a shell command (=comint-delete-output=). This is useful if a shell command spews out lots of output that just gets in the way. With a prefix argument, this command saves the deleted text in the =kill-ring= (see [[id:emacs--Yanking::#Kill-Ring][The Kill Ring]]), so that you could later yank it (see [[id:emacs--Yanking::#Yanking][Yanking]]) elsewhere.
+
+-  <<index-C_002dc-C_002ds-_0028Shell-mode_0029>>C-c C-s [[#index-C_002dc-C_002ds-_0028Shell-mode_0029][¶]] :: Write the last batch of output from a shell command to a file (=comint-write-output=). With a prefix argument, the file is appended to instead. Any prompt at the end of the output is not written.
+
+-  <<index-C_002dc-C_002dr-_0028Shell-mode_0029>>C-c C-r [[#index-C_002dc-C_002dr-_0028Shell-mode_0029][¶]]\\
+  C-M-l :: Scroll to display the beginning of the last batch of output at the top of the window; also move the cursor there (=comint-show-output=).
+
+-  <<index-C_002dc-C_002de-_0028Shell-mode_0029>>C-c C-e [[#index-C_002dc-C_002de-_0028Shell-mode_0029][¶]] :: Scroll to put the last line of the buffer at the bottom of the window (=comint-show-maximum-output=).
+
+-  <<index-C_002dc-C_002df-_0028Shell-mode_0029>>C-c C-f [[#index-C_002dc-C_002df-_0028Shell-mode_0029][¶]] :: Move forward across one shell command, but not beyond the current line (=shell-forward-command=). The variable =shell-command-regexp= specifies how to recognize the end of a command.
+
+-  <<index-C_002dc-C_002db-_0028Shell-mode_0029>>C-c C-b [[#index-C_002dc-C_002db-_0028Shell-mode_0029][¶]] :: Move backward across one shell command, but not beyond the current line (=shell-backward-command=).
+
+- M-x dirs :: Ask the shell for its working directory, and update the Shell buffer's default directory. See [[id:emacs--Directory-Tracking][Directory Tracking]].
+
+- <<index-comint_002dsend_002dinvisible>>M-x comint-send-invisible RET =text= RET [[#index-comint_002dsend_002dinvisible][¶]] :: Send =text= as input to the shell, after reading it without echoing. This is useful when a shell command runs a program that asks for a password.
+
+  Please note that Emacs will not echo passwords by default. If you really want them to be echoed, evaluate (see [[id:emacs--Lisp-Eval][Evaluating Emacs Lisp Expressions]]) the following Lisp expression:
+
+  #+begin_example
+  (remove-hook 'comint-output-filter-functions
+               'comint-watch-for-password-prompt)
+#+end_example
+
+- <<index-comint_002dcontinue_002dsubjob>>M-x comint-continue-subjob [[#index-comint_002dcontinue_002dsubjob][¶]] :: Continue the shell process. This is useful if you accidentally suspend the shell process.[[#FOOT22][^{22}]]
+
+- <<index-comint_002dstrip_002dctrl_002dm>>M-x comint-strip-ctrl-m [[#index-comint_002dstrip_002dctrl_002dm][¶]] :: Discard all control-M characters from the current group of shell output. The most convenient way to use this command is to make it run automatically when you get output from the subshell. To do that, evaluate this Lisp expression:
+
+  #+begin_example
+  (add-hook 'comint-output-filter-functions
+            'comint-strip-ctrl-m)
+#+end_example
+
+- <<index-comint_002dtruncate_002dbuffer>>M-x comint-truncate-buffer [[#index-comint_002dtruncate_002dbuffer][¶]] :: This command truncates the shell buffer to a certain maximum number of lines, specified by the variable =comint-buffer-maximum-size=. Here's how to do this automatically each time you get output from the subshell:
+
+  #+begin_example
+  (add-hook 'comint-output-filter-functions
+            'comint-truncate-buffer)
+#+end_example
+
+By default, Shell mode handles common ANSI escape codes (for instance, for changing the color of text). Emacs also optionally supports some extend escape codes, like some of the OSC (Operating System Codes) if you put the following in your init file:
+
+#+begin_src lisp-preformatted
+(add-hook 'comint-output-filter-functions 'comint-osc-process-output)
+#+end_src
+
+With this enabled, the output from, for instance, =ls --hyperlink= will be made into clickable buttons in the Shell mode buffer.
+
+Shell mode is a derivative of Comint mode, a general-purpose mode for communicating with interactive subprocesses. Most of the features of Shell mode actually come from Comint mode, as you can see from the command names listed above. The special features of Shell mode include the directory tracking feature, and a few user commands.
+
+Other Emacs features that use variants of Comint mode include GUD (see [[id:emacs--Debuggers::#Debuggers][Running Debuggers Under Emacs]]) and M-x run-lisp (see [[id:emacs--External-Lisp][Running an External Lisp]]).
+
+You can use M-x comint-run to execute any program of your choice in a subprocess using unmodified Comint mode---without the specializations of Shell mode. To pass arguments to the program, use C-u M-x comint-run.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF22][(22)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+You should not suspend the shell process. Suspending a subjob of the shell is a completely different matter---that is normal practice, but you must use the shell to continue the subjob; this command won't do it.
+
+--------------

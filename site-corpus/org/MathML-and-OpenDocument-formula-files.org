@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: org--MathML-and-OpenDocument-formula-files
+:END:
+#+filetags: :org:
+#+title: MathML and OpenDocument formula files (The Org Manual)
+
+Next:
+
+<<MathML-and-OpenDocument-formula-files>>
+Previous: [[id:org--LaTeX-math-snippets][LaTeX math snippets]], Up: [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.9.2 MathML and OpenDocument formula files [[#MathML-and-OpenDocument-formula-files-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: MathML-and-OpenDocument-formula-files-1
+:CLASS: subsubsection
+:END:
+When embedding LaTeX math snippets in ODT documents is not reliable, there is one more option to try. Embed an equation by linking to its MathML (‘=.mml=') source or its OpenDocument formula (‘=.odf=') file as shown below:
+
+#+begin_example
+[[./equation.mml]]
+#+end_example
+
+or
+
+#+begin_example
+[[./equation.odf]]
+#+end_example

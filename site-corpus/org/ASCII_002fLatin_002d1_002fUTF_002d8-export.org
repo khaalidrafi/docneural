@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID: org--ASCII_002fLatin_002d1_002fUTF_002d8-export
+:END:
+#+filetags: :org:
+#+title: ASCII/Latin-1/UTF-8 export (The Org Manual)
+
+Next:
+
+<<ASCII_002fLatin_002d1_002fUTF_002d8-export>>
+Next: [[id:org--Beamer-Export][Beamer Export]], Previous: [[id:org--Comment-Lines][Comment Lines]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.7 ASCII/Latin-1/UTF-8 export [[#ASCII_002fLatin_002d1_002fUTF_002d8-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ASCII_002fLatin_002d1_002fUTF_002d8-export-1
+:CLASS: section
+:END:
+ASCII export produces an output file containing only plain ASCII characters. This is the simplest and most direct text output. It does not contain any Org markup. Latin-1 and UTF-8 export use additional characters and symbols available in these encoding standards. All three of these export formats offer the most basic of text output for maximum portability.
+
+On export, Org fills and justifies text according to the text width set in =org-ascii-text-width=.
+
+Org exports links using a footnote-like style where the descriptive part is in the text and the link is in a note before the next heading. See the variable =org-ascii-links-to-notes= for details.
+
+**** ASCII export commands [[#ASCII-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ASCII-export-commands-1
+:CLASS: subheading
+:END:
+-  <<index-C_002dc-C_002de-t-a>>C-c C-e t a (=org-ascii-export-to-ascii=), C-c C-e t l, C-c C-e t u [[#index-C_002dc-C_002de-t-a][¶]] :: Export as an ASCII file with a ‘=.txt=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.txt=', overwriting without warning. For ‘=myfile.txt=', Org exports to ‘=myfile.txt.txt=' in order to prevent data loss.
+
+-  <<index-C_002dc-C_002de-t-A>>C-c C-e t A (=org-ascii-export-to-ascii=), C-c C-e t L, C-c C-e t U [[#index-C_002dc-C_002de-t-A][¶]] :: Export to a temporary buffer. Does not create a file.
+
+**** ASCII specific export settings [[#ASCII-specific-export-settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ASCII-specific-export-settings-1
+:CLASS: subheading
+:END:
+The ASCII export backend has one extra keyword for customizing ASCII output. Setting this keyword works similar to the general options (see [[id:org--Export-Settings][Export Settings]]).
+
+- <<index-SUBTITLE_002c-keyword>>‘=SUBTITLE=' [[#index-SUBTITLE_002c-keyword][¶]] :: The document subtitle. For long subtitles, use multiple ‘=#+SUBTITLE=' lines in the Org file. Org prints them on one continuous line, wrapping into multiple lines if necessary.
+
+**** Header and sectioning structure [[#Header-and-sectioning-structure-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Header-and-sectioning-structure-1
+:CLASS: subheading
+:END:
+Org converts the first three outline levels into headlines for ASCII export. The remaining levels are turned into lists. To change this cut-off point where levels become lists, see [[id:org--Export-Settings][Export Settings]].
+
+**** Quoting ASCII text [[#Quoting-ASCII-text-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quoting-ASCII-text-1
+:CLASS: subheading
+:END:
+To insert text within the Org file by the ASCII backend, use one the following constructs, inline, keyword, or export block:
+
+#+begin_example
+Inline text @@ascii:and additional text@@ within a paragraph.
+
+#+ASCII: Some text
+
+#+BEGIN_EXPORT ascii
+Org exports text in this block only when using ASCII backend.
+#+END_EXPORT
+#+end_example
+
+**** ASCII specific attributes [[#ASCII-specific-attributes-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ASCII-specific-attributes-1
+:CLASS: subheading
+:END:
+ASCII backend recognizes only one attribute, ‘=:width=', which specifies the width of a horizontal rule in number of characters. The keyword and syntax for specifying widths is:
+
+#+begin_example
+#+ATTR_ASCII: :width 10
+-----
+#+end_example
+
+**** ASCII special blocks [[#ASCII-special-blocks-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ASCII-special-blocks-1
+:CLASS: subheading
+:END:
+Besides ‘=#+BEGIN_CENTER=' blocks (see [[id:org--Paragraphs][Paragraphs]]), ASCII backend has these two left and right justification blocks:
+
+#+begin_example
+#+BEGIN_JUSTIFYLEFT
+It's just a jump to the left...
+#+end_example
+
+#+BEGIN_JUSTIFYRIGHT
+...and then a step to the right.
+#+END_JUSTIFYRIGHT
+#+end_src
+
+--------------
+
+Next: [[id:org--Beamer-Export][Beamer Export]], Previous: [[id:org--Comment-Lines][Comment Lines]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

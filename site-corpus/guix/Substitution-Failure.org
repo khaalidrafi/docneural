@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: guix--Substitution-Failure
+:END:
+#+filetags: :guix:
+#+title: Substitution Failure
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Substitution-Failure>>
+Next: [[id:guix--On-Trusting-Binaries][On Trusting Binaries]], Previous: [[id:guix--Proxy-Settings][Proxy Settings]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 5.3.7 Substitution Failure [[#Substitution-Failure-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Substitution-Failure-1
+:CLASS: subsection
+:END:
+Even when a substitute for a derivation is available, sometimes the substitution attempt will fail. This can happen for a variety of reasons: the substitute server might be offline, the substitute may recently have been deleted, the connection might have been interrupted, etc.
+
+When substitutes are enabled and a substitute for a derivation is available, but the substitution attempt fails, Guix will attempt to build the derivation locally depending on whether or not =--fallback= was given (see [[id:guix--Common-Build-Options::#fallback_002doption][common build option =--fallback=]]). Specifically, if =--fallback= was omitted, then no local build will be performed, and the derivation is considered to have failed. However, if =--fallback= was given, then Guix will attempt to build the derivation locally, and the success or failure of the derivation depends on the success or failure of the local build. Note that when substitutes are disabled or no substitute is available for the derivation in question, a local build will /always/ be performed, regardless of whether or not =--fallback= was given.
+
+To get an idea of how many substitutes are available right now, you can try running the =guix weather= command (see [[id:guix--Invoking-guix-weather][Invoking =guix weather=]]). This command provides statistics on the substitutes provided by a server.
+
+--------------
+
+Next: [[id:guix--On-Trusting-Binaries][On Trusting Binaries]], Previous: [[id:guix--Proxy-Settings][Proxy Settings]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

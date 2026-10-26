@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID: org--Scope-of-column-definitions
+:END:
+#+filetags: :org:
+#+title: Scope of column definitions (The Org Manual)
+
+Next:
+
+<<Scope-of-column-definitions>>
+Next: [[id:org--Column-attributes][Column attributes]], Up: [[id:org--Defining-columns][Defining columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 7.5.1.1 Scope of column definitions [[#Scope-of-column-definitions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Scope-of-column-definitions-1
+:CLASS: subsubsection
+:END:
+To specify a format that only applies to a specific tree, add a ‘=COLUMNS=' property to the top node of that tree, for example:
+
+#+begin_example
+** Top node for columns view
+   :PROPERTIES:
+   :COLUMNS: %25ITEM %TAGS %PRIORITY %TODO
+   :END:
+#+end_src
+
+A ‘=COLUMNS=' property within a property drawer before first headline will apply to the entire file. As an addition to property drawers, keywords can also be defined for an entire file using a line like:
+
+#+begin_example
+#+COLUMNS: %25ITEM %TAGS %PRIORITY %TODO
+#+end_example
+
+If a ‘=COLUMNS=' property is present in an entry, it defines columns for the entry itself, and for the entire subtree below it. Since the column definition is part of the hierarchical structure of the document, you can define columns on level 1 that are general enough for all sublevels, and more specific columns further down, when you edit a deeper part of the tree.
+
+--------------
+
+Next: [[id:org--Column-attributes][Column attributes]], Up: [[id:org--Defining-columns][Defining columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

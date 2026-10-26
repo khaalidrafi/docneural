@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Frames
+:END:
+#+filetags: :emacs:
+#+title: Frames
+
+Next: [[id:emacs--International][International Character Set Support]]   Previous: [[id:emacs--Windows][Multiple Windows]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Frames>>
+** 23 Frames and Graphical Displays [[#Frames-and-Graphical-Displays][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Frames-and-Graphical-Displays
+:CLASS: chapter
+:END:
+When Emacs is started on a graphical display, e.g., on the X Window System, it occupies a graphical system-level display region. In this manual, we call this a /frame/, reserving the word “window” for the part of the frame used for displaying a buffer. A frame initially contains one window, but it can be subdivided into multiple windows (see [[id:emacs--Windows][Multiple Windows]]). A frame normally also contains a menu bar, tool bar, and echo area.
+
+You can also create additional frames (see [[id:emacs--Creating-Frames][Creating Frames]]). All frames created in the same Emacs session have access to the same underlying buffers and other data. For instance, if a buffer is being shown in more than one frame, any changes made to it in one frame show up immediately in the other frames too.
+
+Typing C-x C-c closes all the frames on the current display, and ends the Emacs session if it has no frames open on any other displays (see [[id:emacs--Exiting][Exiting Emacs]]). To close just the selected frame, type C-x 5 0 (that is zero, not o).
+
+This chapter describes Emacs features specific to graphical displays (particularly mouse commands), and features for managing multiple frames. On text terminals, many of these features are unavailable. However, it is still possible to create multiple frames on text terminals; such frames are displayed one at a time, filling the entire terminal screen (see [[id:emacs--Text-Terminals][Text Terminals]]). It is also possible to use the mouse on some text terminals (see [[id:emacs--Text_002dOnly-Mouse][Using a Mouse in Text Terminals]], for doing so on GNU and Unix systems; and see [[id:emacs--MS_002dDOS::#MS_002dDOS-Mouse][Mouse Usage on MS-DOS]], for doing so on MS-DOS). Menus are supported on all text terminals.
+
+--------------

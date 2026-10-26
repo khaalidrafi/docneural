@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID: guix--Mcron-Home-Service
+:END:
+#+filetags: :guix:
+#+title: Mcron Home Service
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Mcron-Home-Service>>
+Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.3 Scheduled User's Job Execution [[#Scheduled-User_0027s-Job-Execution][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Scheduled-User_0027s-Job-Execution
+:CLASS: subsection
+:END:
+The =(gnu home services mcron)= module provides an interface to GNU mcron, a daemon to run jobs at scheduled times (see [[https://www.gnu.org/software/mcron/manual/html_node/index.html#Top][GNU mcron]]). The information about system's mcron is applicable here (see [[id:guix--Scheduled-Job-Execution::#mcron_002dservice][mcron reference]]), the only difference for home services is that they have to be declared in a =home-environment= record instead of an =operating-system= record.
+
+#+begin_quote
+*Note:* We recommend defining periodic tasks as Shepherd timers, which provide more flexibility than mcron. See [[id:guix--Shepherd-Home-Service][Managing User Daemons]], for more info.
+
+#+end_quote
+
+- Variable: *home-mcron-service-type* [[#index-home_002dmcron_002dservice_002dtype][¶]] :: This is the type of the =mcron= home service, whose value is a =home-mcron-configuration= object. It allows to manage scheduled tasks.
+
+  This service type can be the target of a service extension that provides additional job specifications (see [[id:guix--Service-Composition][Service Composition]]). In other words, it is possible to define services that provide additional mcron jobs to run.
+
+- Data Type: *home-mcron-configuration* [[#index-home_002dmcron_002dconfiguration][¶]] :: Available =home-mcron-configuration= fields are:
+
+  - =mcron= (default: =mcron=) (type: file-like) :: The mcron package to use.
+
+  - =jobs= (default: ='()=) (type: list-of-gexps) :: This is a list of gexps (see [[id:guix--G_002dExpressions][G-Expressions]]), where each gexp corresponds to an mcron job specification (see [[https://www.gnu.org/software/mcron/manual/html_node/Syntax.html#Syntax][mcron job specifications]] in GNU mcron).
+
+  - =log?= (default: =#t=) (type: boolean) :: Log messages to standard output.
+
+  - =log-format= (default: ="~1@*~a ~a: ~a~%"=) (type: string) :: =(ice-9 format)= format string for log messages. The default value produces messages like "‘=pid== ==name==: ==message=="=' (see [[https://www.gnu.org/software/mcron/manual/html_node/Invoking-mcron.html#Invoking-mcron][Invoking]] in GNU mcron). Each message is also prefixed by a timestamp by GNU Shepherd.
+
+--------------
+
+Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

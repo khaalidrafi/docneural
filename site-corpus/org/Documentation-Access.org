@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--Documentation-Access
+:END:
+#+filetags: :org:
+#+title: Documentation Access (The Org Manual)
+
+Next:
+
+<<Documentation-Access>>
+Next: [[id:org--Escape-Character][Escape Character]], Previous: [[id:org--Org-Syntax][Org Syntax]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.11 Context Dependent Documentation [[#Context-Dependent-Documentation][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Context-Dependent-Documentation
+:CLASS: section
+:END:
+C-c C-x I in an Org file tries to open a suitable section of the Org manual depending on the syntax at point. For example, using it on a headline displays “Document Structure” section.
+
+q closes the Info window.

@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Other-Input
+:END:
+#+filetags: :emacs:
+#+title: Other Input
+
+Next: [[id:emacs--Entering-Emacs][Entering Emacs]]   Previous: [[id:emacs--Commands][Keys and Commands]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Other-Input>>
+** 6 Touchscreen Input and Virtual Keyboards [[#Touchscreen-Input-and-Virtual-Keyboards][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Touchscreen-Input-and-Virtual-Keyboards
+:CLASS: chapter section-level-set-chapter
+:END:
+Emacs was first written assuming that its users were to use it from a desktop computer or computer terminal, equipped with a keyboard and perhaps a suitable pointing device such as a mouse (see [[id:emacs--Mouse-Input][Mouse Input]]).
+
+Emacs is also capable of receiving input from alternative sources of input, enabling users to interact with it even if it is installed on a computer that substitutes such input sources for the customary combination of keyboard and mouse.
+
+--------------

@@ -1,0 +1,136 @@
+:PROPERTIES:
+:ID: guix--Samba-Services
+:END:
+#+filetags: :guix:
+#+title: Samba Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Samba-Services>>
+Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.29 Samba Services [[#Samba-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Samba-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services samba)= module provides service definitions for Samba as well as additional helper services. Currently it provides the following services.
+
+**** Samba [[#Samba][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Samba
+:CLASS: subsubheading
+:END:
+[[https://www.samba.org][Samba]] provides network shares for folders and printers using the SMB/CIFS protocol commonly used on Windows. It can also act as an Active Directory Domain Controller (AD DC) for other hosts in an heterougenious network with different types of Computer systems.
+
+- Variable: *samba-service-type* [[#index-samba_002dservice_002dtype][¶]] :: The service type to enable the samba services =samba=, =nmbd=, =smbd= and =winbindd=. By default this service type does not run any of the Samba daemons; they must be enabled individually.
+
+  Below is a basic example that configures a simple, anonymous (unauthenticated) Samba file share exposing the =/public= directory.
+
+  #+begin_quote
+  *Tip:* The =/public= directory and its contents must be world readable/writable, so you'll want to run ‘=chmod -R 777 /public=' on it.
+
+  #+end_quote
+
+  #+begin_quote
+  *Caution:* Such a Samba configuration should only be used in controlled environments, and you should not share any private files using it, as anyone connecting to your network would be able to access them.
+
+  #+end_quote
+
+  #+begin_src lisp
+  (service samba-service-type (samba-configuration
+                               (enable-smbd? #t)
+                               (config-file (plain-file "smb.conf" "\
+  [global]
+  map to guest = Bad User
+  logging = syslog@1
+
+  [public]
+  browsable = yes
+  path = /public
+  read only = no
+  guest ok = yes
+  guest only = yes\n"))))
+  #+end_src
+
+- Data Type: *samba-service-configuration* [[#index-samba_002dservice_002dconfiguration][¶]] :: Configuration record for the Samba suite.
+
+  - =package= (default: =samba=) :: The samba package to use.
+
+  - =config-file= (default: =#f=) :: The config file to use. To learn about its syntax, run ‘=man smb.conf='.
+
+  - =enable-samba?= (default: =#f=) :: Enable the =samba= daemon.
+
+  - =enable-smbd?= (default: =#f=) :: Enable the =smbd= daemon.
+
+  - =enable-nmbd?= (default: =#f=) :: Enable the =nmbd= daemon.
+
+  - =enable-winbindd?= (default: =#f=) :: Enable the =winbindd= daemon.
+
+**** Web Service Discovery Daemon [[#Web-Service-Discovery-Daemon][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Web-Service-Discovery-Daemon
+:CLASS: subsubheading
+:END:
+The WSDD (Web Service Discovery daemon) implements the [[http://docs.oasis-open.org/ws-dd/discovery/1.1/os/wsdd-discovery-1.1-spec-os.html][Web Services Dynamic Discovery]] protocol that enables host discovery over Multicast DNS, similar to what Avahi does. It is a drop-in replacement for SMB hosts that have had SMBv1 disabled for security reasons.
+
+- Variable: *wsdd-service-type* [[#index-wsdd_002dservice_002dtype][¶]] :: Service type for the WSD host daemon. The value for this service type is a =wsdd-configuration= record. The details for the =wsdd-configuration= record type are given below.
+
+- Data Type: *wsdd-configuration* [[#index-wsdd_002dconfiguration][¶]] :: This data type represents the configuration for the wsdd service.
+
+  - =package= (default: =wsdd=) :: The wsdd package to use.
+
+  - =ipv4only?= (default: =#f=) :: Only listen to IPv4 addresses.
+
+  - =ipv6only= (default: =#f=) :: Only listen to IPv6 addresses. Please note: Activating both options is not possible, since there would be no IP versions to listen to.
+
+  - =chroot= (default: =#f=) :: Chroot into a separate directory to prevent access to other directories. This is to increase security in case there is a vulnerability in =wsdd=.
+
+  - =hop-limit= (default: =1=) :: Limit to the level of hops for multicast packets. The default is =1= which should prevent packets from leaving the local network.
+
+  - =interface= (default: ='()=) :: Limit to the given list of interfaces to listen to. By default wsdd will listen to all interfaces. Except the loopback interface is never used.
+
+  - =uuid-device= (default: =#f=) :: The WSD protocol requires a device to have a UUID. Set this to manually assign the service a UUID.
+
+  - =domain= (default: =#f=) :: Notify this host is a member of an Active Directory.
+
+  - =host-name= (default: =#f=) :: Manually set the hostname rather than letting =wsdd= inherit this host's hostname. Only the host name part of a possible FQDN will be used in the default case.
+
+  - =preserve-case?= (default: =#f=) :: By default =wsdd= will convert the hostname in workgroup to all uppercase. The opposite is true for hostnames in domains. Setting this parameter will preserve case.
+
+  - =workgroup= (default: ="WORKGROUP"=) :: Change the name of the workgroup. By default =wsdd= reports this host being member of a workgroup.
+
+--------------
+
+Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

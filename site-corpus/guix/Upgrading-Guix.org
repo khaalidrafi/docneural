@@ -1,0 +1,118 @@
+:PROPERTIES:
+:ID: guix--Upgrading-Guix
+:END:
+#+filetags: :guix:
+#+title: Upgrading Guix
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Upgrading-Guix>>
+Previous: [[id:guix--Application-Setup][Application Setup]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 2.5 Upgrading Guix [[#Upgrading-Guix-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Upgrading-Guix-1
+:CLASS: section
+:END:
+To upgrade Guix, run:
+
+#+begin_example
+guix pull
+#+end_example
+
+See [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], for more information.
+
+If you installed Guix on a foreign distro with =guix-install.sh=, you can upgrade the build daemon by running:
+
+#+begin_example
+sudo -i guix pull
+#+end_example
+
+followed by (assuming your distro uses the systemd service management tool):
+
+#+begin_example
+systemctl restart guix-daemon.service
+#+end_example
+
+While this works for =guix-install.sh=, it will most likely not work if you installed Guix through the package manager of another distribution (for instance with =sudo apt install guix=, =pacman -S guix=, or similar commands) because on many distributions =guix-daemon.service= will only run the Guix daemon provided by the distribution.
+
+Waiting for your distribution to provide security fixes sometimes work, but fixing security issues in the Guix package takes times for distributions because Guix doesn't backport the security fixes to the releases used by the distributions. On some distribution versions, the Guix package is never fixed.
+
+However since Guix updates also comes with a new daemon, so you can simply configure your distribution to use the guix-daemon provided by Guix instead. The following will assume that your distribution uses systemd.
+
+You first need to override =guix-daemon.service= with the following command:
+
+#+begin_example
+sudo install -m 644 \
+     /lib/systemd/system/guix-daemon.service \
+     /etc/systemd/system/guix-daemon.service
+#+end_example
+
+You will then need to edit =/etc/systemd/system/guix-daemon.service=. To do that open this file with a text editor that has root permissions:
+
+#+begin_example
+sudo $EDITOR /etc/systemd/system/guix-daemon.service
+#+end_example
+
+Then try to find a line with /ExecStart=/, it should look a bit like that:
+
+#+begin_example
+...
+[Service]
+ExecStart=/usr/bin/guix-daemon --build-users-group=_guixbuild
+...
+#+end_example
+
+Then change //usr/bin/guix-daemon/ into //var/guix/profiles/per-user/root/current-guix/bin/guix-daemon/ and save the changes.
+
+Once done you need to tell systemd that /guix-daemon.service/ was overriden:
+
+#+begin_example
+sudo systemctl daemon-reload
+#+end_example
+
+Once done you can then update the Guix daemon in the same way than if you installed Guix with =guix-install.sh=:
+
+#+begin_example
+sudo -i guix pull
+sudo systemctl restart guix-daemon.service
+#+end_example
+
+On Guix System, upgrading the daemon is achieved by reconfiguring the system (see [[id:guix--Invoking-guix-system][=guix system reconfigure=]]).
+
+To migrate an existing installation to the /unprivileged daemon/ where =guix-daemon= does not run as root, see [[id:guix--Build-Environment-Setup::#unprivileged_002ddaemon_002dmigration][unprivileged-daemon-migration]].
+
+--------------
+
+Previous: [[id:guix--Application-Setup][Application Setup]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

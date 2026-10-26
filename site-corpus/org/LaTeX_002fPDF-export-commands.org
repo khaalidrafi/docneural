@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID: org--LaTeX_002fPDF-export-commands
+:END:
+#+filetags: :org:
+#+title: LaTeX/PDF export commands (The Org Manual)
+
+Next:
+
+<<LaTeX_002fPDF-export-commands>>
+Next: [[id:org--LaTeX-specific-export-settings][LaTeX specific export settings]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.1 LaTeX/PDF export commands [[#LaTeX_002fPDF-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: LaTeX_002fPDF-export-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002de-l-l>>C-c C-e l l (=org-latex-export-to-latex=) [[#index-C_002dc-C_002de-l-l][¶]] :: Export to a LaTeX file with a ‘=.tex=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.tex=', overwriting without warning.
+
+-  <<index-C_002dc-C_002de-l-L>>C-c C-e l L (=org-latex-export-as-latex=) [[#index-C_002dc-C_002de-l-L][¶]] :: Export to a temporary buffer. Do not create a file.
+
+-  <<index-C_002dc-C_002de-l-p>>C-c C-e l p (=org-latex-export-to-pdf=) [[#index-C_002dc-C_002de-l-p][¶]] :: Export as LaTeX file and convert it to PDF file.
+
+- <<index-C_002dc-C_002de-l-o>>C-c C-e l o [[#index-C_002dc-C_002de-l-o][¶]] :: Export as LaTeX file and convert it to PDF, then open the PDF using the default viewer.
+
+- M-x org-export-region-as-latex :: Convert the region to LaTeX under the assumption that it was in Org mode syntax before. This is a global command that can be invoked in any buffer.
+
+The LaTeX export backend can use any of these LaTeX engines: ‘=pdflatex=', ‘=xelatex=', and ‘=lualatex='. These engines compile LaTeX files with different compilers, packages, and output options. The LaTeX export backend finds the compiler version to use from =org-latex-compiler= variable or the ‘=#+LATEX_COMPILER=' keyword in the Org file. See the docstring for the =org-latex-default-packages-alist= for loading packages with certain compilers. Also see =org-latex-bib-compiler= to set the bibliography compiler[[#FOOT142][^{142}]].
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF142][(142)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+This does not allow setting different bibliography compilers for different files. However, “smart” LaTeX compilation systems, such as latexmk, can select the correct bibliography compiler.
+
+--------------
+
+Next: [[id:org--LaTeX-specific-export-settings][LaTeX specific export settings]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

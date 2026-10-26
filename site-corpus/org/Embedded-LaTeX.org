@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID: org--Embedded-LaTeX
+:END:
+#+filetags: :org:
+#+title: Embedded LaTeX (The Org Manual)
+
+Next:
+
+<<Embedded-LaTeX>>
+Next: [[id:org--Literal-Examples][Literal Examples]], Previous: [[id:org--Special-Symbols][Special Symbols]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.5 Embedded LaTeX [[#Embedded-LaTeX-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Embedded-LaTeX-1
+:CLASS: section
+:END:
+Plain ASCII is normally sufficient for almost all note-taking. Exceptions include scientific notes, which often require mathematical symbols and the occasional formula. LaTeX[[#FOOT113][^{113}]] is widely used to typeset scientific documents. Org mode supports embedding LaTeX code into its files, because many academics are used to writing and reading LaTeX source code, and because it can be readily processed to produce pretty output for a number of export backends.
+
+- [[id:org--LaTeX-fragments][LaTeX fragments]]
+- [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]]
+- [[id:org--CDLaTeX-mode][Using CDLaTeX to enter math]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF113][(113)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+LaTeX is a macro system based on Donald E. Knuth's TeX system. Many of the features described here as “LaTeX” are really from TeX, but for simplicity I am blurring this distinction.

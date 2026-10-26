@@ -1,0 +1,266 @@
+:PROPERTIES:
+:ID: guix--Additional-Build-Options
+:END:
+#+filetags: :guix:
+#+title: Additional Build Options
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Additional-Build-Options>>
+Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 9.1.3 Additional Build Options [[#Additional-Build-Options-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Additional-Build-Options-1
+:CLASS: subsection
+:END:
+The command-line options presented below are specific to =guix build=.
+
+- =--quiet=\\
+  =-q= :: Build quietly, without displaying the build log; this is equivalent to =--verbosity=0=. Upon completion, the build log is kept in =/var= (or similar) and can always be retrieved using the =--log-file= option.
+
+- =--file===file=\\
+  =-f ==file= :: Build the package, derivation, or other file-like object that the code within =file= evaluates to (see [[id:guix--G_002dExpressions][file-like objects]]).
+
+  As an example, =file= might contain a package definition like this (see [[id:guix--Defining-Packages][Defining Packages]]):
+
+  #+begin_src lisp
+  (use-modules (guix)
+               (guix build-system gnu)
+               (guix licenses))
+
+  (package
+    (name "hello")
+    (version "2.10")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://gnu/hello/hello-" version
+                                  ".tar.gz"))
+              (sha256
+               (base32
+                "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"))))
+    (build-system gnu-build-system)
+    (synopsis "Hello, GNU world: An example GNU package")
+    (description "Guess what GNU Hello prints!")
+    (home-page "http://www.gnu.org/software/hello/")
+    (license gpl3+))
+  #+end_src
+
+  The =file= may also contain a JSON representation of one or more package definitions. Running =guix build -f= on =hello.json= with the following contents would result in building the packages =myhello= and =greeter=:
+
+  #+begin_src verbatim
+  [
+    {
+      "name": "myhello",
+      "version": "2.10",
+      "source": "mirror://gnu/hello/hello-2.10.tar.gz",
+      "build-system": "gnu",
+      "arguments": {
+        "tests?": false
+      },
+      "home-page": "https://www.gnu.org/software/hello/",
+      "synopsis": "Hello, GNU world: An example GNU package",
+      "description": "GNU Hello prints a greeting.",
+      "license": "GPL-3.0+",
+      "native-inputs": ["gettext"]
+    },
+    {
+      "name": "greeter",
+      "version": "1.0",
+      "source": "mirror://gnu/hello/hello-2.10.tar.gz",
+      "build-system": "gnu",
+      "arguments": {
+        "test-target": "foo",
+        "parallel-build?": false
+      },
+      "home-page": "https://example.com/",
+      "synopsis": "Greeter using GNU Hello",
+      "description": "This is a wrapper around GNU Hello.",
+      "license": "GPL-3.0+",
+      "inputs": ["myhello", "hello"]
+    }
+  ]
+  #+end_src
+
+- =--manifest===manifest=\\
+  =-m ==manifest= :: Build all packages listed in the given =manifest= (see [[id:guix--Invoking-guix-package::#profile_002dmanifest][=--manifest=]]).
+
+- =--expression===expr=\\
+  =-e ==expr= :: Build the package or derivation =expr= evaluates to.
+
+  For example, =expr= may be =(@ (gnu packages guile) guile-1.8)=, which unambiguously designates this specific variant of version 1.8 of Guile.
+
+  Alternatively, =expr= may be a G-expression, in which case it is used as a build program passed to =gexp->derivation= (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+  Lastly, =expr= may refer to a zero-argument monadic procedure (see [[id:guix--The-Store-Monad][The Store Monad]]). The procedure must return a derivation as a monadic value, which is then passed through =run-with-store=.
+
+- =--development=\\
+  =-D= :: Build the “development environment” (build dependencies) of the following package.
+
+  For example, the following command builds the inputs of =hello=, but /not/ =hello= itself, and also builds =guile=:
+
+  #+begin_example
+  guix build -D hello guile
+#+end_example
+
+  Notice that =-D= (or =--development=) only applies to the immediately following package on the command line. Under the hood, it uses =package->development-manifest= (see [[id:guix--Writing-Manifests::#package_002ddevelopment_002dmanifest][=package->development-manifest=]]).
+
+  #+begin_quote
+  *Note:* The effect of combining =--development= with =--target= (for cross-compilation) may not be what you expect: it will cross-compile all the dependencies of the given package when it is built natively.
+
+  #+end_quote
+
+- =--dependents[===depth==]=\\
+  =-P ==depth= :: Build the dependents of the following package. By default, build all the direct and indirect dependents; when =depth= is provided, limit to dependents at that distance: 1 for direct dependents, 2 for dependents of dependents, and so on.
+
+  For example, the command below builds /all/ the dependents of libgit2:
+
+  #+begin_example
+  guix build --dependents libgit2
+#+end_example
+
+  To build all the packages that directly depend on NumPy, run:
+
+  #+begin_example
+  guix build -P1 python-numpy
+#+end_example
+
+  The list of dependents is computed in the same way as with =guix refresh --list-dependent= (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
+
+- =--source=\\
+  =-S= :: Build the source derivations of the packages, rather than the packages themselves.
+
+  For instance, =guix build -S gcc= returns something like =/gnu/store/…-gcc-4.7.2.tar.bz2=, which is the GCC source tarball.
+
+  The returned source tarball is the result of applying any patches and code snippets specified in the package =origin= (see [[id:guix--Defining-Packages][Defining Packages]]).
+
+  As with other derivations, the result of building a source derivation can be verified using the =--check= option (see [[#build_002dcheck][build-check]]). This is useful to validate that a (potentially already built or substituted, thus cached) package source matches against its declared hash.
+
+  Note that =guix build -S= compiles the sources only of the specified packages. They do not include the sources of statically linked dependencies and by themselves are insufficient for reproducing the packages.
+
+- =--sources= :: Fetch and return the source of =package-or-derivation= and all their dependencies, recursively. This is a handy way to obtain a local copy of all the source code needed to build =packages=, allowing you to eventually build them even without network access. It is an extension of the =--source= option and can accept one of the following optional argument values:
+
+  - =package= :: This value causes the =--sources= option to behave in the same way as the =--source= option.
+
+  - =all= :: Build the source derivations of all packages, including any source that might be listed as =inputs=. This is the default value.
+
+    #+begin_example
+    $ guix build --sources tzdata
+    The following derivations will be built:
+       /gnu/store/...-tzdata2015b.tar.gz.drv
+       /gnu/store/...-tzcode2015b.tar.gz.drv
+#+end_example
+
+  - =transitive= :: Build the source derivations of all packages, as well of all transitive inputs to the packages. This can be used e.g. to prefetch package source for later offline building.
+
+    #+begin_example
+    $ guix build --sources=transitive tzdata
+    The following derivations will be built:
+       /gnu/store/...-tzcode2015b.tar.gz.drv
+       /gnu/store/...-findutils-4.4.2.tar.xz.drv
+       /gnu/store/...-grep-2.21.tar.xz.drv
+       /gnu/store/...-coreutils-8.23.tar.xz.drv
+       /gnu/store/...-make-4.1.tar.xz.drv
+       /gnu/store/...-bash-4.3.tar.xz.drv
+    ...
+#+end_example
+
+- =--system===system=\\
+  =-s ==system= :: Attempt to build for =system=---e.g., =i686-linux=---instead of the system type of the build host. The =guix build= command allows you to repeat this option several times, in which case it builds for all the specified systems; other commands ignore extraneous =-s= options.
+
+  #+begin_quote
+  *Note:* The =--system= flag is for /native/ compilation and must not be confused with cross-compilation. See =--target= below for information on cross-compilation.
+
+  #+end_quote
+
+  An example use of this is on Linux-based systems, which can emulate different personalities. For instance, passing =--system=i686-linux= on an =x86_64-linux= system or =--system=armhf-linux= on an =aarch64-linux= system allows you to build packages in a complete 32-bit environment.
+
+  #+begin_quote
+  *Note:* Building for an =armhf-linux= system is unconditionally enabled on =aarch64-linux= machines, although certain aarch64 chipsets do not allow for this functionality, notably the ThunderX.
+
+  #+end_quote
+
+  Similarly, when transparent emulation with QEMU and =binfmt_misc= is enabled (see [[id:guix--Virtualization-Services][=qemu-binfmt-service-type=]]), you can build for any system for which a QEMU =binfmt_misc= handler is installed.
+
+  Builds for a system other than that of the machine you are using can also be offloaded to a remote machine of the right architecture. See [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], for more information on offloading.
+
+- <<index-cross_002dcompilation-2>>=--target===triplet= [[#index-cross_002dcompilation-2][¶]] :: Cross-build for =triplet=, which must be a valid GNU triplet, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf).
+
+- =--list-systems= :: List all the supported systems, that can be passed as an argument to =--system=.
+
+- =--list-targets= :: List all the supported targets, that can be passed as an argument to =--target=.
+
+-  <<index-determinism_002c-checking>>=--check= [[#index-determinism_002c-checking][¶]] :: Rebuild =package-or-derivation=, which are already available in the store, and raise an error if the build results are not bit-for-bit identical.
+
+  This mechanism allows you to check whether previously installed substitutes are genuine (see [[id:guix--Substitutes][Substitutes]]), or whether the build result of a package is deterministic. See [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], for more background information and tools.
+
+  When used in conjunction with =--keep-failed=, the differing output is kept in the store, under =/gnu/store/…-check=. This makes it easy to look for differences between the two results.
+
+-  <<index-repairing-store-items>>=--repair= [[#index-repairing-store-items][¶]] :: Attempt to repair the specified store items, if they are corrupt, by re-downloading or rebuilding them.
+
+  This operation is not atomic and thus restricted to =root=.
+
+- =--derivations=\\
+  =-d= :: Return the derivation paths, not the output paths, of the given packages.
+
+-  <<index-GC-roots_002c-adding>>=--root===file= [[#index-GC-roots_002c-adding][¶]]\\
+  =-r ==file= :: Make =file= a symlink to the result, and register it as a garbage collector root.
+
+  Consequently, the results of this =guix build= invocation are protected from garbage collection until =file= is removed. When that option is omitted, build results are eligible for garbage collection as soon as the build completes. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for more on GC roots.
+
+- <<index-build-logs_002c-access>>=--log-file= [[#index-build-logs_002c-access][¶]] :: Return the build log file names or URLs for the given =package-or-derivation=, or raise an error if build logs are missing.
+
+  This works regardless of how packages or derivations are specified. For instance, the following invocations are equivalent:
+
+  #+begin_example
+  guix build --log-file $(guix build -d guile)
+  guix build --log-file $(guix build guile)
+  guix build --log-file guile
+  guix build --log-file -e '(@ (gnu packages guile) guile-2.0)'
+#+end_example
+
+  If a log is unavailable locally, and unless =--no-substitutes= is passed, the command looks for a corresponding log on one of the substitute servers.
+
+  So for instance, imagine you want to see the build log of GDB on =aarch64=, but you are actually on an =x86_64= machine:
+
+  #+begin_example
+  $ guix build --log-file gdb -s aarch64-linux
+  https://bordeaux.guix.gnu.org/log/...-gdb-7.10
+#+end_example
+
+  You can freely access a huge library of build logs!
+
+--------------
+
+Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,577 @@
+:PROPERTIES:
+:ID: guix--DNS-Services
+:END:
+#+filetags: :guix:
+#+title: DNS Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<DNS-Services>>
+Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.24 DNS Services [[#DNS-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: DNS-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services dns)= module provides services related to the /domain name system/ (DNS). It provides a server service for hosting an /authoritative/ DNS server for multiple zones, slave or master. This service uses [[https://www.knot-dns.cz/][Knot DNS]]. And also a caching and forwarding DNS server for the LAN, which uses [[http://www.thekelleys.org.uk/dnsmasq/doc.html][dnsmasq]].
+
+**** Knot Service [[#Knot-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Knot-Service
+:CLASS: subsubheading
+:END:
+An example configuration of an authoritative server for two zones, one master and one slave, is:
+
+#+begin_src lisp
+(define-zone-entries example.org.zone
+;; Name TTL Class Type Data
+  ("@"  ""  "IN"  "A"  "127.0.0.1")
+  ("@"  ""  "IN"  "NS" "ns")
+  ("ns" ""  "IN"  "A"  "127.0.0.1"))
+
+(define master-zone
+  (knot-zone-configuration
+    (domain "example.org")
+    (zone (zone-file
+            (origin "example.org")
+            (entries example.org.zone)))))
+
+(define slave-zone
+  (knot-zone-configuration
+    (domain "plop.org")
+    (dnssec-policy "default")
+    (master (list "plop-master"))))
+
+(define plop-master
+  (knot-remote-configuration
+    (id "plop-master")
+    (address (list "208.76.58.171"))))
+
+(operating-system
+  ;; ...
+  (services (cons* (service knot-service-type
+                     (knot-configuration
+                       (remotes (list plop-master))
+                       (zones (list master-zone slave-zone))))
+                   ;; ...
+                   %base-services)))
+#+end_src
+
+- Variable: *knot-service-type* [[#index-knot_002dservice_002dtype][¶]] :: This is the type for the Knot DNS server.
+
+  Knot DNS is an authoritative DNS server, meaning that it can serve multiple zones, that is to say domain names you would buy from a registrar. This server is not a resolver, meaning that it can only resolve names for which it is authoritative. This server can be configured to serve zones as a master server or a slave server as a per-zone basis. Slave zones will get their data from masters, and will serve it as an authoritative server. From the point of view of a resolver, there is no difference between master and slave.
+
+  The following data types are used to configure the Knot DNS server:
+
+- Data Type: *knot-key-configuration* [[#index-knot_002dkey_002dconfiguration][¶]] :: Data type representing a key. This type has the following parameters:
+
+  - =id= (default: =""=) :: An identifier for other configuration fields to refer to this key. IDs must be unique and must not be empty.
+
+  - =algorithm= (default: =#f=) :: The algorithm to use. Choose between =#f=, ='hmac-md5=, ='hmac-sha1=, ='hmac-sha224=, ='hmac-sha256=, ='hmac-sha384= and ='hmac-sha512=.
+
+  - =secret= (default: =""=) :: The secret key itself.
+
+- Data Type: *knot-acl-configuration* [[#index-knot_002dacl_002dconfiguration][¶]] :: Data type representing an Access Control List (ACL) configuration. This type has the following parameters:
+
+  - =id= (default: =""=) :: An identifier for other configuration fields to refer to this key. IDs must be unique and must not be empty.
+
+  - =address= (default: ='()=) :: An ordered list of IP addresses, network subnets, or network ranges represented with strings. The query must match one of them. Empty value means that address match is not required.
+
+  - =key= (default: ='()=) :: An ordered list of references to keys represented with strings. The string must match a key ID defined in a =knot-key-configuration=. No key means that a key is not require to match that ACL.
+
+  - =action= (default: ='()=) :: An ordered list of actions that are permitted or forbidden by this ACL. Possible values are lists of zero or more elements from ='transfer=, ='notify= and ='update=.
+
+  - =deny?= (default: =#f=) :: When true, the ACL defines restrictions. Listed actions are forbidden. When false, listed actions are allowed.
+
+- Data Type: *zone-entry* [[#index-zone_002dentry][¶]] :: Data type representing a record entry in a zone file. This type has the following parameters:
+
+  - =name= (default: ="@"=) :: The name of the record. ="@"= refers to the origin of the zone. Names are relative to the origin of the zone. For example, in the =example.org= zone, ="ns.example.org"= actually refers to =ns.example.org.example.org=. Names ending with a dot are absolute, which means that ="ns.example.org."= refers to =ns.example.org=.
+
+  - =ttl= (default: =""=) :: The Time-To-Live (TTL) of this record. If not set, the default TTL is used.
+
+  - =class= (default: ="IN"=) :: The class of the record. Knot currently supports only ="IN"= and partially ="CH"=.
+
+  - =type= (default: ="A"=) :: The type of the record. Common types include A (IPv4 address), AAAA (IPv6 address), NS (Name Server) and MX (Mail eXchange). Many other types are defined.
+
+  - =data= (default: =""=) :: The data contained in the record. For instance an IP address associated with an A record, or a domain name associated with an NS record. Remember that domain names are relative to the origin unless they end with a dot.
+
+- Data Type: *zone-file* [[#index-zone_002dfile][¶]] :: Data type representing the content of a zone file. This type has the following parameters:
+
+  - =entries= (default: ='()=) :: The list of entries. The SOA record is taken care of, so you don't need to put it in the list of entries. This list should probably contain an entry for your primary authoritative DNS server. Other than using a list of entries directly, you can use =define-zone-entries= to define a object containing the list of entries more easily, that you can later pass to the =entries= field of the =zone-file=.
+
+  - =origin= (default: =""=) :: The name of your zone. This parameter cannot be empty.
+
+  - =ns= (default: ="ns"=) :: The domain of your primary authoritative DNS server. The name is relative to the origin, unless it ends with a dot. It is mandatory that this primary DNS server corresponds to an NS record in the zone and that it is associated to an IP address in the list of entries.
+
+  - =mail= (default: ="hostmaster"=) :: An email address people can contact you at, as the owner of the zone. This is translated as =<mail>@<origin>=.
+
+  - =serial= (default: =1=) :: The serial number of the zone. As this is used to keep track of changes by both slaves and resolvers, it is mandatory that it /never/ decreases. Always increment it when you make a change in your zone.
+
+  - =refresh= (default: =(* 2 24 3600)=) :: The frequency at which slaves will do a zone transfer. This value is a number of seconds. It can be computed by multiplications or with =(string->duration)=.
+
+  - =retry= (default: =(* 15 60)=) :: The period after which a slave will retry to contact its master when it fails to do so a first time.
+
+  - =expiry= (default: =(* 14 24 3600)=) :: Default TTL of records. Existing records are considered correct for at most this amount of time. After this period, resolvers will invalidate their cache and check again that it still exists.
+
+  - =nx= (default: =3600=) :: Default TTL of inexistent records. This delay is usually short because you want your new domains to reach everyone quickly.
+
+- Data Type: *knot-remote-configuration* [[#index-knot_002dremote_002dconfiguration][¶]] :: Data type representing a remote configuration. This type has the following parameters:
+
+  - =id= (default: =""=) :: An identifier for other configuration fields to refer to this remote. IDs must be unique and must not be empty.
+
+  - =address= (default: ='()=) :: An ordered list of destination IP addresses. Addresses are tried in sequence. An optional port can be given with the @ separator. For instance: =(list "1.2.3.4" "2.3.4.5@53")=. Default port is 53.
+
+  - =via= (default: ='()=) :: An ordered list of source IP addresses. An empty list will have Knot choose an appropriate source IP. An optional port can be given with the @ separator. The default is to choose at random.
+
+  - =key= (default: =#f=) :: A reference to a key, that is a string containing the identifier of a key defined in a =knot-key-configuration= field.
+
+- Data Type: *knot-keystore-configuration* [[#index-knot_002dkeystore_002dconfiguration][¶]] :: Data type representing a keystore to hold dnssec keys. This type has the following parameters:
+
+  - =id= (default: =""=) :: The id of the keystore. It must not be empty.
+
+  - =backend= (default: ='pem=) :: The backend to store the keys in. Can be ='pem= or ='pkcs11=.
+
+  - =config= (default: ="/var/lib/knot/keys/keys"=) :: The configuration string of the backend. An example for the PKCS#11 is: ="pkcs11:token=knot;pin-value=1234 /gnu/store/.../lib/pkcs11/libsofthsm2.so"=. For the pem backend, the string represents a path in the file system.
+
+- Data Type: *knot-policy-configuration* [[#index-knot_002dpolicy_002dconfiguration][¶]] :: Data type representing a dnssec policy. Knot DNS is able to automatically sign your zones. It can either generate and manage your keys automatically or use keys that you generate.
+
+  Dnssec is usually implemented using two keys: a Key Signing Key (KSK) that is used to sign the second, and a Zone Signing Key (ZSK) that is used to sign the zone. In order to be trusted, the KSK needs to be present in the parent zone (usually a top-level domain). If your registrar supports dnssec, you will have to send them your KSK's hash so they can add a DS record in their zone. This is not automated and need to be done each time you change your KSK.
+
+  The policy also defines the lifetime of keys. Usually, ZSK can be changed easily and use weaker cryptographic functions (they use lower parameters) in order to sign records quickly, so they are changed often. The KSK however requires manual interaction with the registrar, so they are changed less often and use stronger parameters because they sign only one record.
+
+  This type has the following parameters:
+
+  - =id= (default: =""=) :: The id of the policy. It must not be empty.
+
+  - =keystore= (default: ="default"=) :: A reference to a keystore, that is a string containing the identifier of a keystore defined in a =knot-keystore-configuration= field. The ="default"= identifier means the default keystore (a kasp database that was setup by this service).
+
+  - =manual?= (default: =#f=) :: Whether the key management is manual or automatic.
+
+  - =single-type-signing?= (default: =#f=) :: When =#t=, use the Single-Type Signing Scheme.
+
+  - =algorithm= (default: ="ecdsap256sha256"=) :: An algorithm of signing keys and issued signatures.
+
+  - =ksk-size= (default: =256=) :: The length of the KSK. Note that this value is correct for the default algorithm, but would be unsecure for other algorithms.
+
+  - =zsk-size= (default: =256=) :: The length of the ZSK. Note that this value is correct for the default algorithm, but would be unsecure for other algorithms.
+
+  - =dnskey-ttl= (default: ='default=) :: The TTL value for DNSKEY records added into zone apex. The special ='default= value means same as the zone SOA TTL.
+
+  - =zsk-lifetime= (default: =(* 30 24 3600)=) :: The period between ZSK publication and the next rollover initiation.
+
+  - =propagation-delay= (default: =(* 24 3600)=) :: An extra delay added for each key rollover step. This value should be high enough to cover propagation of data from the master server to all slaves.
+
+  - =rrsig-lifetime= (default: =(* 14 24 3600)=) :: A validity period of newly issued signatures.
+
+  - =rrsig-refresh= (default: =(* 7 24 3600)=) :: A period how long before a signature expiration the signature will be refreshed.
+
+  - =nsec3?= (default: =#f=) :: When =#t=, NSEC3 will be used instead of NSEC.
+
+  - =nsec3-iterations= (default: =5=) :: The number of additional times the hashing is performed.
+
+  - =nsec3-salt-length= (default: =8=) :: The length of a salt field in octets, which is appended to the original owner name before hashing.
+
+  - =nsec3-salt-lifetime= (default: =(* 30 24 3600)=) :: The validity period of newly issued salt field.
+
+- Data Type: *knot-zone-configuration* [[#index-knot_002dzone_002dconfiguration][¶]] :: Data type representing a zone served by Knot. This type has the following parameters:
+
+  - =domain= (default: =""=) :: The domain served by this configuration. It must not be empty.
+
+  - =file= (default: =""=) :: The file where this zone is saved. This parameter is ignored by master zones. Empty means default location that depends on the domain name.
+
+  - =zone= (default: =(zone-file)=) :: The content of the zone file. This parameter is ignored by slave zones. It must contain a zone-file record.
+
+  - =master= (default: ='()=) :: A list of master remotes. When empty, this zone is a master. When set, this zone is a slave. This is a list of remotes identifiers.
+
+  - =ddns-master= (default: =#f=) :: The main master. When empty, it defaults to the first master in the list of masters.
+
+  - =notify= (default: ='()=) :: A list of slave remote identifiers.
+
+  - =acl= (default: ='()=) :: A list of acl identifiers.
+
+  - =semantic-checks?= (default: =#f=) :: When set, this adds more semantic checks to the zone.
+
+  - =zonefile-sync= (default: =0=) :: The delay between a modification in memory and on disk. 0 means immediate synchronization.
+
+  - =zonefile-load= (default: =#f=) :: The way the zone file contents are applied during zone load. Possible values are:
+
+    - =#f= for using the default value from Knot,
+    - ='none= for not using the zone file at all,
+    - ='difference= for computing the difference between already available contents and zone contents and applying it to the current zone contents,
+    - ='difference-no-serial= for the same as ='difference=, but ignoring the SOA serial in the zone file, while the server takes care of it automatically.
+    - ='whole= for loading zone contents from the zone file.
+
+  - =journal-content= (default: =#f=) :: The way the journal is used to store zone and its changes. Possible values are ='none= to not use it at all, ='changes= to store changes and ='all= to store contents. =#f= does not set this option, so the default value from Knot is used.
+
+  - =max-journal-usage= (default: =#f=) :: The maximum size for the journal on disk. =#f= does not set this option, so the default value from Knot is used.
+
+  - =max-journal-depth= (default: =#f=) :: The maximum size of the history. =#f= does not set this option, so the default value from Knot is used.
+
+  - =max-zone-size= (default: =#f=) :: The maximum size of the zone file. This limit is enforced for incoming transfer and updates. =#f= does not set this option, so the default value from Knot is used.
+
+  - =dnssec-policy= (default: =#f=) :: A reference to a =knot-policy-configuration= record, or the special name ="default"=. If the value is =#f=, there is no dnssec signing on this zone.
+
+  - =serial-policy= (default: ='increment=) :: A policy between ='increment= and ='unixtime=.
+
+- Data Type: *knot-configuration* [[#index-knot_002dconfiguration][¶]] :: Data type representing the Knot configuration. This type has the following parameters:
+
+  - =knot= (default: =knot=) :: The Knot package.
+
+  - =run-directory= (default: ="/var/run/knot"=) :: The run directory. This directory will be used for pid file and sockets.
+
+  - =includes= (default: ='()=) :: A list of strings or file-like objects denoting other files that must be included at the top of the configuration file.
+
+    This can be used to manage secrets out-of-band. For example, secret keys may be stored in an out-of-band file not managed by Guix, and thus not visible in =/gnu/store=---e.g., you could store secret key configuration in =/etc/knot/secrets.conf= and add this file to the =includes= list.
+
+    One can generate a secret tsig key (for nsupdate and zone transfers with the keymgr command from the knot package. Note that the package is not automatically installed by the service. The following example shows how to generate a new tsig key:
+
+    #+begin_example
+    keymgr -t mysecret > /etc/knot/secrets.conf
+    chmod 600 /etc/knot/secrets.conf
+#+end_example
+
+    Also note that the generated key will be named =mysecret=, so it is the name that needs to be used in the =key= field of the =knot-acl-configuration= record and in other places that need to refer to that key.
+
+    It can also be used to add configuration not supported by this interface.
+
+  - =listen-v4= (default: ="0.0.0.0"=) :: An ip address on which to listen.
+
+  - =listen-v6= (default: ="::"=) :: An ip address on which to listen.
+
+  - =listen-port= (default: =53=) :: A port on which to listen.
+
+  - =keys= (default: ='()=) :: The list of knot-key-configuration used by this configuration.
+
+  - =acls= (default: ='()=) :: The list of knot-acl-configuration used by this configuration.
+
+  - =remotes= (default: ='()=) :: The list of knot-remote-configuration used by this configuration.
+
+  - =zones= (default: ='()=) :: The list of knot-zone-configuration used by this configuration.
+
+**** Knot Resolver Service [[#Knot-Resolver-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Knot-Resolver-Service
+:CLASS: subsubheading
+:END:
+- Variable: *knot-resolver-service-type* [[#index-knot_002dresolver_002dservice_002dtype][¶]] :: This is the type of the knot resolver service, whose value should be a =knot-resolver-configuration= object as in this example:
+
+  #+begin_src lisp
+  (service knot-resolver-service-type
+           (knot-resolver-configuration
+             (kresd-config-file (plain-file "kresd.conf" "
+  net.listen('192.168.0.1', 5353)
+  user('knot-resolver', 'knot-resolver')
+  modules = { 'hints > iterate', 'stats', 'predict' }
+  cache.size = 100 * MB
+  "))))
+  #+end_src
+
+  For more information, refer its [[https://knot-resolver.readthedocs.io/en/stable/config-overview.html][manual]].
+
+- Data Type: *knot-resolver-configuration* [[#index-knot_002dresolver_002dconfiguration][¶]] :: Data type representing the configuration of knot-resolver.
+
+  - =package= (default: =knot-resolver=) :: Package object of the knot DNS resolver.
+
+  - =kresd-config-file= (default: %kresd.conf) :: File-like object of the kresd configuration file to use, by default it will listen on =127.0.0.1= and =::1=.
+
+  - =garbage-collection-interval= (default: 1000) :: Number of milliseconds for =kres-cache-gc= to periodically trim the cache.
+
+**** Dnsmasq Service [[#Dnsmasq-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Dnsmasq-Service
+:CLASS: subsubheading
+:END:
+- Variable: *dnsmasq-service-type* [[#index-dnsmasq_002dservice_002dtype][¶]] :: This is the type of the dnsmasq service, whose value should be a =dnsmasq-configuration= object as in this example:
+
+  #+begin_src lisp
+  (service dnsmasq-service-type
+           (dnsmasq-configuration
+             (no-resolv? #t)
+             (servers '("192.168.1.1"))))
+  #+end_src
+
+  The following example shows a slightly more complex configuration that defines an authoritative DNS server on a given subdomain.
+
+  #+begin_src lisp
+  (service dnsmasq-service-type
+           (dnsmasq-configuration
+             (listen-addresses '("10.1.1.1"))
+             (no-resolv? #t)
+             (no-hosts? #t)
+             (authoritative-servers '("vpn.example.com")) ;self
+             (authoritative-zones '("vpn.example.com"))
+             (host-records '("some-service.vpn.example.com,10.1.1.1"))))
+  #+end_src
+
+  For more examples, refer to ‘=man 8 dnsmasq.='
+
+  =dnsmasq-service-type= provides two actions:
+
+  - =reload= :: Send a =SIGHUP= signal to =dnsmasq= to clear cache and reload hosts files which triggers the following actions:
+
+    - Clear the DNS cache
+    - Reload =/etc/hosts= and =/etc/ethers=
+    - Reload files specified by =--dhcp-hostsfile=, =--dhcp-hostsdir=, =--dhcp-optsfile=, =--dhcp-optsdir=, =--addn-hosts=, or =--hostsdir=
+    - Execute DHCP lease change scripts for all existing leases
+    - Reread =/etc/resolv.conf= (only if =--no-poll= is configured).
+
+    #+begin_quote
+    *Note:* The =SIGHUP= signal does not trigger a reload of the main configuration file.
+
+    #+end_quote
+
+    Example usage:
+
+    #+begin_example
+    herd reload dnsmasq
+#+end_example
+
+  - =stats= :: When =dnsmasq= receives a =SIGUSR1= signal, it writes statistics to the system log including:
+
+    - Cache size and number of evicted entries
+    - Cache hits, misses, and authoritative queries answered
+    - For each upstream server: queries sent and errors received
+    - TCP connection fork statistics.
+
+    Example usage:
+
+    #+begin_example
+    herd stats dnsmasq
+#+end_example
+
+- Data Type: *dnsmasq-configuration* [[#index-dnsmasq_002dconfiguration][¶]] :: Data type representing the configuration of dnsmasq.
+
+  - =package= (default: =dnsmasq=) :: Package object of the dnsmasq server.
+
+  - =shepherd-provision= (default: ='(dnsmasq)=)\\
+    =shepherd-requirement= (default: ='(user-processes networking)=) :: This option can be used to provide a list of Shepherd service names (symbols) provided by this service. You might want to change the default value if you intend to run several =dnsmasq= instances.
+
+    Likewise, =shepherd-requirement= is a list of Shepherd service names (symbols) that this service will depend on.
+
+  - =pid-file= (default: ="/run/dnsmasq.pid"=) :: Specify an alternate path for dnsmasq to record its process-id in.
+
+  - =no-hosts?= (default: =#f=) :: When true, don't read the hostnames in /etc/hosts.
+
+  - =port= (default: =53=) :: The port to listen on. Setting this to zero completely disables DNS responses, leaving only DHCP and/or TFTP functions.
+
+  - =local-service?= (default: =#t=) :: Accept DNS queries only from hosts whose address is on a local subnet, ie a subnet for which an interface exists on the server.
+
+  - =listen-addresses= (default: ='()=) :: Listen on the given IP addresses.
+
+  - =ipv4?= (default: =#t=) :: Whether to include A records in answers.
+
+  - =ipv6?= (default: =#t=) :: Whether to include AAAA records in answers.
+
+  - =resolv-file= (default: ="/etc/resolv.conf"=) :: The file to read the IP address of the upstream nameservers from.
+
+  - =no-resolv?= (default: =#f=) :: When true, don't read =resolv-file=.
+
+  - =authoritative-servers= (default: ='()=) :: A list of strings corresponding to valid =--auth-server= values, such as a domain name. This is useful to make =dnsmasq= authoritative for a given domain name or interface.
+
+  - =authoritative-zones= (default: ='()=) :: A list of strings corresponding to valid =--auth-zone= values, such as a domain name. This is useful to make =dnsmasq= authoritative for a given domain name. Note that this must be used in conjunction with the =authoritative-servers= option.
+
+  - =host-records= (default: ='()=) :: A list of strings corresponding to valid =--host-record= values, for example ='("some-service.example.com,10.1.1.1")=.
+
+  - =forward-private-reverse-lookup?= (default: =#t=) :: When false, all reverse lookups for private IP ranges are answered with "no such domain" rather than being forwarded upstream.
+
+  - =query-servers-in-order?= (default: =#f=) :: When true, dnsmasq queries the servers in the same order as they appear in =servers=.
+
+  - =locals= (default: ='()=) :: Specify domain name /patterns/ which should be treated as local, that is, for which there should be no delegation to upstream servers. Provided pattern values should be of the form ='("/vpn.example.com/")=.
+
+  - =servers= (default: ='()=) :: Specify IP address of upstream servers directly.
+
+  - =servers-file= (default: =#f=) :: Specify file containing upstream servers. This file is re-read when dnsmasq receives SIGHUP. Could be either a string or a file-like object.
+
+  - =addresses= (default: ='()=) :: For each entry, specify an IP address to return for any host in the given domains. Queries in the domains are never forwarded and always replied to with the specified IP address.
+
+    This is useful for redirecting hosts locally, for example:
+
+    #+begin_src lisp
+    (service dnsmasq-service-type
+             (dnsmasq-configuration
+               (addresses
+                 '(; Redirect to a local web-server.
+                   "/example.org/127.0.0.1"
+                   ; Redirect subdomain to a specific IP.
+                   "/subdomain.example.org/192.168.1.42"))))
+    #+end_src
+
+    Note that rules in =/etc/hosts= take precedence over this.
+
+  - =cache-size= (default: =150=) :: Set the size of dnsmasq's cache. Setting the cache size to zero disables caching.
+
+  - =negative-cache?= (default: =#t=) :: When false, disable negative caching.
+
+  - =cpe-id= (default: =#f=) :: If set, add a CPE (Customer-Premises Equipment) identifier to DNS queries which are forwarded upstream.
+
+  - =tftp-enable?= (default: =#f=) :: Whether to enable the built-in TFTP server.
+
+  - =tftp-no-fail?= (default: =#f=) :: If true, does not fail dnsmasq if the TFTP server could not start up.
+
+  - =tftp-single-port?= (default: =#f=) :: Whether to use only one single port for TFTP.
+
+  - =tftp-secure?= (default: =#f=) :: If true, only files owned by the user running the dnsmasq process are accessible.
+
+    If dnsmasq is being run as root, different rules apply: =tftp-secure?= has no effect, but only files which have the world-readable bit set are accessible.
+
+  - =tftp-max= (default: =#f=) :: If set, sets the maximal number of concurrent connections allowed.
+
+  - =tftp-mtu= (default: =#f=) :: If set, sets the MTU for TFTP packets to that value.
+
+  - =tftp-no-blocksize?= (default: =#f=) :: If true, stops the TFTP server from negotiating the blocksize with a client.
+
+  - =tftp-lowercase?= (default: =#f=) :: Whether to convert all filenames in TFTP requests to lowercase.
+
+  - =tftp-port-range= (default: =#f=) :: If set, fixes the dynamical ports (one per client) to the given range (="<start>,<end>"=).
+
+  - =tftp-root= (default: =/var/empty,lo=) :: Look for files to transfer using TFTP relative to the given directory. When this is set, TFTP paths which include ‘=..=' are rejected, to stop clients getting outside the specified root. Absolute paths (starting with ‘=/=') are allowed, but they must be within the TFTP-root. If the optional interface argument is given, the directory is only used for TFTP requests via that interface.
+
+  - =tftp-unique-root= (default: =#f=) :: If set, add the IP or hardware address of the TFTP client as a path component on the end of the TFTP-root. Only valid if a TFTP root is set and the directory exists. Defaults to adding IP address (in standard dotted-quad format).
+
+    For instance, if =--tftp-root= is ‘=/tftp=' and client ‘=1.2.3.4=' requests file =myfile= then the effective path will be =/tftp/1.2.3.4/myfile= if =/tftp/1.2.3.4= exists or =/tftp/myfile= otherwise. When ‘==mac=' is specified it will append the MAC address instead, using lowercase zero padded digits separated by dashes, e.g.: ‘=01-02-03-04-aa-bb='. Note that resolving MAC addresses is only possible if the client is in the local network or obtained a DHCP lease from dnsmasq.
+
+  - =conf-file= (default: ='()=) :: File names of configuration files to use. Strings and file-like objects are accepted.
+
+  - =conf-dir= (default: =#f=) :: Read all the files in the given directory as configuration files. Support for =dnsmasq= field extensions is not implemented; users can use =computed-file= to build a directory of files instead. The configuration files are loaded in alphabetical order of file name.
+
+  - =extra-options= (default: ='()=) :: This option provides an “escape hatch” for the user to provide arbitrary command-line arguments to =dnsmasq= as a list of strings.
+
+**** Unbound Service [[#Unbound-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Unbound-Service
+:CLASS: subsubheading
+:END:
+- Variable: *unbound-service-type* [[#index-unbound_002dservice_002dtype][¶]] :: This is the type of the service to run [[https://www.unbound.net][Unbound]], a validating, recursive, and caching DNS resolver. Its value must be a =unbound-configuration= object as in this example:
+
+  #+begin_src lisp
+  (service unbound-service-type
+           (unbound-configuration
+            (forward-zone
+             (list
+              (unbound-zone
+               (name ".")
+               (forward-addr '("149.112.112.112#dns.quad9.net"
+                               "2620:fe::9#dns.quad9.net"))
+               (forward-tls-upstream #t))))))
+  #+end_src
+
+- Data Type: *unbound-configuration* [[#index-unbound_002dconfiguration][¶]] :: Available =unbound-configuration= fields are:
+
+  - =server= (type: unbound-server) :: General options for the Unbound server.
+
+  - =remote-control= (type: unbound-remote) :: Remote control options for the daemon.
+
+  - =forward-zone= (default: =()=) (type: list-of-unbound-zone) :: A zone for which queries should be forwarded to another resolver.
+
+  - =extra-content= (type: maybe-string) :: Raw content to add to the configuration file.
+
+- Data Type: *unbound-server* [[#index-unbound_002dserver][¶]] :: Available =unbound-server= fields are:
+
+  - =interface= (type: maybe-list-of-strings) :: Interfaces listened on for queries from clients.
+
+  - =hide-version= (type: maybe-boolean) :: Refuse the version.server and version.bind queries.
+
+  - =hide-identity= (type: maybe-boolean) :: Refuse the id.server and hostname.bind queries.
+
+  - =tls-cert-bundle= (type: maybe-string) :: Certificate bundle file, used for DNS over TLS.
+
+  - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
+
+- Data Type: *unbound-remote* [[#index-unbound_002dremote][¶]] :: Available =unbound-remote= fields are:
+
+  - =control-enable= (type: maybe-boolean) :: Enable remote control.
+
+  - =control-interface= (type: maybe-string) :: IP address or local socket path to listen on for remote control.
+
+  - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
+
+- Data Type: *unbound-zone* [[#index-unbound_002dzone][¶]] :: Available =unbound-zone= fields are:
+
+  - =name= (type: string) :: Zone name.
+
+  - =forward-addr= (type: maybe-list-of-strings) :: IP address of server to forward to.
+
+  - =forward-tls-upstream= (type: maybe-boolean) :: Whether the queries to this forwarder use TLS for transport.
+
+  - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
+
+**** ddclient Service [[#ddclient-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ddclient-Service
+:CLASS: subsubheading
+:END:
+- Variable: *ddclient-service-type* [[#index-ddclient_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/ddclient/ddclient][ddclient]], a daemon that keeps the entries of a /dynamic DNS/ account up to date with the machine's current IP address. Its value must be a =ddclient-configuration= object, as in this example:
+
+  #+begin_src lisp
+  (service ddclient-service-type
+           (ddclient-configuration
+            (interval 600)))
+  #+end_src
+
+  The daemon runs as the unprivileged =ddclient= user and logs to =/var/log/ddclient.log=.
+
+You must provide a ddclient configuration file, the default configuration expects this to be at =/etc/ddclient/ddclient.conf=. A minimal configuration file looks like this; see =ddclient --help= for the list of supported protocols:
+
+#+begin_example
+# General config
+daemon=300
+
+# Router
+usev4=webv4,webv4=ipify-ipv4
+
+# Protocol
+protocol=dyndns2
+login=myUsername
+password=myPassword
+myhost.dyndns.org
+#+end_example
+
+Note that the =daemon=, =foreground=, =file=, =cache=, and =pid= directives of that file are overridden by the command line the service builds; use the fields below instead.
+
+- Data Type: *ddclient-configuration* [[#index-ddclient_002dconfiguration][¶]] :: Available =ddclient-configuration= fields are:
+
+  - =package= (default: =ddclient=) (type: file-like) :: The ddclient package to use.
+
+  - =config-file= (default: ="/etc/ddclient/ddclient.conf"=) (type: string-or-file-like) :: Configuration file for =ddclient=. Because it holds the credentials of your dynamic DNS (Domain Name System) provider, it is /not/ generated by Guix: it must be created by hand, should be outside the store, and be readable by the =ddclient= user.
+
+  - =interval= (default: =300=) (type: integer) :: Number of seconds to wait between two update checks.
+
+  - =cache-file= (default: ="/var/cache/ddclient/ddclient.cache"=) (type: string) :: File where =ddclient= records the addresses it last sent. Its parent directory is created at activation time.
+
+  - =extra-options= (default: =()=) (type: list-of-strings) :: Extra command-line options passed to =ddclient=.
+
+--------------
+
+Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

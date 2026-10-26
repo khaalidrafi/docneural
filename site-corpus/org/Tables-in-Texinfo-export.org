@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: org--Tables-in-Texinfo-export
+:END:
+#+filetags: :org:
+#+title: Tables in Texinfo export (The Org Manual)
+
+Next:
+
+<<Tables-in-Texinfo-export>>
+Next: [[id:org--Images-in-Texinfo-export][Images in Texinfo export]], Previous: [[id:org--Plain-lists-in-Texinfo-export][Plain lists in Texinfo export]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.10 Tables in Texinfo export [[#Tables-in-Texinfo-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tables-in-Texinfo-export-1
+:CLASS: subsection
+:END:
+When exporting tables, the Texinfo export backend uses the widest cell width in each column. To override this and instead specify as fractions of line length, use the ‘=:columns=' attribute. See example below.
+
+#+begin_example
+#+ATTR_TEXINFO: :columns .5 .5
+| a cell | another cell |
+#+end_example

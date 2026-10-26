@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: guix--Foreign-Architectures
+:END:
+#+filetags: :guix:
+#+title: Foreign Architectures
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Foreign-Architectures>>
+Next: [[id:guix--System-Configuration][System Configuration]], Previous: [[id:guix--Utilities][Utilities]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 10 Foreign Architectures [[#Foreign-Architectures-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Foreign-Architectures-1
+:CLASS: chapter
+:END:
+You can target computers of different CPU architectures when producing packages (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]), packs (see [[id:guix--Invoking-guix-pack][Invoking =guix pack=]]) or full systems (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).
+
+GNU Guix supports two distinct mechanisms to target foreign architectures:
+
+1. The traditional [[https://en.wikipedia.org/wiki/Cross_compiler][cross-compilation]] mechanism.
+2. The native building mechanism which consists in building using the CPU instruction set of the foreign system you are targeting. It often requires emulation, using the QEMU program for instance.
+
+- [[id:guix--Cross_002dCompilation][Cross-Compilation]]
+- [[id:guix--Native-Builds][Native Builds]]

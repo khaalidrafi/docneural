@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: guix--Hosting
+:END:
+#+filetags: :guix:
+#+title: Hosting
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Hosting>>
+Next: [[id:guix--Administrative-Tasks][Administrative Tasks]], Previous: [[id:guix--On_002dSite-Intervention][On-Site Intervention]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.20.5 Hosting [[#Hosting-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Hosting-1
+:CLASS: subsection
+:END:
+We're looking for people who can host machines and help out whenever physical access is needed. More specifically:
+
+- We need hosting of “small” machines such as single-board computers (AArch64, RISC-V) for use as build machines.
+- We need hosting for front-ends and x86_64 build machines in a data center where they can be racked and where, ideally, several local Guix sysadmins can physically access them.
+
+The machines should be accessible over Wireguard VPN most of the time, so longer power or network interruptions should be the exception.
+
+Prerequisites: Familiarity with installing and remotely administering Guix System.

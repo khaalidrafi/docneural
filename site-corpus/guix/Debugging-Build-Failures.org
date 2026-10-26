@@ -1,0 +1,97 @@
+:PROPERTIES:
+:ID: guix--Debugging-Build-Failures
+:END:
+#+filetags: :guix:
+#+title: Debugging Build Failures
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Debugging-Build-Failures>>
+Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 9.1.4 Debugging Build Failures [[#Debugging-Build-Failures-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Debugging-Build-Failures-1
+:CLASS: subsection
+:END:
+When defining a new package (see [[id:guix--Defining-Packages][Defining Packages]]), you will probably find yourself spending some time debugging and tweaking the build until it succeeds. To do that, you need to operate the build commands yourself in an environment as close as possible to the one the build daemon uses.
+
+To that end, the first thing to do is to use the =--keep-failed= or =-K= option of =guix build=, which will keep the failed build tree in =/tmp= or whatever directory you specified as =TMPDIR= (see [[id:guix--Common-Build-Options][=--keep-failed=]]).
+
+From there on, you can =cd= to the failed build tree and source the =environment-variables= file, which contains all the environment variable definitions that were in place when the build failed. So let's say you're debugging a build failure in package =foo=; a typical session would look like this:
+
+#+begin_example
+$ guix build foo -K
+... build fails
+$ cd /tmp/guix-build-foo.drv-0
+$ source ./environment-variables
+$ cd foo-1.2
+#+end_example
+
+Now, you can invoke commands as if you were the daemon (almost) and troubleshoot your build process.
+
+Sometimes it happens that, for example, a package's tests pass when you run them manually but they fail when the daemon runs them. This can happen because the daemon runs builds in containers where, unlike in our environment above, network access is missing, =/bin/sh= does not exist, etc. (see [[id:guix--Build-Environment-Setup][Build Environment Setup]]).
+
+In such cases, you may need to inspect the build process from within a container similar to the one the build daemon creates:
+
+#+begin_example
+$ guix build -K foo
+...
+$ cd /tmp/guix-build-foo.drv-0
+$ guix shell --no-grafts -C -D foo strace gdb
+[env]# source ./environment-variables
+[env]# cd foo-1.2
+#+end_example
+
+Here, =guix shell -C= creates a container and spawns a new shell in it (see [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]). The =strace gdb= part adds the =strace= and =gdb= commands to the container, which you may find handy while debugging. The =--no-grafts= option makes sure we get the exact same environment, with ungrafted packages (see [[id:guix--Security-Updates][Security Updates]], for more info on grafts).
+
+To get closer to a container like that used by the build daemon, we can remove =/bin/sh= (you'll first need to pass the =--writable-root= option to =guix shell=):
+
+#+begin_example
+[env]# rm /bin/sh
+#+end_example
+
+(Don't worry, this is harmless: this is all happening in the throw-away container created by =guix shell=.)
+
+The =strace= command is probably not in the search path, but we can run:
+
+#+begin_example
+[env]# $GUIX_ENVIRONMENT/bin/strace -f -o log make check
+#+end_example
+
+In this way, not only you will have reproduced the environment variables the daemon uses, you will also be running the build process in a container similar to the one the daemon uses.
+
+--------------
+
+Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

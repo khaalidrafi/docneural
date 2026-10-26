@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID: org--Structure-of-Code-Blocks
+:END:
+#+filetags: :org:
+#+title: Structure of Code Blocks (The Org Manual)
+
+Next:
+
+<<Structure-of-Code-Blocks>>
+Next: [[id:org--Using-Header-Arguments][Using Header Arguments]], Previous: [[id:org--Features-Overview][Features Overview]], Up: [[id:org--Working-with-Source-Code][Working with Source Code]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 16.2 Structure of Code Blocks [[#Structure-of-Code-Blocks-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Structure-of-Code-Blocks-1
+:CLASS: section
+:END:
+Org offers two ways to structure source code in Org documents: in a source code block, and directly inline. Both specifications are shown below.
+
+A source code block conforms to this structure:
+
+#+begin_example
+#+NAME: <name>
+#+BEGIN_SRC <language> <switches> <header arguments>
+  <body>
+#+END_SRC
+#+end_example
+
+Do not be put off by having to remember the source block syntax. Org mode offers a command for wrapping existing text in a block (see [[id:org--Structure-Templates][Structure Templates]]). Org also works with other completion systems in Emacs, some of which predate Org and have custom domain-specific languages for defining templates. Regular use of templates reduces errors, increases accuracy, and maintains consistency.
+
+An inline code block conforms to this structure:
+
+#+begin_example
+src_<language>{<body>}
+#+end_example
+
+or
+
+#+begin_example
+src_<language>[<header arguments>]{<body>}
+#+end_example
+
+- ‘=#+NAME: <name>=' :: Optional. Names the source block, so it can be called, like a function, from other source blocks or inline code to evaluate or to capture the results. Code from other blocks, other files, and from table formulas (see [[id:org--The-Spreadsheet][The Spreadsheet]]) can use the name to reference a source block. This naming serves the same purpose as naming Org tables. Org mode requires unique names. For duplicate names, Org mode's behavior is undefined. Inline code blocks cannot have a name.
+
+- ‘=#+BEGIN_SRC=' ... ‘=#+END_SRC=' :: Mandatory. They mark the start and end of a block that Org requires. The ‘=#+BEGIN_SRC=' line takes additional arguments, as described next.
+
+- <<index-language_002c-in-code-blocks>>‘=<language>=' [[#index-language_002c-in-code-blocks][¶]] :: Optional. It is the identifier of the source code language in the block. See [[id:org--Languages][Languages]], for identifiers of supported languages.
+
+  When ‘=<language>=' identifier is omitted, the block also cannot have ‘=<switches>=' and ‘=<header arguments>='. Otherwise, the first switch/argument will be treated as ‘=<language>='.
+
+  Language identifier is also used to fontify code blocks in Org buffers, when =org-src-fontify-natively= is set to non-=nil=. See [[id:org--Editing-Source-Code][Editing Source Code]].
+
+- <<index-switches_002c-in-code-blocks>>‘=<switches>=' [[#index-switches_002c-in-code-blocks][¶]] :: Optional. Switches provide finer control of the code execution, export, and format (see the discussion of switches in [[id:org--Literal-Examples][Literal Examples]]).
+
+- <<index-header-arguments_002c-in-code-blocks>>‘=<header arguments>=' [[#index-header-arguments_002c-in-code-blocks][¶]] :: Optional. Heading arguments control many aspects of evaluation, export and tangling of code blocks (see [[id:org--Using-Header-Arguments][Using Header Arguments]]). Using Org's properties feature, header arguments can be selectively applied to the entire buffer or specific subtrees of the Org document.
+
+- ‘=<body>=' :: Source code in the dialect of the specified language identifier.
+
+--------------
+
+Next: [[id:org--Using-Header-Arguments][Using Header Arguments]], Previous: [[id:org--Features-Overview][Features Overview]], Up: [[id:org--Working-with-Source-Code][Working with Source Code]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

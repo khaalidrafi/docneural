@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: org--Images-in-Texinfo-export
+:END:
+#+filetags: :org:
+#+title: Images in Texinfo export (The Org Manual)
+
+Next:
+
+<<Images-in-Texinfo-export>>
+Next: [[id:org--Quotations-in-Texinfo-export][Quotations in Texinfo export]], Previous: [[id:org--Tables-in-Texinfo-export][Tables in Texinfo export]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.11 Images in Texinfo export [[#Images-in-Texinfo-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Images-in-Texinfo-export-1
+:CLASS: subsection
+:END:
+Insert a file link to the image in the Org file, and the Texinfo export backend inserts the image. These links must have the usual supported image extensions and no descriptions. To scale the image, use ‘=:width=' and ‘=:height=' attributes. For alternate text, use ‘=:alt=' and specify the text using Texinfo code, as shown in the example:
+
+#+begin_example
+#+ATTR_TEXINFO: :width 1in :alt Alternate @i{text}
+[[ridt.pdf]]
+#+end_example

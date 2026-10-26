@@ -1,0 +1,226 @@
+:PROPERTIES:
+:ID: guix--Writing-Manifests
+:END:
+#+filetags: :guix:
+#+title: Writing Manifests
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Writing-Manifests>>
+Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.4 Writing Manifests [[#Writing-Manifests-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Writing-Manifests-1
+:CLASS: section
+:END:
+=guix= commands let you specify package lists on the command line. This is convenient, but as the command line becomes longer and less trivial, it quickly becomes more convenient to have that package list in what we call a /manifest/. A manifest is some sort of a “bill of materials” that defines a package set. You would typically come up with a code snippet that builds the manifest, store it in a file, say =manifest.scm=, and then pass that file to the =-m= (or =--manifest=) option that many =guix= commands support. For example, here's what a manifest for a simple package set might look like:
+
+#+begin_src lisp
+;; Manifest for three packages.
+(specifications->manifest '("gcc-toolchain" "make" "git"))
+#+end_src
+
+Once you have that manifest, you can pass it, for example, to =guix package= to install just those three packages to your profile (see [[id:guix--Invoking-guix-package::#profile_002dmanifest][=-m= option of =guix package=]]):
+
+#+begin_example
+guix package -m manifest.scm
+#+end_example
+
+... or you can pass it to =guix shell= (see [[id:guix--Invoking-guix-shell::#shell_002dmanifest][=-m= option of =guix shell=]]) to spawn an ephemeral environment:
+
+#+begin_example
+guix shell -m manifest.scm
+#+end_example
+
+... or you can pass it to =guix pack= in pretty much the same way (see [[id:guix--Invoking-guix-pack::#pack_002dmanifest][=-m= option of =guix pack=]]). You can store the manifest under version control, share it with others so they can easily get set up, etc.
+
+But how do you write your first manifest? To get started, maybe you'll want to write a manifest that mirrors what you already have in a profile. Rather than start from a blank page, =guix package= can generate a manifest for you (see [[id:guix--Invoking-guix-package::#export_002dmanifest][=guix package --export-manifest=]]):
+
+#+begin_example
+# Write to 'manifest.scm' a manifest corresponding to the
+# default profile, ~/.guix-profile.
+guix package --export-manifest > manifest.scm
+#+end_example
+
+Or maybe you'll want to “translate” command-line arguments into a manifest. In that case, =guix shell= can help (see [[id:guix--Invoking-guix-shell::#shell_002dexport_002dmanifest][=guix shell --export-manifest=]]):
+
+#+begin_example
+# Write a manifest for the packages specified on the command line.
+guix shell --export-manifest gcc-toolchain make git > manifest.scm
+#+end_example
+
+In both cases, the =--export-manifest= option tries hard to generate a faithful manifest; in particular, it takes package transformation options into account (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]).
+
+#+begin_quote
+*Note:* Manifests are /symbolic/: they refer to packages of the channels /currently in use/ (see [[id:guix--Channels][Channels]]). In the example above, =gcc-toolchain= might refer to version 14 today, but it might refer to version 16 two years from now.
+
+If you want to “pin” your software environment to specific package versions and variants, you need an additional piece of information: the list of channel revisions in use, as returned by =guix describe=. See [[id:guix--Replicating-Guix][Replicating Guix]], for more information.
+
+#+end_quote
+
+Once you've obtained your first manifest, perhaps you'll want to customize it. Since your manifest is code, you now have access to all the Guix programming interfaces!
+
+Let's assume you want a manifest to deploy a custom variant of GDB, the GNU Debugger, that does not depend on Guile, together with another package. Building on the example seen in the previous section (see [[id:guix--Defining-Package-Variants][Defining Package Variants]]), you can write a manifest along these lines:
+
+#+begin_src lisp
+(use-modules (guix packages)
+             (gnu packages gdb)               ;for 'gdb'
+             (gnu packages version-control))  ;for 'git'
+
+;; Define a variant of GDB without a dependency on Guile.
+(define gdb-sans-guile
+  (package
+    (inherit gdb)
+    (inputs (modify-inputs inputs
+              (delete "guile")))))
+
+;; Return a manifest containing that one package plus Git.
+(packages->manifest (list gdb-sans-guile git))
+#+end_src
+
+Note that in this example, the manifest directly refers to the =gdb= and =git= variables, which are bound to a =package= object (see [[id:guix--package-Reference][=package= Reference]]), instead of calling =specifications->manifest= to look up packages by name as we did before. The =use-modules= form at the top lets us access the core package interface (see [[id:guix--Defining-Packages][Defining Packages]]) and the modules that define =gdb= and =git= (see [[id:guix--Package-Modules][Package Modules]]). Seamlessly, we're weaving all this together---the possibilities are endless, unleash your creativity!
+
+The data type for manifests as well as supporting procedures are defined in the =(guix profiles)= module, which is automatically available to code passed to =-m=. The reference follows.
+
+- Data Type: *manifest* [[#index-manifest-1][¶]] :: Data type representing a manifest.
+
+  It currently has one field:
+
+  - =entries= :: This must be a list of =manifest-entry= records---see below.
+
+- Data Type: *manifest-entry* [[#index-manifest_002dentry][¶]] :: Data type representing a manifest entry. A manifest entry contains essential metadata: a name and version string, the object (usually a package) for that entry, the desired output (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and a number of optional pieces of information detailed below.
+
+  Most of the time, you won't build a manifest entry directly; instead, you will pass a package to =package->manifest-entry=, described below. In some unusual cases though, you might want to create manifest entries for things that are /not/ packages, as in this example:
+
+  #+begin_src lisp
+  ;; Manually build a single manifest entry for a non-package object.
+  (let ((hello (program-file "hello" #~(display "Hi!"))))
+    (manifest-entry
+      (name "foo")
+      (version "42")
+      (item
+       (computed-file "hello-directory"
+                       #~(let ((bin (string-append #$output "/bin")))
+                           (mkdir #$output) (mkdir bin)
+                            (symlink #$hello
+                                     (string-append bin "/hello")))))))
+  #+end_src
+
+  The available fields are the following:
+
+  - =name=\\
+    =version= :: Name and version string for this entry.
+
+  - =item= :: A package or other file-like object (see [[id:guix--G_002dExpressions][file-like objects]]).
+
+  - =output= (default: ="out"=) :: Output of =item= to use, in case =item= has multiple outputs (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]).
+
+  - =dependencies= (default: ='()=) :: List of manifest entries this entry depends on. When building a profile, dependencies are added to the profile.
+
+    Typically, the propagated inputs of a package (see [[id:guix--package-Reference][=propagated-inputs=]]) end up having a corresponding manifest entry in among the dependencies of the package's own manifest entry.
+
+  - =search-paths= (default: ='()=) :: The list of search path specifications honored by this entry (see [[id:guix--Search-Paths][Search Paths]]).
+
+  - =properties= (default: ='()=) :: List of symbol/value pairs. When building a profile, those properties get serialized.
+
+    This can be used to piggyback additional metadata---e.g., the transformations applied to a package (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]).
+
+  - =parent= (default: =(delay #f)=) :: A promise pointing to the “parent” manifest entry.
+
+    This is used as a hint to provide context when reporting an error related to a manifest entry coming from a =dependencies= field.
+
+- Procedure: *concatenate-manifests* =lst= [[#index-concatenate_002dmanifests][¶]] :: Concatenate the manifests listed in =lst= and return the resulting manifest.
+
+- Procedure: *package->manifest-entry* =package [output] [#:properties]= [[#index-package_002d_003emanifest_002dentry][¶]] :: Return a manifest entry for the =output= of package =package=, where =output= defaults to ="out"=, and with the given =properties=. By default =properties= is the empty list or, if one or more package transformations were applied to =package=, it is an association list representing those transformations, suitable as an argument to =options->transformation= (see [[id:guix--Defining-Package-Variants][=options->transformation=]]).
+
+  The code snippet below builds a manifest with an entry for the default output and the =send-email= output of the =git= package:
+
+  #+begin_src lisp
+  (use-modules (gnu packages version-control))
+
+  (manifest (list (package->manifest-entry git)
+                  (package->manifest-entry git "send-email")))
+  #+end_src
+
+- Procedure: *packages->manifest* =packages= [[#index-packages_002d_003emanifest-1][¶]] :: Return a list of manifest entries, one for each item listed in =packages=. Elements of =packages= can be either package objects or package/string tuples denoting a specific output of a package.
+
+  Using this procedure, the manifest above may be rewritten more concisely:
+
+  #+begin_src lisp
+  (use-modules (gnu packages version-control))
+
+  (packages->manifest (list git `(,git "send-email")))
+  #+end_src
+
+- Procedure: *package->development-manifest* =package [system] [#:target]= [[#index-package_002d_003edevelopment_002dmanifest][¶]] :: Return a manifest for the /development inputs/ of =package= for =system=, optionally when cross-compiling to =target=. Development inputs include both explicit and implicit inputs of =package=.
+
+  Like the =-D= option of =guix shell= (see [[id:guix--Invoking-guix-shell::#shell_002ddevelopment_002doption][=guix shell -D=]]), the resulting manifest describes the environment in which one can develop =package=. For example, suppose you're willing to set up a development environment for Inkscape, with the addition of Git for version control; you can describe that “bill of materials” with the following manifest:
+
+  #+begin_src lisp
+  (use-modules (gnu packages inkscape)          ;for 'inkscape'
+               (gnu packages version-control))  ;for 'git'
+
+  (concatenate-manifests
+   (list (package->development-manifest inkscape)
+         (packages->manifest (list git))))
+  #+end_src
+
+  In this example, the development manifest that =package->development-manifest= returns includes the compiler (GCC), the many supporting libraries (Boost, GLib, GTK, etc.), and a couple of additional development tools---these are the dependencies =guix show inkscape= lists.
+
+Last, the =(gnu packages)= module provides higher-level facilities to build manifests. In particular, it lets you look up packages by name---see below.
+
+- Procedure: *specifications->manifest* =specs= [[#index-specifications_002d_003emanifest][¶]] :: Given =specs=, a list of specifications such as ="emacs@25.2"= or ="guile:debug"=, return a manifest. Specs have the format that command-line tools such as =guix install= and =guix package= understand (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+  As an example, it lets you rewrite the Git manifest that we saw earlier like this:
+
+  #+begin_src lisp
+  (specifications->manifest '("git" "git:send-email"))
+  #+end_src
+
+  Notice that we do not need to worry about =use-modules=, importing the right set of modules, and referring to the right variables. Instead, we directly refer to packages in the same way as on the command line, which can often be more convenient.
+
+- Procedure: *build-system->manifest* =build-system [system] [#:target]= [[#index-build_002dsystem_002d_003emanifest][¶]] :: Given =build-system=, a variable referring to a build system value suitable for the =build-system= field in the =package= record type, return a manifest providing all the packages required by the build system, for =system=, optionally when cross-compiling to =target=.
+
+  In order to be able to use a build system variable, the corresponding module must be loaded, as in the following example:
+
+  #+begin_src lisp
+  (use-modules (guix build-system cmake))
+
+  (build-system->manifest cmake-build-system)
+  #+end_src
+
+--------------
+
+Next: [[id:guix--Build-Systems][Build Systems]], Previous: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

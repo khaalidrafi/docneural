@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Language-Help
+:END:
+#+filetags: :emacs:
+#+title: Language Help
+
+Next: [[id:emacs--Misc-Help][Other Help Commands]]   Previous: [[id:emacs--Package-Keywords][Keyword Search for Packages]]   Up: [[id:emacs--Help][Help]]
+
+<<Language-Help>>
+*** 12.7 Help for International Language Support [[#Help-for-International-Language-Support][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Help-for-International-Language-Support
+:CLASS: section
+:END:
+For information on a specific language environment (see [[id:emacs--Language-Environments][Language Environments]]), type C-h L (=describe-language-environment=). This displays a help buffer describing the languages supported by the language environment, and listing the associated character sets, coding systems, and input methods, as well as some sample text for that language environment.
+
+The command C-h h (=view-hello-file=) displays the file =etc/HELLO=, which demonstrates various character sets by showing how to say “hello” in many languages.
+
+The command C-h I (=describe-input-method=) describes an input method---either a specified input method, or by default the input method currently in use. See [[id:emacs--Input-Methods][Input Methods]].
+
+The command C-h C (=describe-coding-system=) describes coding systems---either a specified coding system, or the ones currently in use. See [[id:emacs--Coding-Systems][Coding Systems]].
+
+--------------

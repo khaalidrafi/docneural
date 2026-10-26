@@ -1,0 +1,121 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-hash
+:END:
+#+filetags: :guix:
+#+title: Invoking guix hash
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-hash>>
+Next: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Previous: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.4 Invoking =guix hash= [[#Invoking-guix-hash-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-hash-1
+:CLASS: section
+:END:
+The =guix hash= command computes the hash of a file. It is primarily a convenience tool for anyone contributing to the distribution: it computes the cryptographic hash of one or more files, which can be used in the definition of a package (see [[id:guix--Defining-Packages][Defining Packages]]).
+
+The general syntax is:
+
+#+begin_example
+guix hash option file ...
+#+end_example
+
+When =file= is =-= (a hyphen), =guix hash= computes the hash of data read from standard input.
+
+Here are a few examples:
+
+- SHA256 of a file for use in an =origin= record: :: 
+
+  #+begin_example
+  guix hash example.tar.gz
+#+end_example
+
+- SHA256 of directory =checkout= for use in an =origin= record: :: 
+
+  #+begin_example
+  guix hash -rx checkout
+#+end_example
+
+- SHA1 hash of =file= like the =sha1sum= command: :: 
+
+  #+begin_example
+  guix hash -H sha1 -f hex file
+#+end_example
+
+- <<index-SWHID_002c-computing>>SHA1 hash of =file= for a =swh:1:cnt= [[https://swhid.org][SWHID]]: [[#index-SWHID_002c-computing][¶]] :: guix hash -S git -H sha1 -f hex =file=
+
+=guix hash= has the following options:
+
+- =--hash===algorithm=\\
+  =-H ==algorithm= :: Compute a hash using the specified =algorithm=, =sha256= by default.
+
+  =algorithm= must be the name of a cryptographic hash algorithm supported by Libgcrypt /via/ Guile-Gcrypt---e.g., =sha512= or =sha3-256= (see [[https://doc.guix.gnu.org/guile-gcrypt/latest/en/html_node/Hash-Functions.html#Hash-Functions][Hash Functions]] in Guile-Gcrypt Reference Manual).
+
+- =--format===fmt=\\
+  =-f ==fmt= :: Write the hash in the format specified by =fmt=.
+
+  Supported formats: =base64=, =nix-base32=, =base32=, =base16= (=hex= and =hexadecimal= can be used as well).
+
+  If the =--format= option is not specified, =guix hash= will output the hash in =nix-base32=. This representation is used in the definitions of packages.
+
+- =--recursive=\\
+  =-r= :: The =--recursive= option is deprecated in favor of =--serializer=nar= (see below); =-r= remains accepted as a convenient shorthand.
+
+- =--serializer===type=\\
+  =-S ==type= :: Compute the hash on =file= using =type= serialization.
+
+  =type= may be one of the following:
+
+  - =none= :: This is the default: it computes the hash of a file's contents.
+
+  - =nar= :: Compute the hash of a “normalized archive” (or “nar”) containing =file=, including its children if it is a directory. Some of the metadata of =file= is part of the archive; for instance, when =file= is a regular file, the hash is different depending on whether =file= is executable or not. Metadata such as time stamps have no impact on the hash (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], for more info on the nar format).
+
+  - =git= :: Compute the hash of the file or directory as a Git “tree”, following the same method as the Git version control system.
+
+- =--exclude-vcs=\\
+  =-x= :: When combined with =--recursive=, exclude version control system directories (=.bzr=, =.git=, =.hg=, etc.).
+
+  As an example, here is how you would compute the hash of a Git checkout, which is useful when using the =git-fetch= method (see [[id:guix--origin-Reference][=origin= Reference]]):
+
+  #+begin_example
+  $ git clone http://example.org/foo.git
+  $ cd foo
+  $ guix hash -x --serializer=nar .
+#+end_example
+
+--------------
+
+Next: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Previous: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

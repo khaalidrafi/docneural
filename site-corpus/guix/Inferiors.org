@@ -1,0 +1,120 @@
+:PROPERTIES:
+:ID: guix--Inferiors
+:END:
+#+filetags: :guix:
+#+title: Inferiors
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Inferiors>>
+Next: [[id:guix--Invoking-guix-describe][Invoking =guix describe=]], Previous: [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 5.9 Inferiors [[#Inferiors-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Inferiors-1
+:CLASS: section
+:END:
+
+#+begin_quote
+*Note:* The functionality described here is a “technology preview” as of version ad54bd5. As such, the interface is subject to change.
+
+#+end_quote
+
+Sometimes you might need to mix packages from the revision of Guix you're currently running with packages available in a different revision of Guix. Guix /inferiors/ allow you to achieve that by composing different Guix revisions in arbitrary ways.
+
+Technically, an “inferior” is essentially a separate Guix process connected to your main Guix process through a REPL (see [[id:guix--Invoking-guix-repl][Invoking =guix repl=]]). The =(guix inferior)= module allows you to create inferiors and to communicate with them. It also provides a high-level interface to browse and manipulate the packages that an inferior provides---/inferior packages/.
+
+When combined with channels (see [[id:guix--Channels][Channels]]), inferiors provide a simple way to interact with a separate revision of Guix. For example, let's assume you want to install in your profile the current =guile= package, along with the =guile-json= as it existed in an older revision of Guix---perhaps because the newer =guile-json= has an incompatible API and you want to run your code against the old API. To do that, you could write a manifest for use by =guix package --manifest= (see [[id:guix--Writing-Manifests][Writing Manifests]]); in that manifest, you would create an inferior for that old Guix revision you care about, and you would look up the =guile-json= package in the inferior:
+
+#+begin_src lisp
+(use-modules (guix inferior) (guix channels)
+             (srfi srfi-1))   ;for 'first'
+
+(define channels
+  ;; This is the old revision from which we want to
+  ;; extract guile-json.
+  (list (channel
+         (name 'guix)
+         (url "https://git.guix.gnu.org/guix.git")
+         (commit
+          "65956ad3526ba09e1f7a40722c96c6ef7c0936fe"))))
+
+(define inferior
+  ;; An inferior representing the above revision.
+  (inferior-for-channels channels))
+
+;; Now create a manifest with the current "guile" package
+;; and the old "guile-json" package.
+(packages->manifest
+ (list (first (lookup-inferior-packages inferior "guile-json"))
+       (specification->package "guile")))
+#+end_src
+
+On its first run, =guix package --manifest= might have to build the channel you specified before it can create the inferior; subsequent runs will be much faster because the Guix revision will be cached.
+
+The =(guix inferior)= module provides the following procedures to open an inferior:
+
+- Procedure: *inferior-for-channels* =channels [#:cache-directory] [#:ttl]= [[#index-inferior_002dfor_002dchannels][¶]] :: Return an inferior for =channels=, a list of channels. Use the cache at =cache-directory=, where entries can be reclaimed after =ttl= seconds. This procedure opens a new connection to the build daemon.
+
+  As a side effect, this procedure may build or substitute binaries for =channels=, which can take time.
+
+- Procedure: *open-inferior* =directory [#:command "bin/guix"]= [[#index-open_002dinferior][¶]] :: Open the inferior Guix in =directory=, running =directory==/==command== repl= or equivalent. Return =#f= if the inferior could not be launched.
+
+The procedures listed below allow you to obtain and manipulate inferior packages.
+
+- Procedure: *inferior-packages* =inferior= [[#index-inferior_002dpackages][¶]] :: Return the list of packages known to =inferior=.
+
+- Procedure: *lookup-inferior-packages* =inferior name [version]= [[#index-lookup_002dinferior_002dpackages][¶]] :: Return the sorted list of inferior packages matching =name= in =inferior=, with highest version numbers first. If =version= is true, return only packages with a version number prefixed by =version=.
+
+- Procedure: *inferior-package?* =obj= [[#index-inferior_002dpackage_003f][¶]] :: Return true if =obj= is an inferior package.
+
+- Procedure: *inferior-package-name* =package= [[#index-inferior_002dpackage_002dname][¶]]\\
+  Procedure: *inferior-package-version* =package= [[#index-inferior_002dpackage_002dversion][¶]]\\
+  Procedure: *inferior-package-synopsis* =package= [[#index-inferior_002dpackage_002dsynopsis][¶]]\\
+  Procedure: *inferior-package-description* =package= [[#index-inferior_002dpackage_002ddescription][¶]]\\
+  Procedure: *inferior-package-home-page* =package= [[#index-inferior_002dpackage_002dhome_002dpage][¶]]\\
+  Procedure: *inferior-package-location* =package= [[#index-inferior_002dpackage_002dlocation][¶]]\\
+  Procedure: *inferior-package-inputs* =package= [[#index-inferior_002dpackage_002dinputs][¶]]\\
+  Procedure: *inferior-package-native-inputs* =package= [[#index-inferior_002dpackage_002dnative_002dinputs][¶]]\\
+  Procedure: *inferior-package-propagated-inputs* =package= [[#index-inferior_002dpackage_002dpropagated_002dinputs][¶]]\\
+  Procedure: *inferior-package-transitive-propagated-inputs* =package= [[#index-inferior_002dpackage_002dtransitive_002dpropagated_002dinputs][¶]]\\
+  Procedure: *inferior-package-native-search-paths* =package= [[#index-inferior_002dpackage_002dnative_002dsearch_002dpaths][¶]]\\
+  Procedure: *inferior-package-transitive-native-search-paths* =package= [[#index-inferior_002dpackage_002dtransitive_002dnative_002dsearch_002dpaths][¶]]\\
+  Procedure: *inferior-package-search-paths* =package= [[#index-inferior_002dpackage_002dsearch_002dpaths][¶]] :: These procedures are the counterpart of package record accessors (see [[id:guix--package-Reference][=package= Reference]]). Most of them work by querying the inferior =package= comes from, so the inferior must still be live when you call these procedures.
+
+Inferior packages can be used transparently like any other package or file-like object in G-expressions (see [[id:guix--G_002dExpressions][G-Expressions]]). They are also transparently handled by the =packages->manifest= procedure, which is commonly used in manifests (see [[id:guix--Invoking-guix-package][the =--manifest= option of =guix package=]]). Thus you can insert an inferior package pretty much anywhere you would insert a regular package: in manifests, in the =packages= field of your =operating-system= declaration, and so on.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-describe][Invoking =guix describe=]], Previous: [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

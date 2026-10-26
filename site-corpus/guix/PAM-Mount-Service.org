@@ -1,0 +1,168 @@
+:PROPERTIES:
+:ID: guix--PAM-Mount-Service
+:END:
+#+filetags: :guix:
+#+title: PAM Mount Service
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<PAM-Mount-Service>>
+Next: [[id:guix--Guix-Services][Guix Services]], Previous: [[id:guix--Game-Services][Game Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.36 PAM Mount Service [[#PAM-Mount-Service-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: PAM-Mount-Service-1
+:CLASS: subsection
+:END:
+The =(gnu services pam-mount)= module provides a service allowing users to mount volumes when they log in. It should be able to mount any volume format supported by the system.
+
+- Variable: *pam-mount-service-type* [[#index-pam_002dmount_002dservice_002dtype][¶]] :: Service type for PAM Mount support.
+
+- Data Type: *pam-mount-configuration* [[#index-pam_002dmount_002dconfiguration][¶]] :: Data type representing the configuration of PAM Mount.
+
+  It takes the following parameters:
+
+  - =rules= :: The configuration rules that will be used to generate =/etc/security/pam_mount.conf.xml=.
+
+    The configuration rules are SXML elements (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SXML.html#SXML][SXML]] in GNU Guile Reference Manual), and the default ones don't mount anything for anyone at login:
+
+    #+begin_src lisp
+    `((debug (@ (enable "0")))
+      (mntoptions (@ (allow ,(string-join
+                              '("nosuid" "nodev" "loop"
+                                "encryption" "fsck" "nonempty"
+                                "allow_root" "allow_other")
+                              ","))))
+      (mntoptions (@ (require "nosuid,nodev")))
+      (logout (@ (wait "0")
+                 (hup "0")
+                 (term "no")
+                 (kill "no")))
+      (mkmountpoint (@ (enable "1")
+                       (remove "true"))))
+    #+end_src
+
+    Some =volume= elements must be added to automatically mount volumes at login. Here's an example allowing the user =alice= to mount her encrypted =HOME= directory and allowing the user =bob= to mount the partition where he stores his data:
+
+    #+begin_src lisp
+    (define pam-mount-rules
+    `((debug (@ (enable "0")))
+                (volume (@ (user "alice")
+                           (fstype "crypt")
+                           (path "/dev/sda2")
+                           (mountpoint "/home/alice")))
+                (volume (@ (user "bob")
+                           (fstype "auto")
+                           (path "/dev/sdb3")
+                           (mountpoint "/home/bob/data")
+                           (options "defaults,autodefrag,compress")))
+                (mntoptions (@ (allow ,(string-join
+                                        '("nosuid" "nodev" "loop"
+                                          "encryption" "fsck" "nonempty"
+                                          "allow_root" "allow_other")
+                                        ","))))
+                (mntoptions (@ (require "nosuid,nodev")))
+                (logout (@ (wait "0")
+                           (hup "0")
+                           (term "no")
+                           (kill "no")))
+                (mkmountpoint (@ (enable "1")
+                                 (remove "true")))))
+
+    (service pam-mount-service-type
+             (pam-mount-configuration
+               (rules pam-mount-rules)))
+    #+end_src
+
+    The complete list of possible options can be found in the man page for [[http://pam-mount.sourceforge.net/pam_mount.conf.5.html][pam_mount.conf]].
+
+**** PAM Mount Volume Service [[#PAM-Mount-Volume-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: PAM-Mount-Volume-Service
+:CLASS: subheading
+:END:
+PAM mount volumes are automatically mounted at login by the PAM login service according to a set of per-volume rules. Because they are mounted by PAM the password entered during login may be used directly to mount authenticated volumes, such as =cifs=, using the same credentials.
+
+These volumes will be added in addition to any volumes directly specified in =pam-mount-rules=.
+
+Here is an example of a rule which will mount a remote CIFS share from =//remote-server/share= into a sub-directory of =/shares= named after the user logging in:
+
+#+begin_src lisp
+(simple-service 'pam-mount-remote-share pam-mount-volume-service-type
+                (list (pam-mount-volume
+                       (secondary-group "users")
+                       (file-system-type "cifs")
+                       (server "remote-server")
+                       (file-name "share")
+                       (mount-point "/shares/%(USER)")
+                       (options "nosuid,nodev,seal,cifsacl"))))
+#+end_src
+
+- Data Type: *pam-mount-volume-service-type* [[#index-pam_002dmount_002dvolume_002dservice_002dtype][¶]] :: Configuration for a single volume to be mounted. Any fields not specified will be omitted from the run-time PAM configuration. See [[http://pam-mount.sourceforge.net/pam_mount.conf.5.html][the man page]] for the default values when unspecified.
+
+  - =user-name= (type: maybe-string) :: Mount the volume for the given user.
+
+  - =user-id= (type: maybe-integer-or-range) :: Mount the volume for the user with this ID. This field may also be specified as a pair of =(start . end)= indicating a range of user IDs for whom to mount the volume.
+
+  - =primary-group= (type: maybe-string) :: Mount the volume for users with this primary group name.
+
+  - =group-id= (type: maybe-integer-or-range) :: Mount the volume for the users with this primary group ID. This field may also be specified as a cons cell of =(start . end)= indicating a range of group ids for whom to mount the volume.
+
+  - =secondary-group= (type: maybe-string) :: Mount the volume for users who are members of this group as either a primary or secondary group.
+
+  - =file-system-type= (type: maybe-string) :: The file system type for the volume being mounted (e.g., =cifs=)
+
+  - =no-mount-as-root?= (type: maybe-boolean) :: Whether or not to mount the volume with root privileges. This is normally disabled, but may be enabled for mounts of type =fuse=, or other user-level mounts.
+
+  - =server= (type: maybe-string) :: The name of the remote server to mount the volume from, when necessary.
+
+  - =file-name= (type: maybe-string) :: The location of the volume, either local or remote, depending on the =file-system-type=.
+
+  - =mount-point= (type: maybe-string) :: Where to mount the volume in the local file-system. This may be set to =~= to indicate the home directory of the user logging in. If this field is omitted then =/etc/fstab= is consulted for the mount destination.
+
+  - =options= (type: maybe-string) :: The options to be passed as-is to the underlying mount program.
+
+  - =ssh?= (type: maybe-boolean) :: Enable this option to pass the login password to SSH for use with mounts involving SSH (e.g., =sshfs=).
+
+  - =cipher= (type: maybe-string) :: Cryptsetup cipher name for the volume. To be used with the =crypt= =file-system-type=.
+
+  - =file-system-key-cipher= (type: maybe-string) :: Cipher name used by the target volume.
+
+  - =file-system-key-hash= (type: maybe-string) :: SSL hash name used by the target volume.
+
+  - =file-system-key-file-name= (type: maybe-string) :: File name of the file system key for the target volume.
+
+--------------
+
+Next: [[id:guix--Guix-Services][Guix Services]], Previous: [[id:guix--Game-Services][Game Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

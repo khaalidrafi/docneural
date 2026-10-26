@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-copy
+:END:
+#+filetags: :guix:
+#+title: Invoking guix copy
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-copy>>
+Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.13 Invoking =guix copy= [[#Invoking-guix-copy-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-copy-1
+:CLASS: section
+:END:
+The =guix copy= command copies items from the store of one machine to that of another machine over a secure shell (SSH) connection[[#FOOT25][^{25}]]. For example, the following command copies the =coreutils= package, the user's profile, and all their dependencies over to =host=, logged in as =user=:
+
+#+begin_example
+guix copy --to=user@host \
+          coreutils $(readlink -f ~/.guix-profile)
+#+end_example
+
+If some of the items to be copied are already present on =host=, they are not actually sent.
+
+The command below retrieves =libreoffice= and =gimp= from =host=, assuming they are available there:
+
+#+begin_example
+guix copy --from=host libreoffice gimp
+#+end_example
+
+The SSH connection is established using the Guile-SSH client, which is compatible with OpenSSH: it honors =~/.ssh/known_hosts= and =~/.ssh/config=, and uses the SSH agent for authentication.
+
+The key used to sign items that are sent must be accepted by the remote machine. Likewise, the key used by the remote machine to sign items you are retrieving must be in =/etc/guix/acl= so it is accepted by your own daemon. See [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], for more information about store item authentication.
+
+The general syntax is:
+
+#+begin_example
+guix copy [--to=spec|--from=spec] items...
+#+end_example
+
+You must always specify one of the following options:
+
+- =--to===spec=\\
+  =--from===spec= :: Specify the host to send to or receive from. =spec= must be an SSH spec such as =example.org=, =charlie@example.org=, or =charlie@example.org:2222=.
+
+The =items= can be either package names, such as =gimp=, or store items, such as =/gnu/store/…-idutils-4.6=.
+
+When specifying the name of a package to send, it is first built if needed, unless =--dry-run= was specified. Common build options are supported (see [[id:guix--Common-Build-Options][Common Build Options]]).
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF25][(25)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+This command is available only when Guile-SSH was found. See [[id:guix--Requirements][Requirements]], for details.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

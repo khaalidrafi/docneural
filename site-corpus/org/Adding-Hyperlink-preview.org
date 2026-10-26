@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID: org--Adding-Hyperlink-preview
+:END:
+#+filetags: :org:
+#+title: Adding Hyperlink preview (The Org Manual)
+
+Next:
+
+<<Adding-Hyperlink-preview>>
+Next: [[id:org--Adding-Export-Backends][Adding Export Backends]], Previous: [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** A.4 Adding Hyperlink preview [[#Adding-Hyperlink-preview-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Adding-Hyperlink-preview-1
+:CLASS: appendixsec
+:END:
+By default, Org supports previewing external links for links of type ‘=file=' and ‘=attachment=' that point to image files. (See [[id:org--Images][Images]].)
+
+Support for previewing other link types inline can be added to Org in the following way:
+
+1. Add a ‘=:preview=' link parameter to the link type using =org-link-set-parameters=. As an example, here we add previews for the ‘=docview=' link type.
+
+   #+begin_src lisp-preformatted
+   (org-link-set-parameters
+    "docview" :preview #'org-link-docview-preview)
+   #+end_src
+
+2. The value of the ‘=:preview=' parameter must be a function that accepts three arguments:
+
+   - an overlay placed from the start to the end of the link,
+   - the link path, as a string, and
+   - the syntax node for the link.
+
+   It must return a non-nil value to indicate preview success. A value of ‘=nil=' implies that the preview failed, and the overlay placed on the link will be removed.
+
+   In our example, we use the ‘=convert=' program (part of the ‘=imagemagick=' suite of tools) to create the thumbnail that is displayed inline.
+
+   #+begin_src lisp-preformatted
+   (defun org-link-docview-preview (ov path _elem)
+     "Preview file at PATH in overlay OV.
+
+   _ELEM is the syntax node of the link element."
+     (when (executable-find "convert")
+       (let* ((path (expand-file-name (substitute-in-file-name path)))
+              (output-file (expand-file-name (concat "org-docview-preview-"
+                                                     (substring (sha1 path) 0 10)
+                                                     ".png")
+                                             temporary-file-directory)))
+         ;; Create or find preview for path
+         (when (or (file-readable-p output-file)
+                   (= 0 (call-process
+                         "convert"
+                         nil (get-buffer-create "*Org Docview Preview Output*") nil
+                         "-thumbnail" "x320" "-colorspace" "rgb"
+                         "-background" "white" "-alpha" "remove" "-strip"
+                         (concat path "[0]") output-file)))
+           ;; If preview image is available, display it via the overlay
+           (overlay-put ov 'display (create-image output-file))))))
+   #+end_src
+
+3. Now previews of docview links for supported document types (PDF, djvu) are generated (along with image file previews) when calling =org-link-preview=.
+
+--------------
+
+Next: [[id:org--Adding-Export-Backends][Adding Export Backends]], Previous: [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

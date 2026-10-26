@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID: org--The-Spreadsheet
+:END:
+#+filetags: :org:
+#+title: The Spreadsheet (The Org Manual)
+
+Next:
+
+<<The-Spreadsheet>>
+Next: [[id:org--Org-Plot][Org Plot]], Previous: [[id:org--Orgtbl-Mode][The Orgtbl Minor Mode]], Up: [[id:org--Tables][Tables]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 3.5 The Spreadsheet [[#The-Spreadsheet-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Spreadsheet-1
+:CLASS: section
+:END:
+The table editor makes use of the Emacs Calc package to implement spreadsheet-like capabilities. It can also evaluate Emacs Lisp forms to derive fields from other fields. While fully featured, Org's implementation is not identical to other spreadsheets. For example, Org knows the concept of a /column formula/ that will be applied to all non-header fields in a column without having to copy the formula to each relevant field. There is also a formula debugger, and a formula editor with features for highlighting fields in the table corresponding to the references at point in the formula, moving these references by arrow keys.
+
+- [[id:org--References][References]]
+- [[id:org--Formula-syntax-for-Calc][Formula syntax for Calc]]
+- [[id:org--Formula-syntax-for-Lisp][Emacs Lisp forms as formulas]]
+- [[id:org--Durations-and-time-values][Durations and time values]]
+- [[id:org--Field-and-range-formulas][Field and range formulas]]
+- [[id:org--Column-formulas][Column formulas]]
+- [[id:org--Lookup-functions][Lookup functions]]
+- [[id:org--Editing-and-debugging-formulas][Editing and debugging formulas]]
+- [[id:org--Updating-the-table][Updating the table]]
+- [[id:org--Advanced-features][Advanced features]]
+
+--------------
+
+Next: [[id:org--Org-Plot][Org Plot]], Previous: [[id:org--Orgtbl-Mode][The Orgtbl Minor Mode]], Up: [[id:org--Tables][Tables]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

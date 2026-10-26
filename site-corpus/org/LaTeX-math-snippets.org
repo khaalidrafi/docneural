@@ -1,0 +1,94 @@
+:PROPERTIES:
+:ID: org--LaTeX-math-snippets
+:END:
+#+filetags: :org:
+#+title: LaTeX math snippets (The Org Manual)
+
+Next:
+
+<<LaTeX-math-snippets>>
+Next: [[id:org--MathML-and-OpenDocument-formula-files][MathML and OpenDocument formula files]], Up: [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.9.1 LaTeX math snippets [[#LaTeX-math-snippets-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: LaTeX-math-snippets-1
+:CLASS: subsubsection
+:END:
+LaTeX math snippets (see [[id:org--LaTeX-fragments][LaTeX fragments]]) can be embedded in the ODT document in one of the following ways:
+
+- <<index-MathML>>MathML [[#index-MathML][¶]] :: Add this line to the Org file. This option is activated on a per-file basis.
+
+  #+begin_example
+  #+OPTIONS: tex:t
+#+end_example
+
+  With this option, LaTeX fragments are first converted into MathML fragments using an external LaTeX-to-MathML converter program. The resulting MathML fragments are then embedded as an OpenDocument Formula in the exported document.
+
+  You can specify the LaTeX-to-MathML converter by customizing the variables =org-latex-to-mathml-convert-command= and =org-latex-to-mathml-jar-file=.
+
+  If you prefer to use MathToWeb[[#FOOT146][^{146}]] as your converter, you can configure the above variables as shown below.
+
+  #+begin_src lisp-preformatted
+  (setq org-latex-to-mathml-convert-command
+        "java -jar %j -unicode -force -df %o %I"
+        org-latex-to-mathml-jar-file
+        "/path/to/mathtoweb.jar")
+  #+end_src
+
+  or, to use LaTeX​ML[[#FOOT147][^{147}]] instead,
+
+  #+begin_src lisp-preformatted
+  (setq org-latex-to-mathml-convert-command
+        "latexmlmath %i --presentationmathml=%o")
+  #+end_src
+
+  To quickly verify the reliability of the LaTeX-to-MathML converter, use the following commands:
+
+  - M-x org-export-as-odf :: Convert a LaTeX math snippet to an OpenDocument formula (‘=.odf=') file.
+
+  - M-x org-export-as-odf-and-open :: Convert a LaTeX math snippet to an OpenDocument formula (‘=.odf=') file and open the formula file with the system-registered application.
+
+-  <<index-dvipng-1>>PNG images [[#index-dvipng-1][¶]] :: Add this line to the Org file. This option is activated on a per-file basis.
+
+  #+begin_example
+  #+OPTIONS: tex:dvipng
+#+end_example
+
+  #+begin_example
+  #+OPTIONS: tex:dvisvgm
+#+end_example
+
+  or
+
+  #+begin_example
+  #+OPTIONS: tex:imagemagick
+#+end_example
+
+  Under this option, LaTeX fragments are processed into PNG or SVG images and the resulting images are embedded in the exported document. This method requires dvipng program, dvisvgm or ImageMagick programs.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF146][(146)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See [[https://mathtoweb.sourceforge.io/][MathToWeb]].
+
+***** [[#DOCF147][(147)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+See [[https://dlmf.nist.gov/LaTeXML/]].
+
+--------------
+
+Next: [[id:org--MathML-and-OpenDocument-formula-files][MathML and OpenDocument formula files]], Up: [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

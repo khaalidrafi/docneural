@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: emacs--Authentication
+:END:
+#+filetags: :emacs:
+#+title: Authentication
+
+Next:   Previous: [[id:emacs--Init-File#Init-File][The Emacs Initialization File]]   Up: [[id:emacs--Customization][Customization]]
+
+<<Authentication>>
+*** 51.5 Keeping Persistent Authentication Information [[#Keeping-Persistent-Authentication-Information][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Keeping-Persistent-Authentication-Information
+:CLASS: section
+:END:
+Some Emacs packages, which connect to other services, require authentication (see [[id:emacs--Passwords][Entering passwords]]), e.g., see [[../gnus_html/index.html#Top][Gnus]] in The Gnus Manual, or [[../tramp_html/index.html#Top][Tramp]] in The Tramp Manual. Because it might be annoying to provide the same user name and password again and again, Emacs offers to keep this information persistent via the =auth-source= library.
+
+By default, the authentication information is taken from the file =~/.authinfo= or =~/.authinfo.gpg= or =~/.netrc=. These files have a syntax similar to netrc files as known from the =ftp= program, like this:
+
+#+begin_example
+machine mymachine login myloginname password mypassword port myport
+#+end_example
+
+Similarly, the =auth-source= library supports multiple storage backend, currently either the classic netrc backend, JSON files, the Secret Service API, and pass, the standard unix password manager.
+
+All these alternatives can be customized via the user option =auth-sources=, see [[../auth_html/Help-for-users.html#Help-for-users][Emacs auth-source]] in Emacs auth-source.
+
+When a password is entered interactively, which is not found via the configured backend, some of the backends offer to save it persistently. This can be changed by customizing the user option =auth-source-save-behavior=.
+
+--------------

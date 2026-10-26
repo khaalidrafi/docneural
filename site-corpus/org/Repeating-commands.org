@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID: org--Repeating-commands
+:END:
+#+filetags: :org:
+#+title: Repeating commands (The Org Manual)
+
+Next:
+
+<<Repeating-commands>>
+Previous: [[id:org--Drag-and-Drop-_0026-yank_002dmedia][Drag and Drop & =yank-media=]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.20 Repeating commands [[#Repeating-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Repeating-commands-1
+:CLASS: section
+:END:
+When =repeat-mode= is turned on, headline motion commands, link and block navigation commands by only pressing a single key. For example, instead of typing C-c C-n repeatedly, you can just type C-c C-n n n n p u ... to move to different headlines. When a key not in the map is pressed, it exits =repeat-mode= and the command corresponding to the key is executed (see the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Repeating.html#Repeating][Emacs user manual]] for more details).
+
+By default, the following commands are made repeatable in separate keymaps.
+
+=org-navigation-repeat-map=:
+
+| Command                           | Key binding | Repeat key |
+|-----------------------------------+-------------+------------|
+| =org-next-visible-heading=        | C-c C-n     | n          |
+| =org-previous-visible-heading=    | C-c C-p     | p          |
+| =org-forward-heading-same-level=  | C-c C-f     | f          |
+| =org-backward-heading-same-level= | C-c C-b     | b          |
+| =org-up-heading=                  | C-c C-u     | u          |
+
+=org-block-navigation-repeat-map=:
+
+| Command              | Key binding | Repeat key |
+|----------------------+-------------+------------|
+| =org-next-block=     | C-c M-f     | f          |
+| =org-previous-block= | C-c M-b     | b          |
+
+=org-link-navigation-repeat-map=:
+
+| Command             | Key binding | Repeat key |
+|---------------------+-------------+------------|
+| =org-next-link=     | C-c C-x C-n | n          |
+| =org-previous-link= | C-c C-x C-p | p          |
+
+--------------
+
+Previous: [[id:org--Drag-and-Drop-_0026-yank_002dmedia][Drag and Drop & =yank-media=]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

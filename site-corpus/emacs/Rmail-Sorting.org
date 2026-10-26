@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID: emacs--Rmail-Sorting
+:END:
+#+filetags: :emacs:
+#+title: Rmail Sorting
+
+Next: [[id:emacs--Rmail-Display][Display of Messages]]   Previous: [[id:emacs--Rmail-Summary#Rmail-Summary][Summaries]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
+
+<<Rmail-Sorting>>
+*** 35.12 Sorting the Rmail File [[#Sorting-the-Rmail-File][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sorting-the-Rmail-File
+:CLASS: section
+:END:
+- <<index-rmail_002dsort_002dby_002ddate>>C-c C-s C-d [[#index-rmail_002dsort_002dby_002ddate][¶]]\\
+  M-x rmail-sort-by-date :: Sort messages of current Rmail buffer by date.
+
+- <<index-rmail_002dsort_002dby_002dsubject>>C-c C-s C-s [[#index-rmail_002dsort_002dby_002dsubject][¶]]\\
+  M-x rmail-sort-by-subject :: Sort messages of current Rmail buffer by subject.
+
+- <<index-rmail_002dsort_002dby_002dauthor>>C-c C-s C-a [[#index-rmail_002dsort_002dby_002dauthor][¶]]\\
+  M-x rmail-sort-by-author :: Sort messages of current Rmail buffer by author's name.
+
+- <<index-rmail_002dsort_002dby_002drecipient>>C-c C-s C-r [[#index-rmail_002dsort_002dby_002drecipient][¶]]\\
+  M-x rmail-sort-by-recipient :: Sort messages of current Rmail buffer by recipient's name.
+
+- <<index-rmail_002dsort_002dby_002dcorrespondent>>C-c C-s C-c [[#index-rmail_002dsort_002dby_002dcorrespondent][¶]]\\
+  M-x rmail-sort-by-correspondent :: Sort messages of current Rmail buffer by the name of the other correspondent.
+
+- <<index-rmail_002dsort_002dby_002dlines>>C-c C-s C-l [[#index-rmail_002dsort_002dby_002dlines][¶]]\\
+  M-x rmail-sort-by-lines :: Sort messages of current Rmail buffer by number of lines.
+
+- <<index-rmail_002dsort_002dby_002dlabels>>C-c C-s C-k RET =labels= RET [[#index-rmail_002dsort_002dby_002dlabels][¶]]\\
+  M-x rmail-sort-by-labels RET =labels= RET :: Sort messages of current Rmail buffer by labels. The argument =labels= should be a comma-separated list of labels. The order of these labels specifies the order of messages; messages with the first label come first, messages with the second label come second, and so on. Messages that have none of these labels come last.
+
+The Rmail sort commands perform a /stable sort/: if there is no reason to prefer either one of two messages, their order remains unchanged. You can use this to sort by more than one criterion. For example, if you use =rmail-sort-by-date= and then =rmail-sort-by-author=, messages from the same author appear in order by date.
+
+With a prefix argument, all these commands reverse the order of comparison. This means they sort messages from newest to oldest, from biggest to smallest, or in reverse alphabetical order.
+
+The same keys in the summary buffer run similar functions; for example, C-c C-s C-l runs =rmail-summary-sort-by-lines=. These commands always sort the whole Rmail buffer, even if the summary is only showing a subset of messages.
+
+Note that you cannot undo a sort, so you may wish to save the Rmail buffer before sorting it.
+
+--------------

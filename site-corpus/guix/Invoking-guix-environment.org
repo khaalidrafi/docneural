@@ -1,0 +1,300 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-environment
+:END:
+#+filetags: :guix:
+#+title: Invoking guix environment
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-environment>>
+Next: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Previous: [[id:guix--Invoking-guix-shell][Invoking =guix shell=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 7.2 Invoking =guix environment= [[#Invoking-guix-environment-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-environment-1
+:CLASS: section
+:END:
+The purpose of =guix environment= is to assist in creating development environments.
+
+#+begin_quote
+*Deprecation warning:* The =guix environment= command is deprecated in favor of =guix shell=, which performs similar functions but is more convenient to use. See [[id:guix--Invoking-guix-shell][Invoking =guix shell=]].
+
+Being deprecated, =guix environment= is slated for eventual removal, but the Guix project is committed to keeping it until May 1st, 2023. Please get in touch with us at [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] if you would like to discuss it.
+
+#+end_quote
+
+The general syntax is:
+
+#+begin_example
+guix environment options package...
+#+end_example
+
+The following example spawns a new shell set up for the development of GNU Guile:
+
+#+begin_example
+guix environment guile
+#+end_example
+
+If the needed dependencies are not built yet, =guix environment= automatically builds them. The environment of the new shell is an augmented version of the environment that =guix environment= was run in. It contains the necessary search paths for building the given package added to the existing environment variables. To create a “pure” environment, in which the original environment variables have been unset, use the =--pure= option[[#FOOT15][^{15}]].
+
+Exiting from a Guix environment is the same as exiting from the shell, and will place the user back in the old environment before =guix environment= was invoked. The next garbage collection (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]) will clean up packages that were installed from within the environment and are no longer used outside of it.
+
+=guix environment= defines the =GUIX_ENVIRONMENT= variable in the shell it spawns; its value is the file name of the profile of this environment. This allows users to, say, define a specific prompt for development environments in their =.bashrc= (see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual):
+
+#+begin_example
+if [ -n "$GUIX_ENVIRONMENT" ]
+then
+    export PS1="\u@\h \w [dev]\$ "
+fi
+#+end_example
+
+... or to browse the profile:
+
+#+begin_example
+$ ls "$GUIX_ENVIRONMENT/bin"
+#+end_example
+
+Additionally, more than one package may be specified, in which case the union of the inputs for the given packages are used. For example, the command below spawns a shell where all of the dependencies of both Guile and Emacs are available:
+
+#+begin_example
+guix environment guile emacs
+#+end_example
+
+Sometimes an interactive shell session is not desired. An arbitrary command may be invoked by placing the =--= token to separate the command from the rest of the arguments:
+
+#+begin_example
+guix environment guile -- make -j4
+#+end_example
+
+In other situations, it is more convenient to specify the list of packages needed in the environment. For example, the following command runs =python= from an environment containing Python 3 and NumPy:
+
+#+begin_example
+guix environment --ad-hoc python-numpy python -- python3
+#+end_example
+
+Furthermore, one might want the dependencies of a package and also some additional packages that are not build-time or runtime dependencies, but are useful when developing nonetheless. Because of this, the =--ad-hoc= flag is positional. Packages appearing before =--ad-hoc= are interpreted as packages whose dependencies will be added to the environment. Packages appearing after are interpreted as packages that will be added to the environment directly. For example, the following command creates a Guix development environment that additionally includes Git and strace:
+
+#+begin_example
+guix environment --pure guix --ad-hoc git strace
+#+end_example
+
+Sometimes it is desirable to isolate the environment as much as possible, for maximal purity and reproducibility. In particular, when using Guix on a host distro that is not Guix System, it is desirable to prevent access to =/usr/bin= and other system-wide resources from the development environment. For example, the following command spawns a Guile REPL in a “container” where only the store and the current working directory are mounted:
+
+#+begin_example
+guix environment --ad-hoc --container guile -- guile
+#+end_example
+
+#+begin_quote
+*Note:* The =--container= option requires Linux-libre 3.19 or newer.
+
+#+end_quote
+
+Another typical use case for containers is to run security-sensitive applications such as a web browser. To run Eolie, we must expose and share some files and directories; we include =nss-certs= and expose =/etc/ssl/certs/= for HTTPS authentication; finally we preserve the =DISPLAY= environment variable since containerized graphical applications won't display without it.
+
+#+begin_example
+guix environment --preserve='^DISPLAY$' --container --network \
+  --expose=/etc/machine-id \
+  --expose=/etc/ssl/certs/ \
+  --share=$HOME/.local/share/eolie/=$HOME/.local/share/eolie/ \
+  --ad-hoc eolie nss-certs dbus --  eolie
+#+end_example
+
+The available options are summarized below.
+
+- =--check= :: Set up the environment and check whether the shell would clobber environment variables. See [[id:guix--Invoking-guix-shell][=--check=]], for more info.
+
+-  <<index-persistent-environment-1>>=--root===file= [[#index-persistent-environment-1][¶]]\\
+  =-r ==file= :: Make =file= a symlink to the profile for this environment, and register it as a garbage collector root.
+
+  This is useful if you want to protect your environment from garbage collection, to make it “persistent”.
+
+  When this option is omitted, the environment is protected from garbage collection only for the duration of the =guix environment= session. This means that next time you recreate the same environment, you could have to rebuild or re-download packages. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for more on GC roots.
+
+- =--expression===expr=\\
+  =-e ==expr= :: Create an environment for the package or list of packages that =expr= evaluates to.
+
+  For example, running:
+
+  #+begin_example
+  guix environment -e '(@ (gnu packages maths) petsc-openmpi)'
+#+end_example
+
+  starts a shell with the environment for this specific variant of the PETSc package.
+
+  Running:
+
+  #+begin_example
+  guix environment --ad-hoc -e '(@ (gnu) %base-packages)'
+#+end_example
+
+  starts a shell with all the base system packages available.
+
+  The above commands only use the default output of the given packages. To select other outputs, two element tuples can be specified:
+
+  #+begin_example
+  guix environment --ad-hoc -e '(list (@ (gnu packages bash) bash) "include")'
+#+end_example
+
+- =--load===file=\\
+  =-l ==file= :: Create an environment for the package or list of packages that the code within =file= evaluates to.
+
+  As an example, =file= might contain a definition like this (see [[id:guix--Defining-Packages][Defining Packages]]):
+
+  #+begin_src verbatim
+  (use-modules (guix)
+               (gnu packages gdb)
+               (gnu packages autotools)
+               (gnu packages texinfo))
+
+  ;; Augment the package definition of GDB with the build tools
+  ;; needed when developing GDB (and which are not needed when
+  ;; simply installing it.)
+  (package
+    (inherit gdb)
+    (native-inputs (modify-inputs (package-native-inputs gdb)
+                     (prepend autoconf-2.69 automake texinfo))))
+  #+end_src
+
+- =--manifest===file=\\
+  =-m ==file= :: Create an environment for the packages contained in the manifest object returned by the Scheme code in =file=. This option can be repeated several times, in which case the manifests are concatenated.
+
+  This is similar to the same-named option in =guix package= (see [[id:guix--Invoking-guix-package::#profile_002dmanifest][=--manifest=]]) and uses the same manifest files.
+
+  See [[id:guix--Invoking-guix-shell::#shell_002dexport_002dmanifest][=guix shell --export-manifest=]], for information on how to “convert” command-line options into a manifest.
+
+- =--ad-hoc= :: Include all specified packages in the resulting environment, as if an /ad hoc/ package were defined with them as inputs. This option is useful for quickly creating an environment without having to write a package expression to contain the desired inputs.
+
+  For instance, the command:
+
+  #+begin_example
+  guix environment --ad-hoc guile guile-sdl -- guile
+#+end_example
+
+  runs =guile= in an environment where Guile and Guile-SDL are available.
+
+  Note that this example implicitly asks for the default output of =guile= and =guile-sdl=, but it is possible to ask for a specific output---e.g., =glib:bin= asks for the =bin= output of =glib= (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]).
+
+  This option may be composed with the default behavior of =guix environment=. Packages appearing before =--ad-hoc= are interpreted as packages whose dependencies will be added to the environment, the default behavior. Packages appearing after are interpreted as packages that will be added to the environment directly.
+
+- =--profile===profile=\\
+  =-p ==profile= :: Create an environment containing the packages installed in =profile=. Use =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]) to create and manage profiles.
+
+- =--pure= :: Unset existing environment variables when building the new environment, except those specified with =--preserve= (see below). This has the effect of creating an environment in which search paths only contain package inputs.
+
+- =--preserve===regexp=\\
+  =-E ==regexp=\\
+  =-E ==var=====value= :: When used alongside =--pure=, preserve the environment variables matching =regexp=---in other words, put them on a “white list” of environment variables that must be preserved. This option can be repeated several times.
+
+  #+begin_example
+  guix environment --pure --preserve=^SLURM --ad-hoc openmpi ... \
+    -- mpirun ...
+#+end_example
+
+  This example runs =mpirun= in a context where the only environment variables defined are =PATH=, environment variables whose name starts with ‘=SLURM=', as well as the usual “precious” variables (=HOME=, =USER=, etc.).
+
+- =--search-paths= :: Display the environment variable definitions that make up the environment.
+
+- =--system===system=\\
+  =-s ==system= :: Attempt to build for =system=---e.g., =i686-linux=.
+
+- <<index-container-2>>=--container= [[#index-container-2][¶]]\\
+  =-C= :: Run =command= within an isolated container. The current working directory outside the container is mapped inside the container. Additionally, unless overridden with =--user=, a dummy home directory is created that matches the current user's home directory, and =/etc/passwd= is configured accordingly.
+
+  The spawned process runs as the current user outside the container. Inside the container, it has the same UID and GID as the current user, unless =--user= is passed (see below).
+
+- =--network=\\
+  =-N= :: For containers, share the network namespace with the host system. Containers created without this flag only have access to the loopback device.
+
+- =--link-profile=\\
+  =-P= :: For containers, link the environment profile to =~/.guix-profile= within the container and set =GUIX_ENVIRONMENT= to that. This is equivalent to making =~/.guix-profile= a symlink to the actual profile within the container. Linking will fail and abort the environment if the directory already exists, which will certainly be the case if =guix environment= was invoked in the user's home directory.
+
+  Certain packages are configured to look in =~/.guix-profile= for configuration files and data;[[#FOOT16][^{16}]] =--link-profile= allows these programs to behave as expected within the environment.
+
+- =--user===user=\\
+  =-u ==user= :: For containers, use the username =user= in place of the current user. The generated =/etc/passwd= entry within the container will contain the name =user=, the home directory will be =/home/==user=, and no user GECOS data will be copied. Furthermore, the UID and GID inside the container are 1000. =user= need not exist on the system.
+
+  Additionally, any shared or exposed path (see =--share= and =--expose= respectively) whose target is within the current user's home directory will be remapped relative to =/home/USER=; this includes the automatic mapping of the current working directory.
+
+  #+begin_example
+  # will expose paths as /home/foo/wd, /home/foo/test, and /home/foo/target
+  cd $HOME/wd
+  guix environment --container --user=foo \
+       --expose=$HOME/test \
+       --expose=/tmp/target=$HOME/target
+#+end_example
+
+  While this will limit the leaking of user identity through home paths and each of the user fields, this is only one useful component of a broader privacy/anonymity solution---not one in and of itself.
+
+- =--no-cwd= :: For containers, the default behavior is to share the current working directory with the isolated container and immediately change to that directory within the container. If this is undesirable, =--no-cwd= will cause the current working directory to /not/ be automatically shared and will change to the user's home directory within the container instead. See also =--user=.
+
+- =--cwd===directory= :: For containers, change to =directory= inside the container instead of the default location. The default location is the current working directory when =--no-cwd= is not used, or the user's home directory when =--no-cwd= is used. When =directory= is a relative file name, it is interpreted relative to the current working directory on the host. Note that =--cwd= does not automatically share =directory=---you must ensure it is accessible via the default current directory sharing or explicit =--share=/=--expose= options.
+
+- =--expose===source==[===target==]=\\
+  =--share===source==[===target==]= :: For containers, =--expose= (resp. =--share=) exposes the file system =source= from the host system as the read-only (resp. writable) file system =target= within the container. If =target= is not specified, =source= is used as the target mount point in the container.
+
+  The example below spawns a Guile REPL in a container in which the user's home directory is accessible read-only via the =/exchange= directory:
+
+  #+begin_example
+  guix environment --container --expose=$HOME=/exchange --ad-hoc guile -- guile
+#+end_example
+
+- =--emulate-fhs=\\
+  =-F= :: For containers, emulate a Filesystem Hierarchy Standard (FHS) configuration within the container, see [[https://refspecs.linuxfoundation.org/fhs.shtml][the official specification]]. As Guix deviates from the FHS specification, this option sets up the container to more closely mimic that of other GNU/Linux distributions. This is useful for reproducing other development environments, testing, and using programs which expect the FHS specification to be followed. With this option, the container will include a version of =glibc= which will read =/etc/ld.so.cache= within the container for the shared library cache (contrary to =glibc= in regular Guix usage) and set up the expected FHS directories: =/bin=, =/etc=, =/lib=, and =/usr= from the container's profile.
+
+=guix environment= also supports all of the common build options that =guix build= supports (see [[id:guix--Common-Build-Options][Common Build Options]]) as well as package transformation options (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]).
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF15][(15)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Users sometimes wrongfully augment environment variables such as =PATH= in their =~/.bashrc= file. As a consequence, when =guix environment= launches it, Bash may read =~/.bashrc=, thereby introducing “impurities” in these environment variables. It is an error to define such environment variables in =.bashrc=; instead, they should be defined in =.bash_profile=, which is sourced only by log-in shells. See [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual, for details on Bash start-up files.
+
+***** [[#DOCF16][(16)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+For example, the =fontconfig= package inspects =~/.guix-profile/share/fonts= for additional fonts.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Previous: [[id:guix--Invoking-guix-shell][Invoking =guix shell=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

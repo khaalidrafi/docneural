@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: emacs--Android-Software
+:END:
+#+filetags: :emacs:
+#+title: Android Software
+
+Next:   Previous: [[id:emacs--Android-Troubleshooting][Troubleshooting Startup Problems on Android]]   Up: [[id:emacs--Android][Emacs and Android]]
+
+<<Android-Software>>
+*** H.9 Installing Extra Software on Android [[#Installing-Extra-Software-on-Android][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Installing-Extra-Software-on-Android
+:CLASS: section
+:END:
+An exceptionally limited set of Unix-like command line tools is distributed alongside default installations of Android. Several projects exist to augment this selection, providing options that range from improved reproductions of Unix command-line utilities to package repositories providing extensive collections of free GNU and Unix software.
+
+[[https://busybox.net][Busybox]] provides Unix utilities and limited replicas of certain popular GNU programs such as =wget= in a single statically-linked Linux binary, which is capable of running under Android.
+
+[[https://termux.dev][Termux]] provides a package manager based on the Debian project's =dpkg= system and a set of package repositories containing substantial amounts of free software for Unix systems, including compilers, debuggers, and runtimes for languages such as C, C++, Java, Python and Common Lisp. These packages are customarily installed from within a purpose-built terminal emulator application, but access is also granted to Emacs when it is built with the same application signing key, and its “shared user ID” is set to the same package name, as that of the terminal emulator program. The file =java/INSTALL= within the Emacs distribution illustrates how to build Emacs in this fashion.
+
+[[https://github.com/termux/termux-packages][termux-packages]] provides the package definitions used by Termux to generate their package repositories, which may also be independently compiled for installation within Emacs's home directory.
+
+In addition to the projects mentioned above, statically linked binaries for most Linux kernel-based systems can also be run on Android.
+
+--------------

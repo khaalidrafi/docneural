@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID: org--Example-blocks-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Example blocks in LaTeX export (The Org Manual)
+
+Next:
+
+<<Example-blocks-in-LaTeX-export>>
+Next: [[id:org--Special-blocks-in-LaTeX-export][Special blocks in LaTeX export]], Previous: [[id:org--Source-blocks-in-LaTeX-export][Source blocks in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.9 Example blocks in LaTeX export [[#Example-blocks-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Example-blocks-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend wraps the contents of example blocks in a ‘=verbatim=' environment. To change this behavior to use another environment globally, specify an appropriate export filter (see [[id:org--Advanced-Export-Configuration][Advanced Export Configuration]]). To change this behavior to use another environment for each block, use the ‘=:environment=' parameter to specify a custom environment.
+
+#+begin_example
+#+ATTR_LATEX: :environment myverbatim
+#+BEGIN_EXAMPLE
+  This sentence is false.
+#+END_EXAMPLE
+#+end_example

@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: guix--Development
+:END:
+#+filetags: :guix:
+#+title: Development
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Development>>
+Next: [[id:guix--Programming-Interface][Programming Interface]], Previous: [[id:guix--Channels][Channels]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 7 Development [[#Development-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Development-1
+:CLASS: chapter
+:END:
+If you are a software developer, Guix provides tools that you should find helpful---independently of the language you're developing in. This is what this chapter is about.
+
+The =guix shell= command provides a convenient way to set up one-off software environments, be it for development purposes or to run a command without installing it in your profile. The =guix pack= command allows you to create /application bundles/ that can be easily distributed to users who do not run Guix.
+
+- [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]
+- [[id:guix--Invoking-guix-environment][Invoking =guix environment=]]
+- [[id:guix--Invoking-guix-pack][Invoking =guix pack=]]
+- [[id:guix--The-GCC-toolchain][The GCC toolchain]]
+- [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]]

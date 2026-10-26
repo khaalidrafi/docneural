@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: org--Attachment-links
+:END:
+#+filetags: :org:
+#+title: Attachment links (The Org Manual)
+
+Next:
+
+<<Attachment-links>>
+Next: [[id:org--Automatic-version_002dcontrol-with-Git][Automatic version-control with Git]], Previous: [[id:org--Attachment-options][Attachment options]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.2.3 Attachment links [[#Attachment-links-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Attachment-links-1
+:CLASS: subsection
+:END:
+Attached files and folders can be referenced using attachment links. This makes it easy to refer to the material added to heading/subtree. Especially if it was attached using the unique ‘=ID=' of the heading!
+
+#+begin_example
+* TODO Some task
+  :PROPERTIES:
+  :ID:       95d50008-c12e-479f-a4f2-cc0238205319
+  :END:
+See attached document for more information: [[attachment:info.org]]
+#+end_src
+
+See [[id:org--External-Links][External Links]] for more information about these links.

@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: org--Working-with-Source-Code
+:END:
+#+filetags: :org:
+#+title: Working with Source Code (The Org Manual)
+
+Next:
+
+<<Working-with-Source-Code>>
+Next: [[id:org--Miscellaneous][Miscellaneous]], Previous: [[id:org--Citation-handling][Citation handling]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 16 Working with Source Code [[#Working-with-Source-Code-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Working-with-Source-Code-1
+:CLASS: chapter
+:END:
+Source code here refers to any plain text collection of computer instructions, possibly with comments, written using a human-readable programming language. Org can manage source code in an Org document when the source code is identified with begin and end markers. Working with source code begins with identifying source code blocks. A source code block can be placed almost anywhere in an Org document; it is not restricted to the preamble or the end of the document. However, Org cannot manage a source code block if it is placed inside an Org comment or within a fixed width section.
+
+Here is an example source code block in the Emacs Lisp language:
+
+#+begin_example
+#+BEGIN_SRC emacs-lisp
+  (defun org-xor (a b)
+     "Exclusive or."
+     (if a (not b) b))
+#+END_SRC
+#+end_example
+
+Source code blocks are one of many Org block types, which also include “center”, “comment”, “dynamic”, “example”, “export”, “quote”, “special”, and “verse”. This section pertains to blocks between ‘=#+BEGIN_SRC=' and ‘=#+END_SRC='.
+
+Details of Org's facilities for working with source code are described in the following sections.
+
+- [[id:org--Features-Overview][Features Overview]]
+- [[id:org--Structure-of-Code-Blocks][Structure of Code Blocks]]
+- [[id:org--Using-Header-Arguments][Using Header Arguments]]
+- [[id:org--Environment-of-a-Code-Block][Environment of a Code Block]]
+- [[id:org--Evaluating-Code-Blocks][Evaluating Code Blocks]]
+- [[id:org--Results-of-Evaluation][Results of Evaluation]]
+- [[id:org--Exporting-Code-Blocks][Exporting Code Blocks]]
+- [[id:org--Extracting-Source-Code][Extracting Source Code]]
+- [[id:org--Languages][Languages]]
+- [[id:org--Editing-Source-Code][Editing Source Code]]
+- [[id:org--Noweb-Reference-Syntax][Noweb Reference Syntax]]
+- [[id:org--Library-of-Babel][Library of Babel]]
+- [[id:org--Key-bindings-and-Useful-Functions][Key bindings and Useful Functions]]
+- [[id:org--Batch-Execution][Batch Execution]]
+
+--------------
+
+Next: [[id:org--Miscellaneous][Miscellaneous]], Previous: [[id:org--Citation-handling][Citation handling]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

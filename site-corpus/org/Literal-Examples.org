@@ -1,0 +1,148 @@
+:PROPERTIES:
+:ID: org--Literal-Examples
+:END:
+#+filetags: :org:
+#+title: Literal Examples (The Org Manual)
+
+Next:
+
+<<Literal-Examples>>
+Next: [[id:org--Images-and-link-previews][Images and link previews]], Previous: [[id:org--Embedded-LaTeX][Embedded LaTeX]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.6 Literal Examples [[#Literal-Examples-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Literal-Examples-1
+:CLASS: section
+:END:
+You can include literal examples that should not be subjected to markup. Such examples are typeset in monospace, so this is well suited for source code and similar examples.
+
+#+begin_example
+#+BEGIN_EXAMPLE
+  Some example from a text file.
+#+END_EXAMPLE
+#+end_example
+
+There is one limitation, however. You must insert a comma right before lines starting with either ‘=*=', ‘=,*=', ‘=#+=' or ‘=,#+=', as those may be interpreted as outlines nodes or some other special syntax. Org transparently strips these additional commas whenever it accesses the contents of the block.
+
+#+begin_example
+#+BEGIN_EXAMPLE
+,* I am no real headline
+#+END_EXAMPLE
+#+end_example
+
+For simplicity when using small examples, you can also start the example lines with a colon followed by a space. There may also be additional whitespace before the colon:
+
+#+begin_example
+Here is an example
+   : Some example from a text file.
+#+end_example
+
+If the example is source code from a programming language, or any other text that can be marked up by Font Lock in Emacs, you can ask for the example to look like the fontified Emacs buffer[[#FOOT117][^{117}]]. This is done with the code block, where you also need to specify the name of the major mode that should be used to fontify the example[[#FOOT118][^{118}]], see [[id:org--Structure-Templates][Structure Templates]] for shortcuts to easily insert code blocks.
+
+#+begin_example
+#+BEGIN_SRC emacs-lisp
+  (defun org-xor (a b)
+    "Exclusive or."
+    (if a (not b) b))
+#+END_SRC
+#+end_example
+
+Both in ‘=example=' and in ‘=src=' snippets, you can add a ‘=-n=' switch to the ‘=#+BEGIN=' line[[#FOOT119][^{119}]], to get the lines of the example numbered. The ‘=-n=' takes an optional numeric argument specifying the starting line number of the block. If you use a ‘=+n=' switch, the numbering from the previous numbered snippet is continued in the current one. The ‘=+n=' switch can also take a numeric argument. This adds the value of the argument to the last line of the previous block to determine the starting line number.
+
+#+begin_example
+#+BEGIN_SRC emacs-lisp -n 20
+  ;; This exports with line number 20.
+  (message "This is line 21")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp +n 10
+  ;; This is listed as line 31.
+  (message "This is line 32")
+#+END_SRC
+#+end_example
+
+In literal examples, Org interprets strings like ‘=(ref:name)=' as labels, and use them as targets for special hyperlinks like ‘=[[(name)]]='---i.e., the reference name enclosed in single parentheses. In HTML, hovering the mouse over such a link remote-highlights the corresponding code line[[#FOOT120][^{120}]], which is kind of cool.
+
+You can also add a ‘=-r=' switch which /removes/ the labels from the source code[[#FOOT121][^{121}]]. With the ‘=-n=' switch, links to these references are labeled by the line numbers from the code listing. Otherwise, links use the labels with no parentheses. Here is an example:
+
+#+begin_example
+#+BEGIN_SRC emacs-lisp -n -r
+  (save-excursion                 (ref:sc)
+     (goto-char (point-min))      (ref:jump)
+#+END_SRC
+In line [[(sc)]] we remember the current position. [[(jump)][Line (jump)]]
+jumps to point-min.
+#+end_example
+
+Source code and examples may be /indented/ in order to align nicely with the surrounding text, and in particular with plain list structure (see [[id:org--Plain-Lists][Plain Lists]]). By default, Org only retains the relative indentation between lines, e.g., when exporting the contents of the block. However, you can use the ‘=-i=' switch to also preserve the global indentation, if it does matter. See [[id:org--Editing-Source-Code][Editing Source Code]].
+
+If the syntax for the label format conflicts with the language syntax, use a ‘=-l=' switch to change the format, for example
+
+#+begin_example
+#+BEGIN_SRC pascal -n -r -l "((%s))"
+#+end_src
+
+See also the variable =org-coderef-label-format=.
+
+HTML export also allows examples to be published as text areas (see [[id:org--Text-areas-in-HTML-export][Text areas in HTML export]]).
+
+Because the ‘=#+BEGIN=' ... ‘=#+END=' patterns need to be added so often, a shortcut is provided (see [[id:org--Structure-Templates][Structure Templates]]).
+
+-  <<index-C_002dc-_0027-1>>C-c ' (=org-edit-special=) [[#index-C_002dc-_0027-1][¶]] :: Edit the source code example at point in its native mode. This works by switching to a temporary buffer with the source code. You need to exit by pressing C-c ' again. The edited version then replaces the old version in the Org buffer. Fixed-width regions---where each line starts with a colon followed by a space---are edited using Artist mode[[#FOOT122][^{122}]] to allow creating ASCII drawings easily. Using this command in an empty line creates a new fixed-width region.
+
+Calling =org-store-link= (see [[id:org--Handling-Links][Handling Links]]) while editing a source code example in a temporary buffer created with C-c ' prompts for a label. Make sure that it is unique in the current buffer, and insert it with the proper formatting like ‘=(ref:label)=' at the end of the current line. Then the label is stored as a link ‘=(label)=', for retrieval with C-c C-l.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF117][(117)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+This works automatically for the HTML backend (it requires version 1.34 of the ‘=htmlize.el=' package, which you need to install). Fontified code chunks in LaTeX can be achieved using either the [[https://www.ctan.org/pkg/listings][listings]] LaTeX package, [[https://www.ctan.org/pkg/minted][minted]] LaTeX package, or by using [[https://elpa.gnu.org/packages/engrave-faces.html][engrave-faces]]. Refer to =org-latex-src-block-backend= for details.
+
+***** [[#DOCF118][(118)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Source code in code blocks may also be evaluated either interactively or on export. See [[id:org--Working-with-Source-Code][Working with Source Code]] for more information on evaluating code blocks.
+
+***** [[#DOCF119][(119)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+In the ‘=src=' snippets, switches must be placed right after the language name and before the [[id:org--Structure-of-Code-Blocks][header arguments]]
+
+***** [[#DOCF120][(120)]]
+:PROPERTIES:
+:CUSTOM_ID: section-3
+:CLASS: footnote-body-heading
+:END:
+This requires some JavaScript which is /not/ automatically included in the HTML output: you have to customize the variable ‘=org-html-head-include-scripts=' to =t= to have it included (it is =nil= by default).
+
+***** [[#DOCF121][(121)]]
+:PROPERTIES:
+:CUSTOM_ID: section-4
+:CLASS: footnote-body-heading
+:END:
+Adding ‘=-k=' to ‘=-n -r=' /keeps/ the labels in the source code while using line numbers for the links, which might be useful to explain those in an Org mode example code.
+
+***** [[#DOCF122][(122)]]
+:PROPERTIES:
+:CUSTOM_ID: section-5
+:CLASS: footnote-body-heading
+:END:
+You may select a different mode with the variable =org-edit-fixed-width-region-mode=.
+
+--------------
+
+Next: [[id:org--Images-and-link-previews][Images and link previews]], Previous: [[id:org--Embedded-LaTeX][Embedded LaTeX]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

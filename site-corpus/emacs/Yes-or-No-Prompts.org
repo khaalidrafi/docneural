@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: emacs--Yes-or-No-Prompts
+:END:
+#+filetags: :emacs:
+#+title: Yes or No Prompts
+
+Next:   Previous: [[id:emacs--Passwords][Entering passwords]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
+
+<<Yes-or-No-Prompts>>
+*** 10.8 Yes or No Prompts [[#Yes-or-No-Prompts-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Yes-or-No-Prompts-1
+:CLASS: section
+:END:
+An Emacs command may require you to answer a yes-or-no question during the course of its execution. Such queries come in two main varieties.
+
+For the first type of yes-or-no query, the prompt ends with ‘=(y or n)='. You answer the query by typing a single key, either ‘=y=' or ‘=n=', which immediately exits the minibuffer and delivers the response. For example, if you type C-x C-w (write-file) to save a buffer, and enter the name of an existing file, Emacs issues a prompt like this:
+
+#+begin_example
+File ‘foo.el’ exists; overwrite? (y or n)
+#+end_example
+
+The second type of yes-or-no query is typically employed if giving the wrong answer would have serious consequences; it thus features a longer prompt ending with ‘=(yes or no)=' (or the value of =yes-or-no-prompt= if you've customized that). For example, if you invoke C-x k (=kill-buffer=) on a file-visiting buffer with unsaved changes, Emacs activates the minibuffer with a prompt like this:
+
+#+begin_example
+Buffer foo.el modified; kill anyway? (yes or no)
+#+end_example
+
+To answer, you must type ‘=yes=' or ‘=no=' into the minibuffer, followed by RET.
+
+With both types of yes-or-no query the minibuffer behaves as described in the previous sections; you can recenter the selected window with C-l, scroll that window (C-v or PageDown scrolls forward, M-v or PageUp scrolls backward), switch to another window with C-x o, use the history commands M-p and M-n, etc. Type C-g to dismiss the query, and quit the minibuffer and the querying command (see [[id:emacs--Quitting][Quitting and Aborting]]).
+
+--------------

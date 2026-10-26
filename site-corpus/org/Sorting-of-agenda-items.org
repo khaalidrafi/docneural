@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: org--Sorting-of-agenda-items
+:END:
+#+filetags: :org:
+#+title: Sorting of agenda items (The Org Manual)
+
+Next:
+
+<<Sorting-of-agenda-items>>
+Next: [[id:org--Filtering_002flimiting-agenda-items][Filtering/limiting agenda items]], Previous: [[id:org--Time_002dof_002dday-specifications][Time-of-day specifications]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 11.4.3 Sorting of agenda items [[#Sorting-of-agenda-items-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sorting-of-agenda-items-1
+:CLASS: subsection
+:END:
+Before being inserted into a view, the items are sorted. How this is done depends on the type of view.
+
+-  For the daily/weekly agenda, the items for each day are sorted. The default order is to first collect all items containing an explicit time-of-day specification. These entries are shown at the beginning of the list, as a /schedule/ for the day. After that, items remain grouped in categories, in the sequence given by =org-agenda-files=. Within each category, items are sorted by urgency, which is derived from the priority (see [[id:org--Priorities][Priorities]]), plus additional increments for overdue scheduled or deadline items. The lowest priority is scored as 0, the next as 1000, and continues in steps of 1000 until reaching the highest priority, e.g., ‘=C=', ‘=B=', ‘=A=' are scored as 0, 1000, and 2000, respectively.
+- For the TODO list, items remain in the order of categories, but within each category, sorting takes place according to urgency. The urgency used for sorting derives from the priority cookie, with additions depending on how close an item is to its due or scheduled date.
+- For tags matches, items are not sorted at all, but just appear in the sequence in which they are found in the agenda files.
+
+Sorting can be customized using the variable =org-agenda-sorting-strategy=, and may also include criteria based on the estimated effort of an entry (see [[id:org--Effort-Estimates][Effort Estimates]]).
+
+--------------
+
+Next: [[id:org--Filtering_002flimiting-agenda-items][Filtering/limiting agenda items]], Previous: [[id:org--Time_002dof_002dday-specifications][Time-of-day specifications]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

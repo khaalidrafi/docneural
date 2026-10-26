@@ -1,0 +1,80 @@
+:PROPERTIES:
+:ID: guix--DAV-Services
+:END:
+#+filetags: :guix:
+#+title: DAV Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<DAV-Services>>
+Next: [[id:guix--Network-File-System][Network File System]], Previous: [[id:guix--VPN-Services][VPN Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.27 DAV Services [[#DAV-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: DAV-Services-1
+:CLASS: subsection
+:END:
+- Variable: *xandikos-service-type* [[#index-xandikos_002dservice_002dtype][¶]] :: This service starts =xandikos=, a lightweight CardDAV/CalDAV server backed by a Git repository.
+
+  The service's value is a =xandikos-configuration= record.
+
+- Data Type: *xandikos-configuration* [[#index-xandikos_002dconfiguration][¶]] :: This is the data type representing the configuration for the =xandikos-shepherd-service=.
+
+  It has the following parameters:
+
+  - =package= (default: =xandikos=) :: The =xandikos= package to use.
+
+  - =directory= (default: ="/var/xandikos/dav"=) :: The directory to serve from.
+
+  - =listen-address= (default: =127.0.0.1=) :: The address =xandikos= listens on.
+
+  - =port= (default: =8080=) :: The port to run =xandikos= on.
+
+  - =current-user-principal= (default: ="/user/"=) :: Path to current user principal.
+
+  - =route-prefix= (default: ="/"=) :: Path to =xandikos= (useful when Xandikos is behind a reverse proxy).
+
+  - =defaults?= (default: =#t=) :: Create initial calendar and address book. Implies =--autocreate=.
+
+  - =dump?= (default: =#f=) :: Print DAV XML request/responses.
+
+  - =avahi?= (default: =#f=) :: Announce services with avahi.
+
+  - =autocreate?= (default: =#f=) :: Automatically create necessary directories.
+
+  - =no-strict?= (default: =#f=) :: Enable workarounds for buggy CalDAV/CardDAV client implementations.
+
+--------------
+
+Next: [[id:guix--Network-File-System][Network File System]], Previous: [[id:guix--VPN-Services][VPN Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

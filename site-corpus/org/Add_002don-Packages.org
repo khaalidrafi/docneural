@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: org--Add_002don-Packages
+:END:
+#+filetags: :org:
+#+title: Add-on Packages (The Org Manual)
+
+Next:
+
+<<Add_002don-Packages>>
+Next: [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]], Previous: [[id:org--Hooks][Hooks]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** A.2 Add-on Packages [[#Add_002don-Packages-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Add_002don-Packages-1
+:CLASS: appendixsec
+:END:
+Various authors wrote many add-on packages for Org. Some of these packages used to be part of the ‘=org-mode=' repository but are now hosted in a separate ‘=org-contrib=' repository [[https://git.sr.ht/~bzg/org-contrib][here]]. A Worg page with more information is at: [[https://orgmode.org/worg/org-contrib/]].

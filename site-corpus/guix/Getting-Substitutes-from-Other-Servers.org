@@ -1,0 +1,121 @@
+:PROPERTIES:
+:ID: guix--Getting-Substitutes-from-Other-Servers
+:END:
+#+filetags: :guix:
+#+title: Getting Substitutes from Other Servers
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Getting-Substitutes-from-Other-Servers>>
+Next: [[id:guix--Substitute-Authentication][Substitute Authentication]], Previous: [[id:guix--Substitute-Server-Authorization][Substitute Server Authorization]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 5.3.4 Getting Substitutes from Other Servers [[#Getting-Substitutes-from-Other-Servers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Getting-Substitutes-from-Other-Servers-1
+:CLASS: subsection
+:END:
+Guix can look up and fetch substitutes from several servers. This is useful when you are using packages from additional channels for which the official server does not have substitutes but another server provides them. Another situation where this is useful is when you would prefer to download from your organization's substitute server, resorting to the official server only as a fallback or dismissing it altogether.
+
+You can give Guix a list of substitute server URLs and it will check them in the specified order. You also need to explicitly authorize the public keys of substitute servers to instruct Guix to accept the substitutes they sign.
+
+On Guix System, this is achieved by modifying the configuration of the =guix= service. Since the =guix= service is part of the default lists of services, =%base-services= and =%desktop-services=, you can use =modify-services= to change its configuration and add the URLs and substitute keys that you want (see [[id:guix--Service-Reference][=modify-services=]]).
+
+As an example, suppose you want to fetch substitutes from =guix.example.org= and to authorize the signing key of that server, in addition to the default =bordeaux.guix.gnu.org= and =ci.guix.gnu.org=. The resulting operating system configuration will look something like:
+
+#+begin_src lisp
+(operating-system
+  ;; ...
+  (services
+    ;; Assume we're starting from '%desktop-services'.  Replace it
+    ;; with the list of services you're actually using.
+    (modify-services %desktop-services
+      (guix-service-type config =>
+                        (guix-configuration
+                          (inherit config)
+                          (substitute-urls
+                            (append (list "https://guix.example.org")
+                                    %default-substitute-urls))
+                          (authorized-keys
+                            (append (list (local-file "./key.pub"))
+                                    %default-authorized-guix-keys)))))))
+#+end_src
+
+This assumes that the file =key.pub= contains the signing key of =guix.example.org=. With this change in place in your operating system configuration file (say =/etc/config.scm=), you can reconfigure and restart the =guix-daemon= service or reboot so the changes take effect:
+
+#+begin_example
+$ sudo guix system reconfigure /etc/config.scm
+$ sudo herd restart guix-daemon
+#+end_example
+
+If you're running Guix on a “foreign distro”, you would instead take the following steps to get substitutes from additional servers:
+
+1. Edit the service configuration file for =guix-daemon=; when using systemd, this is normally =/etc/systemd/system/guix-daemon.service=. Add the =--substitute-urls= option on the =guix-daemon= command line and list the URLs of interest (see [[id:guix--Invoking-guix_002ddaemon::#daemon_002dsubstitute_002durls][=guix-daemon --substitute-urls=]]):
+
+   #+begin_example
+   ... --substitute-urls='https://guix.example.org https://bordeaux.guix.gnu.org https://ci.guix.gnu.org'
+#+end_example
+
+2. Restart the daemon. For systemd, it goes like this:
+
+   #+begin_example
+   systemctl daemon-reload
+   systemctl restart guix-daemon.service
+#+end_example
+
+3. Authorize the key of the new server (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]):
+
+   #+begin_example
+   guix archive --authorize < key.pub
+#+end_example
+
+   Again this assumes =key.pub= contains the public key that =guix.example.org= uses to sign substitutes.
+
+Now you're all set! Substitutes will be preferably taken from =https://guix.example.org=, using =bordeaux.guix.gnu.org= then =ci.guix.gnu.org= as fallback options. Of course you can list as many substitute servers as you like, with the caveat that substitute lookup can be slowed down if too many servers need to be contacted.
+
+#+begin_quote
+*Troubleshooting:* To diagnose problems, you can run =guix weather=. For example, running:
+
+#+begin_example
+guix weather coreutils
+#+end_example
+
+not only tells you which of the currently-configured servers has substitutes for the =coreutils= package, it also reports whether one of these servers is unauthorized. See [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], for more information.
+
+#+end_quote
+
+Note that there are also situations where one may want to add the URL of a substitute server /without/ authorizing its key. See [[id:guix--Substitute-Authentication][Substitute Authentication]], to understand this fine point.
+
+--------------
+
+Next: [[id:guix--Substitute-Authentication][Substitute Authentication]], Previous: [[id:guix--Substitute-Server-Authorization][Substitute Server Authorization]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

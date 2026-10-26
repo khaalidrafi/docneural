@@ -1,0 +1,90 @@
+:PROPERTIES:
+:ID: org--Tables-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Tables in LaTeX export (The Org Manual)
+
+Next:
+
+<<Tables-in-LaTeX-export>>
+Next: [[id:org--Images-in-LaTeX-export][Images in LaTeX export]], Previous: [[id:org--Quoting-LaTeX-code][Quoting LaTeX code]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.5 Tables in LaTeX export [[#Tables-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tables-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend can pass several LaTeX attributes for table contents and layout. Besides specifying a label (see [[id:org--Internal-Links][Internal Links]]) and a caption (see [[id:org--Captions][Captions]]), the other valid LaTeX attributes include:
+
+- <<index-org_002dlatex_002ddefault_002dtable_002dmode>>‘=:mode=' [[#index-org_002dlatex_002ddefault_002dtable_002dmode][¶]] :: The LaTeX export backend wraps the table differently depending on the mode for accurate rendering of math symbols. Mode is either ‘=table=', ‘=math=', ‘=inline-math=', ‘=verbatim=' or ‘=tabbing='.
+
+  For ‘=math=' or ‘=inline-math=' mode, LaTeX export backend wraps the table in a math environment, but every cell in it is exported as-is. For ‘=tabbing=' the LaTeX tabbing environment is used and the correct tabbing delimiters ‘=\>=' are used. The LaTeX export backend determines the default mode from =org-latex-default-table-mode=. The LaTeX export backend merges contiguous tables in the same mode into a single environment.
+
+- <<index-org_002dlatex_002ddefault_002dtable_002denvironment>>‘=:environment=' [[#index-org_002dlatex_002ddefault_002dtable_002denvironment][¶]] :: Set the default LaTeX table environment for the LaTeX export backend to use when exporting Org tables. Common LaTeX table environments are provided by these packages: tabularx, longtable, array, tabu, and bmatrix. For packages, such as tabularx and tabu, or any newer replacements, include them in the =org-latex-packages-alist= variable so the LaTeX export backend can insert the appropriate load package headers in the converted LaTeX file. Look in the docstring for the =org-latex-packages-alist= variable for configuring these packages for LaTeX snippet previews, if any.
+
+- ‘=:caption=' :: Use ‘=CAPTION=' keyword to set a simple caption for a table (see [[id:org--Captions][Captions]]). For custom captions, use ‘=:caption=' attribute, which accepts raw LaTeX code. ‘=:caption=' value overrides ‘=CAPTION=' value.
+
+- ‘=:float=', ‘=:placement=' :: The table environments by default are not floats in LaTeX. To make them floating objects use ‘=:float=' with one of the following options: ‘=t=' (for a default ‘=table=' environment), ‘=sideways=' (for a ‘=sidewaystable=' environment), ‘=multicolumn=' (to span the table across multiple columns of a page in a ‘=table*=' environment) and ‘=nil='. In addition to these three values, ‘=:float=' can pass through any arbitrary value, for example a user-defined float type with the ‘=float=' LaTeX package.
+
+  LaTeX floats can also have additional layout ‘=:placement=' attributes. These are the usual ‘=[h t b p ! H]=' permissions specified in square brackets. Note that for ‘=:float sideways=' tables, the LaTeX export backend ignores ‘=:placement=' attributes.
+
+- ‘=:align=', ‘=:font=', ‘=:width=' :: The LaTeX export backend uses these attributes for regular tables to set their alignments, fonts, and widths.
+
+- ‘=:options=' :: The ‘=:options=' attribute allows adding an optional argument with a list of various table options (between brackets in LaTeX export), since certain tabular environments, such as longtblr of the tabularray LaTeX package, provides this structure. For example: ‘=:options remark{Note}={note},remark{Source}={source}='.
+
+- ‘=:spread=' :: When ‘=:spread=' is non-=nil=, the LaTeX export backend spreads or shrinks the table by the ‘=:width=' for tabu and longtabu environments. ‘=:spread=' has no effect if ‘=:width=' is not set.
+
+-  <<index-org_002dlatex_002dtables_002dbooktabs>>‘=:booktabs=', ‘=:center=', ‘=:rmlines=' [[#index-org_002dlatex_002dtables_002dbooktabs][¶]] :: All three commands are toggles. ‘=:booktabs=' brings in modern typesetting enhancements to regular tables. The ‘=booktabs=' package needs to be loaded through =org-latex-packages-alist=, unless it is already included by your document class[[#FOOT143][^{143}]]. ‘=:center=' is for centering the table. ‘=:rmlines=' removes all but the very first horizontal line made of ASCII characters from “table.el” tables only.
+
+- ‘=:math-prefix=', ‘=:math-suffix=', ‘=:math-arguments=' :: The LaTeX export backend inserts ‘=:math-prefix=' string value in a math environment before the table. The LaTeX export backend inserts ‘=:math-suffix=' string value in a math environment after the table. The LaTeX export backend inserts ‘=:math-arguments=' string value between the macro name and the table's contents. ‘=:math-arguments=' comes in use for matrix macros that require more than one argument, such as ‘=qbordermatrix='.
+
+LaTeX table attributes help to format tables for a wide range of situations, such as matrix product or spanning multiple pages:
+
+#+begin_example
+#+ATTR_LATEX: :environment longtable :align l|lp{3cm}r|l
+| ... | ... |
+| ... | ... |
+
+#+ATTR_LATEX: :mode math :environment bmatrix :math-suffix \times
+| a | b |
+| c | d |
+#+ATTR_LATEX: :mode math :environment bmatrix
+| 1 | 2 |
+| 3 | 4 |
+#+end_example
+
+Set the caption with the LaTeX command ‘=\bicaption{HeadingA}{HeadingB}=':
+
+#+begin_example
+#+ATTR_LATEX: :caption \bicaption{HeadingA}{HeadingB}
+| ... | ... |
+| ... | ... |
+#+end_example
+
+If your table has numbers in scientific notation, you can control how they are shown with the variable =org-latex-table-scientific-notation=. For example:
+
+#+begin_src lisp-preformatted
+(setq org-latex-table-scientific-notation "\\num{%se%s}")
+#+end_src
+
+will print your numbers as /m x 10^{exp}/ instead of using the engineering format ‘=m.mmmEnn='. The first string placeholder(‘=%s=') in =org-latex-table-scientific-notation= will be replaced by the mantissa and the second by the exponent. *Note* that to use the example above, you will need to add the =siunitx= package to your =org-latex-packages-alist=.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF143][(143)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+For example, [[https://authors.acm.org/proceedings/production-information/preparing-your-article-with-latex][the ACM article template]].
+
+--------------
+
+Next: [[id:org--Images-in-LaTeX-export][Images in LaTeX export]], Previous: [[id:org--Quoting-LaTeX-code][Quoting LaTeX code]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

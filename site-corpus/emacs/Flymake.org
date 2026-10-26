@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Flymake
+:END:
+#+filetags: :emacs:
+#+title: Flymake
+
+Next: [[id:emacs--Debuggers#Debuggers][Running Debuggers Under Emacs]]   Previous: [[id:emacs--Grep-Searching][Searching with Grep under Emacs]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
+
+<<Flymake>>
+*** 29.5 Finding Syntax Errors On The Fly [[#Finding-Syntax-Errors-On-The-Fly][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Finding-Syntax-Errors-On-The-Fly
+:CLASS: section
+:END:
+Flymake mode is a minor mode that performs on-the-fly syntax checking for many programming and markup languages, including C, C++, Perl, HTML, and TeX/LaTeX. It is somewhat analogous to Flyspell mode, which performs spell checking for ordinary human languages in a similar fashion (see [[id:emacs--Spelling][Checking and Correcting Spelling]]). As you edit a file, Flymake mode runs an appropriate syntax checking tool in the background, using a temporary copy of the buffer. It then parses the error and warning messages, and highlights the erroneous lines in the buffer. The syntax checking tool used depends on the language; for example, for C/C++ files this is usually the C compiler. Flymake can also use build tools such as =make= for checking complicated projects.
+
+To enable Flymake mode, type M-x flymake-mode. You can jump to the errors that it finds by using M-x flymake-goto-next-error and M-x flymake-goto-prev-error. To display a detailed overview of the diagnostics for the current buffer, use the command M-x flymake-show-buffer-diagnostics; to display a similar overview of diagnostics for the entire project (see [[id:emacs--Projects::#Projects][Working with Projects]]), use M-x flymake-show-project-diagnostics.
+
+For more details about using Flymake, see [[../flymake_html/index.html#Top][Flymake]] in The Flymake Manual.
+
+--------------

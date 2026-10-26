@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Search
+:END:
+#+filetags: :emacs:
+#+title: Search
+
+Next: [[id:emacs--Fixit][Commands for Fixing Typos]]   Previous: [[id:emacs--Display][Controlling the Display]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Search>>
+** 17 Searching and Replacement [[#Searching-and-Replacement][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Searching-and-Replacement
+:CLASS: chapter
+:END:
+Like other editors, Emacs has commands to search for occurrences of a string. Emacs also has commands to replace occurrences of a string with a different string. There are also commands that do the same thing, but search for patterns instead of fixed strings.
+
+You can also search multiple files under the control of =xref= (see [[id:emacs--Xref::#Identifier-Search][Searching and Replacing with Identifiers]]) or through the Dired A command (see [[id:emacs--Operating-on-Files][Operating on Files]]), or ask the =grep= program to do it (see [[id:emacs--Grep-Searching][Searching with Grep under Emacs]]).
+
+--------------

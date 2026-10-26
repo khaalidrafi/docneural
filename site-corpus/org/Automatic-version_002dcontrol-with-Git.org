@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Automatic-version_002dcontrol-with-Git
+:END:
+#+filetags: :org:
+#+title: Automatic version-control with Git (The Org Manual)
+
+Next:
+
+<<Automatic-version_002dcontrol-with-Git>>
+Next: [[id:org--Attach-from-Dired][Attach from Dired]], Previous: [[id:org--Attachment-links][Attachment links]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.2.4 Automatic version-control with Git [[#Automatic-version_002dcontrol-with-Git-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Automatic-version_002dcontrol-with-Git-1
+:CLASS: subsection
+:END:
+If the directory attached to a heading is a Git repository, Org can be configured to automatically commit changes to that repository when it sees them.
+
+To make Org mode take care of versioning of attachments for you, add the following to your Emacs config:
+
+#+begin_src lisp-preformatted
+(require 'org-attach-git)
+#+end_src

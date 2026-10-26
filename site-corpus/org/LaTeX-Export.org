@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID: org--LaTeX-Export
+:END:
+#+filetags: :org:
+#+title: LaTeX Export (The Org Manual)
+
+Next:
+
+<<LaTeX-Export>>
+Next: [[id:org--Markdown-Export][Markdown Export]], Previous: [[id:org--HTML-Export][HTML Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.10 LaTeX Export [[#LaTeX-Export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: LaTeX-Export-1
+:CLASS: section
+:END:
+The LaTeX export backend can handle complex documents, incorporate standard or custom LaTeX document classes, generate documents using alternate LaTeX engines, and produce fully linked PDF files with indexes, bibliographies, and tables of contents, destined for interactive online viewing or high-quality print publication.
+
+While the details are covered in-depth in this section, here are some quick references to variables for the impatient: for engines, see =org-latex-compiler=; for build sequences, see =org-latex-pdf-process=; for packages, see =org-latex-default-packages-alist= and =org-latex-packages-alist=.
+
+An important note about the LaTeX export backend: it is sensitive to blank lines in the Org document. That's because LaTeX itself depends on blank lines to tell apart syntactical elements, such as paragraphs.
+
+The following sections expect users to be familiar with common LaTeX terminology. You may refer to [[https://tug.org/begin.html]] to get familiar with LaTeX basics. Users with LaTeX installed may also run ‘=texdoc latex=' from terminal to open LaTeX introduction [[#FOOT141][^{141}]]
+
+- [[id:org--LaTeX_002fPDF-export-commands][LaTeX/PDF export commands]]
+- [[id:org--LaTeX-specific-export-settings][LaTeX specific export settings]]
+- [[id:org--LaTeX-header-and-sectioning][LaTeX header and sectioning structure]]
+- [[id:org--Quoting-LaTeX-code][Quoting LaTeX code]]
+- [[id:org--Tables-in-LaTeX-export][Tables in LaTeX export]]
+- [[id:org--Images-in-LaTeX-export][Images in LaTeX export]]
+- [[id:org--Plain-lists-in-LaTeX-export][Plain lists in LaTeX export]]
+- [[id:org--Source-blocks-in-LaTeX-export][Source blocks in LaTeX export]]
+- [[id:org--Example-blocks-in-LaTeX-export][Example blocks in LaTeX export]]
+- [[id:org--Special-blocks-in-LaTeX-export][Special blocks in LaTeX export]]
+- [[id:org--Horizontal-rules-in-LaTeX-export][Horizontal rules in LaTeX export]]
+- [[id:org--Verse-blocks-in-LaTeX-export][Verse blocks in LaTeX export]]
+- [[id:org--Quote-blocks-in-LaTeX-export][Quote blocks in LaTeX export]]
+- [[id:org--Controlling-the-way-the-table-of-contents-is-generated][Controlling the way the table of contents is generated]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF141][(141)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The command will open a PDF file, which is also available for download from [[https://mirrors.ctan.org/info/latex-doc-ptr/latex-doc-ptr.pdf]]
+
+--------------
+
+Next: [[id:org--Markdown-Export][Markdown Export]], Previous: [[id:org--HTML-Export][HTML Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

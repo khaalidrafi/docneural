@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID: guix--Guix-Home-Services
+:END:
+#+filetags: :guix:
+#+title: Guix Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Guix-Home-Services>>
+Next: [[id:guix--Backup-Home-Services][Backup Services]], Previous: [[id:guix--XDG-Home-Services][XDG Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.10 Guix Home Services [[#Guix-Home-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Guix-Home-Services-1
+:CLASS: subsection
+:END:
+The =(gnu home services guix)= module provides services for user-specific Guix configuration.
+
+- Variable: *home-channels-service-type* [[#index-home_002dchannels_002dservice_002dtype][¶]] :: This is the service type for managing =$XDG_CONFIG_HOME/guix/channels.scm=, the file that controls the channels received on =guix pull= (see [[id:guix--Channels][Channels]]). Its associated value is a list of =channel= records, defined in the =(guix channels)= module.
+
+  Generally, it is better to extend this service than to directly configure it, as its default value is the default guix channel(s) defined by =%default-channels=. If you configure this service directly, be sure to include a guix channel. See [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]] and [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]] for more details.
+
+  A typical extension for adding a channel might look like this:
+
+  #+begin_src lisp
+  (simple-service 'variant-packages-service
+                  home-channels-service-type
+                  (list
+                   (channel
+                    (name 'variant-packages)
+                    (url "https://example.org/variant-packages.git"))))
+  #+end_src
+
+--------------
+
+Next: [[id:guix--Backup-Home-Services][Backup Services]], Previous: [[id:guix--XDG-Home-Services][XDG Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

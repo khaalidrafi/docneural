@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: emacs--Basic-Files
+:END:
+#+filetags: :emacs:
+#+title: Basic Files
+
+Next: [[id:emacs--Basic-Help][Help]]   Previous: [[id:emacs--Basic-Undo][Undoing Changes]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
+
+<<Basic-Files>>
+*** 9.5 Files [[#Files-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Files-1
+:CLASS: section
+:END:
+Text that you insert in an Emacs buffer lasts only as long as the Emacs session. To keep any text permanently, you must put it in a /file/.
+
+Suppose there is a file named =test.emacs= in your home directory. To begin editing this file in Emacs, type
+
+#+begin_example
+C-x C-f test.emacs RET
+#+end_example
+
+Here the file name is given as an /argument/ to the command C-x C-f (=find-file=). That command uses the /minibuffer/ to read the argument, and you type RET to terminate the argument (see [[id:emacs--Minibuffer][The Minibuffer]]).
+
+Emacs obeys this command by /visiting/ the file: it creates a buffer, copies the contents of the file into the buffer, and then displays the buffer for editing. If you alter the text, you can /save/ the new text in the file by typing C-x C-s (=save-buffer=). This copies the altered buffer contents back into the file =test.emacs=, making them permanent. Until you save, the changed text exists only inside Emacs, and the file =test.emacs= is unaltered.
+
+To create a file, just visit it with C-x C-f as if it already existed. This creates an empty buffer, in which you can insert the text you want to put in the file. Emacs actually creates the file the first time you save this buffer with C-x C-s.
+
+To learn more about using files in Emacs, see [[id:emacs--Files][File Handling]].
+
+--------------

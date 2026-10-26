@@ -1,0 +1,105 @@
+:PROPERTIES:
+:ID: guix--Backup-Home-Services
+:END:
+#+filetags: :guix:
+#+title: Backup Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Backup-Home-Services>>
+Next: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Previous: [[id:guix--Guix-Home-Services][Guix Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.11 Backup Services [[#Backup-Services][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Backup-Services
+:CLASS: subsection
+:END:
+The =(gnu home services backup)= module offers services for backing up file system trees. For now, it provides the =home-restic-backup-service-type=.
+
+With =home-restic-backup-service-type=, you can periodically back up directories and files with [[https://restic.net/][Restic]], which supports end-to-end encryption and deduplication. Consider the following configuration:
+
+#+begin_src lisp
+(use-modules (gnu home services backup) ;for 'restic-backup-job', 'home-restic-backup-service-type'
+             (gnu packages sync)        ;for 'rclone'
+             ...)
+
+(home-environment
+
+  (packages (list rclone    ;for use by restic
+                  ...))
+  (services
+    (list
+      ...
+      (simple-service 'backup-jobs
+                      home-restic-backup-service-type
+                      (list (restic-backup-job
+                              (name "remote-ftp")
+                              (repository "rclone:remote-ftp:backup/restic")
+                              (password-file "/home/alice/.restic")
+                              ;; Every day at 23.
+                              (schedule "0 23 * * *")
+                              (files '("/home/alice/.restic"
+                                       "/home/alice/.config/rclone"
+                                       "/home/alice/Pictures"))))))))
+#+end_src
+
+In general it is preferable to extend the =home-restic-backup-service-type=, as shown in the example above. This is because it takes care of wrapping everything with =for-home=, which enables the =home-restic-backup-service-type= and =restic-backup-service-type= to share the same codebase.
+
+For a custom configuration, wrap your =restic-backup-configuration= in =for-home=, as in this example:
+
+#+begin_src lisp
+(use-modules (gnu services)             ;for 'for-home'
+             (gnu services backup)      ;for 'restic-backup-job' and 'restic-backup-configuration'
+             (gnu home services backup) ;for 'home-restic-backup-service-type'
+             (gnu packages sync)        ;for 'rclone'
+             ...)
+
+(home-environment
+
+  (packages (list rclone    ;for use by restic
+                  ...))
+  (services
+    (list
+      ...
+      (service home-restic-backup-service-type
+               (for-home
+                (restic-backup-configuration
+                 (jobs (list ...))))))))
+#+end_src
+
+You can refer to see [[id:guix--Miscellaneous-Services][=restic-backup-service-type=]] for details about =restic-backup-configuration= and =restic-backup-job=. The only difference is that the =home-restic-backup-service-type= will ignore the =user= and =group= field of =restic-backup-job=.
+
+--------------
+
+Next: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Previous: [[id:guix--Guix-Home-Services][Guix Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

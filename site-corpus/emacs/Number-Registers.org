@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: emacs--Number-Registers
+:END:
+#+filetags: :emacs:
+#+title: Number Registers
+
+Next: [[id:emacs--File-and-Buffer-Registers][Keeping File and Buffer Names in Registers]]   Previous: [[id:emacs--Configuration-Registers][Saving Window and Frame Configurations in Registers]]   Up: [[id:emacs--Registers][Registers]]
+
+<<Number-Registers>>
+*** 15.5 Keeping Numbers in Registers [[#Keeping-Numbers-in-Registers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Keeping-Numbers-in-Registers
+:CLASS: section
+:END:
+There are commands to store a number in a register, to insert the number in the buffer in decimal, and to increment it. These commands can be useful in keyboard macros (see [[id:emacs--Keyboard-Macros][Keyboard Macros]]).
+
+-  <<index-C_002dx-r-n>>C-u =number= C-x r n =r= [[#index-C_002dx-r-n][¶]] :: Store =number= into register =r= (=number-to-register=).
+
+-  <<index-C_002dx-r-_002b>>C-u =number= C-x r + =r= [[#index-C_002dx-r-_002b][¶]] :: If =r= contains a number, increment the number in that register by =number=. Note that command C-x r + (=increment-register=) behaves differently if =r= contains text. See [[id:emacs--Text-Registers][Saving Text in Registers]].
+
+- C-x r i =r= :: Insert the number from register =r= into the buffer.
+
+C-x r i is the same command used to insert any other sort of register contents into the buffer. C-x r + with no numeric argument increments the register value by 1; C-x r n with no numeric argument stores zero in the register.
+
+--------------

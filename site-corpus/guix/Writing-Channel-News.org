@@ -1,0 +1,92 @@
+:PROPERTIES:
+:ID: guix--Writing-Channel-News
+:END:
+#+filetags: :guix:
+#+title: Writing Channel News
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Writing-Channel-News>>
+Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.13 Writing Channel News [[#Writing-Channel-News-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Writing-Channel-News-1
+:CLASS: section
+:END:
+Channel authors may occasionally want to communicate to their users information about important changes in the channel. You'd send them all an email, but that's not convenient.
+
+Instead, channels can provide a /news file/; when the channel users run =guix pull=, that news file is automatically read and =guix pull --news= can display the announcements that correspond to the new commits that have been pulled, if any.
+
+To do that, channel authors must first declare the name of the news file in their =.guix-channel= file:
+
+#+begin_src lisp
+(channel
+  (version 0)
+  (news-file "etc/news.txt"))
+#+end_src
+
+The news file itself, =etc/news.txt= in this example, must look something like this:
+
+#+begin_src lisp
+(channel-news
+  (version 0)
+  (entry (tag "the-bug-fix")
+         (title (en "Fixed terrible bug")
+                (fr "Oh la la"))
+         (body (en "@emph{Good news}!  It's fixed!")
+               (eo "Certe ĝi pli bone funkcias nun!")))
+  (entry (commit "bdcabe815cd28144a2d2b4bc3c5057b051fa9906")
+         (title (en "Added a great package")
+                (ca "Què vol dir guix?"))
+         (body (en "Don't miss the @code{hello} package!"))))
+#+end_src
+
+While the news file is using the Scheme syntax, avoid naming it with a =.scm= extension or else it will get picked up when building the channel and yield an error since it is not a valid module. Alternatively, you can move the channel module to a subdirectory and store the news file in another directory.
+
+The file consists of a list of /news entries/. Each entry is associated with a commit or tag: it describes changes made in this commit, possibly in preceding commits as well. Users see entries only the first time they obtain the commit the entry refers to.
+
+The =title= field should be a one-line summary while =body= can be arbitrarily long, and both can contain Texinfo markup (see [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Overview.html#Overview][Overview]] in GNU Texinfo). Both the title and body are a list of language tag/message tuples, which allows =guix pull= to display news in the language that corresponds to the user's locale.
+
+If you want to translate news using a gettext-based workflow, you can extract translatable strings with =xgettext= (see [[https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html#xgettext-Invocation][xgettext Invocation]] in GNU Gettext Utilities). For example, assuming you write news entries in English first, the command below creates a PO file containing the strings to translate:
+
+#+begin_example
+xgettext -o news.po -l scheme -ken etc/news.txt
+#+end_example
+
+To sum up, yes, you could use your channel as a blog. But beware, this is /not quite/ what your users might expect.
+
+--------------
+
+Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

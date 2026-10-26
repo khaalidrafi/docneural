@@ -1,0 +1,274 @@
+:PROPERTIES:
+:ID: guix--VPN-Services
+:END:
+#+filetags: :guix:
+#+title: VPN Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<VPN-Services>>
+Next: [[id:guix--DAV-Services][DAV Services]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.26 VPN Services [[#VPN-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: VPN-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services vpn)= module provides services related to /virtual private networks/ (VPNs).
+
+**** Bitmask [[#Bitmask][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Bitmask
+:CLASS: subsubheading
+:END:
+- Variable: *bitmask-service-type* [[#index-bitmask_002dservice_002dtype][¶]] :: A service type for the [[https://bitmask.net][Bitmask]] VPN client. It makes the client available in the system and loads its polkit policy. Please note that the client expects an active polkit-agent, which is either run by your desktop-environment or should be run manually.
+
+**** OpenVPN [[#OpenVPN][¶]]
+:PROPERTIES:
+:CUSTOM_ID: OpenVPN
+:CLASS: subsubheading
+:END:
+It provides a /client/ service for your machine to connect to a VPN, and a /server/ service for your machine to host a VPN. Both =openvpn-client-service-type= and =openvpn-server-service-type= can be run simultaneously.
+
+- Variable: *openvpn-client-service-type* [[#index-openvpn_002dclient_002dservice_002dtype][¶]] :: Type of the service that runs =openvpn=, a VPN daemon, as a client.
+
+  The value for this service is a =<openvpn-client-configuration>= object.
+
+- Variable: *openvpn-server-service-type* [[#index-openvpn_002dserver_002dservice_002dtype][¶]] :: Type of the service that runs =openvpn=, a VPN daemon, as a server.
+
+  The value for this service is a =<openvpn-server-configuration>= object.
+
+- Data Type: *openvpn-client-configuration* [[#index-openvpn_002dclient_002dconfiguration][¶]] :: Available =openvpn-client-configuration= fields are:
+
+  - =openvpn= (default: =openvpn=) (type: file-like) :: The OpenVPN package.
+
+  - =pid-file= (default: ="/var/run/openvpn/openvpn.pid"=) (type: string) :: The OpenVPN pid file.
+
+  - =proto= (default: =udp=) (type: proto) :: The protocol (UDP or TCP) used to open a channel between clients and servers.
+
+  - =dev= (default: =tun=) (type: dev) :: The device type used to represent the VPN connection.
+
+  - =ca= (default: ="/etc/openvpn/ca.crt"=) (type: maybe-string) :: The certificate authority to check connections against.
+
+  - =cert= (default: ="/etc/openvpn/client.crt"=) (type: maybe-string) :: The certificate of the machine the daemon is running on. It should be signed by the authority given in =ca=.
+
+  - =key= (default: ="/etc/openvpn/client.key"=) (type: maybe-string) :: The key of the machine the daemon is running on. It must be the key whose certificate is =cert=.
+
+  - =comp-lzo?= (default: =#t=) (type: boolean) :: Whether to use the lzo compression algorithm.
+
+  - =persist-key?= (default: =#t=) (type: boolean) :: Don't re-read key files across SIGUSR1 or --ping-restart.
+
+  - =persist-tun?= (default: =#t=) (type: boolean) :: Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or --ping-restart restarts.
+
+  - =fast-io?= (default: =#f=) (type: boolean) :: (Experimental) Optimize TUN/TAP/UDP I/O writes by avoiding a call to poll/epoll/select prior to the write operation.
+
+  - =verbosity= (default: =3=) (type: number) :: Verbosity level.
+
+  - =tls-auth= (default: =#f=) (type: tls-auth-client) :: Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.
+
+  - =auth-user-pass= (type: maybe-string) :: Authenticate with server using username/password. The option is a file containing username/password on 2 lines. Do not use a file-like object as it would be added to the store and readable by any user.
+
+  - =verify-key-usage?= (default: =#t=) (type: key-usage) :: Whether to check the server certificate has server usage extension.
+
+  - =bind?= (default: =#f=) (type: bind) :: Bind to a specific local port number.
+
+  - =resolv-retry?= (default: =#t=) (type: resolv-retry) :: Retry resolving server address.
+
+  - =remote= (default: ='()=) (type: openvpn-remote-list) :: A list of remote servers to connect to.
+
+    - Data Type: *openvpn-remote-configuration* [[#index-openvpn_002dremote_002dconfiguration][¶]] :: Available =openvpn-remote-configuration= fields are:
+
+      - =name= (default: ="my-server"=) (type: string) :: Server name.
+
+      - =port= (default: =1194=) (type: number) :: Port number the server listens to.
+
+- Data Type: *openvpn-server-configuration* [[#index-openvpn_002dserver_002dconfiguration][¶]] :: Available =openvpn-server-configuration= fields are:
+
+  - =openvpn= (default: =openvpn=) (type: file-like) :: The OpenVPN package.
+
+  - =pid-file= (default: ="/var/run/openvpn/openvpn.pid"=) (type: string) :: The OpenVPN pid file.
+
+  - =proto= (default: =udp=) (type: proto) :: The protocol (UDP or TCP) used to open a channel between clients and servers.
+
+  - =dev= (default: =tun=) (type: dev) :: The device type used to represent the VPN connection.
+
+  - =ca= (default: ="/etc/openvpn/ca.crt"=) (type: maybe-string) :: The certificate authority to check connections against.
+
+  - =cert= (default: ="/etc/openvpn/client.crt"=) (type: maybe-string) :: The certificate of the machine the daemon is running on. It should be signed by the authority given in =ca=.
+
+  - =key= (default: ="/etc/openvpn/client.key"=) (type: maybe-string) :: The key of the machine the daemon is running on. It must be the key whose certificate is =cert=.
+
+  - =comp-lzo?= (default: =#t=) (type: boolean) :: Whether to use the lzo compression algorithm.
+
+  - =persist-key?= (default: =#t=) (type: boolean) :: Don't re-read key files across SIGUSR1 or --ping-restart.
+
+  - =persist-tun?= (default: =#t=) (type: boolean) :: Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or --ping-restart restarts.
+
+  - =fast-io?= (default: =#f=) (type: boolean) :: (Experimental) Optimize TUN/TAP/UDP I/O writes by avoiding a call to poll/epoll/select prior to the write operation.
+
+  - =verbosity= (default: =3=) (type: number) :: Verbosity level.
+
+  - =tls-auth= (default: =#f=) (type: tls-auth-server) :: Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.
+
+  - =port= (default: =1194=) (type: number) :: Specifies the port number on which the server listens.
+
+  - =server= (default: ="10.8.0.0 255.255.255.0"=) (type: ip-mask) :: An ip and mask specifying the subnet inside the virtual network.
+
+  - =server-ipv6= (default: =#f=) (type: cidr6) :: A CIDR notation specifying the IPv6 subnet inside the virtual network.
+
+  - =dh= (default: ="/etc/openvpn/dh2048.pem"=) (type: string) :: The Diffie-Hellman parameters file.
+
+  - =ifconfig-pool-persist= (default: ="/etc/openvpn/ipp.txt"=) (type: string) :: The file that records client IPs.
+
+  - =redirect-gateway?= (default: =#f=) (type: gateway) :: When true, the server will act as a gateway for its clients.
+
+  - =client-to-client?= (default: =#f=) (type: boolean) :: When true, clients are allowed to talk to each other inside the VPN.
+
+  - =keepalive= (default: =(10 120)=) (type: keepalive) :: Causes ping-like messages to be sent back and forth over the link so that each side knows when the other side has gone down. =keepalive= requires a pair. The first element is the period of the ping sending, and the second element is the timeout before considering the other side down.
+
+  - =max-clients= (default: =100=) (type: number) :: The maximum number of clients.
+
+  - =status= (default: ="/var/run/openvpn/status"=) (type: string) :: The status file. This file shows a small report on current connection. It is truncated and rewritten every minute.
+
+  - =client-config-dir= (default: ='()=) (type: openvpn-ccd-list) :: The list of configuration for some clients.
+
+**** strongSwan [[#strongSwan][¶]]
+:PROPERTIES:
+:CUSTOM_ID: strongSwan
+:CLASS: subheading
+:END:
+Currently, the strongSwan service only provides legacy-style configuration with =ipsec.conf= and =ipsec.secrets= files.
+
+- Variable: *strongswan-service-type* [[#index-strongswan_002dservice_002dtype][¶]] :: A service type for configuring strongSwan for IPsec VPN (Virtual Private Networking). Its value must be a =strongswan-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service strongswan-service-type
+           (strongswan-configuration
+            (ipsec-conf "/etc/ipsec.conf")
+            (ipsec-secrets "/etc/ipsec.secrets")))
+  #+end_src
+
+- Data Type: *strongswan-configuration* [[#index-strongswan_002dconfiguration][¶]] :: Data type representing the configuration of the StrongSwan service.
+
+  - =strongswan= :: The strongSwan package to use for this service.
+
+  - =ipsec-conf= (default: =#f=) :: The file name of your =ipsec.conf=. If not =#f=, then this and =ipsec-secrets= must both be strings.
+
+  - =ipsec-secrets= (default =#f=) :: The file name of your =ipsec.secrets=. If not =#f=, then this and =ipsec-conf= must both be strings.
+
+**** Wireguard [[#Wireguard][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Wireguard
+:CLASS: subsubheading
+:END:
+- Variable: *wireguard-service-type* [[#index-wireguard_002dservice_002dtype][¶]] :: A service type for a Wireguard tunnel interface. Its value must be a =wireguard-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service wireguard-service-type
+           (wireguard-configuration
+            (peers
+             (list
+              (wireguard-peer
+               (name "my-peer")
+               (endpoint "my.wireguard.com:51820")
+               (public-key "hzpKg9X1yqu1axN6iJp0mWf6BZGo8m1wteKwtTmDGF4=")
+               (allowed-ips '("10.0.0.2/32")))))))
+  #+end_src
+
+- Data Type: *wireguard-configuration* [[#index-wireguard_002dconfiguration][¶]] :: Data type representing the configuration of the Wireguard service.
+
+  - =wireguard= :: The wireguard package to use for this service.
+
+  - =interface= (default: ="wg0"=) :: The interface name for the VPN.
+
+  - =addresses= (default: ='("10.0.0.1/32")=) :: List of strings or G-expressions which represent the IP addresses to be assigned to the above interface.
+
+  - =port= (default: =51820=) :: The port on which to listen for incoming connections.
+
+  - =dns= (default: ='())=) :: List of strings or G-expressions which represent the DNS server(s) to announce to VPN clients via DHCP.
+
+  - =mtu= (default: =#f=) :: An optional integer to define the largest packet size (in bytes) that can be sent over the VPN tunnel without fragmentation.
+
+  -  <<index-Dynamic-IP_002c-with-Wireguard>>=monitor-ips?= (default: =#f=) [[#index-Dynamic-IP_002c-with-Wireguard][¶]] :: Whether to monitor the resolved Internet addresses (IPs) of the endpoints of the configured peers, resetting the peer endpoints using an IP address that no longer correspond to their freshly resolved host name. Set this to =#t= if one or more endpoints use host names provided by a dynamic DNS service to keep the sessions alive.
+
+  - =monitor-ips-interval= (default: ="*/5 * * * *"=) :: This is the monitoring schedule, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+
+  - =private-key= (default: ="/etc/wireguard/private.key"=) :: The private key file for the interface. It is automatically generated if the file does not exist. If this field is =#f=, a private key is not automatically created and the path is not serialized to the configuration file.
+
+  - =bootstrap-private-key?= (default: =#t=) :: Whether or not the private key should be generated automatically if it does not exist.
+
+    Setting this to =#f= allows one to set the private key using command substitution. One example shown in the =wg-quick(8)= manual is retrieving a private key using =password-store=. This can be achieved with the following code:
+
+    #+begin_src lisp
+    (wireguard-configuration
+     (private-key
+      #~(string-append "<("
+                       #$(file-append password-store "/bin/pass")
+                       ;; Wireguard replaces %i with the interface name.
+                       " WireGuard/private-keys/%i)")))
+    #+end_src
+
+  - =peers= (default: ='()=) :: The authorized peers on this interface. This is a list of =wireguard-peer= records.
+
+  - =pre-up= (default: ='()=) :: List of strings or G-expressions. These are script snippets which will be executed before setting up the interface.
+
+  - =post-up= (default: ='()=) :: List of strings or G-expressions. These are script snippets which will be executed after setting up the interface.
+
+  - =pre-down= (default: ='()=) :: List of strings or G-expressions. These are script snippets which will be executed before tearing down the interface.
+
+  - =post-down= (default: ='()=) :: List of strings or G-expressions. These are script snippets which will be executed after tearing down the interface.
+
+  - =shepherd-requirement= (default: ='()=) (type: list-of-symbols) :: A list of symbols naming Shepherd services that this service will depend on.
+
+  - =table= (default: ="auto"=) :: The routing table to which routes are added, as a string. There are two special values: ="off"= that disables the creation of routes altogether, and ="auto"= (the default) that adds routes to the default table and enables special handling of default routes.
+
+  - =auto-start?= (default: =#t"=) :: Whether the Wireguard network should be started automatically by the Shepherd. If it is =#f= the service has to be started manually with =herd start wireguard-$interface= (for example: =herd start wireguard-wg0=).
+
+- Data Type: *wireguard-peer* [[#index-wireguard_002dpeer][¶]] :: Data type representing a Wireguard peer attached to a given interface.
+
+  - =name= :: The peer name.
+
+  - =endpoint= (default: =#f=) :: The optional endpoint for the peer, such as ="demo.wireguard.com:51820"=.
+
+  - =public-key= :: The peer public-key represented as a base64 string.
+
+  - =preshared-key= (default: =#f=) :: An optional pre-shared key file for this peer that can be either a string or a G-expression. The given file will not be autogenerated.
+
+  - =allowed-ips= :: A list of IP addresses from which incoming traffic for this peer is allowed and to which incoming traffic for this peer is directed.
+
+  - =keep-alive= (default: =#f=) :: An optional time interval in seconds. A packet will be sent to the server endpoint once per time interval. This helps receiving incoming connections from this peer when you are behind a NAT or a firewall.
+
+--------------
+
+Next: [[id:guix--DAV-Services][DAV Services]], Previous: [[id:guix--VNC-Services][VNC Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID: guix--Installing-Guix-in-a-VM
+:END:
+#+filetags: :guix:
+#+title: Installing Guix in a VM
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Installing-Guix-in-a-VM>>
+Next: [[id:guix--Building-the-Installation-Image][Building the Installation Image]], Previous: [[id:guix--After-System-Installation][After System Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 3.8 Installing Guix in a Virtual Machine [[#Installing-Guix-in-a-Virtual-Machine][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Installing-Guix-in-a-Virtual-Machine
+:CLASS: section
+:END:
+If you'd like to install Guix System in a virtual machine (VM) or on a virtual private server (VPS) rather than on your beloved machine, this section is for you.
+
+To boot a [[https://qemu.org/][QEMU]] VM for installing Guix System in a disk image, follow these steps:
+
+1. First, retrieve and decompress the Guix system installation image as described previously (see [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]]).
+
+2. Create a disk image that will hold the installed system. To make a qcow2-formatted disk image, use the =qemu-img= command:
+
+   #+begin_example
+   qemu-img create -f qcow2 guix-system.img 50G
+#+end_example
+
+   The resulting file will be much smaller than 50 GB (typically less than 1 MB), but it will grow as the virtualized storage device is filled up.
+
+3. Boot the USB installation image in a VM:
+
+   #+begin_example
+   qemu-system-x86_64 -m 1024 -smp 1 -enable-kvm \
+     -nic user,model=virtio-net-pci -boot menu=on,order=d \
+     -drive file=guix-system.img \
+     -drive media=cdrom,readonly=on,file=guix-system-install-ad54bd5.system.iso
+#+end_example
+
+   =-enable-kvm= is optional, but significantly improves performance, see [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]].
+
+4. You're now root in the VM, proceed with the installation process. See [[id:guix--Preparing-for-Installation][Preparing for Installation]], and follow the instructions.
+
+Once installation is complete, you can boot the system that's on your =guix-system.img= image. See [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], for how to do that.
+
+--------------
+
+Next: [[id:guix--Building-the-Installation-Image][Building the Installation Image]], Previous: [[id:guix--After-System-Installation][After System Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

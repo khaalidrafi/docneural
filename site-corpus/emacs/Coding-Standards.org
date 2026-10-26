@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID: emacs--Coding-Standards
+:END:
+#+filetags: :emacs:
+#+title: Coding Standards
+
+Next: [[id:emacs--Copyright-Assignment][Copyright Assignment]]   Up: [[id:emacs--Contributing][Contributing to Emacs Development]]
+
+<<Coding-Standards>>
+*** 55.1 Coding Standards [[#Coding-Standards-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Coding-Standards-1
+:CLASS: section subsection-level-set-section
+:END:
+Contributed code should follow the GNU Coding Standards [[https://www.gnu.org/prep/standards/]]. This may also be available in info on your system.
+
+If it doesn't, we'll need to find someone to fix the code before we can use it.
+
+Emacs has additional style and coding conventions:
+
+- See [[../elisp_html/Tips.html#Tips][Tips Appendix]] in Emacs Lisp Reference.
+- Avoid using =advice-add= or =with-eval-after-load= for Lisp code to be included in Emacs.
+- Remove all trailing whitespace in all source and text files.
+- Use =?\s= instead of =? = in Lisp code for a space character.
+
+--------------

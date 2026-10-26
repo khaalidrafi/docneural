@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: org--Activation
+:END:
+#+filetags: :org:
+#+title: Activation (The Org Manual)
+
+Next:
+
+<<Activation>>
+Next: [[id:org--Feedback][Feedback]], Previous: [[id:org--Installation][Installation]], Up: [[id:org--Introduction][Introduction]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 1.3 Activation [[#Activation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Activation-1
+:CLASS: section
+:END:
+Org mode buffers need Font Lock to be turned on: this is the default in Emacs[[#FOOT1][^{1}]].
+
+There are compatibility issues between Org mode and some other Elisp packages (see [[id:org--Conflicts][Packages that conflict with Org mode]]). Please take the time to check the list.
+
+For a better experience, the three Org commands =org-store-link=, =org-capture= and =org-agenda= ought to be accessible anywhere in Emacs, not just in Org buffers. To that effect, you need to bind them to globally available keys, like the ones reserved for users (see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Conventions.html#Key-Binding-Conventions][(elisp)Key Binding Conventions]]). Here are suggested bindings; please modify the keys to your own liking in your [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File][personal init file]].
+
+#+begin_src lisp-preformatted
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
+#+end_src
+
+Files with the ‘=.org=' extension use Org mode by default. To turn on Org mode in a file that does not have the extension ‘=.org=', make the first line of a file look like this:
+
+#+begin_example
+MY PROJECTS    -*- mode: org; -*-
+#+end_example
+
+which selects Org mode for this buffer no matter what the file's name is. See also the variable =org-insert-mode-line-in-empty-file=.
+
+Many commands in Org work on the region if the region is /active/. To make use of this, you need to have Transient Mark mode turned on, which is the default. If you do not like it, you can create an active region by using the mouse to select a region, or pressing C-SPC twice before moving point.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF1][(1)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If you do not use Font Lock globally, turn it on in an Org buffer with ‘=(add-hook 'org-mode-hook #'turn-on-font-lock)='.
+
+--------------
+
+Next: [[id:org--Feedback][Feedback]], Previous: [[id:org--Installation][Installation]], Up: [[id:org--Introduction][Introduction]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

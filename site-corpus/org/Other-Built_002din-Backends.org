@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Other-Built_002din-Backends
+:END:
+#+filetags: :org:
+#+title: Other Built-in Backends (The Org Manual)
+
+Next:
+
+<<Other-Built_002din-Backends>>
+Next: [[id:org--Advanced-Export-Configuration][Advanced Export Configuration]], Previous: [[id:org--iCalendar-Export][iCalendar Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.16 Other Built-in Backends [[#Other-Built_002din-Backends-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Other-Built_002din-Backends-1
+:CLASS: section
+:END:
+Other export backends included with Org are:
+
+- ‘=ox-man.el=': Export to a man page.
+
+To activate such backends, either customize =org-export-backends= or load directly with ‘=(require 'ox-man)='. On successful load, the backend adds new keys in the export dispatcher (see [[id:org--The-Export-Dispatcher][The Export Dispatcher]]).
+
+Follow the comment section of such files, for example, ‘=ox-man.el=', for usage and configuration details.

@@ -1,0 +1,61 @@
+:PROPERTIES:
+:ID: guix--System-Images
+:END:
+#+filetags: :guix:
+#+title: System Images
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<System-Images>>
+Next: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Previous: [[id:guix--Platforms][Platforms]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 16 Creating System Images [[#Creating-System-Images][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-System-Images
+:CLASS: chapter
+:END:
+When it comes to installing Guix System for the first time on a new machine, you can basically proceed in three different ways. The first one is to use an existing operating system on the machine to run the =guix system init= command (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]). The second one, is to produce an installation image (see [[id:guix--Building-the-Installation-Image][Building the Installation Image]]). This is a bootable system which role is to eventually run =guix system init=. Finally, the third option would be to produce an image that is a direct instantiation of the system you wish to run. That image can then be copied on a bootable device such as an USB drive or a memory card. The target machine would then directly boot from it, without any kind of installation procedure.
+
+The =guix system image= command is able to turn an operating system definition into a bootable image. This command supports different image types, such as =mbr-hybrid-raw=, =iso9660= and =docker=. Any modern =x86_64= machine will probably be able to boot from an =iso9660= image. However, there are a few machines out there that require specific image types. Those machines, in general using =ARM= processors, may expect specific partitions at specific offsets.
+
+This chapter explains how to define customized system images and how to turn them into actual bootable images.
+
+- [[id:guix--image-Reference][=image= Reference]]
+- [[id:guix--Instantiate-an-Image][Instantiate an Image]]
+- [[id:guix--image_002dtype-Reference][image-type Reference]]
+- [[id:guix--Image-Modules][Image Modules]]
+
+--------------
+
+Next: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Previous: [[id:guix--Platforms][Platforms]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

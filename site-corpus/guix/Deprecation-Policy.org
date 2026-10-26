@@ -1,0 +1,175 @@
+:PROPERTIES:
+:ID: guix--Deprecation-Policy
+:END:
+#+filetags: :guix:
+#+title: Deprecation Policy
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Deprecation-Policy>>
+Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.17 Deprecation Policy [[#Deprecation-Policy-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Deprecation-Policy-1
+:CLASS: section
+:END:
+As any lively project with a broad scope, Guix changes all the time and at all levels. Because it's user-extensible and programmable, incompatible changes can directly impact users and make their life harder. It is thus important to reduce user-visible incompatible changes to a minimum and, when such changes are deemed necessary, to clearly communicate them through a /deprecation period/ so everyone can adapt with minimum hassle. This section defines the project's commitments for smooth deprecation and describes procedures and mechanisms to honor them.
+
+There are several ways to use Guix; how to handle deprecation will depend on each use case. Those can be roughly categorized like this:
+
+- package management exclusively through the command line;
+- advanced package management using the manifest and package interfaces;
+- Home and System management, using the =operating-system= and/or =home-environment= interfaces together with the service interfaces;
+- development or use of external tools that use programming interfaces such as the =(guix ...)= modules.
+
+These use cases form a spectrum with varying degrees of coupling---from “distant” to tightly coupled. Based on this insight, we define the following /deprecation policies/ that we consider suitable for each of these levels.
+
+- Command-line tools :: Guix sub-commands should be thought of as remaining available “forever”. Once a Guix sub-command is to be removed, it should be deprecated first, and then remain available for *at least one year* after the first release that deprecated it.
+
+  Deprecation should first be announced in the manual and as an entry in =etc/news.scm=; additional communication such as a blog post explaining the rationale is welcome. Months before the scheduled removal date, the command should print a warning explaining how to migrate. An example of this is the replacement of =guix environment= by =guix shell=, started in October 2021[[#FOOT54][^{54}]].
+
+  Because of the broad impact of such a change, we recommend conducting a user survey before enacting a plan.
+
+- <<index-package-deprecation>>Package name changes [[#index-package-deprecation][¶]] :: When a package name changes, it must remain available under its old name for *at least six months*; the deprecation date should be stated in a comment in the code to ease the final removal.
+
+  For example, =go-ipfs= was renamed to =kubo= following a decision made upstream; to communicate the name change to users, the package module provided this definition:
+
+  #+begin_src lisp
+  (define-deprecated-package go-ipfs
+    kubo)
+  #+end_src
+
+  That way, someone running =guix install go-ipfs= or similar sees a deprecation warning mentioning the new package name; likewise, someone referring to the =go-ipfs= /variable/ from their manifest or package definition will see a warning.
+
+  Under the hood, =define-deprecated-package= combines =define-deprecated/public-alias= to mark the variable as deprecated (see below), and the =deprecated-package= procedure to mark the package name as deprecated.
+
+- Package removal :: How packages may be removed depends on their build status and on their position in the package graph.
+
+  - Removal of packages that do not build
+
+    A package that does not build becomes a removal candidate immediately. A pull request removing such a package should be filed on Codeberg with the ‘=deprecation=' label. Additional justification for the (non-)importance, obsolescence etc. of the package is welcome, but not required. Such a pull request may be merged *at least three weeks* later if there is no opposition to the removal or if nobody has volunteered to repair the affected packages.
+
+  - Removal of building packages
+
+    There are various reasons why packages may become removal candidates although they still build: For instance we may have a newer version of the same package in Guix, maintenance has stopped upstream, or the package is not adequately maintained in Guix.
+
+    - Removal candidates that are building leaf packages :: Leaf packages may be removed following the above process, assuming that there is no opposition to the removal or that consensus for the removal has been reached. Leaf packages that are typically installed into user profiles (for instance applications, but also packages used in a service) should not be removed unless there are particularly good reasons, such as security implications.
+
+    - Removal candidates that are building packages with dependents :: Removing building packages on which other packages depend causes more disruption than removing leaf packages, since at the same time all dependent packages need to be removed. This may still be desirable for overarching reasons. For instance, we want to remove older versions of packages for which newer versions are already packaged, remove packages that are unmaintained or have reached end of life upstream, or that suffer from security vulnerabilities.
+
+      In this case, the removal candidate may be removed together with all packages depending on it following the above procedure. If the removal candidate falls into the realm of a team, this team must be notified, and consensus shall be sought about the removal in particular with this team. Reasonable efforts shall be made beforehand to update or otherwise preserve dependent packages.
+
+  #+begin_quote
+  *Note:* Learn about pending package removals by checking [[https://codeberg.org/guix/guix/pulls?labels=445131][pull requests with the ‘=deprecation=' label]].
+
+  #+end_quote
+
+- Moving packages between modules :: When a package is moved from one module to another one, the corresponding variable =name= should be marked as deprecated in the old location for *at least six months*, for instance by adding
+
+  #+begin_src lisp
+  (define-deprecated/public-alias name
+    (@ (gnu packages new-module) name))
+  #+end_src
+
+  in =gnu/packages/old-module.scm=.
+
+- Package additions :: Packages submitted for inclusion must not fulfill the criteria to become a removal candidate immediately after addition.
+
+- <<index-service-deprecation>>Services [[#index-service-deprecation][¶]] :: Changes to services for Guix Home and Guix System have a direct impact on user configuration. For a user, adjusting to interface changes is rarely rewarding, which is why any such change must be clearly communicated in advance through deprecation warnings and documentation.
+
+  Renaming of variables related to service, home, or system configuration must be communicated for at least six months before removal using the =(guix deprecation)= mechanisms. For example, renaming of =murmur-configuration= to =mumble-server-configuration= was communicated through a series of definitions like this one:
+
+  #+begin_src lisp
+  (define-deprecated/public-alias
+    murmur-configuration
+    mumble-server-configuration)
+  #+end_src
+
+  Procedures slated for removal may be defined like this:
+
+  #+begin_src lisp
+  (define-deprecated (elogind-service #:key (config (elogind-configuration)))
+    elogind-service-type
+    (service elogind-service-type config))
+  #+end_src
+
+  Record fields, notably fields of service configuration records, must follow a similar deprecation period. This is usually achieved through /ad hoc/ means though. For example, the =hosts-file= field of =operating-system= was deprecated by adding a =sanitized= property that would emit a warning:
+
+  #+begin_src lisp
+  (define-record-type* <operating-system>
+    ;; ...
+    (hosts-file %operating-system-hosts-file         ;deprecated
+                (default #f)
+                (sanitize warn-hosts-file-field-deprecation)))
+
+  (define-deprecated (operating-system-hosts-file os)
+    hosts-service-type
+    (%operating-system-hosts-file os))
+  #+end_src
+
+  When deprecating interfaces in =operating-system=, =home-environment=, =(gnu services)=, or any popular service, the deprecation must come with an entry in =etc/news.scm=.
+
+- <<index-deprecation-of-programming-interfaces>>Core interfaces [[#index-deprecation-of-programming-interfaces][¶]] :: Core programming interfaces, in particular the =(guix ...)= modules, may be relied on by a variety of external tools and channels. Any incompatible change must be formally deprecated with =define-deprecated=, as shown above, for *at least one year* before removal. The manual must clearly document the new interface and, except in obvious cases, explain how to migrate from the old one.
+
+  As an example, the =build-expression->derivation= procedure was superseded by =gexp->derivation= and remained available as a deprecated symbol:
+
+  #+begin_src lisp
+  (define-deprecated (build-expression->derivation store name exp
+                                                   #:key ...)
+    gexp->derivation
+    ...)
+  #+end_src
+
+  Sometimes bindings are moved from one module to another. In those cases, bindings must be reexported from the original module for at least one year.
+
+This section does not cover all possible situations but hopefully allows users to know what to expect and developers to stick to its spirit. Please email [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] for any questions.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF54][(54)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+For more details on the =guix shell= transition, see [[https://guix.gnu.org/en/blog/2021/from-guix-environment-to-guix-shell/]].
+
+--------------
+
+Next: [[id:guix--Writing-Documentation][Writing Documentation]], Previous: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

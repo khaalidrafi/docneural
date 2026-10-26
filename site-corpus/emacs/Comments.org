@@ -1,0 +1,110 @@
+:PROPERTIES:
+:ID: emacs--Comments
+:END:
+#+filetags: :emacs:
+#+title: Comments
+
+Next: [[id:emacs--Documentation#Documentation][Documentation Lookup]]   Previous: [[id:emacs--Parentheses#Parentheses][Commands for Editing with Parentheses]]   Up: [[id:emacs--Programs][Editing Programs]]
+
+<<Comments>>
+*** 28.5 Manipulating Comments [[#Manipulating-Comments][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Manipulating-Comments
+:CLASS: section
+:END:
+Because comments are such an important part of programming, Emacs provides special commands for editing and inserting comments. It can also do spell checking on comments with Flyspell Prog mode (see [[id:emacs--Spelling][Checking and Correcting Spelling]]).
+
+Some major modes have special rules for indenting different kinds of comments. For example, in Lisp code, comments starting with two semicolons are indented as if they were lines of code, while those starting with three semicolons are supposed to be aligned to the left margin and are often used for sectioning purposes. Emacs understands these conventions; for instance, typing TAB on a comment line will indent the comment to the appropriate position.
+
+#+begin_example
+;; This function is just an example.
+;;; Here either two or three semicolons are appropriate.
+(defun foo (x)
+;;;  And now, the first part of the function:
+  ;; The following line adds one.
+  (1+ x))           ; This line adds one.
+#+end_example
+
+--------------
+
+<<Comment-Commands>>
+**** 28.5.1 Comment Commands [[#Comment-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Comment-Commands-1
+:CLASS: subsection
+:END:
+The following commands operate on comments:
+
+- M-; :: Insert or realign comment on current line; if the region is active, comment or uncomment the region instead (=comment-dwim=).
+
+- C-x C-; :: Comment or uncomment the current line (=comment-line=). If the region is active, comment or uncomment the lines in the region instead.
+
+- C-u M-; :: Kill comment on current line (=comment-kill=).
+
+- C-x ; :: Set comment column (=comment-set-column=).
+
+- C-M-j\\
+  M-j :: Like RET followed by inserting and aligning a comment (=default-indent-new-line=). See [[#Multi_002dLine-Comments][Multiple Lines of Comments]].
+
+- M-x comment-region\\
+  C-c C-c (in C-like modes) :: Add comment delimiters to all the lines in the region.
+
+The command to create or align a comment is M-; (=comment-dwim=). The word “dwim” is an acronym for “Do What I Mean”; it indicates that this command can be used for many different jobs relating to comments, depending on the situation where you use it.
+
+When a region is active (see [[id:emacs--Mark][The Mark and the Region]]), M-; either adds comment delimiters to the region, or removes them. If every line in the region is already a comment, it uncomments each of those lines by removing their comment delimiters. Otherwise, it adds comment delimiters to enclose the text in the region.
+
+If you supply a prefix argument to M-; when a region is active, that specifies the number of comment delimiters to add or delete. A positive argument =n= adds =n= delimiters, while a negative argument −=n= removes =n= delimiters.
+
+If the region is not active, and there is no existing comment on the current line, M-; adds a new comment to the current line. If the line is blank (i.e., empty or containing only whitespace characters), the comment is indented to the same position where TAB would indent to (see [[id:emacs--Program-Indent::#Basic-Indent][Basic Program Indentation Commands]]). If the line is non-blank, the comment is placed after the last non-whitespace character on the line. Emacs tries to fit the comment between the columns specified by the variables =comment-column= and =comment-fill-column= (see [[#Options-for-Comments][Options Controlling Comments]]), if possible. Otherwise, it will choose some other suitable position, usually separated from the non-comment text by at least one space. In each case, Emacs places point after the comment's starting delimiter, so that you can start typing the comment text right away.
+
+You can also use M-; to align an existing comment. If a line already contains the comment-start string, M-; realigns it to the conventional alignment and moves point after the comment's starting delimiter. As an exception, comments starting in column 0 are not moved. Even when an existing comment is properly aligned, M-; is still useful for moving directly to the start of the comment text.
+
+C-x C-; (=comment-line=) comments or uncomments complete lines. When a region is active (see [[id:emacs--Mark][The Mark and the Region]]), C-x C-; either comments or uncomments the lines in the region. If the region is not active, this command comments or uncomments the line point is on. With a positive prefix argument =n=, it operates on =n= lines starting with the current one; with a negative argument −=n=, it affects =n= preceding lines. After invoking this command with a negative argument, successive invocations with a positive argument will operate on preceding lines as if the argument were negated.
+
+C-u M-; (=comment-dwim= with a prefix argument) when the region is not active kills any comment on the current line, along with the whitespace before it. Since the comment is saved to the kill ring, you can reinsert it on another line by moving to the end of that line, doing C-y, and then M-; to realign the comment. You can achieve the same effect as C-u M-; by typing M-x comment-kill (=comment-dwim= actually calls =comment-kill= as a subroutine when it is given a prefix argument). Invoking =comment-dwim= with a prefix numeric argument, as in C-u =n= M-;, when there's no active region, tells =comment-kill= to kill comments on =n= lines.
+
+The command M-x comment-region is equivalent to calling M-; on an active region, except that it always acts on the region, even if the mark is inactive. In C mode and related modes, this command is bound to C-c C-c. The command M-x uncomment-region uncomments each line in the region; a numeric prefix argument specifies the number of comment delimiters to remove (negative arguments specify the number of comment delimiters to add).
+
+For C-like modes, you can configure the exact effect of M-; by setting the variables =c-indent-comment-alist= and =c-indent-comments-syntactically-p=. For example, on a line ending in a closing brace, M-; puts the comment one space after the brace rather than at =comment-column=. For full details see [[../ccmode_html/Comment-Commands.html#Comment-Commands][Comment Commands]] in The CC Mode Manual.
+
+--------------
+
+<<Multi_002dLine-Comments>>
+**** 28.5.2 Multiple Lines of Comments [[#Multiple-Lines-of-Comments][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Multiple-Lines-of-Comments
+:CLASS: subsection
+:END:
+If you are typing a comment and wish to continue it to another line, type M-j or C-M-j (=default-indent-new-line=). This breaks the current line, and inserts the necessary comment delimiters and indentation to continue the comment.
+
+For languages with closing comment delimiters (e.g., ‘=*/=' in C), the exact behavior of M-j depends on the value of the variable =comment-multi-line=. If the value is =nil=, the command closes the comment on the old line and starts a new comment on the new line. Otherwise, it opens a new line within the current comment delimiters.
+
+When Auto Fill mode is on, going past the fill column while typing a comment also continues the comment, in the same way as an explicit invocation of M-j.
+
+To turn existing lines into comment lines, use M-; with the region active, or use M-x comment-region as described in the preceding section.
+
+You can configure C Mode such that when you type a ‘=/=' at the start of a line in a multi-line block comment, this closes the comment. Enable the =comment-close-slash= clean-up for this. See [[../ccmode_html/Clean_002dups.html#Clean_002dups][Clean-ups]] in The CC Mode Manual.
+
+--------------
+
+<<Options-for-Comments>>
+**** 28.5.3 Options Controlling Comments [[#Options-Controlling-Comments][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Options-Controlling-Comments
+:CLASS: subsection
+:END:
+As mentioned in [[#Comment-Commands][Comment Commands]], when the M-j command adds a comment to a line, it tries to place the comment between the columns specified by the buffer-local variables =comment-column= and =comment-fill-column= (or if that is =nil=, then the value of =fill-column=, see [[id:emacs--Filling::#Fill-Commands][Explicit Fill Commands]]). You can set either the local value or the default value of these buffer-local variables in the usual way (see [[id:emacs--Variables::#Locals][Local Variables]]). Alternatively, you can type C-x ; (=comment-set-column=) to set the value of =comment-column= in the current buffer to the column where point is currently located. C-u C-x ; sets the comment column to match the last comment before point in the buffer, and then does a M-; to align the current line's comment under the previous one.
+
+The comment commands recognize comments based on the regular expression that is the value of the variable =comment-start-skip=. Make sure this regexp does not match the null string. It may match more than the comment starting delimiter in the strictest sense of the word; for example, in C mode the value of the variable could be ="/\\*+[ \t]*\\|//+[ \t]*"=, which matches extra stars and spaces after the ‘=/*=' itself, and accepts C++ style (‘=//=') comments also. (Note that ‘=\\=' is needed in Lisp syntax to include a ‘=\=' in the string, which is needed to deny the first star its special meaning in regexp syntax. See [[id:emacs--Regexp-Backslash][Backslash in Regular Expressions]].)
+
+When a comment command makes a new comment, it inserts the value of =comment-start= as an opening comment delimiter. It also inserts the value of =comment-end= after point, as a closing comment delimiter. For example, in Lisp mode, =comment-start= is ‘=";"=' and =comment-end= is =""= (the empty string). In C mode, =comment-start= is ="/* "= and =comment-end= is =" */"=.
+
+The variable =comment-padding= specifies a string that the commenting commands should insert between the comment delimiter(s) and the comment text. The default, ‘=" "=', specifies a single space. Alternatively, the value can be a number, which specifies that number of spaces, or =nil=, which means no spaces at all.
+
+The variable =comment-multi-line= controls how M-j and Auto Fill mode continue comments over multiple lines. See [[#Multi_002dLine-Comments][Multiple Lines of Comments]].
+
+The variable =comment-indent-function= should contain a function that will be called to compute the alignment for a newly inserted comment or for aligning an existing comment. It is set differently by various major modes. The function is called with no arguments, but with point at the beginning of the comment, or at the end of a line if a new comment is to be inserted. It should return the column in which the comment ought to start. For example, the default function bases its decision on how many comment characters begin an existing comment.
+
+Emacs also tries to align comments on adjacent lines. To override this, the function may return a cons of two (possibly equal) integers to indicate an acceptable range of indentation.
+
+--------------

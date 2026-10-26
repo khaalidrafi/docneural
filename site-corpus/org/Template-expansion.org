@@ -1,0 +1,130 @@
+:PROPERTIES:
+:ID: org--Template-expansion
+:END:
+#+filetags: :org:
+#+title: Template expansion (The Org Manual)
+
+Next:
+
+<<Template-expansion>>
+Next: [[id:org--Templates-in-contexts][Templates in contexts]], Previous: [[id:org--Template-elements][Template elements]], Up: [[id:org--Capture-templates][Capture templates]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.1.3.2 Template expansion [[#Template-expansion-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Template-expansion-1
+:CLASS: subsubsection
+:END:
+In the template itself, special “%-escapes”[[#FOOT88][^{88}]] allow dynamic insertion of content. The templates are expanded in the order given here:
+
+- ‘=%[FILE]=' :: Insert the contents of the file given by =FILE=.
+
+- ‘=%(EXP)=' :: Evaluate Elisp expression =(EXP)= and replace it with the result. The =(EXP)= form must return a string. Only placeholders pre-existing within the template, or introduced with ‘=%[file]=', are expanded this way. Since this happens after expanding non-interactive “%-escapes”, those can be used to fill the expression. Examples: ‘=%(org-id-new)=', ‘=%(eval default-directory)='
+
+- ‘=%<FORMAT>=' :: The result of format-time-string on the =FORMAT= specification.
+
+- ‘=%t=' :: Timestamp, date only.
+
+- ‘=%T=' :: Timestamp, with date and time.
+
+- ‘=%u=', ‘=%U=' :: Like ‘=%t=', ‘=%T=' above, but inactive timestamps.
+
+- ‘=%i=' :: Initial content, the region when capture is called while the region is active. If there is text before ‘=%i=' on the same line, such as indentation, and ‘=%i=' is not inside a ‘=%(exp)=' form, that prefix is added before every line in the inserted text.
+
+- ‘=%a=' :: Annotation, normally the link created with =org-store-link=.
+
+- ‘=%A=' :: Like ‘=%a=', but prompt for the description part.
+
+- ‘=%l=' :: Like ‘=%a=', but only insert the literal link.
+
+- ‘=%L=' :: Like ‘=%l=', but without brackets (the link content itself).
+
+- ‘=%c=' :: Current kill ring head.
+
+- ‘=%x=' :: Content of the X clipboard.
+
+- ‘=%k=' :: Title of the currently clocked task.
+
+- ‘=%K=' :: Link to the currently clocked task.
+
+- ‘=%n=' :: Username (taken from =user-full-name=).
+
+- ‘=%f=' :: File visited by current buffer when org-capture was called.
+
+- ‘=%F=' :: Full path of the file or directory visited by current buffer.
+
+- ‘=%:keyword=' :: Specific information for certain link types, see below.
+
+- ‘=%^g=' :: Prompt for tags, with completion on tags in target file.
+
+- ‘=%^G=' :: Prompt for tags, with completion all tags in all agenda files.
+
+- ‘=%^t=' :: Like ‘=%t=', but prompt for date. Similarly, ‘=%^T=', ‘=%^u=', ‘=%^U='. You may define a prompt like ‘=%^{Birthday}t='.
+
+- ‘=%^C=' :: Interactive selection of which kill or clip to use.
+
+- ‘=%^L=' :: Like ‘=%^C=', but insert as link.
+
+- ‘=%^{PROP}p=' :: Prompt the user for a value for property =PROP=. You may specify a default value with ‘=%^{PROP|default}='.
+
+- ‘=%^{PROMPT}X=', X is one of g,G,t,T,u,U,C,L :: Prompt the user as in ‘=%^X=', but use the custom prompt string. You may specify a default value and completions with ‘=%^{PROMPT|default|completion1|completion2|completion3...}X='.
+
+- ‘=%^{PROMPT}=' :: Prompt the user for a string and replace this sequence with it. You may specify a default value and a completion table with ‘=%^{prompt|default|completion2|completion3...}='. The arrow keys access a prompt-specific history.
+
+- ‘=%\N=' :: Insert the text entered at the =N=th ‘=%^{PROMPT}=' (but not ‘=%^{PROMPT}X='), where =N= is a number, starting from 1.
+
+- ‘=%\*N=' :: Same as ‘=%\N=', but include all the prompts.
+
+- ‘=%?=' :: After completing the template, position point here.
+
+For specific link types, the following keywords are defined[[#FOOT89][^{89}]]:
+
+| Link type    | Available keywords                                               |
+|--------------+------------------------------------------------------------------|
+| bbdb         | ‘=%:name=', ‘=%:company='                                        |
+| irc          | ‘=%:server=', ‘=%:port=', ‘=%:nick='                             |
+| mh, rmail    | ‘=%:type=', ‘=%:subject=', ‘=%:message-id='                      |
+|              | ‘=%:from=', ‘=%:fromname=', ‘=%:fromaddress='                    |
+|              | ‘=%:to=', ‘=%:toname=', ‘=%:toaddress='                          |
+|              | ‘=%:date=' (message date header field)                           |
+|              | ‘=%:date-timestamp=' (date as active timestamp)                  |
+|              | ‘=%:date-timestamp-inactive=' (date as inactive timestamp)       |
+|              | ‘=%:fromto=' (either “to NAME” or “from NAME”)[[#FOOT90][^{90}]] |
+| gnus         | ‘=%:group=', for messages also all email fields                  |
+| w3, w3m      | ‘=%:url='                                                        |
+| info         | ‘=%:file=', ‘=%:node='                                           |
+| calendar     | ‘=%:date='                                                       |
+| org-protocol | ‘=%:link=', ‘=%:description=', ‘=%:annotation='                  |
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF88][(88)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If you need one of these sequences literally, escape the ‘=%=' with a backslash.
+
+***** [[#DOCF89][(89)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+If you define your own link types (see [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]]), any property you store with =org-link-store-props= can be accessed in capture templates in a similar way.
+
+***** [[#DOCF90][(90)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+This is always the other, not the user. See the variable =org-link-from-user-regexp=.
+
+--------------
+
+Next: [[id:org--Templates-in-contexts][Templates in contexts]], Previous: [[id:org--Template-elements][Template elements]], Up: [[id:org--Capture-templates][Capture templates]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

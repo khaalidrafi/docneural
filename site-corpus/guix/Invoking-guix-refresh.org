@@ -1,0 +1,364 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-refresh
+:END:
+#+filetags: :guix:
+#+title: Invoking guix refresh
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-refresh>>
+Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.6 Invoking =guix refresh= [[#Invoking-guix-refresh-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-refresh-1
+:CLASS: section
+:END:
+The primary audience of the =guix refresh= command is packagers. As a user, you may be interested in the =--with-latest= option, which can bring you package update superpowers built upon =guix refresh= (see [[id:guix--Package-Transformation-Options][=--with-latest=]]). By default, =guix refresh= reports any packages provided by the distribution that are outdated compared to the latest upstream version, like this:
+
+#+begin_example
+$ guix refresh
+gnu/packages/gettext.scm:29:13: gettext would be upgraded from 0.18.1.1 to 0.18.2.1
+gnu/packages/glib.scm:77:12: glib would be upgraded from 2.34.3 to 2.37.0
+#+end_example
+
+Alternatively, one can specify packages to consider, in which case a warning is emitted for packages that lack an updater:
+
+#+begin_example
+$ guix refresh coreutils guile guile-ssh
+gnu/packages/ssh.scm:205:2: warning: no updater for guile-ssh
+gnu/packages/guile.scm:136:12: guile would be upgraded from 2.0.12 to 2.0.13
+#+end_example
+
+=guix refresh= browses the upstream repository of each package and determines the highest version number of the releases therein. The command knows how to update specific types of packages: GNU packages, ELPA packages, etc.---see the documentation for =--type= below. There are many packages, though, for which it lacks a method to determine whether a new upstream release is available. However, the mechanism is extensible, so feel free to get in touch with us to add a new method!
+
+If for some reason you don't want to update to the latest version, you can update to a specific version by appending an equal sign and the desired version number to the package specification. Note that not all updaters support this; an error is reported when an updater cannot refresh to the specified version.
+
+#+begin_example
+$ guix refresh -u guile=3.0.4
+...
+gnu/packages/guile.scm:392:2: guile: updating from version 3.0.3 to version 3.0.4...
+...
+$ guix refresh -u guile@2.0=2.0.12
+...
+gnu/packages/guile.scm:147:2: guile: updating from version 2.0.10 to version 2.0.12...
+...
+#+end_example
+
+In some specific cases, you may have many packages specified via a manifest or a module selection which should all be updated together; for these cases, the =--target-version= option can be provided to have them all refreshed to the same version, as shown in the examples below:
+
+#+begin_example
+$ guix refresh qtbase qtdeclarative --target-version=6.5.2
+gnu/packages/qt.scm:1248:13: qtdeclarative would be upgraded from 6.3.2 to 6.5.2
+gnu/packages/qt.scm:584:2: qtbase would be upgraded from 6.3.2 to 6.5.2
+#+end_example
+
+#+begin_example
+$ guix refresh --manifest=qt5-manifest.scm --target-version=5.15.10
+gnu/packages/qt.scm:1173:13: qtxmlpatterns would be upgraded from 5.15.8 to 5.15.10
+gnu/packages/qt.scm:1202:13: qtdeclarative would be upgraded from 5.15.8 to 5.15.10
+gnu/packages/qt.scm:1762:13: qtserialbus would be upgraded from 5.15.8 to 5.15.10
+gnu/packages/qt.scm:2070:13: qtquickcontrols2 would be upgraded from 5.15.8 to 5.15.10
+...
+#+end_example
+
+#+begin_example
+$ guix refresh -s module:kde-plasma --target-version=6.3.6
+[...] plasma-systemmonitor would be upgraded from 6.3.4 to 6.3.6
+[...] plasma-workspace-wallpapers would be upgraded from 6.3.4 to 6.3.6
+[...] plasma-browser-integration would be upgraded from 6.3.4 to 6.3.6
+...
+#+end_example
+
+The =--target-version= option accepts partial version prefixes, which can be useful to update to the latest major or major-minor prefixed version:
+
+#+begin_example
+$ guix refresh qtbase@5 qtdeclarative@5 --target-version=5
+gnu/packages/qt.scm:1472:13: qtdeclarative would be upgraded from 5.15.8 to 5.15.10
+gnu/packages/qt.scm:452:13: qtbase would be upgraded from 5.15.8 to 5.15.10
+#+end_example
+
+A per-package equivalent to =--target-version= is made available by prefixing the version specification with the ‘=~=' (tilde) character. For example:
+
+#+begin_example
+$ guix refresh bash=~5 guile=~3
+gnu/packages/guile.scm:354:13: guile would be upgraded from 3.0.9 to 3.0.10
+gnu/packages/bash.scm:150:15: bash would be upgraded from 5.1.16 to 5.2.37
+#+end_example
+
+Sometimes the upstream name differs from the package name used in Guix, and =guix refresh= needs a little help. Most updaters honor the =upstream-name= property in package definitions, which can be used to that effect:
+
+#+begin_src lisp
+(define-public network-manager
+  (package
+    (name "network-manager")
+    ;; ...
+    (properties '((upstream-name . "NetworkManager")))))
+#+end_src
+
+When passed =--update=, it modifies distribution source files to update the version numbers and source code hashes of those package definitions, as well as possibly their inputs (see [[id:guix--Defining-Packages][Defining Packages]]). This is achieved by downloading each package's latest source tarball and its associated OpenPGP signature, authenticating the downloaded tarball against its signature using =gpgv=, and finally computing its hash---note that GnuPG must be installed and in =$PATH=; run =guix install gnupg= if needed.
+
+You might also want to update definitions that correspond to the packages installed in your profile:
+
+#+begin_example
+$ ./pre-inst-env guix refresh -u \
+       $(guix package --list-installed | cut -f1)
+#+end_example
+
+When considering whether to upgrade a package, it is sometimes convenient to know which packages would be affected by the upgrade and should be checked for compatibility. For this the =--list-dependent= option may be used when passing =guix refresh= one or more package names.
+
+When the public key used to sign the tarball is missing from the user's keyring, an attempt is made to automatically retrieve it from a public key server; when this is successful, the key is added to the user's keyring; otherwise, =guix refresh= reports an error.
+
+The following options are supported:
+
+- =--recursive= :: Consider the packages specified, and all the packages upon which they depend.
+
+  #+begin_example
+  $ guix refresh --recursive coreutils
+  gnu/packages/acl.scm:40:13: acl would be upgraded from 2.2.53 to 2.3.1
+  gnu/packages/m4.scm:30:12: 1.4.18 is already the latest version of m4
+  gnu/packages/xml.scm:68:2: warning: no updater for expat
+  gnu/packages/multiprecision.scm:40:12: 6.1.2 is already the latest version of gmp
+  ...
+#+end_example
+
+- =--expression===expr=\\
+  =-e ==expr= :: Consider the package =expr= evaluates to.
+
+  This is useful to precisely refer to a package, as in this example:
+
+  #+begin_example
+  guix refresh -l -e '(@@ (gnu packages commencement) glibc-final)'
+#+end_example
+
+  This command lists the dependents of the “final” libc (essentially all the packages).
+
+- =--update=\\
+  =-u= :: Update distribution source files (package definitions) in place. This is usually run from a checkout of the Guix source tree (see [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]]):
+
+  #+begin_example
+  ./pre-inst-env guix refresh -s non-core -u
+#+end_example
+
+  See [[id:guix--Defining-Packages][Defining Packages]], for more information on package definitions. You can also run it on packages from a third-party channel:
+
+  #+begin_example
+  guix refresh -L /path/to/channel -u package
+#+end_example
+
+  See [[id:guix--Creating-a-Channel][Creating a Channel]], on how to create a channel.
+
+  This command updates the version and source code hash of the package. Depending on the updater being used, it can also update the various ‘=inputs=' fields of the package. In some cases, the updater might get inputs wrong---it might not know about an extra input that's necessary, or it might add an input that should be avoided.
+
+  To address that, packagers can add properties stating inputs that should be added to those found by the updater or inputs that should be ignored: the =updater-extra-inputs= and =updater-ignored-inputs= properties pertain to “regular” inputs, and there are equivalent properties for ‘=native=' and ‘=propagated=' inputs. In the example below, we tell the updater that we need ‘=openmpi=' as an additional input:
+
+  #+begin_src lisp
+  (define-public python-mpi4py
+    (package
+      (name "python-mpi4py")
+      ;; ...
+      (inputs (list openmpi))
+      (properties
+       '((updater-extra-inputs . ("openmpi"))))))
+  #+end_src
+
+  That way, =guix refresh -u python-mpi4py= will leave the ‘=openmpi=' input, even if it is not among the inputs it would normally add.
+
+- =--select=[==subset==]=\\
+  =-s ==subset= :: Select all the packages in =subset=, one of =core=, =non-core= or =module:==name=.
+
+  The =core= subset refers to all the packages at the core of the distribution---i.e., packages that are used to build “everything else”. This includes GCC, libc, Binutils, Bash, etc. Usually, changing one of these packages in the distribution entails a rebuild of all the others. Thus, such updates are an inconvenience to users in terms of build time or bandwidth used to achieve the upgrade.
+
+  The =non-core= subset refers to the remaining packages. It is typically useful in cases where an update of the core packages would be inconvenient.
+
+  The =module:==name= subset refers to all the packages in a specified guile module. The module can be specified as =module:guile= or =module:(gnu packages guile)=, the former is a shorthand for the later.
+
+- =--manifest===file=\\
+  =-m ==file= :: Select all the packages from the manifest in =file=. This is useful to check if any packages of the user manifest can be updated.
+
+- =--type===updater=\\
+  =-t ==updater= :: Select only packages handled by =updater= (may be a comma-separated list of updaters). Currently, =updater= may be one of:
+
+  - =gnu= :: the updater for GNU packages;
+
+  - =savannah= :: the updater for packages hosted at [[https://savannah.gnu.org][Savannah]];
+
+  - =sourceforge= :: the updater for packages hosted at [[https://sourceforge.net][SourceForge]];
+
+  - =gnome= :: the updater for GNOME packages;
+
+  - =kde= :: the updater for KDE packages;
+
+  - =xorg= :: the updater for X.org packages;
+
+  - =kernel.org= :: the updater for packages hosted on kernel.org;
+
+  - =egg= :: the updater for [[https://wiki.call-cc.org/eggs/][Egg]] packages;
+
+  - =elpa= :: the updater for [[https://elpa.gnu.org/][ELPA]] packages;
+
+  - =cran= :: the updater for [[https://cran.r-project.org/][CRAN]] packages;
+
+  - =bioconductor= :: the updater for [[https://www.bioconductor.org/][Bioconductor]] R packages;
+
+  - =cpan= :: the updater for [[https://www.cpan.org/][CPAN]] packages;
+
+  - =pypi= :: the updater for [[https://pypi.python.org][PyPI]] packages.
+
+  - =gem= :: the updater for [[https://rubygems.org][RubyGems]] packages.
+
+  - =github= :: the updater for [[https://github.com][GitHub]] packages.
+
+    The =github= updater uses the [[https://developer.github.com/v3/][GitHub API]] to query for new releases. When used repeatedly e.g. when refreshing all packages, GitHub will eventually refuse to answer any further API requests. By default 60 API requests per hour are allowed, and a full refresh on all GitHub packages in Guix requires more than this. Authentication with GitHub through the use of an API token alleviates these limits. To use an API token, set the environment variable =GUIX_GITHUB_TOKEN= to a token procured from [[https://github.com/settings/tokens]] or otherwise.
+
+  - =hackage= :: the updater for [[https://hackage.haskell.org][Hackage]] packages.
+
+  - =stackage= :: the updater for [[https://www.stackage.org][Stackage]] packages.
+
+  - =crate= :: the updater for [[https://crates.io][Crates]] packages.
+
+  - =launchpad= :: the updater for [[https://launchpad.net][Launchpad]] packages.
+
+  - =generic-html= :: a generic updater that crawls, by default, the HTML page where the source tarball of the package is hosted, when applicable. Behavior can be customized with the following package properties:
+
+    - =release-monitoring-url= :: an alternate URL to crawl;
+
+    - <<index-release_002dfile_002dregexp-package-property_002c-for-generic_002dhtml-updater>>=release-file-regexp= [[#index-release_002dfile_002dregexp-package-property_002c-for-generic_002dhtml-updater][¶]] :: an regular expression matching release file names, whose first subexpression must correspond to the version string.
+
+    Here is an example package with a custom release monitoring URL and a regexp matching an unconventional release file name (it's unconventional due to the use of upper case letter and the lack of a hyphen before the version string):
+
+    #+begin_src lisp
+    (package
+      ;; ...
+      (home-page "http://example.org/software/the-package.html")
+      (properties
+        `((release-monitoring-url . ,home-page)
+          (release-file-regexp . "ThePackage([0-9\\.]+)\\.tgz"))))
+    #+end_src
+
+  - =generic-git= :: a generic updater for packages hosted on Git repositories. It tries to be smart about parsing Git tag names, but if it is not able to parse the tag name and compare tags correctly, users can define the following properties for a package.
+
+    -  =release-tag-prefix=: a regular expression for matching a prefix of the tag name.
+    -  =release-tag-suffix=: a regular expression for matching a suffix of the tag name.
+    -  =release-tag-version-delimiter=: a string used as the delimiter in the tag name for separating the numbers of the version.
+    -  =accept-pre-releases=: by default, the updater will ignore pre-releases; to make it also look for pre-releases, set the this property to =#t=.
+    -  =stable-version-regexp=: a regular expression for matching the version string, if specified the updater will pick the latest version from matching ones when the =--target-version= option is omitted.
+
+    #+begin_src lisp
+    (package
+      (name "foo")
+      ;; ...
+      (properties
+        '((release-tag-prefix . "^release0-")
+          (release-tag-suffix . "[a-z]?$")
+          (release-tag-version-delimiter . ":"))))
+    #+end_src
+
+  For instance, the following command only checks for updates of Emacs packages hosted at =elpa.gnu.org= and for updates of CRAN packages:
+
+  #+begin_example
+  $ guix refresh --type=elpa,cran
+  gnu/packages/statistics.scm:819:13: r-testthat would be upgraded from 0.10.0 to 0.11.0
+  gnu/packages/emacs.scm:856:13: emacs-auctex would be upgraded from 11.88.6 to 11.88.9
+#+end_example
+
+- =--list-updaters= :: List available updaters and exit (see =--type= above).
+
+  For each updater, display the fraction of packages it covers; at the end, display the fraction of packages covered by all these updaters.
+
+- =--list-dependent=\\
+  =-l= :: List top-level dependent packages that would need to be rebuilt as a result of upgrading one or more packages.
+
+  See [[id:guix--Invoking-guix-graph][the =reverse-package= type of =guix graph=]], for information on how to visualize the list of dependents of a package.
+
+  See [[id:guix--Additional-Build-Options::#build_002ddependents][=guix build --dependents=]], for a convenient way to build all the dependents of a package.
+
+  Be aware that the =--list-dependent= option only /approximates/ the rebuilds that would be required as a result of an upgrade. More rebuilds might be required under some circumstances.
+
+  #+begin_example
+  $ guix refresh --list-dependent flex
+  Building the following 120 packages would ensure 213 dependent packages are rebuilt:
+  hop@2.4.0 emacs-geiser@0.13 notmuch@0.18 mu@0.9.9.5 cflow@1.4 idutils@4.6 ...
+#+end_example
+
+  The command above lists a set of packages that could be built to check for compatibility with an upgraded =flex= package.
+
+- =--list-transitive=\\
+  =-T= :: List all the packages which one or more packages depend upon.
+
+  #+begin_example
+  $ guix refresh --list-transitive flex
+  flex@2.6.4 depends on the following 25 packages: perl@5.28.0 help2man@1.47.6
+  bison@3.0.5 indent@2.2.10 tar@1.30 gzip@1.9 bzip2@1.0.6 xz@5.2.4 file@5.33 ...
+#+end_example
+
+  The command above lists a set of packages which, when changed, would cause =flex= to be rebuilt.
+
+- =--load-path===directory=\\
+  =-L ==directory= :: Add =directory= to the front of the package module search path (see [[id:guix--Package-Modules][Package Modules]]).
+
+  This allows users to define their own packages and make them visible to the command-line tools.
+
+The following options can be used to customize GnuPG operation:
+
+- =--gpg===command= :: Use =command= as the GnuPG 2.x command. =command= is searched for in =$PATH=.
+
+- =--keyring===file= :: Use =file= as the keyring for upstream keys. =file= must be in the /keybox format/. Keybox files usually have a name ending in =.kbx= and the GNU Privacy Guard (GPG) can manipulate these files (see [[https://www.gnupg.org/documentation/manuals/gnupg/kbxutil.html#kbxutil][=kbxutil=]] in Using the GNU Privacy Guard, for information on a tool to manipulate keybox files).
+
+  When this option is omitted, =guix refresh= uses =~/.config/guix/upstream/trustedkeys.kbx= as the keyring for upstream signing keys. OpenPGP signatures are checked against keys from this keyring; missing keys are downloaded to this keyring as well (see =--key-download= below).
+
+  You can fetch keys to a specific keybox file like this:
+
+  #+begin_example
+  gpg --no-default-keyring --keyring mykeyring.kbx \
+    --recv-keys A28BF40C3E551372662D14F741AAE7DCCA3D8351
+#+end_example
+
+  See [[https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html#GPG-Configuration-Options][=--keyring=]] in Using the GNU Privacy Guard, for more information on GPG's =--keyring= option.
+
+- =--key-download===policy= :: Handle missing OpenPGP keys according to =policy=, which may be one of:
+
+  - =always= :: Always download missing OpenPGP keys from the key server, and add them to the user's GnuPG keyring.
+
+  - =never= :: Never try to download missing OpenPGP keys. Instead just bail out.
+
+  - =interactive= :: When a package signed with an unknown OpenPGP key is encountered, ask the user whether to download it or not.
+
+  - =auto= :: Automatically selects the =interactive= policy when the standard input is connected to a pseudo terminal (TTY), else =always=. This is the default behavior.
+
+- =--key-server===host= :: Use =host= as the OpenPGP key server when importing a public key.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

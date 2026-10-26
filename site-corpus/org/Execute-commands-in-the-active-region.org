@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Execute-commands-in-the-active-region
+:END:
+#+filetags: :org:
+#+title: Execute commands in the active region (The Org Manual)
+
+Next:
+
+<<Execute-commands-in-the-active-region>>
+Next: [[id:org--Dynamic-Headline-Numbering][Dynamic Headline Numbering]], Previous: [[id:org--Clean-View][A Cleaner Outline View]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.5 Execute commands in the active region [[#Execute-commands-in-the-active-region-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Execute-commands-in-the-active-region-1
+:CLASS: section
+:END:
+When in an Org buffer and the region is active, some commands will apply to all the subtrees in the active region. For example, hitting C-c C-s when multiple headlines are within the active region will successively prompt you for a new schedule date and time. To disable this, set the option =org-loop-over-headlines-in-active-region= to non-=t=, activate the region and run the command normally.
+
+=org-agenda-loop-over-headlines-in-active-region= is the equivalent option of the agenda buffer, where you can also use [[id:org--Agenda-Commands::#Bulk-remote-editing-selected-entries][bulk editing of selected entries]].
+
+Not all commands can loop in the active region and what subtrees or headlines are considered can be refined: see the docstrings of these options for more details.

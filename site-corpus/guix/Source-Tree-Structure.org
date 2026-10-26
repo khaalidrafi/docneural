@@ -1,0 +1,190 @@
+:PROPERTIES:
+:ID: guix--Source-Tree-Structure
+:END:
+#+filetags: :guix:
+#+title: Source Tree Structure
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Source-Tree-Structure>>
+Next: [[id:guix--Packaging-Guidelines][Packaging Guidelines]], Previous: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.6 Source Tree Structure [[#Source-Tree-Structure-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Source-Tree-Structure-1
+:CLASS: section
+:END:
+If you're willing to contribute to Guix beyond packages, or if you'd like to learn how it all fits together, this section provides a guided tour in the code base that you may find useful.
+
+Overall, the Guix source tree contains almost exclusively Guile /modules/, each of which can be seen as an independent library (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Modules.html#Modules][Modules]] in GNU Guile Reference Manual).
+
+The following table gives an overview of the main directories and what they contain. Remember that in Guile, each module name is derived from its file name---e.g., the module in file =guix/packages.scm= is called =(guix packages)=.
+
+- =guix= :: This is the location of core Guix mechanisms. To illustrate what is meant by “core”, here are a few examples, starting from low-level tools and going towards higher-level tools:
+
+  - =(guix store)= :: Connecting to and interacting with the build daemon (see [[id:guix--The-Store][The Store]]).
+
+  - =(guix derivations)= :: Creating derivations (see [[id:guix--Derivations][Derivations]]).
+
+  - =(guix gexps)= :: Writing G-expressions (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+  - =(guix packages)= :: Defining packages and origins (see [[id:guix--package-Reference][=package= Reference]]).
+
+  - =(guix download)=\\
+    =(guix git-download)= :: The =url-fetch= and =git-fetch= origin download methods (see [[id:guix--origin-Reference][=origin= Reference]]).
+
+  - =(guix swh)= :: Fetching source code from the [[https://archive.softwareheritage.org][Software Heritage archive]].
+
+  - =(guix search-paths)= :: Implementing search paths (see [[id:guix--Search-Paths][Search Paths]]).
+
+  - =(guix build-system)= :: The build system interface (see [[id:guix--Build-Systems][Build Systems]]).
+
+  - =(guix profiles)= :: Implementing profiles.
+
+- <<index-build-system_002c-directory-structure>>=guix/build-system= [[#index-build-system_002c-directory-structure][¶]] :: This directory contains specific build system implementations (see [[id:guix--Build-Systems][Build Systems]]), such as:
+
+  - =(guix build-system gnu)= :: the GNU build system;
+
+  - =(guix build-system cmake)= :: the CMake build system;
+
+  - =(guix build-system pyproject)= :: The Python “pyproject” build system.
+
+- =guix/build= :: This contains code generally used on the “build side” (see [[id:guix--G_002dExpressions][strata of code]]). This includes code used to build packages or other operating system components, as well as utilities:
+
+  - =(guix build utils)= :: Utilities for package definitions and more (see [[id:guix--Build-Utilities][Build Utilities]]).
+
+  - =(guix build gnu-build-system)=\\
+    =(guix build cmake-build-system)=\\
+    =(guix build pyproject-build-system)= :: Implementation of build systems, and in particular definition of their build phases (see [[id:guix--Build-Phases][Build Phases]]).
+
+  - =(guix build syscalls)= :: Interface to the C library and to Linux system calls.
+
+-  <<index-command_002dline-tools_002c-as-Guile-modules>>=guix/scripts= [[#index-command_002dline-tools_002c-as-Guile-modules][¶]] :: This contains modules corresponding to =guix= sub-commands. For example, the =(guix scripts shell)= module exports the =guix-shell= procedure, which directly corresponds to the =guix shell= command (see [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]).
+
+- <<index-importer-modules>>=guix/import= [[#index-importer-modules][¶]] :: This contains supporting code for the importers and updaters (see [[id:guix--Invoking-guix-import][Invoking =guix import=]], and see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]). For example, =(guix import pypi)= defines the interface to PyPI, which is used by the =guix import pypi= command.
+
+The directories we have seen so far all live under =guix/=. The other important place is the =gnu/= directory, which contains primarily package definitions as well as libraries and tools for Guix System (see [[id:guix--System-Configuration][System Configuration]]) and Guix Home (see [[id:guix--Home-Configuration][Home Configuration]]), all of which build upon functionality provided by =(guix …)= modules[[#FOOT48][^{48}]].
+
+- <<index-package-modules>>=gnu/packages= [[#index-package-modules][¶]] :: This is by far the most crowded directory of the source tree: it contains /package modules/ that export package definitions (see [[id:guix--Package-Modules][Package Modules]]). A few examples:
+
+  - =(gnu packages base)= :: Module providing “base” packages: =glibc=, =coreutils=, =grep=, etc.
+
+  - =(gnu packages guile)= :: Guile and core Guile packages.
+
+  - =(gnu packages linux)= :: The Linux-libre kernel and related packages.
+
+  - =(gnu packages python)= :: Python and core Python packages.
+
+  - =(gnu packages python-xyz)= :: Miscellaneous Python packages (we were not very creative).
+
+  In any case, you can jump to a package definition using =guix edit= (see [[id:guix--Invoking-guix-edit][Invoking =guix edit=]]) and view its location with =guix show= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+- <<index-search_002dpatches>>=gnu/packages/patches= [[#index-search_002dpatches][¶]] :: This directory contains patches applied against packages and obtained using the =search-patches= procedure.
+
+- =gnu/services= :: This contains service definitions, primarily for Guix System (see [[id:guix--Services][Services]]) but some of them are adapted and reused for Guix Home as we will see below. Examples:
+
+  - =(gnu services)= :: The service framework itself, which defines the service and service type data types (see [[id:guix--Service-Composition][Service Composition]]).
+
+  - =(gnu services base)= :: “Base” services (see [[id:guix--Base-Services][Base Services]]).
+
+  - =(gnu services desktop)= :: “Desktop” services (see [[id:guix--Desktop-Services][Desktop Services]]).
+
+  - =(gnu services shepherd)= :: Support for Shepherd services (see [[id:guix--Shepherd-Services][Shepherd Services]]).
+
+  You can jump to a service definition using =guix system edit= and view its location with =guix system search= (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).
+
+- =gnu/system= :: These are core Guix System modules, such as:
+
+  - =(gnu system)= :: Defines =operating-system= (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]]).
+
+  - =(gnu system file-systems)= :: Defines =file-system= (see [[id:guix--File-Systems][File Systems]]).
+
+  - =(gnu system mapped-devices)= :: Defines =mapped-device= (see [[id:guix--Mapped-Devices][Mapped Devices]]).
+
+- =gnu/build= :: These are modules that are either used on the “build side” when building operating systems or packages, or at run time by operating systems.
+
+  - =(gnu build accounts)= :: Creating =/etc/passwd=, =/etc/shadow=, etc. (see [[id:guix--User-Accounts][User Accounts]]).
+
+  - =(gnu build activation)= :: Activating an operating system at boot time or reconfiguration time.
+
+  - =(gnu build file-systems)= :: Searching, checking, and mounting file systems.
+
+  - =(gnu build linux-boot)=\\
+    =(gnu build hurd-boot)= :: Booting GNU/Linux and GNU/Hurd operating systems.
+
+  - =(gnu build linux-initrd)= :: Creating a Linux initial RAM disk (see [[id:guix--Initial-RAM-Disk][Initial RAM Disk]]).
+
+- =gnu/home= :: This contains all things Guix Home (see [[id:guix--Home-Configuration][Home Configuration]]); examples:
+
+  - =(gnu home services)= :: Core services such as =home-files-service-type=.
+
+  - =(gnu home services ssh)= :: SSH-related services (see [[id:guix--Secure-Shell][Secure Shell]]).
+
+- =gnu/installer= :: This contains the text-mode graphical system installer (see [[id:guix--Guided-Graphical-Installation][Guided Graphical Installation]]).
+
+- =gnu/machine= :: These are the /machine abstractions/ used by =guix deploy= (see [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]]).
+
+- =gnu/tests= :: This contains system tests---tests that spawn virtual machines to check that system services work as expected (see [[id:guix--Running-the-Test-Suite][Running the Test Suite]]).
+
+Last, there's also a few directories that contain files that are /not/ Guile modules:
+
+- =nix= :: This is the C++ implementation of =guix-daemon=, inherited from Nix (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]).
+
+- =tests= :: These are unit tests, each file corresponding more or less to one module, in particular =(guix …)= modules (see [[id:guix--Running-the-Test-Suite][Running the Test Suite]]).
+
+- =doc= :: This is the documentation in the form of Texinfo files: this manual and the Cookbook. See [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Writing-a-Texinfo-File.html#Writing-a-Texinfo-File][Writing a Texinfo File]] in GNU Texinfo, for information on Texinfo markup language.
+
+- =po= :: This is the location of translations of Guix itself, of package synopses and descriptions, of the manual, and of the cookbook. Note that =.po= files that live here are pulled directly from Weblate (see [[id:guix--Translating-Guix][Translating Guix]]).
+
+- =etc= :: Miscellaneous files: shell completions, support for systemd and other init systems, Git hooks, etc.
+
+With all this, a fair chunk of your operating system is at your fingertips! Beyond =grep= and =git grep=, see [[id:guix--The-Perfect-Setup][The Perfect Setup]] on how to navigate code from your editor, and see [[id:guix--Using-Guix-Interactively][Using Guix Interactively]] for information on how to use Scheme modules interactively. Enjoy!
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF48][(48)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+For this reason, =(guix …)= modules must generally not depend on =(gnu …)= modules, with notable exceptions: =(guix build-system …)= modules may look up packages at run time---e.g., =(guix build-system cmake)= needs to access the =cmake= variable at run time---, =(guix scripts …)= often rely on =(gnu …)= modules, and the same goes for some of the =(guix import …)= modules.
+
+--------------
+
+Next: [[id:guix--Packaging-Guidelines][Packaging Guidelines]], Previous: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: emacs--Tab-Line
+:END:
+#+filetags: :emacs:
+#+title: Tab Line
+
+Next: [[id:emacs--Window-Tool-Bar][Window Tool Bar]]   Previous: [[id:emacs--Window-Convenience][Convenience Features for Window Handling]]   Up: [[id:emacs--Windows][Multiple Windows]]
+
+<<Tab-Line>>
+*** 22.8 Window Tab Line [[#Window-Tab-Line][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Window-Tab-Line
+:CLASS: section
+:END:
+The command =global-tab-line-mode= toggles the display of a /tab line/ on the top screen line of each window. The Tab Line shows special buttons (“tabs”) for each buffer that was displayed in a window, and allows switching to any of these buffers by clicking the corresponding button. Clicking on the + icon adds a new buffer to the window-local tab line of buffers, and clicking on the x icon of a tab deletes it. The mouse wheel on the tab line scrolls the tabs horizontally.
+
+Touch screen input (see [[id:emacs--Other-Input][Touchscreen Input and Virtual Keyboards]]) can also be used to interact with the “tab line”. Long-pressing (see [[id:emacs--Touchscreens][Using Emacs on Touchscreens]]) a tab will display a context menu with items that operate on the tab that was pressed; tapping a tab itself will result in switching to that tab's buffer, and tapping a button on the tab line will behave as if it was clicked with mouse-1.
+
+Selecting the previous window-local tab is the same as typing C-x LEFT (=previous-buffer=), selecting the next tab is the same as C-x RIGHT (=next-buffer=). Both commands support a numeric prefix argument as a repeat count.
+
+You can customize the variable =tab-line-tabs-function= to define the preferred contents of the tab line. By default, it displays all buffers previously visited in the window, as described above. But you can also set it to display a list of buffers with the same major mode as the current buffer, or to display buffers grouped by their major mode, where clicking on the mode name in the first tab displays a list of all major modes where you can select another group of buffers.
+
+Note that the Tab Line is different from the Tab Bar (see [[id:emacs--Tab-Bars][Tab Bars]]). Whereas tabs on the Tab Bar at the top of each frame are used to switch between window configurations containing several windows with buffers, tabs on the Tab Line at the top of each window are used to switch between buffers in the window.
+
+Also note that the tab line displays in the same space as the window tool bar, so only one of them can be displayed at any given time, unless you customize the value of =tab-line-format= in Lisp to add =(:eval (tab-line-format))= to =tab-line-format=. See [[../elisp_html/Mode-Line-Format.html#Mode-Line-Format][Mode Line Format]] in The Emacs Lisp Reference Manual.
+
+--------------

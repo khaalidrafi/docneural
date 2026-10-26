@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: org--Special-blocks-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Special blocks in LaTeX export (The Org Manual)
+
+Next:
+
+<<Special-blocks-in-LaTeX-export>>
+Next: [[id:org--Horizontal-rules-in-LaTeX-export][Horizontal rules in LaTeX export]], Previous: [[id:org--Example-blocks-in-LaTeX-export][Example blocks in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.10 Special blocks in LaTeX export [[#Special-blocks-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Special-blocks-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+For other special blocks in the Org file, the LaTeX export backend makes a special environment of the same name. The backend also takes ‘=:options=', if any, and appends as-is to that environment's opening string. For example:
+
+#+begin_example
+#+BEGIN_abstract
+  We demonstrate how to solve the Syracuse problem.
+#+end_example
+
+#+ATTR_LATEX: :options [Proof of important theorem]
+#+BEGIN_proof
+  ...
+  Therefore, any even number greater than 2 is the sum of two primes.
+#+END_proof
+#+end_src
+
+exports to
+
+#+begin_example
+\begin{abstract}
+  We demonstrate how to solve the Syracuse problem.
+\end{abstract}
+
+\begin{proof}[Proof of important theorem]
+  ...
+  Therefore, any even number greater than 2 is the sum of two primes.
+\end{proof}
+#+end_example
+
+If you need to insert a specific caption command, use ‘=:caption=' attribute. It overrides standard ‘=CAPTION=' value, if any. For example:
+
+#+begin_example
+#+ATTR_LATEX: :caption \MyCaption{HeadingA}
+#+BEGIN_proof
+  ...
+#+end_example
+#+end_src
+
+--------------
+
+Next: [[id:org--Horizontal-rules-in-LaTeX-export][Horizontal rules in LaTeX export]], Previous: [[id:org--Example-blocks-in-LaTeX-export][Example blocks in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

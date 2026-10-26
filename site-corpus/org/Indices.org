@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID: org--Indices
+:END:
+#+filetags: :org:
+#+title: Indices (The Org Manual)
+
+Next:
+
+<<Indices>>
+Next: [[id:org--Quoting-Texinfo-code][Quoting Texinfo code]], Previous: [[id:org--Headings-and-sectioning-structure][Headings and sectioning structure]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.7 Indices [[#Indices-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Indices-1
+:CLASS: subsection
+:END:
+The Texinfo export backend recognizes these indexing keywords if used in the Org file: ‘=CINDEX=', ‘=FINDEX=', ‘=KINDEX=', ‘=PINDEX=', ‘=TINDEX=' and ‘=VINDEX='. Write their value as verbatim Texinfo code; in particular, ‘={=', ‘=}=' and ‘=@=' characters need to be escaped with ‘=@=' if they do not belong to a Texinfo command.
+
+#+begin_example
+#+CINDEX: Defining indexing entries
+#+end_example
+
+For the backend to generate an index entry for a headline, set the ‘=INDEX=' property to ‘=cp=' or ‘=vr='. These abbreviations come from Texinfo that stand for concept index and variable index. The Texinfo manual has abbreviations for all other kinds of indexes. The backend exports the headline as an unnumbered chapter or section command, and then inserts the index after its contents.
+
+#+begin_example
+* Concept Index
+  :PROPERTIES:
+  :INDEX: cp
+  :END:
+#+end_src
+
+--------------
+
+Next: [[id:org--Quoting-Texinfo-code][Quoting Texinfo code]], Previous: [[id:org--Headings-and-sectioning-structure][Headings and sectioning structure]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

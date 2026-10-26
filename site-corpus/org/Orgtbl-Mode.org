@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Orgtbl-Mode
+:END:
+#+filetags: :org:
+#+title: Orgtbl Mode (The Org Manual)
+
+Next:
+
+<<Orgtbl-Mode>>
+Next: [[id:org--The-Spreadsheet][The Spreadsheet]], Previous: [[id:org--Column-Groups][Column Groups]], Up: [[id:org--Tables][Tables]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 3.4 The Orgtbl Minor Mode [[#The-Orgtbl-Minor-Mode][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Orgtbl-Minor-Mode
+:CLASS: section
+:END:
+If you like the intuitive way the Org table editor works, you might also want to use it in other modes like Text mode or Mail mode. The minor mode Orgtbl mode makes this possible. You can always toggle the mode with M-x orgtbl-mode. To turn it on by default, for example in Message mode, use
+
+#+begin_src lisp-preformatted
+(add-hook 'message-mode-hook #'turn-on-orgtbl)
+#+end_src
+
+Furthermore, with some special setup, it is possible to maintain tables in arbitrary syntax with Orgtbl mode. For example, it is possible to construct LaTeX tables with the underlying ease and power of Orgtbl mode, including spreadsheet capabilities. For details, see [[id:org--Tables-in-Arbitrary-Syntax][Tables in Arbitrary Syntax]].

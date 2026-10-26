@@ -1,0 +1,78 @@
+:PROPERTIES:
+:ID: guix--X_002e509-Certificates
+:END:
+#+filetags: :guix:
+#+title: X.509 Certificates
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<X_002e509-Certificates>>
+Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.12 X.509 Certificates [[#X_002e509-Certificates-2][¶]]
+:PROPERTIES:
+:CUSTOM_ID: X_002e509-Certificates-2
+:CLASS: section
+:END:
+Web servers available over HTTPS (that is, HTTP over the transport-layer security mechanism, TLS) send client programs an /X.509 certificate/ that the client can then use to /authenticate/ the server. To do that, clients verify that the server's certificate is signed by a so-called /certificate authority/ (CA). But to verify the CA's signature, clients must have first acquired the CA's certificate.
+
+Web browsers such as GNU IceCat include their own set of CA certificates, such that they are able to verify CA signatures out-of-the-box.
+
+However, most other programs that can talk HTTPS---=wget=, =git=, =w3m=, etc.---need to be told where CA certificates can be found.
+
+For users of Guix System, this is done by adding a package that provides certificates to the =packages= field of the =operating-system= declaration (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]]). Guix includes one such package, =nss-certs=, which is a set of CA certificates provided as part of Mozilla's Network Security Services.
+
+This package is part of =%base-packages=, so there is no need to explicitly add it. The =/etc/ssl/certs= directory, which is where most applications and libraries look for certificates by default, points to the certificates installed globally.
+
+Unprivileged users, including users of Guix on a foreign distro, can also install their own certificate package in their profile. A number of environment variables need to be defined so that applications and libraries know where to find them. Namely, the OpenSSL library honors the =SSL_CERT_DIR= and =SSL_CERT_FILE= variables. Some applications add their own environment variables; for instance, the Git version control system honors the certificate bundle pointed to by the =GIT_SSL_CAINFO= environment variable. Thus, you would typically run something like:
+
+#+begin_example
+guix install nss-certs
+export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
+export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
+export GIT_SSL_CAINFO="$SSL_CERT_FILE"
+#+end_example
+
+As another example, R requires the =CURL_CA_BUNDLE= environment variable to point to a certificate bundle, so you would have to run something like this:
+
+#+begin_example
+guix install nss-certs
+export CURL_CA_BUNDLE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
+#+end_example
+
+For other applications you may want to look up the required environment variable in the relevant documentation.
+
+--------------
+
+Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

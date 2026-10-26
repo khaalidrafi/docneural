@@ -1,0 +1,121 @@
+:PROPERTIES:
+:ID: guix--USB-Stick-and-DVD-Installation
+:END:
+#+filetags: :guix:
+#+title: USB Stick and DVD Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<USB-Stick-and-DVD-Installation>>
+Next: [[id:guix--Preparing-for-Installation][Preparing for Installation]], Previous: [[id:guix--Hardware-Considerations][Hardware Considerations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 3.3 USB Stick and DVD Installation [[#USB-Stick-and-DVD-Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: USB-Stick-and-DVD-Installation-1
+:CLASS: section
+:END:
+An ISO-9660 installation image that can be written to a USB stick or burnt to a DVD can be downloaded from ‘=https://ftpmirror.gnu.org/gnu/guix/guix-system-install-ad54bd5.x86_64-linux.iso=', where you can replace =x86_64-linux= with one of:
+
+- =x86_64-linux= :: for a GNU/Linux system on Intel/AMD-compatible 64-bit CPUs;
+
+- =i686-linux= :: for a 32-bit GNU/Linux system on Intel-compatible CPUs.
+
+Make sure to download the associated =.sig= file and to verify the authenticity of the image against it, along these lines:
+
+#+begin_example
+$ wget https://ftpmirror.gnu.org/gnu/guix/guix-system-install-ad54bd5.x86_64-linux.iso.sig
+$ gpg --verify guix-system-install-ad54bd5.x86_64-linux.iso.sig
+#+end_example
+
+If that command fails because you do not have the required public key, then run this command to import it:
+
+#+begin_example
+$ wget https://codeberg.org/efraim.gpg \
+      -qO - | gpg --import -
+#+end_example
+
+and rerun the =gpg --verify= command.
+
+Take note that a warning like “This key is not certified with a trusted signature!” is normal.
+
+This image contains the tools necessary for an installation. It is meant to be copied /as is/ to a large-enough USB stick or DVD.
+
+- [[#Copying-to-a-USB-Stick][Copying to a USB Stick]]
+- [[#Burning-on-a-DVD][Burning on a DVD]]
+- [[#Booting][Booting]]
+
+<<Copying-to-a-USB-Stick>>
+**** Copying to a USB Stick [[#Copying-to-a-USB-Stick][¶]]
+:PROPERTIES:
+:CUSTOM_ID: copying-to-a-usb-stick
+:CLASS: unnumberedsubsec
+:END:
+Insert a USB stick of 1 GiB or more into your machine, and determine its device name. Assuming that the USB stick is known as =/dev/sdX=, copy the image with:
+
+#+begin_example
+dd if=guix-system-install-ad54bd5.x86_64-linux.iso of=/dev/sdX status=progress
+sync
+#+end_example
+
+Access to =/dev/sdX= usually requires root privileges.
+
+<<Burning-on-a-DVD>>
+**** Burning on a DVD [[#Burning-on-a-DVD][¶]]
+:PROPERTIES:
+:CUSTOM_ID: burning-on-a-dvd
+:CLASS: unnumberedsubsec
+:END:
+Insert a blank DVD into your machine, and determine its device name. Assuming that the DVD drive is known as =/dev/srX=, copy the image with:
+
+#+begin_example
+growisofs -dvd-compat -Z /dev/srX=guix-system-install-ad54bd5.x86_64-linux.iso
+#+end_example
+
+Access to =/dev/srX= usually requires root privileges.
+
+<<Booting>>
+**** Booting [[#Booting][¶]]
+:PROPERTIES:
+:CUSTOM_ID: booting
+:CLASS: unnumberedsubsec
+:END:
+Once this is done, you should be able to reboot the system and boot from the USB stick or DVD. The latter usually requires you to get in the BIOS or UEFI boot menu, where you can choose to boot from the USB stick. In order to boot from Libreboot, switch to the command mode by pressing the c key and type =search_grub usb=.
+
+Sadly, on some machines, the installation medium cannot be properly booted and you only see a black screen after booting even after you waited for ten minutes. This may indicate that your machine cannot run Guix System; perhaps you instead want to install Guix on a foreign distro (see [[id:guix--Binary-Installation][Binary Installation]]). But don't give up just yet; a possible workaround is pressing the e key in the GRUB boot menu and appending =nomodeset= to the Linux bootline. Sometimes the black screen issue can also be resolved by connecting a different display.
+
+See [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], if, instead, you would like to install Guix System in a virtual machine (VM).
+
+--------------
+
+Next: [[id:guix--Preparing-for-Installation][Preparing for Installation]], Previous: [[id:guix--Hardware-Considerations][Hardware Considerations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

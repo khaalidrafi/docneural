@@ -1,0 +1,168 @@
+:PROPERTIES:
+:ID: guix--Getting-Started
+:END:
+#+filetags: :guix:
+#+title: Getting Started
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Getting-Started>>
+Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 4 Getting Started [[#Getting-Started-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Getting-Started-1
+:CLASS: chapter
+:END:
+Presumably, you've reached this section because either you have installed Guix on top of another distribution (see [[id:guix--Installation][Installation]]), or you've installed the standalone Guix System (see [[id:guix--System-Installation][System Installation]]). It's time for you to get started using Guix and this section aims to help you do that and give you a feel of what it's like.
+
+Guix is about installing software, so probably the first thing you'll want to do is to actually look for software. Let's say you're looking for a text editor, you can run:
+
+#+begin_example
+guix search text editor
+#+end_example
+
+This command shows you a number of matching /packages/, each time showing the package's name, version, a description, and additional info. Once you've found out the one you want to use, let's say Emacs (ah ha!), you can go ahead and install it (run this command as a regular user, /no need for root privileges/!):
+
+#+begin_example
+guix install emacs
+#+end_example
+
+You've installed your first package, congrats! The package is now visible in your default /profile/, =$HOME/.guix-profile=---a profile is a directory containing installed packages. In the process, you've probably noticed that Guix downloaded pre-built binaries; or, if you explicitly chose to /not/ use pre-built binaries, then probably Guix is still building software (see [[id:guix--Substitutes][Substitutes]], for more info).
+
+Unless you're using Guix System, the =guix install= command must have printed this hint:
+
+#+begin_example
+hint: Consider setting the necessary environment variables by running:
+
+     GUIX_PROFILE="$HOME/.guix-profile"
+     . "$GUIX_PROFILE/etc/profile"
+
+Alternately, see `guix package --search-paths -p "$HOME/.guix-profile"'.
+#+end_example
+
+Indeed, you must now tell your shell where =emacs= and other programs installed with Guix are to be found. Pasting the two lines above will do just that: it will add =$HOME/.guix-profile/bin=---which is where the installed package is---to the =PATH= environment variable. You can paste these two lines in your shell so they take effect right away, but more importantly you should add them to =~/.bash_profile= (or equivalent file if you do not use Bash) so that environment variables are set next time you spawn a shell. You only need to do this once and other search paths environment variables will be taken care of similarly---e.g., if you eventually install =python= and Python libraries, =GUIX_PYTHONPATH= will be defined.
+
+You can go on installing packages at your will. To list installed packages, run:
+
+#+begin_example
+guix package --list-installed
+#+end_example
+
+To remove a package, you would unsurprisingly run =guix remove=. A distinguishing feature is the ability to /roll back/ any operation you made---installation, removal, upgrade---by simply typing:
+
+#+begin_example
+guix package --roll-back
+#+end_example
+
+This is because each operation is in fact a /transaction/ that creates a new /generation/. These generations and the difference between them can be displayed by running:
+
+#+begin_example
+guix package --list-generations
+#+end_example
+
+Now you know the basics of package management!
+
+#+begin_quote
+*Going further:* See [[id:guix--Package-Management][Package Management]], for more about package management. You may like /declarative/ package management with =guix package --manifest=, managing separate /profiles/ with =--profile=, deleting old generations, collecting garbage, and other nifty features that will come in handy as you become more familiar with Guix. If you are a developer, see [[id:guix--Development][Development]] for additional tools. And if you're curious, see [[id:guix--Features][Features]], to peek under the hood.
+
+You can also manage the configuration of your entire /home environment/---your user “dot files”, services, and packages---using Guix Home. See [[id:guix--Home-Configuration][Home Configuration]], to learn more about it!
+
+#+end_quote
+
+Once you've installed a set of packages, you will want to periodically /upgrade/ them to the latest and greatest version. To do that, you will first pull the latest revision of Guix and its package collection:
+
+#+begin_example
+guix pull
+#+end_example
+
+The end result is a new =guix= command, under =~/.config/guix/current/bin=. Unless you're on Guix System, the first time you run =guix pull=, be sure to follow the hint that the command prints and, similar to what we saw above, paste these two lines in your terminal and =.bash_profile=:
+
+#+begin_example
+GUIX_PROFILE="$HOME/.config/guix/current"
+. "$GUIX_PROFILE/etc/profile"
+#+end_example
+
+You must also instruct your shell to point to this new =guix=:
+
+#+begin_example
+hash guix
+#+end_example
+
+At this point, you're running a brand new Guix. You can thus go ahead and actually upgrade all the packages you previously installed:
+
+#+begin_example
+guix upgrade
+#+end_example
+
+As you run this command, you will see that binaries are downloaded (or perhaps some packages are built), and eventually you end up with the upgraded packages. Should one of these upgraded packages not be to your liking, remember you can always roll back!
+
+You can display the exact revision of Guix you're currently using by running:
+
+#+begin_example
+guix describe
+#+end_example
+
+The information it displays is /all it takes to reproduce the exact same Guix/, be it at a different point in time or on a different machine.
+
+#+begin_quote
+*Going further:* See [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], for more information. See [[id:guix--Channels][Channels]], on how to specify additional /channels/ to pull packages from, how to replicate Guix, and more. You may also find =time-machine= handy (see [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]]).
+
+#+end_quote
+
+If you installed Guix System, one of the first things you'll want to do is to upgrade your system. Once you've run =guix pull= to get the latest Guix, you can upgrade the system like this:
+
+#+begin_example
+sudo guix system reconfigure /etc/config.scm
+#+end_example
+
+Upon completion, the system runs the latest versions of its software packages. Just like for packages, you can always /roll back/ to a previous generation /of the whole system/. See [[id:guix--Getting-Started-with-the-System][Getting Started]], to learn how to manage your system.
+
+Now you know enough to get started!
+
+#+begin_quote
+*Resources:* The rest of this manual provides a reference for all things Guix. Here are some additional resources you may find useful:
+
+- See [[https://guix.gnu.org/cookbook/en/html_node/index.html#Top][The GNU Guix Cookbook]], for a list of “how-to” style of recipes for a variety of applications.
+- The [[https://guix.gnu.org/guix-refcard.pdf][GNU Guix Reference Card]] lists in two pages most of the commands and options you'll ever need.
+- The web site contains [[https://guix.gnu.org/en/videos/][instructional videos]] covering topics such as everyday use of Guix, how to get help, and how to become a contributor.
+- See [[id:guix--Documentation][Documentation]], to learn how to access documentation on your computer.
+
+We hope you will enjoy Guix as much as the community enjoys building it!
+
+#+end_quote
+
+--------------
+
+Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

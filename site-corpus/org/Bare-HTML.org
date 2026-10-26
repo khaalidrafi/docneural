@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID: org--Bare-HTML
+:END:
+#+filetags: :org:
+#+title: Bare HTML (The Org Manual)
+
+Next:
+
+<<Bare-HTML>>
+Next: [[id:org--Quoting-HTML-tags][Quoting HTML tags]], Previous: [[id:org--HTML-preamble-and-postamble][HTML preamble and postamble]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.5 Exporting to minimal HTML [[#Exporting-to-minimal-HTML][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Exporting-to-minimal-HTML
+:CLASS: subsection
+:END:
+If you want to output a minimal HTML file, with no CSS, no JavaScript, no preamble or postamble, here are the variable you would need to set:
+
+#+begin_src lisp-preformatted
+(setq org-html-head ""
+      org-html-head-extra ""
+      org-html-head-include-default-style nil
+      org-html-head-include-scripts nil
+      org-html-preamble nil
+      org-html-postamble nil
+      org-html-use-infojs nil)
+#+end_src

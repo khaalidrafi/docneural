@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: emacs--Hiding-Subdirectories
+:END:
+#+filetags: :emacs:
+#+title: Hiding Subdirectories
+
+Next: [[id:emacs--Dired-Updating][Updating the Dired Buffer]]   Previous: [[id:emacs--Subdirectory-Motion][Moving Over Subdirectories]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
+
+<<Hiding-Subdirectories>>
+*** 32.15 Hiding Subdirectories [[#Hiding-Subdirectories-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Hiding-Subdirectories-1
+:CLASS: section
+:END:
+/Hiding/ a subdirectory means to make it invisible, except for its header line.
+
+-  <<index-dired_002dhide_002dsubdir>>$ [[#index-dired_002dhide_002dsubdir][¶]] :: Hide or show the subdirectory that point is in, and move point to the next subdirectory (=dired-hide-subdir=). This is a toggle. A numeric argument serves as a repeat count.
+
+-  <<index-dired_002dhide_002dall>>M-$ [[#index-dired_002dhide_002dall][¶]] :: Hide all subdirectories in this Dired buffer, leaving only their header lines (=dired-hide-all=). Or, if any subdirectory is currently hidden, make all subdirectories visible again. You can use this command to get an overview in very deep directory trees or to move quickly to subdirectories far away.
+
+Ordinary Dired commands never consider files inside a hidden subdirectory. For example, the commands to operate on marked files ignore files in hidden directories even if they are marked. Thus you can use hiding to temporarily exclude subdirectories from operations without having to remove the Dired marks on files in those subdirectories.
+
+See [[id:emacs--Subdirectories-in-Dired][Subdirectories in Dired]], for how to insert a subdirectory listing, and see [[id:emacs--Dired-Updating][Updating the Dired Buffer]], for how to delete it.
+
+--------------

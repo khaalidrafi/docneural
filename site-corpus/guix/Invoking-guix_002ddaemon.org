@@ -1,0 +1,196 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix_002ddaemon
+:END:
+#+filetags: :guix:
+#+title: Invoking guix-daemon
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix_002ddaemon>>
+Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 2.3 Invoking =guix-daemon= [[#Invoking-guix_002ddaemon-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix_002ddaemon-1
+:CLASS: section
+:END:
+The =guix-daemon= program implements all the functionality to access the store. This includes launching build processes, running the garbage collector, querying the availability of a build result, etc. It is normally run as =root= like this:
+
+#+begin_example
+# guix-daemon --build-users-group=guixbuild
+#+end_example
+
+This daemon can also be started following the systemd “socket activation” protocol (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
+
+For details on how to set it up, see [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]].
+
+By default, =guix-daemon= launches build processes under different UIDs, taken from the build group specified with =--build-users-group=. In addition, each build process is run in a chroot environment that only contains the subset of the store that the build process depends on, as specified by its derivation (see [[id:guix--Programming-Interface][derivation]]), plus a set of specific system directories. By default, the latter contains =/dev= and =/dev/pts=. Furthermore, on GNU/Linux, the build environment is a /container/: in addition to having its own file system tree, it has a separate mount name space, its own PID name space, network name space, etc. This helps achieve reproducible builds (see [[id:guix--Features][Features]]).
+
+When the daemon performs a build on behalf of the user, it creates a build directory under =/tmp= or under the directory specified by its =TMPDIR= environment variable. This directory is shared with the container for the duration of the build, though within the container, the build tree is always called =/tmp/guix-build-==name==.drv-0=.
+
+The build directory is automatically deleted upon completion, unless the build failed and the client specified =--keep-failed= (see [[id:guix--Common-Build-Options][=--keep-failed=]]).
+
+The daemon listens for connections and spawns one sub-process for each session started by a client (one of the =guix= sub-commands). The =guix processes= command allows you to get an overview of the activity on your system by viewing each of the active sessions and clients. See [[id:guix--Invoking-guix-processes][Invoking =guix processes=]], for more information.
+
+The following command-line options are supported:
+
+- =--build-users-group===group= :: Take users from =group= to run build processes (see [[id:guix--Setting-Up-the-Daemon][build users]]).
+
+- <<index-substitutes>>=--no-substitutes= [[#index-substitutes][¶]] :: Do not use substitutes for build products. That is, always build things locally instead of allowing downloads of pre-built binaries (see [[id:guix--Substitutes][Substitutes]]).
+
+  When the daemon runs with =--no-substitutes=, clients can still explicitly enable substitution /via/ the =set-build-options= remote procedure call (see [[id:guix--The-Store][The Store]]).
+
+- =--substitute-urls===urls= :: Consider =urls= the default whitespace-separated list of substitute source URLs. When this option is omitted, ‘=https://bordeaux.guix.gnu.org https://ci.guix.gnu.org=' is used.
+
+  This means that substitutes may be downloaded from =urls=, as long as they are signed by a trusted signature (see [[id:guix--Substitutes][Substitutes]]).
+
+  See [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], for more information on how to configure the daemon to get substitutes from other servers.
+
+- <<index-offloading-1>>=--no-offload= [[#index-offloading-1][¶]] :: Do not use offload builds to other machines (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]). That is, always build things locally instead of offloading builds to remote machines.
+
+- =--cache-failures= :: Cache build failures. By default, only successful builds are cached.
+
+  When this option is used, =guix gc --list-failures= can be used to query the set of store items marked as failed; =guix gc --clear-failures= removes store items from the set of cached failures. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]].
+
+- =--cores===n=\\
+  =-c ==n= :: Use =n= CPU cores to build each derivation; =0= means as many as available.
+
+  The default value is =0=, but it may be overridden by clients, such as the =--cores= option of =guix build= (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]).
+
+  The effect is to define the =NIX_BUILD_CORES= environment variable in the build process, which can then use it to exploit internal parallelism---for instance, by running =make -j$NIX_BUILD_CORES=.
+
+- =--max-jobs===n=\\
+  =-M ==n= :: Allow at most =n= build jobs in parallel. The default value is =1=. Setting it to =0= means that no builds will be performed locally; instead, the daemon will offload builds (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]), or simply fail.
+
+- =--max-silent-time===seconds= :: When the build or substitution process remains silent for more than =seconds=, terminate it and report a build failure.
+
+  The default value is =3600= (one hour).
+
+  The value specified here can be overridden by clients (see [[id:guix--Common-Build-Options][=--max-silent-time=]]).
+
+- =--timeout===seconds= :: Likewise, when the build or substitution process lasts for more than =seconds=, terminate it and report a build failure.
+
+  The default value is 24 hours.
+
+  The value specified here can be overridden by clients (see [[id:guix--Common-Build-Options][=--timeout=]]).
+
+- =--rounds===N= :: Build each derivation =n= times in a row, and raise an error if consecutive build results are not bit-for-bit identical. Note that this setting can be overridden by clients such as =guix build= (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]).
+
+  When used in conjunction with =--keep-failed=, the differing output is kept in the store, under =/gnu/store/…-check=. This makes it easy to look for differences between the two results.
+
+- =--debug= :: Produce debugging output.
+
+  This is useful to debug daemon start-up issues, but then it may be overridden by clients, for example the =--verbosity= option of =guix build= (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]).
+
+- =--chroot-directory===dir= :: Add =dir= to the build chroot.
+
+  Doing this may change the result of build processes---for instance if they use optional dependencies found in =dir= when it is available, and not otherwise. For that reason, it is not recommended to do so. Instead, make sure that each derivation declares all the inputs that it needs.
+
+- =--disable-chroot= :: Disable chroot builds.
+
+  #+begin_quote
+  *Warning:* Using this option is not recommended since it allows build processes to gain access to undeclared dependencies, to interfere with one another, and more generally to do anything that can be done with the authority of build users or that of the daemon---which includes at least the ability to tamper with any file in the store!
+
+  You may find it necessary, though, when support for Linux unprivileged user namespaces is missing (see [[id:guix--Build-Environment-Setup][Build Environment Setup]]). Use at your own risk!
+
+  #+end_quote
+
+-  <<index-ASLR-_0028address-space-layout-randomization_0029_002c-for-builds>>=--allow-aslr= [[#index-ASLR-_0028address-space-layout-randomization_0029_002c-for-builds][¶]] :: Allow builds to start even if ASLR (Address Space Layout Randomization) cannot be disabled on Linux systems. This is normally done so as to increase reproducibility, but some environments, such as those affected by Docker's default seccomp policy, don't permit disabling ASLR. Passing this option will allow builds to start with reduced reproducibility regardless.
+
+  Note that passing this option doesn't ensure that ASLR is enabled, it only allows builds to start even when disabling it is blocked.
+
+- =--isolate-host-loopback= :: Prevent fixed-output chroot builds from accessing the host loopback. When this is used, fixed-output builds will have their own loopback interface, and attempts to connect to 127.0.0.1 or ::1 will instead attempt to connect to its local loopback interface.
+
+- =--log-compression===type= :: Compress build logs according to =type=, one of =gzip=, =bzip2=, or =none=.
+
+  Unless =--lose-logs= is used, all the build logs are kept in the =localstatedir=. To save space, the daemon automatically compresses them with gzip by default.
+
+- =--discover[=yes|no]= :: Whether to discover substitute servers on the local network using mDNS and DNS-SD.
+
+  This feature is still experimental. However, here are a few considerations.
+
+  1. It might be faster/less expensive than fetching from remote servers;
+  2. There are no security risks, only genuine substitutes will be used (see [[id:guix--Substitute-Authentication][Substitute Authentication]]);
+  3. An attacker advertising =guix publish= on your LAN cannot serve you malicious binaries, but they can learn what software you're installing;
+  4. Servers may serve substitute over HTTP, unencrypted, so anyone on the LAN can see what software you're installing.
+
+  It is also possible to enable or disable substitute server discovery at run-time by running:
+
+  #+begin_example
+  herd discover guix-daemon on
+  herd discover guix-daemon off
+#+end_example
+
+- <<index-deduplication>>=--disable-deduplication= [[#index-deduplication][¶]] :: Disable automatic file “deduplication” in the store.
+
+  By default, files added to the store are automatically “deduplicated”: if a newly added file is identical to another one found in the store, the daemon makes the new file a hard link to the other file. This can noticeably reduce disk usage, at the expense of slightly increased input/output load at the end of a build process. This option disables this optimization.
+
+- =--gc-keep-outputs[=yes|no]= :: Tell whether the garbage collector (GC) must keep outputs of live derivations.
+
+  When set to =yes=, the GC will keep the outputs of any live derivation available in the store---the =.drv= files. The default is =no=, meaning that derivation outputs are kept only if they are reachable from a GC root. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for more on GC roots.
+
+- =--gc-keep-derivations[=yes|no]= :: Tell whether the garbage collector (GC) must keep derivations corresponding to live outputs.
+
+  When set to =yes=, as is the case by default, the GC keeps derivations---i.e., =.drv= files---as long as at least one of their outputs is live. This allows users to keep track of the origins of items in their store. Setting it to =no= saves a bit of disk space.
+
+  In this way, setting =--gc-keep-derivations= to =yes= causes liveness to flow from outputs to derivations, and setting =--gc-keep-outputs= to =yes= causes liveness to flow from derivations to outputs. When both are set to =yes=, the effect is to keep all the build prerequisites (the sources, compiler, libraries, and other build-time tools) of live objects in the store, regardless of whether these prerequisites are reachable from a GC root. This is convenient for developers since it saves rebuilds or downloads.
+
+- =--impersonate-linux-2.6= :: On Linux-based systems, impersonate Linux 2.6. This means that the kernel's =uname= system call will report 2.6 as the release number.
+
+  This might be helpful to build programs that (usually wrongfully) depend on the kernel version number.
+
+- =--lose-logs= :: Do not keep build logs. By default they are kept under =localstatedir==/guix/log=.
+
+- =--system===system= :: Assume =system= as the current system type. By default it is the architecture/kernel pair found at configure time, such as =x86_64-linux=.
+
+- =--listen===endpoint= :: Listen for connections on =endpoint=. =endpoint= is interpreted as the file name of a Unix-domain socket if it starts with =/= (slash sign). Otherwise, =endpoint= is interpreted as a host name or host name and port to listen to. Here are a few examples:
+
+  - =--listen=/gnu/var/daemon= :: Listen for connections on the =/gnu/var/daemon= Unix-domain socket, creating it if needed.
+
+  -  <<index-daemon_002c-remote-access>>=--listen=localhost= [[#index-daemon_002c-remote-access][¶]] :: Listen for TCP connections on the network interface corresponding to =localhost=, on port 44146.
+
+  - =--listen=128.0.0.42:1234= :: Listen for TCP connections on the network interface corresponding to =128.0.0.42=, on port 1234.
+
+  This option can be repeated multiple times, in which case =guix-daemon= accepts connections on all the specified endpoints. Users can tell client commands what endpoint to connect to by setting the =GUIX_DAEMON_SOCKET= environment variable (see [[id:guix--The-Store][=GUIX_DAEMON_SOCKET=]]).
+
+  #+begin_quote
+  *Note:* The daemon protocol is /unauthenticated and unencrypted/. Using =--listen===host= is suitable on local networks, such as clusters, where only trusted nodes may connect to the build daemon. In other cases where remote access to the daemon is needed, we recommend using Unix-domain sockets along with SSH.
+
+  #+end_quote
+
+  When =--listen= is omitted, =guix-daemon= listens for connections on the Unix-domain socket located at =localstatedir==/guix/daemon-socket/socket=.
+
+--------------
+
+Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

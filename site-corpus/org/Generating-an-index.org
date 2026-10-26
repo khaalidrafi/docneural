@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Generating-an-index
+:END:
+#+filetags: :org:
+#+title: Generating an index (The Org Manual)
+
+Next:
+
+<<Generating-an-index>>
+Previous: [[id:org--Site-map][Generating a sitemap]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 14.1.8 Generating an index [[#Generating-an-index-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Generating-an-index-1
+:CLASS: subsection
+:END:
+Org mode can generate an index across the files of a publishing project.
+
+- =:makeindex= :: When non-=nil=, generate in index in the file ‘=theindex.org=' and publish it as ‘=theindex.html='.
+
+The file is created when first publishing a project with the =:makeindex= set. The file only contains a statement ‘=#+INCLUDE: "theindex.inc"='. You can then build around this include statement by adding a title, style information, etc.
+
+Index entries are specified with ‘=INDEX=' keyword. An entry that contains an exclamation mark creates a sub item.
+
+#+begin_example
+*** Curriculum Vitae
+#+INDEX: CV
+#+INDEX: Application!CV
+#+end_src

@@ -1,0 +1,78 @@
+:PROPERTIES:
+:ID: org--Time_002dof_002dday-specifications
+:END:
+#+filetags: :org:
+#+title: Time-of-day specifications (The Org Manual)
+
+Next:
+
+<<Time_002dof_002dday-specifications>>
+Next: [[id:org--Sorting-of-agenda-items][Sorting of agenda items]], Previous: [[id:org--Categories][Categories]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 11.4.2 Time-of-day specifications [[#Time_002dof_002dday-specifications-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Time_002dof_002dday-specifications-1
+:CLASS: subsection
+:END:
+Org mode checks each agenda item for a time-of-day specification. The time can be part of the timestamp that triggered inclusion into the agenda, for example
+
+#+begin_example
+<2005-05-10 Tue 19:00>
+#+end_example
+
+Time ranges can be specified with two timestamps:
+
+#+begin_example
+<2005-05-10 Tue 20:30>--<2005-05-10 Tue 22:15>
+#+end_example
+
+In the headline of the entry itself, a time(range)---like ‘=12:45=' or a ‘=8:30-1pm='---may also appear as plain text[[#FOOT98][^{98}]].
+
+If the agenda integrates the Emacs diary (see [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]]), time specifications in diary entries are recognized as well.
+
+For agenda display, Org mode extracts the time and displays it in a standard 24-hour format as part of the prefix. The example times in the previous paragraphs would end up in the agenda like this:
+
+#+begin_example
+ 8:30-13:00 Arthur Dent lies in front of the bulldozer
+12:45...... Ford Prefect arrives and takes Arthur to the pub
+19:00...... The Vogon reads his poem
+20:30-22:15 Marvin escorts the Hitchhikers to the bridge
+#+end_example
+
+If the agenda is in single-day mode, or for the display of today, the timed entries are embedded in a time grid, like
+
+#+begin_example
+ 8:00...... ------------------
+ 8:30-13:00 Arthur Dent lies in front of the bulldozer
+10:00...... ------------------
+12:00...... ------------------
+12:45...... Ford Prefect arrives and takes Arthur to the pub
+14:00...... ------------------
+16:00...... ------------------
+18:00...... ------------------
+19:00...... The Vogon reads his poem
+20:00...... ------------------
+20:30-22:15 Marvin escorts the Hitchhikers to the bridge
+#+end_example
+
+The time grid can be turned on and off with the variable =org-agenda-use-time-grid=, and can be configured with =org-agenda-time-grid=.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF98][(98)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+You can, however, disable this by setting =org-agenda-search-headline-for-time= variable to a =nil= value.
+
+--------------
+
+Next: [[id:org--Sorting-of-agenda-items][Sorting of agenda items]], Previous: [[id:org--Categories][Categories]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

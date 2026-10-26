@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID: org--Updating-the-table
+:END:
+#+filetags: :org:
+#+title: Updating the table (The Org Manual)
+
+Next:
+
+<<Updating-the-table>>
+Next: [[id:org--Advanced-features][Advanced features]], Previous: [[id:org--Editing-and-debugging-formulas][Editing and debugging formulas]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 3.5.9 Updating the table [[#Updating-the-table-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Updating-the-table-1
+:CLASS: subsection
+:END:
+Recalculation of a table is normally not automatic, but needs to be triggered by a command. To make recalculation at least semi-automatic, see [[id:org--Advanced-features][Advanced features]].
+
+In order to recalculate a line of a table or the entire table, use the following commands:
+
+-  <<index-C_002dc-_002a-2>>C-c * (=org-table-recalculate=) [[#index-C_002dc-_002a-2][¶]] :: Recalculate the current row by first applying the stored column formulas from left to right, and all field/range formulas in the current row.
+
+-  <<index-C_002du-C_002dc-_002a>>C-u C-c * or C-u C-c C-c [[#index-C_002du-C_002dc-_002a][¶]] :: Recompute the entire table, line by line. Any lines before the first hline are left alone, assuming that these are part of the table header.
+
+-  <<index-C_002du-C_002du-C_002dc-_002a>>C-u C-u C-c * or C-u C-u C-c C-c (=org-table-iterate=) [[#index-C_002du-C_002du-C_002dc-_002a][¶]] :: Iterate the table by recomputing it until no further changes occur. This may be necessary if some computed fields use the value of other fields that are computed /later/ in the calculation sequence.
+
+- <<index-org_002dtable_002drecalculate_002dbuffer_002dtables>>M-x org-table-recalculate-buffer-tables [[#index-org_002dtable_002drecalculate_002dbuffer_002dtables][¶]] :: Recompute all tables in the current buffer.
+
+- <<index-org_002dtable_002diterate_002dbuffer_002dtables>>M-x org-table-iterate-buffer-tables [[#index-org_002dtable_002diterate_002dbuffer_002dtables][¶]] :: Iterate all tables in the current buffer, in order to converge table-to-table dependencies.
+
+--------------
+
+Next: [[id:org--Advanced-features][Advanced features]], Previous: [[id:org--Editing-and-debugging-formulas][Editing and debugging formulas]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

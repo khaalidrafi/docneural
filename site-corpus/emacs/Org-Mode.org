@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID: emacs--Org-Mode
+:END:
+#+filetags: :emacs:
+#+title: Org Mode
+
+Next: [[id:emacs--TeX-Mode#TeX-Mode][TeX Mode]]   Previous: [[id:emacs--Outline-Mode#Outline-Mode][Outline Mode]]   Up: [[id:emacs--Text][Commands for Human Languages]]
+
+<<Org-Mode>>
+*** 27.10 Org Mode [[#Org-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-Mode-1
+:CLASS: section
+:END:
+Org mode is a variant of Outline mode for using Emacs as an organizer and/or authoring system. Files with names ending in the extension =.org= are opened in Org mode (see [[id:emacs--Choosing-Modes][Choosing File Modes]]). To explicitly switch to Org mode, type M-x org-mode.
+
+In Org mode, as in Outline mode, each entry has a heading line that starts with one or more ‘=*=' characters. See [[id:emacs--Outline-Mode::#Outline-Format][Format of Outlines]]. In addition, any line that begins with the ‘=#=' character is treated as a comment.
+
+Org mode provides commands for easily viewing and manipulating the outline structure. The simplest of these commands is TAB (=org-cycle=). If invoked on a heading line, it cycles through the different visibility states of the subtree: (i) showing only that heading line, (ii) showing only the heading line and the heading lines of its direct children, if any, and (iii) showing the entire subtree. If invoked in a body line, the global binding for TAB is executed.
+
+Typing S-TAB (=org-shifttab=) anywhere in an Org mode buffer cycles the visibility of the entire outline structure, between (i) showing only top-level heading lines, (ii) showing all heading lines but no body lines, and (iii) showing everything.
+
+You can move an entire entry up or down in the buffer, including its body lines and subtree (if any), by typing M-UP (=org-metaup=) or M-DOWN (=org-metadown=) on the heading line. Similarly, you can promote or demote a heading line with M-LEFT (=org-metaleft=) and M-RIGHT (=org-metaright=). These commands execute their global bindings if invoked on a body line.
+
+The following subsections give basic instructions for using Org mode as an organizer and as an authoring system. For details, see [[../org_html/index.html#Top][Introduction]] in The Org Manual.
+
+--------------
+
+<<Org-Organizer>>
+**** 27.10.1 Org as an organizer [[#Org-as-an-organizer][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-as-an-organizer
+:CLASS: subsection
+:END:
+You can tag an Org entry as a /TODO/ item by typing C-c C-t (=org-todo=) anywhere in the entry. This adds the keyword ‘=TODO=' to the heading line. Typing C-c C-t again switches the keyword to ‘=DONE='; another C-c C-t removes the keyword entirely, and so forth. You can customize the keywords used by C-c C-t via the variable =org-todo-keywords=.
+
+Apart from marking an entry as TODO, you can attach a date to it, by typing C-c C-s (=org-schedule=) in the entry. This prompts for a date by popping up the Emacs Calendar (see [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]), and then adds the tag ‘=SCHEDULED=', together with the selected date, beneath the heading line. The command C-c C-d (=org-deadline=) has the same effect, except that it uses the tag =DEADLINE=.
+
+Once you have some TODO items planned in an Org file, you can add that file to the list of /agenda files/ by typing C-c [ (=org-agenda-file-to-front=). Org mode is designed to let you easily maintain multiple agenda files, e.g., for organizing different aspects of your life. The list of agenda files is stored in the variable =org-agenda-files=.
+
+To view items coming from your agenda files, type M-x org-agenda. This command prompts for what you want to see: a list of things to do this week, a list of TODO items with specific keywords, etc. See [[../org_html/Agenda-Views.html#Agenda-Views][Agenda Views]] in The Org Manual, for details.
+
+--------------
+
+<<Org-Authoring>>
+**** 27.10.2 Org as an authoring system [[#Org-as-an-authoring-system][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-as-an-authoring-system
+:CLASS: subsection
+:END:
+You may want to format your Org notes nicely and to prepare them for export and publication. To export the current buffer, type C-c C-e (=org-export-dispatch=) anywhere in an Org buffer. This command prompts for an export format; currently supported formats include HTML, LaTeX, Texinfo, OpenDocument (=.odt=), iCalendar, Markdown, man-page, and PDF. Some formats, such as PDF, require certain system tools to be installed.
+
+To export several files at once to a specific directory, either locally or over the network, you must define a list of projects through the variable =org-publish-project-alist=. See its documentation for details.
+
+Org supports a simple markup scheme for applying text formatting to exported documents:
+
+#+begin_example
+- This text is /emphasized/
+- This text is *in bold*
+- This text is _underlined_
+- This text uses =a teletype font=
+
+#+begin_quote
+``This is a quote.''
+#+end_quote
+
+#+begin_example
+This is an example.
+#+end_example
+#+end_example
+
+For further details, [[../org_html/Exporting.html#Exporting][Exporting]] in The Org Manual, and [[../org_html/Publishing.html#Publishing][Publishing]] in The Org Manual.
+
+--------------

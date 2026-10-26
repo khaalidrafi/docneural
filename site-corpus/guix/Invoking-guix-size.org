@@ -1,0 +1,143 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-size
+:END:
+#+filetags: :guix:
+#+title: Invoking guix size
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-size>>
+Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.9 Invoking =guix size= [[#Invoking-guix-size-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-size-1
+:CLASS: section
+:END:
+The =guix size= command helps package developers profile the disk usage of packages. It is easy to overlook the impact of an additional dependency added to a package, or the impact of using a single output for a package that could easily be split (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]). Such are the typical issues that =guix size= can highlight.
+
+The command can be passed one or more package specifications such as =gcc@4.8= or =guile:debug=, or a file name in the store. Consider this example:
+
+#+begin_example
+$ guix size coreutils
+store item                               total    self
+/gnu/store/...-gcc-5.5.0-lib           60.4    30.1  38.1%
+/gnu/store/...-glibc-2.27              30.3    28.8  36.6%
+/gnu/store/...-coreutils-8.28          78.9    15.0  19.0%
+/gnu/store/...-gmp-6.1.2               63.1     2.7   3.4%
+/gnu/store/...-bash-static-4.4.12       1.5     1.5   1.9%
+/gnu/store/...-acl-2.2.52              61.1     0.4   0.5%
+/gnu/store/...-attr-2.4.47             60.6     0.2   0.3%
+/gnu/store/...-libcap-2.25             60.5     0.2   0.2%
+total: 78.9 MiB
+#+end_example
+
+The store items listed here constitute the /transitive closure/ of Coreutils---i.e., Coreutils and all its dependencies, recursively---as would be returned by:
+
+#+begin_example
+$ guix gc -R /gnu/store/...-coreutils-8.23
+#+end_example
+
+Here the output shows three columns next to store items. The first column, labeled “total”, shows the size in mebibytes (MiB) of the closure of the store item---that is, its own size plus the size of all its dependencies. The next column, labeled “self”, shows the size of the item itself. The last column shows the ratio of the size of the item itself to the space occupied by all the items listed here.
+
+In this example, we see that the closure of Coreutils weighs in at 79 MiB, most of which is taken by libc and GCC's run-time support libraries. (That libc and GCC's libraries represent a large fraction of the closure is not a problem /per se/ because they are always available on the system anyway.)
+
+Since the command also accepts store file names, assessing the size of a build result is straightforward:
+
+#+begin_example
+guix size $(guix system build config.scm)
+#+end_example
+
+When the package(s) passed to =guix size= are available in the store[[#FOOT24][^{24}]], =guix size= queries the daemon to determine its dependencies, and measures its size in the store, similar to =du -ms --apparent-size= (see [[https://www.gnu.org/software/coreutils/manual/html_node/du-invocation.html#du-invocation][du invocation]] in GNU Coreutils).
+
+When the given packages are /not/ in the store, =guix size= reports information based on the available substitutes (see [[id:guix--Substitutes][Substitutes]]). This makes it possible to profile the disk usage of store items that are not even on disk, only available remotely.
+
+You can also specify several package names:
+
+#+begin_example
+$ guix size coreutils grep sed bash
+store item                               total    self
+/gnu/store/...-coreutils-8.24          77.8    13.8  13.4%
+/gnu/store/...-grep-2.22               73.1     0.8   0.8%
+/gnu/store/...-bash-4.3.42             72.3     4.7   4.6%
+/gnu/store/...-readline-6.3            67.6     1.2   1.2%
+...
+total: 102.3 MiB
+#+end_example
+
+In this example we see that the combination of the four packages takes 102.3 MiB in total, which is much less than the sum of each closure since they have a lot of dependencies in common.
+
+When looking at the profile returned by =guix size=, you may find yourself wondering why a given package shows up in the profile at all. To understand it, you can use =guix graph --path -t references= to display the shortest path between the two packages (see [[id:guix--Invoking-guix-graph][Invoking =guix graph=]]).
+
+The available options are:
+
+- =--substitute-urls===urls= :: Use substitute information from =urls=. See [[id:guix--Common-Build-Options::#client_002dsubstitute_002durls][the same option for =guix build=]].
+
+- =--sort===key= :: Sort lines according to =key=, one of the following options:
+
+  - =self= :: the size of each item (the default);
+
+  - =closure= :: the total size of the item's closure.
+
+- =--map-file===file= :: Write a graphical map of disk usage in PNG format to =file=.
+
+  For the example above, the map looks like this:
+
+  This option requires that [[https://wingolog.org/software/guile-charting/][Guile-Charting]] be installed and visible in Guile's module search path. When that is not the case, =guix size= fails as it tries to load it.
+
+- =--system===system=\\
+  =-s ==system= :: Consider packages for =system=---e.g., =x86_64-linux=.
+
+- =--load-path===directory=\\
+  =-L ==directory= :: Add =directory= to the front of the package module search path (see [[id:guix--Package-Modules][Package Modules]]).
+
+  This allows users to define their own packages and make them visible to the command-line tools.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF24][(24)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+More precisely, =guix size= looks for the /ungrafted/ variant of the given package(s), as returned by =guix build ==package== --no-grafts=. See [[id:guix--Security-Updates][Security Updates]], for information on grafts.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

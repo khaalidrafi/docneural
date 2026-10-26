@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Beamer-export-commands
+:END:
+#+filetags: :org:
+#+title: Beamer export commands (The Org Manual)
+
+Next:
+
+<<Beamer-export-commands>>
+Next: [[id:org--Beamer-specific-export-settings][Beamer specific export settings]], Up: [[id:org--Beamer-Export][Beamer Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.8.1 Beamer export commands [[#Beamer-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Beamer-export-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002de-l-b>>C-c C-e l b (=org-beamer-export-to-latex=) [[#index-C_002dc-C_002de-l-b][¶]] :: Export as LaTeX file with a ‘=.tex=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.tex=', overwriting without warning.
+
+-  <<index-C_002dc-C_002de-l-B>>C-c C-e l B (=org-beamer-export-as-latex=) [[#index-C_002dc-C_002de-l-B][¶]] :: Export to a temporary buffer. Does not create a file.
+
+-  <<index-C_002dc-C_002de-l-P>>C-c C-e l P (=org-beamer-export-to-pdf=) [[#index-C_002dc-C_002de-l-P][¶]] :: Export as LaTeX file and then convert it to PDF format.
+
+- <<index-C_002dc-C_002de-l-O>>C-c C-e l O [[#index-C_002dc-C_002de-l-O][¶]] :: Export as LaTeX file, convert it to PDF format, and then open the PDF file.

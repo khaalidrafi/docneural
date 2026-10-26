@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-edit
+:END:
+#+filetags: :guix:
+#+title: Invoking guix edit
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-edit>>
+Next: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Previous: [[id:guix--Invoking-guix-build][Invoking =guix build=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.2 Invoking =guix edit= [[#Invoking-guix-edit-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-edit-1
+:CLASS: section
+:END:
+So many packages, so many source files! The =guix edit= command facilitates the life of users and packagers by pointing their editor at the source file containing the definition of the specified packages. For instance:
+
+#+begin_example
+guix edit gcc@4.9 vim
+#+end_example
+
+launches the program specified in the =VISUAL= or in the =EDITOR= environment variable to view the recipe of GCC 4.9.3 and that of Vim.
+
+If you are using a Guix Git checkout (see [[id:guix--Building-from-Git][Building from Git]]), or have created your own packages on =GUIX_PACKAGE_PATH= (see [[id:guix--Package-Modules][Package Modules]]), you will be able to edit the package recipes. In other cases, you will be able to examine the read-only recipes for packages currently in the store.
+
+Instead of =GUIX_PACKAGE_PATH=, the command-line option =--load-path===directory= (or in short =-L ==directory=) allows you to add =directory= to the front of the package module search path and so make your own packages visible.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Previous: [[id:guix--Invoking-guix-build][Invoking =guix build=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

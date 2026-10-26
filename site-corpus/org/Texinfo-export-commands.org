@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--Texinfo-export-commands
+:END:
+#+filetags: :org:
+#+title: Texinfo export commands (The Org Manual)
+
+Next:
+
+<<Texinfo-export-commands>>
+Next: [[id:org--Texinfo-specific-export-settings][Texinfo specific export settings]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.1 Texinfo export commands [[#Texinfo-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Texinfo-export-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002de-i-t>>C-c C-e i t (=org-texinfo-export-to-texinfo=) [[#index-C_002dc-C_002de-i-t][¶]] :: Export as a Texinfo file with ‘=.texi=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.texi=', overwriting without warning.
+
+-  <<index-C_002dc-C_002de-i-i>>C-c C-e i i (=org-texinfo-export-to-info=) [[#index-C_002dc-C_002de-i-i][¶]] :: Export to Texinfo format first and then process it to make an Info file. To generate other formats, such as DocBook, customize the =org-texinfo-info-process= variable.

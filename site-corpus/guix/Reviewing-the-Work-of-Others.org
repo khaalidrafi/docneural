@@ -1,0 +1,90 @@
+:PROPERTIES:
+:ID: guix--Reviewing-the-Work-of-Others
+:END:
+#+filetags: :guix:
+#+title: Reviewing the Work of Others
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Reviewing-the-Work-of-Others>>
+Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.15 Reviewing the Work of Others [[#Reviewing-the-Work-of-Others-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Reviewing-the-Work-of-Others-1
+:CLASS: section
+:END:
+Perhaps the biggest action you can do to help GNU Guix grow as a project is to review the work contributed by others. You do not need to be a committer to do so; applying, reading the source, building, linting and running other people's series and sharing your comments about your experience will give some confidence to committers. You must ensure the check list found in the [[id:guix--Submitting-Patches][Submitting Patches]] section has been correctly followed. A reviewed patch series should give the best chances for the proposed change to be merged faster, so if a change you would like to see merged hasn't yet been reviewed, this is the most appropriate thing to do! If you would like to review changes in a specific area and to receive notifications for incoming patches relevant to that domain, consider joining the relevant team(s) (see [[id:guix--Teams][Teams]]).
+
+Review comments should be unambiguous; be as clear and explicit as you can about what you think should be changed, ensuring the author can take action on it. Please try to keep the following guidelines in mind during review:
+
+1. /Be clear and explicit about changes you are suggesting/, ensuring the author can take action on it. In particular, it is a good idea to explicitly ask for new revisions when you want it.
+2. /Remain focused: do not change the scope of the work being reviewed./ For example, if the contribution touches code that follows a pattern deemed unwieldy, it would be unfair to ask the submitter to fix all occurrences of that pattern in the code; to put it simply, if a problem unrelated to the patch at hand was already there, do not ask the submitter to fix it.
+3. /Ensure progress./ As they respond to review, submitters may submit new revisions of their changes; avoid requesting changes that you did not request in the previous round of comments. Overall, the submitter should get a clear sense of progress; the number of items open for discussion should clearly decrease over time.
+4. /Aim for finalization./ Reviewing code is time-consuming. Your goal as a reviewer is to put the process on a clear path towards integration, possibly with agreed-upon changes, or rejection, with a clear and mutually-understood reasoning. Avoid leaving the review process in a lingering state with no clear way out.
+5. /Review is a discussion./ The submitter's and reviewer's views on how to achieve a particular change may not always be aligned. To lead the discussion, remain focused, ensure progress and aim for finalization, spending time proportional to the stakes[[#FOOT52][^{52}]]. As a reviewer, try hard to explain the rationale for suggestions you make, and to understand and take into account the submitter's motivation for doing things in a certain way. In other words, build consensus with everyone involved (see [[id:guix--Making-Decisions][Making Decisions]]).
+
+When you deem the proposed change adequate and ready for inclusion in Guix, you can explicitly say so for pull requests on Codeberg, for example by selecting “Approve changes” in the “Finish review” dialog of the web interface.
+
+The following well understood/codified ‘=Reviewed-by: Your Name <your-email@example.com>=' [[#FOOT53][^{53}]] line should be used to sign off as a reviewer, meaning you have reviewed the change and that it looks good to you:
+
+- If the /whole/ series (containing multiple commits) looks good to you, reply with ‘=Reviewed-by: Your Name <your-email@example.com>=' to the cover page if it has one, or to the last patch of the series otherwise, adding another ‘=(for the whole series)=' comment on the line below to explicit this fact.
+- If you instead want to mark a /single commit/ as reviewed (but not the whole series), simply reply with ‘=Reviewed-by: Your Name <your-email@example.com>=' to that commit message.
+
+If you are not a committer, you can help others find a /series/ you have reviewed more easily by adding a =reviewed-looks-good= usertag for the =guix= user.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF52][(52)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The tendency to discuss minute details at length is often referred to as “bikeshedding”, where much time is spent discussing each one's preference for the color of the shed at the expense of progress made on the project to keep bikes dry.
+
+***** [[#DOCF53][(53)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+The ‘=Reviewed-by=' Git trailer is used by other projects such as Linux, and is understood by third-party tools such as the ‘=b4 am=' sub-command, which is able to retrieve the complete submission email thread from a public-inbox instance and add the Git trailers found in replies to the commit patches.
+
+--------------
+
+Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

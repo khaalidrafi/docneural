@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: guix--Teams
+:END:
+#+filetags: :guix:
+#+title: Teams
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Teams>>
+Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.12 Teams [[#Teams-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Teams-1
+:CLASS: section
+:END:
+To organize work on Guix, including but not just development efforts, the project has a set of /teams/. Each team has its own focus and interests and is the primary contact point for questions and contributions in those areas. A team's primary mission is to coordinate and review the work of individuals in its scope (see [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]]); it can make decisions within its scope, in agreement with other teams whenever there is overlap or a close connection, and in accordance with other project rules such as seeking consensus (see [[id:guix--Making-Decisions][Making Decisions]]).
+
+As an example, the Python team is responsible for core Python packaging matters; it can decide to upgrade core Python packages in a dedicated =python-team= branch, in collaboration with any team whose scope is directly dependent on Python---e.g., the Science team---and following branching rules (see [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]]). The Documentation team helps review changes to the documentation and can initiate overarching documentation changes. The Translations team organizes translation of Guix and its manual and coordinates efforts in that area. The Core team is responsible for the development of core functionality and interfaces of Guix; because of its central nature, some of its work may require soliciting input from the community at large and seeking consensus before enacting decisions that would affect the entire community.
+
+Teams are defined in the =etc/teams.scm= file in the Guix repository. The scope of each team is defined, when applicable, as a set of files or as a regular expression matching file names.
+
+Anyone with interest in a team's domain and willing to contribute to its work can apply to become a member by contacting current members by email; commit access is not a precondition. Membership is formalized by adding the person's name and email address to =etc/teams.scm=. Members who have not been participating in the team's work for one year or more may be removed; they are free to reapply for membership later.
+
+One or more people may propose the creation of a new team by reaching out to the community by email at [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]], clarifying the intended scope and purpose. When consensus is reached on the creation of this team, someone with commit access formalizes its creation by adding it and its initial members to =etc/teams.scm=.
+
+To list existing teams, run the following command from a Guix checkout:
+
+#+begin_example
+$ ./etc/teams.scm list-teams
+id: mentors
+name: Mentors
+description: A group of mentors who chaperone contributions by newcomers.
+members:
++ Charlie Smith <charlie@example.org>
+...
+#+end_example
+
+To generate a =CODEOWNERS= file, which Forgejo---the software behind Codeberg---uses to determine which team or person should review changes to a given set of files, run:
+
+#+begin_example
+./etc/teams.scm codeowners > CODEOWNERS
+#+end_example
+
+Teams defined in =etc/teams.scm= are reflected [[https://codeberg.org/guix/guix][on Codeberg]]; the “Owners” team on Codeberg, whose members have administration privileges over [[https://codeberg.org/guix][the entire “organization”]], is the only one missing from this file. To synchronize team changes with Codeberg, a member of the “Owners” team can run:
+
+#+begin_example
+./etc/teams.scm sync-codeberg-teams token
+#+end_example
+
+... where =token= is a token created via the [[https://codeberg.org/user/settings/applications][Codeberg applications settings page]], granting read/write access to the ‘=organization=' permission.
+
+--------------
+
+Next: [[id:guix--Making-Decisions][Making Decisions]], Previous: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

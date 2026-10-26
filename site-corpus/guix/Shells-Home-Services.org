@@ -1,0 +1,245 @@
+:PROPERTIES:
+:ID: guix--Shells-Home-Services
+:END:
+#+filetags: :guix:
+#+title: Shells Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Shells-Home-Services>>
+Next: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Previous: [[id:guix--Essential-Home-Services][Essential Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.2 Shells [[#Shells][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shells
+:CLASS: subsection
+:END:
+Shells play a quite important role in the environment initialization process, you can configure them manually as described in section [[id:guix--Configuring-the-Shell][Configuring the Shell]], but the recommended way is to use home services listed below. It's both easier and more reliable.
+
+Each home environment instantiates =home-shell-profile-service-type=, which creates a =~/.profile= startup file for all POSIX-compatible shells. This file contains all the necessary steps to properly initialize the environment, but many modern shells like Bash or Zsh prefer their own startup files, that's why the respective home services (=home-bash-service-type= and =home-zsh-service-type=) ensure that =~/.profile= is sourced by =~/.bash_profile= and =~/.zprofile=, respectively.
+
+**** Shell Profile Service [[#Shell-Profile-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shell-Profile-Service
+:CLASS: subsubheading
+:END:
+- Data Type: *home-shell-profile-configuration* [[#index-home_002dshell_002dprofile_002dconfiguration][¶]] :: Available =home-shell-profile-configuration= fields are:
+
+  - =profile= (default: ='()=) (type: text-config) :: =home-shell-profile= is instantiated automatically by =home-environment=, DO NOT create this service manually, it can only be extended. =profile= is a list of file-like objects, which will go to =~/.profile=. By default =~/.profile= contains the initialization code which must be evaluated by the login shell to make home-environment's profile available to the user, but other commands can be added to the file if it is really necessary. In most cases shell's configuration files are preferred places for user's customizations. Extend home-shell-profile service only if you really know what you do.
+
+**** Bash Home Service [[#Bash-Home-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Bash-Home-Service
+:CLASS: subsubheading
+:END:
+- Data Type: *home-bash-configuration* [[#index-home_002dbash_002dconfiguration][¶]] :: Available =home-bash-configuration= fields are:
+
+  - =package= (default: =bash=) (type: package) :: The Bash package to use.
+
+  - =guix-defaults?= (default: =#t=) (type: boolean) :: Add sane defaults like setting =PS1=, =SHELL=, and ensuring =/etc/profile= is sourced for non-interactive SSH shells. If you use Guix System, is it safe to set this to =#f=, as in this case this is already taken care of by the globally installed =/etc/bashrc=.
+
+  - =environment-variables= (default: =()=) (type: alist) :: Association list of environment variables to set for the Bash session. The rules for the =home-environment-variables-service-type= apply here (see [[id:guix--Essential-Home-Services][Essential Home Services]]). The contents of this field will be added after the contents of the =bash-profile= field.
+
+  - =variables= (default: =()=) (type: alist) :: Bash variables (not to be confused with environment variables) to be set in =.bashrc= for use by interactive shells. A typical example of such variables is =HISTSIZE= and related history variables (see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Variables.html#Bash-Variables][Bash Variables]] in Bash Reference Manual).
+
+  - =aliases= (default: %default-bash-aliases) (type: alist) :: Association list of aliases to set for the Bash session. If you want to preserve the default ones, you should append your alist to =%default-bash-aliases=, a variable from the =(gnu system shadow)= module. The aliases will be defined after the contents of the =bashrc= field has been put in the =.bashrc= file. The alias will automatically be quoted, so something like this:
+
+    #+begin_src lisp
+    '(("ls" . "ls -alF"))
+    #+end_src
+
+    turns into
+
+    #+begin_example
+    alias ls="ls -alF"
+#+end_example
+
+  - =bash-profile= (default: =()=) (type: text-config) :: List of file-like objects, which will be added to =.bash_profile=. Used for executing user's commands at start of login shell (In most cases the shell started on tty just after login). Since =.bash_profile= is always generated, Bash will never load subsequent startup files with lower precedence such as =.bash_login=.
+
+  - =bashrc= (default: =()=) (type: text-config) :: List of file-like objects, which will be added to =.bashrc=. Used for executing user's commands at start of interactive shell (The shell for interactive usage started by typing =bash= or by terminal app or any other program).
+
+  - =bash-logout= (default: =()=) (type: text-config) :: List of file-like objects, which will be added to =.bash_logout=. Used for executing user's commands at the exit of login shell. It won't be read in some cases (if the shell terminates by exec'ing another process for example).
+
+You can extend the Bash service by using the =home-bash-extension= configuration record, whose fields must mirror that of =home-bash-configuration= (see [[#home_002dbash_002dconfiguration][home-bash-configuration]]). The contents of the extensions will be added to the end of the corresponding Bash configuration files (see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual.
+
+For example, here is how you would define a service that extends the Bash service such that =~/.bash_profile= defines an additional shell variable, =PS1=:
+
+#+begin_src lisp
+(define bash-fancy-prompt-service
+  (simple-service 'bash-fancy-prompt
+                  home-bash-service-type
+                  (home-bash-extension
+                   (variables
+                    '(("PS1" . "\\u \\wλ "))))))
+#+end_src
+
+You would then add =bash-fancy-prompt-service= to the list in the =services= field of your =home-environment=. The reference of =home-bash-extension= follows.
+
+- Data Type: *home-bash-extension* [[#index-home_002dbash_002dextension][¶]] :: Available =home-bash-extension= fields are:
+
+  - =environment-variables= (default: =()=) (type: alist) :: Additional environment variables to set. These will be combined with the environment variables from other extensions and the base service to form one coherent block of environment variables.
+
+  - =variables= (default: =()=) (type: alist) :: Extra Bash variables (not to be confused with environment variables) to be set in =.bashrc= for use by interactive shells.
+
+  - =aliases= (default: =()=) (type: alist) :: Additional aliases to set. These will be combined with the aliases from other extensions and the base service.
+
+  - =bash-profile= (default: =()=) (type: text-config) :: Additional text blocks to add to =.bash_profile=, which will be combined with text blocks from other extensions and the base service.
+
+  - =bashrc= (default: =()=) (type: text-config) :: Additional text blocks to add to =.bashrc=, which will be combined with text blocks from other extensions and the base service.
+
+  - =bash-logout= (default: =()=) (type: text-config) :: Additional text blocks to add to =.bash_logout=, which will be combined with text blocks from other extensions and the base service.
+
+**** Zsh Home Service [[#Zsh-Home-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Zsh-Home-Service
+:CLASS: subsubheading
+:END:
+- Data Type: *home-zsh-configuration* [[#index-home_002dzsh_002dconfiguration][¶]] :: Available =home-zsh-configuration= fields are:
+
+  - =package= (default: =zsh=) (type: package) :: The Zsh package to use.
+
+  - =xdg-flavor?= (default: =#t=) (type: boolean) :: Place all the configs to =$XDG_CONFIG_HOME/zsh=. Makes =~/.zshenv= to set =ZDOTDIR= to =$XDG_CONFIG_HOME/zsh=. Shell startup process will continue with =$XDG_CONFIG_HOME/zsh/.zshenv=.
+
+  - =environment-variables= (default: ='()=) (type: alist) :: Association list of environment variables to set for the Zsh session.
+
+  - =zshenv= (default: ='()=) (type: text-config) :: List of file-like objects, which will be added to =.zshenv=. Used for setting user's shell environment variables. Must not contain commands assuming the presence of tty or producing output. Will be read always. Will be read before any other file in =ZDOTDIR=.
+
+  - =zprofile= (default: ='()=) (type: text-config) :: List of file-like objects, which will be added to =.zprofile=. Used for executing user's commands at start of login shell (In most cases the shell started on tty just after login). Will be read before =.zlogin=.
+
+  - =zshrc= (default: ='()=) (type: text-config) :: List of file-like objects, which will be added to =.zshrc=. Used for executing user's commands at start of interactive shell (The shell for interactive usage started by typing =zsh= or by terminal app or any other program).
+
+  - =zlogin= (default: ='()=) (type: text-config) :: List of file-like objects, which will be added to =.zlogin=. Used for executing user's commands at the end of starting process of login shell.
+
+  - =zlogout= (default: ='()=) (type: text-config) :: List of file-like objects, which will be added to =.zlogout=. Used for executing user's commands at the exit of login shell. It won't be read in some cases (if the shell terminates by exec'ing another process for example).
+
+**** Inputrc Profile Service [[#Inputrc-Profile-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Inputrc-Profile-Service
+:CLASS: subsubheading
+:END:
+The [[https://tiswww.cwru.edu/php/chet/readline/rltop.html][GNU Readline package]] includes Emacs and vi editing modes, with the ability to customize the configuration with settings in the =~/.inputrc= file. With the =gnu home services shells= module, you can setup your readline configuration in a predictable manner, as shown below. For more information about configuring an =~/.inputrc= file, see [[https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Init-File][Readline Init File]] in GNU Readline.
+
+- Variable: *home-inputrc-service-type* [[#index-home_002dinputrc_002dservice_002dtype][¶]] :: This is the service to setup various =.inputrc= configurations. The settings in =.inputrc= are read by all programs which are linked with GNU Readline.
+
+  Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
+
+  #+begin_src lisp
+  (service home-inputrc-service-type
+           (home-inputrc-configuration
+             (key-bindings
+              `(("Control-l" . "clear-screen")))
+             (variables
+              `(("bell-style" . "visible")
+                ("colored-completion-prefix" . #t)
+                ("editing-mode" . "vi")
+                ("show-mode-in-prompt" . #t)))
+             (conditional-constructs
+              `(("$if mode=vi" .
+                 ,(home-inputrc-configuration
+                    (variables
+                     `(("colored-stats" . #t)
+                       ("enable-bracketed-paste" . #t)))))
+                ("$else" .
+                 ,(home-inputrc-configuration
+                    (variables
+                     `(("show-all-if-ambiguous" . #t)))))
+                ("endif" . #t)
+                ("$include" . "/etc/inputrc")
+                ("$include" . ,(file-append
+                                 (specification->package "readline")
+                                 "/etc/inputrc"))))))
+  #+end_src
+
+  The example above starts with a combination of =key-bindings= and =variables=. The =conditional-constructs= show how it is possible to add conditionals and includes. In the example above =colored-stats= is only enabled if the editing mode is =vi= style, and it also reads any additional configuration located in =/etc/inputrc= or in =/gnu/store/…-readline/etc/inputrc=.
+
+  The value associated with a =home-inputrc-service-type= instance must be a =home-inputrc-configuration= record, as described below.
+
+- Data Type: *home-inputrc-configuration* [[#index-home_002dinputrc_002dconfiguration][¶]] :: Available =home-inputrc-configuration= fields are:
+
+  - =key-bindings= (default: ='()=) (type: alist) :: Association list of readline key bindings to be added to the =~/.inputrc= file.
+
+    #+begin_src lisp
+    '((\"Control-l\" . \"clear-screen\"))
+    #+end_src
+
+    turns into
+
+    #+begin_example
+    Control-l: clear-screen
+#+end_example
+
+  - =variables= (default: ='()=) (type: alist) :: Association list of readline variables to set.
+
+    #+begin_src lisp
+    '((\"bell-style\" . \"visible\")
+      (\"colored-completion-prefix\" . #t))
+    #+end_src
+
+    turns into
+
+    #+begin_example
+    set bell-style visible
+    set colored-completion-prefix on
+#+end_example
+
+  - =conditional-constructs= (default: ='()=) (type: alist) :: Association list of conditionals to add to the initialization file. This includes =$if=, =else=, =endif= and =include= and they receive a value of another =home-inputrc-configuration=.
+
+    #+begin_src lisp
+    (conditional-constructs
+     `((\"$if mode=vi\" .
+         ,(home-inputrc-configuration
+            (variables
+             `((\"show-mode-in-prompt\" . #t)))))
+       (\"$else\" .
+         ,(home-inputrc-configuration
+            (key-bindings
+             `((\"Control-l\" . \"clear-screen\")))))
+       (\"$endif\" . #t)))
+    #+end_src
+
+    turns into
+
+    #+begin_example
+    $if mode=vi
+    set show-mode-in-prompt on
+    $else
+    Control-l: clear-screen
+    $endif
+#+end_example
+
+  - =extra-content= (default: =""=) (type: text-config) :: Extra content appended as-is to the configuration file. Run =man readline= for more information about all the configuration options.
+
+--------------
+
+Next: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Previous: [[id:guix--Essential-Home-Services][Essential Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

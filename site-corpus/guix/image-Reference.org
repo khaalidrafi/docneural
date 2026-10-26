@@ -1,0 +1,89 @@
+:PROPERTIES:
+:ID: guix--image-Reference
+:END:
+#+filetags: :guix:
+#+title: image Reference
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<image-Reference>>
+Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 16.1 =image= Reference [[#image-Reference-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: image-Reference-1
+:CLASS: section
+:END:
+The =image= record, described right after, allows you to define a customized bootable system image.
+
+- Data Type: *image* [[#index-image][¶]] :: This is the data type representing a system image.
+
+  - =name= (default: =#false=) :: The image name as a symbol, ='my-iso9660= for instance. The name is optional and it defaults to =#false=.
+
+  - =format= :: The image format as a symbol. The following formats are supported:
+
+    - =disk-image=, a raw disk image composed of one or multiple partitions.
+    - =compressed-qcow2=, a compressed qcow2 image composed of one or multiple partitions.
+    - =docker=, a Docker image.
+    - =iso9660=, an ISO-9660 image.
+    - =tarball=, a tar.gz image archive.
+    - =wsl2=, a WSL2 image.
+
+  - =platform= (default: =#false=) :: The =platform= record the image is targeting (see [[id:guix--Platforms][Platforms]]), =aarch64-linux= for instance. By default, this field is set to =#false= and the image will target the host platform.
+
+  - =size= (default: ='guess=) :: The image size in bytes or ='guess=. The ='guess= symbol, which is the default, means that the image size will be inferred based on the image content.
+
+  - =operating-system= :: The image's =operating-system= record that is instantiated.
+
+  - =partition-table-type= (default: ='mbr=) :: The image partition table type as a symbol. Possible values are ='mbr= and ='gpt=. It default to ='mbr=.
+
+  - =partitions= (default: ='()=) :: The image partitions as a list of =partition= records (see [[id:guix--partition-Reference][=partition= Reference]]).
+
+  - =compression?= (default: =#true=) :: Whether the image content should be compressed, as a boolean. It defaults to =#true= and only applies to ='iso9660= image formats.
+
+  - =volatile-root?= (default: =#true=) :: Whether the image root partition should be made volatile, as a boolean.
+
+    This is achieved by using a RAM backed file system (overlayfs) that is mounted on top of the root partition by the initrd. It defaults to =#true=. When set to =#false=, the image root partition is mounted as read-write partition by the initrd.
+
+  - =shared-store?= (default: =#false=) :: Whether the image's store should be shared with the host system, as a boolean. This can be useful when creating images dedicated to virtual machines. When set to =#false=, which is the default, the image's =operating-system= closure is copied to the image. Otherwise, when set to =#true=, it is assumed that the host store will be made available at boot, using a =9p= mount for instance.
+
+  - =shared-network?= (default: =#false=) :: Whether to use the host network interfaces within the image, as a boolean. This is only used for the ='docker= image format. It defaults to =#false=.
+
+  - =substitutable?= (default: =#true=) :: Whether the image derivation should be substitutable, as a boolean. It defaults to =true=.
+
+- [[id:guix--partition-Reference][=partition= Reference]]
+
+--------------
+
+Next: [[id:guix--Instantiate-an-Image][Instantiate an Image]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

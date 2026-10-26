@@ -86,6 +86,14 @@ function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
   return new Promise((resolve) => {
     const outFd = fs.openSync(logFile + '.out', 'w');
     const errFd = fs.openSync(logFile + '.err', 'w');
+    // run 40386541436 follow-up: spawn errors fire 'error' THEN 'close' —
+    // double closeSync = EBADF crash. close each fd exactly once, ignore EBADF.
+    let fdsClosed = false;
+    const closeFds = () => {
+      if (fdsClosed) return;
+      fdsClosed = true;
+      for (const fd of [outFd, errFd]) { try { fs.closeSync(fd); } catch { /* EBADF: already closed */ } }
+    };
     const child = spawn('codebuddy', args, {
       cwd,
       env: { ...process.env, ...envExtra, DISABLE_AUTOUPDATER: '1' },
@@ -95,17 +103,22 @@ function execCapture(args, timeoutMs, cwd, envExtra, logFile) {
     const timer = setTimeout(() => { killed = true; child.kill('SIGTERM'); }, timeoutMs);
     child.on('close', (code, signal) => {
       clearTimeout(timer);
-      fs.closeSync(outFd); fs.closeSync(errFd);
+      closeFds();
       resolve({ code, signal, killed, out: safeRead(logFile + '.out'), err: safeRead(logFile + '.err') });
     });
     child.on('error', (e) => {
       clearTimeout(timer);
-      fs.closeSync(outFd); fs.closeSync(errFd);
+      closeFds();
       resolve({ code: -1, signal: null, killed: false, out: '', err: String(e) });
     });
   });
 }
-const safeRead = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } };
+// hoisted function declaration, NOT a const arrow — run 40386541436 crashed
+// with "ReferenceError: Cannot access 'safeRead' before initialization" when
+// the --version probe's child closed while the const below was still in TDZ.
+// Zero credits burned (crash at version probe, before auth, before any model
+// call) — classified 0-burn; the ONE paid generation stays ahead of us.
+function safeRead(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 
 // The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) mapped into
 // both documented slots; run 40378703437 proved the API-key slot authenticates

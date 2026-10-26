@@ -259,11 +259,11 @@ async function main() {
     const s = document.querySelector('.home .stats')
     // The inner selector is guarded too: a build whose stats panel lacks its
     // rows must FAIL the check below, not crash the driver mid-gate.
-    if (!s || !s.querySelector('.sy-kv')) return null
+    if (!s || !s.querySelector('.dn-kv')) return null
     const cs = getComputedStyle(s)
     return {
-      rows: s.querySelectorAll('.sy-kv > span:nth-child(even)').length,
-      font: getComputedStyle(s.querySelector('.sy-kv')).fontFamily,
+      rows: s.querySelectorAll('.dn-kv > span:nth-child(even)').length,
+      font: getComputedStyle(s.querySelector('.dn-kv')).fontFamily,
       bg: cs.backgroundColor,
       border: cs.borderLeftWidth
     }
@@ -438,13 +438,13 @@ async function main() {
       graphJson.nodes.find((x) => x.tags?.[0] === tag)
     const before = reqs.length
     await page.goto(`${BASE}?doc=${encodeURIComponent(node.slug)}`, NAV)
-    await page.waitForSelector('.reader .sy-org', { timeout: 90000 })
+    await page.waitForSelector('.reader .dn-org', { timeout: 90000 })
     // A beat for the prefetch: next/prev fragments are fetched from an $effect
     // that runs after the article paints, so they are in the log a moment later.
     await page.waitForTimeout(1500)
     fragCounts.push(reqs.slice(before).filter((u) => /\/docs\/.+\.html/.test(u)).length)
     const reader = await page.evaluate(() => {
-      const h2 = document.querySelector('.sy-org h2')
+      const h2 = document.querySelector('.dn-org h2')
       const hv = (sel) => {
         const el = document.querySelector(sel)
         return el ? getComputedStyle(el).getPropertyValue('--dn-src').trim() : null
@@ -455,7 +455,7 @@ async function main() {
         rail: hv('.rail'), nav: hv('.chapters'),
         h2Before: h2 ? getComputedStyle(h2, '::before').content : null,
         headingFont: h2 ? getComputedStyle(h2).fontFamily : null,
-        proseFont: getComputedStyle(document.querySelector('.sy-org p') || h2).fontFamily
+        proseFont: getComputedStyle(document.querySelector('.dn-org p') || h2).fontFamily
       }
     })
     // Expect the same hue Home's card wore: one tag, one colour, any surface.
@@ -542,7 +542,7 @@ async function main() {
   const readDoc = graphJson.nodes.find((x) => !x.stub && x.tags?.[0] === 'org') ??
     graphJson.nodes.find((x) => !x.stub)
   await page.goto(`${BASE}?doc=${encodeURIComponent(readDoc.slug)}`, NAV)
-  await page.waitForSelector('.reader .sy-org h2[id]', { timeout: 90000 })
+  await page.waitForSelector('.reader .dn-org h2[id]', { timeout: 90000 })
 
   // The rail groups: an index chapter that cites you 600 times is ONE counted
   // row, not 600 rows. Asserted on a real page because the failure mode is
@@ -594,11 +594,11 @@ async function main() {
     /copied/.test(noteY) && clipY.includes(`doc=${readDoc.slug}`), `${noteY} | ${clipY}`)
 
   const headId = await page.evaluate(() => {
-    const hs = [...document.querySelectorAll('.sy-org h2[id], .sy-org h3[id]')]
+    const hs = [...document.querySelectorAll('.dn-org h2[id], .dn-org h3[id]')]
     return (hs.find((h) => h.getBoundingClientRect().top > 4) ?? hs[0])?.id ?? null
   })
   if (headId) {
-    await page.locator(`.sy-org [id="${headId}"]`).click()
+    await page.locator(`.dn-org [id="${headId}"]`).click()
     await page.waitForTimeout(300)
     const clipH = await page.evaluate(() => navigator.clipboard.readText().catch(() => ''))
     check('clicking a heading copies a link to that section',
@@ -640,7 +640,7 @@ async function main() {
   await page.waitForSelector('.home .mk', { timeout: 30000 })
   const mkTxt = (await page.locator('.home .mk').first().innerText()).replace(/\s+/g, ' ').trim()
   await page.locator('.home .mk').first().click()
-  await page.waitForSelector('.reader .sy-org', { timeout: 90000 })
+  await page.waitForSelector('.reader .dn-org', { timeout: 90000 })
   const back = await page.evaluate(() => ({
     slug: new URLSearchParams(location.search).get('doc'),
     mark: document.querySelector('.acts .cpy.on')?.textContent?.trim() ?? '',
@@ -677,7 +677,7 @@ async function main() {
     corpus.links.filter((l) => l.source === hereNode?.id).map((l) => l.target)
   )
   const proseHrefs = await page.evaluate(() =>
-    [...document.querySelectorAll('.sy-org a[href*="docs/"]')].map((a) => a.getAttribute('href'))
+    [...document.querySelectorAll('.dn-org a[href*="docs/"]')].map((a) => a.getAttribute('href'))
   )
   const peekHref = proseHrefs.find((h) => {
     const s = h?.split('/').pop()?.replace('.html', '').split('#')[0]
@@ -685,7 +685,7 @@ async function main() {
     return t && wireTargets.has(t.id)
   })
   if (peekHref) {
-    const sel = `.sy-org a[href="${peekHref}"]`
+    const sel = `.dn-org a[href="${peekHref}"]`
     // bubbles must be asked for: a synthetic PointerEvent defaults to
     // non-bubbling, and the reader listens on the article (one delegated
     // handler for 1,559 possible links), so a non-bubbling probe would test
@@ -714,10 +714,10 @@ async function main() {
     // where the link sits. Without this the line reads as a product bug and the
     // first guess is wrong.
     const diag = card ? '' : await page.evaluate((h) => {
-      const a = document.querySelector(`.sy-org a[href="${h}"]`)
+      const a = document.querySelector(`.dn-org a[href="${h}"]`)
       const r = a?.getBoundingClientRect()
       return ` | href="${h}" link=${a ? `${Math.round(r.x)},${Math.round(r.y)} ${Math.round(r.width)}x${Math.round(r.height)}` : 'MISSING'}` +
-        ` zen=${!!document.querySelector('.reader.zen')} articles=${document.querySelectorAll('.sy-org').length}`
+        ` zen=${!!document.querySelector('.reader.zen')} articles=${document.querySelectorAll('.dn-org').length}`
     }, peekHref)
     await page.screenshot({ path: `${OUT}/09-hover-peek.png` })
     await page.evaluate(() => document.querySelector('.doc-main').scrollBy({ top: 60 }))
@@ -792,7 +792,7 @@ async function main() {
     lay1.fit !== undefined && Number(lay1.fit) > 0 && Number(lay1.fit) <= 1,
     `data-fit "${lay1.fit}" for ${lay1.nodes} nodes`)
   await page.reload({ waitUntil: 'domcontentloaded' })
-  await page.waitForSelector('.reader .sy-org', { timeout: 90000 })
+  await page.waitForSelector('.reader .dn-org', { timeout: 90000 })
   await page.keyboard.press('g')
   await page.keyboard.press('s')
   await page.waitForSelector('.layout.spread', { timeout: 60000 })
@@ -810,7 +810,7 @@ async function main() {
 
   await page.keyboard.press('g')
   await page.keyboard.press('d')
-  await page.waitForSelector('.reader .sy-org', { timeout: 90000 })
+  await page.waitForSelector('.reader .dn-org', { timeout: 90000 })
 
   await page.locator('.acts .cpy').nth(2).click()
   await page.waitForTimeout(500)
@@ -827,7 +827,7 @@ async function main() {
   await page.waitForSelector('.home .resume', { timeout: 30000 })
   const resumeTxt = (await page.locator('.home .resume').innerText()).replace(/\s+/g, ' ').trim()
   await page.locator('.home .resume').click()
-  await page.waitForSelector('.reader .sy-org', { timeout: 60000 })
+  await page.waitForSelector('.reader .dn-org', { timeout: 60000 })
   const landed = await page.evaluate(() => new URLSearchParams(location.search).get('doc'))
   check('home offers --resume and it lands back on the same chapter',
     resumeTxt.includes(readDoc.title.slice(0, 10)) && landed === readDoc.slug,

@@ -77,10 +77,12 @@ jobs:
       - name: "Smoke the shipped artifact (Pages layout /docneural/)"
         working-directory: docneural
         run: |
-          test -f dist/docneural/graph.json
-          test -f dist/docneural/docs/site--TODOs.html
-          test -f dist/docneural/ctx/team--STATE.json
-          grep -q '/docneural/assets/' dist/docneural/index.html
+          # Pages serves the artifact ROOT under the /docneural/ prefix, so
+          # dist/ keeps vite's flat layout while index.html URLs carry base.
+          test -f dist/graph.json
+          test -f dist/docs/site--TODOs.html
+          test -f dist/ctx/team--STATE.json
+          grep -q '/docneural/assets/' dist/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:

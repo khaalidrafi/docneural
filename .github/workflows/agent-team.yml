@@ -541,25 +541,16 @@ jobs:
           git checkout -b "$BRANCH"
           echo "TURN_BRANCH=$BRANCH" >> "$GITHUB_ENV"
           # TIME LAW (Owner 2026-10-26 10:42Z #hq): the clock-in is
-          # AUTOMATED at the exact prompt-send moment. The HOST flips the
-          # item the WORK ORDER will assign (the first open item,
-          # oldest-first — the same one the BRIEF tells the member to
-          # take) to ONGOING and stamps the open clock BEFORE the agent
-          # body runs; members never clock. Canonical script:
-          # khaalidrafi/agent-team.el agent-team/tools/clock_in.py at a
-          # pinned sha (no-dup law); a failed fetch skips the clock,
-          # never the segment.
+          # AUTOMATED at the exact prompt-send moment. The clock lives
+          # INSIDE the segment now: the agent-org batch lane's
+          # AGENT_ORG_CLOCK_CMD runs the clock_in.py twin (pinned,
+          # no-dup law) at the EXACT send moment, and the direct-lane
+          # fallback clocks at dispatch time inside the container (the
+          # batch_send failure path). The host no longer clocks — one
+          # clock per item, never two (the twin is idempotent either
+          # way); a failed fetch skips the clock, never the segment.
           WORK_ITEM=$(grep -E '^\*+ (TODO|ONGOING|PENDING|WAIT|PROGRESS)' "$BOARD" | head -1 | sed 's/^[*]* //' || true)
-          if [ -n "${WORK_ITEM:-}" ]; then
-            curl -fsSL -H "Authorization: Bearer ${{ github.token }}" \
-              "https://raw.githubusercontent.com/khaalidrafi/agent-team.el/396848263242bb3686f35c12615e5f7da9957e49/agent-team/tools/clock_in.py" \
-              -o .clock_in.py \
-            && python3 .clock_in.py "$BOARD" "$WORK_ITEM" >> "$SUMMARY" 2>&1 \
-            && git add "$BOARD" \
-            && git commit -q -m "board: TIME LAW automated clock-in at dispatch (Owner 2026-10-26 10:42Z)" \
-            || echo "clock-in: skipped (fetch/match/commit failed) — segment continues" >> "$SUMMARY"
-            rm -f .clock_in.py
-          else
+          if [ -z "${WORK_ITEM:-}" ]; then
             echo "clock-in: no open board item — skipped" >> "$SUMMARY"
           fi
 
@@ -599,8 +590,10 @@ jobs:
           mailbox/ is a frozen archive — NEVER write there.
           TOP BOARD ITEMS (oldest-first):
           ${TOP}
-          TIME LAW CLOCK-IN (Owner 2026-10-26 10:42Z): automation clocked
-          your item in at dispatch — ${WORK_ITEM:-none}. NEVER edit
+          TIME LAW CLOCK-IN (Owner 2026-10-26 10:42Z): automation
+          clocks your item in at the EXACT prompt-send moment (the
+          agent-org hook; direct-lane fallback: at dispatch) —
+          ${WORK_ITEM:-none}. NEVER edit
           :LOGBOOK: clock entries yourself; the automation owns them
           (manual clocking exists only for web/cloud lanes, not this CI).
           REVIEW CLOCK LAW (Owner 2026-10-26 10:55Z): review time is a
@@ -706,6 +699,43 @@ jobs:
           # Deps are baked in the harness image (node_modules); the
           # landing gate re-installs fresh via npm ci in the test job.
           true
+          # --- AGENT-ORG BATCH LANE (Owner R-2-77 endgame 2026-10-26 #hq:
+          #     team CI sends run through agent-org).  When the image has
+          #     emacs-nox + agent-org baked, the send goes THROUGH
+          #     agent-org-batch.el: the SAME prompt-send hook an
+          #     interactive Emacs send fires, and AGENT_ORG_CLOCK_CMD
+          #     clocks the dispatched item at the EXACT send moment
+          #     (TIME LAW; the clock_in.py twin is idempotent).  Exit 42
+          #     = fall back to the direct CLI lane below — the batch path
+          #     only ADDS a working send, never removes one; the fallback
+          #     clock inside batch_send covers the direct lanes.
+          printf '%s' "$BRIEF" > /tmp/.turn-brief.txt
+          {
+            printf '%s\n' '#!/usr/bin/env bash'
+            printf '%s\n' 'curl -fsSL -H "Authorization: Bearer ${CLOCK_TOKEN:-}" \\'
+            printf '%s\n' '  "https://raw.githubusercontent.com/khaalidrafi/agent-team.el/a623e727f23926ad623b0009f50aec8b46c8d3e3/agent-team/tools/clock_in.py" \\'
+            printf '%s\n' '  -o /tmp/.clock_in.py 2>/dev/null || exit 0'
+            printf '%s\n' 'python3 /tmp/.clock_in.py /workspace/agent-team/TODOS.org "${WORK_ITEM:-}" >/dev/null 2>&1 || true'
+            printf '%s\n' 'rm -f /tmp/.clock_in.py'
+          } > /tmp/.ci-clock.sh
+          chmod 0755 /tmp/.ci-clock.sh
+          batch_send() { # $1 provider-id  $2 ACP command  [$3 model pin]
+            if [ -x /usr/bin/emacs ] && [ -f /opt/agent-org/agent-org-batch.el ]; then
+              if [ -n "${3:-}" ]; then export AGENT_ORG_MODEL="$3"; else unset AGENT_ORG_MODEL || true; fi
+              AGENT_ORG_PROVIDER="$1" \
+              AGENT_ORG_PROVIDER_COMMAND="$2" \
+              AGENT_ORG_PROMPT="/tmp/.turn-brief.txt" \
+              AGENT_ORG_OUT="/tmp/.turn-batch-response.txt" \
+              AGENT_ORG_TIMEOUT=900 \
+              AGENT_ORG_LOAD_PATH="/opt/agent-org" \
+              AGENT_ORG_CLOCK_CMD="/tmp/.ci-clock.sh" \
+              emacs --batch -l /opt/agent-org/agent-org-batch.el \
+                --eval '(agent-org-batch-send)' && return 0
+              echo "agent-org batch lane failed (rc=$?) — direct CLI lane fallback"
+            fi
+            /tmp/.ci-clock.sh || true   # dispatch-time clock for the direct lane
+            return 42
+          }
           case "$SEAT" in
             builder)
               # glm-4.7-flash@zai — the lane PROVEN on admincraft CI runs.
@@ -713,7 +743,16 @@ jobs:
               # minimax-m3.1 is BURNED, Owner law 2026-10-24 17:01Z). Base
               # URL carries NO /v1 — goose appends the version path itself
               # (404 /v1/v1 evidence: proof run 40218134008).
-              if env GOOSE_PROVIDER=openai GOOSE_MODEL=glm-4.7-flash \
+              # BATCH FIRST (agent-org send law): export the primary
+              # lane's brain mapping — the batch child inherits the FULL
+              # environment; on 42 the direct lane below runs unchanged.
+              export GOOSE_PROVIDER=openai GOOSE_MODEL=glm-4.7-flash \
+                     OPENAI_API_KEY="$ZAI_API_KEY" \
+                     OPENAI_HOST="https://api.z.ai" \
+                     OPENAI_BASE_PATH="/api/paas/v4/chat/completions"
+              if batch_send goose "goose acp" "glm-4.7-flash"; then
+                echo "TURN_RESULT=goose run OK via agent-org batch (lane: glm-4.7-flash@zai)"
+              elif env GOOSE_PROVIDER=openai GOOSE_MODEL=glm-4.7-flash \
                    OPENAI_API_KEY="$ZAI_API_KEY" \
                    OPENAI_HOST="https://api.z.ai" \
                    OPENAI_BASE_PATH="/api/paas/v4/chat/completions" \
@@ -743,7 +782,10 @@ jobs:
               # Relief: the SAME zen brain through goose's OpenAI-compatible
               # lane (zen /v1/chat/completions) — different body, same free
               # brain; a blocked segment never fakes a verdict.
-              if env OPENCODE_API_KEY="$OPENCODE_API_KEY" \
+              export OPENCODE_API_KEY="$OPENCODE_API_KEY"
+              if batch_send opencode "opencode acp" "zen/glm-5.3-flash-free"; then
+                echo "TURN_RESULT=opencode run OK via agent-org batch (lane: glm-5.3-flash-free@zen)"
+              elif env OPENCODE_API_KEY="$OPENCODE_API_KEY" \
                    opencode run -m zen/glm-5.3-flash-free "$BRIEF"; then
                 echo "TURN_RESULT=opencode run OK (lane: glm-5.3-flash-free@zen)"
               elif env GOOSE_PROVIDER=openai GOOSE_MODEL=glm-5.3-flash-free \
@@ -761,7 +803,10 @@ jobs:
               # baked opencode.json (GROQ_API_KEY lane). NO goose relief:
               # goose is BENCHED for groq brains (HTTP 400 `developer` role,
               # goose-config.yaml) — falling back would fake the lane.
-              if env OPENCODE_API_KEY="$OPENCODE_API_KEY" \
+              export OPENCODE_API_KEY="$OPENCODE_API_KEY" GROQ_API_KEY="$GROQ_API_KEY"
+              if batch_send opencode "opencode acp" "groq/qwen3.8-27b"; then
+                echo "TURN_RESULT=opencode run OK via agent-org batch (lane: qwen3.8-27b@groq)"
+              elif env OPENCODE_API_KEY="$OPENCODE_API_KEY" \
                    opencode run -m groq/qwen3.8-27b "$BRIEF"; then
                 echo "TURN_RESULT=opencode run OK (lane: qwen3.8-27b@groq)"
               else
@@ -798,6 +843,8 @@ jobs:
             -v "$PWD":/workspace -w /workspace \
             -v "$PWD/.sessions-restore":/sessions-restore:ro \
             -e SEAT="${SEAT}" -e BRIEF="${BRIEF}" \
+            -e WORK_ITEM="${WORK_ITEM:-}" \
+            -e CLOCK_TOKEN="${{ github.token }}" \
             -e ZAI_API_KEY -e OPENROUTER_API_KEY -e GOMODEL_MASTER_KEY -e GOMODEL_GATEWAY_URL \
             -e GROQ_API_KEY -e OPENCODE_API_KEY -e CLINE_API_KEY -e CLINE_AUTH_JSON \
             -e GH_PAT \

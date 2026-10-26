@@ -503,3 +503,71 @@
   ai/task/gate-selectors, docneural-ui ai/task/synapse-polish — all
   pushed, merged --no-ff, concurrent CI green (deploy-pages 40275108729
   success on the manuals merge).
+
+* MSG docneural -> @Owner :letter:                    :msg:docneural:Owner:letter:
+:PROPERTIES:
+:FROM: docneural (signed by glm-5.3-flash, EM)
+:TO: Owner
+:KIND: letter
+:WHEN: [2026-10-26 Mon 08:35 UTC]
+:SUBJECT: org-import installed as the corpus converter; design re-passed
+:REF: MSG glm-5.3-flash (EM) -> Owner :report: [2026-10-26 Mon 06:10 UTC]
+:PRIORITY: normal
+:REPLY-BY: none
+:STATUS: open
+:END:
+  To the Owner,
+
+  This letter answers your two instructions from #docneural-site — clone
+  org-pandoc-import from git.khalidrafi.tech and use it, and make the
+  design visibly cooler with working phone graph — and it corrects one
+  claim in the letter it references.  Both instructions are shipped and
+  live; the correction is stated in section 3.
+
+  1. org-import is now the real converter (commit c100691, branch
+     ai/task/org-import-corpus).  The referenced letter claimed the
+     org-import package "was never pushed" — it has since been published
+     at git.khalidrafi.tech/org-pandoc-import (package org-import, HEAD
+     237a2d1); we cloned it, read its AGENTS.md verification contract,
+     and rebuilt the pipeline around it: scripts/org-import-convert.el
+     drives org-import-bulk headless (one batch emacs, concurrent pandoc
+     children, sentinel-checked), and scripts/manuals-corpus.py stages
+     the nav-stripped HTML into it.  Result, anchored: org manual 319/319
+     pages byte-identical to the previous build; emacs 791 pages same
+     set; guix refreshed to the published 1.5.0 manual as it stands
+     today (site-corpus/README.org, "History").  The live graph reads
+     1386 nodes / 30915 wires (https://khaalidrafi.github.io/docneural/
+     graph.json, deploy run 40289685865).  One deviation, documented in
+     scripts/org-import-convert.el: the global _simple-headers.lua
+     filter is cleared for this corpus, because it melts header ids into
+     fuzzy [[*headline]] links and would orphan the machine anchors the
+     cross-reference wires name; the conversion itself remains
+     org-import's html backend, argument profile and bulk machinery.
+
+  2. The design was re-passed for contrast and coolness, and the phone
+     graph is fixed (docneural-ui @94cfc3d, branch ai/task/signal-
+     design).  The defect was found and removed: a deviceMemory<=2
+     auto-downgrade silently flipped many Android phones into lite mode,
+     where the SYNAPSES tab is not rendered and graph mode cannot land —
+     the graph now reaches every device, lite being an explicit choice
+     only.  The visual pass moved the tokens from dim HUD to a
+     high-voltage instrument look: near-white primary text, brighter
+     muted tiers (WCAG AA held on both themes), neon gradient header
+     underline, hero wordmark with split glow, animated terminal status
+     line, count-up corpus stats, sharper glass panels with accent
+     corner brackets, brighter somas and wires, ego dimming at ~12%
+     alpha, and a retuned light theme.  Evidence: vitest 65/65,
+     svelte-check 0/0, vite build clean, and four screenshots at
+     download/signal-{desktop,phone}-{home,graph}.png including the
+     390x844 graph view working.
+
+  3. Correction of record: the referenced letter's claim that the
+     org-pandoc-import repository was empty is no longer true and this
+     letter supersedes it; the pipeline no longer contains a raw-pandoc
+     fallback, so the corpus contract is now executed by the package
+     itself.
+
+  No action requested — this letter is for the record.
+
+  Regards,
+  docneural — glm-5.3-flash (EM)

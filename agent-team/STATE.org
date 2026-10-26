@@ -7,14 +7,29 @@
 - CLINE_API_KEY SEALED 2026-10-26T02:29Z (Owner order "provide cline keys to both teams" + key pasted "store in vault"): burn-tested BEFORE sealing — GET api.cline.bot/api/v1/models = HTTP 200 / 472 ids (matches canonical 472/18 FREE probe); POST chat/completions poolside/laguna-s-2.1:free = HTTP 200, usage.cost = 0, reply "OK". Sealed to docneural + admincraft + agent-team.el the same minute (updated_at 02:29:39-42Z). Secret names per repo: 24 -> 25. Activated on seal: hire round 3's 2 cline API-route interns (cline/poolside-laguna-s-2.1:free@opencode, cline/nemotron-3.5-lightning:free@opencode) + the seat-liveness cline probe row (SKIP -> live). CLI route unchanged: CLINE_AUTH_JSON sealed since 2026-10-24. Raw keyfile shredded after seal; local copy in OWNER-KEYS.
 
 * IN-FLIGHT
+- CORPUS CONVERTED BY THE OWNER'S org-import 2026-10-26: cloned
+  git.khalidrafi.tech/org-pandoc-import (package org-import, HEAD
+  237a2d1) per Owner order; scripts/org-import-convert.el drives
+  org-import-bulk headless and manuals-corpus.py feeds it. org 319/319
+  byte-identical, emacs 791 pages, guix refreshed to published 1.5.0.
+  Live: 1386 nodes / 30915 wires (deploy run 40289685865). _simple-
+  headers.lua global filter cleared for the corpus (anchor contract) —
+  documented in the driver + site-corpus/README.org.
+- DESIGN "signal-design" + PHONE GRAPH FIX 2026-10-26 (docneural-ui
+  @94cfc3d): deviceMemory<=2 auto-lite DELETED (it hid SYNAPSES + graph
+  mode on many Android phones — the Owner could not see the graph);
+  lite is explicit-only now. Contrast pass: near-white fg, brighter
+  muted tiers, neon gradient header underline, hero split-glow wordmark
+  + terminal status line + count-up stats, glass panels with accent
+  brackets, hotter somas/wires, ego dimming ~12%, light theme retuned.
+  Gates: vitest 65/65, svelte-check 0/0, build clean.
 - THE REAL MANUALS DEPLOYED 2026-10-26: site-corpus/ (Emacs 30.1 + Org +
-  Guix — 1392 nodes / 30400 wires / 3 src) is the corpus behind
-  https://khaalidrafi.github.io/docneural/ ; scripts/manuals-corpus.py
-  reimplements the org-docs import contract (org-import never pushed).
-  Design pass "synapse-polish" in docneural-ui: client brotli boot
-  (76 kB), sprite somas, ego dimming, curved traffic wires, sliding seg
-  thumb, mode morphs, count-ups, spread-first big corpora. pw-verify's
-  17 stale/corrupted selectors repaired.
+  Guix — now 1386 nodes / 30915 wires / 3 src) is the corpus behind
+  https://khaalidrafi.github.io/docneural/ . Design pass
+  "synapse-polish" in docneural-ui: client brotli boot (76 kB), sprite
+  somas, ego dimming, curved traffic wires, sliding seg thumb, mode
+  morphs, count-ups, spread-first big corpora. pw-verify's 17
+  stale/corrupted selectors repaired.
 - LIVE SITE 2026-10-26: docneural deploys itself to GitHub Pages on every
   ai/main push (deploy-pages.yml, concurrent with agent-team.yml) —
   https://khaalidrafi.github.io/docneural/ renders the repo's own docs

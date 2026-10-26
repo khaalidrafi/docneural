@@ -68,7 +68,7 @@ jobs:
           npm ci --no-audit --no-fund
           make build BASE_FLAG=--base=/docneural/
 
-      - name: Smoke the shipped artifact (Pages layout: /docneural/)
+      - name: "Smoke the shipped artifact (Pages layout /docneural/)"
         working-directory: docneural
         run: |
           test -f dist/docneural/graph.json

@@ -39,8 +39,13 @@
     first, design second; instant means on a phone.
   - LETTER LAW (Owner 2026-10-26 #hq): any message this team addresses
     to another team or a client follows agent-team/COMMS-FORMAT.org —
-    full skeleton + professional register; reviewers reject
-    non-conforming letters.
+    canonical copy in khaalidrafi/agent-team.el, no local duplicate
+    (Owner no-duplication law 2026-10-26); full skeleton +
+    professional register; reviewers reject non-conforming letters.
+  - TIME LAW (Owner 2026-10-26 #hq): strict time discipline, Org-powered —
+    every lead-assigned TODO sets :EFFORT: (Effort_ALL ladder); members
+    clock actual work with :LOGBOOK: CLOCK entries; a TODO closed
+    without clock evidence bounces at review.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

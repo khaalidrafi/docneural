@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: MS-Windows Registry
 
-Next:
+Next:   Previous: [[id:emacs--Misc-Variables][Miscellaneous Variables]]   Up: [[id:emacs--Environment][Environment Variables]]
 
-The node you are looking for is at [[id:emacs--Environment::#MS_002dWindows-Registry][MS-Windows Registry]].
+<<MS_002dWindows-Registry>>
+
+--------------
+
+**** C.4.3 The MS-Windows System Registry [[#The-MS_002dWindows-System-Registry][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-MS_002dWindows-System-Registry
+:CLASS: appendixsubsec
+:END:
+On MS-Windows, the environment variables =emacs_dir=, =EMACSLOADPATH=, =EMACSDATA=, =EMACSPATH=, =EMACSDOC=, =SHELL=, =TERM=, =HOME=, =LANG=, and =PRELOAD_WINSOCK= can also be set in the =HKEY_CURRENT_USER= or the =HKEY_LOCAL_MACHINE= section of the system registry, under the =/Software/GNU/Emacs= key. When Emacs starts, as well as checking the environment, it also checks the system registry for those variables.
+
+To determine the value of those variables, Emacs goes through the following procedure. First, it checks the environment. If the variable is not found there, Emacs looks for a registry key by the name of the variable under =/Software/GNU/Emacs=; first in the =HKEY_CURRENT_USER= section of the registry, and if not found there, in the =HKEY_LOCAL_MACHINE= section. Finally, if Emacs still cannot determine the values, it uses the compiled-in defaults.
+
+Note that the registry settings have global system-wide effect: they will affect all Emacs sessions run on the system. Thus, if you run different Emacs versions, or use both installed and un-installed Emacs executables, or build newer versions of Emacs, the settings in the registry will cause all of them to use the same directories, which is probably not what you want. For this reason, /we recommend against setting these variables in the registry/. If you have such settings in the registry, we recommend that you remove them.
+
+If you run the Emacs MS-Windows installation program =addpm.exe=, it will update any existing registry settings of the =emacs_dir=, =EMACSLOADPATH=, =EMACSDATA=, =EMACSPATH=, =EMACSDOC=, =SHELL=, and =TERM= variables to have the values suitable for the installed Emacs version with which =addpm.exe= came. Note that =addpm.exe= will /not/ create any registry setting that didn't exist, it will only update existing settings, which are most probably inherited from an old Emacs installation, so that they are compatible with the newly installed Emacs version. Running =addpm.exe= is no longer necessary when installing recent versions of Emacs, so we only recommend doing that if you are upgrading from an older version, and cannot remove these settings from the registry for some reason.
+
+In addition to the environment variables above, you can also add settings to the =/Software/GNU/Emacs= registry key to specify X resources (see [[id:emacs--X-Resources][X Options and Resources]]). Most of the settings you can specify in your =.Xdefaults= file can be set from that registry key.
+
+--------------

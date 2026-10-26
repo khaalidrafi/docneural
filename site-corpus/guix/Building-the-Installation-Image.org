@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Building-the-Installation-Image>>
-Previous: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 3.9 Building the Installation Image [[#Building-the-Installation-Image-1][¶]]
+<<Building-the-Installation-Image-1>>
+*** 3.9 Building the Installation Image
 :PROPERTIES:
-:CUSTOM_ID: Building-the-Installation-Image-1
+:CUSTOM_ID: building-the-installation-image
 :CLASS: section
 :END:
+<<index-installation-image>>
 The installation image described above was built using the =guix system= command, specifically:
 
 #+begin_example
@@ -54,7 +57,7 @@ guix system image -t iso9660 gnu/system/install.scm
 Have a look at =gnu/system/install.scm= in the source tree, and see also [[id:guix--Invoking-guix-system][Invoking =guix system=]] for more information about the installation image.
 
 <<Building-the-Installation-Image-for-ARM-Boards>>
-*** 3.10 Building the Installation Image for ARM Boards [[#Building-the-Installation-Image-for-ARM-Boards][¶]]
+*** 3.10 Building the Installation Image for ARM Boards
 :PROPERTIES:
 :CUSTOM_ID: building-the-installation-image-for-arm-boards
 :CLASS: section
@@ -68,7 +71,3 @@ guix system image --system=armhf-linux -e '((@ (gnu system install) os-with-u-bo
 #+end_example
 
 =A20-OLinuXino-Lime2= is the name of the board. If you specify an invalid board, a list of possible boards will be printed.
-
---------------
-
-Previous: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

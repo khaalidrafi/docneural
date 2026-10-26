@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Build-Phases>>
-Next: [[id:guix--Build-Utilities][Build Utilities]], Previous: [[id:guix--Build-Systems][Build Systems]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Build-Utilities][Build Utilities]], Previous: [[id:guix--Build-Systems][Build Systems]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.6 Build Phases [[#Build-Phases-1][¶]]
+<<Build-Phases-1>>
+*** 8.6 Build Phases
 :PROPERTIES:
-:CUSTOM_ID: Build-Phases-1
+:CUSTOM_ID: build-phases
 :CLASS: section
 :END:
+<<index-build-phases_002c-for-packages>>
 Almost all package build systems implement a notion /build phases/: a sequence of actions that the build system executes, when you build the package, leading to the installed byproducts in the store. A notable exception is the “bare-bones” =trivial-build-system= (see [[id:guix--Build-Systems][Build Systems]]).
 
 As discussed in the previous section, those build systems provide a standard list of phases. For =gnu-build-system=, the main build phases are the following:
@@ -67,14 +70,17 @@ As discussed in the previous section, those build systems provide a standard lis
 
 - =strip= :: Strip debugging symbols from ELF files (unless =#:strip-binaries?= is false), copying them to the =debug= output when available (see [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]).
 
+  <<index-RUNPATH_002c-validation-1>> <<phase_002dvalidate_002drunpath>>
+
 - =validate-runpath= :: Validate the =RUNPATH= of ELF binaries, unless =#:validate-runpath?= is false (see [[id:guix--Build-Systems][Build Systems]]).
 
   This validation step consists in making sure that all the shared libraries needed by an ELF binary, which are listed as =DT_NEEDED= entries in its =PT_DYNAMIC= segment, appear in the =DT_RUNPATH= entry of that binary. In other words, it ensures that running or using those binaries will not result in a “file not found” error at run time. See [[https://sourceware.org/binutils/docs/ld/Options.html#Options][=-rpath=]] in The GNU Linker, for more information on =RUNPATH=.
 
 Other build systems have similar phases, with some variations. For example, =cmake-build-system= has same-named phases but its =configure= phases runs =cmake= instead of =./configure=. Others, such as =python-build-system=, have a wholly different list of standard phases. All this code runs on the /build side/: it is evaluated when you actually build the package, in a dedicated build process spawned by the build daemon (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]).
 
-Build phases are represented as association lists or “alists” (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Association-Lists.html#Association-Lists][Association Lists]] in GNU Guile Reference Manual) where each key is a symbol for the name of the phase and the associated value is a procedure that accepts an arbitrary number of arguments. By convention, those procedures receive information about the build in the form of /keyword parameters/, which they can use or ignore.
+Build phases are represented as association lists or “alists” (see [[https://www.gnu.org/software/guile/manual/html_node/Association-Lists.html#Association-Lists][Association Lists]] in GNU Guile Reference Manual) where each key is a symbol for the name of the phase and the associated value is a procedure that accepts an arbitrary number of arguments. By convention, those procedures receive information about the build in the form of /keyword parameters/, which they can use or ignore.
 
+<<index-_0025standard_002dphases>>
 For example, here is how =(guix build gnu-build-system)= defines =%standard-phases=, the variable holding its alist of build phases[[#FOOT20][^{20}]]:
 
 #+begin_src lisp
@@ -115,13 +121,14 @@ For example, here is how =(guix build gnu-build-system)= defines =%standard-phas
         (cons 'install install)))
 #+end_src
 
-This shows how =%standard-phases= is defined as a list of symbol/procedure pairs (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Pairs.html#Pairs][Pairs]] in GNU Guile Reference Manual). The first pair associates the =unpack= procedure with the =unpack= symbol---a name; the second pair defines the =configure= phase similarly, and so on. When building a package that uses =gnu-build-system= with its default list of phases, those phases are executed sequentially. You can see the name of each phase started and completed in the build log of packages that you build.
+This shows how =%standard-phases= is defined as a list of symbol/procedure pairs (see [[https://www.gnu.org/software/guile/manual/html_node/Pairs.html#Pairs][Pairs]] in GNU Guile Reference Manual). The first pair associates the =unpack= procedure with the =unpack= symbol---a name; the second pair defines the =configure= phase similarly, and so on. When building a package that uses =gnu-build-system= with its default list of phases, those phases are executed sequentially. You can see the name of each phase started and completed in the build log of packages that you build.
 
-Let's now look at the procedures themselves. Each one is defined with =define*=: =#:key= lists keyword parameters the procedure accepts, possibly with a default value, and =#:allow-other-keys= specifies that other keyword parameters are ignored (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Optional-Arguments.html#Optional-Arguments][Optional Arguments]] in GNU Guile Reference Manual).
+Let's now look at the procedures themselves. Each one is defined with =define*=: =#:key= lists keyword parameters the procedure accepts, possibly with a default value, and =#:allow-other-keys= specifies that other keyword parameters are ignored (see [[https://www.gnu.org/software/guile/manual/html_node/Optional-Arguments.html#Optional-Arguments][Optional Arguments]] in GNU Guile Reference Manual).
 
 The =unpack= procedure honors the =source= parameter, which the build system uses to pass the file name of the source tarball (or version control checkout), and it ignores other parameters. The =configure= phase only cares about the =outputs= parameter, an alist mapping package output names to their store file name (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]). It extracts the file name of for =out=, the default output, and passes it to =./configure= as the installation prefix, meaning that =make install= will eventually copy all the files in that directory (see [[https://www.gnu.org/prep/standards/html_node/Configuration.html#Configuration][configuration and makefile conventions]] in GNU Coding Standards). =build= and =install= ignore all their arguments. =check= honors the =test-target= argument, which specifies the name of the Makefile target to run tests; it prints a message and skips tests when =tests?= is false.
 
-The list of phases used for a particular package can be changed with the =#:phases= parameter of the build system. Changing the set of build phases boils down to building a new alist of phases based on the =%standard-phases= alist described above. This can be done with standard alist procedures such as =alist-delete= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SRFI_002d1-Association-Lists.html#SRFI_002d1-Association-Lists][SRFI-1 Association Lists]] in GNU Guile Reference Manual); however, it is more convenient to do so with =modify-phases= (see [[id:guix--Build-Utilities][=modify-phases=]]).
+<<index-build-phases_002c-customizing>>
+The list of phases used for a particular package can be changed with the =#:phases= parameter of the build system. Changing the set of build phases boils down to building a new alist of phases based on the =%standard-phases= alist described above. This can be done with standard alist procedures such as =alist-delete= (see [[https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Association-Lists.html#SRFI_002d1-Association-Lists][SRFI-1 Association Lists]] in GNU Guile Reference Manual); however, it is more convenient to do so with =modify-phases= (see [[id:guix--Build-Utilities][=modify-phases=]]).
 
 Here is an example of a package definition that removes the =configure= phase of =%standard-phases= and inserts a new phase before the =build= phase, called =set-prefix-in-makefile=:
 
@@ -157,6 +164,7 @@ The new phase that is inserted is written as an anonymous procedure, introduced 
 
 #+end_quote
 
+<<index-code-staging>> <<index-staging_002c-of-code>>
 Keep in mind that build phases are code evaluated at the time the package is actually built. This explains why the whole =modify-phases= expression above is quoted (it comes after the =#~= or hash-tilde): it is /staged/ for later execution. See [[id:guix--G_002dExpressions][G-Expressions]], for an explanation of code staging and the /code strata/ involved.
 
 --------------
@@ -169,10 +177,9 @@ Keep in mind that build phases are code evaluated at the time the package is act
 ***** [[#DOCF20][(20)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 We present a simplified view of those build phases, but do take a look at =(guix build gnu-build-system)= to see all the details!
 
 --------------
 
-Next: [[id:guix--Build-Utilities][Build Utilities]], Previous: [[id:guix--Build-Systems][Build Systems]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Build-Utilities][Build Utilities]], Previous: [[id:guix--Build-Systems][Build Systems]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

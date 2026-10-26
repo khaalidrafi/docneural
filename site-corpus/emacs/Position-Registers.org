@@ -7,6 +7,9 @@
 Next: [[id:emacs--Text-Registers][Saving Text in Registers]]   Up: [[id:emacs--Registers][Registers]]
 
 <<Position-Registers>>
+
+--------------
+
 *** 15.1 Saving Positions in Registers [[#Saving-Positions-in-Registers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Saving-Positions-in-Registers
@@ -21,5 +24,3 @@ Typing C-x r SPC (=point-to-register=), followed by a character =r=, saves both 
 The command C-x r j =r= switches to the buffer recorded in register =r=, pushes a mark, and moves point to the recorded position. (The mark is not pushed if point was already at the recorded position, or in successive calls to the command.) The contents of the register are not changed, so you can jump to the saved position any number of times.
 
 If you use C-x r j to go to a saved position, but the buffer it was saved from has been killed, C-x r j tries to create the buffer again by visiting the same file. Of course, this works only for buffers that were visiting files.
-
---------------

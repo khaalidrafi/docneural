@@ -4,6 +4,31 @@
 #+filetags: :emacs:
 #+title: Secondary Selection
 
-Next:
+Next:   Previous: [[id:emacs--Primary-Selection][Cut and Paste with Other Window Applications]]   Up: [[id:emacs--Cut-and-Paste][&ldquo;Cut and Paste&rdquo; Operations on Graphical Displays]]
 
-The node you are looking for is at [[id:emacs--Cut-and-Paste::#Secondary-Selection][Secondary Selection]].
+<<Secondary-Selection>>
+
+--------------
+
+**** 14.3.3 Secondary Selection [[#Secondary-Selection-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Secondary-Selection-1
+:CLASS: subsection
+:END:
+In addition to the primary selection, the X Window System provides a second similar facility known as the /secondary selection/. Nowadays, few X applications make use of the secondary selection, but you can access it using the following Emacs commands:
+
+-  <<index-mouse_002dset_002dsecondary>>M-Drag-mouse-1 [[#index-mouse_002dset_002dsecondary][¶]] :: Set the secondary selection, with one end at the place where you press down the button, and the other end at the place where you release it (=mouse-set-secondary=). The selected text is highlighted, using the =secondary-selection= face, as you drag. The window scrolls automatically if you drag the mouse off the top or bottom of the window, just like =mouse-set-region= (see [[id:emacs--Mouse-Commands][Mouse Commands for Editing]]).
+
+  This command does not alter the kill ring.
+
+-  <<index-mouse_002dstart_002dsecondary>>M-mouse-1 [[#index-mouse_002dstart_002dsecondary][¶]] :: Set one endpoint for the /secondary selection/ (=mouse-start-secondary=); use M-mouse-3 to set the other end and complete the selection. This command cancels any existing secondary selection, when it starts a new one.
+
+-  <<index-mouse_002dsecondary_002dsave_002dthen_002dkill>>M-mouse-3 [[#index-mouse_002dsecondary_002dsave_002dthen_002dkill][¶]] :: Set the secondary selection (=mouse-secondary-save-then-kill=), with one end at the position you click M-mouse-3, and the other at the position specified previously with M-mouse-1. This also puts the selected text in the kill ring. A second M-mouse-3 at the same place kills the text selected by the secondary selection just made.
+
+-  <<index-mouse_002dyank_002dsecondary>>M-mouse-2 [[#index-mouse_002dyank_002dsecondary][¶]] :: Insert the secondary selection where you click, placing point at the end of the yanked text (=mouse-yank-secondary=).
+
+Double or triple clicking of M-mouse-1 operates on words and lines, much like mouse-1.
+
+If =mouse-yank-at-point= is non-=nil=, M-mouse-2 yanks at point. Then it does not matter precisely where you click, or even which of the frame's windows you click on. See [[id:emacs--Mouse-Commands][Mouse Commands for Editing]]. This user option also effects interactive search: if it is non-=nil=, yanking with the mouse anywhere in the frame will add the text to the search string.
+
+--------------

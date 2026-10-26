@@ -7,6 +7,9 @@
 Next: [[id:emacs--Unibyte-Mode][Unibyte Editing Mode]]   Previous: [[id:emacs--Modifying-Fontsets][Modifying Fontsets]]   Up: [[id:emacs--International][International Character Set Support]]
 
 <<Undisplayable-Characters>>
+
+--------------
+
 *** 24.17 Undisplayable Characters [[#Undisplayable-Characters-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Undisplayable-Characters-1
@@ -19,5 +22,3 @@ Graphical displays can display a broader range of characters, but you may not ha
 If you use Latin-1 characters but your terminal can't display Latin-1, you can arrange to display mnemonic ASCII sequences instead, e.g., ‘="o=' for o-umlaut. Load the library =iso-ascii= to do this.
 
 If your terminal can display Latin-1, you can display characters from other European character sets using a mixture of equivalent Latin-1 characters and ASCII mnemonics. Customize the variable =latin1-display= to enable this. The mnemonic ASCII sequences mostly correspond to those of the prefix input methods.
-
---------------

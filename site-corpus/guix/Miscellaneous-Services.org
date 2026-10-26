@@ -36,36 +36,40 @@ Next:
 [[../..][]]
 
 <<Miscellaneous-Services>>
-Previous: [[id:guix--Hurd-Services][Hurd Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Hurd-Services][Hurd Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.40 Miscellaneous Services [[#Miscellaneous-Services-1][¶]]
+<<Miscellaneous-Services-1>>
+**** 11.10.38 Miscellaneous Services
 :PROPERTIES:
-:CUSTOM_ID: Miscellaneous-Services-1
+:CUSTOM_ID: miscellaneous-services
 :CLASS: subsection
 :END:
-**** Fingerprint Service [[#Fingerprint-Service][¶]]
+<<index-fingerprint>> <<Fingerprint-Service>>
+**** Fingerprint Service
 :PROPERTIES:
-:CUSTOM_ID: Fingerprint-Service
+:CUSTOM_ID: fingerprint-service
 :CLASS: subsubheading
 :END:
 The =(gnu services authentication)= module provides a DBus service to read and identify fingerprints via a fingerprint sensor.
 
-- Variable: *fprintd-service-type* [[#index-fprintd_002dservice_002dtype][¶]] :: The service type for =fprintd=, which provides the fingerprint reading capability.
+- Variable: fprintd-service-type  :: The service type for =fprintd=, which provides the fingerprint reading capability.
 
   #+begin_src lisp
   (service fprintd-service-type)
   #+end_src
 
-**** System Control Service [[#System-Control-Service][¶]]
+<<index-sysctl>> <<System-Control-Service>>
+**** System Control Service
 :PROPERTIES:
-:CUSTOM_ID: System-Control-Service
+:CUSTOM_ID: system-control-service
 :CLASS: subsubheading
 :END:
 The =(gnu services sysctl)= provides a service to configure kernel parameters at boot.
 
-- Variable: *sysctl-service-type* [[#index-sysctl_002dservice_002dtype][¶]] :: The service type for =sysctl=, which modifies kernel parameters under =/proc/sys/=. To enable IPv4 forwarding, it can be instantiated as:
+- Variable: sysctl-service-type  :: The service type for =sysctl=, which modifies kernel parameters under =/proc/sys/=. To enable IPv4 forwarding, it can be instantiated as:
 
   #+begin_src lisp
   (service sysctl-service-type
@@ -83,45 +87,47 @@ The =(gnu services sysctl)= provides a service to configure kernel parameters at
                                              %default-sysctl-settings)))))
   #+end_src
 
-- Data Type: *sysctl-configuration* [[#index-sysctl_002dconfiguration][¶]] :: The data type representing the configuration of =sysctl=.
+- Data Type: sysctl-configuration  :: The data type representing the configuration of =sysctl=.
 
   - =sysctl= (default: =(file-append procps "/sbin/sysctl"=) :: The =sysctl= executable to use.
 
   - =settings= (default: =%default-sysctl-settings=) :: An association list specifies kernel parameters and their values.
 
-- Variable: *%default-sysctl-settings* [[#index-_0025default_002dsysctl_002dsettings][¶]] :: An association list specifying the default =sysctl= parameters on Guix System.
+- Variable: %default-sysctl-settings  :: An association list specifying the default =sysctl= parameters on Guix System.
 
-**** PC/SC Smart Card Daemon Service [[#PC_002fSC-Smart-Card-Daemon-Service][¶]]
+<<index-pcscd>> <<PC_002fSC-Smart-Card-Daemon-Service>>
+**** PC/SC Smart Card Daemon Service
 :PROPERTIES:
-:CUSTOM_ID: PC_002fSC-Smart-Card-Daemon-Service
+:CUSTOM_ID: pcsc-smart-card-daemon-service
 :CLASS: subsubheading
 :END:
 The =(gnu services security-token)= module provides the following service to run =pcscd=, the PC/SC Smart Card Daemon. =pcscd= is the daemon program for pcsc-lite and the MuscleCard framework. It is a resource manager that coordinates communications with smart card readers, smart cards and cryptographic tokens that are connected to the system.
 
-- Variable: *pcscd-service-type* [[#index-pcscd_002dservice_002dtype][¶]] :: Service type for the =pcscd= service. Its value must be a =pcscd-configuration= object. To run pcscd in the default configuration, instantiate it as:
+- Variable: pcscd-service-type  :: Service type for the =pcscd= service. Its value must be a =pcscd-configuration= object. To run pcscd in the default configuration, instantiate it as:
 
   #+begin_src lisp
   (service pcscd-service-type)
   #+end_src
 
-- Data Type: *pcscd-configuration* [[#index-pcscd_002dconfiguration][¶]] :: The data type representing the configuration of =pcscd=.
+- Data Type: pcscd-configuration  :: The data type representing the configuration of =pcscd=.
 
   - =pcsc-lite= (default: =pcsc-lite=) :: The pcsc-lite package that provides pcscd.
 
   - =usb-drivers= (default: =(list ccid)=) :: List of packages that provide USB drivers to pcscd. Drivers are expected to be under =pcsc/drivers= in the store directory of the package.
 
-**** LIRC Service [[#LIRC-Service][¶]]
+<<index-LIRC>> <<LIRC-Service>>
+**** LIRC Service
 :PROPERTIES:
-:CUSTOM_ID: LIRC-Service
+:CUSTOM_ID: lirc-service
 :CLASS: subsubheading
 :END:
 The =(gnu services lirc)= module provides the following service.
 
-- Variable: *lirc-service-type* [[#index-lirc_002dservice_002dtype][¶]] :: Type for a service that runs [[http://www.lirc.org][LIRC]], a daemon that decodes infrared signals from remote controls.
+- Variable: lirc-service-type  :: Type for a service that runs [[http://www.lirc.org][LIRC]], a daemon that decodes infrared signals from remote controls.
 
   The value for this service is a =<lirc-configuration>= object.
 
-- Data Type: *lirc-configuration* [[#index-lirc_002dconfiguration][¶]] :: Data type representing the configuration of =lircd=.
+- Data Type: lirc-configuration  :: Data type representing the configuration of =lircd=.
 
   - =lirc= (default: =lirc=) (type: file-like) :: Package object for =lirc=.
 
@@ -131,29 +137,32 @@ The =(gnu services lirc)= module provides the following service.
 
   - =extra-options= (default: ='()=) (type: list-of-string) :: Additional command-line options to pass to =lircd=.
 
-**** SPICE Service [[#SPICE-Service][¶]]
+<<index-SPICE>> <<SPICE-Service>>
+**** SPICE Service
 :PROPERTIES:
-:CUSTOM_ID: SPICE-Service
+:CUSTOM_ID: spice-service
 :CLASS: subsubheading
 :END:
 The =(gnu services spice)= module provides the following service.
 
-- Variable: *spice-vdagent-service-type* [[#index-spice_002dvdagent_002dservice_002dtype][¶]] :: Type of the service that runs [[https://www.spice-space.org][VDAGENT]], a daemon that enables sharing the clipboard with a vm and setting the guest display resolution when the graphical console window resizes.
+- Variable: spice-vdagent-service-type  :: Type of the service that runs [[https://www.spice-space.org][VDAGENT]], a daemon that enables sharing the clipboard with a vm and setting the guest display resolution when the graphical console window resizes.
 
-- Data Type: *spice-vdagent-configuration* [[#index-spice_002dvdagent_002dconfiguration][¶]] :: Data type representing the configuration of =spice-vdagent-service-type=.
+- Data Type: spice-vdagent-configuration  :: Data type representing the configuration of =spice-vdagent-service-type=.
 
   - =spice-vdagent= (default: =spice-vdagent=) (type: file-like) :: Package object for VDAGENT.
 
-**** inputattach Service [[#inputattach-Service][¶]]
+<<index-inputattach>> <<inputattach-Service>>
+**** inputattach Service
 :PROPERTIES:
-:CUSTOM_ID: inputattach-Service
+:CUSTOM_ID: inputattach-service
 :CLASS: subsubheading
 :END:
+<<index-tablet-input_002c-for-Xorg>> <<index-touchscreen-input_002c-for-Xorg>>
 The [[https://linuxwacom.github.io/][inputattach]] service allows you to use input devices such as Wacom tablets, touchscreens, or joysticks with the Xorg display server.
 
-- Variable: *inputattach-service-type* [[#index-inputattach_002dservice_002dtype][¶]] :: Type of a service that runs =inputattach= on a device and dispatches events from it.
+- Variable: inputattach-service-type  :: Type of a service that runs =inputattach= on a device and dispatches events from it.
 
-- Data Type: *inputattach-configuration* [[#index-inputattach_002dconfiguration][¶]] :: - =device-type= (default: ="wacom"=) :: The type of device to connect to. Run =inputattach --help=, from the =inputattach= package, to see the list of supported device types.
+- Data Type: inputattach-configuration  :: - =device-type= (default: ="wacom"=) :: The type of device to connect to. Run =inputattach --help=, from the =inputattach= package, to see the list of supported device types.
 
   - =device= (default: ="/dev/ttyS0"=) :: The device file to connect to the device.
 
@@ -161,14 +170,16 @@ The [[https://linuxwacom.github.io/][inputattach]] service allows you to use inp
 
   - =log-file= (default: =#f=) :: If true, this must be the name of a file to log messages to.
 
-**** Dictionary Service [[#Dictionary-Service][¶]]
+<<Dictionary-Service>>
+**** Dictionary Service
 :PROPERTIES:
-:CUSTOM_ID: Dictionary-Service
+:CUSTOM_ID: dictionary-service
 :CLASS: subsubheading
 :END:
+<<index-dictionary>>
 The =(gnu services dict)= module provides the following service:
 
-- Variable: *dicod-service-type* [[#index-dicod_002dservice_002dtype][¶]] :: This is the type of the service that runs the =dicod= daemon, an implementation of DICT server (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Dicod.html#Dicod][Dicod]] in GNU Dico Manual).
+- Variable: dicod-service-type  :: This is the type of the service that runs the =dicod= daemon, an implementation of DICT server (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Dicod.html#Dicod][Dicod]] in GNU Dico Manual).
 
   You can add =open localhost= to your =~/.dico= file to make =localhost= the default server for =dico= client (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Initialization-File.html#Initialization-File][Initialization File]] in GNU Dico Manual).
 
@@ -177,7 +188,7 @@ The =(gnu services dict)= module provides the following service:
 
   #+end_quote
 
-- Data Type: *dicod-configuration* [[#index-dicod_002dconfiguration][¶]] :: Data type representing the configuration of dicod.
+- Data Type: dicod-configuration  :: Data type representing the configuration of dicod.
 
   - =dico= (default: =dico=) :: Package object of the GNU Dico dictionary server.
 
@@ -187,7 +198,7 @@ The =(gnu services dict)= module provides the following service:
 
   - =databases= (default: =(list %dicod-database:gcide)=) :: List of =<dicod-database>= objects denoting dictionaries to be served.
 
-- Data Type: *dicod-handler* [[#index-dicod_002dhandler][¶]] :: Data type representing a dictionary handler (module instance).
+- Data Type: dicod-handler  :: Data type representing a dictionary handler (module instance).
 
   - =name= :: Name of the handler (module instance).
 
@@ -195,7 +206,7 @@ The =(gnu services dict)= module provides the following service:
 
   - =options= :: List of strings or gexps representing the arguments for the module handler
 
-- Data Type: *dicod-database* [[#index-dicod_002ddatabase][¶]] :: Data type representing a dictionary database.
+- Data Type: dicod-database  :: Data type representing a dictionary database.
 
   - =name= :: Name of the database, will be used in DICT commands.
 
@@ -205,11 +216,11 @@ The =(gnu services dict)= module provides the following service:
 
   - =options= :: List of strings or gexps representing the arguments for the database (see [[https://puszcza.gnu.org.ua/software/dico/manual/html_node/Databases.html#Databases][Databases]] in GNU Dico Manual).
 
-- Variable: *%dicod-database:gcide* [[#index-_0025dicod_002ddatabase_003agcide][¶]] :: A =<dicod-database>= object serving the GNU Collaborative International Dictionary of English using the =gcide= package.
+- Variable: %dicod-database:gcide  :: A =<dicod-database>= object serving the GNU Collaborative International Dictionary of English using the =gcide= package.
 
-- Procedure: *dicod-freedict-database* =dictionary-name= [[#index-dicod_002dfreedict_002ddatabase][¶]] :: Returns a record of type =dicod-database= for purpose of configuring a database for the FreeDict multilingual dictionary named by =dictionary-name=, a string such as ="kur-eng"= for the Kurdish-to-English dictionary, into a service of type =dicod-service-type=.
+- Procedure: dicod-freedict-database dictionary-name :: Returns a record of type =dicod-database= for purpose of configuring a database for the FreeDict multilingual dictionary named by =dictionary-name=, a string such as ="kur-eng"= for the Kurdish-to-English dictionary, into a service of type =dicod-service-type=.
 
-- Variable: *%dicod-databases:freedict* [[#index-_0025dicod_002ddatabases_003afreedict][¶]] :: A relatively large list of records of type =dicod-database=, made available for users who wish to configure all the FreeDict multilingual dictionaries provided by the =freedict-dictionaries= package into a service of type =dicod-service-type=.
+- Variable: %dicod-databases:freedict  :: A relatively large list of records of type =dicod-database=, made available for users who wish to configure all the FreeDict multilingual dictionaries provided by the =freedict-dictionaries= package into a service of type =dicod-service-type=.
 
 The following is an example =dicod-service-type= configuration, extending a =dicod= daemon serving databases for the wordnet and gcide dictionaries, as well as a selection of FreeDict multilingual dictionaries.
 
@@ -233,16 +244,18 @@ The following is an example =dicod-service-type= configuration, extending a =dic
                        '("fra-eng" "eng-fra" "eng-spa" "spa-eng"))))))
 #+end_src
 
-**** Docker Service [[#Docker-Service][¶]]
+<<index-Docker>> <<Docker-Service>>
+**** Docker Service
 :PROPERTIES:
-:CUSTOM_ID: Docker-Service
+:CUSTOM_ID: docker-service
 :CLASS: subsubheading
 :END:
 The =(gnu services docker)= module provides the following services.
 
-- Variable: *containerd-service-type* [[#index-containerd_002dservice_002dtype][¶]] :: This service type operates containerd [[https://containerd.io][containerd]], a daemon responsible for overseeing the entire container lifecycle on its host system. This includes image handling, storage management, container execution, supervision, low-level storage operations, network connections, and more.
+<<index-containerd_002c-container-runtime>>
+- Variable: containerd-service-type  :: This service type operates containerd [[https://containerd.io][containerd]], a daemon responsible for overseeing the entire container lifecycle on its host system. This includes image handling, storage management, container execution, supervision, low-level storage operations, network connections, and more.
 
-- Data Type: *containerd-configuration* [[#index-containerd_002dconfiguration][¶]] :: This is the data type representing the configuration of containerd.
+- Data Type: containerd-configuration  :: This is the data type representing the configuration of containerd.
 
   - =containerd= (default: =containerd=) :: The containerd daemon package to use.
 
@@ -257,11 +270,11 @@ The =(gnu services docker)= module provides the following services.
           "HTTPS_PROXY=socks5://127.0.0.1:9150")
     #+end_src
 
-- Variable: *docker-service-type* [[#index-docker_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://www.docker.com][Docker]], a daemon that can execute application bundles (sometimes referred to as “containers”) in isolated environments.
+- Variable: docker-service-type  :: This is the type of the service that runs [[https://www.docker.com][Docker]], a daemon that can execute application bundles (sometimes referred to as “containers”) in isolated environments.
 
   The =containerd-service-type= service need to be added to a system configuration, otherwise a message about not any service provides =containerd= will be displayed during =guix system reconfigure=.
 
-- Data Type: *docker-configuration* [[#index-docker_002dconfiguration][¶]] :: This is the data type representing the configuration of Docker and Containerd.
+- Data Type: docker-configuration  :: This is the data type representing the configuration of Docker and Containerd.
 
   - =docker= (default: =docker=) :: The Docker daemon package to use.
 
@@ -288,29 +301,32 @@ The =(gnu services docker)= module provides the following services.
 
   - =config-file= (type: maybe-file-like) :: JSON configuration file pass to =dockerd=.
 
-- Variable: *singularity-service-type* [[#index-singularity_002dservice_002dtype][¶]] :: This is the type of the service that allows you to run [[https://www.sylabs.io/singularity/][Singularity]], a Docker-style tool to create and run application bundles (aka. “containers”). The value for this service is the Singularity package to use.
+<<index-Singularity_002c-container-service>>
+- Variable: singularity-service-type  :: This is the type of the service that allows you to run [[https://www.sylabs.io/singularity/][Singularity]], a Docker-style tool to create and run application bundles (aka. “containers”). The value for this service is the Singularity package to use.
 
   The service does not install a daemon; instead, it installs helper programs as setuid-root (see [[id:guix--Privileged-Programs][Privileged Programs]]) such that unprivileged users can invoke =singularity run= and similar commands.
 
-**** Rootless Podman Service [[#Rootless-Podman-Service][¶]]
+<<index-Rootless-Podman>> <<Rootless-Podman-Service>>
+**** Rootless Podman Service
 :PROPERTIES:
-:CUSTOM_ID: Rootless-Podman-Service
+:CUSTOM_ID: rootless-podman-service
 :CLASS: subsubheading
 :END:
+<<index-rootless-podman_002c-container-management-tool>> <<index-podman_002c-rootless>> <<index-container-management_002c-podman>>
 The =(gnu services containers)= module provides the following service.
 
-- Variable: *rootless-podman-service-type* [[#index-rootless_002dpodman_002dservice_002dtype][¶]] :: This is the service type for [[https://podman.io][Podman]] is a container management tool.
+- Variable: rootless-podman-service-type  :: This is the service type for [[https://podman.io][Podman]] is a container management tool.
 
   In addition to providing a drop-in replacement for Docker, Podman offers the ability to run containers in “root-less” mode, meaning that regular users can deploy containers without elevated privileges. It does so mainly by leveraging two Linux kernel features: unprivileged user namespaces, and subordinate user and group IDs (see [[#subordinate_002duser_002dgroup_002dids][the subordinate user and group ID service]]).
 
   The =rootless-podman-service-type= sets up the system to allow unprivileged users to run =podman= commands:
 
   #+begin_src lisp
-  (use-service-modules containers dbus desktop networking ...)
+  (use-service-modules containers dbus desktop networking …)
   (use-modules (gnu system accounts))  ;for 'subid-range'
 
   (operating-system
-    ;; ...
+    ;; …
     (users (cons (user-account
                   (name "alice")
                   (comment "Bob's sister")
@@ -347,9 +363,9 @@ The =(gnu services containers)= module provides the following service.
   PRETTY_NAME="Alpine Linux v3.20"
   HOME_URL="https://alpinelinux.org/"
   BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
-#+end_example
+  #+end_example
 
-- Data Type: *rootless-podman-configuration* [[#index-rootless_002dpodman_002dconfiguration][¶]] :: Available =rootless-podman-configuration= fields are:
+- Data Type: rootless-podman-configuration  :: Available =rootless-podman-configuration= fields are:
 
   - =podman= (default: =podman=) (type: package-or-#f) :: The Podman package that will be installed in the system profile. Pass =#f= to not install Podman.
 
@@ -367,14 +383,15 @@ The =(gnu services containers)= module provides the following service.
 
   - =subuids= (default: =()=) (type: list-of-subid-ranges) :: A list of subid ranges representing the subuids that will be available for each configured user.
 
-**** OCI backed services [[#OCI-backed-services][¶]]
+<<index-OCI_002dbacked_002c-Shepherd-services>> <<OCI-backed-services>>
+**** OCI backed services
 :PROPERTIES:
-:CUSTOM_ID: OCI-backed-services
+:CUSTOM_ID: oci-backed-services
 :CLASS: subsubheading
 :END:
 Should you wish to manage your Open Container Initiative (OCI) containers with the same consistent interface you use for your other Shepherd services, =oci-service-type= is the tool to use: given an OCI container image, it will run it in a Shepherd service. One example where this is useful: it lets you run services that are available as OCI images but not yet packaged for Guix.
 
-- Variable: *oci-service-type* [[#index-oci_002dservice_002dtype][¶]] :: This is a thin wrapper around Docker's or Podman's CLI that executes OCI images backed processes as Shepherd Services.
+- Variable: oci-service-type  :: This is a thin wrapper around Docker's or Podman's CLI that executes OCI images backed processes as Shepherd Services.
 
   #+begin_src lisp
   (simple-service 'oci-provisioning
@@ -412,7 +429,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   In this example three different Shepherd services are going to be added to the system. Each =oci-container-configuration= record translates to a ‘=docker run=' or ‘=podman run=' invocation and its fields directly map to options. You can refer to the [[https://docs.docker.com/engine/reference/commandline/run][Docker]] or [[https://docs.podman.io/en/stable/markdown/podman-run.1.html][Podman]] upstream documentation for semantics of each value. If the images are not found, they will be pulled. You can refer to the [[https://docs.docker.com/engine/reference/commandline/pull/][Docker]] or [[https://docs.podman.io/en/stable/markdown/podman-pull.1.html][Podman]] upstream documentation for semantics. The services with =(network "host")= are going to be attached to the host network and are supposed to behave like native processes with regard to networking.
 
-- Data Type: *oci-configuration* [[#index-oci_002dconfiguration][¶]] :: Available =oci-configuration= fields are:
+- Data Type: oci-configuration  :: Available =oci-configuration= fields are:
 
   - =runtime= (default: ='docker=) (type: symbol) :: The OCI runtime to use to run commands. It can be either ='docker= or ='podman=.
 
@@ -436,7 +453,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =verbose?= (default: =#f=) (type: boolean) :: When true, additional output will be printed, allowing to better follow the flow of execution.
 
-- Data Type: *oci-extension* [[#index-oci_002dextension][¶]] :: Available =oci-extension= fields are:
+- Data Type: oci-extension  :: Available =oci-extension= fields are:
 
   - =containers= (default: ='()=) (type: list-of-oci-containers) :: The list of =oci-container-configuration= records representing the containers to provision.
 
@@ -444,7 +461,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =volumes= (default: ='()=) (type: list-of-oci-volumes) :: The list of =oci-volumes-configuration= records representing the containers to provision.
 
-- Data Type: *oci-container-configuration* [[#index-oci_002dcontainer_002dconfiguration][¶]] :: Available =oci-container-configuration= fields are:
+- Data Type: oci-container-configuration  :: Available =oci-container-configuration= fields are:
 
   - =user= (default: ="oci-container"=) (type: string) :: The user under whose authority docker commands will be run.
 
@@ -452,7 +469,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =command= (default: ='()=) (type: list-of-strings) :: Overwrite the default command (=CMD=) of the image.
 
-  - =entrypoint= (default: =""=) (type: string-or-list-of-strings) :: Overwrite the default entrypoint (=ENTRYPOINT=) of the image. It can be either a string, or a list of strings.
+  - =entrypoint= (default: =""=) (type: string) :: Overwrite the default entrypoint (=ENTRYPOINT=) of the image.
 
   - =host-environment= (default: ='()=) (type: list) :: Set environment variables in the host environment where ‘=docker run=' or ‘=podman run=' are invoked. This is especially useful to pass secrets from the host to the container without having them on the OCI runtime command line, for example: by setting the =MYSQL_PASSWORD= on the host and by passing =--env MYSQL_PASSWORD= through the =extra-arguments= field, it is possible to securely set values in the container environment. This field's value can be a list of pairs or strings, even mixed:
 
@@ -512,7 +529,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =extra-arguments= (default: ='()=) (type: list) :: A list of strings, gexps or file-like objects that will be directly passed to the ‘=docker run=' or ‘=podman run=' invokation.
 
-- Data Type: *oci-network-configuration* [[#index-oci_002dnetwork_002dconfiguration][¶]] :: Available =oci-network-configuration= fields are:
+- Data Type: oci-network-configuration  :: Available =oci-network-configuration= fields are:
 
   - =name= (type: string) :: The name of the OCI network to provision.
 
@@ -534,7 +551,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =extra-arguments= (default: ='()=) (type: list) :: A list of strings, gexps or file-like objects that will be directly passed to the ‘=docker network create=' or ‘=podman network create=' invokation.
 
-- Data Type: *oci-volume-configuration* [[#index-oci_002dvolume_002dconfiguration][¶]] :: Available =oci-volume-configuration= fields are:
+- Data Type: oci-volume-configuration  :: Available =oci-volume-configuration= fields are:
 
   - =name= (type: string) :: The name of the OCI volume to provision.
 
@@ -542,7 +559,7 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =extra-arguments= (default: ='()=) (type: list) :: A list of strings, gexps or file-like objects that will be directly passed to the ‘=docker volume create=' or ‘=podman volume create=' invokation.
 
-- Data Type: *oci-image* [[#index-oci_002dimage][¶]] :: Available =oci-image= fields are:
+- Data Type: oci-image  :: Available =oci-image= fields are:
 
   - =repository= (type: string) :: A string like =myregistry.local:5000/testing/test-image= that names the OCI image.
 
@@ -570,9 +587,10 @@ Should you wish to manage your Open Container Initiative (OCI) containers with t
 
   - =grafts?= (default: =#f=) (type: boolean) :: Whether to allow grafting or not in the pack build.
 
-**** Subordinate User and Group ID Service [[#Subordinate-User-and-Group-ID-Service][¶]]
+<<subordinate_002duser_002dgroup_002dids>><<index-subordinate-user-and-group-IDs>> <<index-subid_002c-subordinate-user-and-group-IDs>> <<Subordinate-User-and-Group-ID-Service>>
+**** Subordinate User and Group ID Service
 :PROPERTIES:
-:CUSTOM_ID: Subordinate-User-and-Group-ID-Service
+:CUSTOM_ID: subordinate-user-and-group-id-service
 :CLASS: subsubheading
 :END:
 Among the virtualization facilities implemented by the Linux kernel is the concept of /subordinate IDs/. Subordinate IDs allow for mapping user and group IDs inside process namespaces to user and group IDs of the host system. Subordinate user ID ranges (subuids) allow users to map virtual user IDs inside containers to the user ID of an unprivileged user of the host system. Subordinate group ID ranges (subgids), instead map virtual group IDs to the group ID of an unprivileged user on the host system. You can access =subuid(5)= and =subgid(5)= Linux man pages for more details.
@@ -584,10 +602,10 @@ With =subids-service-type=, subuids and subgids ranges can be reserved for users
 #+begin_src lisp
 (use-modules (gnu system shadow)     ;for 'subids-service-type'
              (gnu system accounts)   ;for 'subid-range'
-             ...)
+             …)
 
 (operating-system
-  ;; ...
+  ;; …
   (services
     (list
       (simple-service 'alice-bob-subids
@@ -617,15 +635,15 @@ bob:100700:65536
 alice:166236:65536
 #+end_example
 
-- Data Type: *subids-configuration* [[#index-subids_002dconfiguration][¶]] :: With default settings the =subids-service-type= adds, if it's not already there, a configuration for the root account to both =/etc/subuid= and =/etc/subgid=, possibly starting at the minimum possible subid. To disable the default behavior and provide your own definition for the root subid ranges you can set to =#f= the =add-root?= field:
+- Data Type: subids-configuration  :: With default settings the =subids-service-type= adds, if it's not already there, a configuration for the root account to both =/etc/subuid= and =/etc/subgid=, possibly starting at the minimum possible subid. To disable the default behavior and provide your own definition for the root subid ranges you can set to =#f= the =add-root?= field:
 
   #+begin_src lisp
   (use-modules (gnu system shadow)     ;for 'subids-service-type'
                (gnu system accounts)   ;for 'subid-range'
-               ...)
+               …)
 
   (operating-system
-    ;; ...
+    ;; …
     (services
       (list
         (service subids-service-type
@@ -660,13 +678,13 @@ alice:166236:65536
 
   - =subuids= (default: ='()=) (type: list-of-subid-ranges) :: The list of =subid-range=s that will be serialized to =/etc/subuid=. If a range doesn't specify a start it will be fitted based on its number of requested subids. If a range doesn't specify a count the default size of 65536 will be assumed.
 
-- Data Type: *subids-extension* [[#index-subids_002dextension][¶]] :: Available =subids-extension= fields are:
+- Data Type: subids-extension  :: Available =subids-extension= fields are:
 
   - =subgids= (default: ='()=) (type: list-of-subid-ranges) :: The list of =subid-range=s that will be appended to =subids-configuration-subgids=. Entries with the same name are deduplicated upon merging.
 
   - =subuids= (default: ='()=) (type: list-of-subid-ranges) :: The list of =subid-range=s that will be appended to =subids-configuration-subuids=. Entries with the same name are deduplicated upon merging.
 
-- Data Type: *subid-range* [[#index-subid_002drange][¶]] :: The =subid-range= record is defined at =(gnu system accounts)=. Available fields are:
+- Data Type: subid-range  :: The =subid-range= record is defined at =(gnu system accounts)=. Available fields are:
 
   - =name= (type: string) :: The name of the user or group that will own this range.
 
@@ -674,14 +692,15 @@ alice:166236:65536
 
   - =count= (default: =#f=) (type: integer) :: The number of total allocated subids. When #f the default of 65536 will be assumed .
 
-**** Auditd Service [[#Auditd-Service][¶]]
+<<index-Audit>> <<Auditd-Service>>
+**** Auditd Service
 :PROPERTIES:
-:CUSTOM_ID: Auditd-Service
+:CUSTOM_ID: auditd-service
 :CLASS: subsubheading
 :END:
 The =(gnu services auditd)= module provides the following service.
 
-- Variable: *auditd-service-type* [[#index-auditd_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://people.redhat.com/sgrubb/audit/][auditd]], a daemon that tracks security-relevant information on your system.
+- Variable: auditd-service-type  :: This is the type of the service that runs [[https://people.redhat.com/sgrubb/audit/][auditd]], a daemon that tracks security-relevant information on your system.
 
   Examples of things that can be tracked:
 
@@ -692,24 +711,25 @@ The =(gnu services auditd)= module provides the following service.
   5. Firewall filtering
   6. Network access
 
-  =auditctl= from the =audit= package can be used in order to add or remove events to be tracked (until the next reboot). In order to permanently track events, put the command line arguments of auditctl into a file called =audit.rules= in the configuration directory (see below). =aureport= from the =audit= package can be used in order to view a report of all recorded events. The audit daemon by default logs into the file =/var/log/audit/audit.log=.
+  =auditctl= from the =audit= package can be used in order to add or remove events to be tracked (until the next reboot). In order to permanently track events, put the command line arguments of auditctl into a file called =audit.rules= in the configuration directory (see below). =aureport= from the =audit= package can be used in order to view a report of all recorded events. The audit daemon by default logs into the file =/var/log/audit.log=.
 
-- Data Type: *auditd-configuration* [[#index-auditd_002dconfiguration][¶]] :: This is the data type representing the configuration of auditd.
+- Data Type: auditd-configuration  :: This is the data type representing the configuration of auditd.
 
   - =audit= (default: =audit=) :: The audit package to use.
 
   - =configuration-directory= (default: =%default-auditd-configuration-directory=) :: The directory containing the configuration file for the audit package, which must be named =auditd.conf=, and optionally some audit rules to instantiate on startup.
 
-**** R-Shiny service [[#R_002dShiny-service][¶]]
+<<index-rshiny>> <<R_002dShiny-service>>
+**** R-Shiny service
 :PROPERTIES:
-:CUSTOM_ID: R_002dShiny-service
+:CUSTOM_ID: r-shiny-service
 :CLASS: subsubheading
 :END:
 The =(gnu services science)= module provides the following service.
 
-- Variable: *rshiny-service-type* [[#index-rshiny_002dservice_002dtype][¶]] :: This is a type of service which is used to run a webapp created with =r-shiny=. This service sets the =R_LIBS_USER= environment variable and runs the provided script to call =runApp=.
+- Variable: rshiny-service-type  :: This is a type of service which is used to run a webapp created with =r-shiny=. This service sets the =R_LIBS_USER= environment variable and runs the provided script to call =runApp=.
 
-  - Data Type: *rshiny-configuration* [[#index-rshiny_002dconfiguration][¶]] :: This is the data type representing the configuration of rshiny.
+  - Data Type: rshiny-configuration  :: This is the data type representing the configuration of rshiny.
 
     - =package= (default: =r-shiny=) :: The package to use.
 
@@ -718,12 +738,12 @@ The =(gnu services science)= module provides the following service.
       The common way to create this file is as follows:
 
       #+begin_src lisp
-      ...
+      …
       (let* ((out       (assoc-ref %outputs "out"))
              (targetdir (string-append out "/share/" ,name))
              (app       (string-append out "/bin/" ,name))
              (Rbin      (search-input-file %build-inputs "/bin/Rscript")))
-        ;; ...
+        ;; …
         (mkdir-p (string-append out "/bin"))
         (call-with-output-file app
           (lambda (port)
@@ -735,14 +755,15 @@ The =(gnu services science)= module provides the following service.
             Rbin targetdir))))
       #+end_src
 
-**** Nix service [[#Nix-service][¶]]
+<<index-Nix>> <<Nix-service>>
+**** Nix service
 :PROPERTIES:
-:CUSTOM_ID: Nix-service
+:CUSTOM_ID: nix-service
 :CLASS: subsubheading
 :END:
 The =(gnu services nix)= module provides the following service.
 
-- Variable: *nix-service-type* [[#index-nix_002dservice_002dtype][¶]] :: This is the type of the service that runs build daemon of the [[https://nixos.org/nix/][Nix]] package manager. Here is an example showing how to use it:
+- Variable: nix-service-type  :: This is the type of the service that runs build daemon of the [[https://nixos.org/nix/][Nix]] package manager. Here is an example showing how to use it:
 
   #+begin_src lisp
   (use-modules (gnu))
@@ -750,7 +771,7 @@ The =(gnu services nix)= module provides the following service.
   (use-package-modules package-management)
 
   (operating-system
-    ;; ...
+    ;; …
     (packages (append (list nix)
                       %base-packages))
 
@@ -765,25 +786,25 @@ The =(gnu services nix)= module provides the following service.
     #+begin_example
     $ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
     $ nix-channel --update
-#+end_example
+    #+end_example
 
   - Create your Nix profile directory:
 
     #+begin_example
     $ sudo mkdir -p /nix/var/nix/profiles/per-user/$USER
     $ sudo chown $USER:root /nix/var/nix/profiles/per-user/$USER
-#+end_example
+    #+end_example
 
   - Create a symlink to your profile and activate Nix profile:
 
     #+begin_example
     $ ln -s "/nix/var/nix/profiles/per-user/$USER/profile" ~/.nix-profile
     $ source /run/current-system/profile/etc/profile.d/nix.sh
-#+end_example
+    #+end_example
 
-- Data Type: *nix-configuration* [[#index-nix_002dconfiguration][¶]] :: This data type represents the configuration of the Nix daemon.
+- Data Type: nix-configuration  :: This data type represents the configuration of the Nix daemon.
 
-  - =package= (default: =nix=) :: The Nix package to use.
+  - =nix= (default: =nix=) :: The Nix package to use.
 
   - =sandbox= (default: =#t=) :: Specifies whether builds are sandboxed by default.
 
@@ -797,9 +818,10 @@ The =(gnu services nix)= module provides the following service.
 
   - =extra-options= (default: ='()=) :: Extra command line options for =nix-service-type=.
 
-**** Fail2Ban service [[#Fail2Ban-service][¶]]
+<<index-Fail2Ban>> <<Fail2Ban-service>>
+**** Fail2Ban service
 :PROPERTIES:
-:CUSTOM_ID: Fail2Ban-service
+:CUSTOM_ID: fail2ban-service
 :CLASS: subsubheading
 :END:
 [[http://www.fail2ban.org/][=fail2ban=]] scans log files (e.g. =/var/log/apache/error_log=) and bans IP addresses that show malicious signs -- repeated password failures, attempts to make use of exploits, etc.
@@ -814,7 +836,7 @@ This service type runs the =fail2ban= daemon. It can be configured in various wa
 
 - Shepherd extension mechanism :: Service developers can extend the =fail2ban-service-type= service type itself via the usual service extension mechanism.
 
-- Variable: *fail2ban-service-type* [[#index-fail2ban_002dservice_002dtype][¶]] :: This is the type of the service that runs =fail2ban= daemon. Below is an example of a basic, explicit configuration:
+- Variable: fail2ban-service-type  :: This is the type of the service that runs =fail2ban= daemon. Below is an example of a basic, explicit configuration:
 
   #+begin_src lisp
   (append
@@ -832,7 +854,7 @@ This service type runs the =fail2ban= daemon. It can be configured in various wa
    %base-services)
   #+end_src
 
-- Procedure: *fail2ban-jail-service* =svc-type jail= [[#index-fail2ban_002djail_002dservice][¶]] :: Extend =svc-type=, a =<service-type>= object with =jail=, a =fail2ban-jail-configuration= object.
+- Procedure: fail2ban-jail-service svc-type jail :: Extend =svc-type=, a =<service-type>= object with =jail=, a =fail2ban-jail-configuration= object.
 
   For example:
 
@@ -853,7 +875,7 @@ This service type runs the =fail2ban= daemon. It can be configured in various wa
 
 Below is the reference for the different =jail-service-type= configuration records.
 
-- Data Type: *fail2ban-configuration* [[#index-fail2ban_002dconfiguration][¶]] :: Available =fail2ban-configuration= fields are:
+- Data Type: fail2ban-configuration  :: Available =fail2ban-configuration= fields are:
 
   - =fail2ban= (default: =fail2ban=) (type: package) :: The =fail2ban= package to use. It is used for both binaries and as base default configuration that is to be extended with =<fail2ban-jail-configuration>= objects.
 
@@ -865,7 +887,7 @@ Below is the reference for the different =jail-service-type= configuration recor
 
   - =extra-content= (default: ='()=) (type: text-config) :: Extra raw content to add to the end of the =jail.local= file, provided as a list of file-like objects.
 
-- Data Type: *fail2ban-ignore-cache-configuration* [[#index-fail2ban_002dignore_002dcache_002dconfiguration][¶]] :: Available =fail2ban-ignore-cache-configuration= fields are:
+- Data Type: fail2ban-ignore-cache-configuration  :: Available =fail2ban-ignore-cache-configuration= fields are:
 
   - =key= (type: string) :: Cache key.
 
@@ -873,13 +895,13 @@ Below is the reference for the different =jail-service-type= configuration recor
 
   - =max-time= (type: integer) :: Cache time.
 
-- Data Type: *fail2ban-jail-action-configuration* [[#index-fail2ban_002djail_002daction_002dconfiguration][¶]] :: Available =fail2ban-jail-action-configuration= fields are:
+- Data Type: fail2ban-jail-action-configuration  :: Available =fail2ban-jail-action-configuration= fields are:
 
   - =name= (type: string) :: Action name.
 
   - =arguments= (default: ='()=) (type: list-of-arguments) :: Action arguments.
 
-- Data Type: *fail2ban-jail-configuration* [[#index-fail2ban_002djail_002dconfiguration][¶]] :: Available =fail2ban-jail-configuration= fields are:
+- Data Type: fail2ban-jail-configuration  :: Available =fail2ban-jail-configuration= fields are:
 
   - =name= (type: string) :: Required name of this jail configuration.
 
@@ -927,96 +949,16 @@ Below is the reference for the different =jail-service-type= configuration recor
 
   - =extra-content= (default: ='()=) (type: text-config) :: Extra content for the jail configuration, provided as a list of file-like objects.
 
-- Data Type: *fail2ban-jail-filter-configuration* [[#index-fail2ban_002djail_002dfilter_002dconfiguration][¶]] :: Available =fail2ban-jail-filter-configuration= fields are:
+- Data Type: fail2ban-jail-filter-configuration  :: Available =fail2ban-jail-filter-configuration= fields are:
 
   - =name= (type: string) :: Filter to use.
 
   - =mode= (type: maybe-string) :: Mode for filter.
 
-**** OpenSnitch Service [[#OpenSnitch-Service][¶]]
+<<index-resize_002dfile_002dsystem>> <<Resize-File-System-Service>>
+**** Resize File System Service
 :PROPERTIES:
-:CUSTOM_ID: OpenSnitch-Service
-:CLASS: subsubheading
-:END:
-[[https://github.com/evilsocket/opensnitch][OpenSnitch]] is an application-level firewall that monitors outbound connections and prompts users to allow or deny them on a per-application basis.
-
-=opensnitch-service-type= is provided by the =(gnu services opensnitch)= module.
-
-- Variable: *opensnitch-service-type* [[#index-opensnitch_002dservice_002dtype][¶]] :: This is the service type for the OpenSnitch application firewall daemon. Its value must be an =opensnitch-configuration= record.
-
-  Below is an example configuration:
-
-  #+begin_src lisp
-  (service opensnitch-service-type)
-  #+end_src
-
-  This service depends on the =networking= service.
-
-- Data Type: *opensnitch-configuration* [[#index-opensnitch_002dconfiguration][¶]] :: Available =opensnitch-configuration= fields are:
-
-  - =opensnitch= (default: =opensnitch-daemon=) (type: package) :: The =opensnitch-daemon= package to use.
-
-  - =server-address= (default: ="unix:///tmp/osui.sock"=) (type: string) :: Address for the UI to connect to the daemon.
-
-  - =server-log-file= (default: ="/var/log/opensnitchd.log"=) (type: string) :: Path to the daemon log file.
-
-  - =authentication-type= (default: ="simple"=) (type: string) :: Authentication type for UI-daemon communication.
-
-  - =tls-ca-cert= (default: =""=) (type: string) :: Path to TLS CA certificate.
-
-  - =tls-server-cert= (default: =""=) (type: string) :: Path to TLS server certificate.
-
-  - =tls-client-cert= (default: =""=) (type: string) :: Path to TLS client certificate.
-
-  - =tls-client-key= (default: =""=) (type: string) :: Path to TLS client key.
-
-  - =tls-skip-verify?= (default: =#f=) (type: boolean) :: Whether to skip TLS verification.
-
-  - =tls-client-auth-type= (default: ="no-client-cert"=) (type: string) :: TLS client authentication type.
-
-  - =default-action= (default: ="allow"=) (type: string) :: Default action for connections: ="allow"= or ="deny"=.
-
-  - =default-duration= (default: ="once"=) (type: string) :: Default duration for rules: ="once"=, ="until-restart"=, ="always"=, etc.
-
-  - =intercept-unknown?= (default: =#f=) (type: boolean) :: Whether to intercept connections from unknown processes.
-
-  - =proc-monitor-method= (default: ="ebpf"=) (type: string) :: Method for monitoring processes: ="ebpf"=, ="proc"=, or ="audit"=.
-
-  - =log-level= (default: =2=) (type: integer) :: Log level: 0=silent, 1=error, 2=warning, 3=important, 4=debug.
-
-  - =log-utc?= (default: =#t=) (type: boolean) :: Whether to log timestamps in UTC.
-
-  - =log-micro?= (default: =#f=) (type: boolean) :: Whether to include microseconds in log timestamps.
-
-  - =firewall= (default: ="nftables"=) (type: string) :: Firewall backend: ="nftables"= or ="iptables"=.
-
-  - =fw-config-path= (default: ="/etc/opensnitchd/system-fw.json"=) (type: string) :: Path to the system firewall configuration file.
-
-  - =fw-monitor-interval= (default: ="15s"=) (type: string) :: Interval for monitoring firewall rules.
-
-  - =fw-queue-bypass?= (default: =#t=) (type: boolean) :: Whether to bypass the queue when the daemon is not running.
-
-  - =rules-path= (default: ="/etc/opensnitchd/rules/"=) (type: string) :: Directory where firewall rules are stored.
-
-  - =rules-enable-checksums?= (default: =#f=) (type: boolean) :: Whether to enable checksums for rules.
-
-  - =ebpf-events-workers= (default: =8=) (type: integer) :: Number of eBPF event worker threads.
-
-  - =ebpf-queue-events-size= (default: =0=) (type: integer) :: Size of the eBPF events queue (0 = default).
-
-  - =stats-max-events= (default: =250=) (type: integer) :: Maximum number of events to keep in statistics.
-
-  - =stats-max-stats= (default: =25=) (type: integer) :: Maximum number of statistics entries.
-
-  - =stats-workers= (default: =6=) (type: integer) :: Number of statistics worker threads.
-
-  - =internal-gc-percent= (default: =100=) (type: integer) :: Go garbage collector percentage.
-
-  - =internal-flush-conns-on-start?= (default: =#t=) (type: boolean) :: Whether to flush existing connections on daemon start.
-
-**** Resize File System Service [[#Resize-File-System-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Resize-File-System-Service
+:CUSTOM_ID: resize-file-system-service
 :CLASS: subsubheading
 :END:
 This service type lets you resize a live file system during boot, which can be convenient if a Guix image is flashed on an SD Card (e.g. for an embedded device) or uploaded to a VPS. In both cases the medium the image will reside upon may be larger than the image you want to produce.
@@ -1050,9 +992,10 @@ This service supports the ext2, ext3, ext4, btrfs, and bcachefs file systems.
 
 - =bcachefs-tools= (default: =bcachefs-tools=) (type: file-like) :: The bcachefs-tools package to use, used for resizing the bcachefs file system.
 
-**** Backup Services [[#Backup-Services-1][¶]]
+<<index-Backup>> <<Backup-Services-1>>
+**** Backup Services
 :PROPERTIES:
-:CUSTOM_ID: Backup-Services-1
+:CUSTOM_ID: backup-services
 :CLASS: subsubheading
 :END:
 The =(gnu services backup)= module offers services for backing up file system trees. For now, it provides the =restic-backup-service-type=.
@@ -1060,11 +1003,11 @@ The =(gnu services backup)= module offers services for backing up file system tr
 With =restic-backup-service-type=, you can periodically back up directories and files with [[https://restic.net/][Restic]], which supports end-to-end encryption and deduplication. Consider the following configuration:
 
 #+begin_src lisp
-(use-service-modules backup ...) ;for 'restic-backup-service-type'
-(use-package-modules sync ...)   ;for 'rclone'
+(use-service-modules backup …) ;for 'restic-backup-service-type'
+(use-package-modules sync …)   ;for 'rclone'
 
 (operating-system
-  ;; ...
+  ;; …
   (packages (append (list rclone)    ;for use by restic
                     %base-packages))
   (services
@@ -1094,11 +1037,11 @@ The =restic-backup-service-type= provides the ability to instantaneously trigger
 sudo herd trigger remote-ftp
 #+end_example
 
-- Data Type: *restic-backup-configuration* [[#index-restic_002dbackup_002dconfiguration][¶]] :: Available =restic-backup-configuration= fields are:
+- Data Type: restic-backup-configuration  :: Available =restic-backup-configuration= fields are:
 
   - =jobs= (default: ='()=) (type: list-of-restic-backup-jobs) :: The list of backup jobs for the current system.
 
-- Data Type: *restic-backup-job* [[#index-restic_002dbackup_002djob][¶]] :: Available =restic-backup-job= fields are:
+- Data Type: restic-backup-job  :: Available =restic-backup-job= fields are:
 
   - =restic= (default: =restic=) (type: package) :: The restic package to be used for the current job.
 
@@ -1128,9 +1071,10 @@ sudo herd trigger remote-ftp
 
   - =extra-flags= (default: ='()=) (type: list-of-lowerables) :: A list of values that are lowered to strings. These will be passed as command-line arguments to the current job =restic backup= invocation.
 
-**** DLNA/UPnP Services [[#DLNA_002fUPnP-Services][¶]]
+<<index-DLNA_002fUPnP>> <<DLNA_002fUPnP-Services>>
+**** DLNA/UPnP Services
 :PROPERTIES:
-:CUSTOM_ID: DLNA_002fUPnP-Services
+:CUSTOM_ID: dlnaupnp-services
 :CLASS: subsubheading
 :END:
 The =(gnu services upnp)= module offers services related to UPnP (Universal Plug and Play) and DLNA (Digital Living Network Alliance), networking protocols that can be used for media streaming and device interoperability within a local network. For now, this module provides the =readymedia-service-type=.
@@ -1140,10 +1084,10 @@ The =(gnu services upnp)= module offers services related to UPnP (Universal Plug
 Consider the following configuration:
 
 #+begin_src lisp
-(use-service-modules upnp ...)
+(use-service-modules upnp …)
 
 (operating-system
-  ...
+  …
   (services
    (list (service readymedia-service-type
                   (readymedia-configuration
@@ -1157,7 +1101,7 @@ Consider the following configuration:
                           (readymedia-media-directory
                            (path "/media/misc"))))
                    (extra-config '(("notify_interval" . "60")))))
-         ...)))
+         …)))
 #+end_src
 
 This sets up the ReadyMedia daemon to serve files from the media folders specified in =media-directories=. The =media-directories= field is mandatory. All other fields (such as network ports and the server name) come with a predefined default and can be omitted.
@@ -1167,7 +1111,7 @@ This sets up the ReadyMedia daemon to serve files from the media folders specifi
 
 #+end_quote
 
-- Data Type: *readymedia-configuration* [[#index-readymedia_002dconfiguration][¶]] :: Available =readymedia-configuration= fields are:
+- Data Type: readymedia-configuration  :: Available =readymedia-configuration= fields are:
 
   - =readymedia= (default: =readymedia=) (type: package) :: The ReadyMedia package to be used for the service.
 
@@ -1175,20 +1119,20 @@ This sets up the ReadyMedia daemon to serve files from the media folders specifi
 
   - =media-directories= (type: list) :: The list of media folders to serve content from. Each item is a =readymedia-media-directory=.
 
-  - =cache-directory= (type: gexp-or-string) :: A folder for ReadyMedia's cache files, defaulting to ="/var/cache/readymedia"=. If the path is relative, like =".cache/readymedia"=, it will be looked up in the user's home directory. If the directory does not exist already, the folder will be created as part of the service activation and the "readymedia" user will be assigned ownership. For Guix Home services, the value defaults to =".cache/readymedia"=.
+  - =cache-directory= (default: ="/var/cache/readymedia"=) (type: string) :: A folder for ReadyMedia's cache files. If not existing already, the folder will be created as part of the service activation and the ReadyMedia user will be assigned ownership.
 
-  - =log-file= (type: gexp-or-string) :: Where the service will write its logs, defaulting to ="/var/log/readymedia.log"=. For Guix Home services, it defaults to =XDG_STATE_HOME==/shepherd/readymedia.log=.
+  - =log-directory= (default: ="/var/log/readymedia"=) (type: string) :: A folder for ReadyMedia's log files. If not existing already, the folder will be created as part of the service activation and the ReadyMedia user will be assigned ownership.
 
   - =port= (default: =#f=) (type: maybe-integer) :: A custom port that the service will be listening on.
 
   - =extra-config= (default: ='()=) (type: alist) :: An association list of further options, as accepted by ReadyMedia.
 
-- Data Type: *readymedia-media-directory* [[#index-readymedia_002dmedia_002ddirectory][¶]] :: A =media-directories= entry includes a folder =path= and, optionally, the =types= of media files included within the folder.
+- Data Type: readymedia-media-directory  :: A =media-directories= entry includes a folder =path= and, optionally, the =types= of media files included within the folder.
 
-  - =path= (type: string) :: The media folder location. For Guix Home services, if the path is relative, it will be looked up in the user's home directory.
+  - =path= (type: string) :: The media folder location.
 
   - =types= (default: ='()=) (type: list) :: A list indicating the types of file included in the media folder. Valid values are combinations of individual media types, i.e. symbol =A= for audio, =P= for pictures, =V= for video. An empty list means that no type is specified.
 
 --------------
 
-Previous: [[id:guix--Hurd-Services][Hurd Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Hurd-Services][Hurd Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Debugging-Build-Failures>>
-Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 9.1.4 Debugging Build Failures [[#Debugging-Build-Failures-1][¶]]
+<<Debugging-Build-Failures-1>>
+**** 9.1.4 Debugging Build Failures
 :PROPERTIES:
-:CUSTOM_ID: Debugging-Build-Failures-1
+:CUSTOM_ID: debugging-build-failures
 :CLASS: subsection
 :END:
+<<index-build-failures_002c-debugging>>
 When defining a new package (see [[id:guix--Defining-Packages][Defining Packages]]), you will probably find yourself spending some time debugging and tweaking the build until it succeeds. To do that, you need to operate the build commands yourself in an environment as close as possible to the one the build daemon uses.
 
 To that end, the first thing to do is to use the =--keep-failed= or =-K= option of =guix build=, which will keep the failed build tree in =/tmp= or whatever directory you specified as =TMPDIR= (see [[id:guix--Common-Build-Options][=--keep-failed=]]).
@@ -53,7 +56,7 @@ From there on, you can =cd= to the failed build tree and source the =environment
 
 #+begin_example
 $ guix build foo -K
-... build fails
+… build fails
 $ cd /tmp/guix-build-foo.drv-0
 $ source ./environment-variables
 $ cd foo-1.2
@@ -67,7 +70,7 @@ In such cases, you may need to inspect the build process from within a container
 
 #+begin_example
 $ guix build -K foo
-...
+…
 $ cd /tmp/guix-build-foo.drv-0
 $ guix shell --no-grafts -C -D foo strace gdb
 [env]# source ./environment-variables
@@ -94,4 +97,4 @@ In this way, not only you will have reproduced the environment variables the dae
 
 --------------
 
-Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Additional-Build-Options][Additional Build Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

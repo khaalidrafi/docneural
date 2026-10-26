@@ -7,6 +7,9 @@
 Next: [[id:emacs--Comparison-in-Dired][File Comparison with Dired]]   Previous: [[id:emacs--Shell-Command-Guessing][Shell Command Guessing]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
 
 <<Transforming-File-Names>>
+
+--------------
+
 *** 32.10 Transforming File Names in Dired [[#Transforming-File-Names-in-Dired][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Transforming-File-Names-in-Dired
@@ -28,7 +31,7 @@ All of the commands described in this section work /interactively/: they ask you
 - % S =from= RET =to= RET :: 
 - % Y =from= RET =to= RET :: These five commands rename, copy, make hard links, make soft links, and make relative soft links, in each case computing the new name by regular-expression substitution from the name of the old file.
 
-The four regular-expression substitution commands effectively perform a search-and-replace on the selected file names. They read two arguments: a regular expression =from=, and a substitution pattern =to=; they match each old file name against =from=, and then replace the matching part with =to=. You can use ‘=\&=' and ‘=\==digit=' in =to= to refer to all or part of what the pattern matched in the old file name, as in =replace-regexp= (see [[id:emacs--Replace::#Regexp-Replace][Regexp Replacement]]). If the regular expression matches more than once in a file name, only the first match is replaced.
+The four regular-expression substitution commands effectively perform a search-and-replace on the selected file names. They read two arguments: a regular expression =from=, and a substitution pattern =to=; they match each old file name against =from=, and then replace the matching part with =to=. You can use ‘=\&=' and ‘=\==digit=' in =to= to refer to all or part of what the pattern matched in the old file name, as in =replace-regexp= (see [[id:emacs--Regexp-Replace][Regexp Replacement]]). If the regular expression matches more than once in a file name, only the first match is replaced.
 
 For example, % R ^.*$ RET x-\& RET renames each selected file by prepending ‘=x-=' to its name. The inverse of this, removing ‘=x-=' from the front of each file name, is also possible: one method is % R ^x-\(.*\)$ RET \1 RET; another is % R ^x- RET RET. (Use ‘=^=' and ‘=$=' to anchor matches that should span the whole file name.)
 

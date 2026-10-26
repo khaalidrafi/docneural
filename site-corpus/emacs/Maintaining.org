@@ -7,6 +7,9 @@
 Next: [[id:emacs--Abbrevs][Abbrevs]]   Previous: [[id:emacs--Building][Compiling and Testing Programs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Maintaining>>
+
+--------------
+
 ** 30 Maintaining Large Programs [[#Maintaining-Large-Programs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Maintaining-Large-Programs
@@ -24,4 +27,10 @@ This chapter describes Emacs features for maintaining medium- to large-size prog
 
 If you are maintaining a large Lisp program, then in addition to the features described here, you may find the Emacs Lisp Regression Testing (ERT) library useful (see [[../ert_html/index.html#Top][ERT]] in Emacs Lisp Regression Testing).
 
---------------
+- [[id:emacs--Version-Control][Version Control]]
+- [[id:emacs--Projects][Working with Projects]]
+- [[id:emacs--Change-Log][Change Logs]]
+- [[id:emacs--Xref][Find Identifier References]]
+- [[id:emacs--EDE][Emacs Development Environment]]
+- [[id:emacs--Emerge][Merging Files with Emerge]]
+- [[id:emacs--Bug-Reference][Bug Reference]]

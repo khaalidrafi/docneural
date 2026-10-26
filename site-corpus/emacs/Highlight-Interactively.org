@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Highlight Interactively
 
-Next: [[id:emacs--Fringes][Window Fringes]]   Previous: [[id:emacs--Font-Lock#Font-Lock][Font Lock mode]]   Up: [[id:emacs--Display][Controlling the Display]]
+Next: [[id:emacs--Fringes][Window Fringes]]   Previous: [[id:emacs--Font-Lock][Font Lock mode]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Highlight-Interactively>>
+
+--------------
+
 *** 16.14 Interactive Highlighting [[#Interactive-Highlighting][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Interactive-Highlighting
@@ -16,7 +19,7 @@ Highlight Changes mode is a minor mode that /highlights/ the parts of the buffer
 
 Hi Lock mode is a minor mode that highlights text that matches regular expressions you specify. For example, you can use it to highlight all the references to a certain variable in a program source file, highlight certain parts in a voluminous output of some program, or highlight certain names in an article. To enable or disable Hi Lock mode, use the command M-x hi-lock-mode. To enable Hi Lock mode for all buffers, use M-x global-hi-lock-mode or place =(global-hi-lock-mode 1)= in your =.emacs= file.
 
-Hi Lock mode works like Font Lock mode (see [[id:emacs--Font-Lock::#Font-Lock][Font Lock mode]]), except that you specify explicitly the regular expressions to highlight. You can control them with the following commands. (The key bindings below that begin with C-x w are deprecated in favor of the global M-s h bindings, and will be removed in some future Emacs version.)
+Hi Lock mode works like Font Lock mode (see [[id:emacs--Font-Lock][Font Lock mode]]), except that you specify explicitly the regular expressions to highlight. You can control them with the following commands. (The key bindings below that begin with C-x w are deprecated in favor of the global M-s h bindings, and will be removed in some future Emacs version.)
 
 -  <<index-M_002ds-h-r>>M-s h r =regexp= RET =face= RET [[#index-M_002ds-h-r][¶]]\\
   C-x w h =regexp= RET =face= RET :: Highlight text that matches =regexp= using face =face= (=highlight-regexp=). The highlighting will remain as long as the buffer is loaded. For example, to highlight all occurrences of the word “whim” using the default face (a yellow background), type M-s h r whim RET RET. Any face can be used for highlighting, Hi Lock provides several of its own and these are pre-loaded into a list of default values. While being prompted for a face use M-n and M-p to cycle through them. A prefix numeric argument limits the highlighting to the corresponding subexpression.

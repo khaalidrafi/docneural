@@ -4,6 +4,78 @@
 #+filetags: :emacs:
 #+title: Table Conversion
 
-Next:
+Next: [[id:emacs--Table-Misc][Table Miscellany]]   Previous: [[id:emacs--Table-Rows-and-Columns][Table Rows and Columns]]   Up: [[id:emacs--Text-Based-Tables][Editing Text-based Tables]]
 
-The node you are looking for is at [[id:emacs--Text-Based-Tables::#Table-Conversion][Table Conversion]].
+<<Table-Conversion>>
+
+--------------
+
+**** 27.15.7 Converting Between Plain Text and Tables [[#Converting-Between-Plain-Text-and-Tables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Converting-Between-Plain-Text-and-Tables
+:CLASS: subsection
+:END:
+The command M-x table-capture captures plain text in a region and turns it into a table. Unlike M-x table-recognize (see [[id:emacs--Table-Recognition][Table Recognition]]), the original text does not need to have a table appearance; it only needs to have a logical table-like structure.
+
+For example, suppose we have the following numbers, which are divided into three lines and separated horizontally by commas:
+
+#+begin_example
+1, 2, 3, 4
+5, 6, 7, 8
+, 9, 10
+#+end_example
+
+Invoking M-x table-capture on that text produces this table:
+
+#+begin_example
++-----+-----+-----+-----+
+|1    |2    |3    |4    |
++-----+-----+-----+-----+
+|5    |6    |7    |8    |
++-----+-----+-----+-----+
+|     |9    |10   |     |
++-----+-----+-----+-----+
+#+end_example
+
+M-x table-release does the opposite: it converts a table back to plain text, removing its cell borders.
+
+One application of this pair of commands is to edit a text in layout. Look at the following three paragraphs:
+
+#+begin_example
+table-capture is a powerful command.
+Here are some things it can do:
+
+Parse Cell Items   Using row and column delimiter regexps,
+                   it parses the specified text area and
+                   extracts cell items into a table.
+#+end_example
+
+Applying =table-capture= to a region containing the above text, with empty strings for the column and row delimiter regexps, creates a table with a single cell like the following one.
+
+#+begin_example
++----------------------------------------------------------+
+|table-capture is a powerful command.                      |
+|Here are some things it can do:                           |
+|                                                          |
+|Parse Cell Items   Using row and column delimiter regexps,|
+|                   it parses the specified text area and  |
+|                   extracts cell items into a table.      |
++----------------------------------------------------------+
+#+end_example
+
+We can then use the cell splitting commands (see [[id:emacs--Cell-Commands][Commands for Table Cells]]) to subdivide the table so that each paragraph occupies a cell:
+
+#+begin_example
++----------------------------------------------------------+
+|table-capture is a powerful command.                      |
+|Here are some things it can do:                           |
++-----------------+----------------------------------------+
+|Parse Cell Items | Using row and column delimiter regexps,|
+|                 | it parses the specified text area and  |
+|                 | extracts cell items into a table.      |
++-----------------+----------------------------------------+
+#+end_example
+
+Each cell can now be edited independently without affecting the layout of other cells. When finished, we can invoke M-x table-release to convert the table back to plain text.
+
+--------------

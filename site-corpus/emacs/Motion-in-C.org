@@ -4,6 +4,34 @@
 #+filetags: :emacs:
 #+title: Motion in C
 
-Next:
+Next: [[id:emacs--Electric-C][Electric C Characters]]   Up: [[id:emacs--C-Modes][C and Related Modes]]
 
-The node you are looking for is at [[id:emacs--C-Modes::#Motion-in-C][Motion in C]].
+<<Motion-in-C>>
+
+--------------
+
+**** 28.12.1 C Mode Motion Commands [[#C-Mode-Motion-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: C-Mode-Motion-Commands
+:CLASS: subsection
+:END:
+This section describes commands for moving point, in C mode and related modes.
+
+-  <<index-c_002dbeginning_002dof_002ddefun>>=C-M-a= [[#index-c_002dbeginning_002dof_002ddefun][¶]]\\
+  =C-M-e= :: Move point to the beginning or end of the current function or top-level definition. In languages with enclosing scopes (such as C++'s classes) the /current function/ is the immediate one, possibly inside a scope. Otherwise it is the one defined by the least enclosing braces. (By contrast, =beginning-of-defun= and =end-of-defun= search for braces in column zero.) See [[id:emacs--Moving-by-Defuns][Moving by Defuns]].
+
+-  <<index-C_002dc-C_002du-_0028C-mode_0029>>=C-c C-u= [[#index-C_002dc-C_002du-_0028C-mode_0029][¶]] :: Move point back to the containing preprocessor conditional, leaving the mark behind. A prefix argument acts as a repeat count. With a negative argument, move point forward to the end of the containing preprocessor conditional.
+
+  ‘=#elif=' is equivalent to ‘=#else=' followed by ‘=#if=', so the function will stop at a ‘=#elif=' when going backward, but not when going forward.
+
+-  <<index-C_002dc-C_002dp-_0028C-mode_0029>>=C-c C-p= [[#index-C_002dc-C_002dp-_0028C-mode_0029][¶]] :: Move point back over a preprocessor conditional, leaving the mark behind. A prefix argument acts as a repeat count. With a negative argument, move forward.
+
+-  <<index-C_002dc-C_002dn-_0028C-mode_0029>>=C-c C-n= [[#index-C_002dc-C_002dn-_0028C-mode_0029][¶]] :: Move point forward across a preprocessor conditional, leaving the mark behind. A prefix argument acts as a repeat count. With a negative argument, move backward.
+
+-  <<index-M_002da-_0028C-mode_0029>>=M-a= [[#index-M_002da-_0028C-mode_0029][¶]] :: Move point to the beginning of the innermost C statement (=c-beginning-of-statement=). If point is already at the beginning of a statement, move to the beginning of the preceding statement. With prefix argument =n=, move back =n= − 1 statements.
+
+  In comments or in strings which span more than one line, this command moves by sentences instead of statements.
+
+-  <<index-M_002de-_0028C-mode_0029>>=M-e= [[#index-M_002de-_0028C-mode_0029][¶]] :: Move point to the end of the innermost C statement or sentence; like M-a except that it moves in the other direction (=c-end-of-statement=).
+
+--------------

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Remote-Host][Remote Host Shell]]   Previous: [[id:emacs--Terminal-emulator][Emacs Terminal Emulator]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Term-Mode>>
+
+--------------
+
 *** 40.9 Term Mode [[#Term-Mode-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Term-Mode-1
@@ -27,5 +30,3 @@ The following commands are only available in char mode:
 Term mode has a page-at-a-time feature. When enabled, it makes output pause at the end of each screenful:
 
 -  <<index-C_002dc-C_002dq-_0028Term-mode_0029>>C-c C-q [[#index-C_002dc-C_002dq-_0028Term-mode_0029][¶]] :: Toggle the page-at-a-time feature (=term-pager-toggle=). This command works in both line and char modes. When the feature is enabled, the mode-line displays the word ‘=page=', and each time Term receives more than a screenful of output, it pauses and displays ‘=**MORE**=' in the mode-line. Type SPC to display the next screenful of output, or ? to see your other options. The interface is similar to the =more= program.
-
---------------

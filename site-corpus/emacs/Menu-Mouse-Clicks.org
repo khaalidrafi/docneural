@@ -7,6 +7,9 @@
 Next: [[id:emacs--Mode-Line-Mouse][Mode Line Mouse Commands]]   Previous: [[id:emacs--Mouse-References][Following References with the Mouse]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Menu-Mouse-Clicks>>
+
+--------------
+
 *** 23.4 Mouse Clicks for Menus [[#Mouse-Clicks-for-Menus][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Mouse-Clicks-for-Menus
@@ -16,9 +19,9 @@ Several mouse clicks with the Ctrl and SHIFT modifiers bring up menus.
 
 - <<index-C_002dmouse_002d1>>C-mouse-1 [[#index-C_002dmouse_002d1][¶]] :: This menu is for selecting a buffer.
 
-  The MSB (“mouse select buffer”) global minor mode makes this menu smarter and more customizable. See [[id:emacs--Buffer-Convenience::#Buffer-Menus][Customizing Buffer Menus]].
+  The MSB (“mouse select buffer”) global minor mode makes this menu smarter and more customizable. See [[id:emacs--Buffer-Menus][Customizing Buffer Menus]].
 
-- <<index-C_002dmouse_002d2>>C-mouse-2 [[#index-C_002dmouse_002d2][¶]] :: This menu contains entries for examining faces and other text properties, and well as for setting them (the latter is mainly useful when editing enriched text; see [[id:emacs--Enriched-Text::#Enriched-Text][Enriched Text]]).
+- <<index-C_002dmouse_002d2>>C-mouse-2 [[#index-C_002dmouse_002d2][¶]] :: This menu contains entries for examining faces and other text properties, and well as for setting them (the latter is mainly useful when editing enriched text; see [[id:emacs--Enriched-Text][Enriched Text]]).
 
 - <<index-C_002dmouse_002d3>>C-mouse-3 [[#index-C_002dmouse_002d3][¶]] :: This menu is mode-specific. For most modes if Menu-bar mode is on, this menu has the same items as all the mode-specific menu-bar menus put together. Some modes may specify a different menu for this button. If Menu Bar mode is off, this menu contains all the items which would be present in the menu bar---not just the mode-specific ones---so that you can access them without having to display the menu bar.
 

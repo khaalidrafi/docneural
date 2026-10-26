@@ -7,6 +7,9 @@
 Next: [[id:emacs--Optional-Mode-Line][Optional Mode Line Features]]   Previous: [[id:emacs--Useless-Whitespace][Useless Whitespace]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Selective-Display>>
+
+--------------
+
 *** 16.18 Selective Display [[#Selective-Display-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Selective-Display-1
@@ -24,6 +27,6 @@ To make all lines visible again, type C-x $ with no argument.
 
 If you set the variable =selective-display-ellipses= to =nil=, the three dots do not appear at the end of a line that precedes hidden lines. Then there is no visible indication of the hidden lines. This variable becomes local automatically when set.
 
-See also [[id:emacs--Outline-Mode::#Outline-Mode][Outline Mode]] for another way to hide part of the text in a buffer.
+See also [[id:emacs--Outline-Mode][Outline Mode]] for another way to hide part of the text in a buffer.
 
 --------------

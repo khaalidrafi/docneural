@@ -7,6 +7,9 @@
 Next: [[id:emacs--Follow-Mode][Follow Mode]]   Previous: [[id:emacs--Narrowing][Narrowing]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<View-Mode>>
+
+--------------
+
 *** 16.6 View Mode [[#View-Mode-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: View-Mode-1
@@ -17,5 +20,3 @@ View mode is a minor mode that lets you scan a buffer by sequential screenfuls. 
 Typing q (=View-quit=) disables View mode, and switches back to the buffer and position before View mode was enabled. Typing e (=View-exit=) disables View mode, keeping the current buffer and position.
 
 M-x view-buffer prompts for an existing Emacs buffer, switches to it, and enables View mode. M-x view-file prompts for a file and visits it with View mode enabled.
-
---------------

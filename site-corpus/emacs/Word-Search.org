@@ -7,6 +7,9 @@
 Next: [[id:emacs--Symbol-Search][Symbol Search]]   Previous: [[id:emacs--Nonincremental-Search][Nonincremental Search]]   Up: [[id:emacs--Search][Searching and Replacement]]
 
 <<Word-Search>>
+
+--------------
+
 *** 17.3 Word Search [[#Word-Search-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Word-Search-1
@@ -26,7 +29,7 @@ To begin a forward incremental word search, type M-s w. If incremental search is
 
 To begin a nonincremental word search, type M-s w RET for a forward search, or M-s w C-r RET for a backward search. These run the commands =word-search-forward= and =word-search-backward= respectively.
 
-Incremental and nonincremental word searches differ slightly in the way they find a match. In a nonincremental word search, each word in the search string must exactly match a whole word. In an incremental word search, the matching is more lax: while you are typing the search string, its first and last words need not match whole words. This is so that the matching can proceed incrementally as you type. This additional laxity does not apply to the lazy highlight (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]), which always matches whole words. While you are typing the search string, ‘=Pending=' appears in the search prompt until you use a search repeating key like C-s.
+Incremental and nonincremental word searches differ slightly in the way they find a match. In a nonincremental word search, each word in the search string must exactly match a whole word. In an incremental word search, the matching is more lax: while you are typing the search string, its first and last words need not match whole words. This is so that the matching can proceed incrementally as you type. This additional laxity does not apply to the lazy highlight (see [[id:emacs--Incremental-Search][Incremental Search]]), which always matches whole words. While you are typing the search string, ‘=Pending=' appears in the search prompt until you use a search repeating key like C-s.
 
 The word search commands don't perform character folding, and toggling lax whitespace matching (see [[id:emacs--Lax-Search][lax space matching]]) has no effect on them.
 
@@ -38,6 +41,6 @@ The first time you use =dictionary-search=, it creates a new =*Dictionary*= buff
 
 If you turn on =dictionary-tooltip-mode= in a buffer, Emacs will look up the definitions of the word at mouse pointer and show those definitions in a tool tip. This is handy when you are reading text with many words about whose meaning you are unsure.
 
-For other options of dictionary-search, see the =dictionary= customization group (see [[id:emacs--Easy-Customization::#Specific-Customization][Customizing Specific Items]]).
+For other options of dictionary-search, see the =dictionary= customization group (see [[id:emacs--Specific-Customization][Customizing Specific Items]]).
 
 --------------

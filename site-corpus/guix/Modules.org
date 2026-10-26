@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Modules>>
-Next: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Previous: [[id:guix--Programming-Paradigm][Programming Paradigm]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Previous: [[id:guix--Programming-Paradigm][Programming Paradigm]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.8.2 Modules [[#Modules-1][¶]]
+<<Modules-1>>
+**** 22.9.2 Modules
 :PROPERTIES:
-:CUSTOM_ID: Modules-1
+:CUSTOM_ID: modules
 :CLASS: subsection
 :END:
+<<index-build_002dside-modules>> <<index-host_002dside-modules>>
 Guile modules that are meant to be used on the builder side must live in the =(guix build …)= name space. They must not refer to other Guix or GNU modules. However, it is OK for a “host-side” module to use a build-side module. As an example, the =(guix search-paths)= module should not be imported and used by a package since it isn't meant to be used as a “build-side” module. It would also couple the module with the package's dependency graph, which is undesirable.
 
 Modules that deal with the broader GNU system should be in the =(gnu …)= name space rather than =(guix …)=.

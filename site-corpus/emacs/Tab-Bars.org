@@ -7,6 +7,9 @@
 Next: [[id:emacs--Dialog-Boxes][Using Dialog Boxes]]   Previous: [[id:emacs--Tool-Bars][Tool Bars]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Tab-Bars>>
+
+--------------
+
 *** 23.17 Tab Bars [[#Tab-Bars-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Tab-Bars-1
@@ -65,7 +68,7 @@ The following commands can be used to switch between tabs:
 
 -  <<index-C_002dx-t-RET>>C-x t RET =tabname= RET [[#index-C_002dx-t-RET][¶]] :: Switch to the tab by its name (=tab-switch=), with completion on all tab names. The default value and the “future history” of tab names is sorted by recency, so you can use M-n (=next-history-element=) to get the name of the last visited tab, the second last, and so on.
 
--  <<index-C_002d1_002c-tab-bar>>=modifier=-=tab-number= [[#index-C_002d1_002c-tab-bar][¶]] :: Switch to the tab by its number =tab-number= (=tab-select=). After customizing the variable =tab-bar-select-tab-modifiers= to specify one or more =modifier= keys, you can select a tab by its ordinal number using one of the specified modifiers in combination with the tab number to select. The number 9 can be used to select the last tab. You can select any modifiers supported by Emacs, see [[id:emacs--Key-Bindings::#Modifier-Keys][Modifier Keys]]. To display the tab number alongside the tab name, you can customize another variable =tab-bar-tab-hints=. This will help you decide which numerical key to press to select the tab by its number.
+-  <<index-C_002d1_002c-tab-bar>>=modifier=-=tab-number= [[#index-C_002d1_002c-tab-bar][¶]] :: Switch to the tab by its number =tab-number= (=tab-select=). After customizing the variable =tab-bar-select-tab-modifiers= to specify one or more =modifier= keys, you can select a tab by its ordinal number using one of the specified modifiers in combination with the tab number to select. The number 9 can be used to select the last tab. You can select any modifiers supported by Emacs, see [[id:emacs--Modifier-Keys][Modifier Keys]]. To display the tab number alongside the tab name, you can customize another variable =tab-bar-tab-hints=. This will help you decide which numerical key to press to select the tab by its number.
 
 -  <<index-C_002d9_002c-tab-bar>>=modifier=-9 [[#index-C_002d9_002c-tab-bar][¶]] :: Switch to the last tab (=tab-last=). The key combination is the modifier key defined by =tab-bar-select-tab-modifiers= and the key 9. With a numeric argument =n=, switch to the =n=th last tab.
 

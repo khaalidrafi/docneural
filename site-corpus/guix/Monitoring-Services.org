@@ -36,23 +36,27 @@ Next:
 [[../..][]]
 
 <<Monitoring-Services>>
-Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.18 Monitoring Services [[#Monitoring-Services-1][¶]]
+<<Monitoring-Services-1>>
+**** 11.10.17 Monitoring Services
 :PROPERTIES:
-:CUSTOM_ID: Monitoring-Services-1
+:CUSTOM_ID: monitoring-services
 :CLASS: subsection
 :END:
-**** Darkstat Service [[#Darkstat-Service][¶]]
+<<Darkstat-Service>>
+**** Darkstat Service
 :PROPERTIES:
-:CUSTOM_ID: Darkstat-Service
+:CUSTOM_ID: darkstat-service
 :CLASS: subsubheading
 :END:
+<<index-darkstat>>
 Darkstat is a packet sniffer that captures network traffic, calculates statistics about usage, and serves reports over HTTP.
 
-- Variable: *darkstat-service-type* [[#index-darkstat_002dservice_002dtype][¶]] :: This is the service type for the [[https://unix4lyfe.org/darkstat/][darkstat]] service, its value must be a =darkstat-configuration= record as in this example:
+- Variable: darkstat-service-type  :: This is the service type for the [[https://unix4lyfe.org/darkstat/][darkstat]] service, its value must be a =darkstat-configuration= record as in this example:
 
   #+begin_src lisp
   (service darkstat-service-type
@@ -60,7 +64,7 @@ Darkstat is a packet sniffer that captures network traffic, calculates statistic
              (interface "eno1")))
   #+end_src
 
-- Data Type: *darkstat-configuration* [[#index-darkstat_002dconfiguration][¶]] :: Data type representing the configuration of =darkstat=.
+- Data Type: darkstat-configuration  :: Data type representing the configuration of =darkstat=.
 
   - =package= (default: =darkstat=) :: The darkstat package to use.
 
@@ -72,20 +76,22 @@ Darkstat is a packet sniffer that captures network traffic, calculates statistic
 
   - =base= (default: ="/"=) :: Specify the path of the base URL. This can be useful if =darkstat= is accessed via a reverse proxy.
 
-**** Prometheus Node Exporter Service [[#Prometheus-Node-Exporter-Service][¶]]
+<<prometheus_002dnode_002dexporter>><<Prometheus-Node-Exporter-Service>>
+**** Prometheus Node Exporter Service
 :PROPERTIES:
-:CUSTOM_ID: Prometheus-Node-Exporter-Service
+:CUSTOM_ID: prometheus-node-exporter-service
 :CLASS: subsubheading
 :END:
+<<index-prometheus_002dnode_002dexporter>>
 The Prometheus “node exporter” makes hardware and operating system statistics provided by the Linux kernel available for the Prometheus monitoring system. This service should be deployed on all physical nodes and virtual machines, where monitoring these statistics is desirable.
 
-- Variable: *prometheus-node-exporter-service-type* [[#index-prometheus_002dnode_002dexporter_002dservice_002dtype][¶]] :: This is the service type for the [[https://github.com/prometheus/node_exporter/][prometheus-node-exporter]] service, its value must be a =prometheus-node-exporter-configuration=.
+- Variable: prometheus-node-exporter-service-type  :: This is the service type for the [[https://github.com/prometheus/node_exporter/][prometheus-node-exporter]] service, its value must be a =prometheus-node-exporter-configuration=.
 
   #+begin_src lisp
   (service prometheus-node-exporter-service-type)
   #+end_src
 
-- Data Type: *prometheus-node-exporter-configuration* [[#index-prometheus_002dnode_002dexporter_002dconfiguration][¶]] :: Data type representing the configuration of =node_exporter=.
+- Data Type: prometheus-node-exporter-configuration  :: Data type representing the configuration of =node_exporter=.
 
   - =package= (default: =go-github-com-prometheus-node-exporter=) :: The prometheus-node-exporter package to use.
 
@@ -95,14 +101,16 @@ The Prometheus “node exporter” makes hardware and operating system statistic
 
   - =extra-options= (default: ='()=) :: Extra options to pass to the Prometheus node exporter.
 
-**** vnStat Network Traffic Monitor [[#vnStat-Network-Traffic-Monitor][¶]]
+<<vnstat>><<vnStat-Network-Traffic-Monitor>>
+**** vnStat Network Traffic Monitor
 :PROPERTIES:
-:CUSTOM_ID: vnStat-Network-Traffic-Monitor
+:CUSTOM_ID: vnstat-network-traffic-monitor
 :CLASS: subsubheading
 :END:
+<<index-vnstat>>
 vnStat is a network traffic monitor that uses interface statistics provided by the kernel rather than traffic sniffing. This makes it a light resource monitor, regardless of network traffic rate.
 
-- Variable: *vnstat-service-type* [[#index-vnstat_002dservice_002dtype][¶]] :: This is the service type for the [[https://humdi.net/vnstat/][vnStat]] daemon and accepts a =vnstat-configuration= value.
+- Variable: vnstat-service-type  :: This is the service type for the [[https://humdi.net/vnstat/][vnStat]] daemon and accepts a =vnstat-configuration= value.
 
   The following example will configure the service with default values:
 
@@ -110,7 +118,7 @@ vnStat is a network traffic monitor that uses interface statistics provided by t
   (service vnstat-service-type)
   #+end_src
 
-- Data Type: *vnstat-configuration* [[#index-vnstat_002dconfiguration][¶]] :: Available =vnstat-configuration= fields are:
+- Data Type: vnstat-configuration  :: Available =vnstat-configuration= fields are:
 
   - =package= (default: =vnstat=) (type: file-like) :: The vnstat package.
 
@@ -191,18 +199,20 @@ vnStat is a network traffic monitor that uses interface statistics provided by t
 
   - =yearly-years= (default: =-1=) (type: maybe-integer) :: Data retention duration for the one year resolution entries. The configuration defines for how many past years entries will be stored. Set to =-1= for unlimited entries or to =0= to disable the data collection of this resolution.
 
-**** Zabbix server [[#Zabbix-server][¶]]
+<<Zabbix-server>>
+**** Zabbix server
 :PROPERTIES:
-:CUSTOM_ID: Zabbix-server
+:CUSTOM_ID: zabbix-server
 :CLASS: subsubheading
 :END:
+<<index-zabbix-zabbix_002dserver>>
 Zabbix is a high performance monitoring system that can collect data from a variety of sources and provide the results in a web-based interface. Alerting and reporting is built-in, as well as /templates/ for common operating system metrics such as network utilization, CPU load, and disk space consumption.
 
 This service provides the central Zabbix monitoring service; you also need [[#zabbix_002dfront_002dend][=zabbix-front-end-service-type=]] to configure Zabbix and display results, and optionally [[#zabbix_002dagent][=zabbix-agent-service-type=]] on machines that should be monitored (other data sources are supported, such as [[#prometheus_002dnode_002dexporter][Prometheus Node Exporter]]).
 
-- Variable: *zabbix-server-service-type* [[#index-zabbix_002dserver_002dservice_002dtype][¶]] :: This is the service type for the Zabbix server service. Its value must be a =zabbix-server-configuration= record, shown below.
+- Variable: zabbix-server-service-type  :: This is the service type for the Zabbix server service. Its value must be a =zabbix-server-configuration= record, shown below.
 
-- Data Type: *zabbix-server-configuration* [[#index-zabbix_002dserver_002dconfiguration][¶]] :: Available =zabbix-server-configuration= fields are:
+- Data Type: zabbix-server-configuration  :: Available =zabbix-server-configuration= fields are:
 
   - =zabbix-server= (default: =zabbix-server=) (type: file-like) :: The zabbix-server package.
 
@@ -238,16 +248,18 @@ This service provides the central Zabbix monitoring service; you also need [[#za
 
   - =include-files= (default: ='()=) (type: include-files) :: You may include individual files or all files in a directory in the configuration file.
 
-**** Zabbix agent [[#Zabbix-agent][¶]]
+<<zabbix_002dagent>><<Zabbix-agent>>
+**** Zabbix agent
 :PROPERTIES:
-:CUSTOM_ID: Zabbix-agent
+:CUSTOM_ID: zabbix-agent
 :CLASS: subsubheading
 :END:
+<<index-zabbix-zabbix_002dagent>>
 The Zabbix agent gathers information about the running system for the Zabbix monitoring server. It has a variety of built-in checks, and can be extended with custom [[https://www.zabbix.com/documentation/current/en/manual/config/items/userparameters][/user parameters/]].
 
-- Variable: *zabbix-agent-service-type* [[#index-zabbix_002dagent_002dservice_002dtype][¶]] :: This is the service type for the Zabbix agent service. Its value must be a =zabbix-agent-configuration= record, shown below.
+- Variable: zabbix-agent-service-type  :: This is the service type for the Zabbix agent service. Its value must be a =zabbix-agent-configuration= record, shown below.
 
-- Data Type: *zabbix-agent-configuration* [[#index-zabbix_002dagent_002dconfiguration][¶]] :: Available =zabbix-agent-configuration= fields are:
+- Data Type: zabbix-agent-configuration  :: Available =zabbix-agent-configuration= fields are:
 
   - =zabbix-agent= (default: =zabbix-agentd=) (type: file-like) :: The zabbix-agent package.
 
@@ -275,16 +287,18 @@ The Zabbix agent gathers information about the running system for the Zabbix mon
 
   - =include-files= (default: ='()=) (type: include-files) :: You may include individual files or all files in a directory in the configuration file.
 
-**** Zabbix front-end [[#Zabbix-front_002dend][¶]]
+<<zabbix_002dfront_002dend>><<Zabbix-front_002dend>>
+**** Zabbix front-end
 :PROPERTIES:
-:CUSTOM_ID: Zabbix-front_002dend
+:CUSTOM_ID: zabbix-front-end
 :CLASS: subsubheading
 :END:
+<<index-zabbix-zabbix_002dfront_002dend>>
 The Zabbix front-end provides a web interface to Zabbix. It does not need to run on the same machine as the Zabbix server. This service works by extending the [[id:guix--Web-Services::#PHP_002dFPM][PHP-FPM]] and [[id:guix--Web-Services::#NGINX][NGINX]] services with the configuration necessary for loading the Zabbix user interface.
 
-- Variable: *zabbix-front-end-service-type* [[#index-zabbix_002dfront_002dend_002dservice_002dtype][¶]] :: This is the service type for the Zabbix web frontend. Its value must be a =zabbix-front-end-configuration= record, shown below.
+- Variable: zabbix-front-end-service-type  :: This is the service type for the Zabbix web frontend. Its value must be a =zabbix-front-end-configuration= record, shown below.
 
-- Data Type: *zabbix-front-end-configuration* [[#index-zabbix_002dfront_002dend_002dconfiguration][¶]] :: Available =zabbix-front-end-configuration= fields are:
+- Data Type: zabbix-front-end-configuration  :: Available =zabbix-front-end-configuration= fields are:
 
   - =zabbix-server= (default: =zabbix-server=) (type: file-like) :: The Zabbix server package to use.
 
@@ -306,147 +320,6 @@ The Zabbix front-end provides a web interface to Zabbix. It does not need to run
 
   - =zabbix-port= (default: =10051=) (type: number) :: Zabbix server port.
 
-**** collectd Service [[#collectd-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: collectd-Service
-:CLASS: subsubheading
-:END:
-collectd is a daemon which collects, stores, transports, and visualizes system and application performance metrics in a variety of ways.
-
-- Variable: *collectd-service-type* [[#index-collectd_002dservice_002dtype][¶]] :: This is the service type for the [[https://collectd.org/][collectd]] service. Its value must be a =collectd-configuration= record:
-
-  #+begin_src lisp
-  (service collectd-service-type
-           (collectd-configuration
-            (plugins
-             (list
-              (collectd-plugin-generic
-               (name "cpu")
-                  (options '((ReportByCpu . #t)
-                             (ReportByState . #t)
-                             (ValuesPercentage . #t))))))))
-  #+end_src
-
-  The service may be extended to add new plugins:
-
-  #+begin_src lisp
-  (simple-service 'collectd-memory
-                  collectd-service-type
-                  (list
-                   (collectd-plugin-generic
-                    (name "memory")
-                    (options '((ValuesAbsolute . #t)
-                               (ValusPercentage . #t))))))
-  #+end_src
-
-- Data Type: *collectd-configuration* [[#index-collectd_002dconfiguration][¶]] :: Available =collectd-configuration= fields are:
-
-  - =collectd= (default: =collectd=) (type: package) :: The collectd package to use.
-
-  - =base-directory= (default: ="/var/lib/collectd"=) (type: string) :: Sets the base directory. This is the directory beneath which all RRD (round-robin database) files are created. Possibly more subdirectories are created. This is also the working directory for collectd.
-
-  - =auto-load-plugins?= (default: =#f=) (type: boolean) :: When set to =#f=, plugins must be loaded explicitly, by setting the =load-plugin?= field of each plugin configuration to =#t=. If a =<Plugin ...>= block is encountered and no configuration handling callback for this plugin has been registered, a warning is logged and the block is ignored.
-
-    When set to =#t=, each =<Plugin ...>= block acts as if it was immediately preceded by a =LoadPlugin= statement. =LoadPlugin= statements are still required for plugins that don't provide any configuration, e.g. the =Load= plugin.
-
-  - =collect-internal-stats?= (default: =#f=) (type: boolean) :: When =#t=, various statistics about the collectd daemon will be collected, with "collectd" as the plugin name.
-
-  - =type-databases= (type: list-of-file-likes) :: One or more files that contain the data-set descriptions. See =types.db(5)= for a description of the format of these files.
-
-  - =interval= (default: =60=) (type: maybe-seconds) :: Configures the interval in which to query the read plugins. Smaller values lead to a higher system load produced by collectd, while higher values lead to more coarse statistics. Warning: You should set this once and then never touch it again. If you do, you will have to delete all your RRD files or know some serious RRDtool magic! (Assuming you're using the RRDtool or RRDCacheD plugin.)
-
-  - =max-read-interval= (default: =86400=) (type: seconds) :: A read plugin doubles the interval between queries after each failed attempt to get data. This options limits the maximum value of the interval.
-
-  - =timeout= (type: maybe-integer) :: Consider a value list "missing" when no update has been read or received for =Iterations= iterations. By default, collectd considers a value list missing when no update has been received for twice the update interval. Since this setting uses iterations, the maximum allowed time without update depends on the =Interval= information contained in each value list. This is used in the =Threshold= configuration to dispatch notifications about missing values, see =collectd-threshold(5)= for details.
-
-  - =read-threads= (default: =5=) (type: integer) :: Number of threads to start for reading plugins. You may want to increase this if you have more than five plugins that take a long time to read. Mostly those are plugins that do network-IO. Setting this to a value higher than the number of registered read callbacks is not recommended.
-
-  - =write-threads= (default: =5=) (type: integer) :: Number of threads to start for dispatching value lists to write plugins. You may want to increase this if you have more than five plugins that may take relatively long to write to.
-
-  - =write-queue-limit-high= (type: maybe-integer) :: Metrics are read by the read threads and then put into a queue to be handled by the write threads. If one of the write plugins is slow (e.g. network timeouts, I/O saturation of the disk) this queue will grow. In order to avoid running into memory issues in such a case, you can limit the size of this queue. If there are =write-queue-limit-high= metrics in the queue, any new metrics will be dropped. If the number of metrics currently in the queue is between =write-queue-limit-low= and =write-queue-limit-high=, the metric is dropped with a probability that is proportional to the number of metrics in the queue (i.e. it increases linearly until it reaches 100%).
-
-  - =write-queue-limit-low= (type: maybe-integer) :: If there are less than =write-queue-limit-low= metrics in the queue, all new metrics will be enqueued. If =write-queue-limit-high= is set to non-zero and =write-queue-limit-low= is unset, the latter will default to half of =write-queue-limit-high=.
-
-  - =host-name= (type: maybe-string) :: Sets the hostname that identifies a host. If you omit this setting, the hostname will be determined using the =gethostname(2)= system call.
-
-  - =fully-qualified-domain-name-lookup?= (default: =#t=) (type: boolean) :: If =host-name= is determined automatically, this setting controls whether or not the daemon should try to figure out the FQDN (fully qualified domain name). This is done using a lookup of the name returned by =gethostname(2)=.
-
-  - =plugins= (default: =()=) (type: list-of-collectd-plugins) :: Configurations for collectd plugins.
-
-- Data Type: *collectd-plugin-generic* [[#index-collectd_002dplugin_002dgeneric][¶]] :: The =collectd-plugin-generic= record can represent most collectd plugins.
-
-  This example configuration will enable the CPU usage reporting plugin. See the =collectd.conf(5)= man page for a list of plugins and their options.
-
-  #+begin_src lisp
-  (collectd-plugin-generic
-   (name "cpu")
-   (options '((ReportByCpu . #t)
-              (ReportByState . #t)
-              (ValuesPercentage . #t))))
-  #+end_src
-
-  Available =collectd-plugin-generic= fields are:
-
-  - =load-plugin?= (default: =#t=) (type: boolean) :: When =#t=, include a =LoadPlugin= directive in the configuration. This interacts with =auto-load-plugins?= in =collectd-configuration=; if =auto-load-plugins?= is =#f=, all plugins should set this to =#t=.
-
-  - =name= (type: string) :: The name of the plugin to configure.
-
-  - =options= (default: =()=) (type: plugin-options) :: Configuration options for the plugin, as an alist. See =collect.conf(5)= for the available plugin options.
-
-
-- Data Type: *collectd-plugin-python* [[#index-collectd_002dplugin_002dpython][¶]] :: The =collectd-plugin-python= configuration record holds configuration for collectd plugins written in Python. See the =collectd-python(5)= man page for more information on Python support in collectd.
-
-  Guix packages listed in the =packages= field will be added to the profile used to run collectd. This example configuration will load a Python plugin named =myplugin=, whose code is in the =python-myplugin= Guix package.
-
-  #+begin_src lisp
-  (collectd-plugin-python
-   (packages (list python-myplugin))
-   (module "myplugin")
-   (module-options '((SomeOption . "hi")
-                     (AnotherOption . 123))))
-  #+end_src
-
-  The =module-paths= field will emit verbatim =ModulePath= lines, for plugins not packaged for Guix. This example configuration loads the =gpio= plugin from =/home/user/projects/collectd-gpio/gpio=.
-
-  #+begin_src lisp
-  (collectd-plugin-python
-   (module-paths
-    (list
-     "/home/user/projects/collectd-gpio/gpio"))
-   (module "gpio")
-   (module-options '((MonitorGPIOs 1 2 3 4))))
-  #+end_src
-
-  The two mechanisms may be combined: a Guix-packaged Python library may be used by unpackaged plugin code. This example loads a =mongometrics= plugin from =/opt/collectd-mongodb/mongometrics=, and also makes the =python-pymongo= Python package available for it to use.
-
-  #+begin_src lisp
-  (collectd-plugin-python
-   (packages (list python-pymongo))
-   (module-paths
-    (list
-     "/opt/collectd-mongodb/mongometrics"))
-   (module "mongometrics")
-   (module-options '((Host . "localhost"))))
-  #+end_src
-
-  Available =collectd-plugin-python= fields are:
-
-  - =load-plugin?= (default: =#t=) (type: boolean) :: When =#t=, include a =LoadPlugin= directive in the configuration. This interacts with =auto-load-plugins?= in =collectd-configuration=; if =collectd-configuration='s =auto-load-plugins?= is =#f=, all plugins should set this to =#t=.
-
-  - =type-databases= (default: =()=) (type: list-of-file-likes) :: One or more files that contain the data-set descriptions. See =types.db(5)= for a description of the format of these files.
-
-  - =packages= (default: =()=) (type: list-of-packages) :: Packages to make available to the Python plugin. These can be dependencies of the plugin code, or may contain the plugin.
-
-  - =module-paths= (default: =()=) (type: list-of-string) :: Entries to prepend to =sys.path=.
-
-  - =log-traces?= (default: =#f=) (type: boolean) :: If a Python script throws an exception it will be logged by collectd with the name of the exception and the message. If you set this option to true it will also log the full stacktrace just like the default output of an interactive Python interpreter. This does not apply to the =CollectError= exception, which will never log a stacktrace. This should probably be set to false most of the time but is very useful for development and debugging of new modules.
-
-  - =interactive?= (default: =#f=) (type: boolean) :: This option will cause the module to launch an interactive Python interpreter that reads from and writes to the terminal. Note that collectd will terminate right after starting up if you try to run it as a daemon while this option is enabled so make sure to start collectd with the =-f= option. See the =collectd-python(5)= man page for more information on this option.
-
-  - =module= (type: string) :: The name of the Python module to import into the collectd Python process. The module must be available in =packages= or =module-paths=, and register a MPD callback.
-
-  - =module-options= (default: =()=) (type: alist) :: Configuration options for the module.
-
 --------------
 
-Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Kerberos-Services][Kerberos Services]], Previous: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

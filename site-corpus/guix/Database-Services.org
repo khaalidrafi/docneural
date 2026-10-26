@@ -36,23 +36,27 @@ Next:
 [[../..][]]
 
 <<Database-Services>>
-Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.13 Database Services [[#Database-Services-1][¶]]
+<<Database-Services-1>>
+**** 11.10.12 Database Services
 :PROPERTIES:
-:CUSTOM_ID: Database-Services-1
+:CUSTOM_ID: database-services
 :CLASS: subsection
 :END:
+<<index-database>> <<index-SQL>>
 The =(gnu services databases)= module provides the following services.
 
-**** PostgreSQL [[#PostgreSQL][¶]]
+<<PostgreSQL>>
+**** PostgreSQL
 :PROPERTIES:
-:CUSTOM_ID: PostgreSQL
+:CUSTOM_ID: postgresql
 :CLASS: subsubheading
 :END:
-- Variable: *postgresql-service-type* [[#index-postgresql_002dservice_002dtype][¶]] :: The service type for the PostgreSQL database server. Its value should be a valid =postgresql-configuration= object, documented below. The following example describes a PostgreSQL service with the default configuration.
+- Variable: postgresql-service-type  :: The service type for the PostgreSQL database server. Its value should be a valid =postgresql-configuration= object, documented below. The following example describes a PostgreSQL service with the default configuration.
 
   #+begin_src lisp
   (service postgresql-service-type
@@ -68,9 +72,9 @@ The =(gnu services databases)= module provides the following services.
   sudo -u postgres -s /bin/sh
   createuser --interactive
   createdb $MY_USER_LOGIN      # Replace appropriately.
-#+end_example
+  #+end_example
 
-- Data Type: *postgresql-configuration* [[#index-postgresql_002dconfiguration][¶]] :: Data type representing the configuration for the =postgresql-service-type=.
+- Data Type: postgresql-configuration  :: Data type representing the configuration for the =postgresql-service-type=.
 
   - =postgresql= :: PostgreSQL package to use for the service.
 
@@ -84,7 +88,9 @@ The =(gnu services databases)= module provides the following services.
 
   - =data-directory= (default: ="/var/lib/postgresql/data"=) :: Directory in which to store the data.
 
-  - <<index-postgresql-extension_002dpackages>>=extension-packages= (default: ='()=) [[#index-postgresql-extension_002dpackages][¶]] :: Additional extensions are loaded from packages listed in =extension-packages=. Extensions are available at runtime. For instance, to create a geographic database using the =postgis= extension, a user can configure the postgresql-service as in this example:
+  - =extension-packages= (default: ='()=) [[#index-postgresql-extension_002dpackages][¶]] :: Additional extensions are loaded from packages listed in =extension-packages=. Extensions are available at runtime. For instance, to create a geographic database using the =postgis= extension, a user can configure the postgresql-service as in this example:
+
+    <<index-postgis>>
 
     #+begin_src lisp
     (use-package-modules databases geo)
@@ -111,7 +117,7 @@ The =(gnu services databases)= module provides the following services.
     > \connect postgistest;
     > create extension postgis;
     > create extension postgis_topology;
-#+end_example
+    #+end_example
 
     There is no need to add this field for contrib extensions such as hstore or dblink as they are already loadable by postgresql. This field is only required to add extensions provided by other packages.
 
@@ -127,14 +133,14 @@ The =(gnu services databases)= module provides the following services.
 
   - =gid= (default: =#f=) :: Explicitly specify the GID of the =postgres= group.
 
-- Data Type: *postgresql-config-file* [[#index-postgresql_002dconfig_002dfile][¶]] :: Data type representing the PostgreSQL configuration file. As shown in the following example, this can be used to customize the configuration of PostgreSQL. Note that you can use any G-expression or filename in place of this record, if you already have a configuration file you'd like to use for example.
+- Data Type: postgresql-config-file  :: Data type representing the PostgreSQL configuration file. As shown in the following example, this can be used to customize the configuration of PostgreSQL. Note that you can use any G-expression or filename in place of this record, if you already have a configuration file you'd like to use for example.
 
   #+begin_src lisp
   (service postgresql-service-type
            (postgresql-configuration
             (config-file
              (postgresql-config-file
-              (log-destination "csvlog,stderr")
+              (log-destination "stderr")
               (hba-file
                (plain-file "pg_hba.conf"
                            "
@@ -150,7 +156,7 @@ The =(gnu services databases)= module provides the following services.
                  ("log_directory"                 "/var/log/postgresql")))))))
   #+end_src
 
-  - =log-destination= (default: ="stderr"=) :: The logging method to use for PostgreSQL. Valid values are ="stderr"=, ="csvlog"=, ="jsonlog"=, ="syslog"= and ="eventlog"=. Multiple values are accepted, separated by commas.
+  - =log-destination= (default: ="syslog"=) :: The logging method to use for PostgreSQL. Multiple values are accepted, separated by commas.
 
   - =hba-file= (default: =%default-postgres-hba=) :: Filename or G-expression for the host-based authentication configuration.
 
@@ -158,11 +164,13 @@ The =(gnu services databases)= module provides the following services.
 
   - =socket-directory= (default: ="/var/run/postgresql"=) :: Specifies the directory of the Unix-domain socket(s) on which PostgreSQL is to listen for connections from client applications. If set to =""= PostgreSQL does not listen on any Unix-domain sockets, in which case only TCP/IP sockets can be used to connect to the server.
 
+    By default, the =#false= value means the PostgreSQL default value will be used, which is currently ‘=/tmp='.
+
   - =extra-config= (default: ='()=) :: List of additional keys and values to include in the PostgreSQL config file. Each entry in the list should be a list where the first element is the key, and the remaining elements are the values.
 
     The values can be numbers, booleans or strings and will be mapped to PostgreSQL parameters types =Boolean=, =String=, =Numeric=, =Numeric with Unit= and =Enumerated= described [[https://www.postgresql.org/docs/current/config-setting.html][here]].
 
-- Variable: *postgresql-role-service-type* [[#index-postgresql_002drole_002dservice_002dtype][¶]] :: This service allows to create PostgreSQL roles and databases after PostgreSQL service start. Here is an example of its use.
+- Variable: postgresql-role-service-type  :: This service allows to create PostgreSQL roles and databases after PostgreSQL service start. Here is an example of its use.
 
   #+begin_src lisp
   (service postgresql-role-service-type
@@ -183,7 +191,7 @@ The =(gnu services databases)= module provides the following services.
                               (create-database? #t)))))
   #+end_src
 
-- Data Type: *postgresql-role* [[#index-postgresql_002drole][¶]] :: PostgreSQL manages database access permissions using the concept of roles. A role can be thought of as either a database user, or a group of database users, depending on how the role is set up. Roles can own database objects (for example, tables) and can assign privileges on those objects to other roles to control who has access to which objects.
+- Data Type: postgresql-role  :: PostgreSQL manages database access permissions using the concept of roles. A role can be thought of as either a database user, or a group of database users, depending on how the role is set up. Roles can own database objects (for example, tables) and can assign privileges on those objects to other roles to control who has access to which objects.
 
   - =name= :: The role name.
 
@@ -201,7 +209,7 @@ The =(gnu services databases)= module provides the following services.
 
   - =template= (default: ="template1"=) :: The default template to copy the new database from when creating it. Use ="template0"= for a pristine database with no system-local modifications.
 
-- Data Type: *postgresql-role-configuration* [[#index-postgresql_002drole_002dconfiguration][¶]] :: Data type representing the configuration of =postgresql-role-service-type=.
+- Data Type: postgresql-role-configuration  :: Data type representing the configuration of =postgresql-role-service-type=.
 
   - =host= (default: ="/var/run/postgresql"=) :: The PostgreSQL host to connect to.
 
@@ -211,14 +219,15 @@ The =(gnu services databases)= module provides the following services.
 
   - =roles= (default: ='()=) :: The initial PostgreSQL roles to create.
 
-**** MariaDB/MySQL [[#MariaDB_002fMySQL][¶]]
+<<MariaDB_002fMySQL>>
+**** MariaDB/MySQL
 :PROPERTIES:
-:CUSTOM_ID: MariaDB_002fMySQL
+:CUSTOM_ID: mariadbmysql
 :CLASS: subsubheading
 :END:
-- Variable: *mysql-service-type* [[#index-mysql_002dservice_002dtype][¶]] :: This is the service type for a MySQL or MariaDB database server. Its value is a =mysql-configuration= object that specifies which package to use, as well as various settings for the =mysqld= daemon.
+- Variable: mysql-service-type  :: This is the service type for a MySQL or MariaDB database server. Its value is a =mysql-configuration= object that specifies which package to use, as well as various settings for the =mysqld= daemon.
 
-- Data Type: *mysql-configuration* [[#index-mysql_002dconfiguration][¶]] :: Data type representing the configuration of =mysql-service-type=.
+- Data Type: mysql-configuration  :: Data type representing the configuration of =mysql-service-type=.
 
   - =mysql= (default: =mariadb=) :: Package object of the MySQL database server, can be either =mariadb= or =mysql=.
 
@@ -236,18 +245,19 @@ The =(gnu services databases)= module provides the following services.
 
   - =auto-upgrade?= (default: =#t=) :: Whether to automatically run =mysql_upgrade= after starting the service. This is necessary to upgrade the /system schema/ after “major” updates (such as switching from MariaDB 10.4 to 10.5), but can be disabled if you would rather do that manually.
 
-**** Memcached [[#Memcached][¶]]
+<<Memcached>>
+**** Memcached
 :PROPERTIES:
-:CUSTOM_ID: Memcached
+:CUSTOM_ID: memcached
 :CLASS: subsubheading
 :END:
-- Variable: *memcached-service-type* [[#index-memcached_002dservice_002dtype][¶]] :: This is the service type for the [[https://memcached.org/][Memcached]] service, which provides a distributed in memory cache. The value for the service type is a =memcached-configuration= object.
+- Variable: memcached-service-type  :: This is the service type for the [[https://memcached.org/][Memcached]] service, which provides a distributed in memory cache. The value for the service type is a =memcached-configuration= object.
 
 #+begin_src lisp
 (service memcached-service-type)
 #+end_src
 
-- Data Type: *memcached-configuration* [[#index-memcached_002dconfiguration][¶]] :: Data type representing the configuration of memcached.
+- Data Type: memcached-configuration  :: Data type representing the configuration of memcached.
 
   - =memcached= (default: =memcached=) :: The Memcached package to use.
 
@@ -259,16 +269,17 @@ The =(gnu services databases)= module provides the following services.
 
   - =additional-options= (default: ='()=) :: Additional command line options to pass to =memcached=.
 
-**** Redis [[#Redis][¶]]
+<<Redis>>
+**** Redis
 :PROPERTIES:
-:CUSTOM_ID: Redis
+:CUSTOM_ID: redis
 :CLASS: subsubheading
 :END:
 [[https://redis.io/][Redis]] is an in-memory data store used by millions of developers as a cache, vector database, document database, streaming engine, and message broker. Redis has built-in replication and different levels of on-disk persistence. It supports complex data types (for example, strings, hashes, lists, sets, sorted sets, and JSON), with atomic operations defined on those data types.
 
-- Variable: *redis-service-type* [[#index-redis_002dservice_002dtype][¶]] :: Type of the service that runs =redis=, an in-memory data store. The value for this service is a =<redis-configuration>= object.
+- Variable: redis-service-type  :: Type of the service that runs =redis=, an in-memory data store. The value for this service is a =<redis-configuration>= object.
 
-- Data Type: *redis-configuration* [[#index-redis_002dconfiguration][¶]] :: Available =redis-configuration= fields are:
+- Data Type: redis-configuration  :: Available =redis-configuration= fields are:
 
   - =redis= (default: =redis=) (type: package) :: The Redis package to use.
 
@@ -282,4 +293,4 @@ The =(gnu services databases)= module provides the following services.
 
 --------------
 
-Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Mail-Services][Mail Services]], Previous: [[id:guix--File-Search-Services][File Search Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

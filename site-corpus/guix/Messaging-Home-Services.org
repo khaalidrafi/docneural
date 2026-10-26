@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Messaging-Home-Services>>
-Next: [[id:guix--Media-Home-Services][Media Home Services]], Previous: [[id:guix--Mail-Home-Services][Mail Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Media-Home-Services][Media Home Services]], Previous: [[id:guix--Mail-Home-Services][Mail Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.15 Messaging Home Services [[#Messaging-Home-Services-1][¶]]
+<<Messaging-Home-Services-1>>
+**** 13.3.14 Messaging Home Services
 :PROPERTIES:
-:CUSTOM_ID: Messaging-Home-Services-1
+:CUSTOM_ID: messaging-home-services
 :CLASS: subsection
 :END:
+<<index-znc>>
 The [[https://znc.in][ZNC bouncer]] can be run as a daemon to manage your IRC presence. With the =(gnu home services messaging)= service, you can configure ZNC to run upon login.
 
 You will have to provide a =~/.znc/configs/znc.conf= separately.
@@ -55,17 +58,18 @@ Here is an example of a service and its configuration that you could add to the 
 (service home-znc-service-type)
 #+end_src
 
-- Variable: *home-znc-service-type* [[#index-home_002dznc_002dservice_002dtype][¶]] :: This is the type of the ZNC home service, whose value is a =home-znc-configuration= object.
+- Variable: home-znc-service-type  :: This is the type of the ZNC home service, whose value is a =home-znc-configuration= object.
 
-- Data Type: *home-znc-configuration* [[#index-home_002dznc_002dconfiguration][¶]] :: Available =home-znc-configuration= fields are:
+- Data Type: home-znc-configuration  :: Available =home-znc-configuration= fields are:
 
   - =znc= (default: =znc=) (type: file-like) :: The ZNC package to use.
 
   - =extra-options= (default: ='()=) :: Extra options will be passed to =znc=, please run =man znc= for more information.
 
+<<index-irc_002dbot-1>> <<index-snuik-1>>
 The [[https://gitlab.com/janneke/snuik][Snuik IRC bot]] can be run as a daemon to aid talking to users that are currently offline. With the =(gnu home services messaging)= service, you can configure Snuik to run upon login.
 
-- Variable: *home-snuik-service-type* [[#index-home_002dsnuik_002dservice_002dtype][¶]] :: This is the type of the Snuik home service, whose value is a =home-snuik-configuration= object.
+- Variable: home-snuik-service-type  :: This is the type of the Snuik home service, whose value is a =home-snuik-configuration= object.
 
 You may specify a custom configuration by providing a =snuik-configuration= record, exactly like for =snuik-service-type= and wrapping it in =for-home=. Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
 
@@ -81,4 +85,4 @@ You may specify a custom configuration by providing a =snuik-configuration= reco
 
 --------------
 
-Next: [[id:guix--Media-Home-Services][Media Home Services]], Previous: [[id:guix--Mail-Home-Services][Mail Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Media-Home-Services][Media Home Services]], Previous: [[id:guix--Mail-Home-Services][Mail Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

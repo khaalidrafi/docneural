@@ -7,6 +7,9 @@
 Next: [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]]   Previous: [[id:emacs--Resources][X Resources]]   Up: [[id:emacs--X-Resources][X Options and Resources]]
 
 <<Table-of-Resources>>
+
+--------------
+
 *** D.2 Table of X Resources for Emacs [[#Table-of-X-Resources-for-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Table-of-X-Resources-for-Emacs
@@ -52,15 +55,15 @@ The table below lists the X resource names that Emacs recognizes. Note that some
 
 - <<index-line-spacing-_0028X-resource_0029>>=lineSpacing= (class =LineSpacing=) [[#index-line-spacing-_0028X-resource_0029][¶]] :: Additional space between lines, in pixels.
 
-- <<index-background-for-menus-_0028X-resource_0029>>=menuBackground= (class =Background=) [[#index-background-for-menus-_0028X-resource_0029][¶]] :: The background color of the menus in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+- <<index-background-for-menus-_0028X-resource_0029>>=menuBackground= (class =Background=) [[#index-background-for-menus-_0028X-resource_0029][¶]] :: The background color of the menus in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources][GTK+ resources]].)
 
 - <<index-menu-bar-_0028X-resource_0029>>=menuBar= (class =MenuBar=) [[#index-menu-bar-_0028X-resource_0029][¶]] :: If the value of this resource is ‘=off=' or ‘=false=' or ‘=0=', Emacs disables Menu Bar mode at startup (see [[id:emacs--Menu-Bars][Menu Bars]]).
 
 - =minibuffer= (class =Minibuffer=) :: If ‘=none=', Emacs will not make a minibuffer in this frame; it will use a separate minibuffer frame instead.
 
-- <<index-font-for-menus-_0028X-resource_0029>>=paneFont= (class =Font=) [[#index-font-for-menus-_0028X-resource_0029][¶]] :: Font name for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+- <<index-font-for-menus-_0028X-resource_0029>>=paneFont= (class =Font=) [[#index-font-for-menus-_0028X-resource_0029][¶]] :: Font name for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources][GTK+ resources]].)
 
-- <<index-foreground-for-menus-_0028X-resource_0029>>=paneForeground= (class =Foreground=) [[#index-foreground-for-menus-_0028X-resource_0029][¶]] :: Foreground color for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+- <<index-foreground-for-menus-_0028X-resource_0029>>=paneForeground= (class =Foreground=) [[#index-foreground-for-menus-_0028X-resource_0029][¶]] :: Foreground color for menu pane titles, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources][GTK+ resources]].)
 
 - =pointerColor= (class =Foreground=) :: Color of the mouse cursor. This has no effect in many graphical desktop environments, as they do not let Emacs change the mouse cursor this way.
 
@@ -74,9 +77,9 @@ The table below lists the X resource names that Emacs recognizes. Note that some
 
 - <<index-scrollbar-width-_0028X-resource_0029>>=scrollBarWidth= (class =ScrollBarWidth=) [[#index-scrollbar-width-_0028X-resource_0029][¶]] :: The scroll bar width in pixels, equivalent to the frame parameter =scroll-bar-width=. Do not set this resource if Emacs is compiled with GTK+ support.
 
-- =selectionFont= (class =SelectionFont=) :: Font name for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+- =selectionFont= (class =SelectionFont=) :: Font name for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources][GTK+ resources]].)
 
-- =selectionForeground= (class =SelectionForeground=) :: Foreground color for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources::#GTK-resources][GTK+ resources]].)
+- =selectionForeground= (class =SelectionForeground=) :: Foreground color for pop-up menu items, in non-toolkit versions of Emacs. (For toolkit versions, see [[id:emacs--Lucid-Resources][Lucid Menu And Dialog X Resources]], also see [[id:emacs--Motif-Resources][Motif Menu X Resources]], and see [[id:emacs--GTK-resources][GTK+ resources]].)
 
 - =selectionTimeout= (class =SelectionTimeout=) :: Number of milliseconds to wait for a selection reply. If the selection owner doesn't reply in this time, we give up. A value of 0 means wait as long as necessary.
 
@@ -110,6 +113,6 @@ The table below lists the X resource names that Emacs recognizes. Note that some
 
 - =visualClass= (class =VisualClass=) :: The /visual class/ for X color display. If specified, the value should start with one of ‘=TrueColor=', ‘=PseudoColor=', ‘=DirectColor=', ‘=StaticColor=', ‘=GrayScale=', and ‘=StaticGray=', followed by ‘=-==depth=', where =depth= is the number of color planes.
 
-You can also use X resources to customize individual Emacs faces (see [[id:emacs--Faces][Text Faces]]). For example, setting the resource ‘=face==.attributeForeground=' is equivalent to customizing the ‘=foreground=' attribute of the face =face=. However, we recommend customizing faces from within Emacs, instead of using X resources. See [[id:emacs--Easy-Customization::#Face-Customization][Customizing Faces]].
+You can also use X resources to customize individual Emacs faces (see [[id:emacs--Faces][Text Faces]]). For example, setting the resource ‘=face==.attributeForeground=' is equivalent to customizing the ‘=foreground=' attribute of the face =face=. However, we recommend customizing faces from within Emacs, instead of using X resources. See [[id:emacs--Face-Customization][Customizing Faces]].
 
 --------------

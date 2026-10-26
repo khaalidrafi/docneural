@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Program Modes
 
-Next: [[id:emacs--Defuns#Defuns][Top-Level Definitions, or Defuns]]   Up: [[id:emacs--Programs][Editing Programs]]
+Next: [[id:emacs--Defuns][Top-Level Definitions, or Defuns]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Program-Modes>>
+
+--------------
+
 *** 28.1 Major Modes for Programming Languages [[#Major-Modes-for-Programming-Languages][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Major-Modes-for-Programming-Languages
@@ -20,9 +23,9 @@ Ideally, Emacs should have a major mode for each programming language that you m
 
 If Emacs has been compiled with the ‘=tree-sitter=' library, it offers several optional editing modes based on that library, which utilize the incremental parsing capabilities provided by ‘=tree-sitter='. These modes have ‘=-ts-=' in their names; for example =c-ts-mode=, =python-ts-mode=, etc.
 
-In most programming languages, indentation should vary from line to line to illustrate the structure of the program. Therefore, in most programming language modes, typing TAB updates the indentation of the current line (see [[id:emacs--Program-Indent::#Program-Indent][Indentation for Programs]]). Furthermore, DEL is usually bound to =backward-delete-char-untabify=, which deletes backward treating each tab as if it were the equivalent number of spaces, so that you can delete one column of indentation without worrying whether the whitespace consists of spaces or tabs.
+In most programming languages, indentation should vary from line to line to illustrate the structure of the program. Therefore, in most programming language modes, typing TAB updates the indentation of the current line (see [[id:emacs--Program-Indent][Indentation for Programs]]). Furthermore, DEL is usually bound to =backward-delete-char-untabify=, which deletes backward treating each tab as if it were the equivalent number of spaces, so that you can delete one column of indentation without worrying whether the whitespace consists of spaces or tabs.
 
-Entering a programming language mode runs the custom Lisp functions specified in the hook variable =prog-mode-hook=, followed by those specified in the mode's own mode hook (see [[id:emacs--Major-Modes][Major Modes]]). For instance, entering C mode runs the hooks =prog-mode-hook= and =c-mode-hook=. See [[id:emacs--Variables::#Hooks][Hooks]], for information about hooks.
+Entering a programming language mode runs the custom Lisp functions specified in the hook variable =prog-mode-hook=, followed by those specified in the mode's own mode hook (see [[id:emacs--Major-Modes][Major Modes]]). For instance, entering C mode runs the hooks =prog-mode-hook= and =c-mode-hook=. See [[id:emacs--Hooks][Hooks]], for information about hooks.
 
 Separate manuals are available for the modes for Ada (see [[../ada-mode_html/index.html#Top][Ada Mode]] in Ada Mode), C/C++/Objective C/Java/Corba IDL/Pike/AWK (see [[../ccmode_html/index.html#Top][CC Mode]] in CC Mode), Octave, VHDL, and IDLWAVE (see [[../idlwave_html/index.html#Top][IDLWAVE]] in IDLWAVE User Manual).
 

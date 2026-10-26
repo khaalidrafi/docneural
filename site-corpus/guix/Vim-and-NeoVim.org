@@ -36,16 +36,18 @@ Next:
 [[../..][]]
 
 <<Vim-and-NeoVim>>
-Previous: [[id:guix--Guile-Studio][Guile Studio]], Up: [[id:guix--The-Perfect-Setup][The Perfect Setup]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Guile-Studio][Guile Studio]], Up: [[id:guix--Alternative-Setups][Alternative Setups]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.5.3 Vim and NeoVim [[#Vim-and-NeoVim-1][¶]]
+<<Vim-and-NeoVim-1>>
+**** 22.6.2 Vim and NeoVim
 :PROPERTIES:
-:CUSTOM_ID: Vim-and-NeoVim-1
+:CUSTOM_ID: vim-and-neovim
 :CLASS: subsection
 :END:
-Vim (and NeoVim) are also packaged in Guix, in case these popular modal editors are more to your taste.
+Vim (and NeoVim) are also packaged in Guix, just in case you decided to go for the evil path.
 
 #+begin_example
 guix install vim
@@ -72,7 +74,3 @@ guix install vim-guix-vim
 #+end_example
 
 In NeoVim you can even make a similar setup to Geiser using [[https://conjure.fun/][Conjure]] that lets you connect to a running Guile process and inject your code there live (sadly it's not packaged in Guix yet).
-
---------------
-
-Previous: [[id:guix--Guile-Studio][Guile Studio]], Up: [[id:guix--The-Perfect-Setup][The Perfect Setup]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

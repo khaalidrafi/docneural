@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Visual-Line-Mode][Visual Line Mode]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Display-Custom>>
+
+--------------
+
 *** 16.24 Customization of Display [[#Customization-of-Display][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Customization-of-Display
@@ -20,7 +23,7 @@ If you want to have Emacs display line numbers for every line in the buffer, cus
 
 - =relative= :: Display relative line numbers before non-continuation lines which show buffer text. The line numbers are relative to the line showing point, so the numbers grow both up and down as lines become farther from the current line.
 
-- =visual= :: This value causes Emacs to count lines visually: only lines actually shown on the display will be counted (disregarding any lines in invisible parts of text), and lines which wrap to consume more than one screen line will be numbered that many times. The displayed numbers are relative, as with =relative= value above. This is handy in modes that fold text, such as Outline mode (see [[id:emacs--Outline-Mode::#Outline-Mode][Outline Mode]]), and when you need to move by exact number of screen lines.
+- =visual= :: This value causes Emacs to count lines visually: only lines actually shown on the display will be counted (disregarding any lines in invisible parts of text), and lines which wrap to consume more than one screen line will be numbered that many times. The displayed numbers are relative, as with =relative= value above. This is handy in modes that fold text, such as Outline mode (see [[id:emacs--Outline-Mode][Outline Mode]]), and when you need to move by exact number of screen lines.
 
 - anything else :: Any other non-=nil= value is treated as =t=.
 

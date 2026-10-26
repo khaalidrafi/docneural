@@ -7,16 +7,19 @@
 Next: [[id:emacs--Printing][Printing Hard Copies]]   Previous: [[id:emacs--Shell][Running Shell Commands from Emacs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Emacs-Server>>
+
+--------------
+
 ** 41 Using Emacs as a Server [[#Using-Emacs-as-a-Server][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Using-Emacs-as-a-Server
 :CLASS: chapter section-level-set-chapter
 :END:
-Various programs can invoke your choice of editor to edit a particular piece of text. For instance, version control programs invoke an editor to enter version control logs (see [[id:emacs--Version-Control::#Version-Control][Version Control]]), and the Unix =mail= utility invokes an editor to enter a message to send. By convention, your choice of editor is specified by the environment variable =EDITOR=. If you set =EDITOR= to ‘=emacs=', Emacs would be invoked, but in an inconvenient way---by starting a new Emacs process. This is inconvenient because the new Emacs process doesn't share buffers, a command history, or other kinds of information with any existing Emacs process.
+Various programs can invoke your choice of editor to edit a particular piece of text. For instance, version control programs invoke an editor to enter version control logs (see [[id:emacs--Version-Control][Version Control]]), and the Unix =mail= utility invokes an editor to enter a message to send. By convention, your choice of editor is specified by the environment variable =EDITOR=. If you set =EDITOR= to ‘=emacs=', Emacs would be invoked, but in an inconvenient way---by starting a new Emacs process. This is inconvenient because the new Emacs process doesn't share buffers, a command history, or other kinds of information with any existing Emacs process.
 
 You can solve this problem by setting up Emacs as an /edit server/, so that it “listens” for external edit requests and acts accordingly. There are various ways to start an Emacs server:
 
--  Run the command =server-start= in an existing Emacs process: either type M-x server-start, or put the expression =(server-start)= in your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). The existing Emacs process is the server; when you exit Emacs, the server dies with the Emacs process.
+-  Run the command =server-start= in an existing Emacs process: either type M-x server-start, or put the expression =(server-start)= in your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]). The existing Emacs process is the server; when you exit Emacs, the server dies with the Emacs process.
 
 -  Run Emacs as a /daemon/, using one of the ‘=--daemon=' command-line options. See [[id:emacs--Initial-Options][Initial Options]]. When Emacs is started this way, it calls =server-start= after initialization and does not open an initial frame. It then waits for edit requests from clients.
 
@@ -68,6 +71,10 @@ The Emacs server can optionally be stopped automatically when certain conditions
 If you have defined a server by a unique server name, it is possible to connect to the server from another Emacs instance and evaluate Lisp expressions on the server, using the =server-eval-at= function. For instance, =(server-eval-at "foo" '(+ 1 2))= evaluates the expression =(+ 1 2)= on the ‘=foo=' server, and returns =3=. (If there is no server with that name, an error is signaled.) Currently, this feature is mainly useful for developers.
 
 If your operating system's desktop environment is [[https://www.freedesktop.org/wiki/Specifications/][freedesktop.org-compatible]] (which is true of most GNU/Linux and other recent Unix-like GUIs), you may use the ‘=Emacs (Client)=' menu entry to connect to an Emacs server with =emacsclient=. The daemon starts if not already running.
+
+- [[id:emacs--TCP-Emacs-server][TCP Emacs server]]
+- [[id:emacs--Invoking-emacsclient][Invoking =emacsclient=]]
+- [[id:emacs--emacsclient-Options][=emacsclient= Options]]
 
 --------------
 

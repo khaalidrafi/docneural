@@ -36,22 +36,25 @@ Next:
 [[../..][]]
 
 <<Shepherd-Home-Service>>
-Next: [[id:guix--Secure-Shell][Secure Shell]], Previous: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Secure-Shell][Secure Shell]], Previous: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.5 Managing User Daemons [[#Managing-User-Daemons][¶]]
+<<Managing-User-Daemons>>
+**** 13.3.5 Managing User Daemons
 :PROPERTIES:
-:CUSTOM_ID: Managing-User-Daemons
+:CUSTOM_ID: managing-user-daemons
 :CLASS: subsection
 :END:
-The =(gnu home services shepherd)= module supports the definitions of per-user Shepherd services (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual). You extend =home-shepherd-service-type= with new services; Guix Home then takes care of starting the =shepherd= daemon for you when you log in, which in turns starts the services you asked for.
+<<index-shepherd-services_002c-for-users>>
+The =(gnu home services shepherd)= module supports the definitions of per-user Shepherd services (see [[https://www.gnu.org/software/shepherd/manual/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual). You extend =home-shepherd-service-type= with new services; Guix Home then takes care of starting the =shepherd= daemon for you when you log in, which in turns starts the services you asked for.
 
-- Variable: *home-shepherd-service-type* [[#index-home_002dshepherd_002dservice_002dtype][¶]] :: The service type for the userland Shepherd, which allows one to manage long-running processes or one-shot tasks. User's Shepherd is not an init process (PID 1), but almost all other information described in (see [[id:guix--Shepherd-Services][Shepherd Services]]) is applicable here too.
+- Variable: home-shepherd-service-type  :: The service type for the userland Shepherd, which allows one to manage long-running processes or one-shot tasks. User's Shepherd is not an init process (PID 1), but almost all other information described in (see [[id:guix--Shepherd-Services][Shepherd Services]]) is applicable here too.
 
   This is the service type that extensions target when they want to create shepherd services (see [[id:guix--Service-Types-and-Services][Service Types and Services]], for an example). Each extension must pass a list of =<shepherd-service>=. Its value must be a =home-shepherd-configuration=, as described below.
 
-- Data Type: *home-shepherd-configuration* [[#index-home_002dshepherd_002dconfiguration][¶]] :: This data type represents the Shepherd's configuration.
+- Data Type: home-shepherd-configuration  :: This data type represents the Shepherd's configuration.
 
   - =shepherd (default: ==shepherd==)= :: The Shepherd package to use.
 
@@ -63,6 +66,7 @@ The =(gnu home services shepherd)= module supports the definitions of per-user S
 
   - =services (default: =='()==)= :: A list of =<shepherd-service>= to start. You should probably use the service extension mechanism instead (see [[id:guix--Shepherd-Services][Shepherd Services]]).
 
+<<index-timers_002c-per_002duser>>
 The Shepherd allows you to define /timers/, a special type of service that performs a given task periodically. Just like you can define timers at the system level (see [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]), you can do so in your home environment.
 
 The example below defines a home environment where a Shepherd timer runs the =mkid= command twice per day (see [[https://www.gnu.org/software/idutils/manual/html_node/mkid-invocation.html#mkid-invocation][mkid invocation]] in ID Database Utilities). It does so by extending =home-shepherd-service-type= with =simple-service=; the Shepherd timer itself is produced by the =shepherd-timer= procedure (see [[id:guix--Scheduled-Job-Execution::#shepherd_002dtimer_002dprocedure][=shepherd-timer=]]), which is given the service name, a gexp specifying its schedule, and a gexp specifying the command to run.
@@ -70,7 +74,7 @@ The example below defines a home environment where a Shepherd timer runs the =mk
 #+begin_src lisp
 (use-modules (gnu) (guix)
              (gnu home services shepherd)
-             (gnu packages code))
+             (gnu packages idutils))
 
 (define idutils-service
   ;; Index my 'doc' directory everyday at 12:15PM and 7:15PM.
@@ -83,24 +87,25 @@ The example below defines a home environment where a Shepherd timer runs the =mk
                             "doc")))))
 
 (home-environment
-  ;; ...
+  ;; …
   (services (append (list idutils-service)
                     %base-home-services)))
 #+end_src
 
-See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual for more information on Shepherd timers.
+See [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual for more information on Shepherd timers.
 
+<<index-log-rotation_002c-for-user-services>>
 The Shepherd also comes with a /log rotation service/, which compresses and then deletes old log files produced by services and daemons that it runs. This service is made available through =home-log-rotation-service-type= as described below.
 
-- Variable: *home-log-rotation-service-type* [[#index-home_002dlog_002drotation_002dservice_002dtype][¶]] :: This is the service type for the user Shepherd log rotation service (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Log-Rotation-Service.html#Log-Rotation-Service][Log Rotation Service]] in The GNU Shepherd Manual). Its value must be a =log-rotation-configuration= record, exactly as for its system-wide counterpart. See [[id:guix--Log-Rotation::#log_002drotation_002dconfiguration][log-rotation-configuration]], for its reference.
+- Variable: home-log-rotation-service-type  :: This is the service type for the user Shepherd log rotation service (see [[https://www.gnu.org/software/shepherd/manual/html_node/Log-Rotation-Service.html#Log-Rotation-Service][Log Rotation Service]] in The GNU Shepherd Manual). Its value must be a =log-rotation-configuration= record, exactly as for its system-wide counterpart. See [[id:guix--Log-Rotation::#log_002drotation_002dconfiguration][log-rotation-configuration]], for its reference.
 
   This service is part of =%base-home-services=.
 
-- Variable: *home-shepherd-transient-service-type* [[#index-home_002dshepherd_002dtransient_002dservice_002dtype][¶]]\\
-  Variable: *home-shepherd-timer-service-type* [[#index-home_002dshepherd_002dtimer_002dservice_002dtype][¶]] :: These are the =timer= and =transient= Shepherd services. The former lets you schedule command execution for later, while the latter can run commands in the background as a regular service.
+- Variable: home-shepherd-transient-service-type \\
+  Variable: home-shepherd-timer-service-type  :: These are the =timer= and =transient= Shepherd services. The former lets you schedule command execution for later, while the latter can run commands in the background as a regular service.
 
   See [[id:guix--Shepherd-Services::#shepherd_002dtransient_002dtimer_002dservices][the system =timer= and =transient= services]], which are their Guix System counterparts, for more info.
 
 --------------
 
-Next: [[id:guix--Secure-Shell][Secure Shell]], Previous: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Secure-Shell][Secure Shell]], Previous: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

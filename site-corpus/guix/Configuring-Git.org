@@ -36,15 +36,19 @@ Next:
 [[../..][]]
 
 <<Configuring-Git>>
-Up: [[id:guix--Submitting-Patches][Submitting Patches]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Sending-a-Patch-Series][Sending a Patch Series]], Up: [[id:guix--Submitting-Patches][Submitting Patches]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.10.1 Configuring Git [[#Configuring-Git-1][¶]]
+<<Configuring-Git-1>>
+**** 22.10.1 Configuring Git
 :PROPERTIES:
-:CUSTOM_ID: Configuring-Git-1
+:CUSTOM_ID: configuring-git
 :CLASS: subsection
 :END:
+<<index-git-configuration>> <<index-git-format_002dpatch>> <<index-git-send_002demail>>
 If you have not done so already, you may wish to set a name and email that will be associated with your commits (see [[https://git-scm.com/docs/user-manual#telling-git-your-name][Telling Git your name]] in Git User Manual). If you wish to use a different name or email just for commits in this repository, you can use =git config --local=, or edit =.git/config= in the repository instead of =~/.gitconfig=.
 
-Other important Git configuration will automatically be configured when building the project (see [[id:guix--Building-from-Git][Building from Git]]).
+<<index-commit_002dmsg-hook>>
+Other important Git configuration will automatically be configured when building the project (see [[id:guix--Building-from-Git][Building from Git]]). A =.git/hooks/commit-msg= hook will be installed that embeds ‘=Change-Id=' Git /trailers/ in your commit messages for traceability purposes. It is important to preserve these when editing your commit messages, particularly if a first version of your proposed changes was already submitted for review. If you have a =commit-msg= hook of your own you would like to use with Guix, you can place it under the =.git/hooks/commit-msg.d/= directory.

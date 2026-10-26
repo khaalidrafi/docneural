@@ -36,23 +36,27 @@ Next:
 [[../..][]]
 
 <<Telephony-Services>>
-Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.16 Telephony Services [[#Telephony-Services-1][¶]]
+<<Telephony-Services-1>>
+**** 11.10.15 Telephony Services
 :PROPERTIES:
-:CUSTOM_ID: Telephony-Services-1
+:CUSTOM_ID: telephony-services
 :CLASS: subsection
 :END:
+<<index-telephony_002c-services>>
 The =(gnu services telephony)= module contains Guix service definitions for telephony services. Currently it provides the following services:
 
-**** Jami [[#Jami][¶]]
+<<Jami>>
+**** Jami
 :PROPERTIES:
-:CUSTOM_ID: Jami
+:CUSTOM_ID: jami
 :CLASS: subsubheading
 :END:
-- Variable: *jami-service-type* [[#index-jami_002dservice_002dtype][¶]] :: The service type for running [[https://jami.net/][Jami]] as a service. It takes a =jami-configuration= object as a value, documented below. This section describes how to configure a Jami server that can be used to host video (or audio) conferences, among other uses. The following example demonstrates how to specify Jami account archives (backups) to be provisioned automatically:
+- Variable: jami-service-type  :: The service type for running Jami as a service. It takes a =jami-configuration= object as a value, documented below. This section describes how to configure a Jami server that can be used to host video (or audio) conferences, among other uses. The following example demonstrates how to specify Jami account archives (backups) to be provisioned automatically:
 
   #+begin_src lisp
   (service jami-service-type
@@ -98,7 +102,7 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
    ban-contact
    enable-account
    disable-account)
-#+end_example
+  #+end_example
 
   The above actions aim to provide the most valuable actions for moderation purposes, not to cover the whole Jami API. Users wanting to interact with the Jami daemon from Guile may be interested in experimenting with the =(gnu build jami-service)= module, which powers the above Shepherd actions.
 
@@ -111,7 +115,7 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
   # herd list-moderators jami
   Moderators for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
     - 1dbcb0f5f37324228235564b79f2b9737e9a008f
-#+end_example
+  #+end_example
 
   In the case of =ban-contact=, the second username argument is optional; when omitted, the account is banned from all Jami accounts:
 
@@ -121,7 +125,7 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
   # herd list-banned-contacts jami
   Banned contacts for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
     - 1dbcb0f5f37324228235564b79f2b9737e9a008f
-#+end_example
+  #+end_example
 
   Banned contacts are also stripped from their moderation privileges.
 
@@ -133,21 +137,21 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
   # herd list-accounts jami
   The following Jami accounts are available:
     - f3345f2775ddfe07a4b0d95daea111d15fbc1199 (dummy) [disabled]
-#+end_example
+  #+end_example
 
-  The =list-account-details= action prints the detailed parameters of each accounts in the Recutils format, which means the =recsel= command can be used to select accounts of interest (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual). Note that period characters (‘=.=') found in the account parameter keys are mapped to underscores (‘=_=') in the output, to meet the requirements of the Recutils format. The following example shows how to print the account fingerprints for all accounts operating in the rendezvous point mode:
+  The =list-account-details= action prints the detailed parameters of each accounts in the Recutils format, which means the =recsel= command can be used to select accounts of interest (see [[https://www.gnu.org/software/recutils/manual/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual). Note that period characters (‘=.=') found in the account parameter keys are mapped to underscores (‘=_=') in the output, to meet the requirements of the Recutils format. The following example shows how to print the account fingerprints for all accounts operating in the rendezvous point mode:
 
   #+begin_example
   # herd list-account-details jami | \
     recsel -p Account.username -e 'Account.rendezVous ~ "true"'
   Account_username: f3345f2775ddfe07a4b0d95daea111d15fbc1199
-#+end_example
+  #+end_example
 
   The remaining actions should be self-explanatory.
 
   The complete set of available configuration options is detailed below.
 
-- Data Type: *jami-configuration* [[#index-jami_002dconfiguration][¶]] :: Available =jami-configuration= fields are:
+- Data Type: jami-configuration  :: Available =jami-configuration= fields are:
 
   - =libjami= (default: =libjami=) (type: package) :: The Jami daemon package to use.
 
@@ -155,7 +159,7 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
 
   - =nss-certs= (default: =nss-certs=) (type: package) :: The nss-certs package to use to provide TLS certificates.
 
-  - =enable-logging?= (default: =#t=) (type: boolean) :: Whether to enable logging to =/var/log/jami=.
+  - =enable-logging?= (default: =#t=) (type: boolean) :: Whether to enable logging to syslog.
 
   - =debug?= (default: =#f=) (type: boolean) :: Whether to enable debug level messages.
 
@@ -163,7 +167,7 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
 
   - =accounts= (type: maybe-jami-account-list) :: A list of Jami accounts to be (re-)provisioned every time the Jami daemon service starts. When providing this field, the account directories under =/var/lib/jami/= are recreated every time the service starts, ensuring a consistent state.
 
-- Data Type: *jami-account* [[#index-jami_002daccount][¶]] :: Available =jami-account= fields are:
+- Data Type: jami-account  :: Available =jami-account= fields are:
 
   - =archive= (type: string-or-computed-file) :: The account archive (backup) file name of the account. This is used to provision the account when the service starts. The account archive should /not/ be encrypted. It is highly recommended to make it readable only to the ‘=root=' user (i.e., not in the store), to guard against leaking the secret key material of the Jami account it contains.
 
@@ -179,16 +183,18 @@ The =(gnu services telephony)= module contains Guix service definitions for tele
 
   - =name-server-uri= (type: maybe-string) :: The URI of the name server to use, that can be used to retrieve the account fingerprint for a registered username.
 
-**** Mumble server [[#Mumble-server][¶]]
+<<Mumble-server>>
+**** Mumble server
 :PROPERTIES:
-:CUSTOM_ID: Mumble-server
+:CUSTOM_ID: mumble-server
 :CLASS: subsubheading
 :END:
+<<index-Mumble>> <<index-Murmur>> <<index-VoIP-server>>
 This section describes how to set up and run a [[https://mumble.info][Mumble]] server (formerly known as Murmur).
 
-- Variable: *mumble-server-service-type* [[#index-mumble_002dserver_002dservice_002dtype][¶]] :: This is the service to run a Mumble server. It takes a =mumble-server-configuration= object as its value, defined below.
+- Variable: mumble-server-service-type  :: This is the service to run a Mumble server. It takes a =mumble-server-configuration= object as its value, defined below.
 
-- Data Type: *mumble-server-configuration* [[#index-mumble_002dserver_002dconfiguration][¶]] :: The service type for the Mumble server. An example configuration can look like this:
+- Data Type: mumble-server-configuration  :: The service type for the Mumble server. An example configuration can look like this:
 
   #+begin_src lisp
   (service mumble-server-service-type
@@ -295,7 +301,7 @@ This section describes how to set up and run a [[https://mumble.info][Mumble]] s
 
   - =file= (default: =#f=) :: Optional alternative override for this configuration.
 
-- Data Type: *mumble-server-public-registration-configuration* [[#index-mumble_002dserver_002dpublic_002dregistration_002dconfiguration][¶]] :: Configuration for public registration of a mumble-server service.
+- Data Type: mumble-server-public-registration-configuration  :: Configuration for public registration of a mumble-server service.
 
   - =name= :: This is a display name for your server. Not to be confused with the hostname.
 
@@ -312,4 +318,4 @@ This section describes how to set up and run a [[https://mumble.info][Mumble]] s
 
 --------------
 
-Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

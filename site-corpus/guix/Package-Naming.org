@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Package-Naming>>
-Next: [[id:guix--Version-Numbers][Version Numbers]], Previous: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Version-Numbers][Version Numbers]], Previous: [[id:guix--Software-Freedom][Software Freedom]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.3 Package Naming [[#Package-Naming-1][¶]]
+<<Package-Naming-1>>
+**** 22.8.2 Package Naming
 :PROPERTIES:
-:CUSTOM_ID: Package-Naming-1
+:CUSTOM_ID: package-naming
 :CLASS: subsection
 :END:
+<<index-package-name>>
 A package actually has two names associated with it. First, there is the name of the /Scheme variable/, the one following =define-public=. By this name, the package can be made known in the Scheme code, for instance as input to another package. Second, there is the string in the =name= field of a package definition. This name is used by package management commands such as =guix package= and =guix build=.
 
 Both are usually the same and correspond to the lowercase conversion of the project name chosen upstream, with underscores replaced with hyphens. For instance, GNUnet is available as =gnunet=, and SDL_net as =sdl-net=.
@@ -54,7 +57,3 @@ A noteworthy exception to this rule is when the project name is only a single ch
 We do not add =lib= prefixes for library packages, unless these are already part of the official project name. But see [[id:guix--Python-Modules][Python Modules]] and [[id:guix--Perl-Modules][Perl Modules]] for special rules concerning modules for the Python and Perl languages.
 
 Font package names are handled differently, see [[id:guix--Fonts][Fonts]].
-
---------------
-
-Next: [[id:guix--Version-Numbers][Version Numbers]], Previous: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Package-Files][Package Files and Directory Layout]]   Previous: [[id:emacs--Package-Statuses][Package Statuses]]   Up: [[id:emacs--Packages][Emacs Lisp Packages]]
 
 <<Package-Installation>>
+
+--------------
+
 *** 50.3 Package Installation [[#Package-Installation-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Package-Installation-1
@@ -46,9 +49,9 @@ Another option that is useful when you have several package archives enabled is 
 
 Once a package is downloaded, byte-compiled and installed, it is made available to the current Emacs session. Making a package available adds its directory to =load-path= and loads its autoloads. The effect of a package's autoloads varies from package to package. Most packages just make some new commands available, while others have more wide-ranging effects on the Emacs session. For such information, consult the package's help buffer.
 
-Installed packages are automatically made available by Emacs in all subsequent sessions. This happens at startup, before processing the init file but after processing the early init file (see [[id:emacs--Init-File::#Early-Init-File][The Early Init File]]). As an exception, Emacs does not make packages available at startup if invoked with the ‘=-q=' or ‘=--no-init-file=' options (see [[id:emacs--Initial-Options][Initial Options]]).
+Installed packages are automatically made available by Emacs in all subsequent sessions. This happens at startup, before processing the init file but after processing the early init file (see [[id:emacs--Early-Init-File][The Early Init File]]). As an exception, Emacs does not make packages available at startup if invoked with the ‘=-q=' or ‘=--no-init-file=' options (see [[id:emacs--Initial-Options][Initial Options]]).
 
-To keep Emacs from automatically making packages available at startup, change the variable =package-enable-at-startup= to =nil=. You must do this in the early init file, as the variable is read before loading the regular init file. Therefore, if you customize this variable via Customize, you should save your customized setting into your early init file. To do this, set or change the value of the variable =custom-file= (see [[id:emacs--Easy-Customization::#Saving-Customizations][Saving Customizations]]) to point to your early init file before saving the customized value of =package-enable-at-startup=.
+To keep Emacs from automatically making packages available at startup, change the variable =package-enable-at-startup= to =nil=. You must do this in the early init file, as the variable is read before loading the regular init file. Therefore, if you customize this variable via Customize, you should save your customized setting into your early init file. To do this, set or change the value of the variable =custom-file= (see [[id:emacs--Saving-Customizations][Saving Customizations]]) to point to your early init file before saving the customized value of =package-enable-at-startup=.
 
 If you have many packages installed, you can improve startup times by setting the user option =package-quickstart= to =t=. Setting this option will make Emacs precompute many things instead of re-computing them on every Emacs startup. However, if you do this, then you have to manually run the command =package-quickstart-refresh= when the activations need to be changed, such as when you change the value of =package-load-list=.
 

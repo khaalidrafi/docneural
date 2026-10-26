@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Commit-Access>>
-Next: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Previous: [[id:guix--Making-Decisions][Making Decisions]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Previous: [[id:guix--Making-Decisions][Making Decisions]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.14 Commit Access [[#Commit-Access-1][¶]]
+<<Commit-Access-1>>
+*** 22.14 Commit Access
 :PROPERTIES:
-:CUSTOM_ID: Commit-Access-1
+:CUSTOM_ID: commit-access
 :CLASS: section
 :END:
+<<index-commit-access_002c-for-developers>>
 Everyone can contribute to Guix without having commit access (see [[id:guix--Submitting-Patches][Submitting Patches]]). However, for frequent contributors, having write access to the repository can be convenient. As a rule of thumb, a contributor should have accumulated fifty (50) reviewed commits to be considered as a committer and have sustained their activity in the project for at least 6 months. This ensures enough interactions with the contributor, which is essential for mentoring and assessing whether they are ready to become a committer. Commit access should not be thought of as a “badge of honor” but rather as a responsibility a contributor is willing to take to help the project.
 
 Committers are in a position where they enact technical decisions. Such decisions must be made by /actively building consensus/ among interested parties and stakeholders. See [[id:guix--Making-Decisions][Making Decisions]], for more on that.
@@ -58,7 +61,7 @@ The following sections explain how to get commit access, how to be ready to push
 - [[#Helping-Out][Helping Out]]
 
 <<Applying-for-Commit-Access>>
-**** 22.14.1 Applying for Commit Access [[#Applying-for-Commit-Access][¶]]
+**** 22.14.1 Applying for Commit Access
 :PROPERTIES:
 :CUSTOM_ID: applying-for-commit-access
 :CLASS: subsection
@@ -75,11 +78,11 @@ When you deem it necessary, consider applying for commit access by following the
 
    #+begin_example
    digest-algo sha512
-#+end_example
+   #+end_example
 
 3. Maintainers ultimately decide whether to grant you commit access, usually following your referrals' recommendation.
 
-4.  If and once you've been given access, please send a message to [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] to say so, again signed with the OpenPGP key you will use to sign commits (do that before pushing your first commit). That way, everyone can notice and ensure you control that OpenPGP key.
+4. <<index-OpenPGP_002c-signed-commits>> If and once you've been given access, please send a message to [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] to say so, again signed with the OpenPGP key you will use to sign commits (do that before pushing your first commit). That way, everyone can notice and ensure you control that OpenPGP key.
 
    #+begin_quote
    *Important:* Before you can push for the first time, maintainers must:
@@ -118,7 +121,7 @@ See [[id:guix--Building-from-Git][Building from Git]] for running the first auth
 To avoid accidentally pushing unsigned or signed with the wrong key commits to Codeberg, make sure to configure Git according to See [[id:guix--Configuring-Git][Configuring Git]].
 
 <<Commit-Policy>>
-**** 22.14.2 Commit Policy [[#Commit-Policy][¶]]
+**** 22.14.2 Commit Policy
 :PROPERTIES:
 :CUSTOM_ID: commit-policy
 :CLASS: subsection
@@ -138,7 +141,7 @@ make check-channel-news
 #+end_example
 
 <<Addressing-Issues>>
-**** 22.14.3 Addressing Issues [[#Addressing-Issues][¶]]
+**** 22.14.3 Addressing Issues
 :PROPERTIES:
 :CUSTOM_ID: addressing-issues
 :CLASS: subsection
@@ -147,6 +150,7 @@ Peer review (see [[id:guix--Submitting-Patches][Submitting Patches]]) and tools 
 
 Some issues can directly affect all users---for instance because they make =guix pull= fail or break core functionality, because they break major packages (at build time or run time), or because they introduce known security vulnerabilities.
 
+<<index-reverting-commits>>
 The people involved in authoring, reviewing, and pushing such commit(s) should be at the forefront to mitigate their impact in a timely fashion: by pushing a followup commit to fix it (if possible), or by reverting it to leave time to come up with a proper fix, and by communicating with other developers about the problem.
 
 If these persons are unavailable to address the issue in time, other committers are entitled to revert the commit(s), explaining in the commit log and on the mailing list what the problem was, with the goal of leaving time to the original committer, reviewer(s), and author(s) to propose a way forward.
@@ -156,7 +160,7 @@ Once the problem has been dealt with, it is the responsibility of those involved
 - [[#Reverting-commits][Reverting commits]]
 
 <<Reverting-commits>>
-**** 22.14.3.1 Reverting commits [[#Reverting-commits][¶]]
+**** 22.14.3.1 Reverting commits
 :PROPERTIES:
 :CUSTOM_ID: reverting-commits
 :CLASS: subsubsection
@@ -166,7 +170,7 @@ Like normal commits, the commit message should state why the changes are being m
 If the changes are being reverted because they led to excessive number of packages being affected, then a decision should be made whether to allow the build farms to build the changes, or whether to avoid this. For the bordeaux build farm, commits can be ignored by adding them to the =ignore-commits= list in the =build-from-guix-data-service= record, found in the bayfront machine configuration.
 
 <<Commit-Revocation>>
-**** 22.14.4 Commit Revocation [[#Commit-Revocation][¶]]
+**** 22.14.4 Commit Revocation
 :PROPERTIES:
 :CUSTOM_ID: commit-revocation
 :CLASS: subsection
@@ -182,7 +186,7 @@ Maintainers[[#FOOT51][^{51}]] may also revoke an individual's commit rights, as 
 When maintainers resort to such a decision, they notify developers on [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]]; inquiries may be sent to [[mailto:guix-maintainers@gnu.org][guix-maintainers@gnu.org]]. Depending on the situation, the individual may still be welcome to contribute.
 
 <<Helping-Out>>
-**** 22.14.5 Helping Out [[#Helping-Out][¶]]
+**** 22.14.5 Helping Out
 :PROPERTIES:
 :CUSTOM_ID: helping-out
 :CLASS: subsection
@@ -199,10 +203,9 @@ One last thing: the project keeps moving forward because committers not only pus
 ***** [[#DOCF51][(51)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 See [[https://guix.gnu.org/en/about]] for the current list of maintainers. You can email them privately at [[mailto:guix-maintainers@gnu.org][guix-maintainers@gnu.org]].
 
 --------------
 
-Next: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Previous: [[id:guix--Making-Decisions][Making Decisions]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]], Previous: [[id:guix--Making-Decisions][Making Decisions]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

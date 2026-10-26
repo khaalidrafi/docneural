@@ -36,16 +36,19 @@ Next:
 [[../..][]]
 
 <<Privileged-Programs>>
-Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.11 Privileged Programs [[#Privileged-Programs-1][¶]]
+<<Privileged-Programs-1>>
+*** 11.11 Privileged Programs
 :PROPERTIES:
-:CUSTOM_ID: Privileged-Programs-1
+:CUSTOM_ID: privileged-programs
 :CLASS: section
 :END:
-Some programs need to run with elevated privileges, even when they are launched by unprivileged users. A notorious example is the =passwd= program, which users can run to change their password, and which needs to access the =/etc/passwd= and =/etc/shadow= files---something normally restricted to root, for obvious security reasons. To address that, =passwd= should be /setuid-root/, meaning that it always runs with root privileges (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/How-Change-Persona.html#How-Change-Persona][How Change Persona]] in The GNU C Library Reference Manual, for more info about the setuid mechanism).
+<<index-privileged-programs>> <<index-setuid-programs>> <<index-setgid-programs>> <<index-capabilities_002c-POSIX>> <<index-setcap>>
+Some programs need to run with elevated privileges, even when they are launched by unprivileged users. A notorious example is the =passwd= program, which users can run to change their password, and which needs to access the =/etc/passwd= and =/etc/shadow= files---something normally restricted to root, for obvious security reasons. To address that, =passwd= should be /setuid-root/, meaning that it always runs with root privileges (see [[https://www.gnu.org/software/libc/manual/html_node/How-Change-Persona.html#How-Change-Persona][How Change Persona]] in The GNU C Library Reference Manual, for more info about the setuid mechanism).
 
 The store itself /cannot/ contain privileged programs: that would be a security issue since any user on the system can write derivations that populate the store (see [[id:guix--The-Store][The Store]]). Thus, a different mechanism is used: instead of directly granting permissions to files that are in the store, we let the system administrator /declare/ which programs should be entrusted with these additional privileges.
 
@@ -69,7 +72,7 @@ And then, to make =mount.nfs= setuid on your system, add the previous example to
             %default-privileged-programs)))
 #+end_src
 
-- Data Type: *privileged-program* [[#index-privileged_002dprogram][¶]] :: This data type represents a program with special privileges, such as setuid
+- Data Type: privileged-program  :: This data type represents a program with special privileges, such as setuid
 
   - =program= :: A file-like object to which all given privileges should apply.
 
@@ -85,7 +88,7 @@ And then, to make =mount.nfs= setuid on your system, add the previous example to
 
 A default set of privileged programs is defined by the =%default-privileged-programs= variable of the =(gnu system)= module.
 
-- Variable: *Scheme Variable* =%default-privileged-programs= [[#index-Scheme-Variable][¶]] :: A list of =<privileged-program>= denoting common programs with elevated privileges.
+- Variable: Scheme Variable %default-privileged-programs :: A list of =<privileged-program>= denoting common programs with elevated privileges.
 
   The list includes commands such as =passwd=, =ping=, =su=, and =sudo=.
 
@@ -93,4 +96,4 @@ Under the hood, the actual privileged programs are created in the =/run/privileg
 
 --------------
 
-Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--X_002e509-Certificates][X.509 Certificates]], Previous: [[id:guix--Services][Services]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

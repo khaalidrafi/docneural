@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-publish>>
-Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.11 Invoking =guix publish= [[#Invoking-guix-publish-1][¶]]
+<<Invoking-guix-publish-1>>
+*** 9.11 Invoking =guix publish=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-publish-1
+:CUSTOM_ID: invoking-guix-publish
 :CLASS: section
 :END:
+<<index-guix-publish>>
 The purpose of =guix publish= is to enable users to easily share their store with others, who can then use it as a substitute server (see [[id:guix--Substitutes][Substitutes]]).
 
 When =guix publish= runs, it spawns an HTTP server which allows anyone with network access to obtain substitutes from it. This means that any machine running Guix can also act as if it were a build farm, since the HTTP interface is compatible with Cuirass, the software behind the =bordeaux.guix.gnu.org= build farm.
@@ -53,12 +56,12 @@ For security, each substitute is signed, allowing recipients to check their auth
 
 The signing key pair must be generated before =guix publish= is launched, using =guix archive --generate-key= (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]).
 
-When the =--advertise= option is passed, the server advertises its availability on the local network using multicast DNS (mDNS) and DNS service discovery (DNS-SD), currently /via/ Guile-Avahi (see [[https://doc.guix.gnu.org/guile-avahi/latest/en/html_node/index.html#Top][Using Avahi in Guile Scheme Programs]]).
+When the =--advertise= option is passed, the server advertises its availability on the local network using multicast DNS (mDNS) and DNS service discovery (DNS-SD), currently /via/ Guile-Avahi (see [[http://nongnu.org/guile-avahi/doc/guile-avahi.html#Top][Using Avahi in Guile Scheme Programs]]).
 
 The general syntax is:
 
 #+begin_example
-guix publish options...
+guix publish options…
 #+end_example
 
 Running =guix publish= without any additional arguments will spawn an HTTP server on port 8080:
@@ -67,7 +70,8 @@ Running =guix publish= without any additional arguments will spawn an HTTP serve
 guix publish
 #+end_example
 
-=guix publish= can also be started following the systemd “socket activation” protocol (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
+<<index-socket-activation_002c-for-guix-publish>>
+=guix publish= can also be started following the systemd “socket activation” protocol (see [[https://www.gnu.org/software/shepherd/manual/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
 
 Once a publishing server has been authorized, the daemon may download substitutes from it. See [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]].
 
@@ -76,15 +80,16 @@ By default, =guix publish= compresses archives on the fly as it serves them. Thi
 As a bonus, =guix publish= also serves as a content-addressed mirror for source files referenced in =origin= records (see [[id:guix--origin-Reference][=origin= Reference]]). For instance, assuming =guix publish= is running on =example.org=, the following URL returns the raw =hello-2.10.tar.gz= file with the given SHA256 hash (represented in =nix-base32= format, see [[id:guix--Invoking-guix-hash][Invoking =guix hash=]]):
 
 #+begin_example
-http://example.org/file/hello-2.10.tar.gz/sha256/0ssi1...ndq1i
+http://example.org/file/hello-2.10.tar.gz/sha256/0ssi1…ndq1i
 #+end_example
 
 Obviously, these URLs only work for files that are in the store; in other cases, they return 404 (“Not Found”).
 
+<<index-build-logs_002c-publication>>
 Build logs are available from =/log= URLs like:
 
 #+begin_example
-http://example.org/log/gwspk...-guile-2.2.3
+http://example.org/log/gwspk…-guile-2.2.3
 #+end_example
 
 When =guix-daemon= is configured to save compressed build logs, as is the case by default (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]), =/log= URLs return the compressed log as-is, with an appropriate =Content-Type= and/or =Content-Encoding= header. We recommend running =guix-daemon= with =--log-compression=gzip= since Web browsers can automatically decompress it, which is not the case with Bzip2 compression.
@@ -153,7 +158,7 @@ The following options are available:
   The files must correspond to the same key pair (the private key is used for signing and the public key is merely advertised in the signature metadata). They must contain keys in the canonical s-expression format as produced by =guix archive --generate-key= (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]). By default, =/etc/guix/signing-key.pub= and =/etc/guix/signing-key.sec= are used.
 
 - =--repl[===port==]=\\
-  =-r [==port==]= :: Spawn a Guile REPL server (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/REPL-Servers.html#REPL-Servers][REPL Servers]] in GNU Guile Reference Manual) on =port= (37146 by default). This is used primarily for debugging a running =guix publish= server.
+  =-r [==port==]= :: Spawn a Guile REPL server (see [[https://www.gnu.org/software/guile/manual/html_node/REPL-Servers.html#REPL-Servers][REPL Servers]] in GNU Guile Reference Manual) on =port= (37146 by default). This is used primarily for debugging a running =guix publish= server.
 
 Enabling =guix publish= on Guix System is a one-liner: just instantiate a =guix-publish-service-type= service in the =services= field of the =operating-system= declaration (see [[id:guix--Base-Services::#guix_002dpublish_002dservice_002dtype][=guix-publish-service-type=]]).
 
@@ -165,17 +170,17 @@ If you are instead running Guix on a “foreign distro”, follow these instruct
   # ln -s ~root/.guix-profile/lib/systemd/system/guix-publish.service \
           /etc/systemd/system/
   # systemctl start guix-publish && systemctl enable guix-publish
-#+end_example
+  #+end_example
 
 - If your host distro uses the Upstart init system:
 
   #+begin_example
   # ln -s ~root/.guix-profile/lib/upstart/system/guix-publish.conf /etc/init/
   # start guix-publish
-#+end_example
+  #+end_example
 
 - Otherwise, proceed similarly with your distro's init system.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]]   Previous: [[id:emacs--Basic-Minibuffer][Using the Minibuffer]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
 
 <<Minibuffer-File>>
+
+--------------
+
 *** 10.2 Minibuffers for File Names [[#Minibuffers-for-File-Names][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Minibuffers-for-File-Names
@@ -36,7 +39,7 @@ When completing remote file names (see [[id:emacs--Remote-Files][Remote Files]])
 
 Emacs interprets =~/= as your home directory. Thus, =~/foo/bar.txt= specifies a file named =bar.txt=, inside a directory named =foo=, which is in turn located in your home directory. In addition, =~==user-id==/= means the home directory of a user whose login name is =user-id=. Any leading directory name in front of the =~= is ignored: thus, =/u2/emacs/~/foo/bar.txt= is equivalent to =~/foo/bar.txt=.
 
-On MS-Windows and MS-DOS systems, where a user doesn't always have a home directory, Emacs uses several alternatives. For MS-Windows, see [[id:emacs--Windows-HOME][HOME and Startup Directories on MS-Windows]]; for MS-DOS, see [[id:emacs--MS_002dDOS::#MS_002dDOS-File-Names][File Names on MS-DOS]]. On these systems, the =~==user-id==/= construct is supported only for the current user, i.e., only if =user-id= is the current user's login name.
+On MS-Windows and MS-DOS systems, where a user doesn't always have a home directory, Emacs uses several alternatives. For MS-Windows, see [[id:emacs--Windows-HOME][HOME and Startup Directories on MS-Windows]]; for MS-DOS, see [[id:emacs--MS_002dDOS-File-Names][File Names on MS-DOS]]. On these systems, the =~==user-id==/= construct is supported only for the current user, i.e., only if =user-id= is the current user's login name.
 
 To prevent Emacs from inserting the default directory when reading file names, change the variable =insert-default-directory= to =nil=. In that case, the minibuffer starts out empty. Nonetheless, relative file name arguments are still interpreted based on the same default directory.
 

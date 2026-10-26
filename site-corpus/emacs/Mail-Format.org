@@ -7,6 +7,9 @@
 Next: [[id:emacs--Mail-Headers][Mail Header Fields]]   Up: [[id:emacs--Sending-Mail][Sending Mail]]
 
 <<Mail-Format>>
+
+--------------
+
 *** 34.1 The Format of the Mail Buffer [[#The-Format-of-the-Mail-Buffer][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Format-of-the-Mail-Buffer
@@ -28,6 +31,4 @@ At the top of the mail buffer is a set of /header fields/, which are used for sp
 
 The line that says ‘=--text follows this line--=' separates the header fields from the /body/ (or /text/) of the message. Everything above that line is treated as part of the headers; everything below it is treated as the body. The delimiter line itself does not appear in the message actually sent.
 
-You can insert and edit header fields using ordinary editing commands. See [[id:emacs--Mail-Commands::#Header-Editing][Mail Header Editing]], for commands specific to editing header fields. Certain headers, such as ‘=Date=' and ‘=Message-Id=', are normally omitted from the mail buffer and are created automatically when the message is sent.
-
---------------
+You can insert and edit header fields using ordinary editing commands. See [[id:emacs--Header-Editing][Mail Header Editing]], for commands specific to editing header fields. Certain headers, such as ‘=Date=' and ‘=Message-Id=', are normally omitted from the mail buffer and are created automatically when the message is sent.

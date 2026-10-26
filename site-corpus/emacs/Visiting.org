@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Visiting
 
-Next: [[id:emacs--Saving#Saving][Saving Files]]   Previous: [[id:emacs--File-Names][File Names]]   Up: [[id:emacs--Files][File Handling]]
+Next: [[id:emacs--Saving][Saving Files]]   Previous: [[id:emacs--File-Names][File Names]]   Up: [[id:emacs--Files][File Handling]]
 
 <<Visiting>>
+
+--------------
+
 *** 20.2 Visiting Files [[#Visiting-Files][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Visiting-Files
@@ -28,11 +31,11 @@ Next: [[id:emacs--Saving#Saving][Saving Files]]   Previous: [[id:emacs--File-Nam
 
 To visit a file, type C-x C-f (=find-file=) and use the minibuffer to enter the name of the desired file. While in the minibuffer, you can abort the command by typing C-g. See [[id:emacs--File-Names][File Names]], for details about entering file names into minibuffers.
 
-If the specified file exists but the system does not allow you to read it, an error message is displayed in the echo area (on GNU and Unix systems you might be able to visit such a file using the ‘=su=' or ‘=sudo=' methods; see [[id:emacs--Remote-Files][Remote Files]]). Otherwise, you can tell that C-x C-f has completed successfully by the appearance of new text on the screen, and by the buffer name shown in the mode line (see [[id:emacs--Mode-Line][The Mode Line]]). Emacs normally constructs the buffer name from the file name, omitting the directory name. For example, a file named =/usr/rms/emacs.tex= is visited in a buffer named ‘=emacs.tex='. If there is already a buffer with that name, Emacs constructs a unique name; the normal method is to add a suffix based on the directory name (e.g., ‘=<rms>=', ‘=<tmp>=', and so on), but you can select other methods. See [[id:emacs--Buffer-Convenience::#Uniquify][Making Buffer Names Unique]].
+If the specified file exists but the system does not allow you to read it, an error message is displayed in the echo area (on GNU and Unix systems you might be able to visit such a file using the ‘=su=' or ‘=sudo=' methods; see [[id:emacs--Remote-Files][Remote Files]]). Otherwise, you can tell that C-x C-f has completed successfully by the appearance of new text on the screen, and by the buffer name shown in the mode line (see [[id:emacs--Mode-Line][The Mode Line]]). Emacs normally constructs the buffer name from the file name, omitting the directory name. For example, a file named =/usr/rms/emacs.tex= is visited in a buffer named ‘=emacs.tex='. If there is already a buffer with that name, Emacs constructs a unique name; the normal method is to add a suffix based on the directory name (e.g., ‘=<rms>=', ‘=<tmp>=', and so on), but you can select other methods. See [[id:emacs--Uniquify][Making Buffer Names Unique]].
 
 To create a new file, just visit it using the same command, C-x C-f. Emacs displays ‘=(New file)=' in the echo area, but in other respects behaves as if you had visited an existing empty file.
 
-After visiting a file, the changes you make with editing commands are made in the Emacs buffer. They do not take effect in the visited file, until you /save/ the buffer (see [[id:emacs--Saving::#Saving][Saving Files]]). If a buffer contains changes that have not been saved, we say the buffer is /modified/. This implies that some changes will be lost if the buffer is not saved. The mode line displays two stars near the left margin to indicate that the buffer is modified.
+After visiting a file, the changes you make with editing commands are made in the Emacs buffer. They do not take effect in the visited file, until you /save/ the buffer (see [[id:emacs--Saving][Saving Files]]). If a buffer contains changes that have not been saved, we say the buffer is /modified/. This implies that some changes will be lost if the buffer is not saved. The mode line displays two stars near the left margin to indicate that the buffer is modified.
 
 If you visit a file that is already in Emacs, C-x C-f switches to the existing buffer instead of making another copy. Before doing so, it checks whether the file has changed since you last visited or saved it. If the file has changed, Emacs offers to reread it.
 
@@ -66,7 +69,7 @@ On text-mode terminals and on graphical displays when Emacs was built without a 
 
 Each time you visit a file, Emacs automatically scans its contents to detect what character encoding and end-of-line convention it uses, and converts these to Emacs's internal encoding and end-of-line convention within the buffer. When you save the buffer, Emacs performs the inverse conversion, writing the file to disk with its original encoding and end-of-line convention. See [[id:emacs--Coding-Systems][Coding Systems]].
 
-If you wish to edit a file as a sequence of ASCII characters with no special encoding or conversion, use the M-x find-file-literally command. This visits a file, like C-x C-f, but does not do format conversion (see [[../elisp_html/Format-Conversion.html#Format-Conversion][Format Conversion]] in the Emacs Lisp Reference Manual), character code conversion (see [[id:emacs--Coding-Systems][Coding Systems]]), or automatic uncompression (see [[id:emacs--Compressed-Files][Accessing Compressed Files]]), and does not add a final newline because of =require-final-newline= (see [[id:emacs--Saving::#Customize-Save][Customizing Saving of Files]]). If you have already visited the same file in the usual (non-literal) manner, this command asks you whether to visit it literally instead.
+If you wish to edit a file as a sequence of ASCII characters with no special encoding or conversion, use the M-x find-file-literally command. This visits a file, like C-x C-f, but does not do format conversion (see [[../elisp_html/Format-Conversion.html#Format-Conversion][Format Conversion]] in the Emacs Lisp Reference Manual), character code conversion (see [[id:emacs--Coding-Systems][Coding Systems]]), or automatic uncompression (see [[id:emacs--Compressed-Files][Accessing Compressed Files]]), and does not add a final newline because of =require-final-newline= (see [[id:emacs--Customize-Save][Customizing Saving of Files]]). If you have already visited the same file in the usual (non-literal) manner, this command asks you whether to visit it literally instead.
 
 Files are sometimes (loosely) tied to other files, and you could call these files /sibling files/. For instance, when editing C files, if you have a file called ‘="foo.c"=', you often also have a file called ‘="foo.h"=', and that could be its sibling file. Or you may have different versions of a file, for instance ‘="src/emacs/emacs-27/lisp/allout.el"=' and ‘="src/emacs/emacs-28/lisp/allout.el"=' might be considered siblings. Emacs provides the =find-sibling-file= command to jump between sibling files, but it's impossible to guess at which files a user might want to be considered siblings, so Emacs lets you configure this freely by altering the =find-sibling-rules= user option. This is a list of match/expansion elements.
 
@@ -77,7 +80,7 @@ For instance, to do the ‘=".c"=' to ‘=".h"=' mapping, you could say:
       '(("\\([^/]+\\)\\.c\\'" "\\1.h")))
 #+end_src
 
-(=ff-find-related-file= offers similar functionality especially geared towards C files, see [[id:emacs--C-Modes::#Other-C-Commands][Other Commands for C Mode]].)
+(=ff-find-related-file= offers similar functionality especially geared towards C files, see [[id:emacs--Other-C-Commands][Other Commands for C Mode]].)
 
 Or, if you want to consider all files under ‘="src/emacs/DIR/file-name"=' to be siblings of other =dir=s, you could say:
 
@@ -90,8 +93,8 @@ As you can see, this is a list of =(==MATCH== ==EXPANSION==...)= elements. The 
 
 Two special hook variables allow extensions to modify the operation of visiting files. Visiting a file that does not exist runs the functions in =find-file-not-found-functions=; this variable holds a list of functions, which are called one by one (with no arguments) until one of them returns non-=nil=. This is not a normal hook, and the name ends in ‘=-functions=' rather than ‘=-hook=' to indicate that fact.
 
-Successful visiting of any file, whether existing or not, calls the functions in =find-file-hook=, with no arguments. This variable is a normal hook. In the case of a nonexistent file, the =find-file-not-found-functions= are run first. See [[id:emacs--Variables::#Hooks][Hooks]].
+Successful visiting of any file, whether existing or not, calls the functions in =find-file-hook=, with no arguments. This variable is a normal hook. In the case of a nonexistent file, the =find-file-not-found-functions= are run first. See [[id:emacs--Hooks][Hooks]].
 
-There are several ways to specify automatically the major mode for editing the file (see [[id:emacs--Choosing-Modes][Choosing File Modes]]), and to specify local variables defined for that file (see [[id:emacs--Variables::#File-Variables][Local Variables in Files]]).
+There are several ways to specify automatically the major mode for editing the file (see [[id:emacs--Choosing-Modes][Choosing File Modes]]), and to specify local variables defined for that file (see [[id:emacs--File-Variables][Local Variables in Files]]).
 
 --------------

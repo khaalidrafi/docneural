@@ -4,6 +4,28 @@
 #+filetags: :emacs:
 #+title: Enriched Justification
 
-Next:
+Next: [[id:emacs--Enriched-Properties][Setting Other Text Properties]]   Previous: [[id:emacs--Enriched-Indentation][Indentation in Enriched Text]]   Up: [[id:emacs--Enriched-Text][Enriched Text]]
 
-The node you are looking for is at [[id:emacs--Enriched-Text::#Enriched-Justification][Enriched Justification]].
+<<Enriched-Justification>>
+
+--------------
+
+**** 27.14.6 Justification in Enriched Text [[#Justification-in-Enriched-Text][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Justification-in-Enriched-Text
+:CLASS: subsection
+:END:
+In Enriched mode, you can use the following commands to specify various /justification styles/ for filling. These commands apply to the paragraph containing point, or, if the region is active, to all paragraphs overlapping the region.
+
+-  <<index-M_002dj-l-_0028Enriched-mode_0029>>M-j l [[#index-M_002dj-l-_0028Enriched-mode_0029][¶]] :: Align lines to the left margin (=set-justification-left=).
+
+-  <<index-M_002dj-r-_0028Enriched-mode_0029>>M-j r [[#index-M_002dj-r-_0028Enriched-mode_0029][¶]] :: Align lines to the right margin (=set-justification-right=).
+
+-  <<index-M_002dj-b-_0028Enriched-mode_0029>>M-j b [[#index-M_002dj-b-_0028Enriched-mode_0029][¶]] :: Align lines to both margins, inserting spaces in the middle of the line to achieve this (=set-justification-full=).
+
+-  <<index-M_002dj-c-_0028Enriched-mode_0029>>M-j c [[#index-M_002dj-c-_0028Enriched-mode_0029][¶]]\\
+  M-S :: Center lines between the margins (=set-justification-center=).
+
+-  <<index-M_002dj-u-_0028Enriched-mode_0029>>M-j u [[#index-M_002dj-u-_0028Enriched-mode_0029][¶]] :: Turn off filling entirely (=set-justification-none=). The fill commands do nothing on text with this setting. You can, however, still indent the left margin.
+
+You can also specify justification styles using the Justification submenu in the Text Properties menu. The default justification style is specified by the per-buffer variable =default-justification=. Its value should be one of the symbols =left=, =right=, =full=, =center=, or =none=; their meanings correspond to the commands above.

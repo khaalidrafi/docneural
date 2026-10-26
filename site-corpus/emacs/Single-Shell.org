@@ -7,6 +7,9 @@
 Next: [[id:emacs--Interactive-Shell][Interactive Subshell]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Single-Shell>>
+
+--------------
+
 *** 40.1 Single Shell Commands [[#Single-Shell-Commands][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Single-Shell-Commands
@@ -36,7 +39,7 @@ For example, you can use M-| with the =gpg= program to see what keys are in the 
 
 The above commands use the shell specified by the variable =shell-file-name=. Its default value is determined by the =SHELL= environment variable when Emacs is started. If the file name is relative, Emacs searches the directories listed in =exec-path= (see [[id:emacs--Shell][Running Shell Commands from Emacs]]).
 
-If the default directory is remote (see [[id:emacs--Remote-Files][Remote Files]]), the default value is =/bin/sh=. This can be changed by declaring =shell-file-name= connection-local (see [[id:emacs--Variables::#Connection-Variables][Per-Connection Local Variables]]).
+If the default directory is remote (see [[id:emacs--Remote-Files][Remote Files]]), the default value is =/bin/sh=. This can be changed by declaring =shell-file-name= connection-local (see [[id:emacs--Connection-Variables][Per-Connection Local Variables]]).
 
 To specify a coding system for M-! or M-|, use the command C-x RET c immediately beforehand. See [[id:emacs--Communication-Coding][Coding Systems for Interprocess Communication]].
 

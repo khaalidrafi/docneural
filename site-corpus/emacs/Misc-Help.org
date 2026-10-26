@@ -7,6 +7,9 @@
 Next: [[id:emacs--Help-Files][Help Files]]   Previous: [[id:emacs--Language-Help][Help for International Language Support]]   Up: [[id:emacs--Help][Help]]
 
 <<Misc-Help>>
+
+--------------
+
 *** 12.8 Other Help Commands [[#Other-Help-Commands][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Other-Help-Commands
@@ -26,7 +29,7 @@ To review recent echo area messages, use C-h e (=view-echo-area-messages=). This
 
 Each Emacs major mode typically redefines a few keys and makes other changes in how editing works. C-h m (=describe-mode=) displays documentation on the current major mode, which normally describes the commands and features that are changed in this mode, and also its key bindings.
 
-C-h b (=describe-bindings=) and C-h s (=describe-syntax=) show other information about the current environment within Emacs. C-h b displays a list of all the key bindings now in effect: first the local bindings of the current minor modes, then the local bindings defined by the current major mode, and finally the global bindings (see [[id:emacs--Key-Bindings::#Key-Bindings][Customizing Key Bindings]]). C-h s displays the contents of the syntax table, with explanations of each character's syntax (see [[../elisp_html/Syntax-Tables.html#Syntax-Tables][Syntax Tables]] in The Emacs Lisp Reference Manual).
+C-h b (=describe-bindings=) and C-h s (=describe-syntax=) show other information about the current environment within Emacs. C-h b displays a list of all the key bindings now in effect: first the local bindings of the current minor modes, then the local bindings defined by the current major mode, and finally the global bindings (see [[id:emacs--Key-Bindings][Customizing Key Bindings]]). C-h s displays the contents of the syntax table, with explanations of each character's syntax (see [[../elisp_html/Syntax-Tables.html#Syntax-Tables][Syntax Tables]] in The Emacs Lisp Reference Manual).
 
 C-h C-q (=help-quick-toggle=) toggles on and off the display of a buffer showing the most popular Emacs commands and their respective key bindings (a.k.a. “cheat sheet”). The contents of that buffer are created by the command =help-quick=. Each key binding shown in this buffer is a button: click on it with mouse-1 or mouse-2 to show the documentation of the command bound to that key sequence.
 

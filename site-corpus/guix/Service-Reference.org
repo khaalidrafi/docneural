@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<Service-Reference>>
-Next: [[id:guix--Shepherd-Services][Shepherd Services]], Previous: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Shepherd-Services][Shepherd Services]], Previous: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.19.3 Service Reference [[#Service-Reference-1][¶]]
+<<Service-Reference-1>>
+**** 11.19.3 Service Reference
 :PROPERTIES:
-:CUSTOM_ID: Service-Reference-1
+:CUSTOM_ID: service-reference
 :CLASS: subsection
 :END:
 We have seen an overview of service types (see [[id:guix--Service-Types-and-Services][Service Types and Services]]). This section provides a reference on how to manipulate services and service types. This interface is provided by the =(gnu services)= module.
 
-- Procedure: *service* =type [value]= [[#index-service][¶]] :: Return a new service of =type=, a =<service-type>= object (see below). =value= can be any object; it represents the parameters of this particular service instance.
+- Procedure: service type [value] :: Return a new service of =type=, a =<service-type>= object (see below). =value= can be any object; it represents the parameters of this particular service instance.
 
   When =value= is omitted, the default value specified by =type= is used; if =type= does not specify a default value, an error is raised.
 
@@ -66,11 +68,11 @@ We have seen an overview of service types (see [[id:guix--Service-Types-and-Serv
 
   In both cases the result is an instance of =openssh-service-type= with the default configuration.
 
-- Procedure: *service?* =obj= [[#index-service_003f][¶]] :: Return true if =obj= is a service.
+- Procedure: service? obj :: Return true if =obj= is a service.
 
-- Procedure: *service-kind* =service= [[#index-service_002dkind][¶]] :: Return the type of =service=---i.e., a =<service-type>= object.
+- Procedure: service-kind service :: Return the type of =service=---i.e., a =<service-type>= object.
 
-- Procedure: *service-value* =service= [[#index-service_002dvalue][¶]] :: Return the value associated with =service=. It represents its parameters.
+- Procedure: service-value service :: Return the value associated with =service=. It represents its parameters.
 
 Here is an example of how a service is created and manipulated:
 
@@ -90,13 +92,13 @@ Here is an example of how a service is created and manipulated:
 ⇒ #t
 #+end_src
 
-The =modify-services= form provides a handy way to change the parameters of some of the services of a list such as =%base-services= (see [[id:guix--Base-Services][=%base-services=]]). It evaluates to a list of services. Of course, you could always use standard list combinators such as =map= and =fold= to do that (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SRFI_002d1.html#SRFI_002d1][List Library]] in GNU Guile Reference Manual); =modify-services= simply provides a more concise form for this common pattern.
+The =modify-services= form provides a handy way to change the parameters of some of the services of a list such as =%base-services= (see [[id:guix--Base-Services][=%base-services=]]). It evaluates to a list of services. Of course, you could always use standard list combinators such as =map= and =fold= to do that (see [[https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1.html#SRFI_002d1][List Library]] in GNU Guile Reference Manual); =modify-services= simply provides a more concise form for this common pattern.
 
-- Special Form: *modify-services* =services (type variable => body) …= [[#index-modify_002dservices-1][¶]] :: Modify the services listed in =services= according to the given clauses. Each clause has the form:
+- Special Form: modify-services services (type variable => body) ... :: Modify the services listed in =services= according to the given clauses. Each clause has the form:
 
   #+begin_example
   (type variable => body)
-#+end_example
+  #+end_example
 
   where =type= is a service type---e.g., =guix-service-type=---and =variable= is an identifier that is bound within the =body= to the service parameters---e.g., a =guix-configuration= instance---of the original service of that =type=.
 
@@ -114,7 +116,7 @@ The =modify-services= form provides a handy way to change the parameters of some
 
 Next comes the programming interface for service types. This is something you want to know when writing new service definitions, but not necessarily when simply looking for ways to customize your =operating-system= declaration.
 
-- Data Type: *service-type* [[#index-service_002dtype][¶]] :: 
+- Data Type: service-type  :: <<index-service-type>>
 
   This is the representation of a /service type/ (see [[id:guix--Service-Types-and-Services][Service Types and Services]]).
 
@@ -142,13 +144,13 @@ Next comes the programming interface for service types. This is something you wa
 
   See [[id:guix--Service-Types-and-Services][Service Types and Services]], for examples.
 
-- Procedure: *service-extension* =target-type compute= [[#index-service_002dextension][¶]] :: Return a new extension for services of type =target-type=. =compute= must be a one-argument procedure: =fold-services= calls it, passing it the value associated with the service that provides the extension; it must return a valid value for the target service.
+- Procedure: service-extension target-type compute :: Return a new extension for services of type =target-type=. =compute= must be a one-argument procedure: =fold-services= calls it, passing it the value associated with the service that provides the extension; it must return a valid value for the target service.
 
-- Procedure: *service-extension?* =obj= [[#index-service_002dextension_003f][¶]] :: Return true if =obj= is a service extension.
+- Procedure: service-extension? obj :: Return true if =obj= is a service extension.
 
 Occasionally, you might want to simply extend an existing service. This involves creating a new service type and specifying the extension of interest, which can be verbose; the =simple-service= procedure provides a shorthand for this.
 
-- Procedure: *simple-service* =name target value= [[#index-simple_002dservice][¶]] :: Return a service that extends =target= with =value=. This works by creating a singleton service type =name=, of which the returned service is an instance.
+- Procedure: simple-service name target value :: Return a service that extends =target= with =value=. This works by creating a singleton service type =name=, of which the returned service is an instance.
 
   For example, this extends mcron (see [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]) with an additional job:
 
@@ -159,15 +161,15 @@ Occasionally, you might want to simply extend an existing service. This involves
 
 At the core of the service abstraction lies the =fold-services= procedure, which is responsible for “compiling” a list of services down to a single directory that contains everything needed to boot and run the system---the directory shown by the =guix system build= command (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]). In essence, it propagates service extensions down the service graph, updating each node parameters on the way, until it reaches the root node.
 
-- Procedure: *fold-services* =services [#:target-type system-service-type]= [[#index-fold_002dservices][¶]] :: Fold =services= by propagating their extensions down to the root of type =target-type=; return the root service adjusted accordingly.
+- Procedure: fold-services services [#:target-type system-service-type] :: Fold =services= by propagating their extensions down to the root of type =target-type=; return the root service adjusted accordingly.
 
 Lastly, the =(gnu services)= module also defines several essential service types, some of which are listed below.
 
-- Variable: *system-service-type* [[#index-system_002dservice_002dtype][¶]] :: This is the root of the service graph. It produces the system directory as returned by the =guix system build= command.
+- Variable: system-service-type  :: This is the root of the service graph. It produces the system directory as returned by the =guix system build= command.
 
-- Variable: *boot-service-type* [[#index-boot_002dservice_002dtype][¶]] :: The type of the “boot service”, which produces the /boot script/. The boot script is what the initial RAM disk runs when booting.
+- Variable: boot-service-type  :: The type of the “boot service”, which produces the /boot script/. The boot script is what the initial RAM disk runs when booting.
 
-- Variable: *etc-service-type* [[#index-etc_002dservice_002dtype][¶]] :: The type of the =/etc= service. This service is used to create files under =/etc= and can be extended by passing it name/file tuples such as:
+- Variable: etc-service-type  :: The type of the =/etc= service. This service is used to create files under =/etc= and can be extended by passing it name/file tuples such as:
 
   #+begin_src lisp
   (list `("issue" ,(plain-file "issue" "Welcome!\n")))
@@ -175,35 +177,36 @@ Lastly, the =(gnu services)= module also defines several essential service types
 
   In this example, the effect would be to add an =/etc/issue= file pointing to the given file.
 
-- Variable: *etc-profile-d-service-type* [[#index-etc_002dprofile_002dd_002dservice_002dtype][¶]] :: The type of the =/etc/profile.d= service. This service is used to create files under =/etc/profile.d=. It takes as value a list of file-like objects, as can be produced with =local-file=, =plain-file=, etc. Note that provided files whose file names do not end with =.sh= are /not/ added to =/etc/profile.d/= and are silently dropped. Package objects can also be provided directly to have their =etc/profile.d/*.sh= prefixed files added. A simple usage may look like:
+- Variable: etc-profile-d-service-type  :: The type of the =/etc/profile.d= service. This service is used to create files under =/etc/profile.d=. It takes as value a list of file-like objects, as can be produced with =local-file=, =plain-file=, etc. Note that provided files whose file names do not end with =.sh= are /not/ added to =/etc/profile.d/= and are silently dropped. Package objects can also be provided directly to have their =etc/profile.d/*.sh= prefixed files added. A simple usage may look like:
 
   #+begin_example
   (simple-service 'my-important-profile-file etc-profile-d-service-type
                   (list (plain-file "youppi.sh" "HOW_IMPORTANT=very")))
-#+end_example
+  #+end_example
 
-- Variable: *etc-bashrc-d-service-type* [[#index-etc_002dbashrc_002dd_002dservice_002dtype][¶]] :: The type of the =/etc/bashrc.d= service. This service is used to create files under =/etc/bashrc.d=. It takes as value a list of file-like objects, as can be produced with =local-file=, =plain-file=, etc. Note that provided files whose file names do not end with =.sh= are /not/ added to =/etc/profile.d/= and are silently dropped. The default value is made available via the =%default-etc-bashrc-d-files= variable for users to extended. Package objects can also be provided directly to have their =etc/bashrc.d/*.sh= prefixed files added. Since the service is part =%base-services=, it can be extended via =simple-service= like so:
+- Variable: etc-bashrc-d-service-type  :: The type of the =/etc/bashrc.d= service. This service is used to create files under =/etc/bashrc.d=. It takes as value a list of file-like objects, as can be produced with =local-file=, =plain-file=, etc. Note that provided files whose file names do not end with =.sh= are /not/ added to =/etc/profile.d/= and are silently dropped. The default value is made available via the =%default-etc-bashrc-d-files= variable for users to extended. Package objects can also be provided directly to have their =etc/bashrc.d/*.sh= prefixed files added. Since the service is part =%base-services=, it can be extended via =simple-service= like so:
 
   #+begin_example
   (use-package-modules gnome)     ;for the `vte' package
 
   (simple-service 'vte-integration etc-bashrc-d-service-type
                   (list (file-append vte "/etc/profile.d/vte.sh")))
-#+end_example
+  #+end_example
 
-- Variable: *vte-integration-service-type* [[#index-vte_002dintegration_002dservice_002dtype][¶]] :: This services adds the =/etc/bashrc.d/vte.sh= to your system, which improves the Bash and Zsh experience when using VTE-powered terminal emulators. This causes for example the current directory to be displayed in the terminal emulator's tab title, and the current directory to be preserved when creating a new tab, among other features. The value of the service is the =vte= package to use.
+- Variable: vte-integration-service-type  :: This services adds the =/etc/bashrc.d/vte.sh= to your system, which improves the Bash and Zsh experience when using VTE-powered terminal emulators. This causes for example the current directory to be displayed in the terminal emulator's tab title, and the current directory to be preserved when creating a new tab, among other features. The value of the service is the =vte= package to use.
 
   #+begin_example
   (use-package-modules gnome)     ;for the `vte' package
 
   (service vte-integration-service-type vte)
-#+end_example
+  #+end_example
 
-- Variable: *privileged-program-service-type* [[#index-privileged_002dprogram_002dservice_002dtype][¶]] :: Type for the “privileged-program service”. This service collects lists of executable file names, passed as gexps, and adds them to the set of privileged programs on the system (see [[id:guix--Privileged-Programs][Privileged Programs]]).
+- Variable: privileged-program-service-type  :: Type for the “privileged-program service”. This service collects lists of executable file names, passed as gexps, and adds them to the set of privileged programs on the system (see [[id:guix--Privileged-Programs][Privileged Programs]]).
 
-- Variable: *profile-service-type* [[#index-profile_002dservice_002dtype][¶]] :: Type of the service that populates the /system profile/---i.e., the programs under =/run/current-system/profile=. Other services can extend it by passing it lists of packages to add to the system profile.
+- Variable: profile-service-type  :: Type of the service that populates the /system profile/---i.e., the programs under =/run/current-system/profile=. Other services can extend it by passing it lists of packages to add to the system profile.
 
-- Variable: *provenance-service-type* [[#index-provenance_002dservice_002dtype][¶]] :: This is the type of the service that records /provenance meta-data/ in the system itself. It creates several files under =/run/current-system=:
+<<index-provenance-tracking_002c-of-the-operating-system-2>> <<provenance_002dservice_002dtype>>
+- Variable: provenance-service-type  :: This is the type of the service that records /provenance meta-data/ in the system itself. It creates several files under =/run/current-system=:
 
   - =channels.scm= :: This is a “channel file” that can be passed to =guix pull -C= or =guix time-machine -C=, and which describes the channels used to build the system, if that information was available (see [[id:guix--Channels][Channels]]).
 
@@ -222,7 +225,7 @@ Lastly, the =(gnu services)= module also defines several essential service types
 
   This service is automatically added to your operating system configuration when you use =guix system reconfigure=, =guix system init=, or =guix deploy=.
 
-- Variable: *linux-loadable-module-service-type* [[#index-linux_002dloadable_002dmodule_002dservice_002dtype][¶]] :: Type of the service that collects lists of packages containing kernel-loadable modules, and adds them to the set of kernel-loadable modules.
+- Variable: linux-loadable-module-service-type  :: Type of the service that collects lists of packages containing kernel-loadable modules, and adds them to the set of kernel-loadable modules.
 
   This service type is intended to be extended by other service types, such as below:
 
@@ -237,4 +240,4 @@ Lastly, the =(gnu services)= module also defines several essential service types
 
 --------------
 
-Next: [[id:guix--Shepherd-Services][Shepherd Services]], Previous: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Shepherd-Services][Shepherd Services]], Previous: [[id:guix--Service-Types-and-Services][Service Types and Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

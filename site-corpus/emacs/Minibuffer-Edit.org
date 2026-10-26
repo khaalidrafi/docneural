@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Minibuffer Edit
 
-Next: [[id:emacs--Completion#Completion][Completion]]   Previous: [[id:emacs--Minibuffer-File][Minibuffers for File Names]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
+Next: [[id:emacs--Completion][Completion]]   Previous: [[id:emacs--Minibuffer-File][Minibuffers for File Names]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
 
 <<Minibuffer-Edit>>
+
+--------------
+
 *** 10.3 Editing in the Minibuffer [[#Editing-in-the-Minibuffer][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Editing-in-the-Minibuffer
@@ -16,7 +19,7 @@ The minibuffer is an Emacs buffer, albeit a peculiar one, and the usual Emacs co
 
 Since RET in the minibuffer submits the argument, you can't use it to insert a newline. You can do that with C-q C-j, which inserts a C-j control character, which is formally equivalent to a newline character (see [[id:emacs--Inserting-Text][Inserting Text]]). Alternatively, you can use the C-o (=open-line=) command (see [[id:emacs--Blank-Lines][Blank Lines]]).
 
-Inside a minibuffer, the keys TAB, SPC, and ? are often bound to /completion commands/, which allow you to easily fill in the desired text without typing all of it. See [[id:emacs--Completion::#Completion][Completion]]. As with RET, you can use C-q to insert a TAB, SPC, or ‘=?=' character. If you want to make SPC and ? insert normally instead of starting completion, you can put the following in your init file:
+Inside a minibuffer, the keys TAB, SPC, and ? are often bound to /completion commands/, which allow you to easily fill in the desired text without typing all of it. See [[id:emacs--Completion][Completion]]. As with RET, you can use C-q to insert a TAB, SPC, or ‘=?=' character. If you want to make SPC and ? insert normally instead of starting completion, you can put the following in your init file:
 
 #+begin_src lisp-preformatted
 (keymap-unset minibuffer-local-completion-map "SPC")

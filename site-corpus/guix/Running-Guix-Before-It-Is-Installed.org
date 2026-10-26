@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Running-Guix-Before-It-Is-Installed>>
-Next: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Previous: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Previous: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.4 Running Guix Before It Is Installed [[#Running-Guix-Before-It-Is-Installed-1][¶]]
+<<Running-Guix-Before-It-Is-Installed-1>>
+*** 22.4 Running Guix Before It Is Installed
 :PROPERTIES:
-:CUSTOM_ID: Running-Guix-Before-It-Is-Installed-1
+:CUSTOM_ID: running-guix-before-it-is-installed
 :CLASS: section
 :END:
 In order to keep a sane working environment, you will find it useful to test the changes made in your local source tree checkout without actually installing them. So that you can distinguish between your “end-user” hat and your “motley” costume.
@@ -61,7 +63,7 @@ $ ./pre-inst-env guile -c '(use-modules (guix utils)) (pk (%current-system))'
 ;;; ("x86_64-linux")
 #+end_example
 
-... and for a REPL (see [[id:guix--Using-Guix-Interactively][Using Guix Interactively]]):
+<<index-REPL>> <<index-read_002deval_002dprint-loop>> ... and for a REPL (see [[id:guix--Using-Guix-Interactively][Using Guix Interactively]]):
 
 #+begin_example
 $ ./pre-inst-env guile
@@ -79,7 +81,7 @@ scheme@(guile-user)> (length snakes)
 $1 = 361
 #+end_example
 
-If you are hacking on the daemon and its supporting code or if =guix-daemon= is not already running on your system, you can launch it straight from the build tree[[#FOOT47][^{47}]]:
+If you are hacking on the daemon and its supporting code or if =guix-daemon= is not already running on your system, you can launch it straight from the build tree[[#FOOT44][^{44}]]:
 
 #+begin_example
 $ sudo -E ./pre-inst-env guix-daemon --build-users-group=guixbuild
@@ -107,13 +109,12 @@ You can run =make= automatically as you work using =watchexec= from the =watchex
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF47][(47)]]
+***** [[#DOCF44][(44)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The =-E= flag to =sudo= guarantees that =GUILE_LOAD_PATH= is correctly set such that =guix-daemon= and the tools it uses can find the Guile modules they need.
 
 --------------
 
-Next: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Previous: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Previous: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

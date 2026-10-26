@@ -4,6 +4,36 @@
 #+filetags: :emacs:
 #+title: Org Authoring
 
-Next:
+Next:   Previous: [[id:emacs--Org-Organizer][Org as an organizer]]   Up: [[id:emacs--Org-Mode][Org Mode]]
 
-The node you are looking for is at [[id:emacs--Org-Mode::#Org-Authoring][Org Authoring]].
+<<Org-Authoring>>
+
+--------------
+
+**** 27.10.2 Org as an authoring system [[#Org-as-an-authoring-system][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-as-an-authoring-system
+:CLASS: subsection
+:END:
+You may want to format your Org notes nicely and to prepare them for export and publication. To export the current buffer, type C-c C-e (=org-export-dispatch=) anywhere in an Org buffer. This command prompts for an export format; currently supported formats include HTML, LaTeX, Texinfo, OpenDocument (=.odt=), iCalendar, Markdown, man-page, and PDF. Some formats, such as PDF, require certain system tools to be installed.
+
+To export several files at once to a specific directory, either locally or over the network, you must define a list of projects through the variable =org-publish-project-alist=. See its documentation for details.
+
+Org supports a simple markup scheme for applying text formatting to exported documents:
+
+#+begin_example
+- This text is /emphasized/
+- This text is *in bold*
+- This text is _underlined_
+- This text uses =a teletype font=
+
+#+begin_quote
+``This is a quote.''
+#+end_quote
+
+#+begin_example
+This is an example.
+#+end_example
+#+end_example
+
+For further details, [[../org_html/Exporting.html#Exporting][Exporting]] in The Org Manual, and [[../org_html/Publishing.html#Publishing][Publishing]] in The Org Manual.

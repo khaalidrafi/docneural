@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Translating-Guix>>
-Next: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]], Previous: [[id:guix--Writing-Documentation][Writing Documentation]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]], Previous: [[id:guix--Writing-Documentation][Writing Documentation]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.19 Translating Guix [[#Translating-Guix-1][¶]]
+<<Translating-Guix-1>>
+*** 22.19 Translating Guix
 :PROPERTIES:
-:CUSTOM_ID: Translating-Guix-1
+:CUSTOM_ID: translating-guix
 :CLASS: section
 :END:
 Writing code and packages is not the only way to provide a meaningful contribution to Guix. Translating to a language you speak is another example of a valuable contribution you can make. This section is designed to describe the translation process. It gives you advice on how you can get involved, what can be translated, what mistakes you should avoid and what we can do to help you!
@@ -61,9 +63,10 @@ Guix has five components hosted on Weblate.
 - =documentation-manual= corresponds to this manual.
 - =documentation-cookbook= is the component for the cookbook.
 
-**** General Directions [[#General-Directions][¶]]
+<<General-Directions>>
+**** General Directions
 :PROPERTIES:
-:CUSTOM_ID: General-Directions
+:CUSTOM_ID: general-directions
 :CLASS: subsubheading
 :END:
 Once you get an account, you should be able to select a component from [[https://translate.codeberg.org/projects/guix/][the guix project]], and select a language. If your language does not appear in the list, go to the bottom and click on the “Start new translation” button. Select the language you want to translate to from the list, to start your new translation.
@@ -74,9 +77,10 @@ Even though PO files are text files, changes should not be made with a text edit
 
 On Weblate, you will find various links to the editor, that will show various subsets (or all) of the strings. Have a look around and at the [[https://docs.weblate.org/en/latest/][documentation]] to familiarize yourself with the platform.
 
-**** Translation Components [[#Translation-Components][¶]]
+<<Translation-Components>>
+**** Translation Components
 :PROPERTIES:
-:CUSTOM_ID: Translation-Components
+:CUSTOM_ID: translation-components
 :CLASS: subsubheading
 :END:
 In this section, we provide more detailed guidance on the translation process, as well as details on what you should or should not do. When in doubt, please contact us, we will be happy to help!
@@ -87,7 +91,7 @@ In this section, we provide more detailed guidance on the translation process, a
 
   If there are multiple formatting symbols, make sure to respect the order. Guile does not know in which order you intended the string to be read, so it will substitute the symbols in the same order as the English sentence.
 
-  As an example, you cannot translate ‘=package '~a' has been superseded by '~a'=' by ‘='~a' supersedes package '~a'=', because the meaning would be reversed. If =foo= is superseded by =bar=, the translation would read ‘='foo' supersedes package 'bar'='. To work around this problem, it is possible to use more advanced formatting to select a given piece of data, instead of following the default English order. See [[https://doc.guix.gnu.org/guile/latest/en/html_node/Formatted-Output.html#Formatted-Output][Formatted Output]] in GNU Guile Reference Manual, for more information on formatting in Guile.
+  As an example, you cannot translate ‘=package '~a' has been superseded by '~a'=' by ‘='~a' supersedes package '~a'=', because the meaning would be reversed. If =foo= is superseded by =bar=, the translation would read ‘='foo' supersedes package 'bar'='. To work around this problem, it is possible to use more advanced formatting to select a given piece of data, instead of following the default English order. See [[https://www.gnu.org/software/guile/manual/html_node/Formatted-Output.html#Formatted-Output][Formatted Output]] in GNU Guile Reference Manual, for more information on formatting in Guile.
 
 - packages :: Package descriptions occasionally contain Texinfo markup (see [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]]). Texinfo markup looks like ‘=@code{rm -rf}=', ‘=@emph{important}=', etc. When translating, please leave markup as is.
 
@@ -115,15 +119,16 @@ In this section, we provide more detailed guidance on the translation process, a
   #: apps/base/templates/about.scm:64
   msgid "Packages are <1>defined<1.1>en</1.1><1.2>Defining-Packages.html</1.2></1> as native <2>Guile</2> modules."
   msgstr "Pakete werden als reine <2>Guile</2>-Module <1>definiert<1.1>de</1.1><1.2>Pakete-definieren.html</1.2></1>."
-#+end_example
+  #+end_example
 
   Note that you need to include the same markups. You cannot skip any.
 
 In case you make a mistake, the component might fail to build properly with your language, or even make guix pull fail. To prevent that, we have a process in place to check the content of the files before pushing to our repository. We will not be able to update the translation for your language in Guix, so we will notify you (through weblate and/or by email) so you get a chance to fix the issue.
 
-**** Outside of Weblate [[#Outside-of-Weblate][¶]]
+<<Outside-of-Weblate>>
+**** Outside of Weblate
 :PROPERTIES:
-:CUSTOM_ID: Outside-of-Weblate
+:CUSTOM_ID: outside-of-weblate
 :CLASS: subsubheading
 :END:
 Currently, some parts of Guix cannot be translated on Weblate, help wanted!
@@ -134,9 +139,10 @@ Currently, some parts of Guix cannot be translated on Weblate, help wanted!
 - Some of the libraries Guix uses cannot be translated or are translated outside of the Guix project. Guile itself is not internationalized.
 - Other manuals linked from this manual or the cookbook might not be translated.
 
-**** Conditions for Inclusion [[#Conditions-for-Inclusion][¶]]
+<<Conditions-for-Inclusion>>
+**** Conditions for Inclusion
 :PROPERTIES:
-:CUSTOM_ID: Conditions-for-Inclusion
+:CUSTOM_ID: conditions-for-inclusion
 :CLASS: subsubheading
 :END:
 There are no conditions for adding new translations of the =guix= and =guix-packages= components, other than they need at least one translated string. New languages will be added to Guix as soon as possible. The files may be removed if they fall out of sync and have no more translated strings.
@@ -145,9 +151,10 @@ Given that the web site is dedicated to new users, we want its translation to be
 
 The manual and cookbook are automatically added in the default compilation target. Every time we synchronize translations, developers need to recompile all the translated manuals and cookbooks. This is useless for what is essentially the English manual or cookbook. Therefore, we will only include a new language when it reaches 10% completion in the component. When a language is included, it may be removed in the future if it stays out of sync and falls below 5% completion.
 
-**** Translation Infrastructure [[#Translation-Infrastructure][¶]]
+<<Translation-Infrastructure>>
+**** Translation Infrastructure
 :PROPERTIES:
-:CUSTOM_ID: Translation-Infrastructure
+:CUSTOM_ID: translation-infrastructure
 :CLASS: subsubheading
 :END:
 Weblate is backed by a git repository from which it discovers new strings to translate and pushes new and updated translations. Normally, it would be enough to give it commit access to our repositories. However, we decided to use a separate repository for two reasons. First, we would have to give Weblate commit access and authorize its signing key, but we do not trust it in the same way we trust guix developers, especially since we do not manage the instance ourselves. Second, if translators mess something up, it can break the generation of the website and/or guix pull for all our users, independently of their language.
@@ -163,6 +170,8 @@ Before pushing new translation files, developers should add them to the make mac
 - New po files for the =documentation-cookbook= component must be registered by adding the file name to =DOC_COOKBOOK_PO_FILES= in =po/doc/local.mk=, the generated =%D%/guix-cookbook.xx.texi= manual to =info_TEXINFOS= in =doc/local.mk= and the generated =%D%/guix-cookbook.xx.texi= to =TRANSLATED_INFO= also in =doc/local.mk=.
 - New po files for the =website= component must be added to the =guix-artwork= repository, in =website/po/=. =website/po/LINGUAS= and =website/po/ietf-tags.scm= must be updated accordingly (see =website/i18n-howto.txt= for more information on the process).
 
+<<index-infrastructure>>
+
 --------------
 
-Next: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]], Previous: [[id:guix--Writing-Documentation][Writing Documentation]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]], Previous: [[id:guix--Writing-Documentation][Writing Documentation]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

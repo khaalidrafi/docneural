@@ -36,30 +36,37 @@ Next:
 [[../..][]]
 
 <<X-Window>>
-Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.8 X Window [[#X-Window-1][¶]]
+<<X-Window-1>>
+**** 11.10.7 X Window
 :PROPERTIES:
-:CUSTOM_ID: X-Window-1
+:CUSTOM_ID: x-window
 :CLASS: subsection
 :END:
+<<index-X11>> <<index-X-Window-System>> <<index-login-manager>>
 Support for the X Window graphical display system---specifically Xorg---is provided by the =(gnu services xorg)= module. Note that there is no =xorg-service= procedure. Instead, the X server is started by the /login manager/, by default the GNOME Display Manager (GDM).
 
+<<index-GDM>> <<index-GNOME_002c-login-manager>> <<gdm>>
 GDM of course allows users to log in into window managers and desktop environments other than GNOME; for those using GNOME, GDM is required for features such as automatic screen locking.
 
+<<index-window-manager>>
 To use X11, you must install at least one /window manager/---for example the =windowmaker= or =openbox= packages---preferably by adding it to the =packages= field of your operating system definition (see [[id:guix--operating_002dsystem-Reference][system-wide packages]]).
 
 GDM also supports Wayland: it can itself use Wayland instead of X11 for its user interface, and it can also start Wayland sessions. Wayland support is enabled by default. To disable it, set =wayland?= to =#f= in =gdm-configuration=.
 
-- Variable: *gdm-service-type* [[#index-gdm_002dservice_002dtype][¶]] :: This is the type for the [[https://wiki.gnome.org/Projects/GDM/][GNOME Desktop Manager]] (GDM), a program that manages graphical display servers and handles graphical user logins. Its value must be a =gdm-configuration= (see below).
+- Variable: gdm-service-type  :: This is the type for the [[https://wiki.gnome.org/Projects/GDM/][GNOME Desktop Manager]] (GDM), a program that manages graphical display servers and handles graphical user logins. Its value must be a =gdm-configuration= (see below).
+
+  <<index-session-types>>
 
   GDM looks for /session types/ described by the =.desktop= files in =/run/current-system/profile/share/xsessions= (for X11 sessions) and =/run/current-system/profile/share/wayland-sessions= (for Wayland sessions) and allows users to choose a session from the log-in screen. Packages such as =gnome=, =xfce=, =i3= and =sway= provide =.desktop= files; adding them to the system-wide set of packages automatically makes them available at the log-in screen.
 
   In addition, =~/.xsession= files are honored. When available, =~/.xsession= must be an executable that starts a window manager and/or other X clients.
 
-- Data Type: *gdm-configuration* [[#index-gdm_002dconfiguration][¶]] :: - =auto-login?= (default: =#f=)\\
+- Data Type: gdm-configuration  :: - =auto-login?= (default: =#f=)\\
     =default-user= (default: =#f=) :: When =auto-login?= is false, GDM presents a log-in screen.
 
     When =auto-login?= is true, GDM logs in directly as =default-user=.
@@ -74,6 +81,8 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =x-session= (default: =(xinitrc)=) :: Script to run before starting a X session.
 
+  - =xdmcp?= (default: =#f=) :: When true, enable the X Display Manager Control Protocol (XDMCP). This should only be enabled in trusted environments, as the protocol is not secure. When enabled, GDM listens for XDMCP queries on the UDP port 177.
+
   - =dbus-daemon= (default: =dbus-daemon-wrapper=) :: File name of the =dbus-daemon= executable.
 
   - =gdm= (default: =gdm=) :: The GDM package to use.
@@ -82,7 +91,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =wayland-session= (default: =gdm-wayland-session-wrapper=) :: The Wayland session wrapper to use, needed to setup the environment.
 
-- Variable: *slim-service-type* [[#index-slim_002dservice_002dtype][¶]] :: This is the type for the SLiM graphical login manager for X11.
+- Variable: slim-service-type  :: This is the type for the SLiM graphical login manager for X11.
 
   Like GDM, SLiM looks for session types described by =.desktop= files and allows users to choose a session from the log-in screen using F1. It also honors =~/.xsession= files.
 
@@ -105,7 +114,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
                        (delete gdm-service-type)))))
   #+end_src
 
-- Data Type: *slim-configuration* [[#index-slim_002dconfiguration][¶]] :: Data type representing the configuration of =slim-service-type=.
+- Data Type: slim-configuration  :: Data type representing the configuration of =slim-service-type=.
 
   - =allow-empty-passwords?= (default: =#t=) :: Whether to allow logins with empty passwords.
 
@@ -142,10 +151,11 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =slim= (default: =slim=) :: The SLiM package to use.
 
-- Variable: *%default-theme* [[#index-_0025default_002dtheme][¶]]\\
-  Variable: *%default-theme-name* [[#index-_0025default_002dtheme_002dname][¶]] :: The default SLiM theme and its name.
+- Variable: %default-theme \\
+  Variable: %default-theme-name  :: The default SLiM theme and its name.
 
-- Variable: *sddm-service-type* [[#index-sddm_002dservice_002dtype][¶]] :: This is the type of the service to run the [[https://github.com/sddm/sddm][SDDM display manager]]. Its value must be a =sddm-configuration= record (see below).
+<<index-login-manager-1>> <<index-X11-login>>
+- Variable: sddm-service-type  :: This is the type of the service to run the [[https://github.com/sddm/sddm][SDDM display manager]]. Its value must be a =sddm-configuration= record (see below).
 
   Here's an example use:
 
@@ -156,9 +166,14 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
              (auto-login-session "xfce.desktop")))
   #+end_src
 
-- Data Type: *sddm-configuration* [[#index-sddm_002dconfiguration][¶]] :: This data type represents the configuration of the SDDM login manager. The available fields are:
+- Data Type: sddm-configuration  :: This data type represents the configuration of the SDDM login manager. The available fields are:
 
-  - =sddm= (default: =sddm-qt5=) :: The SDDM package to use.
+  - =sddm= (default: =sddm=) :: The SDDM package to use.
+
+    #+begin_quote
+    *Note:* sddm has Qt6 enabled by default. If you want to still use a Qt5 theme, you need to set it to =sddm-qt5=.
+
+    #+end_quote
 
   - =display-server= (default: "x11") :: Select display server to use for the greeter. Valid values are ‘="x11"=' or ‘="wayland"='.
 
@@ -214,7 +229,8 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =relogin?= (default #f) :: Relogin after logout.
 
-- Variable: *lightdm-service-type* [[#index-lightdm_002dservice_002dtype][¶]] :: This is the type of the service to run the [[https://github.com/canonical/lightdm][LightDM display manager]]. Its value must be a =lightdm-configuration= record, which is documented below. Among its distinguishing features are TigerVNC integration for easily remoting your desktop as well as support for the XDMCP protocol, which can be used by remote clients to start a session from the login manager.
+<<index-lightdm_002c-graphical-login-manager>> <<index-display-manager_002c-lightdm>> <<lightdm>>
+- Variable: lightdm-service-type  :: This is the type of the service to run the [[https://github.com/canonical/lightdm][LightDM display manager]]. Its value must be a =lightdm-configuration= record, which is documented below. Among its distinguishing features are TigerVNC integration for easily remoting your desktop as well as support for the XDMCP protocol, which can be used by remote clients to start a session from the login manager.
 
   In its most basic form, it can be used simply as:
 
@@ -239,7 +255,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
                     (user-session "ratpoison"))))))
   #+end_src
 
-- Data Type: *lightdm-configuration* [[#index-lightdm_002dconfiguration][¶]] :: Available =lightdm-configuration= fields are:
+- Data Type: lightdm-configuration  :: Available =lightdm-configuration= fields are:
 
   - =lightdm= (default: =lightdm=) (type: file-like) :: The lightdm package to use.
 
@@ -281,7 +297,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the LightDM configuration file.
 
-- Data Type: *lightdm-gtk-greeter-configuration* [[#index-lightdm_002dgtk_002dgreeter_002dconfiguration][¶]] :: Available =lightdm-gtk-greeter-configuration= fields are:
+- Data Type: lightdm-gtk-greeter-configuration  :: Available =lightdm-gtk-greeter-configuration= fields are:
 
   - =lightdm-gtk-greeter= (default: =lightdm-gtk-greeter=) (type: file-like) :: The lightdm-gtk-greeter package to use.
 
@@ -307,7 +323,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the LightDM GTK Greeter configuration file.
 
-- Data Type: *lightdm-seat-configuration* [[#index-lightdm_002dseat_002dconfiguration][¶]] :: Available =lightdm-seat-configuration= fields are:
+- Data Type: lightdm-seat-configuration  :: Available =lightdm-seat-configuration= fields are:
 
   - =name= (type: seat-name) :: The name of the seat. An asterisk (*) can be used in the name to apply the seat configuration to all the seat names it matches.
 
@@ -325,7 +341,8 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =extra-config= (default: ='()=) (type: list-of-strings) :: Extra configuration values to append to the seat configuration section.
 
-- Data Type: *xorg-configuration* [[#index-xorg_002dconfiguration][¶]] :: This data type represents the configuration of the Xorg graphical display server. Note that there is no Xorg service; instead, the X server is started by a “display manager” such as GDM, SDDM, LightDM or SLiM. Thus, the configuration of these display managers aggregates an =xorg-configuration= record.
+<<index-Xorg_002c-configuration>>
+- Data Type: xorg-configuration  :: This data type represents the configuration of the Xorg graphical display server. Note that there is no Xorg service; instead, the X server is started by a “display manager” such as GDM, SDDM, LightDM or SLiM. Thus, the configuration of these display managers aggregates an =xorg-configuration= record.
 
   - =modules= (default: =%default-xorg-modules=) :: This is a list of /module packages/ loaded by the Xorg server---e.g., =xf86-video-vesa=, =xf86-input-libinput=, and so on.
 
@@ -335,7 +352,9 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =resolutions= (default: ='()=) :: When =resolutions= is the empty list, Xorg chooses an appropriate screen resolution. Otherwise, it must be a list of resolutions---e.g., ='((1024 768) (640 480))=.
 
-  -  <<index-keyboard-layout_002c-for-Xorg>>=keyboard-layout= (default: =#f=) [[#index-keyboard-layout_002c-for-Xorg][¶]] :: If this is =#f=, Xorg uses the default keyboard layout---usually US English (“qwerty”) for a 105-key PC keyboard.
+    <<index-keyboard-layout_002c-for-Xorg>> <<index-keymap_002c-for-Xorg>>
+
+  - =keyboard-layout= (default: =#f=) :: If this is =#f=, Xorg uses the default keyboard layout---usually US English (“qwerty”) for a 105-key PC keyboard.
 
     Otherwise this must be a =keyboard-layout= object specifying the keyboard layout in use when Xorg is running. See [[id:guix--Keyboard-Layout][Keyboard Layout]], for more information on how to specify the keyboard layout.
 
@@ -345,17 +364,17 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =server-arguments= (default: =%default-xorg-server-arguments=) :: This is the list of command-line arguments to pass to the X server. The default is =-nolisten tcp=.
 
-- Procedure: *set-xorg-configuration* =config [login-manager-service-type]= [[#index-set_002dxorg_002dconfiguration-1][¶]] :: Tell the log-in manager (of type =login-manager-service-type=) to use =config=, an =<xorg-configuration>= record.
+- Procedure: set-xorg-configuration config [login-manager-service-type] :: Tell the log-in manager (of type =login-manager-service-type=) to use =config=, an =<xorg-configuration>= record.
 
   Since the Xorg configuration is embedded in the log-in manager's configuration---e.g., =gdm-configuration=---this procedure provides a shorthand to set the Xorg configuration.
 
-- Procedure: *xorg-start-command* =[config]= [[#index-xorg_002dstart_002dcommand][¶]] :: Return a =startx= script in which the modules, fonts, etc. specified in =config=, are available. The result should be used in place of =startx=.
+- Procedure: xorg-start-command [config] :: Return a =startx= script in which the modules, fonts, etc. specified in =config=, are available. The result should be used in place of =startx=.
 
   Usually the X server is started by a login manager.
 
-- Procedure: *xorg-start-command-xinit* =[config]= [[#index-xorg_002dstart_002dcommand_002dxinit][¶]] :: Return a =startx= script in which the modules, fonts, etc. specified in =config= are available. The result should be used in place of =startx= and should be invoked by the user from a tty after login. Unlike =xorg-start-command=, this script calls xinit. Therefore it works well when executed from a tty. This script can be set up as =startx= using =startx-command-service-type= or =home-startx-command-service-type=. If you are using a desktop environment, you are unlikely to need this procedure.
+- Procedure: xorg-start-command-xinit [config] :: Return a =startx= script in which the modules, fonts, etc. specified in =config= are available. The result should be used in place of =startx= and should be invoked by the user from a tty after login. Unlike =xorg-start-command=, this script calls xinit. Therefore it works well when executed from a tty. This script can be set up as =startx= using =startx-command-service-type= or =home-startx-command-service-type=. If you are using a desktop environment, you are unlikely to need this procedure.
 
-- Variable: *screen-locker-service-type* [[#index-screen_002dlocker_002dservice_002dtype][¶]] :: Type for a service that adds a package for a screen locker or screen saver to the set of privileged programs and/or add a PAM entry for it. The value for this service is a =<screen-locker-configuration>= object.
+- Variable: screen-locker-service-type  :: Type for a service that adds a package for a screen locker or screen saver to the set of privileged programs and/or add a PAM entry for it. The value for this service is a =<screen-locker-configuration>= object.
 
   While the default behavior is to setup both a privileged program and PAM entry, these two methods are redundant. Screen locker programs may not execute when PAM is configured and =setuid= is set on their executable. In this case, =using-setuid?= can be set to =#f=.
 
@@ -381,7 +400,7 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
              (using-setuid? #f)))
   #+end_src
 
-- Data Type: *screen-locker-configuration* [[#index-screen_002dlocker_002dconfiguration][¶]] :: Available =screen-locker-configuration= fields are:
+- Data Type: screen-locker-configuration  :: Available =screen-locker-configuration= fields are:
 
   - =name= (type: string) :: Name of the screen locker.
 
@@ -393,10 +412,10 @@ GDM also supports Wayland: it can itself use Wayland instead of X11 for its user
 
   - =using-setuid?= (default: =#t=) (type: boolean) :: Whether to setup program as setuid binary.
 
-- Variable: *startx-command-service-type* [[#index-startx_002dcommand_002dservice_002dtype][¶]] :: Add =startx= to the system profile putting it onto =PATH=.
+- Variable: startx-command-service-type  :: Add =startx= to the system profile putting it onto =PATH=.
 
   The value for this service is a =<xorg-configuration>= object which is passed to the =xorg-start-command-xinit= procedure producing the =startx= used. Default value is =(xorg-configuration)=.
 
 --------------
 
-Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Printing-Services][Printing Services]], Previous: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

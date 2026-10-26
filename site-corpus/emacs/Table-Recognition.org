@@ -4,6 +4,31 @@
 #+filetags: :emacs:
 #+title: Table Recognition
 
-Next:
+Next: [[id:emacs--Cell-Commands][Commands for Table Cells]]   Previous: [[id:emacs--Table-Creation][Creating a Table]]   Up: [[id:emacs--Text-Based-Tables][Editing Text-based Tables]]
 
-The node you are looking for is at [[id:emacs--Text-Based-Tables::#Table-Recognition][Table Recognition]].
+<<Table-Recognition>>
+
+--------------
+
+**** 27.15.3 Table Recognition [[#Table-Recognition-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-Recognition-1
+:CLASS: subsection
+:END:
+Existing text-based tables in a buffer, which lack the special text properties applied by M-x table-insert, are not treated specially as tables. To apply those text properties, type M-x table-recognize. This command scans the current buffer, /recognizes/ valid table cells, and applies the relevant text properties. Conversely, type M-x table-unrecognize to /unrecognize/ all tables in the current buffer, removing the special text properties and converting tables back to plain text.
+
+You can also use the following commands to selectively recognize or unrecognize tables:
+
+- <<index-table_002drecognize_002dregion>>M-x table-recognize-region [[#index-table_002drecognize_002dregion][¶]] :: Recognize tables within the current region.
+
+- <<index-table_002dunrecognize_002dregion>>M-x table-unrecognize-region [[#index-table_002dunrecognize_002dregion][¶]] :: Unrecognize tables within the current region.
+
+- <<index-table_002drecognize_002dtable>>M-x table-recognize-table [[#index-table_002drecognize_002dtable][¶]] :: Recognize the table at point and activate it.
+
+- <<index-table_002dunrecognize_002dtable>>M-x table-unrecognize-table [[#index-table_002dunrecognize_002dtable][¶]] :: Deactivate the table at point.
+
+- <<index-table_002drecognize_002dcell>>M-x table-recognize-cell [[#index-table_002drecognize_002dcell][¶]] :: Recognize the cell at point and activate it.
+
+- <<index-table_002dunrecognize_002dcell>>M-x table-unrecognize-cell [[#index-table_002dunrecognize_002dcell][¶]] :: Deactivate the cell at point.
+
+See [[id:emacs--Table-Conversion][Converting Between Plain Text and Tables]], for another way to recognize a table.

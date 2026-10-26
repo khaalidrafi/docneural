@@ -7,6 +7,9 @@
 Next: [[id:emacs--Buffers][Using Multiple Buffers]]   Previous: [[id:emacs--Keyboard-Macros][Keyboard Macros]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Files>>
+
+--------------
+
 ** 20 File Handling [[#File-Handling][¶]]
 :PROPERTIES:
 :CUSTOM_ID: File-Handling
@@ -18,4 +21,23 @@ To edit a file, you must tell Emacs to read the file and prepare a buffer contai
 
 In addition to visiting and saving files, Emacs can delete, copy, rename, and append to files, keep multiple versions of them, and operate on file directories.
 
---------------
+- [[id:emacs--File-Names][File Names]]
+- [[id:emacs--Visiting][Visiting Files]]
+- [[id:emacs--Saving][Saving Files]]
+- [[id:emacs--Reverting][Reverting a Buffer]]
+- [[id:emacs--Auto-Revert][Auto Revert: Keeping buffers automatically up-to-date]]
+- [[id:emacs--Auto-Save][Auto-Saving: Protection Against Disasters]]
+- [[id:emacs--File-Aliases][File Name Aliases]]
+- [[id:emacs--Directories][File Directories]]
+- [[id:emacs--Comparing-Files][Comparing Files]]
+- [[id:emacs--Diff-Mode][Diff Mode]]
+- [[id:emacs--Copying-and-Naming][Copying, Naming and Renaming Files]]
+- [[id:emacs--Misc-File-Ops][Miscellaneous File Operations]]
+- [[id:emacs--Compressed-Files][Accessing Compressed Files]]
+- [[id:emacs--File-Archives][File Archives]]
+- [[id:emacs--Remote-Files][Remote Files]]
+- [[id:emacs--Quoted-File-Names][Quoted File Names]]
+- [[id:emacs--File-Name-Cache][File Name Cache]]
+- [[id:emacs--File-Conveniences][Convenience Features for Finding Files]]
+- [[id:emacs--Image-Mode][Viewing Image Files]]
+- [[id:emacs--Filesets][Filesets]]

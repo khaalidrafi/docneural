@@ -7,6 +7,9 @@
 Next: [[id:emacs--Haiku][Emacs and Haiku]]   Previous: [[id:emacs--Antinews][Emacs 29 Antinews]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Mac-OS-_002f-GNUstep>>
+
+--------------
+
 ** Appendix F Emacs and macOS / GNUstep [[#Emacs-and-macOS-_002f-GNUstep][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Emacs-and-macOS-_002f-GNUstep
@@ -19,5 +22,10 @@ GNUstep is free software; macOS is not. Because it is a non-free operating syste
 We support GNU Emacs on proprietary operating systems because we hope this taste of freedom will inspire users to escape from them.
 
 For various historical and technical reasons, Emacs uses the term ‘=Nextstep=' internally, instead of “Cocoa” or “macOS”; for instance, most of the commands and variables described in this section begin with ‘=ns-=', which is short for ‘=Nextstep='. NeXTstep was an application interface released by NeXT Inc. during the 1980s, of which Cocoa is a direct descendant. Apart from Cocoa, there is another NeXTstep-style system: GNUstep, which is free software. As of this writing, Emacs GNUstep support is in alpha status (see [[id:emacs--GNUstep-Support][GNUstep Support]]), but we hope to improve it in the future.
+
+- [[id:emacs--Mac-_002f-GNUstep-Basics][Basic Emacs usage under macOS and GNUstep]]
+- [[id:emacs--Mac-_002f-GNUstep-Customization][Mac / GNUstep Customization]]
+- [[id:emacs--Mac-_002f-GNUstep-Events][Windowing System Events under macOS / GNUstep]]
+- [[id:emacs--GNUstep-Support][GNUstep Support]]
 
 --------------

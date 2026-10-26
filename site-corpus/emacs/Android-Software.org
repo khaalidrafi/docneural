@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Android-Troubleshooting][Troubleshooting Startup Problems on Android]]   Up: [[id:emacs--Android][Emacs and Android]]
 
 <<Android-Software>>
+
+--------------
+
 *** H.9 Installing Extra Software on Android [[#Installing-Extra-Software-on-Android][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Installing-Extra-Software-on-Android
@@ -21,5 +24,3 @@ An exceptionally limited set of Unix-like command line tools is distributed alon
 [[https://github.com/termux/termux-packages][termux-packages]] provides the package definitions used by Termux to generate their package repositories, which may also be independently compiled for installation within Emacs's home directory.
 
 In addition to the projects mentioned above, statically linked binaries for most Linux kernel-based systems can also be run on Android.
-
---------------

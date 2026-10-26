@@ -4,6 +4,56 @@
 #+filetags: :emacs:
 #+title: Expressions
 
-Next:
+Next: [[id:emacs--Moving-by-Parens][Moving in the Parenthesis Structure]]   Up: [[id:emacs--Parentheses][Commands for Editing with Parentheses]]
 
-The node you are looking for is at [[id:emacs--Parentheses::#Expressions][Expressions]].
+<<Expressions>>
+
+--------------
+
+**** 28.4.1 Expressions with Balanced Parentheses [[#Expressions-with-Balanced-Parentheses][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Expressions-with-Balanced-Parentheses
+:CLASS: subsection
+:END:
+Each programming language mode has its own definition of a /balanced expression/. Balanced expressions typically include individual symbols, numbers, and string constants, as well as pieces of code enclosed in a matching pair of delimiters. The following commands deal with balanced expressions (in Emacs, such expressions are referred to internally as /sexps/[[#FOOT14][^{14}]]).
+
+- C-M-f :: Move forward over a balanced expression (=forward-sexp=).
+
+- C-M-b :: Move backward over a balanced expression (=backward-sexp=).
+
+- C-M-k :: Kill balanced expression forward (=kill-sexp=).
+
+- C-M-t :: Transpose expressions (=transpose-sexps=).
+
+- C-M-@\\
+  C-M-SPC :: Put mark after following expression (=mark-sexp=).
+
+To move forward over a balanced expression, use C-M-f (=forward-sexp=). If the first significant character after point is an opening delimiter (e.g., ‘=(=', ‘=[=' or ‘={=' in C), this command moves past the matching closing delimiter. If the character begins a symbol, string, or number, the command moves over that.
+
+The command C-M-b (=backward-sexp=) moves backward over a balanced expression---like C-M-f, but in the reverse direction. If the expression is preceded by any prefix characters (single-quote, backquote and comma, in Lisp), the command moves back over them as well.
+
+C-M-f or C-M-b with an argument repeats that operation the specified number of times; with a negative argument means to move in the opposite direction. In most modes, these two commands move across comments as if they were whitespace. Note that their keys, C-M-f and C-M-b, are analogous to C-f and C-b, which move by characters (see [[id:emacs--Moving-Point][Changing the Location of Point]]), and M-f and M-b, which move by words (see [[id:emacs--Words][Words]]).
+
+To kill a whole balanced expression, type C-M-k (=kill-sexp=). This kills the text that C-M-f would move over.
+
+C-M-t (=transpose-sexps=) switches the positions of the previous balanced expression and the next one. It is analogous to the C-t command, which transposes characters (see [[id:emacs--Transpose][Transposing Text]]). An argument to C-M-t serves as a repeat count, moving the previous expression over that many following ones. A negative argument moves the previous balanced expression backwards across those before it. An argument of zero, rather than doing nothing, transposes the balanced expressions ending at or after point and the mark.
+
+To operate on balanced expressions with a command which acts on the region, type C-M-SPC (=mark-sexp=). This sets the mark where C-M-f would move to. While the mark is active, each successive call to this command extends the region by shifting the mark by one expression. Positive or negative numeric arguments move the mark forward or backward by the specified number of expressions. The alias C-M-@ is equivalent to C-M-SPC. See [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]], for more information about this and related commands.
+
+In languages that use infix operators, such as C, it is not possible to recognize all balanced expressions because there can be multiple possibilities at a given position. For example, C mode does not treat ‘=foo + bar=' as a single expression, even though it /is/ one C expression; instead, it recognizes ‘=foo=' as one expression and ‘=bar=' as another, with the ‘=+=' as punctuation between them. However, C mode recognizes ‘=(foo + bar)=' as a single expression, because of the parentheses.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF14][(14)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The word “sexp” is used to refer to an expression in Lisp.
+
+--------------

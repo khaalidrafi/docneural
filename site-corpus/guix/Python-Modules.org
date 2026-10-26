@@ -36,47 +36,51 @@ Next:
 [[../..][]]
 
 <<Python-Modules>>
-Next: [[id:guix--Perl-Modules][Perl Modules]], Previous: [[id:guix--Emacs-Packages][Emacs Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Perl-Modules][Perl Modules]], Previous: [[id:guix--Emacs-Packages][Emacs Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.10 Python Modules [[#Python-Modules-1][¶]]
+<<Python-Modules-1>>
+**** 22.8.9 Python Modules
 :PROPERTIES:
-:CUSTOM_ID: Python-Modules-1
+:CUSTOM_ID: python-modules
 :CLASS: subsection
 :END:
-The standard way to generate a package definition is to use =guix import pypi <name>=, where =name= is the name of the Python package on [[https://pypi.org][PyPI]], see see [[id:guix--Invoking-guix-import][Invoking =guix import=]]. Please check with =guix lint <package-name>= that the generated package is valid.
+<<index-python>>
+We currently package Python 2 and Python 3, under the Scheme variable names =python-2= and =python= as explained in [[id:guix--Version-Numbers][Version Numbers]]. To avoid confusion and naming clashes with other programming languages, it seems desirable that the name of a package for a Python module contains the word =python=.
 
-To avoid confusion and naming clashes with other programming languages, Python module packages should be prefixed with =python-=.
+Some modules are compatible with only one version of Python, others with both. If the package Foo is compiled with Python 3, we name it =python-foo=. If it is compiled with Python 2, we name it =python2-foo=. Python 2 packages are being removed from the distribution; please do no not submit any new Python 2 packages.
 
-If a project already contains the word =python=, please do not repeat it; for instance, the module python-dateutil is packaged under the name =python-dateutil=. If the project name starts with =py=, it is kept and prefixed as described above (e.g. =python-pytz=).
+If a project already contains the word =python=, we drop this; for instance, the module python-dateutil is packaged under the names =python-dateutil= and =python2-dateutil=. If the project name starts with =py= (e.g. =pytz=), we keep it and prefix it as described above.
 
 #+begin_quote
-*Note:* The standard build system for Python packages is Guix's implementation of the [[https://peps.python.org/pep-0517/][formal Python standard]] for specifying build requirements: =pyproject-build-system=. The =python-build-system= which corresponds to the way Python packages were built before PEP517, using the informally specified =setup.py= file, is now deprecated. =pyproject-build-system= will eventually be deprecated and renamed into =python-build-system= after its removal.
+*Note:* Currently there are two different build systems for Python packages in Guix: =python-build-system= and =pyproject-build-system=. For the longest time, Python packages were built from an informally specified =setup.py= file. That worked amazingly well, considering Python's success, but was difficult to build tooling around. As a result, a host of alternative build systems emerged and the community eventually settled on a [[https://peps.python.org/pep-0517/][formal standard]] for specifying build requirements. =pyproject-build-system= is Guix's implementation of this standard. It is considered “experimental” in that it does not yet support all the various PEP-517 /build backends/, but you are encouraged to try it for new Python packages and report any problems. It will eventually be deprecated and merged into =python-build-system=.
 
 #+end_quote
 
 - [[#Specifying-Dependencies][Specifying Dependencies]]
 
 <<Specifying-Dependencies>>
-**** 22.7.10.1 Specifying Dependencies [[#Specifying-Dependencies][¶]]
+**** 22.8.9.1 Specifying Dependencies
 :PROPERTIES:
 :CUSTOM_ID: specifying-dependencies
 :CLASS: subsubsection
 :END:
+<<index-inputs_002c-for-Python-packages>>
 Dependency information for Python packages is usually available in the package source tree, with varying degrees of accuracy: in the =pyproject.toml= file, the =setup.py= file, in =requirements.txt=, or in =tox.ini= (the latter mostly for test dependencies).
 
-When editing a recipe for a Python package, the goal is to map these dependencies to the appropriate type of “input” (see [[id:guix--package-Reference][inputs]]). Although the =pypi= importer normally does a good job (see [[id:guix--Invoking-guix-import][Invoking =guix import=]]), please verify the following check list to determine which dependency goes where.
+Your mission, when writing a recipe for a Python package, is to map these dependencies to the appropriate type of “input” (see [[id:guix--package-Reference][inputs]]). Although the =pypi= importer normally does a good job (see [[id:guix--Invoking-guix-import][Invoking =guix import=]]), you may want to check the following check list to determine which dependency goes where.
 
-- Python is packaged /without/ =setuptools= and =pip= installed per default.
+- We currently package Python with =setuptools= and =pip= installed per default. This is about to change, and users are encouraged to use =python-toolchain= if they want a build environment for Python.
 
-  =guix lint= will warn if =pip= or other unneeded native-inputs are added.
+  =guix lint= will warn if =setuptools= or =pip= are added as native-inputs because they are generally not necessary.
 
 - Python dependencies required at run time go into =propagated-inputs=. They are typically defined with the =install_requires= keyword in =setup.py=, or in the =requirements.txt= file.
 
-- Python packages required only at build time---e.g., those listed under =build-system.requires= in =pyproject.toml= or with the =setup_requires= keyword in =setup.py=---or dependencies only for testing---e.g., those in =tests_require= or =tox.ini=---go into =native-inputs=. The rationale is that (1) they do not need to be propagated because they are not needed at run time, and (2) in a cross-compilation context, it's the target “native” input.
+- Python packages required only at build time---e.g., those listed under =build-system.requires= in =pyproject.toml= or with the =setup_requires= keyword in =setup.py=---or dependencies only for testing---e.g., those in =tests_require= or =tox.ini=---go into =native-inputs=. The rationale is that (1) they do not need to be propagated because they are not needed at run time, and (2) in a cross-compilation context, it's the “native” input that we'd want.
 
-  Examples are the =pytest=, =mock=, and =stestr= test frameworks. Of course if any of these packages is also required at run-time, it needs to go to =propagated-inputs=.
+  Examples are the =pytest=, =mock=, and =nose= test frameworks. Of course if any of these packages is also required at run-time, it needs to go to =propagated-inputs=.
 
 - Anything that does not fall in the previous categories goes to =inputs=, for example programs or C libraries required for building Python packages containing C extensions.
 
@@ -84,4 +88,4 @@ When editing a recipe for a Python package, the goal is to map these dependencie
 
 --------------
 
-Next: [[id:guix--Perl-Modules][Perl Modules]], Previous: [[id:guix--Emacs-Packages][Emacs Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Perl-Modules][Perl Modules]], Previous: [[id:guix--Emacs-Packages][Emacs Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

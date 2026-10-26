@@ -4,6 +4,27 @@
 #+filetags: :emacs:
 #+title: Electric C
 
-Next:
+Next: [[id:emacs--Hungry-Delete][Hungry Delete Feature in C]]   Previous: [[id:emacs--Motion-in-C][C Mode Motion Commands]]   Up: [[id:emacs--C-Modes][C and Related Modes]]
 
-The node you are looking for is at [[id:emacs--C-Modes::#Electric-C][Electric C]].
+<<Electric-C>>
+
+--------------
+
+**** 28.12.2 Electric C Characters [[#Electric-C-Characters][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Electric-C-Characters
+:CLASS: subsection
+:END:
+In C mode and related modes, certain printing characters are /electric/---in addition to inserting themselves, they also reindent the current line, and optionally also insert newlines. The electric characters are {, }, :, #, ;, ,, <, >, /, *, (, and ).
+
+You might find electric indentation inconvenient if you are editing chaotically indented code. If you are new to CC Mode, you might find it disconcerting. You can toggle electric action with the command C-c C-l; when it is enabled, ‘=/==c==l=' appears in the mode line after the mode name (where =c=, if present, is ‘=*=' or ‘=/=', depending on whether the comment style is block or line). See [[../ccmode_html/Minor-Modes.html#Minor-Modes][Minor Modes]] in The CC Mode Manual, for more about mode-line indicators in CC Mode.
+
+-  <<index-C_002dc-C_002dl-_0028C-mode_0029>>C-c C-l [[#index-C_002dc-C_002dl-_0028C-mode_0029][¶]] :: Toggle electric action (=c-toggle-electric-state=). With a positive prefix argument, this command enables electric action, with a negative one it disables it.
+
+Electric characters insert newlines only when, in addition to the electric state, the /auto-newline/ feature is enabled (indicated by ‘=/==c==la=' in the mode line after the mode name). You can turn this feature on or off with the command C-c C-a:
+
+-  <<index-C_002dc-C_002da-_0028C-mode_0029>>C-c C-a [[#index-C_002dc-C_002da-_0028C-mode_0029][¶]] :: Toggle the auto-newline feature (=c-toggle-auto-newline=). With a prefix argument, this command turns the auto-newline feature on if the argument is positive, and off if it is negative.
+
+Usually the CC Mode style configures the exact circumstances in which Emacs inserts auto-newlines. You can also configure this directly. See [[../ccmode_html/Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines][Custom Auto-newlines]] in The CC Mode Manual.
+
+--------------

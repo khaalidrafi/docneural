@@ -4,6 +4,28 @@
 #+filetags: :emacs:
 #+title: GDB Graphical Interface
 
-Next:
+Next:   Previous: [[id:emacs--GUD-Customization][GUD Customization]]   Up: [[id:emacs--Debuggers][Running Debuggers Under Emacs]]
 
-The node you are looking for is at [[id:emacs--Debuggers::#GDB-Graphical-Interface][GDB Graphical Interface]].
+<<GDB-Graphical-Interface>>
+
+--------------
+
+**** 29.6.5 GDB Graphical Interface [[#GDB-Graphical-Interface-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: GDB-Graphical-Interface-1
+:CLASS: subsection
+:END:
+The command M-x gdb starts GDB in an IDE-like interface, with specialized buffers for controlling breakpoints, stack frames, and other aspects of the debugger state. It also provides additional ways to control the debugging session with the mouse, such as clicking in the fringe of a source buffer to set a breakpoint there.
+
+To run GDB using just the GUD interaction buffer interface, without these additional features, use M-x gud-gdb (see [[id:emacs--Starting-GUD][Starting GUD]]).
+
+Internally, M-x gdb informs GDB that its screen size is unlimited; for correct operation, you must not change GDB's screen height and width values during the debugging session.
+
+- [[id:emacs--GDB-User-Interface-Layout][GDB User Interface Layout]]
+- [[id:emacs--Source-Buffers][Source Buffers]]
+- [[id:emacs--Breakpoints-Buffer][Breakpoints Buffer]]
+- [[id:emacs--Threads-Buffer][Threads Buffer]]
+- [[id:emacs--Stack-Buffer][Stack Buffer]]
+- [[id:emacs--Other-GDB-Buffers][Other GDB Buffers]]
+- [[id:emacs--Watch-Expressions][Watch Expressions]]
+- [[id:emacs--Multithreaded-Debugging][Multithreaded Debugging]]

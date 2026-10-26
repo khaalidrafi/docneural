@@ -7,6 +7,9 @@
 Next: [[id:emacs--Modes][Major and Minor Modes]]   Previous: [[id:emacs--Frames][Frames and Graphical Displays]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<International>>
+
+--------------
+
 ** 24 International Character Set Support [[#International-Character-Set-Support][¶]]
 :PROPERTIES:
 :CUSTOM_ID: International-Character-Set-Support
@@ -27,5 +30,26 @@ Emacs allows editing text with international characters by supporting all the re
   With the X Window System, your locale should be set to an appropriate value to make sure Emacs interprets keyboard input correctly; see [[id:emacs--Language-Environments][locales]], and [[id:emacs--X-Coding][Coding Systems for X Keyboard Input]].
 
 The rest of this chapter describes these issues in detail.
+
+- [[id:emacs--International-Chars][Introduction to International Character Sets]]
+- [[id:emacs--Language-Environments][Language Environments]]
+- [[id:emacs--Input-Methods][Input Methods]]
+- [[id:emacs--Select-Input-Method][Selecting an Input Method]]
+- [[id:emacs--Coding-Systems][Coding Systems]]
+- [[id:emacs--Recognize-Coding][Recognizing Coding Systems]]
+- [[id:emacs--Specify-Coding][Specifying a File's Coding System]]
+- [[id:emacs--Output-Coding][Choosing Coding Systems for Output]]
+- [[id:emacs--Text-Coding][Specifying a Coding System for File Text]]
+- [[id:emacs--Communication-Coding][Coding Systems for Interprocess Communication]]
+- [[id:emacs--File-Name-Coding][Coding Systems for File Names]]
+- [[id:emacs--X-Coding][Coding Systems for X Keyboard Input]]
+- [[id:emacs--Terminal-Coding][Coding Systems for Terminal I/O]]
+- [[id:emacs--Fontsets][Fontsets]]
+- [[id:emacs--Defining-Fontsets][Defining Fontsets]]
+- [[id:emacs--Modifying-Fontsets][Modifying Fontsets]]
+- [[id:emacs--Undisplayable-Characters][Undisplayable Characters]]
+- [[id:emacs--Unibyte-Mode][Unibyte Editing Mode]]
+- [[id:emacs--Charsets][Charsets]]
+- [[id:emacs--Bidirectional-Editing][Bidirectional Editing]]
 
 --------------

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<AppArmor-Support>>
-Previous: [[id:guix--SELinux-Support][SELinux Support]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--SELinux-Support][SELinux Support]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 2.2.4 AppArmor Support [[#AppArmor-Support-1][¶]]
+<<AppArmor-Support-1>>
+**** 2.2.4 AppArmor Support
 :PROPERTIES:
-:CUSTOM_ID: AppArmor-Support-1
+:CUSTOM_ID: apparmor-support
 :CLASS: subsection
 :END:
+<<index-AppArmor>>
 Guix includes an AppArmor profile for the build daemon in =etc/apparmor.d/guix-daemon= that can be installed on systems with strict AppArmor policies to allow it to run unprivileged (see [[id:guix--Build-Environment-Setup][Build Environment Setup]]). Indeed, the unprivileged daemon makes use of Linux user namespaces but these are disallowed without an AppArmor policy on some systems like Ubuntu.
 
 To know if this applies to you, check if the =kernel.apparmor_restrict_unprivileged_userns= kernel parameter is enabled.
@@ -52,11 +55,12 @@ To know if this applies to you, check if the =kernel.apparmor_restrict_unprivile
 - [[#Installing-the-AppArmor-profile][Installing the AppArmor profile]]
 
 <<Installing-the-AppArmor-profile>>
-**** 2.2.4.1 Installing the AppArmor profile [[#Installing-the-AppArmor-profile][¶]]
+**** 2.2.4.1 Installing the AppArmor profile
 :PROPERTIES:
 :CUSTOM_ID: installing-the-apparmor-profile
 :CLASS: subsubsection
 :END:
+<<index-AppArmor_002c-profile-installation>>
 
 #+begin_quote
 *Note:* The =guix-install.sh= binary installation script offers to perform the steps below for you (see [[id:guix--Binary-Installation][Binary Installation]]).
@@ -75,7 +79,3 @@ apparmor_parser -r /etc/apparmor.d/guix
 #+end_example
 
 After this, the build daemon will be able to function correctly.
-
---------------
-
-Previous: [[id:guix--SELinux-Support][SELinux Support]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

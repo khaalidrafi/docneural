@@ -7,6 +7,9 @@
 Next: [[id:emacs--Maintaining][Maintaining Large Programs]]   Previous: [[id:emacs--Programs][Editing Programs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Building>>
+
+--------------
+
 ** 29 Compiling and Testing Programs [[#Compiling-and-Testing-Programs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Compiling-and-Testing-Programs
@@ -14,4 +17,14 @@ Next: [[id:emacs--Maintaining][Maintaining Large Programs]]   Previous: [[id:ema
 :END:
 The previous chapter discusses the Emacs commands that are useful for making changes in programs. This chapter deals with commands that assist in the process of compiling and testing programs.
 
---------------
+- [[id:emacs--Compilation][Running Compilations under Emacs]]
+- [[id:emacs--Compilation-Mode][Compilation Mode]]
+- [[id:emacs--Compilation-Shell][Subshells for Compilation]]
+- [[id:emacs--Grep-Searching][Searching with Grep under Emacs]]
+- [[id:emacs--Flymake][Finding Syntax Errors On The Fly]]
+- [[id:emacs--Debuggers][Running Debuggers Under Emacs]]
+- [[id:emacs--Executing-Lisp][Executing Lisp Expressions]]
+- [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]
+- [[id:emacs--Lisp-Eval][Evaluating Emacs Lisp Expressions]]
+- [[id:emacs--Lisp-Interaction][Lisp Interaction Buffers]]
+- [[id:emacs--External-Lisp][Running an External Lisp]]

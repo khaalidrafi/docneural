@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-copy>>
-Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.13 Invoking =guix copy= [[#Invoking-guix-copy-1][¶]]
+<<Invoking-guix-copy-1>>
+*** 9.13 Invoking =guix copy=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-copy-1
+:CUSTOM_ID: invoking-guix-copy
 :CLASS: section
 :END:
+<<index-guix-copy>> <<index-copy_002c-of-store-items_002c-over-SSH>> <<index-SSH_002c-copy-of-store-items>> <<index-sharing-store-items-across-machines>> <<index-transferring-store-items-across-machines>>
 The =guix copy= command copies items from the store of one machine to that of another machine over a secure shell (SSH) connection[[#FOOT25][^{25}]]. For example, the following command copies the =coreutils= package, the user's profile, and all their dependencies over to =host=, logged in as =user=:
 
 #+begin_example
@@ -67,7 +70,7 @@ The key used to sign items that are sent must be accepted by the remote machine.
 The general syntax is:
 
 #+begin_example
-guix copy [--to=spec|--from=spec] items...
+guix copy [--to=spec|--from=spec] items…
 #+end_example
 
 You must always specify one of the following options:
@@ -89,10 +92,9 @@ When specifying the name of a package to send, it is first built if needed, unle
 ***** [[#DOCF25][(25)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 This command is available only when Guile-SSH was found. See [[id:guix--Requirements][Requirements]], for details.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Previous: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Recursive-Edit][Recursive Editing Levels]]   Previous: [[id:emacs--Editing-Binary-Files][Editing Binary Files]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Saving-Emacs-Sessions>>
+
+--------------
+
 ** 46 Saving Emacs Sessions [[#Saving-Emacs-Sessions-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Saving-Emacs-Sessions-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Recursive-Edit][Recursive Editing Levels]]   Previous: [[id:em
 :END:
 You can use the desktop library to save the state of Emacs from one session to another. The saved Emacs /desktop configuration/ includes the buffers, their file names, major modes, buffer positions, window and frame configuration, and some important global variables.
 
-To enable this feature, use the Customization buffer (see [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]]) to set =desktop-save-mode= to =t= for future sessions, or add this line in your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]):
+To enable this feature, use the Customization buffer (see [[id:emacs--Easy-Customization][Easy Customization Interface]]) to set =desktop-save-mode= to =t= for future sessions, or add this line in your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]):
 
 #+begin_example
 (desktop-save-mode 1)
@@ -34,7 +37,7 @@ Whenever you want, you can use the command M-x desktop-save to force immediate s
 
 By default, the desktop tries to save and restore the frame and window configuration. To disable this, set =desktop-restore-frames= to =nil=. (See that variable's documentation for some related options that you can customize to fine-tune this behavior.)
 
-When the desktop restores the frame and window configuration, it uses the recorded values of frame parameters, disregarding any settings for those parameters you have in your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). This means that frame parameters such as fonts and faces for the restored frames will come from the desktop file, where they were saved when you exited your previous Emacs session; any settings for those parameters in your init file will be ignored. To disable this, customize the value of =frameset-filter-alist= to filter out the frame parameters you don't want to be restored; they will then be set according to your customizations in the init file.
+When the desktop restores the frame and window configuration, it uses the recorded values of frame parameters, disregarding any settings for those parameters you have in your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]). This means that frame parameters such as fonts and faces for the restored frames will come from the desktop file, where they were saved when you exited your previous Emacs session; any settings for those parameters in your init file will be ignored. To disable this, customize the value of =frameset-filter-alist= to filter out the frame parameters you don't want to be restored; they will then be set according to your customizations in the init file.
 
 Information about buffers visiting remote files is not saved by default. Customize the variable =desktop-files-not-to-save= to change this. In this case, you might also consider customizing =remote-file-name-access-timeout=, which is the number of seconds after which buffer restoration of a remote file is stopped. This prevents Emacs from being blocked when restoring sessions that visited remote files.
 

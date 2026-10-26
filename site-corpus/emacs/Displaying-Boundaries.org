@@ -7,12 +7,15 @@
 Next: [[id:emacs--Useless-Whitespace][Useless Whitespace]]   Previous: [[id:emacs--Fringes][Window Fringes]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Displaying-Boundaries>>
+
+--------------
+
 *** 16.16 Displaying Boundaries [[#Displaying-Boundaries-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Displaying-Boundaries-1
 :CLASS: section
 :END:
-Emacs can display an indication of the =fill-column= position (see [[id:emacs--Filling::#Fill-Commands][Explicit Fill Commands]]). The fill-column indicator is a useful functionality especially in =prog-mode= and its descendants (see [[id:emacs--Major-Modes][Major Modes]]) to indicate the position of a specific column that has some special meaning for formatting the source code of a program. This assumes the buffer uses a fixed-pitch font, where all the characters (with the possible exception of double-width characters) have the same width on display. If the buffer uses variable-pitch fonts, the fill-column indicators on different lines might appear unaligned.
+Emacs can display an indication of the =fill-column= position (see [[id:emacs--Fill-Commands][Explicit Fill Commands]]). The fill-column indicator is a useful functionality especially in =prog-mode= and its descendants (see [[id:emacs--Major-Modes][Major Modes]]) to indicate the position of a specific column that has some special meaning for formatting the source code of a program. This assumes the buffer uses a fixed-pitch font, where all the characters (with the possible exception of double-width characters) have the same width on display. If the buffer uses variable-pitch fonts, the fill-column indicators on different lines might appear unaligned.
 
 To activate the fill-column indication display, use the minor modes =display-fill-column-indicator-mode= and =global-display-fill-column-indicator-mode=, which enable the indicator locally or globally, respectively.
 

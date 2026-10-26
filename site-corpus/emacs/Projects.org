@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Projects
 
-Next: [[id:emacs--Change-Log#Change-Log][Change Logs]]   Previous: [[id:emacs--Version-Control#Version-Control][Version Control]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
+Next: [[id:emacs--Change-Log][Change Logs]]   Previous: [[id:emacs--Version-Control][Version Control]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
 
 <<Projects>>
+
+--------------
+
 *** 30.2 Working with Projects [[#Working-with-Projects][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Working-with-Projects
@@ -14,122 +17,15 @@ Next: [[id:emacs--Change-Log#Change-Log][Change Logs]]   Previous: [[id:emacs--V
 :END:
 A /project/ is a collection of files used for producing one or more programs. Files that belong to a project are typically stored in a hierarchy of directories; the top-level directory of the hierarchy is known as the /project root/.
 
-Whether a given directory is a root of some project is determined by the project-specific infrastructure, known as /project back-end/. Emacs currently supports two such back-ends: VC-aware (see [[id:emacs--Version-Control::#Version-Control][Version Control]]), whereby a VCS repository is considered a project; and EDE (see [[id:emacs--EDE][Emacs Development Environment]]). This is expected to be extended in the future to support additional types of projects.
+Whether a given directory is a root of some project is determined by the project-specific infrastructure, known as /project back-end/. Emacs currently supports two such back-ends: VC-aware (see [[id:emacs--Version-Control][Version Control]]), whereby a VCS repository is considered a project; and EDE (see [[id:emacs--EDE][Emacs Development Environment]]). This is expected to be extended in the future to support additional types of projects.
 
-Which files do or don't belong to a project is also determined by the project back-end. For example, the VC-aware back-end doesn't consider “ignored” files (see [[id:emacs--Version-Control::#VC-Ignore][Ignore Version Control Files]]) to be part of the project. Also, the VC-aware Project back-end considers “untracked” files by default. That behavior is controllable with the variable =project-vc-include-untracked=.
+Which files do or don't belong to a project is also determined by the project back-end. For example, the VC-aware back-end doesn't consider “ignored” files (see [[id:emacs--VC-Ignore][Ignore Version Control Files]]) to be part of the project. Also, the VC-aware Project back-end considers “untracked” files by default. That behavior is controllable with the variable =project-vc-include-untracked=.
 
 - User Option: *project-mode-line* [[#index-project_002dmode_002dline][¶]] :: If this user option is non-=nil=, Emacs displays the name of the current project (if any) on the mode line; clicking mouse-1 on the project name pops up the menu with the project-related commands. The default value is =nil=.
 
---------------
-
-<<Project-File-Commands>>
-**** 30.2.1 Project Commands That Operate on Files [[#Project-Commands-That-Operate-on-Files][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Project-Commands-That-Operate-on-Files
-:CLASS: subsection
-:END:
-- C-x p f :: Visit a file that belongs to the current project (=project-find-file=).
-
-- C-x p g :: Find matches for a regexp in all files that belong to the current project (=project-find-regexp=).
-
-- M-x project-search :: Interactively search for regexp matches in all files that belong to the current project.
-
-- C-x p r :: Perform query-replace for a regexp in all files that belong to the current project (=project-query-replace-regexp=).
-
-- C-x p D :: Run Dired in the current project's root directory (=project-dired=).
-
-- C-x p v :: Run =vc-dir= in the current project's root directory (=project-vc-dir=).
-
-- C-x p s :: Start an inferior shell in the current project's root directory (=project-shell=).
-
-- C-x p e :: Start Eshell in the current project's root directory (=project-eshell=).
-
-- C-x p c :: Run compilation in the current project's root directory (=project-compile=).
-
-- C-x p ! :: Run shell command in the current project's root directory (=project-shell-command=).
-
-- C-x p & :: Run shell command asynchronously in the current project's root directory (=project-async-shell-command=).
-
-- C-x p o :: Run the next command in the current project (=project-any-command=).
-
-Emacs provides commands for handling project files conveniently. This subsection describes these commands.
-
-All of the commands described here share the notion of the /current project/. The current project is determined by the =default-directory= (see [[id:emacs--File-Names][File Names]]) of the buffer that is the current buffer when the command is invoked. If that directory doesn't seem to belong to a recognizable project, these commands prompt you for the project directory.
-
-The command C-x p f (=project-find-file=) is a convenient way of visiting files (see [[id:emacs--Visiting][Visiting Files]]) that belong to the current project. Unlike C-x C-f, this command doesn't require typing the full file name of the file to visit, you can type only the file's base name (i.e., omit the leading directories). In addition, the completion candidates considered by the command include only the files belonging to the current project, and nothing else. If there's a file name at point, this command offers that file as the first element of the “future history”. If given a prefix, include all files under the project root, except for VCS directories listed in =vc-directory-exclusion-list=.
-
-The command C-x p g (=project-find-regexp=) is similar to =rgrep= (see [[id:emacs--Grep-Searching][Searching with Grep under Emacs]]), but it searches only the files that belong to the current project. The command prompts for the regular expression to search, and pops up an Xref mode buffer with the search results, where you can select a match using the Xref mode commands (see [[id:emacs--Xref::#Xref-Commands][Commands Available in the =*xref*= Buffer]]). When invoked with a prefix argument, this command additionally prompts for the base directory from which to start the search; this allows, for example, to limit the search only to project files under a certain subdirectory of the project root. The way this command displays the matches is affected by the value of =xref-auto-jump-to-first-xref= (see [[id:emacs--Xref::#Identifier-Search][Searching and Replacing with Identifiers]]).
-
-M-x project-search is a sequential variant of =project-find-regexp=. It prompts for a regular expression to search in the current project's files, but instead of finding all the matches and displaying them, it stops when it finds a match and visits the matched file at the locus of the match, allowing you to edit the matched file. To find the rest of the matches, type M-x fileloop-continue RET.
-
-C-x p r (=project-query-replace-regexp=) is similar to =project-search=, but it prompts you for whether to replace each match it finds, like =query-replace= does (see [[id:emacs--Replace::#Query-Replace][Query Replace]]), and continues to the next match after you respond. If your response causes Emacs to exit the query-replace loop, you can later continue with M-x fileloop-continue RET.
-
-The command C-x p d (=project-find-dir=) prompts you to choose a directory inside the current project, with completion. And opens a Dired buffer (see [[id:emacs--Dired][Dired, the Directory Editor]]) listing the files in it.
-
-The command C-x p D (=project-dired=) opens a Dired buffer (see [[id:emacs--Dired][Dired, the Directory Editor]]) listing the files in the current project's root directory.
-
-The command C-x p v (=project-vc-dir=) opens a VC Directory buffer (see [[id:emacs--Version-Control::#VC-Directory-Mode][VC Directory Mode]]) listing the version control statuses of the files in a directory tree under the current project's root directory.
-
-The command C-x p s (=project-shell=) starts a shell session (see [[id:emacs--Shell][Running Shell Commands from Emacs]]) in a new buffer with the current project's root as the working directory.
-
-The command C-x p e (=project-eshell=) starts an Eshell session in a new buffer with the current project's root as the working directory. See [[../eshell_html/index.html#Top][Eshell]] in Eshell: The Emacs Shell.
-
-The command C-x p c (=project-compile=) runs compilation (see [[id:emacs--Compilation][Running Compilations under Emacs]]) in the current project's root directory.
-
-The command C-x p ! (=project-shell-command=) runs =shell-command= in the current project's root directory.
-
-The command C-x p & (=project-async-shell-command=) runs =async-shell-command= in the current project's root directory.
-
-Finally, the command C-x p o (=project-any-command=) will run the next command you type, whether related to files or not, in the current project.
-
---------------
-
-<<Project-Buffer-Commands>>
-**** 30.2.2 Project Commands That Operate on Buffers [[#Project-Commands-That-Operate-on-Buffers][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Project-Commands-That-Operate-on-Buffers
-:CLASS: subsection
-:END:
-- C-x p b :: Switch to another buffer belonging to the current project (=project-switch-to-buffer=).
-
-- C-x p C-b :: List the project buffers (=project-list-buffers=).
-
-- C-x p k :: Kill all live buffers that belong to the current project (=project-kill-buffers=).
-
-- C-x p o :: Run the next command in the current project (=project-any-command=).
-
-Working on a project could potentially involve having many buffers visiting files that belong to the project, and also buffers that belong to the project, but don't visit any files (like the =*compilation*= buffer created by =project-compile=). The command C-x p b (=project-switch-to-buffer=) helps you switch between buffers that belong to the current project by prompting for a buffer to switch and considering only the current project's buffers as candidates for completion.
-
-Like the command =list-buffers= (see [[id:emacs--List-Buffers][Listing Existing Buffers]]), the command C-x p C-b (=project-list-buffers=) displays a list of existing buffers, but only belonging to the current project.
-
-When you finish working on the project, you may wish to kill all the buffers that belong to the project, to keep your Emacs session smaller. The command C-x p k (=project-kill-buffers=) accomplishes that: it kills all the buffers that belong to the current project that satisfy any of =project-kill-buffer-conditions=. If =project-kill-buffers-display-buffer-list= is non-=nil=, the buffers to be killed will be displayed first.
-
-Finally, the command C-x p o (=project-any-command=) will run the next command you type, whether related to buffers or not, in the current project.
-
---------------
-
-<<Switching-Projects>>
-**** 30.2.3 Switching Projects [[#Switching-Projects-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Switching-Projects-1
-:CLASS: subsection
-:END:
-- C-x p p :: Run an Emacs command for another project (=project-switch-project=).
-
-Commands that operate on project files (see [[#Project-File-Commands][Project Commands That Operate on Files]]) will conveniently prompt you for a project directory when no project is current. When you are inside some project, but you want to operate on a different project, use the C-x p p command (=project-switch-project=). This command prompts you to choose a directory among known project roots, and then displays the menu of available commands to operate on the project you choose. The variable =project-switch-commands= controls which commands are available in the menu, and which key invokes each command.
-
-The variable =project-list-file= names the file in which Emacs records the list of known projects. It defaults to the file =projects= in =user-emacs-directory= (see [[id:emacs--Init-File::#Find-Init][How Emacs Finds Your Init File]]).
-
---------------
-
-<<Managing-Projects>>
-**** 30.2.4 Managing the Project List File [[#Managing-the-Project-List-File][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Managing-the-Project-List-File
-:CLASS: subsection
-:END:
-- M-x project-forget-project :: Remove a known project from the =project-list-file=.
-
-Normally Emacs automatically adds and removes projects to and from the =project-list-file=, but sometimes you may want to manually edit the available projects. M-x project-forget-project prompts you to choose one of the available projects, and then removes it from the file.
+- [[id:emacs--Project-File-Commands][Project Commands That Operate on Files]]
+- [[id:emacs--Project-Buffer-Commands][Project Commands That Operate on Buffers]]
+- [[id:emacs--Switching-Projects][Switching Projects]]
+- [[id:emacs--Managing-Projects][Managing the Project List File]]
 
 --------------

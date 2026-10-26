@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Using-Guix-Interactively>>
-Previous: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.14 Using Guix Interactively [[#Using-Guix-Interactively-1][¶]]
+<<Using-Guix-Interactively-1>>
+*** 8.14 Using Guix Interactively
 :PROPERTIES:
-:CUSTOM_ID: Using-Guix-Interactively-1
+:CUSTOM_ID: using-guix-interactively
 :CLASS: section
 :END:
+<<index-interactive-use>> <<index-REPL_002c-read_002deval_002dprint-loop>>
 The =guix repl= command gives you access to a warm and friendly /read-eval-print loop/ (REPL) (see [[id:guix--Invoking-guix-repl][Invoking =guix repl=]]). If you're getting into Guix programming---defining your own packages, writing manifests, defining services for Guix System or Guix Home, etc.---you will surely find it convenient to toy with ideas at the REPL.
 
 If you use Emacs, the most convenient way to do that is with Geiser (see [[id:guix--The-Perfect-Setup][The Perfect Setup]]), but you do not have to use Emacs to enjoy the REPL. When using =guix repl= or =guile= in the terminal, we recommend using Readline for completion and Colorized to get colorful output. To do that, you can run:
@@ -72,7 +75,7 @@ scheme@(guix-user)> (string-append "a" "b")
 $2 = "ab"
 #+end_example
 
-It becomes interesting when you start fiddling with Guix at the REPL. The first thing you'll want to do is to “import” the =(guix)= module, which gives access to the main part of the programming interface, and perhaps a bunch of useful Guix modules. You could type =(use-modules (guix))=, which is valid Scheme code to import a module (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Using-Guile-Modules.html#Using-Guile-Modules][Using Guile Modules]] in GNU Guile Reference Manual), but the REPL provides the =use= /command/ as a shorthand notation (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/REPL-Commands.html#REPL-Commands][REPL Commands]] in GNU Guile Reference Manual):
+It becomes interesting when you start fiddling with Guix at the REPL. The first thing you'll want to do is to “import” the =(guix)= module, which gives access to the main part of the programming interface, and perhaps a bunch of useful Guix modules. You could type =(use-modules (guix))=, which is valid Scheme code to import a module (see [[https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#Using-Guile-Modules][Using Guile Modules]] in GNU Guile Reference Manual), but the REPL provides the =use= /command/ as a shorthand notation (see [[https://www.gnu.org/software/guile/manual/html_node/REPL-Commands.html#REPL-Commands][REPL Commands]] in GNU Guile Reference Manual):
 
 #+begin_example
 scheme@(guix-user)> ,use (guix)
@@ -85,13 +88,13 @@ Guix extends the Guile REPL with additional commands for convenience. Among thos
 
 #+begin_example
 scheme@(guix-user)> ,build coreutils
-$1 = "/gnu/store/...-coreutils-8.32-debug"
-$2 = "/gnu/store/...-coreutils-8.32"
+$1 = "/gnu/store/…-coreutils-8.32-debug"
+$2 = "/gnu/store/…-coreutils-8.32"
 scheme@(guix-user)> ,build grep
-$3 = "/gnu/store/...-grep-3.6"
+$3 = "/gnu/store/…-grep-3.6"
 scheme@(guix-user)> ,build (computed-file "x" #~(mkdir #$output))
-building /gnu/store/...-x.drv...
-$4 = "/gnu/store/...-x"
+building /gnu/store/…-x.drv...
+$4 = "/gnu/store/…-x"
 scheme@(guix-user)> ,use(ice-9 ftw)
 scheme@(guix-user)> (scandir (string-append $3 "/bin"))
 $5 = ("." ".." "egrep" "fgrep" "grep")
@@ -120,39 +123,37 @@ At a lower-level, a useful command is =lower=: it takes a file-like object and �
 
 #+begin_example
 scheme@(guix-user)> ,lower grep
-$6 = #<derivation /gnu/store/...-grep-3.6.drv => /gnu/store/...-grep-3.6 7f0e639115f0>
+$6 = #<derivation /gnu/store/…-grep-3.6.drv => /gnu/store/…-grep-3.6 7f0e639115f0>
 scheme@(guix-user)> ,lower (plain-file "x" "Hello!")
-$7 = "/gnu/store/...-x"
+$7 = "/gnu/store/…-x"
 #+end_example
 
 The full list of REPL commands can be seen by typing =,help guix= and is given below for reference.
 
-- REPL command: *build* =object== [==build-mode==]= [[#index-build][¶]] :: Lower =object= and build it if it's not already built, returning its output file name(s).
+- REPL command: build =object= :: Lower =object= and build it if it's not already built, returning its output file name(s).
 
-  =build-mode= defaults to =normal=. Other valid build modes are =check= and =repair=.
-
-- REPL command: *build-options* =options= [[#index-build_002doptions][¶]] :: Set build options for rest of the REPL commands to =options=. Must be a list of keywords with values accepted by procedure =(@ (guix store) set-build-options)=. An example would be:
+- REPL command: build-options =options= :: Set build options for rest of the REPL commands to =options=. Must be a list of keywords with values accepted by procedure =(@ (guix store) set-build-options)=. An example would be:
 
   #+begin_example
   ,build-options '(#:offload? #f)
-#+end_example
+  #+end_example
 
-- REPL command: *graft?* =graft?= [[#index-graft_003f][¶]] :: Set whether grafts should be performed as part of the build. Equivalent to =--no-grafts= argument to =guix build=.
+- REPL command: graft? =graft?= :: Set whether grafts should be performed as part of the build. Equivalent to =--no-grafts= argument to =guix build=.
 
-- REPL command: *lower* =object= [[#index-lower][¶]] :: Lower =object= into a derivation or store file name and return it.
+- REPL command: lower =object= :: Lower =object= into a derivation or store file name and return it.
 
-- REPL command: *verbosity* =level= [[#index-verbosity][¶]] :: Change build verbosity to =level=.
+- REPL command: verbosity =level= :: Change build verbosity to =level=.
 
   This is similar to the =--verbosity= command-line option (see [[id:guix--Common-Build-Options][Common Build Options]]): level 0 means total silence, level 1 shows build events only, and higher levels print build logs.
 
-- REPL command: *phases* =package= [[#index-phases][¶]]\\
-  REPL command: *configure-flags* =package= [[#index-configure_002dflags][¶]]\\
-  REPL command: *make-flags* =package= [[#index-make_002dflags][¶]] :: These REPL commands return the value of one element of the =arguments= field of =package= (see [[id:guix--package-Reference][=package= Reference]]): the first one show the staged code associated with =#:phases= (see [[id:guix--Build-Phases][Build Phases]]), the second shows the code for =#:configure-flags=, and =,make-flags= returns the code for =#:make-flags=.
+- REPL command: phases =package=\\
+  REPL command: configure-flags =package=\\
+  REPL command: make-flags =package= :: These REPL commands return the value of one element of the =arguments= field of =package= (see [[id:guix--package-Reference][=package= Reference]]): the first one show the staged code associated with =#:phases= (see [[id:guix--Build-Phases][Build Phases]]), the second shows the code for =#:configure-flags=, and =,make-flags= returns the code for =#:make-flags=.
 
-- REPL command: *run-in-store* =exp= [[#index-run_002din_002dstore][¶]] :: Run =exp=, a monadic expression, through the store monad. See [[id:guix--The-Store-Monad][The Store Monad]], for more information.
+- REPL command: run-in-store =exp= :: Run =exp=, a monadic expression, through the store monad. See [[id:guix--The-Store-Monad][The Store Monad]], for more information.
 
-- REPL command: *enter-store-monad* [[#index-enter_002dstore_002dmonad][¶]] :: Enter a new REPL to evaluate monadic expressions (see [[id:guix--The-Store-Monad][The Store Monad]]). You can quit this “inner” REPL by typing =,q=.
+- REPL command: enter-store-monad  :: Enter a new REPL to evaluate monadic expressions (see [[id:guix--The-Store-Monad][The Store Monad]]). You can quit this “inner” REPL by typing =,q=.
 
 --------------
 
-Previous: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

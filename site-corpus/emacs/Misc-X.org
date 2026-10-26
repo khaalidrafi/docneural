@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Icons-X][Icons]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
 
 <<Misc-X>>
+
+--------------
+
 *** C.12 Other Display Options [[#Other-Display-Options][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Other-Display-Options
@@ -27,5 +30,3 @@ Next:   Previous: [[id:emacs--Icons-X][Icons]]   Up: [[id:emacs--Emacs-Invocatio
 - ‘=--basic-display=' :: Disable the menu-bar, the tool-bar, the scroll-bars, tool tips, and turn off font-lock-mode and the blinking cursor. This can be useful for making a test case that simplifies debugging of display problems.
 
 The ‘=--xrm=' option (see [[id:emacs--Resources][X Resources]]) specifies additional X resource values.
-
---------------

@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-gc>>
-Next: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Previous: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Previous: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.6 Invoking =guix gc= [[#Invoking-guix-gc-1][¶]]
+<<Invoking-guix-gc-1>>
+*** 5.6 Invoking =guix gc=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-gc-1
+:CUSTOM_ID: invoking-guix-gc
 :CLASS: section
 :END:
+<<index-garbage-collector>> <<index-disk-space>> <<index-guix-gc>>
 Packages that are installed, but not used, may be /garbage-collected/. The =guix gc= command allows users to explicitly run the garbage collector to reclaim space from the =/gnu/store= directory. It is the /only/ way to remove files from =/gnu/store=---removing files or directories manually may break it beyond repair!
 
+<<index-GC-roots-1>> <<index-garbage-collector-roots-1>>
 The garbage collector has a set of known /roots/: any file under =/gnu/store= reachable from a root is considered /live/ and cannot be deleted; any other file is considered /dead/ and may be deleted. The set of garbage collector roots (“GC roots” for short) includes default user profiles; by default, the symlinks under =/var/guix/gcroots= represent these GC roots. New GC roots can be added with =guix build --root=, for example (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]). The =guix gc --list-roots= command lists them.
 
 Prior to running =guix gc --collect-garbage= to make space, it is often useful to remove old generations from user profiles; that way, old package builds referenced by those generations can be reclaimed. This is achieved by running =guix package --delete-generations= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
@@ -80,7 +84,7 @@ The =guix gc= command has three modes of operation: it can be used to garbage-co
 
   #+begin_example
   guix gc -d 2m -F 10G
-#+end_example
+  #+end_example
 
 - =--delete=\\
   =-D= :: Attempt to delete all the store files and directories specified as arguments. This fails if some of the files are not in the store, or if they are still live.
@@ -103,21 +107,21 @@ The =guix gc= command has three modes of operation: it can be used to garbage-co
 
 In addition, the references among existing store files can be queried:
 
-- <<index-package-dependencies>>=--references= [[#index-package-dependencies][¶]]\\
+- =--references= [[#index-package-dependencies][¶]]\\
   =--referrers= :: List the references (respectively, the referrers) of store files given as arguments.
 
-- <<index-closure>>=--requisites= [[#index-closure][¶]]\\
+- =--requisites= [[#index-closure][¶]]\\
   =-R= :: List the requisites of the store files passed as arguments. Requisites include the store files themselves, their references, and the references of these, recursively. In other words, the returned list is the /transitive closure/ of the store files.
 
   See [[id:guix--Invoking-guix-size][Invoking =guix size=]], for a tool to profile the size of the closure of an element. See [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], for a tool to visualize the graph of references.
 
-- <<index-derivation>>=--derivers= [[#index-derivation][¶]] :: Return the derivation(s) leading to the given store items (see [[id:guix--Derivations][Derivations]]).
+- =--derivers= [[#index-derivation][¶]] :: Return the derivation(s) leading to the given store items (see [[id:guix--Derivations][Derivations]]).
 
   For example, this command:
 
   #+begin_example
   guix gc --derivers $(guix package -I ^emacs$ | cut -f4)
-#+end_example
+  #+end_example
 
   returns the =.drv= file(s) leading to the =emacs= package installed in your profile.
 
@@ -125,7 +129,9 @@ In addition, the references among existing store files can be queried:
 
 Lastly, the following options allow you to check the integrity of the store and to control disk usage.
 
--  <<index-integrity_002c-of-the-store>>=--verify[===options==]= [[#index-integrity_002c-of-the-store][¶]] :: Verify the integrity of the store.
+- =--verify[===options==]= [[#index-integrity_002c-of-the-store][¶]] :: <<index-integrity-checking>>
+
+  Verify the integrity of the store.
 
   By default, make sure that all the store items marked as valid in the database of the daemon actually exist in =/gnu/store=.
 
@@ -133,14 +139,16 @@ Lastly, the following options allow you to check the integrity of the store and 
 
   When passing =--verify=contents=, the daemon computes the content hash of each store item and compares it against its hash in the database. Hash mismatches are reported as data corruptions. Because it traverses /all the files in the store/, this command can take a long time, especially on systems with a slow disk drive.
 
+  <<index-repairing-the-store>> <<index-corruption_002c-recovering-from>>
+
   Using =--verify=repair= or =--verify=contents,repair= causes the daemon to try to repair corrupt store items by fetching substitutes for them (see [[id:guix--Substitutes][Substitutes]]). Because repairing is not atomic, and thus potentially dangerous, it is available only to the system administrator. A lightweight alternative, when you know exactly which items in the store are corrupt, is =guix build --repair= (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]).
 
-- <<index-deduplication-1>>=--optimize= [[#index-deduplication-1][¶]] :: Optimize the store by hard-linking identical files---this is /deduplication/.
+- =--optimize= [[#index-deduplication-1][¶]] :: Optimize the store by hard-linking identical files---this is /deduplication/.
 
   The daemon performs deduplication after each successful build or archive import, unless it was started with =--disable-deduplication= (see [[id:guix--Invoking-guix_002ddaemon][=--disable-deduplication=]]). Thus, this option is primarily useful when the daemon was running with =--disable-deduplication=.
 
-- <<index-vacuum-the-store-database>>=--vacuum-database= [[#index-vacuum-the-store-database][¶]] :: Guix uses an sqlite database to keep track of the items in the store (see [[id:guix--The-Store][The Store]]). Over time it is possible that the database may grow to a large size and become fragmented. As a result, one may wish to clear the freed space and join the partially used pages in the database left behind from removed packages or after running the garbage collector. Running =sudo guix gc --vacuum-database= will lock the database and =VACUUM= the store, defragmenting the database and purging freed pages, unlocking the database when it finishes.
+- =--vacuum-database= [[#index-vacuum-the-store-database][¶]] :: Guix uses an sqlite database to keep track of the items in the store (see [[id:guix--The-Store][The Store]]). Over time it is possible that the database may grow to a large size and become fragmented. As a result, one may wish to clear the freed space and join the partially used pages in the database left behind from removed packages or after running the garbage collector. Running =sudo guix gc --vacuum-database= will lock the database and =VACUUM= the store, defragmenting the database and purging freed pages, unlocking the database when it finishes.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Previous: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Previous: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Keyboard-Macro-Registers][Keyboard Macro Registers]]   Previous: [[id:emacs--Number-Registers][Keeping Numbers in Registers]]   Up: [[id:emacs--Registers][Registers]]
 
 <<File-and-Buffer-Registers>>
+
+--------------
+
 *** 15.6 Keeping File and Buffer Names in Registers [[#Keeping-File-and-Buffer-Names-in-Registers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Keeping-File-and-Buffer-Names-in-Registers
@@ -35,5 +38,3 @@ Similarly, if there are certain buffers you visit frequently, you can put their 
 #+end_example
 
 To switch to the buffer whose name is in register =r=, type C-x r j =r=.
-
---------------

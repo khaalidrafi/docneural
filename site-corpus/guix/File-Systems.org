@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<File-Systems>>
-Next: [[id:guix--Mapped-Devices][Mapped Devices]], Previous: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Mapped-Devices][Mapped Devices]], Previous: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.4 File Systems [[#File-Systems-1][¶]]
+<<File-Systems-1>>
+*** 11.4 File Systems
 :PROPERTIES:
-:CUSTOM_ID: File-Systems-1
+:CUSTOM_ID: file-systems
 :CLASS: section
 :END:
 The list of file systems to be mounted is specified in the =file-systems= field of the operating system declaration (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]). Each file system is declared using the =file-system= form, like this:
@@ -56,13 +58,15 @@ The list of file systems to be mounted is specified in the =file-systems= field 
 
 As usual, some of the fields are mandatory---those shown in the example above---while others can be omitted. These are described below.
 
-- Data Type: *file-system* [[#index-file_002dsystem][¶]] :: Objects of this type represent file systems to be mounted. They contain the following members:
+- Data Type: file-system  :: Objects of this type represent file systems to be mounted. They contain the following members:
 
   - =type= :: This is a string specifying the type of the file system---e.g., ="ext4"=.
 
   - =mount-point= :: This designates the place where the file system is to be mounted.
 
   - =device= :: This names the “source” of the file system. It can be one of three things: a file system label, a file system UUID, or the name of a =/dev= node. Labels and UUIDs offer a way to refer to file systems without having to hard-code their actual device name[[#FOOT28][^{28}]].
+
+    <<index-file_002dsystem_002dlabel>>
 
     File system labels are created using the =file-system-label= procedure, UUIDs are created using =uuid=, and =/dev= nodes are plain strings. Here's an example of a file system referred to by its label, as shown by the =e2label= command:
 
@@ -72,6 +76,8 @@ As usual, some of the fields are mandatory---those shown in the example above---
       (type "ext4")
       (device (file-system-label "my-home")))
     #+end_src
+
+    <<index-uuid>>
 
     UUIDs are converted from their string representation (as shown by the =tune2fs -l= command) using the =uuid= form[[#FOOT29][^{29}]], like this:
 
@@ -84,9 +90,9 @@ As usual, some of the fields are mandatory---those shown in the example above---
 
     When the source of a file system is a mapped device (see [[id:guix--Mapped-Devices][Mapped Devices]]), its =device= field /must/ refer to the mapped device name---e.g., ="/dev/mapper/root-partition"=. This is required so that the system knows that mounting the file system depends on having the corresponding device mapping established.
 
-  - =flags= (default: ='()=) :: This is a list of symbols denoting mount flags. Recognized flags include =read-only=, =bind-mount=, =no-dev= (disallow access to special files), =no-suid= (ignore setuid and setgid bits), =no-atime= (do not update file access times), =no-diratime= (likewise for directories only), =strict-atime= (update file access time), =lazy-time= (only update time on the in-memory version of the file inode), =no-exec= (disallow program execution), =remount= (remount a mounted file system), and =shared= (make the mount shared). See [[https://doc.guix.gnu.org/libc/latest/en/html_node/Mount_002dUnmount_002dRemount.html#Mount_002dUnmount_002dRemount][Mount-Unmount-Remount]] in The GNU C Library Reference Manual, for more information on these flags.
+  - =flags= (default: ='()=) :: This is a list of symbols denoting mount flags. Recognized flags include =read-only=, =bind-mount=, =no-dev= (disallow access to special files), =no-suid= (ignore setuid and setgid bits), =no-atime= (do not update file access times), =no-diratime= (likewise for directories only), =strict-atime= (update file access time), =lazy-time= (only update time on the in-memory version of the file inode), =no-exec= (disallow program execution), =remount= (remount a mounted file system), and =shared= (make the mount shared). See [[https://www.gnu.org/software/libc/manual/html_node/Mount_002dUnmount_002dRemount.html#Mount_002dUnmount_002dRemount][Mount-Unmount-Remount]] in The GNU C Library Reference Manual, for more information on these flags.
 
-  - =options= (default: =#f=) :: This is either =#f=, or a string denoting mount options passed to the file system driver. See [[https://doc.guix.gnu.org/libc/latest/en/html_node/Mount_002dUnmount_002dRemount.html#Mount_002dUnmount_002dRemount][Mount-Unmount-Remount]] in The GNU C Library Reference Manual, for details.
+  - =options= (default: =#f=) :: This is either =#f=, or a string denoting mount options passed to the file system driver. See [[https://www.gnu.org/software/libc/manual/html_node/Mount_002dUnmount_002dRemount.html#Mount_002dUnmount_002dRemount][Mount-Unmount-Remount]] in The GNU C Library Reference Manual, for details.
 
     Run =man 8 mount= for options for various file systems, but beware that what it lists as file-system-independent “mount options” are in fact flags, and belong in the =flags= field described above.
 
@@ -124,7 +130,7 @@ As usual, some of the fields are mandatory---those shown in the example above---
 
   - =shepherd-requirements= (default: ='()=) :: This is a list of symbols denoting Shepherd requirements that must be met before mounting the file system.
 
-    As an example, an NFS file system would typically have a requirement for =networking=. In some situations, requiring =networking= might not be sufficient as =networking= being marked as started does /not/ imply the network has already been configured and in working order (for example, when using =dhcpcd-service-type=). For such cases, adding a requirement on a custom =network-online= service may be necessary. A sample =network-online= one-shot Shepherd service implementation is provided below:
+    As an example, an NFS file system would typically have a requirement for =networking=. In some situations, requiring =networking= might not be sufficient as =networking= being marked as started does /not/ imply the network has already been configured and in working order (for example, when using =dhcp-client-service-type=). For such cases, adding a requirement on a custom =network-online= service may be necessary. A sample =network-online= one-shot Shepherd service implementation is provided below:
 
     #+begin_src lisp
     (simple-service 'network-online shepherd-root-service-type
@@ -149,7 +155,7 @@ As usual, some of the fields are mandatory---those shown in the example above---
 
     Typically, file systems are mounted before most other Shepherd services are started. However, file systems with a non-empty shepherd-requirements field are mounted after Shepherd services have begun. Any Shepherd service that depends on a file system with a non-empty shepherd-requirements field must depend on it directly and not on the generic symbol =file-systems=.
 
-- Procedure: *file-system-label* =str= [[#index-file_002dsystem_002dlabel-1][¶]] :: This procedure returns an opaque file system label from =str=, a string:
+- Procedure: file-system-label str :: This procedure returns an opaque file system label from =str=, a string:
 
   #+begin_src lisp
   (file-system-label "home")
@@ -160,30 +166,30 @@ As usual, some of the fields are mandatory---those shown in the example above---
 
 The =(gnu system file-systems)= exports the following useful variables.
 
-- Variable: *%base-file-systems* [[#index-_0025base_002dfile_002dsystems][¶]] :: These are essential file systems that are required on normal systems, such as =%pseudo-terminal-file-system= and =%immutable-store= (see below). Operating system declarations should always contain at least these.
+- Variable: %base-file-systems  :: These are essential file systems that are required on normal systems, such as =%pseudo-terminal-file-system= and =%immutable-store= (see below). Operating system declarations should always contain at least these.
 
-- Variable: *%pseudo-terminal-file-system* [[#index-_0025pseudo_002dterminal_002dfile_002dsystem][¶]] :: This is the file system to be mounted as =/dev/pts=. It supports /pseudo-terminals/ created /via/ =openpty= and similar functions (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Pseudo_002dTerminals.html#Pseudo_002dTerminals][Pseudo-Terminals]] in The GNU C Library Reference Manual). Pseudo-terminals are used by terminal emulators such as =xterm=.
+- Variable: %pseudo-terminal-file-system  :: This is the file system to be mounted as =/dev/pts=. It supports /pseudo-terminals/ created /via/ =openpty= and similar functions (see [[https://www.gnu.org/software/libc/manual/html_node/Pseudo_002dTerminals.html#Pseudo_002dTerminals][Pseudo-Terminals]] in The GNU C Library Reference Manual). Pseudo-terminals are used by terminal emulators such as =xterm=.
 
-- Variable: *%shared-memory-file-system* [[#index-_0025shared_002dmemory_002dfile_002dsystem][¶]] :: This file system is mounted as =/dev/shm= and is used to support memory sharing across processes (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Memory_002dmapped-I_002fO.html#Memory_002dmapped-I_002fO][=shm_open=]] in The GNU C Library Reference Manual).
+- Variable: %shared-memory-file-system  :: This file system is mounted as =/dev/shm= and is used to support memory sharing across processes (see [[https://www.gnu.org/software/libc/manual/html_node/Memory_002dmapped-I_002fO.html#Memory_002dmapped-I_002fO][=shm_open=]] in The GNU C Library Reference Manual).
 
-- Variable: *%immutable-store* [[#index-_0025immutable_002dstore][¶]] :: This file system performs a read-only “bind mount” of =/gnu/store=, making it read-only for all the users including =root=. This prevents against accidental modification by software running as =root= or by system administrators.
+- Variable: %immutable-store  :: This file system performs a read-only “bind mount” of =/gnu/store=, making it read-only for all the users including =root=. This prevents against accidental modification by software running as =root= or by system administrators.
 
   The daemon itself is still able to write to the store: it remounts it read-write in its own “name space.”
 
-- Variable: *%binary-format-file-system* [[#index-_0025binary_002dformat_002dfile_002dsystem][¶]] :: The =binfmt_misc= file system, which allows handling of arbitrary executable file types to be delegated to user space. This requires the =binfmt.ko= kernel module to be loaded.
+- Variable: %binary-format-file-system  :: The =binfmt_misc= file system, which allows handling of arbitrary executable file types to be delegated to user space. This requires the =binfmt.ko= kernel module to be loaded.
 
-- Variable: *%fuse-control-file-system* [[#index-_0025fuse_002dcontrol_002dfile_002dsystem][¶]] :: The =fusectl= file system, which allows unprivileged users to mount and unmount user-space FUSE file systems. This requires the =fuse.ko= kernel module to be loaded.
+- Variable: %fuse-control-file-system  :: The =fusectl= file system, which allows unprivileged users to mount and unmount user-space FUSE file systems. This requires the =fuse.ko= kernel module to be loaded.
 
 The =(gnu system uuid)= module provides tools to deal with file system “unique identifiers” (UUIDs).
 
-- Procedure: *uuid* =str [type]= [[#index-uuid-1][¶]] :: Return an opaque UUID (unique identifier) object of the given =type= (a symbol) by parsing =str= (a string):
+- Procedure: uuid str [type] :: Return an opaque UUID (unique identifier) object of the given =type= (a symbol) by parsing =str= (a string):
 
   #+begin_src lisp
   (uuid "4dab5feb-d176-45de-b287-9b0a6e4c01cb")
-  ⇒ #<<uuid> type: dce bv: ...>
+  ⇒ #<<uuid> type: dce bv: …>
 
   (uuid "1234-ABCD" 'fat)
-  ⇒ #<<uuid> type: fat bv: ...>
+  ⇒ #<<uuid> type: fat bv: …>
   #+end_src
 
   =type= may be one of =dce=, =iso9660=, =fat=, =ntfs=, or one of the commonly found synonyms for these.
@@ -202,17 +208,15 @@ The =(gnu system uuid)= module provides tools to deal with file system “unique
 ***** [[#DOCF28][(28)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 Note that, while it is tempting to use =/dev/disk/by-uuid= and similar device names to achieve the same result, this is not recommended: These special device nodes are created by the udev daemon and may be unavailable at the time the device is mounted.
 
 ***** [[#DOCF29][(29)]]
 :PROPERTIES:
 :CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 The =uuid= form expects 16-byte UUIDs as defined in [[https://tools.ietf.org/html/rfc4122][RFC 4122]]. This is the form of UUID used by the ext2 family of file systems and others, but it is different from “UUIDs” found in FAT file systems, for instance.
 
 --------------
 
-Next: [[id:guix--Mapped-Devices][Mapped Devices]], Previous: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Mapped-Devices][Mapped Devices]], Previous: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

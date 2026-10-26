@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Windows Misc
 
-Next: [[id:emacs--MS_002dDOS#MS_002dDOS][Emacs and MS-DOS]]   Previous: [[id:emacs--Windows-Fonts][Specifying Fonts on MS-Windows]]   Up: [[id:emacs--Microsoft-Windows][Emacs and Microsoft Windows/MS-DOS]]
+Next: [[id:emacs--MS_002dDOS][Emacs and MS-DOS]]   Previous: [[id:emacs--Windows-Fonts][Specifying Fonts on MS-Windows]]   Up: [[id:emacs--Microsoft-Windows][Emacs and Microsoft Windows/MS-DOS]]
 
 <<Windows-Misc>>
+
+--------------
+
 *** I.11 Miscellaneous Windows-specific features [[#Miscellaneous-Windows_002dspecific-features][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Miscellaneous-Windows_002dspecific-features
@@ -20,6 +23,6 @@ The variable =w32-grab-focus-on-raise=, if set to a non-=nil= value causes a fra
 
 On Windows 10 (version 1809 and higher) and Windows 11, Emacs title bars and scroll bars by default follow the system's Light or Dark mode, similar to other programs such as Explorer and Command Prompt. To change the color mode, select =Personalization= from =Windows Settings=, then =Colors->Choose your color= (or =Choose your default app mode= or =Choose your mode=); then restart Emacs. On Windows 11, you can select separate default modes for Windows and for applications.
 
-If you don't want Emacs to follow the system's Dark mode setting, customize the variable =w32-follow-system-dark-mode= to a =nil= value; then Emacs will use the default Light mode regardless of system-wide settings. Changing the value of this variable affects only the Emacs frames created after the change, so you should set its value in your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]), either directly or via M-x customize-variable, which lets you save the customized value, see [[id:emacs--Easy-Customization::#Saving-Customizations][Saving Customizations]].
+If you don't want Emacs to follow the system's Dark mode setting, customize the variable =w32-follow-system-dark-mode= to a =nil= value; then Emacs will use the default Light mode regardless of system-wide settings. Changing the value of this variable affects only the Emacs frames created after the change, so you should set its value in your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]), either directly or via M-x customize-variable, which lets you save the customized value, see [[id:emacs--Saving-Customizations][Saving Customizations]].
 
 --------------

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Terminal-emulator][Emacs Terminal Emulator]]   Previous: [[id:emacs--Directory-Tracking][Directory Tracking]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Shell-Options>>
+
+--------------
+
 *** 40.7 Shell Mode Options [[#Shell-Mode-Options][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Shell-Mode-Options
@@ -34,6 +37,6 @@ You can configure the behavior of ‘=pushd='. Variables control whether ‘=pus
 
 Comint mode sets the =TERM= environment variable to a safe default value, but this value disables some useful features. For example, color is disabled in applications that use =TERM= to determine if color is supported. Therefore, Emacs provides an option =comint-terminfo-terminal= to let you choose a terminal with more advanced features, as defined in your system's terminfo database. Emacs will use this option as the value for =TERM= so long as =system-uses-terminfo= is non-=nil=.
 
-Both =comint-terminfo-terminal= and =system-uses-terminfo= can be declared as connection-local variables to adjust these options to match what a remote system expects (see [[id:emacs--Variables::#Connection-Variables][Per-Connection Local Variables]]).
+Both =comint-terminfo-terminal= and =system-uses-terminfo= can be declared as connection-local variables to adjust these options to match what a remote system expects (see [[id:emacs--Connection-Variables][Per-Connection Local Variables]]).
 
 --------------

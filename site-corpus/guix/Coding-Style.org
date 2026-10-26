@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Coding-Style>>
-Next: [[id:guix--Copyright-Matters][Copyright Matters]], Previous: [[id:guix--Packaging-Guidelines][Packaging Guidelines]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Submitting-Patches][Submitting Patches]], Previous: [[id:guix--Packaging-Guidelines][Packaging Guidelines]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.8 Coding Style [[#Coding-Style-1][¶]]
+<<Coding-Style-1>>
+*** 22.9 Coding Style
 :PROPERTIES:
-:CUSTOM_ID: Coding-Style-1
+:CUSTOM_ID: coding-style
 :CLASS: section
 :END:
 In general our code follows the GNU Coding Standards (see [[https://www.gnu.org/prep/standards/html_node/index.html#Top][GNU Coding Standards]]). However, they do not say much about Scheme, so here are some additional rules.

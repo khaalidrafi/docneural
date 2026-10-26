@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Image-Modules>>
-Previous: [[id:guix--image_002dtype-Reference][image-type Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--image_002dtype-Reference][image-type Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 16.4 Image Modules [[#Image-Modules-1][¶]]
+<<Image-Modules-1>>
+*** 16.4 Image Modules
 :PROPERTIES:
-:CUSTOM_ID: Image-Modules-1
+:CUSTOM_ID: image-modules
 :CLASS: section
 :END:
 Let's take the example of the Pine64, an ARM based machine. To be able to produce an image targeting this board, we need the following elements:
@@ -75,7 +77,3 @@ $ guix system image --image-type=pine64-raw my-pine.scm
 #+end_example
 
 Note that there are other modules in the =gnu/system/images= directory targeting =Novena=, =Pine64=, =PinebookPro= and =Rock64= machines.
-
---------------
-
-Previous: [[id:guix--image_002dtype-Reference][image-type Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

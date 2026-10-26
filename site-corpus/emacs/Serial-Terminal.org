@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Remote-Host][Remote Host Shell]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Serial-Terminal>>
+
+--------------
+
 *** 40.11 Serial Terminal [[#Serial-Terminal-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Serial-Terminal-1
@@ -19,5 +22,3 @@ The speed of the serial port is measured in bits per second. The most common spe
 A serial port can be configured even more by clicking on ‘=8N1=' in the mode line. By default, a serial port is configured as ‘=8N1=', which means that each byte consists of 8 data bits, No parity check bit, and 1 stopbit.
 
 If the speed or the configuration is wrong, you cannot communicate with your device and will probably only see garbage output in the window.
-
---------------

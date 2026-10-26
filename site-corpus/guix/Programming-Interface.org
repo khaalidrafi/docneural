@@ -36,19 +36,22 @@ Next:
 [[../..][]]
 
 <<Programming-Interface>>
-Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 8 Programming Interface [[#Programming-Interface-1][¶]]
+<<Programming-Interface-1>>
+** 8 Programming Interface
 :PROPERTIES:
-:CUSTOM_ID: Programming-Interface-1
+:CUSTOM_ID: programming-interface
 :CLASS: chapter
 :END:
 GNU Guix provides several Scheme programming interfaces (APIs) to define, build, and query packages. The first interface allows users to write high-level package definitions. These definitions refer to familiar packaging concepts, such as the name and version of a package, its build system, and its dependencies. These definitions can then be turned into concrete build actions.
 
 Build actions are performed by the Guix daemon, on behalf of users. In a standard setup, the daemon has write access to the store---the =/gnu/store= directory---whereas users do not. The recommended setup also has the daemon perform builds in chroots, under specific build users, to minimize interference with the rest of the system.
 
+<<index-derivation-1>>
 Lower-level APIs are available to interact with the daemon and the store. To instruct the daemon to perform a build action, users actually provide it with a /derivation/. A derivation is a low-level representation of the build actions to be taken, and the environment in which they should occur---derivations are to package definitions what assembly is to C programs. The term “derivation” comes from the fact that build results /derive/ from them.
 
 This chapter describes all these APIs in turn, starting from high-level package definitions. See [[id:guix--Source-Tree-Structure][Source Tree Structure]], for a more general overview of the source code.
@@ -70,4 +73,4 @@ This chapter describes all these APIs in turn, starting from high-level package 
 
 --------------
 
-Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Utilities][Utilities]], Previous: [[id:guix--Development][Development]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

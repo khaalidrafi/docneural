@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<partition-Reference>>
-Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 16.1.1 =partition= Reference [[#partition-Reference-1][¶]]
+<<partition-Reference-1>>
+**** 16.1.1 =partition= Reference
 :PROPERTIES:
-:CUSTOM_ID: partition-Reference-1
+:CUSTOM_ID: partition-reference
 :CLASS: subsection
 :END:
 In =image= record may contain some partitions.
 
-- Data Type: *partition* [[#index-partition][¶]] :: This is the data type representing an image partition.
+- Data Type: partition  :: This is the data type representing an image partition.
 
   - =size= (default: ='guess=) :: The partition size in bytes or ='guess=. The ='guess= symbol, which is the default, means that the partition size will be inferred based on the partition content.
 
@@ -55,7 +57,7 @@ In =image= record may contain some partitions.
 
   - =file-system= (default: ="ext4"=) :: The partition file system as a string, defaulting to ="ext4"=.
 
-    The supported values are ="btrfs"=, ="erofs"=, ="ext4"=, ="fat16"=, ="f2fs"=, ="fat32"=, ="vfat"=, ="squashfs"=, and ="swap"=.
+    The supported values are ="btrfs"=, ="ext4"=, ="fat16"=, ="f2fs"=, ="fat32"=, ="vfat"=, and ="swap"=.
 
     ="vfat"=, ="fat16"=, and ="fat32"= partitions without the ='esp= flag are by default LBA compatible.
 
@@ -73,4 +75,4 @@ In =image= record may contain some partitions.
 
 --------------
 
-Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

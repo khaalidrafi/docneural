@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Nonincremental Search
 
-Next: [[id:emacs--Word-Search][Word Search]]   Previous: [[id:emacs--Incremental-Search#Incremental-Search][Incremental Search]]   Up: [[id:emacs--Search][Searching and Replacement]]
+Next: [[id:emacs--Word-Search][Word Search]]   Previous: [[id:emacs--Incremental-Search][Incremental Search]]   Up: [[id:emacs--Search][Searching and Replacement]]
 
 <<Nonincremental-Search>>
+
+--------------
+
 *** 17.2 Nonincremental Search [[#Nonincremental-Search-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Nonincremental-Search-1
@@ -25,5 +28,3 @@ When you type C-s RET, the C-s invokes incremental search as usual. That command
 Nonincremental search can also be invoked from the menu bar's ‘=Edit->Search=' menu.
 
 You can also use two simpler commands, M-x search-forward and M-x search-backward. These commands look for the literal strings you specify, and don't support any of the lax-search features (see [[id:emacs--Lax-Search][Lax Matching During Searching]]) except case folding.
-
---------------

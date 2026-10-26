@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Getting-Started-with-the-System>>
-Next: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.1 Getting Started [[#Getting-Started-2][¶]]
+<<Getting-Started-2>>
+*** 11.1 Getting Started
 :PROPERTIES:
-:CUSTOM_ID: Getting-Started-2
+:CUSTOM_ID: getting-started
 :CLASS: section
 :END:
+<<index-system-configuration-file>> <<index-configuration-file_002c-of-the-system>>
 You're reading this section probably because you have just installed Guix System (see [[id:guix--System-Installation][System Installation]]) and would like to know where to go from here. If you're already familiar with GNU/Linux system administration, the way Guix System is configured is very different from what you're used to: you won't install a system service by running =guix install=, you won't configure services by modifying files under =/etc=, and you won't create user accounts by invoking =useradd=; instead, all these aspects are spelled out in a /system configuration file/.
 
 The first step with Guix System is thus to write the /system configuration file/; luckily, system installation already generated one for you and stored it under =/etc/config.scm=.
@@ -58,18 +61,18 @@ The /entire/ configuration of the system---user accounts, system services, timez
 
 #+begin_src lisp
 (use-modules (gnu))
-(use-package-modules ...)
-(use-service-modules ...)
+(use-package-modules …)
+(use-service-modules …)
 
 (operating-system
-  (host-name ...)
-  (timezone ...)
-  (locale ...)
-  (bootloader ...)
-  (file-systems ...)
-  (users ...)
-  (packages ...)
-  (services ...))
+  (host-name …)
+  (timezone …)
+  (locale …)
+  (bootloader …)
+  (file-systems …)
+  (users …)
+  (packages …)
+  (services …))
 #+end_src
 
 This configuration file is in fact a Scheme program; the first lines pull in modules providing variables you might need in the rest of the file---e.g., packages, services, etc. The =operating-system= form declares the system configuration as a /record/ with a number of /fields/. See [[id:guix--Using-the-Configuration-System][Using the Configuration System]], to view complete examples and learn what to put in there.
@@ -83,7 +86,7 @@ guix system vm /etc/config.scm
 This command returns the name of a shell script that starts a virtual machine (VM) running the system /as described in the configuration file/:
 
 #+begin_example
-/gnu/store/...-run-vm.sh
+/gnu/store/…-run-vm.sh
 #+end_example
 
 In this VM, you can log in as =root= with no password. That's a good way to check that your configuration file is correct and that it gives the expected result, without touching your system. See [[id:guix--Invoking-guix-system][Invoking =guix system=]], for more information.
@@ -93,12 +96,14 @@ In this VM, you can log in as =root= with no password. That's a good way to chec
 
 #+end_quote
 
+<<index-system-instantiation>> <<index-reconfiguring-the-system>>
 The third step, once you're happy with your configuration, is to /instantiate/ it---make this configuration effective on your system. To do that, run:
 
 #+begin_example
 sudo guix system reconfigure /etc/config.scm
 #+end_example
 
+<<index-upgrading-system-services>> <<index-system-services_002c-upgrading>>
 This operation is /transactional/: either it succeeds and you end up with an upgraded system, or it fails and nothing has changed. Note that it does /not/ restart system services that were already running. Thus, to upgrade those services, you have to reboot or to explicitly restart them; for example, to restart the secure shell (SSH) daemon, you would run:
 
 #+begin_example
@@ -106,7 +111,7 @@ sudo herd restart sshd
 #+end_example
 
 #+begin_quote
-*Note:* System services are managed by the Shepherd (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual). The =herd= command lets you inspect, start, and stop services. To view the status of services, run:
+*Note:* System services are managed by the Shepherd (see [[https://www.gnu.org/software/shepherd/manual/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual). The =herd= command lets you inspect, start, and stop services. To view the status of services, run:
 
 #+begin_example
 sudo herd status
@@ -122,6 +127,7 @@ See [[id:guix--Services][Services]], for more information.
 
 #+end_quote
 
+<<index-provenance_002c-of-the-system>>
 The system records its /provenance/---the configuration file and channels that were used to deploy it. You can view it like so:
 
 #+begin_example
@@ -134,7 +140,7 @@ Additionally, =guix system reconfigure= preserves previous system generations, w
 guix system list-generations
 #+end_example
 
-Crucially, that means that you can always /roll back/ to an earlier generation should something go wrong! When you eventually reboot, you'll notice a sub-menu in the bootloader that reads “Old system generations”: it's what allows you to boot /an older generation of your system/, should the latest generation be “broken” or otherwise unsatisfying. You can also “permanently” roll back, like so:
+<<index-roll-back_002c-for-the-system>> Crucially, that means that you can always /roll back/ to an earlier generation should something go wrong! When you eventually reboot, you'll notice a sub-menu in the bootloader that reads “Old system generations”: it's what allows you to boot /an older generation of your system/, should the latest generation be “broken” or otherwise unsatisfying. You can also “permanently” roll back, like so:
 
 #+begin_example
 sudo guix system roll-back
@@ -148,7 +154,7 @@ Once in a while, you'll want to delete old generations that you do not need anym
 sudo guix system delete-generations 4m
 #+end_example
 
-From there on, anytime you want to change something in the system configuration, be it adding a user account or changing parameters of a service, you will first update your configuration file and then run =guix system reconfigure= as shown above. Likewise, to /upgrade/ system software, you first fetch an up-to-date Guix and then reconfigure your system with that new Guix:
+From there on, anytime you want to change something in the system configuration, be it adding a user account or changing parameters of a service, you will first update your configuration file and then run =guix system reconfigure= as shown above. <<index-upgrade_002c-of-the-system>> Likewise, to /upgrade/ system software, you first fetch an up-to-date Guix and then reconfigure your system with that new Guix:
 
 #+begin_example
 guix pull
@@ -158,6 +164,7 @@ sudo guix system reconfigure /etc/config.scm
 We recommend doing that regularly so that your system includes the latest security updates (see [[id:guix--Security-Updates][Security Updates]]).
 
 #+begin_quote
+<<index-sudo-vs_002e-guix-pull>>
 
 *Note:* =sudo guix= runs your user's =guix= command and /not/ root's, because =sudo= leaves =PATH= unchanged.
 
@@ -169,4 +176,4 @@ That's it! If you're getting started with Guix entirely, see [[id:guix--Getting-
 
 --------------
 
-Next: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

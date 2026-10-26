@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Substitute-Authentication>>
-Next: [[id:guix--Proxy-Settings][Proxy Settings]], Previous: [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Proxy-Settings][Proxy Settings]], Previous: [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 5.3.5 Substitute Authentication [[#Substitute-Authentication-1][¶]]
+<<Substitute-Authentication-1>>
+**** 5.3.4 Substitute Authentication
 :PROPERTIES:
-:CUSTOM_ID: Substitute-Authentication-1
+:CUSTOM_ID: substitute-authentication
 :CLASS: subsection
 :END:
+<<index-digital-signatures>>
 Guix detects and raises an error when attempting to use a substitute that has been tampered with. Likewise, it ignores substitutes that are not signed, or that are not signed by one of the keys listed in the ACL.
 
 There is one exception though: if an unauthorized server provides substitutes that are /bit-for-bit identical/ to those provided by an authorized server, then the unauthorized server becomes eligible for downloads. For example, assume we have chosen two substitute servers with this option:
@@ -53,10 +56,6 @@ There is one exception though: if an unauthorized server provides substitutes th
 --substitute-urls="https://a.example.org https://b.example.org"
 #+end_example
 
-If the ACL contains only the key for ‘=b.example.org=', and if ‘=a.example.org=' happens to serve the /exact same/ substitutes, then Guix will download substitutes from ‘=a.example.org=' because it comes first in the list and can be considered a mirror of ‘=b.example.org='. In practice, independent build machines usually produce the same binaries, thanks to bit-reproducible builds (see below).
+<<index-reproducible-builds-2>> If the ACL contains only the key for ‘=b.example.org=', and if ‘=a.example.org=' happens to serve the /exact same/ substitutes, then Guix will download substitutes from ‘=a.example.org=' because it comes first in the list and can be considered a mirror of ‘=b.example.org='. In practice, independent build machines usually produce the same binaries, thanks to bit-reproducible builds (see below).
 
 When using HTTPS, the server's X.509 certificate is /not/ validated (in other words, the server is not authenticated), contrary to what HTTPS clients such as Web browsers usually do. This is because Guix authenticates substitute information itself, as explained above, which is what we care about (whereas X.509 certificates are about authenticating bindings between domain names and public keys).
-
---------------
-
-Next: [[id:guix--Proxy-Settings][Proxy Settings]], Previous: [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

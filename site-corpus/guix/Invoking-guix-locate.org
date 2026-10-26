@@ -36,42 +36,46 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-locate>>
-Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.5 Invoking =guix locate= [[#Invoking-guix-locate-1][¶]]
+<<Invoking-guix-locate-1>>
+*** 5.5 Invoking =guix locate=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-locate-1
+:CUSTOM_ID: invoking-guix-locate
 :CLASS: section
 :END:
+<<index-file_002c-searching-in-packages>> <<index-file-search>> <<index-searching-for-packages-1>>
 There's so much free software out there that sooner or later, you will need to search for packages. The =guix search= command that we've seen before (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]) lets you search by keywords:
 
 #+begin_example
 guix search video editor
 #+end_example
 
+<<index-searching-for-packages_002c-by-file-name>>
 Sometimes, you instead want to find which package provides a given file, and this is where =guix locate= comes in. Here is how you can find which package provides the =ls= command:
 
 #+begin_example
 $ guix locate ls
-coreutils@9.1       /gnu/store/...-coreutils-9.1/bin/ls
+coreutils@9.1       /gnu/store/…-coreutils-9.1/bin/ls
 #+end_example
 
 Of course the command works for any file, not just commands:
 
 #+begin_example
 $ guix locate unistr.h
-icu4c@71.1          /gnu/store/.../include/unicode/unistr.h
-libunistring@1.0    /gnu/store/.../include/unistr.h
+icu4c@71.1          /gnu/store/…/include/unicode/unistr.h
+libunistring@1.0    /gnu/store/…/include/unistr.h
 #+end_example
 
 You may also specify /glob patterns/ with wildcards. For example, here is how you would search for packages providing =.service= files:
 
 #+begin_example
 $ guix locate -g '*.service'
-man-db@2.11.1        .../lib/systemd/system/man-db.service
-wpa-supplicant@2.10  .../system-services/fi.w1.wpa_supplicant1.service
+man-db@2.11.1        …/lib/systemd/system/man-db.service
+wpa-supplicant@2.10  …/system-services/fi.w1.wpa_supplicant1.service
 #+end_example
 
 The =guix locate= command relies on a database that maps file names to package names. By default, it automatically creates that database if it does not exist yet by traversing packages available /locally/, which can take a few minutes (depending on the size of your store and the speed of your storage device).
@@ -86,7 +90,7 @@ By default, =guix locate= first tries to look for a system-wide database, usuall
 The general syntax is:
 
 #+begin_example
-guix locate [options...] file...
+guix locate [options…] file…
 #+end_example
 
 ... where =file= is the name of a file to search for (specifically, the “base name” of the file: files whose parent directories are called =file= are not matched).
@@ -120,4 +124,4 @@ The available options are as follows:
 
 --------------
 
-Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

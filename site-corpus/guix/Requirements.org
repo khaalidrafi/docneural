@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Requirements>>
-Next: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.1 Requirements [[#Requirements-1][¶]]
+<<Requirements-1>>
+*** 22.1 Requirements
 :PROPERTIES:
-:CUSTOM_ID: Requirements-1
+:CUSTOM_ID: requirements
 :CLASS: section
 :END:
 You can easily hack on Guix itself using Guix and Git, which we use for version control (see [[id:guix--Building-from-Git][Building from Git]]).
@@ -51,18 +53,19 @@ But when packaging Guix for foreign distros or when bootstrapping on systems wit
 
 This section lists requirements when building Guix from source. The build procedure for Guix is the same as for other GNU software, and is not covered here. Please see the files =README= and =INSTALL= in the Guix source tree for additional details.
 
+<<index-official-website>>
 GNU Guix is available for download from its website at [[https://guix.gnu.org]].
 
 GNU Guix depends on the following packages:
 
-- [[https://gnu.org/software/guile/][GNU Guile]], version 3.0.x, version 3.0.9 or later;
-- [[https://codeberg.org/guile-gcrypt/guile-gcrypt][Guile-Gcrypt]], version 0.1.0 or later;
-- [[https://codeberg.org/guile-gnutls/guile-gnutls][Guile-GnuTLS]] (see [[http://gnutls.org/manual/gnutls-guile/Guile-Preparations.html#Guile-Preparations][how to install the GnuTLS bindings for Guile]] in GnuTLS-Guile)[[#FOOT43][^{43}]];
-- [[https://codeberg.org/guile-sqlite3/guile-sqlite3][Guile-SQLite3]], version 0.1.0 or later;
-- [[https://codeberg.org/guile-compression/guile-zlib][Guile-zlib]], version 0.1.0 or later;
-- [[https://codeberg.org/guile-compression/guile-lzlib][Guile-lzlib]];
+- [[https://gnu.org/software/guile/][GNU Guile]], version 3.0.x, version 3.0.3 or later;
+- [[https://notabug.org/cwebber/guile-gcrypt][Guile-Gcrypt]], version 0.1.0 or later;
+- [[https://gitlab.com/gnutls/guile/][Guile-GnuTLS]] (see [[http://gnutls.org/manual/gnutls-guile/Guile-Preparations.html#Guile-Preparations][how to install the GnuTLS bindings for Guile]] in GnuTLS-Guile)[[#FOOT42][^{42}]];
+- [[https://notabug.org/guile-sqlite3/guile-sqlite3][Guile-SQLite3]], version 0.1.0 or later;
+- [[https://notabug.org/guile-zlib/guile-zlib][Guile-zlib]], version 0.1.0 or later;
+- [[https://notabug.org/guile-lzlib/guile-lzlib][Guile-lzlib]];
 - [[https://www.nongnu.org/guile-avahi/][Guile-Avahi]];
-- [[https://codeberg.org/guile-git/guile-git][Guile-Git]], version 0.10.0 or later;
+- [[https://gitlab.com/guile-git/guile-git][Guile-Git]], version 0.10.0 or later;
 - [[https://git-scm.com][Git]] (yes, both!);
 - [[https://github.com/aconchillo/guile-json][Guile-JSON]] 4.3.0 or later;
 - [[https://www.gnu.org/software/make/][GNU Make]].
@@ -70,7 +73,7 @@ GNU Guix depends on the following packages:
 The following dependencies are optional:
 
 - Support for build offloading (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]) and =guix copy= (see [[id:guix--Invoking-guix-copy][Invoking =guix copy=]]) depends on [[https://github.com/artyom-poptsov/guile-ssh][Guile-SSH]], version 0.13.0 or later.
-- [[https://codeberg.org/guile-compression/guile-zstd][Guile-zstd]], for zstd compression and decompression in =guix publish= and for substitutes (see [[id:guix--Invoking-guix-publish][Invoking =guix publish=]]).
+- [[https://notabug.org/guile-zstd/guile-zstd][Guile-zstd]], for zstd compression and decompression in =guix publish= and for substitutes (see [[id:guix--Invoking-guix-publish][Invoking =guix publish=]]).
 - [[https://ngyro.com/software/guile-semver.html][Guile-Semver]] for the =crate= importer (see [[id:guix--Invoking-guix-import][Invoking =guix import=]]).
 - [[https://www.nongnu.org/guile-lib/doc/ref/htmlprag/][Guile-Lib]] for the =go= importer (see [[id:guix--Invoking-guix-import][Invoking =guix import=]]) and for some of the “updaters” (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
 - When [[http://www.bzip.org][libbz2]] is available, =guix-daemon= can use it to compress build logs.
@@ -88,13 +91,12 @@ Unless =--disable-daemon= was passed to =configure=, the following packages are 
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF43][(43)]]
+***** [[#DOCF42][(42)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The Guile bindings to [[https://gnutls.org/][GnuTLS]] were distributed as part of GnuTLS until version 3.7.8 included.
 
 --------------
 
-Next: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

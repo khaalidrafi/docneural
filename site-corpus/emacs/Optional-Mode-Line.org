@@ -7,6 +7,9 @@
 Next: [[id:emacs--Text-Display][How Text Is Displayed]]   Previous: [[id:emacs--Selective-Display][Selective Display]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Optional-Mode-Line>>
+
+--------------
+
 *** 16.19 Optional Mode Line Features [[#Optional-Mode-Line-Features][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Optional-Mode-Line-Features
@@ -44,7 +47,7 @@ The word ‘=Mail=' appears after the load level if there is mail for you that y
 
 When running Emacs on a laptop computer, you can display the battery charge on the mode-line, by using the command =display-battery-mode= or customizing the variable =display-battery-mode=. The variable =battery-mode-line-format= determines the way the battery charge is displayed; the exact mode-line message depends on the operating system, and it usually shows the current battery charge as a percentage of the total charge. The functions in =battery-update-functions= are run after updating the mode line, and can be used to trigger actions based on the battery status.
 
-On graphical displays, the mode line is drawn as a 3D box. If you don't like this effect, you can disable it by customizing the =mode-line= face and setting its =box= attribute to =nil=. See [[id:emacs--Easy-Customization::#Face-Customization][Customizing Faces]].
+On graphical displays, the mode line is drawn as a 3D box. If you don't like this effect, you can disable it by customizing the =mode-line= face and setting its =box= attribute to =nil=. See [[id:emacs--Face-Customization][Customizing Faces]].
 
 By default, the mode line of nonselected windows is displayed in a different face, called =mode-line-inactive=. Only the selected window is displayed in the =mode-line= face. This helps show which window is selected. When the minibuffer is selected, since it has no mode line, the window from which you activated the minibuffer has its mode line displayed using =mode-line=; as a result, ordinary entry to the minibuffer does not change any mode lines.
 

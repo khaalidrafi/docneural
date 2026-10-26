@@ -4,6 +4,28 @@
 #+filetags: :emacs:
 #+title: Hungry Delete
 
-Next:
+Next: [[id:emacs--Other-C-Commands][Other Commands for C Mode]]   Previous: [[id:emacs--Electric-C][Electric C Characters]]   Up: [[id:emacs--C-Modes][C and Related Modes]]
 
-The node you are looking for is at [[id:emacs--C-Modes::#Hungry-Delete][Hungry Delete]].
+<<Hungry-Delete>>
+
+--------------
+
+**** 28.12.3 Hungry Delete Feature in C [[#Hungry-Delete-Feature-in-C][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Hungry-Delete-Feature-in-C
+:CLASS: subsection
+:END:
+If you want to delete an entire block of whitespace at point, you can use /hungry deletion/. This deletes all the contiguous whitespace either before point or after point in a single operation. /Whitespace/ here includes tabs and newlines, but not comments or preprocessor commands.
+
+-  <<index-c_002dhungry_002ddelete_002dbackwards>>C-c C-DEL [[#index-c_002dhungry_002ddelete_002dbackwards][¶]]\\
+  C-c DEL :: Delete the entire block of whitespace preceding point (=c-hungry-delete-backwards=).
+
+-  <<index-c_002dhungry_002ddelete_002dforward>>C-c C-d [[#index-c_002dhungry_002ddelete_002dforward][¶]]\\
+  C-c C-Delete\\
+  C-c Delete :: Delete the entire block of whitespace after point (=c-hungry-delete-forward=).
+
+As an alternative to the above commands, you can enable /hungry delete mode/. When this feature is enabled (indicated by ‘=h=' after a ‘=/=' in the mode line after the mode name), a single DEL deletes all preceding whitespace, not just one space, and a single C-d (but /not/ plain Delete) deletes all following whitespace.
+
+- <<index-c_002dtoggle_002dhungry_002dstate>>M-x c-toggle-hungry-state [[#index-c_002dtoggle_002dhungry_002dstate][¶]] :: Toggle the hungry-delete feature (=c-toggle-hungry-state=). With a prefix argument, this command turns the hungry-delete feature on if the argument is positive, and off if it is negative.
+
+The variable =c-hungry-delete-key= controls whether the hungry-delete feature is enabled.

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Dired-Visiting][Visiting Files in Dired]]   Previous: [[id:emacs--Dired-Deletion][Deleting Files with Dired]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
 
 <<Flagging-Many-Files>>
+
+--------------
+
 *** 32.4 Flagging Many Files at Once [[#Flagging-Many-Files-at-Once][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Flagging-Many-Files-at-Once
@@ -14,9 +17,9 @@ Next: [[id:emacs--Dired-Visiting][Visiting Files in Dired]]   Previous: [[id:ema
 :END:
 The #, ~, ., % &, and % d commands flag many files for deletion, based on their file names:
 
-- # :: Flag all auto-save files (files whose names start and end with ‘=#=') for deletion (see [[id:emacs--Auto-Save::#Auto-Save][Auto-Saving: Protection Against Disasters]]).
+- # :: Flag all auto-save files (files whose names start and end with ‘=#=') for deletion (see [[id:emacs--Auto-Save][Auto-Saving: Protection Against Disasters]]).
 
-- ~ :: Flag all backup files (files whose names end with ‘=~=') for deletion (see [[id:emacs--Saving::#Backup][Backup Files]]).
+- ~ :: Flag all backup files (files whose names end with ‘=~=') for deletion (see [[id:emacs--Backup][Backup Files]]).
 
 - . (Period) :: Flag excess numeric backup files for deletion. The oldest and newest few backup files of any one file are exempt; the middle ones are flagged.
 
@@ -24,9 +27,9 @@ The #, ~, ., % &, and % d commands flag many files for deletion, based on their 
 
 - % d =regexp= RET :: Flag for deletion all files whose names match the regular expression =regexp=.
 
-​# (=dired-flag-auto-save-files=) flags all files whose names look like auto-save files---that is, files whose names begin and end with ‘=#='. See [[id:emacs--Auto-Save::#Auto-Save][Auto-Saving: Protection Against Disasters]].
+​# (=dired-flag-auto-save-files=) flags all files whose names look like auto-save files---that is, files whose names begin and end with ‘=#='. See [[id:emacs--Auto-Save][Auto-Saving: Protection Against Disasters]].
 
-~ (=dired-flag-backup-files=) flags all files whose names say they are backup files---that is, files whose names end in ‘=~='. See [[id:emacs--Saving::#Backup][Backup Files]].
+~ (=dired-flag-backup-files=) flags all files whose names say they are backup files---that is, files whose names end in ‘=~='. See [[id:emacs--Backup][Backup Files]].
 
 . (period, =dired-clean-directory=) flags just some of the backup files for deletion: all but the oldest few and newest few backups of any one file. Normally, the number of newest versions kept for each file is given by the variable =dired-kept-versions= (/not/ =kept-new-versions=; that applies only when saving). The number of oldest versions to keep is given by the variable =kept-old-versions=.
 

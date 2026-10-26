@@ -7,6 +7,9 @@
 Next: [[id:emacs--Minibuffer][The Minibuffer]]   Previous: [[id:emacs--Exiting][Exiting Emacs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Basic>>
+
+--------------
+
 ** 9 Basic Editing Commands [[#Basic-Editing-Commands][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Basic-Editing-Commands
@@ -14,4 +17,14 @@ Next: [[id:emacs--Minibuffer][The Minibuffer]]   Previous: [[id:emacs--Exiting][
 :END:
 Here we explain the basics of how to enter text, make corrections, and save the text in a file. If this material is new to you, we suggest you first run the Emacs learn-by-doing tutorial, by typing C-h t (=help-with-tutorial=).
 
---------------
+- [[id:emacs--Inserting-Text][Inserting Text]]
+- [[id:emacs--Moving-Point][Changing the Location of Point]]
+- [[id:emacs--Erasing][Erasing Text]]
+- [[id:emacs--Basic-Undo][Undoing Changes]]
+- [[id:emacs--Basic-Files][Files]]
+- [[id:emacs--Basic-Help][Help]]
+- [[id:emacs--Blank-Lines][Blank Lines]]
+- [[id:emacs--Continuation-Lines][Continuation Lines]]
+- [[id:emacs--Position-Info][Cursor Position Information]]
+- [[id:emacs--Arguments][Numeric Arguments]]
+- [[id:emacs--Repeating][Repeating a Command]]

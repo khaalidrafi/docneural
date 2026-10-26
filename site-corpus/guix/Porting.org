@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Porting>>
-Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 21 Porting to a New Platform [[#Porting-to-a-New-Platform][¶]]
+<<Porting-to-a-New-Platform>>
+** 21 Porting to a New Platform
 :PROPERTIES:
-:CUSTOM_ID: Porting-to-a-New-Platform
+:CUSTOM_ID: porting-to-a-new-platform
 :CLASS: chapter
 :END:
 As discussed above, the GNU distribution is self-contained, and self-containment is achieved by relying on pre-built “bootstrap binaries” (see [[id:guix--Bootstrapping][Bootstrapping]]). These binaries are specific to an operating system kernel, CPU architecture, and application binary interface (ABI). Thus, to port the distribution to a platform that is not yet supported, one must build those bootstrap binaries, and update the =(gnu packages bootstrap)= module to use them on that platform.
@@ -61,4 +63,4 @@ In practice, there may be some complications. First, it may be that the extended
 
 --------------
 
-Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

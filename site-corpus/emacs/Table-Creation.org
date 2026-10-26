@@ -4,6 +4,17 @@
 #+filetags: :emacs:
 #+title: Table Creation
 
-Next:
+Next: [[id:emacs--Table-Recognition][Table Recognition]]   Previous: [[id:emacs--Table-Definition][What is a Text-based Table?]]   Up: [[id:emacs--Text-Based-Tables][Editing Text-based Tables]]
 
-The node you are looking for is at [[id:emacs--Text-Based-Tables::#Table-Creation][Table Creation]].
+<<Table-Creation>>
+
+--------------
+
+**** 27.15.2 Creating a Table [[#Creating-a-Table][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-a-Table
+:CLASS: subsection
+:END:
+To create a text-based table from scratch, type M-x table-insert. This command prompts for the number of table columns, the number of table rows, cell width and cell height. The cell width and cell height do not include the cell borders; each can be specified as a single integer (which means each cell is given the same width/height), or as a sequence of integers separated by spaces or commas (which specify the width/height of the individual table columns/rows, counting from left to right for table columns and from top to bottom for table rows). The specified table is then inserted at point.
+
+The table inserted by M-x table-insert contains special text properties, which tell Emacs to treat it specially as a text-based table. If you save the buffer to a file and visit it again later, those properties are lost, and the table appears to Emacs as an ordinary piece of text. See the next section, for how to convert it back into a table.

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-size>>
-Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.9 Invoking =guix size= [[#Invoking-guix-size-1][¶]]
+<<Invoking-guix-size-1>>
+*** 9.9 Invoking =guix size=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-size-1
+:CUSTOM_ID: invoking-guix-size
 :CLASS: section
 :END:
+<<index-size>> <<index-package-size>> <<index-closure-1>> <<index-guix-size>>
 The =guix size= command helps package developers profile the disk usage of packages. It is easy to overlook the impact of an additional dependency added to a package, or the impact of using a single output for a package that could easily be split (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]). Such are the typical issues that =guix size= can highlight.
 
 The command can be passed one or more package specifications such as =gcc@4.8= or =guile:debug=, or a file name in the store. Consider this example:
@@ -52,21 +55,22 @@ The command can be passed one or more package specifications such as =gcc@4.8= o
 #+begin_example
 $ guix size coreutils
 store item                               total    self
-/gnu/store/...-gcc-5.5.0-lib           60.4    30.1  38.1%
-/gnu/store/...-glibc-2.27              30.3    28.8  36.6%
-/gnu/store/...-coreutils-8.28          78.9    15.0  19.0%
-/gnu/store/...-gmp-6.1.2               63.1     2.7   3.4%
-/gnu/store/...-bash-static-4.4.12       1.5     1.5   1.9%
-/gnu/store/...-acl-2.2.52              61.1     0.4   0.5%
-/gnu/store/...-attr-2.4.47             60.6     0.2   0.3%
-/gnu/store/...-libcap-2.25             60.5     0.2   0.2%
+/gnu/store/…-gcc-5.5.0-lib           60.4    30.1  38.1%
+/gnu/store/…-glibc-2.27              30.3    28.8  36.6%
+/gnu/store/…-coreutils-8.28          78.9    15.0  19.0%
+/gnu/store/…-gmp-6.1.2               63.1     2.7   3.4%
+/gnu/store/…-bash-static-4.4.12       1.5     1.5   1.9%
+/gnu/store/…-acl-2.2.52              61.1     0.4   0.5%
+/gnu/store/…-attr-2.4.47             60.6     0.2   0.3%
+/gnu/store/…-libcap-2.25             60.5     0.2   0.2%
 total: 78.9 MiB
 #+end_example
 
+<<index-closure-2>>
 The store items listed here constitute the /transitive closure/ of Coreutils---i.e., Coreutils and all its dependencies, recursively---as would be returned by:
 
 #+begin_example
-$ guix gc -R /gnu/store/...-coreutils-8.23
+$ guix gc -R /gnu/store/…-coreutils-8.23
 #+end_example
 
 Here the output shows three columns next to store items. The first column, labeled “total”, shows the size in mebibytes (MiB) of the closure of the store item---that is, its own size plus the size of all its dependencies. The next column, labeled “self”, shows the size of the item itself. The last column shows the ratio of the size of the item itself to the space occupied by all the items listed here.
@@ -88,11 +92,11 @@ You can also specify several package names:
 #+begin_example
 $ guix size coreutils grep sed bash
 store item                               total    self
-/gnu/store/...-coreutils-8.24          77.8    13.8  13.4%
-/gnu/store/...-grep-2.22               73.1     0.8   0.8%
-/gnu/store/...-bash-4.3.42             72.3     4.7   4.6%
-/gnu/store/...-readline-6.3            67.6     1.2   1.2%
-...
+/gnu/store/…-coreutils-8.24          77.8    13.8  13.4%
+/gnu/store/…-grep-2.22               73.1     0.8   0.8%
+/gnu/store/…-bash-4.3.42             72.3     4.7   4.6%
+/gnu/store/…-readline-6.3            67.6     1.2   1.2%
+…
 total: 102.3 MiB
 #+end_example
 
@@ -134,10 +138,9 @@ The available options are:
 ***** [[#DOCF24][(24)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 More precisely, =guix size= looks for the /ungrafted/ variant of the given package(s), as returned by =guix build ==package== --no-grafts=. See [[id:guix--Security-Updates][Security Updates]], for information on grafts.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Previous: [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

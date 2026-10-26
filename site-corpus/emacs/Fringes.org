@@ -7,6 +7,9 @@
 Next: [[id:emacs--Displaying-Boundaries][Displaying Boundaries]]   Previous: [[id:emacs--Highlight-Interactively][Interactive Highlighting]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Fringes>>
+
+--------------
+
 *** 16.15 Window Fringes [[#Window-Fringes][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Window-Fringes
@@ -18,7 +21,7 @@ The most common use of the fringes is to indicate a continuation line (see [[id:
 
 The fringes indicate line truncation (see [[id:emacs--Line-Truncation][Line Truncation]]) with short horizontal arrows meaning there's more text on this line which is scrolled horizontally out of view. Clicking the mouse on one of the arrows scrolls the display horizontally in the direction of the arrow.
 
-The fringes can also indicate other things, such as buffer boundaries (see [[id:emacs--Displaying-Boundaries][Displaying Boundaries]]), unused lines near the end of the window (see [[id:emacs--Useless-Whitespace::#indicate_002dempty_002dlines][indicate-empty-lines]]), and where a program you are debugging is executing (see [[id:emacs--Debuggers::#Debuggers][Running Debuggers Under Emacs]]).
+The fringes can also indicate other things, such as buffer boundaries (see [[id:emacs--Displaying-Boundaries][Displaying Boundaries]]), unused lines near the end of the window (see [[id:emacs--Useless-Whitespace::#indicate_002dempty_002dlines][indicate-empty-lines]]), and where a program you are debugging is executing (see [[id:emacs--Debuggers][Running Debuggers Under Emacs]]).
 
 The fringe is also used for drawing the cursor, if the current line is exactly as wide as the window and point is at the end of the line. To disable this, change the variable =overflow-newline-into-fringe= to =nil=; this causes Emacs to continue or truncate lines that are exactly as wide as the window.
 

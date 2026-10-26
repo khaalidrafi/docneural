@@ -36,20 +36,23 @@ Next:
 [[../..][]]
 
 <<Sound-Home-Services>>
-Next: [[id:guix--Mail-Home-Services][Mail Home Services]], Previous: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Mail-Home-Services][Mail Home Services]], Previous: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.13 Sound Home Services [[#Sound-Home-Services-1][¶]]
+<<Sound-Home-Services-1>>
+**** 13.3.12 Sound Home Services
 :PROPERTIES:
-:CUSTOM_ID: Sound-Home-Services-1
+:CUSTOM_ID: sound-home-services
 :CLASS: subsection
 :END:
 The =(gnu home services sound)= module provides services related to sound support.
 
-**** PulseAudio RTP Streaming Services [[#PulseAudio-RTP-Streaming-Services][¶]]
+<<index-PulseAudio_002c-home-service>> <<index-RTP_002c-for-PulseAudio>> <<PulseAudio-RTP-Streaming-Services>>
+**** PulseAudio RTP Streaming Services
 :PROPERTIES:
-:CUSTOM_ID: PulseAudio-RTP-Streaming-Services
+:CUSTOM_ID: pulseaudio-rtp-streaming-services
 :CLASS: subsubheading
 :END:
 The following services dynamically reconfigure the [[https://pulseaudio.org][PulseAudio sound server]]: they let you toggle broadcast of audio output over the network using the RTP (real-time transport protocol) and, correspondingly, playback of sound received over RTP. Once =home-pulseaudio-rtp-sink-service-type= is among your home services, you can start broadcasting audio output by running this command:
@@ -94,8 +97,8 @@ Again, by default it will listen on the multicast address. If, instead, you'd li
 
 The reference of these services is given below.
 
-- Variable: *home-pulseaudio-rtp-sink-service-type* [[#index-home_002dpulseaudio_002drtp_002dsink_002dservice_002dtype][¶]]\\
-  Variable: *home-pulseaudio-rtp-source-service-type* [[#index-home_002dpulseaudio_002drtp_002dsource_002dservice_002dtype][¶]] :: This is the type of the service to send, respectively receive, audio streams over RTP (real-time transport protocol).
+- Variable: home-pulseaudio-rtp-sink-service-type \\
+  Variable: home-pulseaudio-rtp-source-service-type  :: This is the type of the service to send, respectively receive, audio streams over RTP (real-time transport protocol).
 
   The value associated with this service is the IP address (a string) where to send, respectively receive, the audio stream. By default, audio is sent/received on multicast address =%pulseaudio-rtp-multicast-address=.
 
@@ -103,15 +106,16 @@ The reference of these services is given below.
 
   #+begin_example
   herd start pulseaudio-rtp-sink
-#+end_example
+  #+end_example
 
   Stopping the Shepherd service turns off broadcasting.
 
-- Variable: *%pulseaudio-rtp-multicast-address* [[#index-_0025pulseaudio_002drtp_002dmulticast_002daddress][¶]] :: This is the multicast address used by default by the two services above.
+- Variable: %pulseaudio-rtp-multicast-address  :: This is the multicast address used by default by the two services above.
 
-**** PipeWire Home Service [[#PipeWire-Home-Service][¶]]
+<<index-PipeWire_002c-home-service>> <<PipeWire-Home-Service>>
+**** PipeWire Home Service
 :PROPERTIES:
-:CUSTOM_ID: PipeWire-Home-Service
+:CUSTOM_ID: pipewire-home-service
 :CLASS: subsubheading
 :END:
 [[https://pipewire.org][PipeWire]] provides a low-latency, graph-based audio and video processing service. In addition to its native protocol, it can also be used as a replacement for both JACK and PulseAudio.
@@ -130,7 +134,7 @@ For more information on PulseAudio emulation, see [[https://gitlab.freedesktop.o
 
 As PipeWire does not use =dbus= to start its services on demand (as PulseAudio does), =home-pipewire-service-type= uses Shepherd to start services when logged in, provisioning the =pipewire=, =wireplumber=, and, if configured, =pipewire-pulseaudio= services. See [[id:guix--Shepherd-Home-Service][Managing User Daemons]].
 
-- Variable: *home-pipewire-service-type* [[#index-home_002dpipewire_002dservice_002dtype][¶]] :: This provides the service definition for =pipewire=, which will run on login. Its value is a =home-pipewire-configuration= object.
+- Variable: home-pipewire-service-type  :: This provides the service definition for =pipewire=, which will run on login. Its value is a =home-pipewire-configuration= object.
 
   To start the service, add it to the =service= field of your =home-environment=, such as:
 
@@ -138,7 +142,7 @@ As PipeWire does not use =dbus= to start its services on demand (as PulseAudio d
   (service home-pipewire-service-type)
   #+end_src
 
-- Data Type: *home-pipewire-configuration* [[#index-home_002dpipewire_002dconfiguration][¶]] :: Available =home-pipewire-configuration= fields are:
+- Data Type: home-pipewire-configuration  :: Available =home-pipewire-configuration= fields are:
 
   - =pipewire= (default: =pipewire=) (type: file-like) :: The PipeWire package to use.
 
@@ -150,4 +154,4 @@ As PipeWire does not use =dbus= to start its services on demand (as PulseAudio d
 
 --------------
 
-Next: [[id:guix--Mail-Home-Services][Mail Home Services]], Previous: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Mail-Home-Services][Mail Home Services]], Previous: [[id:guix--Fonts-Home-Services][Fonts Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

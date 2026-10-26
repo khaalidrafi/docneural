@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Package-Files][Package Files and Directory Layout]]   Up: [[id:emacs--Packages][Emacs Lisp Packages]]
 
 <<Fetching-Package-Sources>>
+
+--------------
+
 *** 50.5 Fetching Package Sources [[#Fetching-Package-Sources-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Fetching-Package-Sources-1
@@ -18,9 +21,11 @@ One way to do this is to use =package-vc-install=, to fetch the source code for 
 
 Note that currently, built-in packages cannot be upgraded using =package-vc-install=.
 
-With the source checkout, you might want to reproduce a bug against the current development head or implement a new feature to scratch an itch. If the package metadata indicates how to contact the maintainer, you can use the command =package-report-bug= to report a bug via Email. This report will include all the user options that you have customized. If you have made a change you wish to share with the maintainers, first commit your changes then use the command =package-vc-prepare-patch= to share it. See [[id:emacs--Version-Control::#Preparing-Patches][Preparing Patches]].
+With the source checkout, you might want to reproduce a bug against the current development head or implement a new feature to scratch an itch. If the package metadata indicates how to contact the maintainer, you can use the command =package-report-bug= to report a bug via Email. This report will include all the user options that you have customized. If you have made a change you wish to share with the maintainers, first commit your changes then use the command =package-vc-prepare-patch= to share it. See [[id:emacs--Preparing-Patches][Preparing Patches]].
 
 If you maintain your own packages you might want to use a local checkout instead of cloning a remote repository. You can do this by using =package-vc-install-from-checkout=, which creates a symbolic link from the package directory (see [[id:emacs--Package-Files][Package Files and Directory Layout]]) to your checkout and initializes the code. Note that you might have to use =package-vc-rebuild= to repeat the initialization and update the autoloads.
+
+- [[#Specifying-Package-Sources][Specifying Package Sources]]
 
 <<Specifying-Package-Sources>>
 **** 50.5.1 Specifying Package Sources [[#Specifying-Package-Sources][¶]]

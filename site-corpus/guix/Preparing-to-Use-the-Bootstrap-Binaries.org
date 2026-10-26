@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Preparing-to-Use-the-Bootstrap-Binaries>>
-Previous: [[id:guix--Full_002dSource-Bootstrap][The Full-Source Bootstrap]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Full_002dSource-Bootstrap][The Full-Source Bootstrap]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 20.2 Preparing to Use the Bootstrap Binaries [[#Preparing-to-Use-the-Bootstrap-Binaries-1][¶]]
+<<Preparing-to-Use-the-Bootstrap-Binaries-1>>
+*** 20.2 Preparing to Use the Bootstrap Binaries
 :PROPERTIES:
-:CUSTOM_ID: Preparing-to-Use-the-Bootstrap-Binaries-1
+:CUSTOM_ID: preparing-to-use-the-bootstrap-binaries
 :CLASS: section
 :END:
 The figure above shows the very beginning of the dependency graph of the distribution, corresponding to the package definitions of the =(gnu packages bootstrap)= module. A similar figure can be generated with =guix graph= (see [[id:guix--Invoking-guix-graph][Invoking =guix graph=]]), along the lines of:
@@ -70,7 +72,7 @@ Once =guile-bootstrap-2.0.drv= is built, we have a functioning Guile that can be
 Finally, the various tarballs are unpacked by the derivations =gcc-bootstrap-0.drv=, =glibc-bootstrap-0.drv=, or =bootstrap-mes-0.drv= and =bootstrap-mescc-tools-0.drv=, at which point we have a working C tool chain.
 
 <<Building-the-Build-Tools>>
-*** Building the Build Tools [[#Building-the-Build-Tools][¶]]
+*** Building the Build Tools
 :PROPERTIES:
 :CUSTOM_ID: building-the-build-tools
 :CLASS: unnumberedsec
@@ -85,7 +87,7 @@ guix graph -t bag \
           glibc-final-with-bootstrap-bash)' | xdot -
 #+end_example
 
-displays the dependency graph leading to the “final” C library[[#FOOT42][^{42}]], depicted below.
+displays the dependency graph leading to the “final” C library[[#FOOT41][^{41}]], depicted below.
 
 The first tool that gets built with the bootstrap binaries is GNU Make---noted =make-boot0= above---which is a prerequisite for all the following packages. From there Findutils and Diffutils get built.
 
@@ -96,11 +98,12 @@ From there the final Binutils and GCC (not shown above) are built. GCC uses =ld=
 And voilà! At this point we have the complete set of build tools that the GNU Build System expects. These are in the =%final-inputs= variable of the =(gnu packages commencement)= module, and are implicitly used by any package that uses =gnu-build-system= (see [[id:guix--Build-Systems][=gnu-build-system=]]).
 
 <<Building-the-Bootstrap-Binaries>>
-*** Building the Bootstrap Binaries [[#Building-the-Bootstrap-Binaries][¶]]
+*** Building the Bootstrap Binaries
 :PROPERTIES:
 :CUSTOM_ID: building-the-bootstrap-binaries
 :CLASS: unnumberedsec
 :END:
+<<index-bootstrap-binaries-1>>
 Because the final tool chain does not depend on the bootstrap binaries, those rarely need to be updated. Nevertheless, it is useful to have an automated way to produce them, should an update occur, and this is what the =(gnu packages make-bootstrap)= module provides.
 
 The following command builds the tarballs containing the bootstrap binaries (Binutils, GCC, glibc, for the traditional bootstrap and linux-libre-headers, bootstrap-mescc-tools, bootstrap-mes for the Reduced Binary Seed bootstrap, and Guile, and a tarball containing a mixture of Coreutils and other basic command-line tools):
@@ -114,7 +117,7 @@ The generated tarballs are those that should be referred to in the =(gnu package
 Still here? Then perhaps by now you've started to wonder: when do we reach a fixed point? That is an interesting question! The answer is unknown, but if you would like to investigate further (and have significant computational and storage resources to do so), then let us know.
 
 <<Reducing-the-Set-of-Bootstrap-Binaries>>
-*** Reducing the Set of Bootstrap Binaries [[#Reducing-the-Set-of-Bootstrap-Binaries][¶]]
+*** Reducing the Set of Bootstrap Binaries
 :PROPERTIES:
 :CUSTOM_ID: reducing-the-set-of-bootstrap-binaries
 :CLASS: unnumberedsec
@@ -125,7 +128,7 @@ This is mitigated by the fact that our bootstrap binaries were generated from an
 
 The [[https://bootstrappable.org][Bootstrappable.org web site]] lists on-going projects to do that. One of these is about replacing the bootstrap GCC with a sequence of assemblers, interpreters, and compilers of increasing complexity, which could be built from source starting from a simple and auditable assembler.
 
-Our first major achievement is the replacement of GCC, the GNU C Library and Binutils by MesCC-Tools (a simple hex linker and macro assembler) and Mes (see [[https://doc.guix.gnu.org/mes/latest/en/html_node/index.html#Top][GNU Mes Reference Manual]] in GNU Mes, a Scheme interpreter and C compiler in Scheme). Neither MesCC-Tools nor Mes can be fully bootstrapped yet and thus we inject them as binary seeds. We call this the Reduced Binary Seed bootstrap, as it has halved the size of our bootstrap binaries! Also, it has eliminated the C compiler binary; i686-linux and x86_64-linux Guix packages are now bootstrapped without any binary C compiler.
+Our first major achievement is the replacement of GCC, the GNU C Library and Binutils by MesCC-Tools (a simple hex linker and macro assembler) and Mes (see [[https://www.gnu.org/software/mes/manual/html_node/index.html#Top][GNU Mes Reference Manual]] in GNU Mes, a Scheme interpreter and C compiler in Scheme). Neither MesCC-Tools nor Mes can be fully bootstrapped yet and thus we inject them as binary seeds. We call this the Reduced Binary Seed bootstrap, as it has halved the size of our bootstrap binaries! Also, it has eliminated the C compiler binary; i686-linux and x86_64-linux Guix packages are now bootstrapped without any binary C compiler.
 
 Work is ongoing to make MesCC-Tools and Mes fully bootstrappable and we are also looking at any other bootstrap binaries. Your help is welcome!
 
@@ -136,13 +139,12 @@ Work is ongoing to make MesCC-Tools and Mes fully bootstrappable and we are also
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF42][(42)]]
+***** [[#DOCF41][(41)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 You may notice the =glibc-intermediate= label, suggesting that it is not /quite/ final, but as a good approximation, we will consider it final.
 
 --------------
 
-Previous: [[id:guix--Full_002dSource-Bootstrap][The Full-Source Bootstrap]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Full_002dSource-Bootstrap][The Full-Source Bootstrap]], Up: [[id:guix--Bootstrapping][Bootstrapping]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

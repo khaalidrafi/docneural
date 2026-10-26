@@ -7,6 +7,9 @@
 Next: [[id:emacs--Moving-Point][Changing the Location of Point]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
 
 <<Inserting-Text>>
+
+--------------
+
 *** 9.1 Inserting Text [[#Inserting-Text-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Inserting-Text-1
@@ -16,7 +19,7 @@ You can insert an ordinary /graphic character/ (e.g., ‘=a=', ‘=B=', ‘=3=',
 
 To end a line and start a new one, type RET (=newline=). (The RET key may be labeled Return, or Enter, or with a funny-looking left-pointing arrow on your keyboard, but we refer to it as RET in this manual.) This command inserts a newline character into the buffer, then indents (see [[id:emacs--Indentation][Indentation]]) according to the major mode. If point is at the end of the line, the effect is to create a new blank line after it and indent the new line; if point is in the middle of a line, the line is split at that position. To turn off the auto-indentation, you can either disable Electric Indent mode (see [[id:emacs--Indent-Convenience][Convenience Features for Indentation]]) or type C-j, which inserts just a newline, without any auto-indentation.
 
-As we explain later in this manual, you can change the way Emacs handles text insertion by turning on /minor modes/. For instance, the minor mode called Auto Fill mode splits lines automatically when they get too long (see [[id:emacs--Filling::#Filling][Filling Text]]). The minor mode called Overwrite mode causes inserted characters to replace (overwrite) existing text, instead of shoving it to the right. See [[id:emacs--Minor-Modes][Minor Modes]].
+As we explain later in this manual, you can change the way Emacs handles text insertion by turning on /minor modes/. For instance, the minor mode called Auto Fill mode splits lines automatically when they get too long (see [[id:emacs--Filling][Filling Text]]). The minor mode called Overwrite mode causes inserted characters to replace (overwrite) existing text, instead of shoving it to the right. See [[id:emacs--Minor-Modes][Minor Modes]].
 
 Only graphic characters can be inserted by typing the associated key; other keys act as editing commands and do not insert themselves. For instance, DEL runs the command =delete-backward-char= by default (some modes bind it to a different command); it does not insert a literal ‘=DEL=' character (ASCII character code 127).
 
@@ -32,7 +35,7 @@ To use decimal or hexadecimal instead of octal, set the variable =read-quoted-ch
 
 A few common Unicode characters can be inserted via a command starting with C-x 8. For example, C-x 8 [ inserts =‘= which is Unicode code-point U+2018 LEFT SINGLE QUOTATION MARK, sometimes called a left single “curved quote” or “curly quote”. Similarly, C-x 8 ], C-x 8 { and C-x 8 } insert the curved quotes =’=, =“= and =”=, respectively. Also, a working Alt key acts like C-x 8 (unless followed by RET); e.g., A-[ acts like C-x 8 [ and inserts =‘=. To see which characters have C-x 8 shorthands, type C-x 8 C-h.
 
-Alternatively, you can use the command C-x 8 RET (=insert-char=). This prompts for the Unicode name or code-point of a character, using the minibuffer. If you enter a name, the command provides completion (see [[id:emacs--Completion::#Completion][Completion]]). If you enter a code-point, it should be as a hexadecimal number (the convention for Unicode), or a number with a specified radix, e.g., =#o23072= (octal); See [[../elisp_html/Integer-Basics.html#Integer-Basics][Integer Basics]] in The Emacs Lisp Reference Manual. The command then inserts the corresponding character into the buffer.
+Alternatively, you can use the command C-x 8 RET (=insert-char=). This prompts for the Unicode name or code-point of a character, using the minibuffer. If you enter a name, the command provides completion (see [[id:emacs--Completion][Completion]]). If you enter a code-point, it should be as a hexadecimal number (the convention for Unicode), or a number with a specified radix, e.g., =#o23072= (octal); See [[../elisp_html/Integer-Basics.html#Integer-Basics][Integer Basics]] in The Emacs Lisp Reference Manual. The command then inserts the corresponding character into the buffer.
 
 For example, the following all insert the same character:
 

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-lint>>
-Next: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Previous: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Previous: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.8 Invoking =guix lint= [[#Invoking-guix-lint-1][¶]]
+<<Invoking-guix-lint-1>>
+*** 9.8 Invoking =guix lint=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-lint-1
+:CUSTOM_ID: invoking-guix-lint
 :CLASS: section
 :END:
+<<index-guix-lint>> <<index-package_002c-checking-for-errors>>
 The =guix lint= command is meant to help package developers avoid common errors and use a consistent style. It runs a number of checks on a given set of packages in order to find common mistakes in their definitions. Available /checkers/ include (see =--list-checkers= for a complete list):
 
 - =synopsis=\\
@@ -82,7 +85,9 @@ The =guix lint= command is meant to help package developers avoid common errors 
 
 - =profile-collisions= :: Check whether installing the given packages in a profile would lead to collisions. Collisions occur when several packages with the same name but a different version or a different store file name are propagated. See [[id:guix--package-Reference][=propagated-inputs=]], for more information on propagated inputs.
 
--  <<index-Software-Heritage_002c-source-code-archive>>=archival= [[#index-Software-Heritage_002c-source-code-archive][¶]] :: Checks whether the package's source code is archived at [[https://www.softwareheritage.org][Software Heritage]].
+- =archival= [[#index-Software-Heritage_002c-source-code-archive][¶]] :: <<index-archival-of-source-code_002c-Software-Heritage>>
+
+  Checks whether the package's source code is archived at [[https://www.softwareheritage.org][Software Heritage]].
 
   When the source code that is not archived comes from a version-control system (VCS)---e.g., it's obtained with =git-fetch=, send Software Heritage a “save” request so that it eventually archives it. This ensures that the source will remain available in the long term, and that Guix can fall back to Software Heritage should the source code disappear from its original host. The status of recent “save” requests can be [[https://archive.softwareheritage.org/save/#requests][viewed on-line]].
 
@@ -90,7 +95,9 @@ The =guix lint= command is meant to help package developers avoid common errors 
 
   Software Heritage [[https://archive.softwareheritage.org/api/#rate-limiting][limits the request rate per IP address]]. When the limit is reached, =guix lint= prints a message and the =archival= checker stops doing anything until that limit has been reset.
 
--  <<index-security-vulnerabilities>>=cve= [[#index-security-vulnerabilities][¶]] :: Report known vulnerabilities found in the Common Vulnerabilities and Exposures (CVE) databases of the current and past year [[https://nvd.nist.gov/vuln/data-feeds][published by the US NIST]].
+- =cve= [[#index-security-vulnerabilities][¶]] :: <<index-CVE_002c-Common-Vulnerabilities-and-Exposures>>
+
+  Report known vulnerabilities found in the Common Vulnerabilities and Exposures (CVE) databases of the current and past year [[https://nvd.nist.gov/vuln/data-feeds][published by the US NIST]].
 
   To view information about a particular vulnerability, visit pages such as:
 
@@ -104,7 +111,7 @@ The =guix lint= command is meant to help package developers avoid common errors 
   #+begin_src lisp
   (package
     (name "grub")
-    ;; ...
+    ;; …
     ;; CPE calls this package "grub2".
     (properties '((cpe-name . "grub2")
                   (cpe-version . "2.3"))))
@@ -115,12 +122,12 @@ The =guix lint= command is meant to help package developers avoid common errors 
   #+begin_src lisp
   (package
     (name "halibut")
-    ;; ...
+    ;; …
     (properties '((cpe-vendor . "halibut_project"))))
 
   (package
     (name "cvs")
-    ;; ...
+    ;; …
     (properties '((lint-hidden-cpe-vendors . ("jenkins"
                                               "vendor2")))))
   #+end_src
@@ -130,7 +137,7 @@ The =guix lint= command is meant to help package developers avoid common errors 
   #+begin_src lisp
   (package
     (name "t1lib")
-    ;; ...
+    ;; …
     ;; These CVEs no longer apply and can be safely ignored.
     (properties `((lint-hidden-cve . ("CVE-2011-0433"
                                       "CVE-2011-1553"
@@ -145,22 +152,10 @@ The =guix lint= command is meant to help package developers avoid common errors 
 The general syntax is:
 
 #+begin_example
-guix lint options package...
+guix lint options package…
 #+end_example
 
-If no package is given on the command line, then all packages are checked. To check packages in a particular manifest, use:
-
-#+begin_example
-guix lint options --manifest=file ...
-#+end_example
-
-To check packages in particular source files, the syntax is:
-
-#+begin_example
-guix lint options --whole-file file...
-#+end_example
-
-The =options= may be zero or more of the following:
+If no package is given on the command line, then all packages are checked. The =options= may be zero or more of the following:
 
 - =--list-checkers=\\
   =-l= :: List and describe all the available checkers that will be run on packages and exit.
@@ -178,10 +173,7 @@ The =options= may be zero or more of the following:
 
   #+begin_example
   guix lint -c archival -e '(@ (gnu packages guile) guile-3.0)'
-#+end_example
-
-- =--manifest===file=\\
-  =-m ==file= :: Run checkers on packages in manifest =file= (see [[id:guix--Writing-Manifests][Writing Manifests]]).
+  #+end_example
 
 - =--no-network=\\
   =-n= :: Only enable the checkers that do not depend on Internet access.
@@ -189,17 +181,8 @@ The =options= may be zero or more of the following:
 - =--load-path===directory=\\
   =-L ==directory= :: Add =directory= to the front of the package module search path (see [[id:guix--Package-Modules][Package Modules]]).
 
-- =--whole-file=\\
-  =-f= :: Check the top-level package definitions in the given files; subsequent arguments are treated as file names rather than package names. This option also enables a special checker which checks if a package alphabetically succeeds the one above it.
-
-  For example, to check if the packages in =gnu/packages/matrix.scm= are sorted alphabetically, and if the package names therein follow established conventions, run:
-
-  #+begin_example
-  guix lint -c name -f gnu/packages/matrix.scm
-#+end_example
-
-  The previous two options allow users to define their own packages and make them visible to the command-line tools.
+  This allows users to define their own packages and make them visible to the command-line tools.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Previous: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Previous: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

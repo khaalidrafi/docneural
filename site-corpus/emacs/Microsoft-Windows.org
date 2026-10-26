@@ -7,12 +7,15 @@
 Next: [[id:emacs--Manifesto][The GNU Manifesto]]   Previous: [[id:emacs--Android][Emacs and Android]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Microsoft-Windows>>
+
+--------------
+
 ** Appendix I Emacs and Microsoft Windows/MS-DOS [[#Emacs-and-Microsoft-Windows_002fMS_002dDOS][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Emacs-and-Microsoft-Windows_002fMS_002dDOS
 :CLASS: appendix
 :END:
-This section describes peculiarities of using Emacs on Microsoft Windows. Some of these peculiarities are also relevant to Microsoft's older MS-DOS operating system. However, Emacs features that are relevant /only/ to MS-DOS are described in a separate section (see [[id:emacs--MS_002dDOS::#MS_002dDOS][Emacs and MS-DOS]]).
+This section describes peculiarities of using Emacs on Microsoft Windows. Some of these peculiarities are also relevant to Microsoft's older MS-DOS operating system. However, Emacs features that are relevant /only/ to MS-DOS are described in a separate section (see [[id:emacs--MS_002dDOS][Emacs and MS-DOS]]).
 
 MS-Windows is a non-free operating system; that means it denies its users the freedom that every computer user deserves. That is an injustice. For your freedom's sake, we urge you to switch to a free operating system.
 
@@ -20,4 +23,15 @@ We support GNU Emacs on proprietary operating systems because we hope this taste
 
 The behavior of Emacs on MS-Windows is reasonably similar to what is documented in the rest of the manual, including support for long file names, multiple frames, scroll bars, mouse menus, and subprocesses. However, a few special considerations apply, and they are described here.
 
---------------
+- [[id:emacs--Windows-Startup][How to Start Emacs on MS-Windows]]
+- [[id:emacs--Text-and-Binary][Text Files and Binary Files]]
+- [[id:emacs--Windows-Files][File Names on MS-Windows]]
+- [[id:emacs--ls-in-Lisp][Emulation of =ls= on MS-Windows]]
+- [[id:emacs--Windows-HOME][HOME and Startup Directories on MS-Windows]]
+- [[id:emacs--Windows-Keyboard][Keyboard Usage on MS-Windows]]
+- [[id:emacs--Windows-Mouse][Mouse Usage on MS-Windows]]
+- [[id:emacs--Windows-Processes][Subprocesses on Windows 9X/ME and Windows NT/2K/XP/Vista/7/8/10]]
+- [[id:emacs--Windows-Printing][Printing and MS-Windows]]
+- [[id:emacs--Windows-Fonts][Specifying Fonts on MS-Windows]]
+- [[id:emacs--Windows-Misc][Miscellaneous Windows-specific features]]
+- [[id:emacs--MS_002dDOS][Emacs and MS-DOS]]

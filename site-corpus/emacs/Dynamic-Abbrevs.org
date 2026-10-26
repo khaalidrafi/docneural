@@ -7,6 +7,9 @@
 Next: [[id:emacs--Dabbrev-Customization][Customizing Dynamic Abbreviation]]   Previous: [[id:emacs--Saving-Abbrevs][Saving Abbrevs]]   Up: [[id:emacs--Abbrevs][Abbrevs]]
 
 <<Dynamic-Abbrevs>>
+
+--------------
+
 *** 31.7 Dynamic Abbrev Expansion [[#Dynamic-Abbrev-Expansion][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Dynamic-Abbrev-Expansion
@@ -30,7 +33,7 @@ After you have expanded a dynamic abbrev, you can copy additional words that fol
 
 You can control the way M-/ determines the word to expand and how to expand it, see [[id:emacs--Dabbrev-Customization][Customizing Dynamic Abbreviation]].
 
-The command C-M-/ (=dabbrev-completion=) performs completion of a dynamic abbrev. Instead of trying the possible expansions one by one, it finds all of them, then inserts the text that they have in common. If they have nothing in common, C-M-/ displays a list of completions, from which you can select a choice in the usual manner. See [[id:emacs--Completion::#Completion][Completion]].
+The command C-M-/ (=dabbrev-completion=) performs completion of a dynamic abbrev. Instead of trying the possible expansions one by one, it finds all of them, then inserts the text that they have in common. If they have nothing in common, C-M-/ displays a list of completions, from which you can select a choice in the usual manner. See [[id:emacs--Completion][Completion]].
 
 Dynamic abbrev expansion is completely independent of Abbrev mode; the expansion of a word with M-/ is completely independent of whether it has a definition as an ordinary abbrev.
 

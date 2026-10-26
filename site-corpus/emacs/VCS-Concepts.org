@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: VCS Concepts
 
-Next:
+Next: [[id:emacs--VCS-Merging][Merge-based vs Lock-based Version Control]]   Previous: [[id:emacs--Version-Control-Systems][Supported Version Control Systems]]   Up: [[id:emacs--Introduction-to-VC][Introduction to Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#VCS-Concepts][VCS Concepts]].
+<<VCS-Concepts>>
+
+--------------
+
+**** 30.1.1.3 Concepts of Version Control [[#Concepts-of-Version-Control][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Concepts-of-Version-Control
+:CLASS: subsubsection
+:END:
+When a file is under version control, we say that it is /registered/ in the version control system. The system has a /repository/ which stores both the file's present state and its change history---enough to reconstruct the current version or any earlier version. The repository also contains other information, such as /log entries/ that describe the changes made to each file.
+
+The copy of a version-controlled file that you actually edit is called the /work file/. You can change each work file as you would an ordinary file. After you are done with a set of changes, you may /commit/ (or /check in/) the changes; this records the changes in the repository, along with a descriptive log entry.
+
+A directory tree of work files is called a /working tree/.
+
+Each commit creates a new /revision/ in the repository. The version control system keeps track of all past revisions and the changes that were made in each revision. Each revision is named by a /revision ID/, whose format depends on the version control system; in the simplest case, it is just an integer.
+
+To go beyond these basic concepts, you will need to understand three aspects in which version control systems differ. As explained in the next three sections, they can be lock-based or merge-based; file-based or changeset-based; and centralized or decentralized. VC handles all these modes of operation, but it cannot hide the differences.
+
+--------------

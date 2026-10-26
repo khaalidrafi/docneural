@@ -7,6 +7,9 @@
 Next: [[id:emacs--Keys][Keys]]   Previous: [[id:emacs--Screen][The Organization of the Screen]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<User-Input>>
+
+--------------
+
 ** 2 Kinds of User Input [[#Kinds-of-User-Input][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Kinds-of-User-Input
@@ -20,7 +23,7 @@ Emacs also recognizes control characters that are entered using /modifier keys/.
 
 You can also type Meta characters using two-character sequences starting with ESC. Thus, you can enter M-a by typing ESC a. You can enter C-M-a (holding down both Ctrl and Alt, then pressing a) by typing ESC C-a. Unlike Meta, ESC is entered as a separate character. You don't hold down ESC while typing the next character; instead, press ESC and release it, then enter the next character. This feature is useful on certain text terminals where the Meta key does not function reliably.
 
-Emacs supports 3 additional modifier keys, see [[id:emacs--Key-Bindings::#Modifier-Keys][Modifier Keys]].
+Emacs supports 3 additional modifier keys, see [[id:emacs--Modifier-Keys][Modifier Keys]].
 
 Emacs has extensive support for using mouse buttons, mouse wheels and other pointing devices like touchpads and touch screens. See [[id:emacs--Mouse-Input][Mouse Input]], for details.
 

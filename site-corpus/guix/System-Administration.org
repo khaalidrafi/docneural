@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<System-Administration>>
-Next: [[id:guix--Day_002dto_002dDay-System-Administration][Day-to-Day System Administration]], Previous: [[id:guix--Coding][Coding]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Day_002dto_002dDay-System-Administration][Day-to-Day System Administration]], Previous: [[id:guix--Coding][Coding]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.20.2 System Administration [[#System-Administration-1][¶]]
+<<System-Administration-1>>
+**** 22.20.2 System Administration
 :PROPERTIES:
-:CUSTOM_ID: System-Administration-1
+:CUSTOM_ID: system-administration
 :CLASS: subsection
 :END:
 Guix System configuration for all our systems is held in this repository:
@@ -73,4 +75,4 @@ Without even having SSH access to the machine, you can help by posting patches t
 
 --------------
 
-Next: [[id:guix--Day_002dto_002dDay-System-Administration][Day-to-Day System Administration]], Previous: [[id:guix--Coding][Coding]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Day_002dto_002dDay-System-Administration][Day-to-Day System Administration]], Previous: [[id:guix--Coding][Coding]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

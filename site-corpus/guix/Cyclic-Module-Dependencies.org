@@ -36,17 +36,20 @@ Next:
 [[../..][]]
 
 <<Cyclic-Module-Dependencies>>
-Next: [[id:guix--Bulk-Updates][Bulk Updates]], Previous: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Bulk-Updates][Bulk Updates]], Previous: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.7 Cyclic Module Dependencies [[#Cyclic-Module-Dependencies-1][¶]]
+<<Cyclic-Module-Dependencies-1>>
+**** 22.8.6 Cyclic Module Dependencies
 :PROPERTIES:
-:CUSTOM_ID: Cyclic-Module-Dependencies-1
+:CUSTOM_ID: cyclic-module-dependencies
 :CLASS: subsection
 :END:
 While there cannot be circular dependencies between packages, Guile's lax module loading mechanism allows circular dependencies between Guile modules, which doesn't cause problems as long as the following conditions are followed for two modules part of a dependency cycle:
 
+<<index-rules-to-cope-with-circular-module-dependencies>>
 1. Macros are not shared between the co-dependent modules
 2. Top-level variables are only referenced in delayed (/thunked/) package fields: =arguments=, =native-inputs=, =inputs=, =propagated-inputs= or =replacement=
 3. Procedures referencing top-level variables from another module are not called at the top level of a module themselves.
@@ -75,4 +78,4 @@ Care would need to be taken to ensure the above procedure is only ever used in a
 
 --------------
 
-Next: [[id:guix--Bulk-Updates][Bulk Updates]], Previous: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Bulk-Updates][Bulk Updates]], Previous: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

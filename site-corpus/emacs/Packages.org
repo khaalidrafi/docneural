@@ -7,6 +7,9 @@
 Next: [[id:emacs--Customization][Customization]]   Previous: [[id:emacs--Amusements][Games and Other Amusements]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Packages>>
+
+--------------
+
 ** 50 Emacs Lisp Packages [[#Emacs-Lisp-Packages][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Emacs-Lisp-Packages
@@ -23,5 +26,11 @@ The command C-h P (=describe-package=) prompts for the name of a package, and di
 By default, Emacs downloads packages from two archives: [[https://elpa.gnu.org/][GNU ELPA]] and [[https://elpa.nongnu.org/][NonGNU ELPA]]. These are maintained by the Emacs developers and hosted by the GNU project. Optionally, you can also download packages from third-party archives. See [[id:emacs--Package-Installation][Package Installation]].
 
 For information about turning an Emacs Lisp program into an installable package, See [[../elisp_html/Packaging.html#Packaging][Packaging]] in The Emacs Lisp Reference Manual.
+
+- [[id:emacs--Package-Menu][The Package Menu Buffer]]
+- [[id:emacs--Package-Statuses][Package Statuses]]
+- [[id:emacs--Package-Installation][Package Installation]]
+- [[id:emacs--Package-Files][Package Files and Directory Layout]]
+- [[id:emacs--Fetching-Package-Sources][Fetching Package Sources]]
 
 --------------

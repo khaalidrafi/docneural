@@ -36,17 +36,18 @@ Next:
 [[../..][]]
 
 <<Documentation>>
-Next: [[id:guix--Platforms][Platforms]], Previous: [[id:guix--Home-Configuration][Home Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Platforms][Platforms]], Previous: [[id:guix--Home-Configuration][Home Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 14 Documentation [[#Documentation-1][¶]]
+<<Documentation-1>>
+** 14 Documentation
 :PROPERTIES:
-:CUSTOM_ID: Documentation-1
+:CUSTOM_ID: documentation
 :CLASS: chapter
 :END:
-Documentation for Guix itself is [[https://guix.gnu.org/manual/devel][available online]] and documentation for a number of “Guix-adjacent packages” is available from [[https://doc.guix.gnu.org][the Documentation Center]]. These provide an easy way to browse documentation online, but you can also access it locally on your computer, as we will see below.
-
+<<index-documentation_002c-searching-for>> <<index-searching-for-documentation>> <<index-Info_002c-documentation-format>> <<index-man-pages>> <<index-manual-pages>>
 In most cases packages installed with Guix come with documentation. There are two main documentation formats: “Info”, a browsable hypertext format used for GNU software, and “manual pages” (or “man pages”), the linear documentation format traditionally found on Unix. Info manuals are accessed with the =info= command or with Emacs, and man pages are accessed using =man=.
 
 You can look for documentation of software installed on your system by keyword. For example, the following command searches for information about “TLS” in Info manuals:
@@ -57,16 +58,16 @@ $ info -k TLS
 "(emacs)Network Security" -- TLS
 "(gnutls)Core TLS API" -- gnutls_certificate_set_verify_flags
 "(gnutls)Core TLS API" -- gnutls_certificate_set_verify_function
-...
+…
 #+end_example
 
-The command below searches for the same keyword in man pages[[#FOOT40][^{40}]]:
+The command below searches for the same keyword in man pages[[#FOOT38][^{38}]]:
 
 #+begin_example
 $ man -k TLS
 SSL (7)              - OpenSSL SSL/TLS library
 certtool (1)         - GnuTLS certificate tool
-...
+…
 #+end_example
 
 These searches are purely local to your computer so you have the guarantee that documentation you find corresponds to what you have actually installed, you can access it off-line, and your privacy is respected.
@@ -92,13 +93,12 @@ Info manuals contain sections and indices as well as hyperlinks like those found
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF40][(40)]]
+***** [[#DOCF38][(38)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The database searched by =man -k= is only created in profiles that contain the =man-db= package.
 
 --------------
 
-Next: [[id:guix--Platforms][Platforms]], Previous: [[id:guix--Home-Configuration][Home Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Platforms][Platforms]], Previous: [[id:guix--Home-Configuration][Home Configuration]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

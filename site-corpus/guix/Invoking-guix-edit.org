@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-edit>>
-Next: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Previous: [[id:guix--Invoking-guix-build][Invoking =guix build=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Previous: [[id:guix--Invoking-guix-build][Invoking =guix build=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.2 Invoking =guix edit= [[#Invoking-guix-edit-1][¶]]
+<<Invoking-guix-edit-1>>
+*** 9.2 Invoking =guix edit=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-edit-1
+:CUSTOM_ID: invoking-guix-edit
 :CLASS: section
 :END:
+<<index-guix-edit>> <<index-package-definition_002c-editing>>
 So many packages, so many source files! The =guix edit= command facilitates the life of users and packagers by pointing their editor at the source file containing the definition of the specified packages. For instance:
 
 #+begin_example
@@ -56,7 +59,3 @@ launches the program specified in the =VISUAL= or in the =EDITOR= environment va
 If you are using a Guix Git checkout (see [[id:guix--Building-from-Git][Building from Git]]), or have created your own packages on =GUIX_PACKAGE_PATH= (see [[id:guix--Package-Modules][Package Modules]]), you will be able to edit the package recipes. In other cases, you will be able to examine the read-only recipes for packages currently in the store.
 
 Instead of =GUIX_PACKAGE_PATH=, the command-line option =--load-path===directory= (or in short =-L ==directory=) allows you to add =directory= to the front of the package module search path and so make your own packages visible.
-
---------------
-
-Next: [[id:guix--Invoking-guix-download][Invoking =guix download=]], Previous: [[id:guix--Invoking-guix-build][Invoking =guix build=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

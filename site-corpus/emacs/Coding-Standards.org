@@ -7,6 +7,9 @@
 Next: [[id:emacs--Copyright-Assignment][Copyright Assignment]]   Up: [[id:emacs--Contributing][Contributing to Emacs Development]]
 
 <<Coding-Standards>>
+
+--------------
+
 *** 55.1 Coding Standards [[#Coding-Standards-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Coding-Standards-1
@@ -22,5 +25,3 @@ Emacs has additional style and coding conventions:
 - Avoid using =advice-add= or =with-eval-after-load= for Lisp code to be included in Emacs.
 - Remove all trailing whitespace in all source and text files.
 - Use =?\s= instead of =? = in Lisp code for a space character.
-
---------------

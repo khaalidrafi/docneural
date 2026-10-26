@@ -1,0 +1,223 @@
+:PROPERTIES:
+:ID: guix--Debbugs-User-Interfaces
+:END:
+#+filetags: :guix:
+#+title: Debbugs User Interfaces
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Debbugs-User-Interfaces>>
+
+Next: [[id:guix--Debbugs-Usertags][Debbugs Usertags]], Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
+
+--------------
+
+<<Debbugs-User-Interfaces-1>>
+**** 22.11.3 Debbugs User Interfaces
+:PROPERTIES:
+:CUSTOM_ID: debbugs-user-interfaces
+:CLASS: subsection
+:END:
+
+#+begin_quote
+*Warning:* This section is about bug reports and patches sent by email to [[https://issues.guix.gnu.org][Debbugs]]. This option is supported until December 31st, 2025, after which [[https://codeberg.org/guix/guix][Codeberg]] will be the only interface for submitting bug reports and changes. See [[id:guix--Submitting-Patches][Submitting Patches]], for more info.
+
+#+end_quote
+
+- [[#Web-interface][Web interface]]
+- [[#Command_002dLine-Interface][Command-Line Interface]]
+- [[#Emacs-Interface][Emacs Interface]]
+
+<<Web-interface>>
+**** 22.11.3.1 Web interface
+:PROPERTIES:
+:CUSTOM_ID: web-interface
+:CLASS: subsubsection
+:END:
+<<index-mumi_002c-web-interface-for-issues>>
+A web interface (actually /two/ web interfaces!) are available to browse issues:
+
+- [[https://issues.guix.gnu.org]] provides a pleasant interface powered by mumi[[#FOOT49][^{49}]] to browse bug reports and patches, and to participate in discussions; mumi also has a command-line interface as we will see below;
+- [[https://bugs.gnu.org/guix]] lists bug reports;
+- [[https://bugs.gnu.org/guix-patches]] lists patch submissions.
+
+To view discussions related to issue number =n=, go to ‘=https://issues.guix.gnu.org/==n=' or ‘=https://bugs.gnu.org/==n='.
+
+<<Command_002dLine-Interface>>
+**** 22.11.3.2 Command-Line Interface
+:PROPERTIES:
+:CUSTOM_ID: command-line-interface
+:CLASS: subsubsection
+:END:
+<<index-mumi-command_002dline-interface>> <<index-mumi-am>> <<index-mumi-compose>> <<index-mumi-send_002demail>> <<index-mumi-www>>
+Mumi also comes with a command-line interface that can be used to search existing issues, open new issues, compose replies, apply and send patches. You do not need to use Emacs to use the mumi command-line client. You interact with it only on the command-line.
+
+To use the mumi command-line interface, navigate to a local clone of the Guix git repository, and drop into a shell with mumi, git and git:send-email installed.
+
+#+begin_example
+$ cd guix
+~/guix$ guix shell mumi git git:send-email
+#+end_example
+
+To search for issues, say all open issues about "zig", run
+
+#+begin_example
+~/guix [env]$ mumi search zig is:open
+
+#60889 Add zig-build-system
+opened on 17 Jan 17:37 Z by Ekaitz Zarraga
+#61036 [PATCH 0/3] Update zig to 0.10.1
+opened on 24 Jan 09:42 Z by Efraim Flashner
+#39136 [PATCH] gnu: services: Add endlessh.
+opened on 14 Jan 2020 21:21 by Nicol? Balzarotti
+#60424 [PATCH] gnu: Add python-online-judge-tools
+opened on 30 Dec 2022 07:03 by gemmaro
+#45601 [PATCH 0/6] vlang 0.2 update
+opened on  1 Jan 2021 19:23 by Ryan Prior
+#+end_example
+
+Pick an issue and make it the "current" issue.
+
+#+begin_example
+~/guix [env]$ mumi current 61036
+
+#61036 [PATCH 0/3] Update zig to 0.10.1
+opened on 24 Jan 09:42 Z by Efraim Flashner
+#+end_example
+
+Once an issue is the current issue, you can open the issue in a web browser, compose replies, apply patches, send patches, etc. with short succinct commands.
+
+Open the issue in your web browser using
+
+#+begin_example
+~/guix [env]$ mumi www
+#+end_example
+
+Compose a reply using
+
+#+begin_example
+~/guix [env]$ mumi compose
+#+end_example
+
+Compose a reply and close the issue using
+
+#+begin_example
+~/guix [env]$ mumi compose --close
+#+end_example
+
+=mumi compose= opens your mail client by passing ‘=mailto:=' URIs to =xdg-open=. So, you need to have =xdg-open= set up to open your mail client correctly.
+
+Apply the latest patchset from the issue using
+
+#+begin_example
+~/guix [env]$ mumi am
+#+end_example
+
+You may also apply a patchset of a specific version (say, v3) using
+
+#+begin_example
+~/guix [env]$ mumi am v3
+#+end_example
+
+Or, you may apply a patch from a specific e-mail message. For example, to apply the patch from the 4th message (message index starts from 0), run
+
+#+begin_example
+~/guix [env]$ mumi am @4
+#+end_example
+
+=mumi am= is a wrapper around =git am=. You can pass =git am= arguments to it after a ‘=--='. For example, to add a Signed-off-by trailer, run
+
+#+begin_example
+~/guix [env]$ mumi am -- -s
+#+end_example
+
+Create and send patches to the issue using
+
+#+begin_example
+~/guix [env]$ git format-patch origin/master
+~/guix [env]$ mumi send-email foo.patch bar.patch
+#+end_example
+
+Note that you do not have to pass in ‘=--to=' or ‘=--cc=' arguments to =git format-patch=. =mumi send-email= will put them in correctly when sending the patches.
+
+To open a new issue, run
+
+#+begin_example
+~/guix [env]$ mumi new
+#+end_example
+
+and send an email (using =mumi compose=) or patches (using =mumi send-email=).
+
+=mumi send-email= is really a wrapper around =git send-email= that automates away all the nitty-gritty of sending patches. It uses the current issue state to automatically figure out the correct ‘=To=' address to send to, other participants to ‘=Cc=', headers to add, etc.
+
+Also note that, unlike =git send-email=, =mumi send-email= works perfectly well with single and multiple patches alike. It automates away the debbugs dance of sending the first patch, waiting for a response from debbugs and sending the remaining patches. It does so by sending the first patch, polling the server for a response, and then sending the remaining patches. This polling can unfortunately take a few minutes. So, please be patient.
+
+<<Emacs-Interface>>
+**** 22.11.3.3 Emacs Interface
+:PROPERTIES:
+:CUSTOM_ID: emacs-interface
+:CLASS: subsubsection
+:END:
+If you use Emacs, you may find it more convenient to interact with issues using =debbugs.el=, which you can install with:
+
+#+begin_example
+guix install emacs-debbugs
+#+end_example
+
+For example, to list all open issues on =guix-patches=, hit:
+
+#+begin_example
+C-u M-x debbugs-gnu RET RET guix-patches RET n y
+#+end_example
+
+For a more convenient (shorter) way to access both the bugs and patches submissions, you may want to configure the =debbugs-gnu-default-packages= and =debbugs-gnu-default-severities= Emacs variables (see [[id:guix--Viewing-Bugs-within-Emacs][Viewing Bugs within Emacs]]).
+
+To search for bugs, ‘=M-x== debbugs-gnu-guix-search=' can be used.
+
+See [[https://elpa.gnu.org/packages/doc/debbugs-ug.html#Top][Debbugs User Guide]], for more information on this nifty tool!
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF49][(49)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:END:
+Mumi is a nice piece of software written in Guile, and you can help! See [[https://codeberg.org/guix/mumi]].
+
+--------------
+
+Next: [[id:guix--Debbugs-Usertags][Debbugs Usertags]], Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

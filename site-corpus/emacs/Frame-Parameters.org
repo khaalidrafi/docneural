@@ -7,6 +7,9 @@
 Next: [[id:emacs--Scroll-Bars][Scroll Bars]]   Previous: [[id:emacs--Multiple-Displays][Multiple Displays]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Frame-Parameters>>
+
+--------------
+
 *** 23.11 Frame Parameters [[#Frame-Parameters-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Frame-Parameters-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Scroll-Bars][Scroll Bars]]   Previous: [[id:emacs--Multiple-Di
 :END:
 You can control the default appearance and behavior of all frames by specifying a default list of /frame parameters/ in the variable =default-frame-alist=. Its value should be a list of entries, each specifying a parameter name and a value for that parameter. These entries take effect whenever Emacs creates a new frame, including the initial frame.
 
-For example, you can add the following lines to your init file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]) to set the default frame width to 90 character columns, the default frame height to 40 character rows, and the default font to ‘=Monospace-10=':
+For example, you can add the following lines to your init file (see [[id:emacs--Init-File][The Emacs Initialization File]]) to set the default frame width to 90 character columns, the default frame height to 40 character rows, and the default font to ‘=Monospace-10=':
 
 #+begin_example
 (add-to-list 'default-frame-alist '(width  . 90))

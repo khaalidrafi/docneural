@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Other Calendars
 
-Next: [[id:emacs--Diary#Diary][The Diary]]   Previous: [[id:emacs--Lunar-Phases][Phases of the Moon]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
+Next: [[id:emacs--Diary][The Diary]]   Previous: [[id:emacs--Lunar-Phases][Phases of the Moon]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
 
 <<Other-Calendars>>
+
+--------------
+
 *** 33.9 Conversion To and From Other Calendars [[#Conversion-To-and-From-Other-Calendars][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Conversion-To-and-From-Other-Calendars
@@ -16,111 +19,6 @@ The Emacs calendar displayed is /always/ the /Gregorian calendar/, sometimes cal
 
 While Emacs cannot display other calendars, it can convert dates to and from several other calendars.
 
---------------
-
-<<Calendar-Systems>>
-**** 33.9.1 Supported Calendar Systems [[#Supported-Calendar-Systems][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Supported-Calendar-Systems
-:CLASS: subsection
-:END:
-The ISO commercial calendar is often used in business.
-
-The Julian calendar, named after Julius Caesar, was the one used in Europe throughout medieval times, and in many countries up until the nineteenth century.
-
-Astronomers use a simple counting of days elapsed since noon, Monday, January 1, 4713 BC on the Julian calendar. The number of days elapsed since then is called the /Julian day number/ or the /Astronomical day number/.
-
-The Hebrew calendar is used by tradition in the Jewish religion. The Emacs calendar program uses the Hebrew calendar to determine the dates of Jewish holidays. Hebrew calendar dates begin and end at sunset.
-
-The Islamic calendar is used in many predominantly Islamic countries. Emacs uses it to determine the dates of Islamic holidays. There is no universal agreement in the Islamic world about the calendar; Emacs uses a widely accepted version, but the precise dates of Islamic holidays often depend on proclamation by religious authorities, not on calculations. As a consequence, the actual dates of observance can vary slightly from the dates computed by Emacs. Islamic calendar dates begin and end at sunset.
-
-The French Revolutionary calendar was created by the Jacobins after the 1789 revolution, to represent a more secular and nature-based view of the annual cycle, and to install a 10-day week in a rationalization measure similar to the metric system. The French government officially abandoned this calendar at the end of 1805.
-
-The Maya of Central America used three separate, overlapping calendar systems, the /long count/, the /tzolkin/, and the /haab/. Emacs knows about all three of these calendars. Experts dispute the exact correlation between the Mayan calendar and our calendar; Emacs uses the Goodman-Martinez-Thompson correlation in its calculations.
-
-The Copts use a calendar based on the ancient Egyptian solar calendar. Their calendar consists of twelve 30-day months followed by an extra five-day period. Once every fourth year they add a leap day to this extra period to make it six days. The Ethiopic calendar is identical in structure, but has different year numbers and month names.
-
-The Persians use a solar calendar based on a design of Omar Khayyam. Their calendar consists of twelve months of which the first six have 31 days, the next five have 30 days, and the last has 29 in ordinary years and 30 in leap years. Leap years occur in a complicated pattern every four or five years. The calendar implemented here is the arithmetical Persian calendar championed by Birashk, based on a 2,820-year cycle. It differs from the astronomical Persian calendar, which is based on astronomical events. As of this writing the first future discrepancy is projected to occur on March 20, 2025. It is currently not clear what the official calendar of Iran will be at that time.
-
-The Chinese calendar is a complicated system of lunar months arranged into solar years. The years go in cycles of sixty, each year containing either twelve months in an ordinary year or thirteen months in a leap year; each month has either 29 or 30 days. Years, ordinary months, and days are named by combining one of ten /celestial stems/ with one of twelve /terrestrial branches/ for a total of sixty names that are repeated in a cycle of sixty.
-
-The Bahá'í calendar system is based on a solar cycle of 19 months with 19 days each. The four remaining intercalary days are placed between the 18th and 19th months.
-
---------------
-
-<<To-Other-Calendar>>
-**** 33.9.2 Converting To Other Calendars [[#Converting-To-Other-Calendars][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Converting-To-Other-Calendars
-:CLASS: subsection
-:END:
-The following commands describe the selected date (the date at point) in various other calendar systems:
-
--  <<index-p-_0028Calendar-mode_0029>>mouse-3 Other calendars [[#index-p-_0028Calendar-mode_0029][¶]]\\
-  p o :: Display the selected date in various other calendars. (=calendar-print-other-dates=).
-
-- p c :: Display ISO commercial calendar equivalent for selected day (=calendar-iso-print-date=).
-
-- p j :: Display Julian date for selected day (=calendar-julian-print-date=).
-
-- p a :: Display astronomical (Julian) day number for selected day (=calendar-astro-print-day-number=).
-
-- p h :: Display Hebrew date for selected day (=calendar-hebrew-print-date=).
-
-- p i :: Display Islamic date for selected day (=calendar-islamic-print-date=).
-
-- p f :: Display French Revolutionary date for selected day (=calendar-french-print-date=).
-
-- p b :: Display Bahá'í date for selected day (=calendar-bahai-print-date=).
-
-- p C :: Display Chinese date for selected day (=calendar-chinese-print-date=).
-
-- p k :: Display Coptic date for selected day (=calendar-coptic-print-date=).
-
-- p e :: Display Ethiopic date for selected day (=calendar-ethiopic-print-date=).
-
-- p p :: Display Persian date for selected day (=calendar-persian-print-date=).
-
-- p m :: Display Mayan date for selected day (=calendar-mayan-print-date=).
-
-Otherwise, move point to the date you want to convert, then type the appropriate command starting with p from the table above. The prefix p is a mnemonic for “print”, since Emacs “prints” the equivalent date in the echo area. p o (=calendar-print-other-dates=) displays the date in all forms known to Emacs. You can also use mouse-3 and then choose Other calendars from the menu that appears. This displays the equivalent forms of the date in all the calendars Emacs understands, in the form of a menu. (Choosing an alternative from this menu doesn't actually do anything---the menu is used only for display.)
-
---------------
-
-<<From-Other-Calendar>>
-**** 33.9.3 Converting From Other Calendars [[#Converting-From-Other-Calendars][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Converting-From-Other-Calendars
-:CLASS: subsection
-:END:
-You can use the other supported calendars to specify a date to move to. This section describes the commands for doing this using calendars other than Mayan; for the Mayan calendar, see the following section.
-
-- g c :: Move to a date specified in the ISO commercial calendar (=calendar-iso-goto-date=).
-
-- g w :: Move to a week specified in the ISO commercial calendar (=calendar-iso-goto-week=).
-
-- g j :: Move to a date specified in the Julian calendar (=calendar-julian-goto-date=).
-
-- g a :: Move to a date specified with an astronomical (Julian) day number (=calendar-astro-goto-day-number=).
-
-- g b :: Move to a date specified in the Bahá'í calendar (=calendar-bahai-goto-date=).
-
-- g h :: Move to a date specified in the Hebrew calendar (=calendar-hebrew-goto-date=).
-
-- g i :: Move to a date specified in the Islamic calendar (=calendar-islamic-goto-date=).
-
-- g f :: Move to a date specified in the French Revolutionary calendar (=calendar-french-goto-date=).
-
-- g C :: Move to a date specified in the Chinese calendar (=calendar-chinese-goto-date=).
-
-- g p :: Move to a date specified in the Persian calendar (=calendar-persian-goto-date=).
-
-- g k :: Move to a date specified in the Coptic calendar (=calendar-coptic-goto-date=).
-
-- g e :: Move to a date specified in the Ethiopic calendar (=calendar-ethiopic-goto-date=).
-
-These commands ask you for a date on the other calendar, move point to the Gregorian calendar date equivalent to that date, and display the other calendar's date in the echo area. Emacs uses strict completion (see [[id:emacs--Completion::#Completion-Exit][Completion Exit]]) whenever it asks you to type a month name, so you don't have to worry about the spelling of Hebrew, Islamic, or French names.
-
-One common issue concerning the Hebrew calendar is the computation of the anniversary of a date of death, called a /yahrzeit/. The Emacs calendar includes a facility for such calculations. If you are in the calendar, the command M-x calendar-hebrew-list-yahrzeits asks you for a range of years and then displays a list of the yahrzeit dates for those years for the date given by point. If you are not in the calendar, this command first asks you for the date of death and the range of years, and then displays the list of yahrzeit dates.
-
---------------
+- [[id:emacs--Calendar-Systems][Supported Calendar Systems]]
+- [[id:emacs--To-Other-Calendar][Converting To Other Calendars]]
+- [[id:emacs--From-Other-Calendar][Converting From Other Calendars]]

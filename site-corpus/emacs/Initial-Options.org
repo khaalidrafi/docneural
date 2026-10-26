@@ -7,6 +7,9 @@
 Next: [[id:emacs--Command-Example][Command Argument Example]]   Previous: [[id:emacs--Action-Arguments][Action Arguments]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
 
 <<Initial-Options>>
+
+--------------
+
 *** C.2 Initial Options [[#Initial-Options-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Initial-Options-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Command-Example][Command Argument Example]]   Previous: [[id:e
 :END:
 The initial options specify parameters for the Emacs session. This section describes the more general initial options; some other options specifically related to the X Window System appear in the following sections.
 
-Some initial options affect the loading of the initialization file. Normally, Emacs first loads =site-start.el= if it exists, then your own initialization file if it exists, and finally the default initialization file =default.el= if it exists (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). Certain options prevent loading of some of these files or substitute other files for them.
+Some initial options affect the loading of the initialization file. Normally, Emacs first loads =site-start.el= if it exists, then your own initialization file if it exists, and finally the default initialization file =default.el= if it exists (see [[id:emacs--Init-File][The Emacs Initialization File]]). Certain options prevent loading of some of these files or substitute other files for them.
 
 -  <<index-_002d_002dchdir>>‘=-chdir ==directory=' [[#index-_002d_002dchdir][¶]] :: 
 - ‘=--chdir===directory=' :: Change to =directory= before doing anything else. This is mainly used by session management in X so that Emacs starts in the same directory as it stopped. This makes desktop saving and restoring easier.
@@ -53,19 +56,19 @@ Some initial options affect the loading of the initialization file. Normally, Em
   #!/usr/bin/emacs -x
 #+end_example
 
-  This is like ‘=--script=', but suppresses loading the init files (like =--quick=), and can't be used on a normal command line (since it doesn't specify the script to load). In addition, when it reaches the end of the script, it exits Emacs and uses the value of the final form as the exit value from the script (if the final value is numerical). Otherwise, it will always exit with a zero value. Note that when Emacs reads the Lisp code in this case, it ignores any file-local variables (see [[id:emacs--Variables::#Specifying-File-Variables][Specifying File Variables]]), both in the first line and in a local-variables section near the end of the file.
+  This is like ‘=--script=', but suppresses loading the init files (like =--quick=), and can't be used on a normal command line (since it doesn't specify the script to load). In addition, when it reaches the end of the script, it exits Emacs and uses the value of the final form as the exit value from the script (if the final value is numerical). Otherwise, it will always exit with a zero value. Note that when Emacs reads the Lisp code in this case, it ignores any file-local variables (see [[id:emacs--Specifying-File-Variables][Specifying File Variables]]), both in the first line and in a local-variables section near the end of the file.
 
 -  <<index-_002d_002dno_002dbuild_002ddetails>>‘=--no-build-details=' [[#index-_002d_002dno_002dbuild_002ddetails][¶]] :: Omit details like system name and build time from the Emacs executable, so that builds are more deterministic. This switch is not meant for regular (or interactive) use, since it makes commands like =system-name= return =nil=.
 
 -  <<index-_002d_002dno_002dinit_002dfile>>‘=-q=' [[#index-_002d_002dno_002dinit_002dfile][¶]] :: 
-- ‘=--no-init-file=' :: Do not load any initialization file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). When Emacs is invoked with this option, the Customize facility does not allow options to be saved (see [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]]). This option does not disable loading =site-start.el=.
+- ‘=--no-init-file=' :: Do not load any initialization file (see [[id:emacs--Init-File][The Emacs Initialization File]]). When Emacs is invoked with this option, the Customize facility does not allow options to be saved (see [[id:emacs--Easy-Customization][Easy Customization Interface]]). This option does not disable loading =site-start.el=.
 
 -  <<index-_002dnsl>>‘=--no-site-file=' [[#index-_002dnsl][¶]] :: 
-- ‘=-nsl=' :: Do not load =site-start.el= (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). The ‘=-Q=' option does this too, but other options like ‘=-q=' do not.
+- ‘=-nsl=' :: Do not load =site-start.el= (see [[id:emacs--Init-File][The Emacs Initialization File]]). The ‘=-Q=' option does this too, but other options like ‘=-q=' do not.
 
--  <<index-_002d_002dno_002dsite_002dlisp>>‘=--no-site-lisp=' [[#index-_002d_002dno_002dsite_002dlisp][¶]] :: Do not include the =site-lisp= directories in =load-path= (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]). The ‘=-Q=' option does this too.
+-  <<index-_002d_002dno_002dsite_002dlisp>>‘=--no-site-lisp=' [[#index-_002d_002dno_002dsite_002dlisp][¶]] :: Do not include the =site-lisp= directories in =load-path= (see [[id:emacs--Init-File][The Emacs Initialization File]]). The ‘=-Q=' option does this too.
 
-- <<index-_002d_002dinit_002ddirectory>>‘=--init-directory=' [[#index-_002d_002dinit_002ddirectory][¶]] :: Specify the directory to use when looking for the Emacs init files. Note that this merely overrides the value of =user-emacs-directory=, the directory which Emacs usually determines as side effect of searching for your init file (see [[id:emacs--Init-File::#Find-Init][How Emacs Finds Your Init File]]), but does not change the search for the =~/.emacs= init file. In particular, if there's no =init.el= file in the directory named by this option, Emacs will find and use =init.el= it would have used without this option (but will search for your other per-user Emacs files in the directory specified by this option). If you want to force Emacs to use =init.el= file in this directory, make sure it exists there before starting Emacs with this option.
+- <<index-_002d_002dinit_002ddirectory>>‘=--init-directory=' [[#index-_002d_002dinit_002ddirectory][¶]] :: Specify the directory to use when looking for the Emacs init files. Note that this merely overrides the value of =user-emacs-directory=, the directory which Emacs usually determines as side effect of searching for your init file (see [[id:emacs--Find-Init][How Emacs Finds Your Init File]]), but does not change the search for the =~/.emacs= init file. In particular, if there's no =init.el= file in the directory named by this option, Emacs will find and use =init.el= it would have used without this option (but will search for your other per-user Emacs files in the directory specified by this option). If you want to force Emacs to use =init.el= file in this directory, make sure it exists there before starting Emacs with this option.
 
 -  <<index-_002d_002dno_002dsplash>>‘=--no-splash=' [[#index-_002d_002dno_002dsplash][¶]] :: Do not display a startup screen. You can also achieve this effect by setting the variable =inhibit-startup-screen= to non-=nil= in your initialization file (see [[id:emacs--Entering-Emacs][Entering Emacs]]).
 

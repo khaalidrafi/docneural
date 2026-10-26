@@ -604,7 +604,7 @@ jobs:
           :LOGBOOK: clock entries yourself; the automation owns them
           (manual clocking exists only for web/cloud lanes, not this CI).
           REVIEW CLOCK LAW (Owner 2026-10-26 10:55Z): review time is a
-          SEPARATE clock on its own TODO — `review: <parent title>'
+          SEPARATE clock on its own TODO — 'review: <parent title>'
           nested one level under the work item, its own :EFFORT: (in
           :PROPERTIES:) and its own clock. The duty REVIEWER sets DONE —
           on the review TODO first, then on the parent — when everything

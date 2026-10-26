@@ -1,0 +1,44 @@
+name: designer-bakeoff
+
+# Blind Web Designer bake-off across OWNER-KEYS vision lanes (HIRE LAW).
+# Keys stay in Actions secrets; only blind-coded outputs land in the artifact.
+# Dispatched manually; never runs on push.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: designer-bakeoff
+  cancel-in-progress: false
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: "run blind bake-off — keys stay sealed"
+        env:
+          ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTLING_API_KEY: ${{ secrets.ANTLING_API_KEY }}
+          GMI_API_KEY: ${{ secrets.GMI_API_KEY }}
+          CLINE_API_KEY: ${{ secrets.CLINE_API_KEY }}
+        run: node scripts/designer-bakeoff.mjs
+
+      - name: upload bench outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-out
+          path: bench-out/
+          retention-days: 7

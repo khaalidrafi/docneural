@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Security-Updates>>
-Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 19 Security Updates [[#Security-Updates-1][¶]]
+<<Security-Updates-1>>
+** 19 Security Updates
 :PROPERTIES:
-:CUSTOM_ID: Security-Updates-1
+:CUSTOM_ID: security-updates
 :CLASS: chapter
 :END:
+<<index-security-updates>> <<index-security-vulnerabilities-1>>
 Occasionally, important security vulnerabilities are discovered in software packages and must be patched. Guix developers try hard to keep track of known vulnerabilities and to apply fixes as soon as possible in the =master= branch of Guix (we do not yet provide a “stable” branch containing only security updates). The =guix lint= tool helps developers find out about vulnerable versions of software packages in the distribution:
 
 #+begin_example
@@ -52,22 +55,24 @@ $ guix lint -c cve
 gnu/packages/base.scm:652:2: glibc@2.21: probably vulnerable to CVE-2015-1781, CVE-2015-7547
 gnu/packages/gcc.scm:334:2: gcc@4.9.3: probably vulnerable to CVE-2015-5276
 gnu/packages/image.scm:312:2: openjpeg@2.1.0: probably vulnerable to CVE-2016-1923, CVE-2016-1924
-...
+…
 #+end_example
 
 See [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], for more information.
 
 Guix follows a functional package management discipline (see [[id:guix--Introduction][Introduction]]), which implies that, when a package is changed, /every package that depends on it/ must be rebuilt. This can significantly slow down the deployment of fixes in core packages such as libc or Bash, since basically the whole distribution would need to be rebuilt. Using pre-built binaries helps (see [[id:guix--Substitutes][Substitutes]]), but deployment may still take more time than desired.
 
+<<index-grafts>>
 To address this, Guix implements /grafts/, a mechanism that allows for fast deployment of critical updates without the costs associated with a whole-distribution rebuild. The idea is to rebuild only the package that needs to be patched, and then to “graft” it onto packages explicitly installed by the user and that were previously referring to the original package. The cost of grafting is typically very low, and order of magnitudes lower than a full rebuild of the dependency chain.
 
+<<index-replacements-of-packages_002c-for-grafts>>
 For instance, suppose a security update needs to be applied to Bash. Guix developers will provide a package definition for the “fixed” Bash, say =bash-fixed=, in the usual way (see [[id:guix--Defining-Packages][Defining Packages]]). Then, the original package definition is augmented with a =replacement= field pointing to the package containing the bug fix:
 
 #+begin_src lisp
 (define bash
   (package
     (name "bash")
-    ;; ...
+    ;; …
     (replacement bash-fixed)))
 #+end_src
 
@@ -109,4 +114,4 @@ lsof | grep /gnu/store/.*bash
 
 --------------
 
-Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

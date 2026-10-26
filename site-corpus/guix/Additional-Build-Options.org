@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Additional-Build-Options>>
-Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 9.1.3 Additional Build Options [[#Additional-Build-Options-1][¶]]
+<<Additional-Build-Options-1>>
+**** 9.1.3 Additional Build Options
 :PROPERTIES:
-:CUSTOM_ID: Additional-Build-Options-1
+:CUSTOM_ID: additional-build-options
 :CLASS: subsection
 :END:
 The command-line options presented below are specific to =guix build=.
@@ -132,7 +134,7 @@ The command-line options presented below are specific to =guix build=.
 
   #+begin_example
   guix build -D hello guile
-#+end_example
+  #+end_example
 
   Notice that =-D= (or =--development=) only applies to the immediately following package on the command line. Under the hood, it uses =package->development-manifest= (see [[id:guix--Writing-Manifests::#package_002ddevelopment_002dmanifest][=package->development-manifest=]]).
 
@@ -141,6 +143,8 @@ The command-line options presented below are specific to =guix build=.
 
   #+end_quote
 
+  <<index-dependents-of-a-package_002c-building-them>> <<index-building-the-dependents-of-a-package>> <<build_002ddependents>>
+
 - =--dependents[===depth==]=\\
   =-P ==depth= :: Build the dependents of the following package. By default, build all the direct and indirect dependents; when =depth= is provided, limit to dependents at that distance: 1 for direct dependents, 2 for dependents of dependents, and so on.
 
@@ -148,13 +152,13 @@ The command-line options presented below are specific to =guix build=.
 
   #+begin_example
   guix build --dependents libgit2
-#+end_example
+  #+end_example
 
   To build all the packages that directly depend on NumPy, run:
 
   #+begin_example
   guix build -P1 python-numpy
-#+end_example
+  #+end_example
 
   The list of dependents is computed in the same way as with =guix refresh --list-dependent= (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
 
@@ -164,6 +168,8 @@ The command-line options presented below are specific to =guix build=.
   For instance, =guix build -S gcc= returns something like =/gnu/store/…-gcc-4.7.2.tar.bz2=, which is the GCC source tarball.
 
   The returned source tarball is the result of applying any patches and code snippets specified in the package =origin= (see [[id:guix--Defining-Packages][Defining Packages]]).
+
+  <<index-source_002c-verification>>
 
   As with other derivations, the result of building a source derivation can be verified using the =--check= option (see [[#build_002dcheck][build-check]]). This is useful to validate that a (potentially already built or substituted, thus cached) package source matches against its declared hash.
 
@@ -178,23 +184,23 @@ The command-line options presented below are specific to =guix build=.
     #+begin_example
     $ guix build --sources tzdata
     The following derivations will be built:
-       /gnu/store/...-tzdata2015b.tar.gz.drv
-       /gnu/store/...-tzcode2015b.tar.gz.drv
-#+end_example
+       /gnu/store/…-tzdata2015b.tar.gz.drv
+       /gnu/store/…-tzcode2015b.tar.gz.drv
+    #+end_example
 
   - =transitive= :: Build the source derivations of all packages, as well of all transitive inputs to the packages. This can be used e.g. to prefetch package source for later offline building.
 
     #+begin_example
     $ guix build --sources=transitive tzdata
     The following derivations will be built:
-       /gnu/store/...-tzcode2015b.tar.gz.drv
-       /gnu/store/...-findutils-4.4.2.tar.xz.drv
-       /gnu/store/...-grep-2.21.tar.xz.drv
-       /gnu/store/...-coreutils-8.23.tar.xz.drv
-       /gnu/store/...-make-4.1.tar.xz.drv
-       /gnu/store/...-bash-4.3.tar.xz.drv
-    ...
-#+end_example
+       /gnu/store/…-tzcode2015b.tar.gz.drv
+       /gnu/store/…-findutils-4.4.2.tar.xz.drv
+       /gnu/store/…-grep-2.21.tar.xz.drv
+       /gnu/store/…-coreutils-8.23.tar.xz.drv
+       /gnu/store/…-make-4.1.tar.xz.drv
+       /gnu/store/…-bash-4.3.tar.xz.drv
+    …
+    #+end_example
 
 - =--system===system=\\
   =-s ==system= :: Attempt to build for =system=---e.g., =i686-linux=---instead of the system type of the build host. The =guix build= command allows you to repeat this option several times, in which case it builds for all the specified systems; other commands ignore extraneous =-s= options.
@@ -215,31 +221,39 @@ The command-line options presented below are specific to =guix build=.
 
   Builds for a system other than that of the machine you are using can also be offloaded to a remote machine of the right architecture. See [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]], for more information on offloading.
 
-- <<index-cross_002dcompilation-2>>=--target===triplet= [[#index-cross_002dcompilation-2][¶]] :: Cross-build for =triplet=, which must be a valid GNU triplet, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf).
+- =--target===triplet= [[#index-cross_002dcompilation-2][¶]] :: Cross-build for =triplet=, which must be a valid GNU triplet, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf).
 
 - =--list-systems= :: List all the supported systems, that can be passed as an argument to =--system=.
 
 - =--list-targets= :: List all the supported targets, that can be passed as an argument to =--target=.
 
--  <<index-determinism_002c-checking>>=--check= [[#index-determinism_002c-checking][¶]] :: Rebuild =package-or-derivation=, which are already available in the store, and raise an error if the build results are not bit-for-bit identical.
+  <<build_002dcheck>>
+
+- =--check= [[#index-determinism_002c-checking][¶]] :: <<index-reproducibility_002c-checking>>
+
+  Rebuild =package-or-derivation=, which are already available in the store, and raise an error if the build results are not bit-for-bit identical.
 
   This mechanism allows you to check whether previously installed substitutes are genuine (see [[id:guix--Substitutes][Substitutes]]), or whether the build result of a package is deterministic. See [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], for more background information and tools.
 
   When used in conjunction with =--keep-failed=, the differing output is kept in the store, under =/gnu/store/…-check=. This makes it easy to look for differences between the two results.
 
--  <<index-repairing-store-items>>=--repair= [[#index-repairing-store-items][¶]] :: Attempt to repair the specified store items, if they are corrupt, by re-downloading or rebuilding them.
+- =--repair= [[#index-repairing-store-items][¶]] :: <<index-corruption_002c-recovering-from-1>>
+
+  Attempt to repair the specified store items, if they are corrupt, by re-downloading or rebuilding them.
 
   This operation is not atomic and thus restricted to =root=.
 
 - =--derivations=\\
   =-d= :: Return the derivation paths, not the output paths, of the given packages.
 
--  <<index-GC-roots_002c-adding>>=--root===file= [[#index-GC-roots_002c-adding][¶]]\\
-  =-r ==file= :: Make =file= a symlink to the result, and register it as a garbage collector root.
+- =--root===file= [[#index-GC-roots_002c-adding][¶]]\\
+  =-r ==file= :: <<index-garbage-collector-roots_002c-adding>>
+
+  Make =file= a symlink to the result, and register it as a garbage collector root.
 
   Consequently, the results of this =guix build= invocation are protected from garbage collection until =file= is removed. When that option is omitted, build results are eligible for garbage collection as soon as the build completes. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for more on GC roots.
 
-- <<index-build-logs_002c-access>>=--log-file= [[#index-build-logs_002c-access][¶]] :: Return the build log file names or URLs for the given =package-or-derivation=, or raise an error if build logs are missing.
+- =--log-file= [[#index-build-logs_002c-access][¶]] :: Return the build log file names or URLs for the given =package-or-derivation=, or raise an error if build logs are missing.
 
   This works regardless of how packages or derivations are specified. For instance, the following invocations are equivalent:
 
@@ -248,7 +262,7 @@ The command-line options presented below are specific to =guix build=.
   guix build --log-file $(guix build guile)
   guix build --log-file guile
   guix build --log-file -e '(@ (gnu packages guile) guile-2.0)'
-#+end_example
+  #+end_example
 
   If a log is unavailable locally, and unless =--no-substitutes= is passed, the command looks for a corresponding log on one of the substitute servers.
 
@@ -256,11 +270,11 @@ The command-line options presented below are specific to =guix build=.
 
   #+begin_example
   $ guix build --log-file gdb -s aarch64-linux
-  https://bordeaux.guix.gnu.org/log/...-gdb-7.10
-#+end_example
+  https://bordeaux.guix.gnu.org/log/…-gdb-7.10
+  #+end_example
 
   You can freely access a huge library of build logs!
 
 --------------
 
-Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Debugging-Build-Failures][Debugging Build Failures]], Previous: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

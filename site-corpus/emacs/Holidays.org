@@ -7,6 +7,9 @@
 Next: [[id:emacs--Sunrise_002fSunset][Times of Sunrise and Sunset]]   Previous: [[id:emacs--Writing-Calendar-Files][Writing Calendar Files]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
 
 <<Holidays>>
+
+--------------
+
 *** 33.6 Holidays [[#Holidays-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Holidays-1
@@ -29,7 +32,7 @@ The Emacs calendar knows about many major and minor holidays, and can display th
 
 To see if any holidays fall on a given date, position point on that date in the calendar window and use the h (=calendar-cursor-holidays=) command. Alternatively, click on that date with mouse-3 and then choose Holidays from the menu that appears. Either way, this displays the holidays for that date, in the echo area if they fit there, otherwise in a separate window.
 
-To view the distribution of holidays for all the dates shown in the calendar, use the x (=calendar-mark-holidays=) command. This displays the dates that are holidays in a different face. See [[id:emacs--Advanced-Calendar_002fDiary-Usage::#Calendar-Customizing][calendar-holiday-marker]]. The command applies both to the currently visible months and to other months that subsequently become visible by scrolling. To turn marking off and erase the current marks, type u (=calendar-unmark=), which also erases any diary marks (see [[id:emacs--Diary::#Diary][The Diary]]). If the variable =calendar-mark-holidays-flag= is non-=nil=, creating or updating the calendar marks holidays automatically.
+To view the distribution of holidays for all the dates shown in the calendar, use the x (=calendar-mark-holidays=) command. This displays the dates that are holidays in a different face. See [[id:emacs--Calendar-Customizing][calendar-holiday-marker]]. The command applies both to the currently visible months and to other months that subsequently become visible by scrolling. To turn marking off and erase the current marks, type u (=calendar-unmark=), which also erases any diary marks (see [[id:emacs--Diary][The Diary]]). If the variable =calendar-mark-holidays-flag= is non-=nil=, creating or updating the calendar marks holidays automatically.
 
 To get even more detailed information, use the a (=calendar-list-holidays=) command, which displays a separate buffer containing a list of all holidays in the current three-month range. You can use SPC and DEL in the calendar window to scroll that list up and down, respectively.
 

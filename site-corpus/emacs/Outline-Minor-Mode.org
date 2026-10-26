@@ -4,6 +4,23 @@
 #+filetags: :emacs:
 #+title: Outline Minor Mode
 
-Next:
+Next: [[id:emacs--Outline-Format][Format of Outlines]]   Up: [[id:emacs--Outline-Mode][Outline Mode]]
 
-The node you are looking for is at [[id:emacs--Outline-Mode::#Outline-Minor-Mode][Outline Minor Mode]].
+<<Outline-Minor-Mode>>
+
+--------------
+
+**** 27.9.1 Outline Minor Mode [[#Outline-Minor-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Minor-Mode-1
+:CLASS: subsection
+:END:
+Outline minor mode is a buffer-local minor mode which provides the same commands as the major mode, Outline mode, but can be used in conjunction with other major modes. You can type M-x outline-minor-mode to toggle Outline minor mode in the current buffer, or use a file-local variable setting to enable it in a specific file (see [[id:emacs--File-Variables][Local Variables in Files]]).
+
+The major mode, Outline mode, provides special key bindings on the C-c prefix. Outline minor mode provides similar bindings with C-c @ as the prefix; this is to reduce the conflicts with the major mode's special commands. (The variable =outline-minor-mode-prefix= controls the prefix used.)
+
+If =outline-minor-mode-use-buttons= is non-=nil=, Outline minor mode will use buttons at the beginning of the heading lines, in addition to ellipsis, to show that a section is hidden. Clicking the mouse on the button toggles display of the section. If the value of this variable is =insert=, the buttons are inserted directly into the buffer text, so RET on the button will also toggle display of the section, like a mouse click does. Using the value =insert= is not recommended in editable buffers because it modifies them. If the value is =in-margins=, Outline minor mode will use the window margins to indicate that a section is hidden. The buttons are customizable as icons (see [[id:emacs--Icons][Icons]]).
+
+If the =outline-minor-mode-cycle= user option is non-=nil=, the TAB and S-TAB keys that cycle the visibility are enabled on the outline heading lines (see [[id:emacs--Outline-Visibility][outline-cycle]]). TAB cycles hiding, showing the sub-heading, and showing all for the current section. S-TAB does the same for the entire buffer.
+
+--------------

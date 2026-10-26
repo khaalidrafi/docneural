@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Desktop-Home-Services>>
-Next: [[id:guix--XDG-Home-Services][XDG Home Services]], Previous: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Guix-Home-Services][Guix Home Services]], Previous: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.8 Desktop Home Services [[#Desktop-Home-Services-1][¶]]
+<<Desktop-Home-Services-1>>
+**** 13.3.8 Desktop Home Services
 :PROPERTIES:
-:CUSTOM_ID: Desktop-Home-Services-1
+:CUSTOM_ID: desktop-home-services
 :CLASS: subsection
 :END:
 The =(gnu home services desktop)= module provides services that you may find useful on “desktop” systems running a graphical user environment such as Xorg.
 
-- Variable: *home-x11-service-type* [[#index-home_002dx11_002dservice_002dtype][¶]] :: This is the service type representing the X Window graphical display server (also referred to as “X11”).
+<<index-X-Window_002c-for-Guix-Home-services>> <<index-X11_002c-in-Guix-Home>>
+- Variable: home-x11-service-type  :: This is the service type representing the X Window graphical display server (also referred to as “X11”).
 
   X Window is necessarily started by a system service; on Guix System, starting it is the responsibility of =gdm-service-type= and similar services (see [[id:guix--X-Window][X Window]]). At the level of Guix Home, as an unprivileged user, we cannot start X Window; all we can do is check whether it is running. This is what this service does.
 
@@ -59,29 +62,11 @@ The =(gnu home services desktop)= module provides services that you may find use
 
   #+begin_example
   herd start x11-display :3
-#+end_example
+  #+end_example
 
   In the example above, =x11-display= is instructed to set =DISPLAY= to =:3=.
 
-- Variable: *home-wayland-service-type* [[#index-home_002dwayland_002dservice_002dtype][¶]] :: This is the service type representing a Wayland compositor. It functions as an equivalent of =x11-service-type= for Wayland.
-
-  Wayland compositors are typically started by services like =gdm-service-type=, described in the system configuration, although they can also be specified as a Guix Home service or started manually by the user. This means that we cannot always rely on the Wayland compositor being managed by Guix Home to tell whether one is present; we must explicitly check for it. This is what this service does.
-
-  As a user, you probably don't need to worry or explicitly instantiate =home-wayland-service-type=. Services that require a Wayland graphical display instantiate this service and depend on its corresponding =wayland-display= Shepherd service (see [[id:guix--Shepherd-Home-Service][Managing User Daemons]]).
-
-  If you're writing a Shepherd service that requires the presence of a Wayland compositor, you need to depend on this service to ensure Wayland is accessible from your service.
-
-  When the Wayland compositor is running, the =wayland-display= Shepherd service starts and sets the =WAYLAND_DISPLAY= environment variable of the =shepherd= process, using its original value if it was already set; otherwise, it fails to start.
-
-  The service can also be forced to use a given value for =WAYLAND_DISPLAY=, like so:
-
-  #+begin_example
-  herd start wayland-display wayland-2
-#+end_example
-
-  In the example above, =wayland-display= is instructed to set =WAYLAND_DISPLAY= to =wayland-2=.
-
-- Variable: *home-redshift-service-type* [[#index-home_002dredshift_002dservice_002dtype][¶]] :: This is the service type for [[https://github.com/jonls/redshift][Redshift]], a program that adjusts the display color temperature according to the time of day. Its associated value must be a =home-redshift-configuration= record, as shown below.
+- Variable: home-redshift-service-type  :: This is the service type for [[https://github.com/jonls/redshift][Redshift]], a program that adjusts the display color temperature according to the time of day. Its associated value must be a =home-redshift-configuration= record, as shown below.
 
   A typical configuration, where we manually specify the latitude and longitude, might look like this:
 
@@ -93,7 +78,7 @@ The =(gnu home services desktop)= module provides services that you may find use
             (longitude -0.80))) ;west of Greenwich
   #+end_src
 
-- Data Type: *home-redshift-configuration* [[#index-home_002dredshift_002dconfiguration][¶]] :: Available =home-redshift-configuration= fields are:
+- Data Type: home-redshift-configuration  :: Available =home-redshift-configuration= fields are:
 
   - =redshift= (default: =redshift=) (type: file-like) :: Redshift package to use.
 
@@ -119,13 +104,13 @@ The =(gnu home services desktop)= module provides services that you may find use
 
   - =extra-content= (default: =""=) (type: raw-configuration-string) :: Extra content appended as-is to the Redshift configuration file. Run =man redshift= for more information about the configuration file format.
 
-- Variable: *home-dbus-service-type* [[#index-home_002ddbus_002dservice_002dtype][¶]] :: This is the service type for running a session-specific D-Bus, for unprivileged applications that require D-Bus to be running.
+- Variable: home-dbus-service-type  :: This is the service type for running a session-specific D-Bus, for unprivileged applications that require D-Bus to be running.
 
-- Data Type: *home-dbus-configuration* [[#index-home_002ddbus_002dconfiguration][¶]] :: The configuration record for =home-dbus-service-type=.
+- Data Type: home-dbus-configuration  :: The configuration record for =home-dbus-service-type=.
 
   - =dbus= (default: =dbus=) :: The package providing the =/bin/dbus-daemon= command.
 
-- Variable: *home-unclutter-service-type* [[#index-home_002dunclutter_002dservice_002dtype][¶]] :: This is the service type for Unclutter, a program that runs on the background of an X11 session and detects when the X pointer hasn't moved for a specified idle timeout, after which it hides the cursor so that you can focus on the text underneath. Its associated value must be a =home-unclutter-configuration= record, as shown below.
+- Variable: home-unclutter-service-type  :: This is the service type for Unclutter, a program that runs on the background of an X11 session and detects when the X pointer hasn't moved for a specified idle timeout, after which it hides the cursor so that you can focus on the text underneath. Its associated value must be a =home-unclutter-configuration= record, as shown below.
 
   A typical configuration, where we manually specify the idle timeout (in seconds), might look like this:
 
@@ -135,13 +120,13 @@ The =(gnu home services desktop)= module provides services that you may find use
             (idle-timeout 2)))
   #+end_src
 
-- Data Type: *home-unclutter-configuration* [[#index-home_002dunclutter_002dconfiguration][¶]] :: The configuration record for =home-unclutter-service-type=.
+- Data Type: home-unclutter-configuration  :: The configuration record for =home-unclutter-service-type=.
 
   - =unclutter= (default: =unclutter=) (type: file-like) :: Unclutter package to use.
 
   - =idle-timeout= (default: =5=) (type: integer) :: A timeout in seconds after which to hide cursor.
 
-- Variable: *home-xmodmap-service-type* [[#index-home_002dxmodmap_002dservice_002dtype][¶]] :: This is the service type for the [[https://gitlab.freedesktop.org/xorg/app/xmodmap][xmodmap]] utility to modify keymaps and pointer button mappings under the Xorg display server. Its associated value must be a =home-xmodmap-configuration= record, as shown below.
+- Variable: home-xmodmap-service-type  :: This is the service type for the [[https://gitlab.freedesktop.org/xorg/app/xmodmap][xmodmap]] utility to modify keymaps and pointer button mappings under the Xorg display server. Its associated value must be a =home-xmodmap-configuration= record, as shown below.
 
   The =key-map= field takes a list of objects, each of which is either a /statement/ (a string) or an /assignment/ (a pair of strings). As an example, the snippet below swaps around the Caps_Lock and the Control_L keys, by first removing the keysyms (on the right-hand side) from the corresponding modifier maps (on the left-hand side), re-assigning them by swapping each other out, and finally adding back the keysyms to the modifier maps.
 
@@ -156,23 +141,23 @@ The =(gnu home services desktop)= module provides services that you may find use
                        ("add Control" . "Control_L")))))
   #+end_src
 
-- Data Type: *home-xmodmap-configuration* [[#index-home_002dxmodmap_002dconfiguration][¶]] :: The configuration record for =home-xmodmap-service-type=. Its available fields are:
+- Data Type: home-xmodmap-configuration  :: The configuration record for =home-xmodmap-service-type=. Its available fields are:
 
   - =xmodmap= (default: =xmodmap=) (type: file-like) :: The =xmodmap= package to use.
 
   - =key-map= (default: ='()=) (type: list) :: The list of expressions to be read by =xmodmap= on service startup.
 
-- Variable: *home-startx-command-service-type* [[#index-home_002dstartx_002dcommand_002dservice_002dtype][¶]] :: Add =startx= to the home profile putting it onto =PATH=.
+- Variable: home-startx-command-service-type  :: Add =startx= to the home profile putting it onto =PATH=.
 
   The value for this service is a =<xorg-configuration>= object which is passed to the =xorg-start-command-xinit= procedure producing the =startx= used. Default value is =(xorg-configuration)=.
 
-- Variable: *home-darkman-service-type* [[#index-home_002ddarkman_002dservice_002dtype][¶]] :: This is the service type for the [[https://gitlab.com/WhyNotHugo/darkman][Darkman]], a program for dark-mode and light-mode transitions on Unix-like desktops. It invokes scripts in =$XDG_DATA_DIRS/dark-mode.d= at sundown, and invokes scripts in =$XDG_DATA_DIRS/light-mode.d= at sunrise. Darkman tries to determine the user's current location from:
+- Variable: home-darkman-service-type  :: This is the service type for the [[https://gitlab.com/WhyNotHugo/darkman][Darkman]], a program for dark-mode and light-mode transitions on Unix-like desktops. It invokes scripts in =$XDG_DATA_DIRS/dark-mode.d= at sundown, and invokes scripts in =$XDG_DATA_DIRS/light-mode.d= at sunrise. Darkman tries to determine the user's current location from:
 
   - The config file.
   - The cache file from last time it ran.
   - Using the system geoclue.
 
-- Data Type: *home-darkman-configuration* [[#index-home_002ddarkman_002dconfiguration][¶]] :: The configuration record for =home-darkman-service-type=. Its available fields are:
+- Data Type: home-darkman-configuration  :: The configuration record for =home-darkman-service-type=. Its available fields are:
 
   - =darkman= (default: =darkman=) (type: file-like) :: The =darkman= package to use.
 
@@ -186,7 +171,7 @@ The =(gnu home services desktop)= module provides services that you may find use
 
   - =portal= (default: =#t=) (type: boolean) :: Whether to expose the current mode via the XDG settings portal D-Bus API.
 
-- Variable: *home-gcr-ssh-agent-service-type* [[#index-home_002dgcr_002dssh_002dagent_002dservice_002dtype][¶]] :: GNOME Keyring used to be able to act as a wrapper over =ssh-agent=. It would display a graphical password entry dialog, including a checkbox to remember the password, which, if selected, would allow fully passwordless use of that key.
+- Variable: home-gcr-ssh-agent-service-type  :: GNOME Keyring used to be able to act as a wrapper over =ssh-agent=. It would display a graphical password entry dialog, including a checkbox to remember the password, which, if selected, would allow fully passwordless use of that key.
 
   The SSH functionality is disabled by default in =gnome-keyring-daemon= builds since version [[https://gitlab.gnome.org/GNOME/gnome-keyring/-/commit25c5a1982467802fa12c6852b03c57924553ba73][1.46]]. It has been [[https://gitlab.gnome.org/GNOME/gcr/-/merge_requests/67][moved]] into =gcr-ssh-agent=, which is part of the =gcr= package.
 
@@ -194,16 +179,16 @@ The =(gnu home services desktop)= module provides services that you may find use
 
   #+begin_src lisp
   (use-modules (gnu home services gnome) ;for 'home-gcr-ssh-agent-service-type'
-               ...)
+               …)
 
   (home-environment
     (services
       (list
-        ...
+        …
         (service home-gcr-ssh-agent-service-type))))
   #+end_src
 
-- Data Type: *gcr-ssh-agent-configuration* [[#index-gcr_002dssh_002dagent_002dconfiguration][¶]] :: The configuration record for =home-gcr-ssh-agent-service-type=. Its available fields are:
+- Data Type: gcr-ssh-agent-configuration  :: The configuration record for =home-gcr-ssh-agent-service-type=. Its available fields are:
 
   - =package= (default: =gcr=) (type: package) :: The =gcr= package to use.
 
@@ -211,4 +196,4 @@ The =(gnu home services desktop)= module provides services that you may find use
 
 --------------
 
-Next: [[id:guix--XDG-Home-Services][XDG Home Services]], Previous: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Guix-Home-Services][Guix Home Services]], Previous: [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

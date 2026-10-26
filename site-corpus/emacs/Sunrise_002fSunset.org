@@ -7,6 +7,9 @@
 Next: [[id:emacs--Lunar-Phases][Phases of the Moon]]   Previous: [[id:emacs--Holidays][Holidays]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
 
 <<Sunrise_002fSunset>>
+
+--------------
+
 *** 33.7 Times of Sunrise and Sunset [[#Times-of-Sunrise-and-Sunset][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Times-of-Sunrise-and-Sunset
@@ -49,6 +52,6 @@ The value of =calendar-time-zone= is the number of minutes of difference between
 
 If you want to display numerical time zones (like ‘="+0100"=') instead of symbolic ones (like ‘="CET"='), set the variable =calendar-time-zone-style= to =numeric=.
 
-As a user, you might find it convenient to set the calendar location variables for your usual physical location in your =.emacs= file. If you are a system administrator, you may want to set these variables for all users in a =default.el= file. See [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]].
+As a user, you might find it convenient to set the calendar location variables for your usual physical location in your =.emacs= file. If you are a system administrator, you may want to set these variables for all users in a =default.el= file. See [[id:emacs--Init-File][The Emacs Initialization File]].
 
 --------------

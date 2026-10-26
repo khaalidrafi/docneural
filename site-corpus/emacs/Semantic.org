@@ -7,6 +7,9 @@
 Next: [[id:emacs--Misc-for-Programs][Other Features Useful for Editing Programs]]   Previous: [[id:emacs--MixedCase-Words][MixedCase Words]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Semantic>>
+
+--------------
+
 *** 28.10 Semantic [[#Semantic-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Semantic-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Misc-for-Programs][Other Features Useful for Editing Programs]
 :END:
 Semantic is a package that provides language-aware editing commands based on =source code parsers=. This section provides a brief description of Semantic; for full details, see [[../semantic_html/index.html#Top][Semantic]] in Semantic.
 
-Most of the language-aware features in Emacs, such as Font Lock mode (see [[id:emacs--Font-Lock::#Font-Lock][Font Lock mode]]), rely on rules of thumb[[#FOOT17][^{17}]] that usually give good results but are never completely exact. In contrast, the parsers used by Semantic have an exact understanding of programming language syntax. This allows Semantic to provide search, navigation, and completion commands that are powerful and precise.
+Most of the language-aware features in Emacs, such as Font Lock mode (see [[id:emacs--Font-Lock][Font Lock mode]]), rely on rules of thumb[[#FOOT17][^{17}]] that usually give good results but are never completely exact. In contrast, the parsers used by Semantic have an exact understanding of programming language syntax. This allows Semantic to provide search, navigation, and completion commands that are powerful and precise.
 
 To begin using Semantic, type M-x semantic-mode or click on the menu item named ‘=Source Code Parsers (Semantic)=' in the ‘=Tools=' menu. This enables Semantic mode, a global minor mode.
 

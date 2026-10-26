@@ -7,6 +7,9 @@
 Next: [[id:emacs--Mark][The Mark and the Region]]   Previous: [[id:emacs--M_002dx][Running Commands by Name]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Help>>
+
+--------------
+
 ** 12 Help [[#Help-2][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Help-2
@@ -37,5 +40,16 @@ If you are looking for a certain feature, but don't know what it is called or wh
 - M-x list-packages :: This displays a list of external packages. See [[id:emacs--Packages][Emacs Lisp Packages]].
 
 C-h or F1 mean “help” in various other contexts as well. For instance, you can type them after a prefix key to view a list of the keys that can follow the prefix key. (You can also use ? in this context. A few prefix keys don't support C-h or ? in this way, because they define other meanings for those inputs, but they all support F1.)
+
+- [[id:emacs--Help-Summary][Help Summary]]
+- [[id:emacs--Key-Help][Documentation for a Key]]
+- [[id:emacs--Name-Help][Help by Command or Variable Name]]
+- [[id:emacs--Apropos][Apropos]]
+- [[id:emacs--Help-Mode][Help Mode Commands]]
+- [[id:emacs--Package-Keywords][Keyword Search for Packages]]
+- [[id:emacs--Language-Help][Help for International Language Support]]
+- [[id:emacs--Misc-Help][Other Help Commands]]
+- [[id:emacs--Help-Files][Help Files]]
+- [[id:emacs--Help-Echo][Help on Active Text and Tooltips]]
 
 --------------

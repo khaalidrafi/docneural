@@ -36,21 +36,23 @@ Next:
 [[../..][]]
 
 <<Substitutes>>
-Next: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Previous: [[id:guix--Invoking-guix-package][Invoking =guix package=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Previous: [[id:guix--Invoking-guix-package][Invoking =guix package=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.3 Substitutes [[#Substitutes-1][¶]]
+<<Substitutes-1>>
+*** 5.3 Substitutes
 :PROPERTIES:
-:CUSTOM_ID: Substitutes-1
+:CUSTOM_ID: substitutes
 :CLASS: section
 :END:
+<<index-substitutes-2>> <<index-pre_002dbuilt-binaries>>
 Guix supports transparent source/binary deployment, which means that it can either build things locally, or download pre-built items from a server, or both. We call these pre-built items /substitutes/---they are substitutes for local build results. In many cases, downloading a substitute is much faster than building things locally.
 
 Substitutes can be anything resulting from a derivation build (see [[id:guix--Derivations][Derivations]]). Of course, in the common case, they are pre-built package binaries, but source tarballs, for instance, which also result from derivation builds, can be available as substitutes.
 
 - [[id:guix--Official-Substitute-Servers][Official Substitute Servers]]
-- [[id:guix--Volunteer-Run-Mirrors][Volunteer Run Mirrors]]
 - [[id:guix--Substitute-Server-Authorization][Substitute Server Authorization]]
 - [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]]
 - [[id:guix--Substitute-Authentication][Substitute Authentication]]

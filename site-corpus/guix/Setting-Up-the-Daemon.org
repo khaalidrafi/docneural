@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Setting-Up-the-Daemon>>
-Next: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Previous: [[id:guix--Binary-Installation][Binary Installation]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Previous: [[id:guix--Binary-Installation][Binary Installation]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 2.2 Setting Up the Daemon [[#Setting-Up-the-Daemon-1][¶]]
+<<Setting-Up-the-Daemon-1>>
+*** 2.2 Setting Up the Daemon
 :PROPERTIES:
-:CUSTOM_ID: Setting-Up-the-Daemon-1
+:CUSTOM_ID: setting-up-the-daemon
 :CLASS: section
 :END:
+<<index-daemon>> <<index-build-daemon-1>>
 During installation, the /build daemon/ that must be running to use Guix has already been set up and you can run =guix= commands in your terminal program, see [[id:guix--Getting-Started][Getting Started]]:
 
 #+begin_example
@@ -63,7 +66,3 @@ The following sections explain how to prepare the build daemon's environment. Se
 - [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]
 - [[id:guix--SELinux-Support][SELinux Support]]
 - [[id:guix--AppArmor-Support][AppArmor Support]]
-
---------------
-
-Next: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Previous: [[id:guix--Binary-Installation][Binary Installation]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

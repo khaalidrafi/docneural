@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Reverting
 
-Next: [[id:emacs--Auto-Revert#Auto-Revert][Auto Revert: Keeping buffers automatically up-to-date]]   Previous: [[id:emacs--Saving#Saving][Saving Files]]   Up: [[id:emacs--Files][File Handling]]
+Next: [[id:emacs--Auto-Revert][Auto Revert: Keeping buffers automatically up-to-date]]   Previous: [[id:emacs--Saving][Saving Files]]   Up: [[id:emacs--Files][File Handling]]
 
 <<Reverting>>
+
+--------------
+
 *** 20.4 Reverting a Buffer [[#Reverting-a-Buffer][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Reverting-a-Buffer
@@ -26,7 +29,7 @@ When you edit a file that changes automatically and frequently---for example, a 
 
 The C-x x g keystroke is bound to the =revert-buffer-quick= command. This is like the =revert-buffer= command, but prompts less. Unlike =revert-buffer=, it will not prompt if the current buffer visits a file, and the buffer is not modified. It also respects the =revert-buffer-quick-short-answers= user option. If this option is non-=nil=, use a shorter y/n query instead of a longer yes/no query.
 
-You can also tell Emacs to revert buffers automatically when their visited files change on disk; see [[id:emacs--Auto-Revert::#Auto-Revert][Auto Revert: Keeping buffers automatically up-to-date]].
+You can also tell Emacs to revert buffers automatically when their visited files change on disk; see [[id:emacs--Auto-Revert][Auto Revert: Keeping buffers automatically up-to-date]].
 
 Note that reverting a buffer turns on the major mode appropriate for visiting the buffer's file, as described in [[id:emacs--Choosing-Modes][Choosing File Modes]]. Thus, the major mode actually turned on as result of reverting a buffer depends on mode remapping, and could be different from the original mode if you customized =major-mode-remap-alist= in-between.
 

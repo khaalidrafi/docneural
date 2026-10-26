@@ -36,21 +36,24 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-build>>
-Next: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.1 Invoking =guix build= [[#Invoking-guix-build-1][¶]]
+<<Invoking-guix-build-1>>
+*** 9.1 Invoking =guix build=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-build-1
+:CUSTOM_ID: invoking-guix-build
 :CLASS: section
 :END:
+<<index-package-building>> <<index-guix-build>>
 The =guix build= command builds packages or derivations and their dependencies, and prints the resulting store paths. Note that it does not modify the user's profile---this is the job of the =guix package= command (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). Thus, it is mainly useful for distribution developers.
 
 The general syntax is:
 
 #+begin_example
-guix build options package-or-derivation...
+guix build options package-or-derivation…
 #+end_example
 
 As an example, the following command builds the latest versions of Emacs and of Guile, displays their build logs, and finally displays the resulting directories:
@@ -76,7 +79,3 @@ There may be zero or more =options=. The available options are described in the 
 - [[id:guix--Package-Transformation-Options][Package Transformation Options]]
 - [[id:guix--Additional-Build-Options][Additional Build Options]]
 - [[id:guix--Debugging-Build-Failures][Debugging Build Failures]]
-
---------------
-
-Next: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

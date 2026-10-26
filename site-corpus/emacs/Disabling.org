@@ -4,6 +4,48 @@
 #+filetags: :emacs:
 #+title: Disabling
 
-Next:
+Next:   Previous: [[id:emacs--Mouse-Buttons][Rebinding Mouse Buttons]]   Up: [[id:emacs--Key-Bindings][Customizing Key Bindings]]
 
-The node you are looking for is at [[id:emacs--Key-Bindings::#Disabling][Disabling]].
+<<Disabling>>
+
+--------------
+
+**** 51.3.11 Disabling Commands [[#Disabling-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Disabling-Commands
+:CLASS: subsection
+:END:
+Disabling a command means that invoking it interactively asks for confirmation from the user. The purpose of disabling a command is to prevent users from executing it by accident; we do this for commands that might be confusing to the uninitiated.
+
+Attempting to invoke a disabled command interactively in Emacs displays a window containing the command's name, its documentation, and some instructions on what to do immediately; then Emacs asks for input saying whether to execute the command as requested, enable it and execute it, or cancel. If you decide to enable the command, you must then answer another question---whether to do this permanently, or just for the current session. (Enabling permanently works by automatically editing your initialization file.) You can also type ! to enable /all/ commands, for the current session only.
+
+The direct mechanism for disabling a command is to put a non-=nil= =disabled= property on the Lisp symbol for the command. Here is the Lisp program to do this:
+
+#+begin_example
+(put 'delete-region 'disabled t)
+#+end_example
+
+If the value of the =disabled= property is a string, that string is included in the message displayed when the command is used:
+
+#+begin_example
+(put 'delete-region 'disabled
+     "It's better to use `kill-region' instead.\n")
+#+end_example
+
+As a less heavy-handed alternative to disabling commands, you may want to be queried before executing a command. For instance, to be queried before executing the M-> (=end-of-buffer=) command, you could put something like the following in your init file:
+
+#+begin_example
+(command-query
+ 'end-of-buffer
+ "Do you really want to go to the end of the buffer?")
+#+end_example
+
+By default, you'll be queried with a y/n question, but if you give a non-=nil= value to the third, optional argument, you'll be queried with yes/no instead.
+
+You can make a command disabled either by editing the initialization file directly, or with the command M-x disable-command, which edits the initialization file for you. Likewise, M-x enable-command edits the initialization file to enable a command permanently. See [[id:emacs--Init-File][The Emacs Initialization File]].
+
+If Emacs was invoked with the =-q= or =--no-init-file= options (see [[id:emacs--Initial-Options][Initial Options]]), it will not edit your initialization file. Doing so could lose information because Emacs has not read your initialization file.
+
+Whether a command is disabled is independent of what key is used to invoke it; disabling also applies if the command is invoked using M-x. However, disabling a command has no effect on calling it as a function from Lisp programs.
+
+--------------

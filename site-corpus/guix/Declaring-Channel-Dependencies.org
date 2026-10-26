@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Declaring-Channel-Dependencies>>
-Next: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Previous: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Previous: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.10 Declaring Channel Dependencies [[#Declaring-Channel-Dependencies-1][¶]]
+<<Declaring-Channel-Dependencies-1>>
+*** 6.9 Declaring Channel Dependencies
 :PROPERTIES:
-:CUSTOM_ID: Declaring-Channel-Dependencies-1
+:CUSTOM_ID: declaring-channel-dependencies
 :CLASS: section
 :END:
+<<index-dependencies_002c-channels>> <<index-meta_002ddata_002c-channels>>
 Channel authors may decide to augment a package collection provided by other channels. They can declare their channel to be dependent on other channels in a meta-data file =.guix-channel=, which is to be placed in the root of the channel repository.
 
 The meta-data file should contain a simple S-expression like this:
@@ -73,7 +76,3 @@ The meta-data file should contain a simple S-expression like this:
 In the above example this channel is declared to depend on two other channels, which will both be fetched automatically. The modules provided by the channel will be compiled in an environment where the modules of all these declared channels are available.
 
 For the sake of reliability and maintainability, you should avoid dependencies on channels that you don't control, and you should aim to keep the number of dependencies to a minimum.
-
---------------
-
-Next: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Previous: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

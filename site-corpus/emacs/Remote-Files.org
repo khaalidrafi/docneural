@@ -7,6 +7,9 @@
 Next: [[id:emacs--Quoted-File-Names][Quoted File Names]]   Previous: [[id:emacs--File-Archives][File Archives]]   Up: [[id:emacs--Files][File Handling]]
 
 <<Remote-Files>>
+
+--------------
+
 *** 20.15 Remote Files [[#Remote-Files-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Remote-Files-1
@@ -36,7 +39,7 @@ When the Ange-FTP package is used, Emacs logs in through FTP using the name =use
 
 For performance reasons, Emacs does not make backup files for files accessed via FTP by default. To make it do so, change the variable =ange-ftp-make-backup-files= to a non-=nil= value.
 
-By default, auto-save files for remote files are made in the temporary file directory on the local machine, as specified by the variable =auto-save-file-name-transforms=. See [[id:emacs--Auto-Save::#Auto-Save-Files][Auto-Save Files]].
+By default, auto-save files for remote files are made in the temporary file directory on the local machine, as specified by the variable =auto-save-file-name-transforms=. See [[id:emacs--Auto-Save-Files][Auto-Save Files]].
 
 To visit files accessible by anonymous FTP, you use special user names ‘=anonymous=' or ‘=ftp='. Passwords for these user names are handled specially. The variable =ange-ftp-generate-anonymous-password= controls what happens: if the value of this variable is a string, then that string is used as the password; if non-=nil= (the default), then the value of =user-mail-address= is used; if =nil=, then Emacs prompts you for a password as usual (see [[id:emacs--Passwords][Entering passwords]]).
 

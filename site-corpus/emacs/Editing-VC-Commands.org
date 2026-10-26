@@ -4,6 +4,17 @@
 #+filetags: :emacs:
 #+title: Editing VC Commands
 
-Next:
+Next: [[id:emacs--Preparing-Patches][Preparing Patches]]   Previous: [[id:emacs--Version-Headers][Inserting Version Control Headers]]   Up: [[id:emacs--Miscellaneous-VC][Miscellaneous Commands and Features of VC]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Editing-VC-Commands][Editing VC Commands]].
+<<Editing-VC-Commands>>
+
+--------------
+
+**** 30.1.12.5 Editing VC Commands [[#Editing-VC-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Editing-VC-Commands-1
+:CLASS: subsubsection
+:END:
+You can use the C-x v ! (=vc-edit-next-command=) prefix command to edit the shell command line that VC is about to run. This is primarily intended to make it possible to add optional command-line arguments to VCS commands without unnecessary complications of the VC command set and its interfaces with the backend.
+
+For example, Git can produce logs of more than one branch, but C-x v b l (=vc-print-branch-log=) prompts for the name of just one branch. To obtain a log of more than one branch, you can type C-x v ! C-x v b l and then append the names of additional branches to the end of the ‘=git log=' command that VC is about to run.

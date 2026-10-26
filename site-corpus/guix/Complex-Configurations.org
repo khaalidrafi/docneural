@@ -36,20 +36,23 @@ Next:
 [[../..][]]
 
 <<Complex-Configurations>>
-Previous: [[id:guix--Shepherd-Services][Shepherd Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Shepherd-Services][Shepherd Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.19.5 Complex Configurations [[#Complex-Configurations-1][¶]]
+<<Complex-Configurations-1>>
+**** 11.19.5 Complex Configurations
 :PROPERTIES:
-:CUSTOM_ID: Complex-Configurations-1
+:CUSTOM_ID: complex-configurations
 :CLASS: subsection
 :END:
+<<index-complex-configurations>>
 Some programs might have rather complex configuration files or formats, and to make it easier to create Scheme bindings for these configuration files, you can use the utilities defined in the =(gnu services configuration)= module.
 
-The main utility is the =define-configuration= macro, a helper used to define a Scheme record type (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Record-Overview.html#Record-Overview][Record Overview]] in GNU Guile Reference Manual). The fields from this Scheme record can be serialized using /serializers/, which are procedures that take some kind of Scheme value and translates them into another Scheme value or [[id:guix--G_002dExpressions][G-Expressions]].
+The main utility is the =define-configuration= macro, a helper used to define a Scheme record type (see [[https://www.gnu.org/software/guile/manual/html_node/Record-Overview.html#Record-Overview][Record Overview]] in GNU Guile Reference Manual). The fields from this Scheme record can be serialized using /serializers/, which are procedures that take some kind of Scheme value and translates them into another Scheme value or [[id:guix--G_002dExpressions][G-Expressions]].
 
-- Macro: *define-configuration* =name clause1 clause2 …= [[#index-define_002dconfiguration][¶]] :: Create a record type named =name= that contains the fields found in the clauses.
+- Macro: define-configuration name clause1 clause2 ... :: Create a record type named =name= that contains the fields found in the clauses.
 
   A clause has the following form:
 
@@ -58,8 +61,8 @@ The main utility is the =define-configuration= macro, a helper used to define a 
    type-decl
    documentation
    option*
-   ...)
-#+end_example
+   …)
+  #+end_example
 
   =field-name= is an identifier that denotes the name of the field in the generated record.
 
@@ -100,10 +103,10 @@ The main utility is the =define-configuration= macro, a helper used to define a 
 
   #+begin_src lisp
   (define (foo-serialize-string field-name value)
-    ...)
+    …)
 
   (define (bar-serialize-string field-name value)
-    ...)
+    …)
 
   (define-configuration foo-configuration
     (label
@@ -135,7 +138,7 @@ The main utility is the =define-configuration= macro, a helper used to define a 
      "Some documentation."))
   #+end_src
 
-- Macro: *define-maybe* =type= [[#index-define_002dmaybe][¶]] :: Sometimes a field should not be serialized if the user doesn't specify a value. To achieve this, you can use the =define-maybe= macro to define a “maybe type”; if the value of a maybe type is left unset, or is set to the =%unset-value= value, then it will not be serialized.
+- Macro: define-maybe type :: Sometimes a field should not be serialized if the user doesn't specify a value. To achieve this, you can use the =define-maybe= macro to define a “maybe type”; if the value of a maybe type is left unset, or is set to the =%unset-value= value, then it will not be serialized.
 
   When defining a “maybe type”, the corresponding serializer for the regular type will be used by default. For example, a field of type =maybe-string= will be serialized using the =serialize-string= procedure by default, you can of course change this by specifying a custom serializer procedure. Likewise, the type of the value would have to be a string, or left unspecified.
 
@@ -143,7 +146,7 @@ The main utility is the =define-configuration= macro, a helper used to define a 
   (define-maybe string)
 
   (define (serialize-string field-name value)
-    ...)
+    …)
 
   (define-configuration baz-configuration
     (name
@@ -160,7 +163,7 @@ The main utility is the =define-configuration= macro, a helper used to define a 
     (prefix baz-))
 
   (define (baz-serialize-integer field-name value)
-    ...)
+    …)
   #+end_src
 
   There is also the =no-serialization= literal, which when set means that no serializer will be defined for the “maybe type”, regardless of whether its value is set or not. =define-maybe/no-serialization= is a shorthand for specifying the =no-serialization= literal.
@@ -174,13 +177,13 @@ The main utility is the =define-configuration= macro, a helper used to define a 
      "Docstring."))
   #+end_src
 
-- Procedure: *maybe-value-set?* =value= [[#index-maybe_002dvalue_002dset_003f][¶]] :: Predicate to check whether a user explicitly specified the value of a maybe field.
+- Procedure: maybe-value-set? value :: Predicate to check whether a user explicitly specified the value of a maybe field.
 
-- Procedure: *serialize-configuration* =configuration fields= [[#index-serialize_002dconfiguration][¶]] :: Return a G-expression that contains the values corresponding to the =fields= of =configuration=, a record that has been generated by =define-configuration=. The G-expression can then be serialized to disk by using something like =mixed-text-file=.
+- Procedure: serialize-configuration configuration fields :: Return a G-expression that contains the values corresponding to the =fields= of =configuration=, a record that has been generated by =define-configuration=. The G-expression can then be serialized to disk by using something like =mixed-text-file=.
 
 Once you have defined a configuration record, you will most likely also want to document it so that other people know to use it. To help with that, there are two procedures, both of which are documented below.
 
-- Procedure: *generate-documentation* =documentation documentation-name= [[#index-generate_002ddocumentation][¶]] :: Generate a Texinfo fragment from the docstrings in =documentation=, a list of =(==label== ==fields== ==sub-documentation== ...)=. =label= should be a symbol and should be the name of the configuration record. =fields= should be a list of all the fields available for the configuration record.
+- Procedure: generate-documentation documentation documentation-name :: Generate a Texinfo fragment from the docstrings in =documentation=, a list of =(==label== ==fields== ==sub-documentation== ...)=. =label= should be a symbol and should be the name of the configuration record. =fields= should be a list of all the fields available for the configuration record.
 
   =sub-documentation= is a =(==field-name== ==configuration-name==)= tuple. =field-name= is the name of the field which takes another configuration record as its value, and =configuration-name= is the name of that configuration record. The same value may be used for multiple =field-name=s, in case a field accepts different types of configurations.
 
@@ -190,13 +193,13 @@ Once you have defined a configuration record, you will most likely also want to 
   (generate-documentation
     `((getmail-configuration ,getmail-configuration-fields
        (rcfile getmail-configuration-file))
-      ...)
+      …)
     'getmail-configuration)
   #+end_src
 
   =documentation-name= should be a symbol and should be the name of the configuration record.
 
-- Procedure: *configuration->documentation* =configuration-symbol= [[#index-configuration_002d_003edocumentation][¶]] :: Take =configuration-symbol=, the symbol corresponding to the name used when defining a configuration record with =define-configuration=, and print the Texinfo documentation of its fields. This is useful if there aren't any nested configuration records since it only prints the documentation for the top-level fields.
+- Procedure: configuration->documentation configuration-symbol :: Take =configuration-symbol=, the symbol corresponding to the name used when defining a configuration record with =define-configuration=, and print the Texinfo documentation of its fields. This is useful if there aren't any nested configuration records since it only prints the documentation for the top-level fields.
 
 As of right now, there is no automated way to generate documentation for configuration records and put them in the manual. Instead, every time you make a change to the docstrings of a configuration record, you have to manually call =generate-documentation= or =configuration->documentation=, and paste the output into the =doc/guix.texi= file.
 
@@ -311,53 +314,8 @@ phone-number = 0
 is-married = true
 #+end_example
 
-- [[#Serializing-to-environment-variables][Serializing to environment variables]]
-
-<<Serializing-to-environment-variables>>
-**** 11.19.5.1 Serializing to environment variables [[#Serializing-to-environment-variables][¶]]
-:PROPERTIES:
-:CUSTOM_ID: serializing-to-environment-variables
-:CLASS: subsubsection
-:END:
-There are services which expect their configuration as environment variables. The =(gnu services configuration environment-variables)= module provides facilities to serialize configuration records from =(gnu services configuration)= to list of pairs representing environment variables.
-
-For example this configuration record:
-
-#+begin_src lisp
-(define-configuration/no-serialization server
-  (ssh-port
-   (number 22)
-   "The public SSH port of the server.")
-  (fqdn
-   (maybe-string)
-   "The fully qualified domain name of the server.")
-  (active?
-   (boolean #f)
-   "Whether or not the server should be activated."))
-
-(define my-server
- (server
-  (ssh-port 20022)
-  (active? #t)))
-#+end_src
-
-with this call:
-
-#+begin_src lisp
-(serialize-environment-variables my-server server-fields
-                                 #:true-value "1"
-                                 #:false-value "0")
-#+end_src
-
-would yield:
-
-#+begin_src lisp
-'(("SSH_PORT" . "20022")
-  ("ACTIVE" . "1"))
-#+end_src
-
-- Procedure: *serialize-environment-variables* =config== ==fields== [==selection== #f] [==negate?== #f] [#:prefix #f] [#:true-value "true"] [#:false-value "false"]= [[#index-serialize_002denvironment_002dvariables][¶]] :: Serializes the fields whose name is included in SELECTION from CONFIG, a configuration from =(gnu services configuration)=, and FIELDS, the list of its field records, to a list of pairs. When NEGATE? is #t all services not included in SELECTION will be serialized. Each pair represents an environment variable. The first element of each pair is the variable name, the second is the value. When PREFIX is a string it is prepended to the variable name. TRUE-VALUE and FALSE-VALUE will be used as a representation for respectfully =#t= and =#f=.
+<<index-troubleshooting_002c-Guix-System>> <<index-guix-system-troubleshooting>>
 
 --------------
 
-Previous: [[id:guix--Shepherd-Services][Shepherd Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Shepherd-Services][Shepherd Services]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

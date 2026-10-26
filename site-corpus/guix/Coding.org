@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Coding>>
-Next: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.20.1 Coding [[#Coding-1][¶]]
+<<Coding-1>>
+**** 22.20.1 Coding
 :PROPERTIES:
-:CUSTOM_ID: Coding-1
+:CUSTOM_ID: coding
 :CLASS: subsection
 :END:
 The project runs many Guix-specific services; this is all lovely Scheme code but it tends to receive less attention than Guix itself:

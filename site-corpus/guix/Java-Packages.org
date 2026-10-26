@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Java-Packages>>
-Next: [[id:guix--Rust-Crates][Rust Crates]], Previous: [[id:guix--Perl-Modules][Perl Modules]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Rust-Crates][Rust Crates]], Previous: [[id:guix--Perl-Modules][Perl Modules]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.12 Java Packages [[#Java-Packages-1][¶]]
+<<Java-Packages-1>>
+**** 22.8.11 Java Packages
 :PROPERTIES:
-:CUSTOM_ID: Java-Packages-1
+:CUSTOM_ID: java-packages
 :CLASS: subsection
 :END:
+<<index-java>>
 Java programs standing for themselves are named as any other package, using the lowercase upstream name.
 
 To avoid confusion and naming clashes with other programming languages, it is desirable that the name of a package for a Java package is prefixed with =java-=. If a project already contains the word =java=, we drop this; for instance, the package =ngsjava= is packaged under the name =java-ngs=.

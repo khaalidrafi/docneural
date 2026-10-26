@@ -7,6 +7,9 @@
 Next: [[id:emacs--Icons][Icons]]   Previous: [[id:emacs--Colors][Colors for Faces]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Standard-Faces>>
+
+--------------
+
 *** 16.10 Standard Faces [[#Standard-Faces-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Standard-Faces-1
@@ -38,15 +41,15 @@ Here's an incomplete list of faces used to highlight parts of the text temporari
 
 - =highlight= :: This face is used for text highlighting in various contexts, such as when the mouse cursor is moved over a hyperlink.
 
-- =isearch= :: This face is used to highlight the current Isearch match (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]).
+- =isearch= :: This face is used to highlight the current Isearch match (see [[id:emacs--Incremental-Search][Incremental Search]]).
 
-- =query-replace= :: This face is used to highlight the current Query Replace match (see [[id:emacs--Replace::#Replace][Replacement Commands]]).
+- =query-replace= :: This face is used to highlight the current Query Replace match (see [[id:emacs--Replace][Replacement Commands]]).
 
 - =lazy-highlight= :: This face is used to highlight lazy matches for Isearch and Query Replace (matches other than the current one).
 
 - =region= :: This face is used for displaying an active region (see [[id:emacs--Mark][The Mark and the Region]]). When Emacs is built with GTK+ support, its colors are taken from the current GTK+ theme.
 
-- =secondary-selection= :: This face is used for displaying a secondary X selection (see [[id:emacs--Cut-and-Paste::#Secondary-Selection][Secondary Selection]]).
+- =secondary-selection= :: This face is used for displaying a secondary X selection (see [[id:emacs--Secondary-Selection][Secondary Selection]]).
 
 - =trailing-whitespace= :: The face for highlighting excess spaces and tabs at the end of a line when =show-trailing-whitespace= is non-=nil= (see [[id:emacs--Useless-Whitespace][Useless Whitespace]]).
 

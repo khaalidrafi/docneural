@@ -7,6 +7,9 @@
 Next: [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]]   Up: [[id:emacs--Mark][The Mark and the Region]]
 
 <<Setting-Mark>>
+
+--------------
+
 *** 13.1 Setting the Mark [[#Setting-the-Mark][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Setting-the-Mark
@@ -42,7 +45,7 @@ Finally, you can set the mark by holding down the shift key while typing certain
 
 Many commands that insert text, such as C-y (=yank=), set the mark at the other end of the inserted text, without activating it. This lets you easily return to that position (see [[id:emacs--Mark-Ring][The Mark Ring]]). You can tell that a command does this when it shows ‘=Mark set=' in the echo area.
 
-Under X, every time the active region changes, Emacs saves the text in the region to the /primary selection/. This lets you insert that text into other X applications with mouse-2 clicks. See [[id:emacs--Cut-and-Paste::#Primary-Selection][Cut and Paste with Other Window Applications]].
+Under X, every time the active region changes, Emacs saves the text in the region to the /primary selection/. This lets you insert that text into other X applications with mouse-2 clicks. See [[id:emacs--Primary-Selection][Cut and Paste with Other Window Applications]].
 
 --------------
 

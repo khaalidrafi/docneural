@@ -7,6 +7,9 @@
 Next: [[id:emacs--Gnus-Startup][When Gnus Starts Up]]   Up: [[id:emacs--Gnus][Email and Usenet News with Gnus]]
 
 <<Buffers-of-Gnus>>
+
+--------------
+
 *** 36.1 Gnus Buffers [[#Gnus-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Gnus-Buffers
@@ -19,5 +22,3 @@ The /group buffer/ contains a list of article sources (e.g., newsgroups and emai
 The /summary buffer/ lists the articles in a single group, showing one article per line. By default, it displays each article's author, subject, and line number, but this is customizable; See [[../gnus_html/Summary-Buffer-Format.html#Summary-Buffer-Format][Summary Buffer Format]] in The Gnus Manual. The summary buffer is created when you select a group in the group buffer, and is killed when you exit the group.
 
 From the summary buffer, you can choose an article to view. The article is displayed in the /article buffer/. In normal Gnus usage, you view this buffer but do not select it---all useful Gnus commands can be invoked from the summary buffer. But you can select the article buffer, and execute Gnus commands from it, if you wish.
-
---------------

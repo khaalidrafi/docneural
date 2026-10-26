@@ -7,6 +7,9 @@
 Next: [[id:emacs--Shell-Prompts][Shell Prompts]]   Previous: [[id:emacs--Interactive-Shell][Interactive Subshell]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Shell-Mode>>
+
+--------------
+
 *** 40.3 Shell Mode [[#Shell-Mode-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Shell-Mode-1
@@ -16,7 +19,7 @@ The major mode for Shell buffers is Shell mode. Many of its special commands are
 
 -  <<index-RET-_0028Shell-mode_0029>>RET [[#index-RET-_0028Shell-mode_0029][¶]] :: Send the current line as input to the subshell (=comint-send-input=). Any shell prompt at the beginning of the line is omitted (see [[id:emacs--Shell-Prompts][Shell Prompts]]). If point is at the end of buffer, this is like submitting the command line in an ordinary interactive shell. However, you can also invoke RET elsewhere in the shell buffer to submit the current line as input.
 
--  <<index-TAB-_0028Shell-mode_0029>>TAB [[#index-TAB-_0028Shell-mode_0029][¶]] :: Complete the command name or file name before point in the shell buffer (=completion-at-point=). This uses the usual Emacs completion rules (see [[id:emacs--Completion::#Completion][Completion]]), with the completion alternatives being file names, environment variable names, the shell command history, and history references (see [[id:emacs--Shell-History::#History-References][Shell History References]]). For options controlling the completion, see [[id:emacs--Shell-Options][Shell Mode Options]].
+-  <<index-TAB-_0028Shell-mode_0029>>TAB [[#index-TAB-_0028Shell-mode_0029][¶]] :: Complete the command name or file name before point in the shell buffer (=completion-at-point=). This uses the usual Emacs completion rules (see [[id:emacs--Completion][Completion]]), with the completion alternatives being file names, environment variable names, the shell command history, and history references (see [[id:emacs--History-References][Shell History References]]). For options controlling the completion, see [[id:emacs--Shell-Options][Shell Mode Options]].
 
 -  <<index-M_002d_003f-_0028Shell-mode_0029>>M-? [[#index-M_002d_003f-_0028Shell-mode_0029][¶]] :: Display temporarily a list of the possible completions of the file name before point (=comint-dynamic-list-filename-completions=).
 
@@ -36,7 +39,7 @@ The major mode for Shell buffers is Shell mode. Many of its special commands are
 
 -  <<index-comint_002dquit_002dsubjob>>C-c C-\ [[#index-comint_002dquit_002dsubjob][¶]] :: Send quit signal to the shell or its current subjob if any (=comint-quit-subjob=). This command also kills any shell input pending in the shell buffer and not yet sent.
 
--  <<index-C_002dc-C_002do-_0028Shell-mode_0029>>C-c C-o [[#index-C_002dc-C_002do-_0028Shell-mode_0029][¶]] :: Delete the last batch of output from a shell command (=comint-delete-output=). This is useful if a shell command spews out lots of output that just gets in the way. With a prefix argument, this command saves the deleted text in the =kill-ring= (see [[id:emacs--Yanking::#Kill-Ring][The Kill Ring]]), so that you could later yank it (see [[id:emacs--Yanking::#Yanking][Yanking]]) elsewhere.
+-  <<index-C_002dc-C_002do-_0028Shell-mode_0029>>C-c C-o [[#index-C_002dc-C_002do-_0028Shell-mode_0029][¶]] :: Delete the last batch of output from a shell command (=comint-delete-output=). This is useful if a shell command spews out lots of output that just gets in the way. With a prefix argument, this command saves the deleted text in the =kill-ring= (see [[id:emacs--Kill-Ring][The Kill Ring]]), so that you could later yank it (see [[id:emacs--Yanking][Yanking]]) elsewhere.
 
 -  <<index-C_002dc-C_002ds-_0028Shell-mode_0029>>C-c C-s [[#index-C_002dc-C_002ds-_0028Shell-mode_0029][¶]] :: Write the last batch of output from a shell command to a file (=comint-write-output=). With a prefix argument, the file is appended to instead. Any prompt at the end of the output is not written.
 
@@ -86,7 +89,7 @@ With this enabled, the output from, for instance, =ls --hyperlink= will be made 
 
 Shell mode is a derivative of Comint mode, a general-purpose mode for communicating with interactive subprocesses. Most of the features of Shell mode actually come from Comint mode, as you can see from the command names listed above. The special features of Shell mode include the directory tracking feature, and a few user commands.
 
-Other Emacs features that use variants of Comint mode include GUD (see [[id:emacs--Debuggers::#Debuggers][Running Debuggers Under Emacs]]) and M-x run-lisp (see [[id:emacs--External-Lisp][Running an External Lisp]]).
+Other Emacs features that use variants of Comint mode include GUD (see [[id:emacs--Debuggers][Running Debuggers Under Emacs]]) and M-x run-lisp (see [[id:emacs--External-Lisp][Running an External Lisp]]).
 
 You can use M-x comint-run to execute any program of your choice in a subprocess using unmodified Comint mode---without the specializations of Shell mode. To pass arguments to the program, use C-u M-x comint-run.
 

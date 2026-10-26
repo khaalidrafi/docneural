@@ -36,19 +36,23 @@ Next:
 [[../..][]]
 
 <<Formatting-Code>>
-Previous: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.8.4 Formatting Code [[#Formatting-Code-1][¶]]
+<<Formatting-Code-1>>
+**** 22.9.4 Formatting Code
 :PROPERTIES:
-:CUSTOM_ID: Formatting-Code-1
+:CUSTOM_ID: formatting-code
 :CLASS: subsection
 :END:
+<<index-formatting-code>> <<index-coding-style>>
 When writing Scheme code, we follow common wisdom among Scheme programmers. In general, we follow the [[https://mumble.net/~campbell/scheme/style.txt][Riastradh's Lisp Style Rules]]. This document happens to describe the conventions mostly used in Guile's code too. It is very thoughtful and well written, so please do read it.
 
-Some special forms introduced in Guix, such as the =substitute*= macro, have special indentation rules. These are defined in the =.dir-locals.el= file, which Emacs automatically uses. Also note that Emacs-Guix provides =guix-devel-mode= mode that indents and highlights Guix code properly (see [[https://doc.guix.gnu.org/emacs-guix/latest/en/html_node/Development.html#Development][Development]] in The Emacs-Guix Reference Manual).
+Some special forms introduced in Guix, such as the =substitute*= macro, have special indentation rules. These are defined in the =.dir-locals.el= file, which Emacs automatically uses. Also note that Emacs-Guix provides =guix-devel-mode= mode that indents and highlights Guix code properly (see [[https://emacs-guix.gitlab.io/website/manual/latest/html_node/Development.html#Development][Development]] in The Emacs-Guix Reference Manual).
 
+<<index-indentation_002c-of-code>> <<index-formatting_002c-of-code>>
 If you do not use Emacs, please make sure your editor knows these rules. To automatically indent a package definition, you can also run:
 
 #+begin_example
@@ -60,7 +64,3 @@ See [[id:guix--Invoking-guix-style][Invoking =guix style=]], for more informatio
 We require all top-level procedures to carry a docstring. This requirement can be relaxed for simple private procedures in the =(guix build …)= name space, though.
 
 Procedures should not have more than four positional parameters. Use keyword parameters for procedures that take more than four parameters.
-
---------------
-
-Previous: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

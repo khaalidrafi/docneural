@@ -4,6 +4,33 @@
 #+filetags: :emacs:
 #+title: Other GDB Buffers
 
-Next:
+Next: [[id:emacs--Watch-Expressions][Watch Expressions]]   Previous: [[id:emacs--Stack-Buffer][Stack Buffer]]   Up: [[id:emacs--GDB-Graphical-Interface][GDB Graphical Interface]]
 
-The node you are looking for is at [[id:emacs--Debuggers::#Other-GDB-Buffers][Other GDB Buffers]].
+<<Other-GDB-Buffers>>
+
+--------------
+
+**** 29.6.5.6 Other GDB Buffers [[#Other-GDB-Buffers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Other-GDB-Buffers-1
+:CLASS: subsubsection
+:END:
+Other buffers provided by M-x gdb whose display you can optionally request include:
+
+- <<index-gdb_002ddisplay_002dlocals_002dbuffer>>Locals Buffer [[#index-gdb_002ddisplay_002dlocals_002dbuffer][¶]] :: This buffer displays the values of local variables of the current stack frame for simple data types (see [[../gdb_html/Frame-Info.html#Frame-Info][Information on a frame]] in The GNU debugger). Press RET or click mouse-2 on the value if you want to edit it.
+
+  Arrays and structures display their type only. With GDB 6.4 or later, you can examine the value of the local variable at point by typing RET, or with a mouse-2 click. With earlier versions of GDB, use RET or mouse-2 on the type description (‘=[struct/union]=' or ‘=[array]='). See [[id:emacs--Watch-Expressions][Watch Expressions]].
+
+  To display the Locals buffer, type M-x gdb-display-locals-buffer.
+
+- <<index-gdb_002ddisplay_002dio_002dbuffer>>I/O Buffer [[#index-gdb_002ddisplay_002dio_002dbuffer][¶]] :: If the program you are debugging uses standard input and output streams for interaction with the user, or emits a significant amount of output to its standard output, you may wish to separate its I/O from interaction with GDB. Use the command M-x gdb-display-io-buffer to show a window with a buffer to which Emacs redirects the input and output from the program you are debugging. However, if the variable =gdb-display-io-buffer= is =nil=, Emacs will not create nor display a separate I/O buffer, but will instead redirect the program's interaction to the GUD interaction buffer.
+
+- <<index-gdb_002ddisplay_002dregisters_002dbuffer>>Registers Buffer [[#index-gdb_002ddisplay_002dregisters_002dbuffer][¶]] :: This buffer displays the values held by the registers (see [[../gdb_html/Registers.html#Registers][Registers]] in The GNU debugger). Request the display of this buffer with the command M-x gdb-display-registers-buffer. Press RET or click mouse-2 on a register if you want to edit its value. With GDB 6.4 or later, recently changed register values display with =font-lock-warning-face=.
+
+- <<index-gdb_002ddisplay_002ddisassembly_002dbuffer>>Assembler Buffer [[#index-gdb_002ddisplay_002ddisassembly_002dbuffer][¶]] :: The assembler buffer displays the current frame as machine code. An arrow points to the current instruction, and you can set and remove breakpoints as in a source buffer. Breakpoint icons also appear in the fringe or margin. To request the display of this buffer, use M-x gdb-display-disassembly-buffer.
+
+- <<index-gdb_002ddisplay_002dmemory_002dbuffer>>Memory Buffer [[#index-gdb_002ddisplay_002dmemory_002dbuffer][¶]] :: The memory buffer lets you examine sections of program memory (see [[../gdb_html/Memory.html#Memory][Examining memory]] in The GNU debugger). Click mouse-1 on the appropriate part of the header line to change the starting address or number of data items that the buffer displays. Alternatively, use S or N respectively. Click mouse-3 on the header line to select the display format or unit size for these data items. Use M-x gdb-display-memory-buffer to request display of this buffer.
+
+When =gdb-many-windows= is non-=nil=, the locals buffer shares its window with the registers buffer, just like breakpoints and threads buffers. To switch from one to the other, click with mouse-1 on the relevant button in the header line.
+
+--------------

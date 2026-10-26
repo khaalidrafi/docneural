@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Package-Management>>
-Next: [[id:guix--Channels][Channels]], Previous: [[id:guix--Getting-Started][Getting Started]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Channels][Channels]], Previous: [[id:guix--Getting-Started][Getting Started]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 5 Package Management [[#Package-Management-1][¶]]
+<<Package-Management-1>>
+** 5 Package Management
 :PROPERTIES:
-:CUSTOM_ID: Package-Management-1
+:CUSTOM_ID: package-management
 :CLASS: chapter
 :END:
+<<index-packages>>
 The purpose of GNU Guix is to allow users to easily install, upgrade, and remove software packages, without having to know about their build procedures or dependencies. Guix also goes beyond this obvious set of features.
 
-This chapter describes the main features of Guix, as well as the package management tools it provides. Along with the command-line interface described below (see [[id:guix--Invoking-guix-package][=guix package=]]), you may also use the Emacs-Guix interface (see [[https://doc.guix.gnu.org/emacs-guix/latest/en/html_node/index.html#Top][The Emacs-Guix Reference Manual]]), after installing =emacs-guix= package (run M-x guix-help command to start with it):
+This chapter describes the main features of Guix, as well as the package management tools it provides. Along with the command-line interface described below (see [[id:guix--Invoking-guix-package][=guix package=]]), you may also use the Emacs-Guix interface (see [[https://emacs-guix.gitlab.io/website/manual/latest/html_node/index.html#Top][The Emacs-Guix Reference Manual]]), after installing =emacs-guix= package (run M-x guix-help command to start with it):
 
 #+begin_example
 guix install emacs-guix
@@ -64,7 +67,3 @@ guix install emacs-guix
 - [[id:guix--Inferiors][Inferiors]]
 - [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]
 - [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]
-
---------------
-
-Next: [[id:guix--Channels][Channels]], Previous: [[id:guix--Getting-Started][Getting Started]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

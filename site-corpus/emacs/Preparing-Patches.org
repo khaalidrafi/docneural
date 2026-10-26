@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: Preparing Patches
 
-Next:
+Next:   Previous: [[id:emacs--Editing-VC-Commands][Editing VC Commands]]   Up: [[id:emacs--Miscellaneous-VC][Miscellaneous Commands and Features of VC]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Preparing-Patches][Preparing Patches]].
+<<Preparing-Patches>>
+
+--------------
+
+**** 30.1.12.6 Preparing Patches [[#Preparing-Patches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Preparing-Patches-1
+:CLASS: subsubsection
+:END:
+When collaborating on projects it is common to send patches via email, to share changes. You can do this using VC with the =vc-prepare-patch= command. This will prompt you for the revisions you wish to share, and which destination email address(es) to use. Separate the revisions using the value of =crm-separator=, commas by default. The command will then prepare those revisions using your MUA (Mail User Agent) for you to review and send.
+
+When invoked interactively in a Log View buffer with marked revisions, those marked revisions will be used.
+
+Depending on the value of the user option =vc-prepare-patches-separately=, =vc-prepare-patch= will generate one or more messages. The default value =t= means prepare and display a message for each revision, one after another. A value of =nil= means to generate a single message with all patches attached in the body.
+
+If you expect to contribute patches on a regular basis, you can set the user option =vc-default-patch-addressee= to the address(es) you wish to use. This will be used as the default value when invoking =vc-prepare-patch=. Project maintainers may consider setting this as a directory local variable (see [[id:emacs--Directory-Variables][Per-Directory Local Variables]]).

@@ -36,21 +36,25 @@ Next:
 [[../..][]]
 
 <<Running-Guix-in-a-VM>>
-Next: [[id:guix--Defining-Services][Defining Services]], Previous: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Defining-Services][Defining Services]], Previous: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.18 Running Guix in a Virtual Machine [[#Running-Guix-in-a-Virtual-Machine][¶]]
+<<Running-Guix-in-a-Virtual-Machine>>
+*** 11.18 Running Guix in a Virtual Machine
 :PROPERTIES:
-:CUSTOM_ID: Running-Guix-in-a-Virtual-Machine
+:CUSTOM_ID: running-guix-in-a-virtual-machine
 :CLASS: section
 :END:
-To run Guix in a virtual machine (VM), one can use the pre-built Guix VM image distributed at [[https://ftpmirror.gnu.org/gnu/guix/guix-system-vm-image-ad54bd5.x86_64-linux.qcow2]]. This image is a compressed image in QCOW format. You can pass it to an emulator such as [[https://qemu.org/][QEMU]] (see below for details).
+<<index-virtual-machine-1>>
+To run Guix in a virtual machine (VM), one can use the pre-built Guix VM image distributed at [[https://ftpmirror.gnu.org/gnu/guix/guix-system-vm-image-1.5.0.x86_64-linux.qcow2]]. This image is a compressed image in QCOW format. You can pass it to an emulator such as [[https://qemu.org/][QEMU]] (see below for details).
 
 This image boots the Xfce graphical environment and it contains some commonly used tools. You can install more software in the image by running =guix package= in a terminal (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). You can also reconfigure the system based on its initial configuration file available as =/run/current-system/configuration.scm= (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]).
 
 Instead of using this pre-built image, one can also build their own image using =guix system image= (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).
 
+<<index-QEMU>>
 If you built your own image, you must copy it out of the store (see [[id:guix--The-Store][The Store]]) and give yourself permission to write to the copy before you can use it. When invoking QEMU, you must choose a system emulator that is suitable for your hardware platform. Here is a minimal QEMU invocation that will boot the result of =guix system image -t qcow2= on x86_64 hardware:
 
 #+begin_example
@@ -58,7 +62,7 @@ $ qemu-system-x86_64 \
    -nic user,model=virtio-net-pci \
    -enable-kvm -m 2048 \
    -device virtio-blk,drive=myhd \
-   -drive if=none,file=guix-system-vm-image-ad54bd5.x86_64-linux.qcow2,id=myhd
+   -drive if=none,file=guix-system-vm-image-1.5.0.x86_64-linux.qcow2,id=myhd
 #+end_example
 
 Here is what each of these options means:
@@ -73,19 +77,20 @@ Here is what each of these options means:
 
 - =-device virtio-blk,drive=myhd= :: Create a =virtio-blk= drive called “myhd”. =virtio-blk= is a “paravirtualization” mechanism for block devices that allows QEMU to achieve better performance than if it were emulating a complete disk drive. See the QEMU and KVM documentation for more info.
 
-- =-drive if=none,file=/tmp/qemu-image,id=myhd= :: Use our QCOW image, the =guix-system-vm-image-ad54bd5.x86_64-linux.qcow2= file, as the backing store of the “myhd” drive.
+- =-drive if=none,file=/tmp/qemu-image,id=myhd= :: Use our QCOW image, the =guix-system-vm-image-1.5.0.x86_64-linux.qcow2= file, as the backing store of the “myhd” drive.
 
-The default =run-vm.sh= script that is returned by an invocation of =guix system vm= does not add a =-nic user= flag by default. To get network access from within the vm add the =(dhcpcd-service-type)= to your system definition and start the VM using =$(guix system vm config.scm) -nic user=. An important caveat of using =-nic user= for networking is that =ping= will not work, because it uses the ICMP protocol. You'll have to use a different command to check for network connectivity, for example =guix download=.
+The default =run-vm.sh= script that is returned by an invocation of =guix system vm= does not add a =-nic user= flag by default. To get network access from within the vm add the =(dhcp-client-service)= to your system definition and start the VM using =$(guix system vm config.scm) -nic user=. An important caveat of using =-nic user= for networking is that =ping= will not work, because it uses the ICMP protocol. You'll have to use a different command to check for network connectivity, for example =guix download=.
 
 - [[#Connecting-Through-SSH][Connecting Through SSH]]
 - [[#Using-virt_002dviewer-with-Spice][Using =virt-viewer= with Spice]]
 
 <<Connecting-Through-SSH>>
-**** 11.18.1 Connecting Through SSH [[#Connecting-Through-SSH][¶]]
+**** 11.18.1 Connecting Through SSH
 :PROPERTIES:
 :CUSTOM_ID: connecting-through-ssh
 :CLASS: subsection
 :END:
+<<index-SSH-1>> <<index-SSH-server-1>>
 To enable SSH inside a VM you need to add an SSH server like =openssh-service-type= to your VM (see [[id:guix--Networking-Services][=openssh-service-type=]]). In addition you need to forward the SSH port, 22 by default, to the host. You can do this with
 
 #+begin_example
@@ -101,46 +106,29 @@ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 10022 localho
 The =-p= tells =ssh= the port you want to connect to. =-o UserKnownHostsFile=/dev/null= prevents =ssh= from complaining every time you modify your =config.scm= file and the =-o StrictHostKeyChecking=no= prevents you from having to allow a connection to an unknown host every time you connect.
 
 #+begin_quote
-*Note:* If you find the above ‘=hostfwd=' example not to be working (e.g., your SSH client hangs attempting to connect to the mapped port of your VM), make sure that your Guix System VM has networking support, such as by using the =dhcpcd-service-type= service type.
+*Note:* If you find the above ‘=hostfwd=' example not to be working (e.g., your SSH client hangs attempting to connect to the mapped port of your VM), make sure that your Guix System VM has networking support, such as by using the =dhcp-client-service-type= service type.
 
 #+end_quote
 
 <<Using-virt_002dviewer-with-Spice>>
-**** 11.18.2 Using =virt-viewer= with Spice [[#Using-virt_002dviewer-with-Spice][¶]]
+**** 11.18.2 Using =virt-viewer= with Spice
 :PROPERTIES:
 :CUSTOM_ID: using-virt-viewer-with-spice
 :CLASS: subsection
 :END:
-As an alternative to the default =qemu= graphical client you can use the =remote-viewer= from the =virt-viewer= package. To connect pass the =-spice port=5930,disable-ticketing=on= flag to =qemu=. See previous section for further information on how to do this.
+As an alternative to the default =qemu= graphical client you can use the =remote-viewer= from the =virt-viewer= package. To connect pass the =-spice port=5930,disable-ticketing= flag to =qemu=. See previous section for further information on how to do this.
 
 Spice also allows you to do some nice stuff like share your clipboard with your VM. To enable that you'll also have to pass the following flags to =qemu=:
 
 #+begin_example
--device virtio-serial \
--chardev spicevmc,name=vdagent,id=vdagent \
--device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
--display spice-app,gl=on -device virtio-gpu-gl -vga none
+-device virtio-serial-pci,id=virtio-serial0,max_ports=16,bus=pci.0,addr=0x5
+-chardev spicevmc,name=vdagent,id=vdagent
+-device virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,\
+name=com.redhat.spice.0
 #+end_example
 
-You'll also need to add the =(spice-vdagent-service-type)= to your system definition (see [[id:guix--Miscellaneous-Services][Spice service]]).
-
-Here is a working example with QEMU ‘=10.2.1=':
-
-#+begin_example
-qemu-system-x86_64 -nic user,model=virtio-net-pci -enable-kvm -m 2048 \
--device virtio-blk,drive=myhd \
--drive if=none,file=guix-system-vm-image-ad54bd5.x86_64-linux.qcow2,id=myhd \
--device virtio-serial \
--chardev spicevmc,name=vdagent,id=vdagent \
--device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
--display spice-app,gl=on -device virtio-gpu-gl -vga none
-#+end_example
-
-#+begin_quote
-*Note:* QEMU will modify the .qcow2 image file while running. Back up the image file beforehand if you want to keep it untouched.
-
-#+end_quote
+You'll also need to add the =(spice-vdagent-service)= to your system definition (see [[id:guix--Miscellaneous-Services][Spice service]]).
 
 --------------
 
-Next: [[id:guix--Defining-Services][Defining Services]], Previous: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Defining-Services][Defining Services]], Previous: [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

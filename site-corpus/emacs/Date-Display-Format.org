@@ -4,6 +4,38 @@
 #+filetags: :emacs:
 #+title: Date Display Format
 
-Next:
+Next: [[id:emacs--Time-Display-Format][Time Display Format]]   Previous: [[id:emacs--Mayan-Calendar][Converting from the Mayan Calendar]]   Up: [[id:emacs--Advanced-Calendar_002fDiary-Usage][More advanced features of the Calendar and Diary]]
 
-The node you are looking for is at [[id:emacs--Advanced-Calendar_002fDiary-Usage::#Date-Display-Format][Date Display Format]].
+<<Date-Display-Format>>
+
+--------------
+
+**** 33.13.4 Date Display Format [[#Date-Display-Format-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Date-Display-Format-1
+:CLASS: subsection
+:END:
+You can customize the way dates are displayed in the diary, mode lines, and messages by setting =calendar-date-display-form=. This variable holds a list of expressions that can involve the variables =month=, =day=, and =year=, which are all numbers in string form, and =monthname= and =dayname=, which are both alphabetic strings. In the American style, the default value of this list is as follows:
+
+#+begin_example
+((if dayname (concat dayname ", ")) monthname " " day ", " year)
+#+end_example
+
+while in the European style this value is the default:
+
+#+begin_example
+((if dayname (concat dayname ", ")) day " " monthname " " year)
+#+end_example
+
+The default ISO date representation is:
+
+#+begin_example
+((format "%s-%.2d-%.2d" year (string-to-number month)
+         (string-to-number day)))
+#+end_example
+
+Another typical American format is:
+
+#+begin_example
+(month "/" day "/" (substring year -2))
+#+end_example

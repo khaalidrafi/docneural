@@ -7,6 +7,9 @@
 Next: [[id:emacs--International][International Character Set Support]]   Previous: [[id:emacs--Windows][Multiple Windows]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Frames>>
+
+--------------
+
 ** 23 Frames and Graphical Displays [[#Frames-and-Graphical-Displays][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Frames-and-Graphical-Displays
@@ -18,6 +21,29 @@ You can also create additional frames (see [[id:emacs--Creating-Frames][Creating
 
 Typing C-x C-c closes all the frames on the current display, and ends the Emacs session if it has no frames open on any other displays (see [[id:emacs--Exiting][Exiting Emacs]]). To close just the selected frame, type C-x 5 0 (that is zero, not o).
 
-This chapter describes Emacs features specific to graphical displays (particularly mouse commands), and features for managing multiple frames. On text terminals, many of these features are unavailable. However, it is still possible to create multiple frames on text terminals; such frames are displayed one at a time, filling the entire terminal screen (see [[id:emacs--Text-Terminals][Text Terminals]]). It is also possible to use the mouse on some text terminals (see [[id:emacs--Text_002dOnly-Mouse][Using a Mouse in Text Terminals]], for doing so on GNU and Unix systems; and see [[id:emacs--MS_002dDOS::#MS_002dDOS-Mouse][Mouse Usage on MS-DOS]], for doing so on MS-DOS). Menus are supported on all text terminals.
+This chapter describes Emacs features specific to graphical displays (particularly mouse commands), and features for managing multiple frames. On text terminals, many of these features are unavailable. However, it is still possible to create multiple frames on text terminals; such frames are displayed one at a time, filling the entire terminal screen (see [[id:emacs--Text-Terminals][Text Terminals]]). It is also possible to use the mouse on some text terminals (see [[id:emacs--Text_002dOnly-Mouse][Using a Mouse in Text Terminals]], for doing so on GNU and Unix systems; and see [[id:emacs--MS_002dDOS-Mouse][Mouse Usage on MS-DOS]], for doing so on MS-DOS). Menus are supported on all text terminals.
+
+- [[id:emacs--Mouse-Commands][Mouse Commands for Editing]]
+- [[id:emacs--Word-and-Line-Mouse][Mouse Commands for Words and Lines]]
+- [[id:emacs--Mouse-References][Following References with the Mouse]]
+- [[id:emacs--Menu-Mouse-Clicks][Mouse Clicks for Menus]]
+- [[id:emacs--Mode-Line-Mouse][Mode Line Mouse Commands]]
+- [[id:emacs--Creating-Frames][Creating Frames]]
+- [[id:emacs--Frame-Commands][Frame Commands]]
+- [[id:emacs--Fonts][Fonts]]
+- [[id:emacs--Speedbar][Speedbar Frames]]
+- [[id:emacs--Multiple-Displays][Multiple Displays]]
+- [[id:emacs--Frame-Parameters][Frame Parameters]]
+- [[id:emacs--Scroll-Bars][Scroll Bars]]
+- [[id:emacs--Window-Dividers][Window Dividers]]
+- [[id:emacs--Drag-and-Drop][Drag and Drop]]
+- [[id:emacs--Menu-Bars][Menu Bars]]
+- [[id:emacs--Tool-Bars][Tool Bars]]
+- [[id:emacs--Tab-Bars][Tab Bars]]
+- [[id:emacs--Dialog-Boxes][Using Dialog Boxes]]
+- [[id:emacs--Tooltips][Tooltips]]
+- [[id:emacs--Mouse-Avoidance][Mouse Avoidance]]
+- [[id:emacs--Text-Terminals][Text Terminals]]
+- [[id:emacs--Text_002dOnly-Mouse][Using a Mouse in Text Terminals]]
 
 --------------

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-pack>>
-Next: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Previous: [[id:guix--Invoking-guix-environment][Invoking =guix environment=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Previous: [[id:guix--Invoking-guix-environment][Invoking =guix environment=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 7.3 Invoking =guix pack= [[#Invoking-guix-pack-1][¶]]
+<<Invoking-guix-pack-1>>
+*** 7.3 Invoking =guix pack=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-pack-1
+:CUSTOM_ID: invoking-guix-pack
 :CLASS: section
 :END:
+<<index-guix-pack>>
 Occasionally you want to pass software to people who are not (yet!) lucky enough to be using Guix. You'd tell them to run =guix package -i ==something=, but that's not possible in this case. This is where =guix pack= comes in.
 
 #+begin_quote
@@ -52,14 +55,15 @@ Occasionally you want to pass software to people who are not (yet!) lucky enough
 
 #+end_quote
 
+<<index-pack>> <<index-bundle>> <<index-application-bundle>> <<index-software-bundle>>
 The =guix pack= command creates a shrink-wrapped /pack/ or /software bundle/: it creates a tarball or some other archive containing the binaries of the software you're interested in, and all its dependencies. The resulting archive can be used on any machine that does not have Guix, and people can run the exact same binaries as those you have with Guix. The pack itself is created in a bit-reproducible fashion, so anyone can verify that it really contains the build results that you pretend to be shipping.
 
 For example, to create a bundle containing Guile, Emacs, Geiser, and all their dependencies, you can run:
 
 #+begin_example
 $ guix pack guile emacs emacs-geiser
-...
-/gnu/store/...-pack.tar.gz
+…
+/gnu/store/…-pack.tar.gz
 #+end_example
 
 The result here is a tarball containing a =/gnu/store= directory with all the relevant packages. The resulting tarball contains a /profile/ with the three packages of interest; the profile is the same as would be created by =guix package -i=. It is this mechanism that is used to create Guix's own standalone binary tarball (see [[id:guix--Binary-Installation][Binary Installation]]).
@@ -72,8 +76,10 @@ guix pack -S /opt/gnu/bin=bin guile emacs emacs-geiser
 
 That way, users can happily type =/opt/gnu/bin/guile= and enjoy.
 
+<<index-relocatable-binaries_002c-with-guix-pack>>
 What if the recipient of your pack does not have root privileges on their machine, and thus cannot unpack it in the root file system? In that case, you will want to use the =--relocatable= option (see below). This option produces /relocatable binaries/, meaning they can be placed anywhere in the file system hierarchy: in the example above, users can unpack your tarball in their home directory and directly run =./opt/gnu/bin/guile=.
 
+<<index-Docker_002c-build-an-image-with-guix-pack>>
 Alternatively, you can produce a pack in the Docker image format using the following command:
 
 #+begin_example
@@ -89,6 +95,7 @@ docker run -ti guile-guile-readline /bin/guile
 
 where =file= is the image returned by =guix pack=, and =guile-guile-readline= is its “image tag”. See the [[https://docs.docker.com/engine/reference/commandline/load/][Docker documentation]] for more information.
 
+<<index-Singularity_002c-build-an-image-with-guix-pack>> <<index-SquashFS_002c-build-an-image-with-guix-pack>>
 Yet another option is to produce a SquashFS image with the following command:
 
 #+begin_example
@@ -97,6 +104,7 @@ guix pack -f squashfs bash guile emacs emacs-geiser
 
 The result is a SquashFS file system image that can either be mounted or directly be used as a file system container image with the [[https://www.sylabs.io/docs/][Singularity container execution environment]], using commands like =singularity shell= or =singularity exec=.
 
+<<index-AppImage_002c-create-an-AppImage-file-with-guix-pack>>
 Another format internally based on SquashFS is [[https://appimage.org/][AppImage]]. An AppImage file can be created and executed without any special privileges:
 
 #+begin_example
@@ -121,18 +129,18 @@ Several command-line options allow you to customize your pack:
     *Note:* Singularity /requires/ you to provide =/bin/sh= in the image. For that reason, =guix pack -f squashfs= always implies =-S /bin=bin=. Thus, your =guix pack= invocation must always start with something like:
 
     #+begin_example
-    guix pack -f squashfs bash ...
-#+end_example
+    guix pack -f squashfs bash …
+    #+end_example
 
     If you forget the =bash= (or similar) package, =singularity run= and =singularity exec= will fail with an unhelpful “no such file or directory” message.
 
     #+end_quote
 
-  - <<index-Debian_002c-build-a-_002edeb-package-with-guix-pack>>=deb= [[#index-Debian_002c-build-a-_002edeb-package-with-guix-pack][¶]] :: This produces a Debian archive (a package with the ‘=.deb=' file extension) containing all the specified binaries and symbolic links, that can be installed on top of any dpkg-based GNU(/Linux) distribution. Advanced options can be revealed via the =--help-deb-format= option. They allow embedding control files for more fine-grained control, such as activating specific triggers or providing a maintainer configure script to run arbitrary setup code upon installation.
+  - =deb= [[#index-Debian_002c-build-a-_002edeb-package-with-guix-pack][¶]] :: This produces a Debian archive (a package with the ‘=.deb=' file extension) containing all the specified binaries and symbolic links, that can be installed on top of any dpkg-based GNU(/Linux) distribution. Advanced options can be revealed via the =--help-deb-format= option. They allow embedding control files for more fine-grained control, such as activating specific triggers or providing a maintainer configure script to run arbitrary setup code upon installation.
 
     #+begin_example
     guix pack -f deb -C xz -S /usr/bin/hello=bin/hello hello
-#+end_example
+    #+end_example
 
     #+begin_quote
     *Note:* Because archives produced with =guix pack= contain a collection of store items and because each =dpkg= package must not have conflicting files, in practice that means you likely won't be able to install more than one such archive on a given system. You can nonetheless pack as many Guix packages as you want in one such archive.
@@ -144,7 +152,7 @@ Several command-line options allow you to customize your pack:
 
     #+end_quote
 
-  - <<index-RPM_002c-build-an-RPM-archive-with-guix-pack>>=rpm= [[#index-RPM_002c-build-an-RPM-archive-with-guix-pack][¶]] :: This produces an RPM archive (a package with the ‘=.rpm=' file extension) containing all the specified binaries and symbolic links, that can be installed on top of any RPM-based GNU/Linux distribution. The RPM format embeds checksums for every file it contains, which the =rpm= command uses to validate the integrity of the archive.
+  - =rpm= [[#index-RPM_002c-build-an-RPM-archive-with-guix-pack][¶]] :: This produces an RPM archive (a package with the ‘=.rpm=' file extension) containing all the specified binaries and symbolic links, that can be installed on top of any RPM-based GNU/Linux distribution. The RPM format embeds checksums for every file it contains, which the =rpm= command uses to validate the integrity of the archive.
 
     Advanced RPM-related options are revealed via the =--help-rpm-format= option. These options allow embedding maintainer scripts that can run before or after the installation of the RPM archive, for example.
 
@@ -152,11 +160,11 @@ Several command-line options allow you to customize your pack:
 
     #+begin_example
     guix pack -f rpm -R -C xz -S /usr/bin/hello=bin/hello hello
-#+end_example
+    #+end_example
 
     #+begin_example
     sudo rpm --install --prefix=/opt /gnu/store/...-hello.rpm
-#+end_example
+    #+end_example
 
     #+begin_quote
     *Note:* Contrary to Debian packages, conflicting but /identical/ files in RPM packages can be installed simultaneously, which means multiple =guix pack=-produced RPM packages can usually be installed side by side without any problem.
@@ -168,11 +176,11 @@ Several command-line options allow you to customize your pack:
 
     #+end_quote
 
-  - <<index-AppImage_002c-create-an-AppImage-file-with-guix-pack-1>>=appimage= [[#index-AppImage_002c-create-an-AppImage-file-with-guix-pack-1][¶]] :: This produces an [[https://appimage.org/][AppImage file]] with the ‘=.AppImage=' extension. AppImage is a SquashFS volume prefixed with a runtime that mounts the SquashFS file system and executes the binary provided with =--entry-point=. This results in a self-contained archive that bundles the software and all its requirements into a single file. When the file is made executable it runs the packaged software.
+  - =appimage= [[#index-AppImage_002c-create-an-AppImage-file-with-guix-pack-1][¶]] :: This produces an [[https://appimage.org/][AppImage file]] with the ‘=.AppImage=' extension. AppImage is a SquashFS volume prefixed with a runtime that mounts the SquashFS file system and executes the binary provided with =--entry-point=. This results in a self-contained archive that bundles the software and all its requirements into a single file. When the file is made executable it runs the packaged software.
 
     #+begin_example
     guix pack -f appimage --entry-point=bin/vlc vlc
-#+end_example
+    #+end_example
 
     The runtime used by AppImages invokes the =fusermount3= command to mount the image quickly. If that command is unavailable, the AppImage fails to run, but it can still be started by passing the =--appimage-extract-and-run= flag.
 
@@ -183,7 +191,7 @@ Several command-line options allow you to customize your pack:
 
     #+begin_example
     guix pack -f appimage --entry-point=bin/hello --relocatable hello
-#+end_example
+    #+end_example
 
     #+begin_quote
     *Note:* The resulting AppImage does not conform to the complete standard as it currently does not contain a =.DirIcon= file. This does not impact functionality of the AppImage itself, but possibly that of software used to manage AppImages.
@@ -195,7 +203,9 @@ Several command-line options allow you to customize your pack:
 
     #+end_quote
 
-- <<index-relocatable-binaries>>=--relocatable= [[#index-relocatable-binaries][¶]]\\
+  <<index-relocatable-binaries>>
+
+- =--relocatable=\\
   =-R= :: Produce /relocatable binaries/---i.e., binaries that can be placed anywhere in the file system hierarchy and run from there.
 
   When this option is passed once, the resulting binaries require support for /user namespaces/ in the kernel Linux; when passed /twice/[[#FOOT17][^{17}]], relocatable binaries fall to back to other techniques if user namespaces are unavailable, and essentially work anywhere---see below for the implications.
@@ -204,14 +214,14 @@ Several command-line options allow you to customize your pack:
 
   #+begin_example
   guix pack -RR -S /mybin=bin bash
-#+end_example
+  #+end_example
 
   ... you can copy that pack to a machine that lacks Guix, and from your home directory as a normal user, run:
 
   #+begin_example
   tar xf pack.tar.gz
   ./mybin/sh
-#+end_example
+  #+end_example
 
   In that shell, if you type =ls /gnu/store=, you'll notice that =/gnu/store= shows up and contains all the dependencies of =bash=, even though the machine actually lacks =/gnu/store= altogether! That is probably the simplest way to deploy Guix-built software on a non-Guix machine.
 
@@ -230,37 +240,45 @@ Several command-line options allow you to customize your pack:
 
   - =fakechroot= :: Run through Fakechroot. [[https://github.com/dex4er/fakechroot/][Fakechroot]] virtualizes file system accesses by intercepting calls to C library functions such as =open=, =stat=, =exec=, and so on. Unlike PRoot, it incurs very little overhead. However, it does not always work: for example, some file system accesses made from within the C library are not intercepted, and file system accesses made /via/ direct syscalls are not intercepted either, leading to erratic behavior.
 
+  <<index-GUIX_005fEXECUTION_005fENGINE>>
+
   When running a wrapped program, you can explicitly request one of the execution engines listed above by setting the =GUIX_EXECUTION_ENGINE= environment variable accordingly.
 
   #+end_quote
 
-- <<index-entry-point_002c-for-Docker-and-Singularity-images>>=--entry-point===command= [[#index-entry-point_002c-for-Docker-and-Singularity-images][¶]] :: Use =command= as the /entry point/ of the resulting pack, if the pack format supports it---currently =docker=, =appimage=, and =squashfs= (Singularity) support it. =command= must be relative to the profile contained in the pack.
+  <<index-entry-point_002c-for-Docker-and-Singularity-images>>
+
+- =--entry-point===command= :: Use =command= as the /entry point/ of the resulting pack, if the pack format supports it---currently =docker=, =appimage=, and =squashfs= (Singularity) support it. =command= must be relative to the profile contained in the pack.
 
   The entry point specifies the command that tools like =docker run= or =singularity run= automatically start by default. For example, you can do:
 
   #+begin_example
   guix pack -f docker --entry-point=bin/guile guile
-#+end_example
+  #+end_example
 
   The resulting pack can easily be loaded and =docker run= with no extra arguments will spawn =bin/guile=:
 
   #+begin_example
   docker load -i pack.tar.gz
   docker run image-id
-#+end_example
+  #+end_example
 
-- <<index-entry-point-arguments_002c-for-docker-images>>=--entry-point-argument===command= [[#index-entry-point-arguments_002c-for-docker-images][¶]]\\
+  <<index-entry-point-arguments_002c-for-docker-images>>
+
+- =--entry-point-argument===command=\\
   =-A ==command= :: Use =command= as an argument to /entry point/ of the resulting pack. This option is only valid in conjunction with =--entry-point= and can appear multiple times on the command line.
 
   #+begin_example
   guix pack -f docker --entry-point=bin/guile --entry-point-argument="--help" guile
-#+end_example
+  #+end_example
 
-- <<index-maximum-layers-argument_002c-for-docker-images>>=--max-layers===n= [[#index-maximum-layers-argument_002c-for-docker-images][¶]] :: Specifies the maximum number of Docker image layers allowed when building an image.
+  <<index-maximum-layers-argument_002c-for-docker-images>>
+
+- =--max-layers===n= :: Specifies the maximum number of Docker image layers allowed when building an image.
 
   #+begin_example
   guix pack -f docker --max-layers=100 guile
-#+end_example
+  #+end_example
 
   This option allows you to limit the number of layers in a Docker image. Docker images are comprised of multiple layers, and each layer adds to the overall size and complexity of the image. By setting a maximum number of layers, you can control the following effects:
 
@@ -276,6 +294,8 @@ Several command-line options allow you to customize your pack:
 
   This has the same purpose as the same-named option in =guix build= (see [[id:guix--Additional-Build-Options][=--file= in =guix build=]]), but it has no shorthand, because =-f= already means =--format=.
 
+  <<pack_002dmanifest>>
+
 - =--manifest===file=\\
   =-m ==file= :: Use the packages contained in the manifest object returned by the Scheme code in =file=. This option can be repeated several times, in which case the manifests are concatenated.
 
@@ -286,10 +306,12 @@ Several command-line options allow you to customize your pack:
 - =--system===system=\\
   =-s ==system= :: Attempt to build for =system=---e.g., =i686-linux=---instead of the system type of the build host.
 
-- <<index-cross_002dcompilation>>=--target===triplet= [[#index-cross_002dcompilation][¶]] :: Cross-build for =triplet=, which must be a valid GNU triplet, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-target-triplets.html#Specifying-target-triplets][GNU configuration triplets]] in Autoconf).
+- =--target===triplet= [[#index-cross_002dcompilation][¶]] :: Cross-build for =triplet=, which must be a valid GNU triplet, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-target-triplets.html#Specifying-target-triplets][GNU configuration triplets]] in Autoconf).
 
 - =--compression===tool=\\
   =-C ==tool= :: Compress the resulting tarball using =tool=---one of =gzip=, =zstd=, =bzip2=, =xz=, =lzip=, or =none= for no compression.
+
+  <<pack_002dsymlink_002doption>>
 
 - =--symlink===spec=\\
   =-S ==spec= :: Add the symlinks specified by =spec= to the pack. This option can appear several times.
@@ -304,7 +326,7 @@ Several command-line options allow you to customize your pack:
 
   This option is not enabled by default because, like timestamps, provenance information contributes nothing to the build process. In other words, there is an infinity of channel URLs and commit IDs that can lead to the same pack. Recording such “silent” metadata in the output thus potentially breaks the source-to-binary bitwise reproducibility property.
 
-- <<index-garbage-collector-root_002c-for-packs>>=--root===file= [[#index-garbage-collector-root_002c-for-packs][¶]]\\
+- =--root===file= [[#index-garbage-collector-root_002c-for-packs][¶]]\\
   =-r ==file= :: Make =file= a symlink to the resulting pack, and register it as a garbage collector root.
 
 - =--localstatedir=\\
@@ -331,10 +353,9 @@ In addition, =guix pack= supports all the common build options (see [[id:guix--C
 ***** [[#DOCF17][(17)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 Here's a trick to memorize it: =-RR=, which adds PRoot support, can be thought of as the abbreviation of “Really Relocatable”. Neat, isn't it?
 
 --------------
 
-Next: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Previous: [[id:guix--Invoking-guix-environment][Invoking =guix environment=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Previous: [[id:guix--Invoking-guix-environment][Invoking =guix environment=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

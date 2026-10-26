@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Declaring-the-Home-Environment>>
-Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 13.1 Declaring the Home Environment [[#Declaring-the-Home-Environment-1][¶]]
+<<Declaring-the-Home-Environment-1>>
+*** 13.1 Declaring the Home Environment
 :PROPERTIES:
-:CUSTOM_ID: Declaring-the-Home-Environment-1
+:CUSTOM_ID: declaring-the-home-environment
 :CLASS: section
 :END:
 The home environment is configured by providing a =home-environment= declaration in a file that can be passed to the =guix home= command (see [[id:guix--Invoking-guix-home][Invoking =guix home=]]). The easiest way to get started is by generating an initial configuration with =guix home import=:
@@ -59,6 +61,8 @@ A simple setup can include Bash and a custom text configuration, like in the exa
 *Note:* It is highly recommended that you manage your shell or shells with Guix Home, because it will make sure that all the necessary scripts are sourced by the shell configuration file. Otherwise you will need to do it manually. (see [[id:guix--Configuring-the-Shell][Configuring the Shell]]).
 
 #+end_quote
+
+<<index-home_002denvironment>> <<index-_0025base_002dhome_002dservices>>
 
 #+begin_src lisp
 (use-modules (gnu home)
@@ -89,10 +93,11 @@ A simple setup can include Bash and a custom text configuration, like in the exa
            %base-home-services)))
 #+end_src
 
-The =packages= field should be self-explanatory, it will install the list of packages into the user's profile. The most important field is =services=, it contains a list of /home services/, which are the basic building blocks of a home environment. See [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], for the full list of =home-environment= fields.
+The =packages= field should be self-explanatory, it will install the list of packages into the user's profile. The most important field is =services=, it contains a list of /home services/, which are the basic building blocks of a home environment.
 
 There is no daemon (at least not necessarily) related to a home service, a home service is just an element that is used to declare part of home environment and extend other parts of it. The extension mechanism discussed in the previous chapter (see [[id:guix--Defining-Services][Defining Services]]) should not be confused with Shepherd services (see [[id:guix--Shepherd-Services][Shepherd Services]]). Using this extension mechanism and some Scheme code that glues things together gives the user the freedom to declare their own, very custom, home environments.
 
+<<index-container_002c-for-guix-home>>
 Once the configuration looks good, you can first test it in a throw-away “container”:
 
 #+begin_example
@@ -118,4 +123,4 @@ If you're using Guix System, you can embed your home configuration in your syste
 
 --------------
 
-Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Configuring-the-Shell][Configuring the Shell]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

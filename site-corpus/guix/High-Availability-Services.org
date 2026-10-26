@@ -36,82 +36,52 @@ Next:
 [[../..][]]
 
 <<High-Availability-Services>>
-Next: [[id:guix--Certificate-Services][Certificate Services]], Previous: [[id:guix--Web-Services][Web Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Certificate-Services][Certificate Services]], Previous: [[id:guix--Web-Services][Web Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.22 High Availability Services [[#High-Availability-Services-1][¶]]
+<<High-Availability-Services-1>>
+**** 11.10.21 High Availability Services
 :PROPERTIES:
-:CUSTOM_ID: High-Availability-Services-1
+:CUSTOM_ID: high-availability-services
 :CLASS: subsection
 :END:
-The =(gnu services high-availability)= module provides services for Erlang Port Mapper Daemon (epmd) and RabbitMQ broker.
+<<index-Message-broker>> <<index-Message-streaming>>
+The =(gnu services high-availability)= module provides RabbitMQ message broker service.
 
-**** Erlang Port Mapper Daemon (epmd) [[#Erlang-Port-Mapper-Daemon-_0028epmd_0029][¶]]
+<<RabbitMQ>><<RabbitMQ-1>>
+**** RabbitMQ
 :PROPERTIES:
-:CUSTOM_ID: Erlang-Port-Mapper-Daemon-_0028epmd_0029
+:CUSTOM_ID: rabbitmq
 :CLASS: subsubheading
 :END:
-- Variable: *epmd-service-type* [[#index-epmd_002dservice_002dtype][¶]] :: Service type for the [[https://www.erlang.org/doc/apps/erts/epmd_cmd.html][Erlang Port Mapper Daemon (epmd)]]. The value for this service type is a =<epmd-configuration>= record.
-
-  Below is an example configuration:
-
-  #+begin_src lisp
-  (service epmd-service-type)
-  #+end_src
-
-- Data Type: *epmd-configuration* [[#index-epmd_002dconfiguration][¶]] :: Available =epmd-configuration= fields are:
-
-  - =user= (default: ="epmd"=) (type: string) :: The user running epmd.
-
-  - =group= (default: ="epmd"=) (type: string) :: The user group running epmd.
-
-  - =address= (default: =("127.0.0.1" "::1")=) (type: list-of-strings) :: List of addresses for epmd to listen on. Set it to false (=#f=) to listen on all available addresses. Note that epmd cannot start on ="0.0.0.0"= address.
-
-  - =port= (default: =4369=) (type: integer) :: Default port for epmd to listen on.
-
-**** RabbitMQ [[#RabbitMQ-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: RabbitMQ-1
-:CLASS: subsubheading
-:END:
-- Variable: *rabbitmq-service-type* [[#index-rabbitmq_002dservice_002dtype][¶]] :: Service type for the [[https://www.rabbitmq.com/][RabbitMQ]] server. The value for this service type is a =<rabbitmq-configuration>= record.
+- Variable: rabbitmq-service-type  :: Service type for the [[https://www.rabbitmq.com/][RabbitMQ]] web server. The value for this service type is a =<rabbitmq-configuration>= record.
 
   A simple example configuration is given below.
 
   #+begin_src lisp
   (service rabbitmq-service-type
            (rabbitmq-configuration
-             (plugins '("rabbitmq_stream"
-                        "rabbitmq_management"
-                        "rabbitmq_prometheus"))))
+             (rabbitmq-configuration
+               (plugins '("rabbitmq_stream"
+                          "rabbitmq_management"
+                          "rabbitmq_prometheus")))))
   #+end_src
 
-  This service depends on the =epmd= service.
+At startup, RabbitMQ broker logs its initialization messages into =/var/log/messages= file. Once running, the logging messages can be found in a logging file of a RabbitMQ node in =/var/log/rabbitmq= directory.
 
-  At startup, RabbitMQ broker logs its initialization messages into =/var/log/messages= file. Once running, the logging messages can be found in a logging file of a RabbitMQ node in =/var/log/rabbitmq= directory.
+#+begin_quote
+*Note:* The default configuration of the RabbitMQ service enables the RabbitMQ broker to accept connections only on loopback interfaces. However, enabling certain plugins may open ports on all network interfaces. See also [[https://www.rabbitmq.com/docs/networking#ports][RabbitMQ Port Access]].
 
-  #+begin_quote
-  *Warning:* The default configuration of the RabbitMQ service enables the RabbitMQ broker to accept connections only on loopback interfaces. However, enabling certain plugins may open ports on all network interfaces. See also [[https://www.rabbitmq.com/docs/networking#ports][RabbitMQ Port Access]].
+#+end_quote
 
-  #+end_quote
-
-- Data Type: *rabbitmq-configuration* [[#index-rabbitmq_002dconfiguration][¶]] :: This data type represents the configuration for RabbitMQ.
+- Data Type: rabbitmq-configuration  :: This data type represents the configuration for RabbitMQ.
 
   - =rabbitmq= (default: =rabbitmq=) :: The RabbitMQ package to use.
 
-  - =node-name= (default: ="rabbit@localhost"=) :: Node name of a RabbitMQ broker instance. See also [[https://www.rabbitmq.com/docs/clustering#node-names][RabbitMQ Node Names]].
-
   - =config-file= (default: =%default-rabbitmq-config-file=) :: Configuration file for the RabbitMQ broker. See also [[https://www.rabbitmq.com/docs/configure][RabbitMQ Configuration]].
-
-  - =env-config-file= (default: =#f=) :: Environment configuration file for the RabbitMQ broker.
-
-    Set RabbitMQ environment variables, for example Erlang parameters, node name, or configuration file location, using =variable=value= format. Each variable name without =RABBITMQ_= prefix. See also [[https://www.rabbitmq.com/docs/configure][RabbitMQ Configuration]].
 
   - =data-directory= (default: ="/var/lib/rabbitmq/data"=) :: Directory with RabbitMQ broker data - a schema database, message stores, cluster member information, and other persistent node state.
 
   - =plugins= (default: ='()=) :: A list of RabbitMQ plugins to enable. View all available plugins using the =rabbitmq-plugins list= command.
-
---------------
-
-Next: [[id:guix--Certificate-Services][Certificate Services]], Previous: [[id:guix--Web-Services][Web Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Editing-Binary-Files][Editing Binary Files]]   Previous: [[id:emacs--Sorting][Sorting Text]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Picture-Mode>>
+
+--------------
+
 ** 44 Editing Pictures [[#Editing-Pictures][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Editing-Pictures
@@ -25,5 +28,10 @@ One of these keys, C-c C-c, is particularly important. Often a picture is part o
 The special commands of Picture mode all work in other modes (provided the =picture= library is loaded), but are not bound to keys except in Picture mode. The descriptions below talk of moving “one column” and so on, but all the picture mode commands handle numeric arguments as their normal equivalents do.
 
 Turning on Picture mode runs the hook =picture-mode-hook=. Additional extensions to Picture mode can be found in =artist.el=.
+
+- [[id:emacs--Basic-Picture][Basic Editing in Picture Mode]]
+- [[id:emacs--Insert-in-Picture][Controlling Motion after Insert]]
+- [[id:emacs--Tabs-in-Picture][Picture Mode Tabs]]
+- [[id:emacs--Rectangles-in-Picture][Picture Mode Rectangle Commands]]
 
 --------------

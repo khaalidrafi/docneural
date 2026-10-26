@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Package-Modules-in-a-Sub_002ddirectory>>
-Next: [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]], Previous: [[id:guix--Creating-a-Channel][Creating a Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]], Previous: [[id:guix--Creating-a-Channel][Creating a Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.9 Package Modules in a Sub-directory [[#Package-Modules-in-a-Sub_002ddirectory-1][¶]]
+<<Package-Modules-in-a-Sub_002ddirectory-1>>
+*** 6.8 Package Modules in a Sub-directory
 :PROPERTIES:
-:CUSTOM_ID: Package-Modules-in-a-Sub_002ddirectory-1
+:CUSTOM_ID: package-modules-in-a-sub-directory
 :CLASS: section
 :END:
+<<index-subdirectory_002c-channels>>
 As a channel author, you may want to keep your channel modules in a sub-directory. If your modules are in the sub-directory =guix=, you must add a meta-data file =.guix-channel= that contains:
 
 #+begin_src lisp

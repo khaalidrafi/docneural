@@ -36,22 +36,25 @@ Next:
 [[../..][]]
 
 <<Bulk-Updates>>
-Next: [[id:guix--Emacs-Packages][Emacs Packages]], Previous: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Emacs-Packages][Emacs Packages]], Previous: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.8 Bulk Updates [[#Bulk-Updates-1][¶]]
+<<Bulk-Updates-1>>
+**** 22.8.7 Bulk Updates
 :PROPERTIES:
-:CUSTOM_ID: Bulk-Updates-1
+:CUSTOM_ID: bulk-updates
 :CLASS: subsection
 :END:
+<<index-packaging_002c-maintenance>>
 Sometimes you may need to update a monotonic collection of grouped packages, in a particular module---e.g., =(gnu packages astronomy)=. Doing so requires refreshing package versions, creating commits following guidelines and testing them. Let's say there are 200+ packages with fresh versions, you may deal with this task by applying the following technique.
 
 Enter a development shell in your local Guix checkout, assuming you already ran =bootstrap= and =configure=:
 
 #+begin_example
 ~$ guix shell --development guix
-[env: /gnu/store/...-profile]
+[env: /gnu/store/…-profile]
 > ./pre-inst-env guix refresh --select=module:astronomy --update
 > ./pre-inst-env etc/committer.scm
 #+end_example
@@ -61,10 +64,6 @@ The first command updates all packages in =(gnu packages astronomy)= to the late
 If your machine is powerful enough, you may check that the whole collection has no regressions and can still be built successfully:
 
 #+begin_example
-[env: /gnu/store/...-profile]
+[env: /gnu/store/…-profile]
 > ./pre-inst-env guix build $(./pre-inst-env guix package -A | awk '/astronomy.scm/{print $1"@"$2}')
 #+end_example
-
---------------
-
-Next: [[id:guix--Emacs-Packages][Emacs Packages]], Previous: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

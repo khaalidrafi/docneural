@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Mcron-Home-Service>>
-Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.3 Scheduled User's Job Execution [[#Scheduled-User_0027s-Job-Execution][¶]]
+<<Scheduled-User_0027s-Job-Execution>>
+**** 13.3.3 Scheduled User's Job Execution
 :PROPERTIES:
-:CUSTOM_ID: Scheduled-User_0027s-Job-Execution
+:CUSTOM_ID: scheduled-users-job-execution
 :CLASS: subsection
 :END:
+<<index-cron_002c-per_002duser>> <<index-mcron_002c-per_002duser>> <<index-scheduling-jobs-per_002duser>>
 The =(gnu home services mcron)= module provides an interface to GNU mcron, a daemon to run jobs at scheduled times (see [[https://www.gnu.org/software/mcron/manual/html_node/index.html#Top][GNU mcron]]). The information about system's mcron is applicable here (see [[id:guix--Scheduled-Job-Execution::#mcron_002dservice][mcron reference]]), the only difference for home services is that they have to be declared in a =home-environment= record instead of an =operating-system= record.
 
 #+begin_quote
@@ -52,11 +55,11 @@ The =(gnu home services mcron)= module provides an interface to GNU mcron, a da
 
 #+end_quote
 
-- Variable: *home-mcron-service-type* [[#index-home_002dmcron_002dservice_002dtype][¶]] :: This is the type of the =mcron= home service, whose value is a =home-mcron-configuration= object. It allows to manage scheduled tasks.
+- Variable: home-mcron-service-type  :: This is the type of the =mcron= home service, whose value is a =home-mcron-configuration= object. It allows to manage scheduled tasks.
 
   This service type can be the target of a service extension that provides additional job specifications (see [[id:guix--Service-Composition][Service Composition]]). In other words, it is possible to define services that provide additional mcron jobs to run.
 
-- Data Type: *home-mcron-configuration* [[#index-home_002dmcron_002dconfiguration][¶]] :: Available =home-mcron-configuration= fields are:
+- Data Type: home-mcron-configuration  :: Available =home-mcron-configuration= fields are:
 
   - =mcron= (default: =mcron=) (type: file-like) :: The mcron package to use.
 
@@ -68,4 +71,4 @@ The =(gnu home services mcron)= module provides an interface to GNU mcron, a da
 
 --------------
 
-Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Power-Management-Home-Services][Power Management Home Services]], Previous: [[id:guix--Shells-Home-Services][Shells]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

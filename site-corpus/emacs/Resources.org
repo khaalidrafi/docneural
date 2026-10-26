@@ -7,6 +7,9 @@
 Next: [[id:emacs--Table-of-Resources][Table of X Resources for Emacs]]   Up: [[id:emacs--X-Resources][X Options and Resources]]
 
 <<Resources>>
+
+--------------
+
 *** D.1 X Resources [[#X-Resources-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: X-Resources-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Table-of-Resources][Table of X Resources for Emacs]]   Up: [[i
 :END:
 Programs running under the X Window System organize their user options under a hierarchy of classes and resources. You can specify default values for these options in your /X resource file/, usually named =~/.Xdefaults= or =~/.Xresources=. Changes in this file do not take effect immediately, because the X server stores its own list of resources; to update it, use the command =xrdb=---for instance, ‘=xrdb ~/.Xdefaults='.
 
-Settings specified via X resources in general override the equivalent settings in Emacs init files (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]), in particular for parameters of the initial frame (see [[id:emacs--Frame-Parameters][Frame Parameters]]).
+Settings specified via X resources in general override the equivalent settings in Emacs init files (see [[id:emacs--Init-File][The Emacs Initialization File]]), in particular for parameters of the initial frame (see [[id:emacs--Frame-Parameters][Frame Parameters]]).
 
 (MS-Windows systems do not support X resource files; on such systems, Emacs looks for X resources in the Windows Registry, first under the key ‘=HKEY_CURRENT_USER\SOFTWARE\GNU\Emacs=', which affects only the current user and override the system-wide settings, and then under the key ‘=HKEY_LOCAL_MACHINE\SOFTWARE\GNU\Emacs=', which affects all users of the system. The menu and scroll bars are native widgets on MS-Windows, so they are only customizable via the system-wide settings in the Display Control Panel. You can also set resources using the ‘=-xrm=' command line option, as explained below.)
 

@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: Citing Mail
 
-Next:
+Next: [[id:emacs--Mail-Misc][Mail Miscellany]]   Previous: [[id:emacs--Header-Editing][Mail Header Editing]]   Up: [[id:emacs--Mail-Commands][Mail Commands]]
 
-The node you are looking for is at [[id:emacs--Mail-Commands::#Citing-Mail][Citing Mail]].
+<<Citing-Mail>>
+
+--------------
+
+**** 34.4.3 Citing Mail [[#Citing-Mail-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Citing-Mail-1
+:CLASS: subsection
+:END:
+- C-c C-y :: Yank the selected message from the mail reader, as a citation (=message-yank-original=).
+
+- C-c C-q :: Fill each paragraph cited from another message (=message-fill-yanked-message=).
+
+You can use the command C-c C-y (=message-yank-original=) to /cite/ a message that you are replying to. This inserts the text of that message into the mail buffer. This command works only if the mail buffer is invoked from a mail reader running in Emacs, such as Rmail.
+
+By default, Emacs inserts the string ‘=>=' in front of each line of the cited text; this prefix string is specified by the variable =message-yank-prefix=. If you call =message-yank-original= with a prefix argument, the citation prefix is not inserted.
+
+After using C-c C-y, you can type C-c C-q (=message-fill-yanked-message=) to fill the paragraphs of the cited message. One use of C-c C-q fills all such paragraphs, each one individually. To fill a single paragraph of the quoted message, use M-q. If filling does not automatically handle the type of citation prefix you use, try setting the fill prefix explicitly. See [[id:emacs--Filling][Filling Text]].
+
+You can customize mail citation through the hook =mail-citation-hook=. For example, you can use the Supercite package, which provides more flexible citation (see [[../sc_html/Introduction.html#Introduction][Introduction]] in Supercite).

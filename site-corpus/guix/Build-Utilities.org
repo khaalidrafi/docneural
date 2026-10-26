@@ -36,20 +36,22 @@ Next:
 [[../..][]]
 
 <<Build-Utilities>>
-Next: [[id:guix--Search-Paths][Search Paths]], Previous: [[id:guix--Build-Phases][Build Phases]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Search-Paths][Search Paths]], Previous: [[id:guix--Build-Phases][Build Phases]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.7 Build Utilities [[#Build-Utilities-1][¶]]
+<<Build-Utilities-1>>
+*** 8.7 Build Utilities
 :PROPERTIES:
-:CUSTOM_ID: Build-Utilities-1
+:CUSTOM_ID: build-utilities
 :CLASS: section
 :END:
 As soon as you start writing non-trivial package definitions (see [[id:guix--Defining-Packages][Defining Packages]]) or other build actions (see [[id:guix--G_002dExpressions][G-Expressions]]), you will likely start looking for helpers for “shell-like” actions---creating directories, copying and deleting files recursively, manipulating build phases, and so on. The =(guix build utils)= module provides such utility procedures.
 
 Most build systems load =(guix build utils)= (see [[id:guix--Build-Systems][Build Systems]]). Thus, when writing custom build phases for your package definitions, you can usually assume those procedures are in scope.
 
-When writing G-expressions, you can import =(guix build utils)= on the “build side” using =with-imported-modules= and then put it in scope with the =use-modules= form (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Using-Guile-Modules.html#Using-Guile-Modules][Using Guile Modules]] in GNU Guile Reference Manual):
+When writing G-expressions, you can import =(guix build utils)= on the “build side” using =with-imported-modules= and then put it in scope with the =use-modules= form (see [[https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#Using-Guile-Modules][Using Guile Modules]] in GNU Guile Reference Manual):
 
 #+begin_src lisp
 (with-imported-modules '((guix build utils))  ;import it
@@ -73,64 +75,64 @@ The remainder of this section is the reference for most of the utility procedure
 - [[#Wrappers][Wrappers]]
 
 <<Dealing-with-Store-File-Names>>
-**** 8.7.1 Dealing with Store File Names [[#Dealing-with-Store-File-Names][¶]]
+**** 8.7.1 Dealing with Store File Names
 :PROPERTIES:
 :CUSTOM_ID: dealing-with-store-file-names
 :CLASS: subsection
 :END:
 This section documents procedures that deal with store file names.
 
-- Procedure: *%store-directory* [[#index-_0025store_002ddirectory][¶]] :: Return the directory name of the store.
+- Procedure: %store-directory  :: Return the directory name of the store.
 
-- Procedure: *store-file-name?* =file= [[#index-store_002dfile_002dname_003f][¶]] :: Return true if =file= is in the store.
+- Procedure: store-file-name? file :: Return true if =file= is in the store.
 
-- Procedure: *strip-store-file-name* =file= [[#index-strip_002dstore_002dfile_002dname][¶]] :: Strip the =/gnu/store= and hash from =file=, a store file name. The result is typically a ="==package==-==version=="= string.
+- Procedure: strip-store-file-name file :: Strip the =/gnu/store= and hash from =file=, a store file name. The result is typically a ="==package==-==version=="= string.
 
-- Procedure: *package-name->name+version* =name= [[#index-package_002dname_002d_003ename_002bversion][¶]] :: Given =name=, a package name like ="foo-0.9.1b"=, return two values: ="foo"= and ="0.9.1b"=. When the version part is unavailable, =name= and =#f= are returned. The first hyphen followed by a digit is considered to introduce the version part.
+- Procedure: package-name->name+version name :: Given =name=, a package name like ="foo-0.9.1b"=, return two values: ="foo"= and ="0.9.1b"=. When the version part is unavailable, =name= and =#f= are returned. The first hyphen followed by a digit is considered to introduce the version part.
 
 <<File-Types>>
-**** 8.7.2 File Types [[#File-Types][¶]]
+**** 8.7.2 File Types
 :PROPERTIES:
 :CUSTOM_ID: file-types
 :CLASS: subsection
 :END:
 The procedures below deal with files and file types.
 
-- Procedure: *directory-exists?* =dir= [[#index-directory_002dexists_003f][¶]] :: Return =#t= if =dir= exists and is a directory.
+- Procedure: directory-exists? dir :: Return =#t= if =dir= exists and is a directory.
 
-- Procedure: *executable-file?* =file= [[#index-executable_002dfile_003f][¶]] :: Return =#t= if =file= exists and is executable.
+- Procedure: executable-file? file :: Return =#t= if =file= exists and is executable.
 
-- Procedure: *symbolic-link?* =file= [[#index-symbolic_002dlink_003f][¶]] :: Return =#t= if =file= is a symbolic link (aka. a “symlink”).
+- Procedure: symbolic-link? file :: Return =#t= if =file= is a symbolic link (aka. a “symlink”).
 
-- Procedure: *elf-file?* =file= [[#index-elf_002dfile_003f][¶]]\\
-  Procedure: *ar-file?* =file= [[#index-ar_002dfile_003f][¶]]\\
-  Procedure: *gzip-file?* =file= [[#index-gzip_002dfile_003f][¶]] :: Return =#t= if =file= is, respectively, an ELF file, an =ar= archive (such as a =.a= static library), or a gzip file.
+- Procedure: elf-file? file\\
+  Procedure: ar-file? file\\
+  Procedure: gzip-file? file :: Return =#t= if =file= is, respectively, an ELF file, an =ar= archive (such as a =.a= static library), or a gzip file.
 
-- Procedure: *reset-gzip-timestamp* =file [#:keep-mtime? #t]= [[#index-reset_002dgzip_002dtimestamp][¶]] :: If =file= is a gzip file, reset its embedded timestamp (as with =gzip --no-name=) and return true. Otherwise return =#f=. When =keep-mtime?= is true, preserve =file='s modification time.
+- Procedure: reset-gzip-timestamp file [#:keep-mtime? #t] :: If =file= is a gzip file, reset its embedded timestamp (as with =gzip --no-name=) and return true. Otherwise return =#f=. When =keep-mtime?= is true, preserve =file='s modification time.
 
 <<File-Manipulation>>
-**** 8.7.3 File Manipulation [[#File-Manipulation][¶]]
+**** 8.7.3 File Manipulation
 :PROPERTIES:
 :CUSTOM_ID: file-manipulation
 :CLASS: subsection
 :END:
-The following procedures and macros help create, modify, and delete files. They provide functionality comparable to common shell utilities such as =mkdir -p=, =cp -r=, =rm -r=, and =sed=. They complement Guile's extensive, but low-level, file system interface (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/POSIX.html#POSIX][POSIX]] in GNU Guile Reference Manual).
+The following procedures and macros help create, modify, and delete files. They provide functionality comparable to common shell utilities such as =mkdir -p=, =cp -r=, =rm -r=, and =sed=. They complement Guile's extensive, but low-level, file system interface (see [[https://www.gnu.org/software/guile/manual/html_node/POSIX.html#POSIX][POSIX]] in GNU Guile Reference Manual).
 
-- Macro: *with-directory-excursion* =directory body …= [[#index-with_002ddirectory_002dexcursion][¶]] :: Run =body= with =directory= as the process's current directory.
+- Macro: with-directory-excursion directory body ... :: Run =body= with =directory= as the process's current directory.
 
-  Essentially, this macro changes the current directory to =directory= before evaluating =body=, using =chdir= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Processes.html#Processes][Processes]] in GNU Guile Reference Manual). It changes back to the initial directory when the dynamic extent of =body= is left, be it /via/ normal procedure return or /via/ a non-local exit such as an exception.
+  Essentially, this macro changes the current directory to =directory= before evaluating =body=, using =chdir= (see [[https://www.gnu.org/software/guile/manual/html_node/Processes.html#Processes][Processes]] in GNU Guile Reference Manual). It changes back to the initial directory when the dynamic extent of =body= is left, be it /via/ normal procedure return or /via/ a non-local exit such as an exception.
 
-- Procedure: *mkdir-p* =dir= [[#index-mkdir_002dp][¶]] :: Create directory =dir= and all its ancestors.
+- Procedure: mkdir-p dir :: Create directory =dir= and all its ancestors.
 
-- Procedure: *install-file* =file directory= [[#index-install_002dfile][¶]] :: Create =directory= if it does not exist and copy =file= in there under the same name.
+- Procedure: install-file file directory :: Create =directory= if it does not exist and copy =file= in there under the same name.
 
-- Procedure: *make-file-writable* =file= [[#index-make_002dfile_002dwritable][¶]] :: Make =file= writable for its owner.
+- Procedure: make-file-writable file :: Make =file= writable for its owner.
 
-- Procedure: *copy-recursively* =source destination [#:log (current-output-port)] [#:follow-symlinks? #f] [#:copy-file copy-file] [#:keep-mtime? #f] [#:keep-permissions? #t] [#:select? (const #t)]= [[#index-copy_002drecursively][¶]] :: Copy =source= directory to =destination=. Follow symlinks if =follow-symlinks?= is true; otherwise, just preserve them. Call =copy-file= to copy regular files. Call =select?=, taking two arguments, =file= and =stat=, for each entry in =source=, where =file= is the entry's absolute file name and =stat= is the result of =lstat= (or =stat= if =follow-symlinks?= is true); exclude entries for which =select?= does not return true. When =keep-mtime?= is true, keep the modification time of the files in =source= on those of =destination=. When =keep-permissions?= is true, preserve file permissions. Write verbose output to the =log= port.
+- Procedure: copy-recursively source destination [#:log (current-output-port)] [#:follow-symlinks? #f] [#:copy-file copy-file] [#:keep-mtime? #f] [#:keep-permissions? #t] [#:select? (const #t)] :: Copy =source= directory to =destination=. Follow symlinks if =follow-symlinks?= is true; otherwise, just preserve them. Call =copy-file= to copy regular files. Call =select?=, taking two arguments, =file= and =stat=, for each entry in =source=, where =file= is the entry's absolute file name and =stat= is the result of =lstat= (or =stat= if =follow-symlinks?= is true); exclude entries for which =select?= does not return true. When =keep-mtime?= is true, keep the modification time of the files in =source= on those of =destination=. When =keep-permissions?= is true, preserve file permissions. Write verbose output to the =log= port.
 
-- Procedure: *delete-file-recursively* =dir [#:follow-mounts? #f]= [[#index-delete_002dfile_002drecursively][¶]] :: Delete =dir= recursively, like =rm -rf=, without following symlinks. Don't follow mount points either, unless =follow-mounts?= is true. Report but ignore errors.
+- Procedure: delete-file-recursively dir [#:follow-mounts? #f] :: Delete =dir= recursively, like =rm -rf=, without following symlinks. Don't follow mount points either, unless =follow-mounts?= is true. Report but ignore errors.
 
-- Macro: *substitute** =file ((regexp match-var…) body…) …= [[#index-substitute_002a][¶]] :: Substitute =regexp= in =file= by the string returned by =body=. =body= is evaluated with each =match-var= bound to the corresponding positional regexp sub-expression. For example:
+- Macro: substitute* file ((regexp match-var...) body...) ... :: Substitute =regexp= in =file= by the string returned by =body=. =body= is evaluated with each =match-var= bound to the corresponding positional regexp sub-expression. For example:
 
   #+begin_src lisp
   (substitute* file
@@ -149,37 +151,38 @@ The following procedures and macros help create, modify, and delete files. They 
   Be careful about using =$= to match the end of a line; by itself it won't match the terminating newline of a line. For example, to match a whole line ending with a backslash, one needs a regex like ="(.*)\\\\\n$"=.
 
 <<File-Search>>
-**** 8.7.4 File Search [[#File-Search][¶]]
+**** 8.7.4 File Search
 :PROPERTIES:
 :CUSTOM_ID: file-search
 :CLASS: subsection
 :END:
+<<index-file_002c-searching>>
 This section documents procedures to search and filter files.
 
-- Procedure: *file-name-predicate* =regexp= [[#index-file_002dname_002dpredicate][¶]] :: Return a predicate that returns true when passed a file name whose base name matches =regexp=.
+- Procedure: file-name-predicate regexp :: Return a predicate that returns true when passed a file name whose base name matches =regexp=.
 
-- Procedure: *find-files* =dir [pred] [#:stat lstat] [#:directories? #f] [#:fail-on-error? #f]= [[#index-find_002dfiles][¶]] :: Return the lexicographically sorted list of files under =dir= for which =pred= returns true. =pred= is passed two arguments: the absolute file name, and its stat buffer; the default predicate always returns true. =pred= can also be a regular expression, in which case it is equivalent to =(file-name-predicate ==pred==)=. =stat= is used to obtain file information; using =lstat= means that symlinks are not followed. If =directories?= is true, then directories will also be included. If =fail-on-error?= is true, raise an exception upon error.
+- Procedure: find-files dir [pred] [#:stat lstat] [#:directories? #f] [#:fail-on-error? #f] :: Return the lexicographically sorted list of files under =dir= for which =pred= returns true. =pred= is passed two arguments: the absolute file name, and its stat buffer; the default predicate always returns true. =pred= can also be a regular expression, in which case it is equivalent to =(file-name-predicate ==pred==)=. =stat= is used to obtain file information; using =lstat= means that symlinks are not followed. If =directories?= is true, then directories will also be included. If =fail-on-error?= is true, raise an exception upon error.
 
 Here are a few examples where we assume that the current directory is the root of the Guix source tree:
 
 #+begin_src lisp
 ;; List all the regular files in the current directory.
 (find-files ".")
-⇒ ("./.dir-locals.el" "./.gitignore" ...)
+⇒ ("./.dir-locals.el" "./.gitignore" …)
 
 ;; List all the .scm files under gnu/services.
 (find-files "gnu/services" "\\.scm$")
-⇒ ("gnu/services/admin.scm" "gnu/services/audio.scm" ...)
+⇒ ("gnu/services/admin.scm" "gnu/services/audio.scm" …)
 
 ;; List ar files in the current directory.
 (find-files "." (lambda (file stat) (ar-file? file)))
-⇒ ("./libformat.a" "./libstore.a" ...)
+⇒ ("./libformat.a" "./libstore.a" …)
 #+end_src
 
-- Procedure: *which* =program= [[#index-which][¶]] :: Return the complete file name for =program= as found in =$PATH=, or =#f= if =program= could not be found.
+- Procedure: which program :: Return the complete file name for =program= as found in =$PATH=, or =#f= if =program= could not be found.
 
-- Procedure: *search-input-file* =inputs name= [[#index-search_002dinput_002dfile][¶]]\\
-  Procedure: *search-input-directory* =inputs name= [[#index-search_002dinput_002ddirectory][¶]] :: Return the complete file name for =name= as found in =inputs=; =search-input-file= searches for a regular file and =search-input-directory= searches for a directory. If =name= could not be found, an exception is raised.
+- Procedure: search-input-file inputs name\\
+  Procedure: search-input-directory inputs name :: Return the complete file name for =name= as found in =inputs=; =search-input-file= searches for a regular file and =search-input-directory= searches for a directory. If =name= could not be found, an exception is raised.
 
   Here, =inputs= must be an association list like =inputs= and =native-inputs= as available to build phases (see [[id:guix--Build-Phases][Build Phases]]).
 
@@ -196,26 +199,27 @@ Here is a (simplified) example of how =search-input-file= is used in a build pha
 #+end_src
 
 <<Program-Invocation>>
-**** 8.7.5 Program Invocation [[#Program-Invocation][¶]]
+**** 8.7.5 Program Invocation
 :PROPERTIES:
 :CUSTOM_ID: program-invocation
 :CLASS: subsection
 :END:
-You'll find handy procedures to spawn processes in this module, essentially convenient wrappers around Guile's =system*= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Processes.html#Processes][=system*=]] in GNU Guile Reference Manual).
+<<index-program-invocation_002c-from-Scheme>> <<index-invoking-programs_002c-from-Scheme>>
+You'll find handy procedures to spawn processes in this module, essentially convenient wrappers around Guile's =system*= (see [[https://www.gnu.org/software/guile/manual/html_node/Processes.html#Processes][=system*=]] in GNU Guile Reference Manual).
 
-- Procedure: *invoke* =program args…= [[#index-invoke][¶]] :: Invoke =program= with the given =args=. Raise an =&invoke-error= exception if the exit code is non-zero; otherwise return =#t=.
+- Procedure: invoke program args... :: Invoke =program= with the given =args=. Raise an =&invoke-error= exception if the exit code is non-zero; otherwise return =#t=.
 
   The advantage compared to =system*= is that you do not need to check the return value. This reduces boilerplate in shell-script-like snippets for instance in package build phases.
 
-- Procedure: *invoke-error?* =c= [[#index-invoke_002derror_003f][¶]] :: Return true if =c= is an =&invoke-error= condition.
+- Procedure: invoke-error? c :: Return true if =c= is an =&invoke-error= condition.
 
-- Procedure: *invoke-error-program* =c= [[#index-invoke_002derror_002dprogram][¶]]\\
-  Procedure: *invoke-error-arguments* =c= [[#index-invoke_002derror_002darguments][¶]]\\
-  Procedure: *invoke-error-exit-status* =c= [[#index-invoke_002derror_002dexit_002dstatus][¶]]\\
-  Procedure: *invoke-error-term-signal* =c= [[#index-invoke_002derror_002dterm_002dsignal][¶]]\\
-  Procedure: *invoke-error-stop-signal* =c= [[#index-invoke_002derror_002dstop_002dsignal][¶]] :: Access specific fields of =c=, an =&invoke-error= condition.
+- Procedure: invoke-error-program c\\
+  Procedure: invoke-error-arguments c\\
+  Procedure: invoke-error-exit-status c\\
+  Procedure: invoke-error-term-signal c\\
+  Procedure: invoke-error-stop-signal c :: Access specific fields of =c=, an =&invoke-error= condition.
 
-- Procedure: *report-invoke-error* =c [port]= [[#index-report_002dinvoke_002derror][¶]] :: Report to =port= (by default the current error port) about =c=, an =&invoke-error= condition, in a human-friendly way.
+- Procedure: report-invoke-error c [port] :: Report to =port= (by default the current error port) about =c=, an =&invoke-error= condition, in a human-friendly way.
 
   Typical usage would look like this:
 
@@ -227,10 +231,10 @@ You'll find handy procedures to spawn processes in this module, essentially conv
              (report-invoke-error c)))
     (invoke "date" "--imaginary-option"))
 
-  ⊣ command "date" "--imaginary-option" failed with status 1
+  -| command "date" "--imaginary-option" failed with status 1
   #+end_src
 
-- Procedure: *invoke/quiet* =program args…= [[#index-invoke_002fquiet][¶]] :: Invoke =program= with =args= and capture =program='s standard output and standard error. If =program= succeeds, print nothing and return the unspecified value; otherwise, raise a =&message= error condition that includes the status code and the output of =program=.
+- Procedure: invoke/quiet program args... :: Invoke =program= with =args= and capture =program='s standard output and standard error. If =program= succeeds, print nothing and return the unspecified value; otherwise, raise a =&message= error condition that includes the status code and the output of =program=.
 
   Here's an example:
 
@@ -244,23 +248,25 @@ You'll find handy procedures to spawn processes in this module, essentially conv
     (invoke/quiet "date")  ;all is fine
     (invoke/quiet "date" "--imaginary-option"))
 
-  ⊣ 'date --imaginary-option' exited with status 1; output follows:
+  -| 'date --imaginary-option' exited with status 1; output follows:
 
       date: unrecognized option '--imaginary-option'
       Try 'date --help' for more information.
   #+end_src
 
 <<Build-Phases-2>>
-**** 8.7.6 Build Phases [[#Build-Phases-2][¶]]
+**** 8.7.6 Build Phases
 :PROPERTIES:
 :CUSTOM_ID: build-phases
 :CLASS: subsection
 :END:
-The =(guix build utils)= also contains tools to manipulate build phases as used by build systems (see [[id:guix--Build-Systems][Build Systems]]). Build phases are represented as association lists or “alists” (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Association-Lists.html#Association-Lists][Association Lists]] in GNU Guile Reference Manual) where each key is a symbol naming the phase and the associated value is a procedure (see [[id:guix--Build-Phases][Build Phases]]).
+<<index-build-phases-2>>
+The =(guix build utils)= also contains tools to manipulate build phases as used by build systems (see [[id:guix--Build-Systems][Build Systems]]). Build phases are represented as association lists or “alists” (see [[https://www.gnu.org/software/guile/manual/html_node/Association-Lists.html#Association-Lists][Association Lists]] in GNU Guile Reference Manual) where each key is a symbol naming the phase and the associated value is a procedure (see [[id:guix--Build-Phases][Build Phases]]).
 
 Guile core and the =(srfi srfi-1)= module both provide tools to manipulate alists. The =(guix build utils)= module complements those with tools written with build phases in mind.
 
-- Macro: *modify-phases* =phases clause…= [[#index-modify_002dphases][¶]] :: Modify =phases= sequentially as per each =clause=, which may have one of the following forms:
+<<index-build-phases_002c-modifying>>
+- Macro: modify-phases phases clause... :: Modify =phases= sequentially as per each =clause=, which may have one of the following forms:
 
   #+begin_src lisp
   (delete old-phase-name)
@@ -271,7 +277,7 @@ Guile core and the =(srfi srfi-1)= module both provide tools to manipulate alist
 
   Where every =phase-name= above is an expression evaluating to a symbol, and =new-phase= an expression evaluating to a procedure.
 
-The example below is taken from the definition of the =grep= package. It adds a phase to run after the =install= phase, called =fix-egrep-and-fgrep=. That phase is a procedure (=lambda*= is for anonymous procedures) that takes a =#:outputs= keyword argument and ignores extra keyword arguments (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Optional-Arguments.html#Optional-Arguments][Optional Arguments]] in GNU Guile Reference Manual, for more on =lambda*= and optional and keyword arguments.) The phase uses =substitute*= to modify the installed =egrep= and =fgrep= scripts so that they refer to =grep= by its absolute file name:
+The example below is taken from the definition of the =grep= package. It adds a phase to run after the =install= phase, called =fix-egrep-and-fgrep=. That phase is a procedure (=lambda*= is for anonymous procedures) that takes a =#:outputs= keyword argument and ignores extra keyword arguments (see [[https://www.gnu.org/software/guile/manual/html_node/Optional-Arguments.html#Optional-Arguments][Optional Arguments]] in GNU Guile Reference Manual, for more on =lambda*= and optional and keyword arguments.) The phase uses =substitute*= to modify the installed =egrep= and =fgrep= scripts so that they refer to =grep= by its absolute file name:
 
 #+begin_src lisp
 (modify-phases %standard-phases
@@ -303,11 +309,12 @@ In the example below, phases are modified in two ways: the standard =configure= 
 #+end_src
 
 <<Wrappers>>
-**** 8.7.7 Wrappers [[#Wrappers][¶]]
+**** 8.7.7 Wrappers
 :PROPERTIES:
 :CUSTOM_ID: wrappers
 :CLASS: subsection
 :END:
+<<index-program-wrappers>> <<index-wrapping-programs>>
 It is not unusual for a command to require certain environment variables to be set for proper functioning, typically search paths (see [[id:guix--Search-Paths][Search Paths]]). Failing to do that, the command might fail to find files or other commands it relies on, or it might pick the “wrong” ones---depending on the environment in which it runs. Examples include:
 
 - a shell script that assumes all the commands it uses are in =PATH=;
@@ -318,7 +325,7 @@ For a package writer, the goal is to make sure commands always work the same rat
 
 To ease that task, the =(guix build utils)= module provides a couple of helpers to wrap commands.
 
-- Procedure: *wrap-program* =program [#:sh sh] [#:rest variables]= [[#index-wrap_002dprogram][¶]] :: Make a wrapper for =program=. =variables= should look like this:
+- Procedure: wrap-program program [#:sh sh] [#:rest variables] :: Make a wrapper for =program=. =variables= should look like this:
 
   #+begin_src lisp
   '(variable delimiter position list-of-directories)
@@ -342,11 +349,11 @@ To ease that task, the =(guix build utils)= module provides a couple of helpers 
   export PATH="/gnu/.../bar/bin"
   export CERT_PATH="$CERT_PATH${CERT_PATH:+:}/gnu/.../baz/certs:/qux/certs"
   exec -a $0 location/of/.foo-real "$@"
-#+end_example
+  #+end_example
 
   If =program= has previously been wrapped by =wrap-program=, the wrapper is extended with definitions for =variables=. If it is not, =sh= will be used as the interpreter.
 
-- Procedure: *wrap-script* =program [#:guile guile] [#:rest variables]= [[#index-wrap_002dscript][¶]] :: Wrap the script =program= such that =variables= are set first. The format of =variables= is the same as in the =wrap-program= procedure. This procedure differs from =wrap-program= in that it does not create a separate shell script. Instead, =program= is modified directly by prepending a Guile script, which is interpreted as a comment in the script's language.
+- Procedure: wrap-script program [#:guile guile] [#:rest variables] :: Wrap the script =program= such that =variables= are set first. The format of =variables= is the same as in the =wrap-program= procedure. This procedure differs from =wrap-program= in that it does not create a separate shell script. Instead, =program= is modified directly by prepending a Guile script, which is interpreted as a comment in the script's language.
 
   Special encoding comments as supported by Python are recreated on the second line.
 
@@ -354,4 +361,4 @@ To ease that task, the =(guix build utils)= module provides a couple of helpers 
 
 --------------
 
-Next: [[id:guix--Search-Paths][Search Paths]], Previous: [[id:guix--Build-Phases][Build Phases]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Search-Paths][Search Paths]], Previous: [[id:guix--Build-Phases][Build Phases]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

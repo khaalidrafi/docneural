@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<GNU-Distribution>>
-Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 1.2 GNU Distribution [[#GNU-Distribution-1][¶]]
+<<GNU-Distribution-1>>
+*** 1.2 GNU Distribution
 :PROPERTIES:
-:CUSTOM_ID: GNU-Distribution-1
+:CUSTOM_ID: gnu-distribution
 :CLASS: section
 :END:
+<<index-Guix-System-1>>
 Guix comes with a distribution of the GNU system consisting entirely of free software[[#FOOT3][^{3}]]. The distribution can be installed on its own (see [[id:guix--System-Installation][System Installation]]), but it is also possible to install Guix as a package manager on top of an installed GNU/Linux system (see [[id:guix--Installation][Installation]]). When we need to distinguish between the two, we refer to the standalone distribution as Guix System.
 
 The distribution provides core GNU packages such as GNU libc, GCC, and Binutils, as well as many GNU and non-GNU applications. The complete list of available packages can be browsed [[https://www.gnu.org/software/guix/packages][on-line]] or by running =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]):
@@ -81,7 +84,7 @@ Packages are currently available on the following platforms:
 
 - =riscv64-linux= :: little-endian 64-bit RISC-V processors, specifically RV64GC, and Linux-Libre kernel. This platform is available as a "technology preview": although it is supported, substitutes are not yet available from the build farm (see [[id:guix--Substitutes][Substitutes]]), and some packages may fail to build (see [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]). That said, the Guix community is actively working on improving this support, and now is a great time to try it and get involved!
 
-With Guix System, you /declare/ all aspects of the operating system configuration and Guix takes care of instantiating the configuration in a transactional, reproducible, and stateless fashion (see [[id:guix--System-Configuration][System Configuration]]). Guix System uses the Linux-libre kernel, the Shepherd initialization system (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual), the well-known GNU utilities and tool chain, as well as the graphical environment or system services of your choice.
+With Guix System, you /declare/ all aspects of the operating system configuration and Guix takes care of instantiating the configuration in a transactional, reproducible, and stateless fashion (see [[id:guix--System-Configuration][System Configuration]]). Guix System uses the Linux-libre kernel, the Shepherd initialization system (see [[https://www.gnu.org/software/shepherd/manual/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual), the well-known GNU utilities and tool chain, as well as the graphical environment or system services of your choice.
 
 Guix System is available on all the above platforms except =mips64el-linux=, =powerpc-linux=, =powerpc64le-linux= and =riscv64-linux=.
 
@@ -99,10 +102,9 @@ Building this distribution is a cooperative effort, and you are invited to join!
 ***** [[#DOCF3][(3)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The term “free” here refers to the [[https://www.gnu.org/philosophy/free-sw.html][freedom provided to users of that software]].
 
 --------------
 
-Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

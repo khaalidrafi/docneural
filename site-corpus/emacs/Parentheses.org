@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Parentheses
 
-Next: [[id:emacs--Comments#Comments][Manipulating Comments]]   Previous: [[id:emacs--Program-Indent#Program-Indent][Indentation for Programs]]   Up: [[id:emacs--Programs][Editing Programs]]
+Next: [[id:emacs--Comments][Manipulating Comments]]   Previous: [[id:emacs--Program-Indent][Indentation for Programs]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Parentheses>>
+
+--------------
+
 *** 28.4 Commands for Editing with Parentheses [[#Commands-for-Editing-with-Parentheses][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Commands-for-Editing-with-Parentheses
@@ -18,120 +21,6 @@ When talking about these facilities, the term “parenthesis” also includes br
 
 You can use M-x check-parens to find any unbalanced parentheses and unbalanced string quotes in the buffer.
 
---------------
-
-<<Expressions>>
-**** 28.4.1 Expressions with Balanced Parentheses [[#Expressions-with-Balanced-Parentheses][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Expressions-with-Balanced-Parentheses
-:CLASS: subsection
-:END:
-Each programming language mode has its own definition of a /balanced expression/. Balanced expressions typically include individual symbols, numbers, and string constants, as well as pieces of code enclosed in a matching pair of delimiters. The following commands deal with balanced expressions (in Emacs, such expressions are referred to internally as /sexps/[[#FOOT14][^{14}]]).
-
-- C-M-f :: Move forward over a balanced expression (=forward-sexp=).
-
-- C-M-b :: Move backward over a balanced expression (=backward-sexp=).
-
-- C-M-k :: Kill balanced expression forward (=kill-sexp=).
-
-- C-M-t :: Transpose expressions (=transpose-sexps=).
-
-- C-M-@\\
-  C-M-SPC :: Put mark after following expression (=mark-sexp=).
-
-To move forward over a balanced expression, use C-M-f (=forward-sexp=). If the first significant character after point is an opening delimiter (e.g., ‘=(=', ‘=[=' or ‘={=' in C), this command moves past the matching closing delimiter. If the character begins a symbol, string, or number, the command moves over that.
-
-The command C-M-b (=backward-sexp=) moves backward over a balanced expression---like C-M-f, but in the reverse direction. If the expression is preceded by any prefix characters (single-quote, backquote and comma, in Lisp), the command moves back over them as well.
-
-C-M-f or C-M-b with an argument repeats that operation the specified number of times; with a negative argument means to move in the opposite direction. In most modes, these two commands move across comments as if they were whitespace. Note that their keys, C-M-f and C-M-b, are analogous to C-f and C-b, which move by characters (see [[id:emacs--Moving-Point][Changing the Location of Point]]), and M-f and M-b, which move by words (see [[id:emacs--Words][Words]]).
-
-To kill a whole balanced expression, type C-M-k (=kill-sexp=). This kills the text that C-M-f would move over.
-
-C-M-t (=transpose-sexps=) switches the positions of the previous balanced expression and the next one. It is analogous to the C-t command, which transposes characters (see [[id:emacs--Transpose][Transposing Text]]). An argument to C-M-t serves as a repeat count, moving the previous expression over that many following ones. A negative argument moves the previous balanced expression backwards across those before it. An argument of zero, rather than doing nothing, transposes the balanced expressions ending at or after point and the mark.
-
-To operate on balanced expressions with a command which acts on the region, type C-M-SPC (=mark-sexp=). This sets the mark where C-M-f would move to. While the mark is active, each successive call to this command extends the region by shifting the mark by one expression. Positive or negative numeric arguments move the mark forward or backward by the specified number of expressions. The alias C-M-@ is equivalent to C-M-SPC. See [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]], for more information about this and related commands.
-
-In languages that use infix operators, such as C, it is not possible to recognize all balanced expressions because there can be multiple possibilities at a given position. For example, C mode does not treat ‘=foo + bar=' as a single expression, even though it /is/ one C expression; instead, it recognizes ‘=foo=' as one expression and ‘=bar=' as another, with the ‘=+=' as punctuation between them. However, C mode recognizes ‘=(foo + bar)=' as a single expression, because of the parentheses.
-
---------------
-
-<<Moving-by-Parens>>
-**** 28.4.2 Moving in the Parenthesis Structure [[#Moving-in-the-Parenthesis-Structure][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Moving-in-the-Parenthesis-Structure
-:CLASS: subsection
-:END:
-The following commands move over groupings delimited by parentheses (or whatever else serves as delimiters in the language you are working with). They ignore strings and comments, including any parentheses within them, and also ignore parentheses that are quoted with an escape character. These commands are mainly intended for editing programs, but can be useful for editing any text containing parentheses. They are referred to internally as “list commands” because in Lisp these groupings are lists.
-
-These commands assume that the starting point is not inside a string or a comment. If you invoke them from inside a string or comment, the results are unreliable.
-
-- C-M-n :: Move forward over a parenthetical group (=forward-list=).
-
-- C-M-p :: Move backward over a parenthetical group (=backward-list=).
-
-- C-M-u :: Move up in parenthesis structure (=backward-up-list=).
-
-- C-M-d :: Move down in parenthesis structure (=down-list=).
-
-The list commands C-M-n (=forward-list=) and C-M-p (=backward-list=) move forward or backward over one (or =n=) parenthetical groupings.
-
-C-M-n and C-M-p try to stay at the same level in the parenthesis structure. To move /up/ one (or =n=) levels, use C-M-u (=backward-up-list=). C-M-u moves backward up past one unmatched opening delimiter. A positive argument serves as a repeat count; a negative argument reverses the direction of motion, so that the command moves forward and up one or more levels.
-
-To move /down/ in the parenthesis structure, use C-M-d (=down-list=). In Lisp mode, where ‘=(=' is the only opening delimiter, this is nearly the same as searching for a ‘=(='. An argument specifies the number of levels to go down.
-
---------------
-
-<<Matching>>
-**** 28.4.3 Matching Parentheses [[#Matching-Parentheses][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Matching-Parentheses
-:CLASS: subsection
-:END:
-Emacs has a number of /parenthesis matching/ features, which make it easy to see how and whether parentheses (or other delimiters) match up.
-
-Whenever you type a self-inserting character that is a closing delimiter, Emacs briefly indicates the location of the matching opening delimiter, provided that is on the screen. If it is not on the screen, Emacs displays some of the text near it in the echo area. Either way, you can tell which grouping you are closing off. If the opening delimiter and closing delimiter are mismatched---such as in ‘=[x)='---a warning message is displayed in the echo area.
-
-Three variables control the display of matching parentheses:
-
-- =blink-matching-paren= turns the feature on or off: =nil= disables it, but the default is =t= to enable it. Set it to =jump= to make indication work by momentarily moving the cursor to the matching opening delimiter. Set it to =jump-offscreen= to make the cursor jump, even if the opening delimiter is off screen.
-- =blink-matching-delay= says how many seconds to keep indicating the matching opening delimiter. This may be an integer or floating-point number; the default is 1.
-- =blink-matching-paren-distance= specifies how many characters back to search to find the matching opening delimiter. If the match is not found in that distance, Emacs stops scanning and nothing is displayed. The default is 102400.
-
-Show Paren mode is a minor mode that provides a more powerful kind of automatic matching. Whenever point is before an opening delimiter or after a closing delimiter, the delimiter, its matching delimiter, and optionally the text between them are highlighted. To toggle Show Paren mode globally, type M-x show-paren-mode. To toggle it only in the current buffer, type M-x show-paren-local-mode.
-
-By default, this mode is switched on in all buffers that are meant for editing, but is not enabled in buffers that show data. This is controlled by the =show-paren-predicate= user option.
-
-To customize the mode, type M-x customize-group RET paren-showing. The customizable options which control the operation of this mode include:
-
--  =show-paren-highlight-openparen= controls whether to highlight an open paren when point is just before it, and hence its position is marked by the cursor anyway. The default is non-=nil= (yes).
--  =show-paren-style= controls whether just the two parens, or also the text between them get highlighted. The valid options here are =parenthesis= (show the matching paren), =expression= (highlight the entire expression enclosed by the parens), and =mixed= (highlight the matching paren if it is visible in the window, the expression otherwise).
--  =show-paren-when-point-inside-paren=, when non-=nil=, causes highlighting also when point is inside of the parentheses. The default is =nil=.
--  =show-paren-when-point-in-periphery=, when non-=nil=, causes highlighting also when point is in whitespace at the beginning of a line and there is a paren at the first or last non-whitespace position on the line, or when point is at the end of a line and there is a paren at the last non-whitespace position on the line.
--  =show-paren-context-when-offscreen=, when non-=nil=, shows some context in the echo area when point is in a closing delimiter and the opening delimiter is offscreen. The context is usually the line that contains the opening delimiter, except if the opening delimiter is on its own line, in which case the context includes the previous nonblank line.
-
-Electric Pair mode, a global minor mode, provides a way to easily insert matching delimiters: parentheses, braces, brackets, etc. Whenever you insert an opening delimiter, the matching closing delimiter is automatically inserted as well, leaving point between the two. Conversely, when you insert a closing delimiter over an existing one, no insertion takes places, and that position is simply skipped over. If the region is active (see [[id:emacs--Mark][The Mark and the Region]]), insertion of a delimiter operates on the region: the characters in the region are enclosed in a pair of matching delimiters, leaving point after the delimiter you typed.
-
-These variables control additional features of Electric Pair mode:
-
--  =electric-pair-preserve-balance=, when non-=nil=, makes the default pairing logic balance out the number of opening and closing delimiters.
--  =electric-pair-delete-adjacent-pairs=, when non-=nil=, makes backspacing between two adjacent delimiters also automatically delete the closing delimiter.
--  =electric-pair-open-newline-between-pairs=, when non-=nil=, makes inserting a newline between two adjacent pairs also automatically open an extra newline after point.
--  =electric-pair-skip-whitespace=, when non-=nil=, causes the minor mode to skip whitespace forward before deciding whether to skip over the closing delimiter.
-
-To toggle Electric Pair mode, type M-x electric-pair-mode. To toggle the mode in a single buffer, use M-x electric-pair-local-mode.
-
---------------
-
-**** Footnotes
-:PROPERTIES:
-:CUSTOM_ID: footnotes
-:CLASS: footnotes-heading
-:END:
-***** [[#DOCF14][(14)]]
-:PROPERTIES:
-:CUSTOM_ID: section
-:CLASS: footnote-body-heading
-:END:
-The word “sexp” is used to refer to an expression in Lisp.
-
---------------
+- [[id:emacs--Expressions][Expressions with Balanced Parentheses]]
+- [[id:emacs--Moving-by-Parens][Moving in the Parenthesis Structure]]
+- [[id:emacs--Matching][Matching Parentheses]]

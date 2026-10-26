@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Defining-Services>>
-Previous: [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.19 Defining Services [[#Defining-Services-1][¶]]
+<<Defining-Services-1>>
+*** 11.19 Defining Services
 :PROPERTIES:
-:CUSTOM_ID: Defining-Services-1
+:CUSTOM_ID: defining-services
 :CLASS: section
 :END:
 The previous sections show the available services and how one can combine them in an =operating-system= declaration. But how do we define them in the first place? And what is a service anyway?

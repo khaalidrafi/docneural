@@ -7,6 +7,9 @@
 Next: [[id:emacs--Compilation-Mode][Compilation Mode]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
 
 <<Compilation>>
+
+--------------
+
 *** 29.1 Running Compilations under Emacs [[#Running-Compilations-under-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Running-Compilations-under-Emacs
@@ -23,7 +26,7 @@ Emacs can run compilers for languages such as C and Fortran, feeding the compila
 
 To run =make= or another compilation command, type M-x compile. This reads a shell command line using the minibuffer, and then executes the command by running a shell as a subprocess (or /inferior process/) of Emacs. The output is inserted in a buffer named =*compilation*=. The current buffer's default directory is used as the working directory for the execution of the command, so by default compilation takes place in that directory.
 
-The default compilation command is ‘=make -k=', which is usually correct for programs compiled using the =make= utility (the ‘=-k=' flag tells =make= to continue compiling as much as possible after an error). See [[../make_html/index.html#Top][Make]] in GNU Make Manual. If you have done M-x compile before, the command that you specified is automatically stored in the variable =compile-command=; this is used as the default the next time you type M-x compile. A file can also specify a file-local value for =compile-command= (see [[id:emacs--Variables::#File-Variables][Local Variables in Files]]).
+The default compilation command is ‘=make -k=', which is usually correct for programs compiled using the =make= utility (the ‘=-k=' flag tells =make= to continue compiling as much as possible after an error). See [[../make_html/index.html#Top][Make]] in GNU Make Manual. If you have done M-x compile before, the command that you specified is automatically stored in the variable =compile-command=; this is used as the default the next time you type M-x compile. A file can also specify a file-local value for =compile-command= (see [[id:emacs--File-Variables][Local Variables in Files]]).
 
 Starting a compilation displays the =*compilation*= buffer in another window but does not select it. While the compilation is running, the word ‘=run=' is shown in the major mode indicator for the =*compilation*= buffer, and the word ‘=Compiling=' appears in all mode lines. You do not have to keep the =*compilation*= buffer visible while compilation is running; it continues in any case. When the compilation ends, for whatever reason, the mode line of the =*compilation*= buffer changes to say ‘=exit=' (followed by the exit code: ‘=[0]=' for a normal exit), or ‘=signal=' (if a signal terminated the process).
 

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Erasing][Erasing Text]]   Previous: [[id:emacs--Inserting-Text][Inserting Text]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
 
 <<Moving-Point>>
+
+--------------
+
 *** 9.2 Changing the Location of Point [[#Changing-the-Location-of-Point][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Changing-the-Location-of-Point
@@ -75,7 +78,7 @@ You can also click the left mouse button to move point to the position clicked. 
 
 - C-u C-x C-n :: Cancel the goal column. Henceforth, C-n and C-p try to preserve the horizontal position, as usual.
 
-When a line of text in the buffer is longer than the width of the window, Emacs usually displays it on two or more /screen lines/, a.k.a. /visual lines/. For convenience, C-n and C-p move point by screen lines, as do the equivalent keys down and up. You can force these commands to move according to /logical lines/ (i.e., according to the text lines in the buffer) by setting the variable =line-move-visual= to =nil=; if a logical line occupies multiple screen lines, the cursor then skips over the additional screen lines. For details, see [[id:emacs--Continuation-Lines][Continuation Lines]]. See [[id:emacs--Variables::#Variables][Variables]], for how to set variables such as =line-move-visual=.
+When a line of text in the buffer is longer than the width of the window, Emacs usually displays it on two or more /screen lines/, a.k.a. /visual lines/. For convenience, C-n and C-p move point by screen lines, as do the equivalent keys down and up. You can force these commands to move according to /logical lines/ (i.e., according to the text lines in the buffer) by setting the variable =line-move-visual= to =nil=; if a logical line occupies multiple screen lines, the cursor then skips over the additional screen lines. For details, see [[id:emacs--Continuation-Lines][Continuation Lines]]. See [[id:emacs--Variables][Variables]], for how to set variables such as =line-move-visual=.
 
 Unlike C-n and C-p, most of the Emacs commands that work on lines work on /logical/ lines. For instance, C-a (=move-beginning-of-line=) and C-e (=move-end-of-line=) respectively move to the beginning and end of the logical line. Whenever we encounter commands that work on screen lines, such as C-n and C-p, we will point these out.
 

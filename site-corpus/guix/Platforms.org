@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Platforms>>
-Next: [[id:guix--System-Images][Creating System Images]], Previous: [[id:guix--Documentation][Documentation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--System-Images][Creating System Images]], Previous: [[id:guix--Documentation][Documentation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 15 Platforms [[#Platforms-1][¶]]
+<<Platforms-1>>
+** 15 Platforms
 :PROPERTIES:
-:CUSTOM_ID: Platforms-1
+:CUSTOM_ID: platforms
 :CLASS: chapter
 :END:
 The packages and systems built by Guix are intended, like most computer programs, to run on a CPU with a specific instruction set, and under a specific operating system. Those programs are often also targeting a specific kernel and system library. Those constraints are captured by Guix in =platform= records.

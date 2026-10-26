@@ -7,6 +7,9 @@
 Next: [[id:emacs--Bugs][Reporting Bugs]]   Previous: [[id:emacs--Quitting][Quitting and Aborting]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Lossage>>
+
+--------------
+
 ** 53 Dealing with Emacs Trouble [[#Dealing-with-Emacs-Trouble][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Dealing-with-Emacs-Trouble
@@ -16,4 +19,11 @@ This section describes how to recognize and deal with situations in which Emacs 
 
 See [[id:emacs--Bugs][Reporting Bugs]], for what to do when you think you have found a bug in Emacs.
 
---------------
+- [[id:emacs--Stuck-Recursive][Recursive Editing Levels]]
+- [[id:emacs--Screen-Garbled][Garbage on the Screen]]
+- [[id:emacs--Text-Garbled][Garbage in the Text]]
+- [[id:emacs--Memory-Full][Running out of Memory]]
+- [[id:emacs--Crashing][When Emacs Crashes]]
+- [[id:emacs--After-a-Crash][Recovery After a Crash]]
+- [[id:emacs--Emergency-Escape][Emergency Escape]]
+- [[id:emacs--DEL-Does-Not-Delete][If DEL Fails to Delete]]

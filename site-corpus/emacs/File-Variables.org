@@ -4,6 +4,20 @@
 #+filetags: :emacs:
 #+title: File Variables
 
-Next:
+Next: [[id:emacs--Directory-Variables][Per-Directory Local Variables]]   Previous: [[id:emacs--Locals][Local Variables]]   Up: [[id:emacs--Variables][Variables]]
 
-The node you are looking for is at [[id:emacs--Variables::#File-Variables][File Variables]].
+<<File-Variables>>
+
+--------------
+
+**** 51.2.4 Local Variables in Files [[#Local-Variables-in-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Local-Variables-in-Files
+:CLASS: subsection
+:END:
+A file can specify local variable values to use when editing the file with Emacs. Visiting the file or setting a major mode checks for local variable specifications; it automatically makes these variables local to the buffer, and sets them to the values specified in the file.
+
+File local variables override directory local variables (see [[id:emacs--Directory-Variables][Per-Directory Local Variables]]), if any are specified for a file's directory.
+
+- [[id:emacs--Specifying-File-Variables][Specifying File Variables]]
+- [[id:emacs--Safe-File-Variables][Safety of File Variables]]

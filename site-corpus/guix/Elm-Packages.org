@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Elm-Packages>>
-Next: [[id:guix--Fonts][Fonts]], Previous: [[id:guix--Rust-Crates][Rust Crates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Fonts][Fonts]], Previous: [[id:guix--Rust-Crates][Rust Crates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.14 Elm Packages [[#Elm-Packages-1][¶]]
+<<Elm-Packages-1>>
+**** 22.8.13 Elm Packages
 :PROPERTIES:
-:CUSTOM_ID: Elm-Packages-1
+:CUSTOM_ID: elm-packages
 :CLASS: subsection
 :END:
+<<index-Elm>>
 Elm applications can be named like other software: their names need not mention Elm.
 
 Packages in the Elm sense (see =elm-build-system= under [[id:guix--Build-Systems][Build Systems]]) are required use names of the format =author==/==project=, where both the =author= and the =project= may contain hyphens internally, and the =author= sometimes contains uppercase letters.
@@ -58,7 +61,7 @@ In many cases we can reconstruct an Elm package's upstream name heuristically, b
 
 The module =(guix build-system elm)= provides the following utilities for working with names and related conventions:
 
-- Procedure: *elm-package-origin* =elm-name== ==version== ==hash= [[#index-elm_002dpackage_002dorigin][¶]] :: Returns a Git origin using the repository naming and tagging regime required for a published Elm package with the upstream name =elm-name= at version =version= with sha256 checksum =hash=.
+- Procedure: elm-package-origin =elm-name= =version= =hash= :: Returns a Git origin using the repository naming and tagging regime required for a published Elm package with the upstream name =elm-name= at version =version= with sha256 checksum =hash=.
 
   For example:
 
@@ -74,14 +77,14 @@ The module =(guix build-system elm)= provides the following utilities for workin
     ...)
   #+end_src
 
-- Procedure: *elm->package-name* =elm-name= [[#index-elm_002d_003epackage_002dname][¶]] :: Returns the Guix-style package name for an Elm package with upstream name =elm-name=.
+- Procedure: elm->package-name =elm-name= :: Returns the Guix-style package name for an Elm package with upstream name =elm-name=.
 
   Note that there is more than one possible =elm-name= for which =elm->package-name= will produce a given result.
 
-- Procedure: *guix-package->elm-name* =package= [[#index-guix_002dpackage_002d_003eelm_002dname][¶]] :: Given an Elm =package=, returns the possibly-inferred upstream name, or =#f= the upstream name is not specified via the ='upstream-name= property and can not be inferred by =infer-elm-package-name=.
+- Procedure: guix-package->elm-name =package= :: Given an Elm =package=, returns the possibly-inferred upstream name, or =#f= the upstream name is not specified via the ='upstream-name= property and can not be inferred by =infer-elm-package-name=.
 
-- Procedure: *infer-elm-package-name* =guix-name= [[#index-infer_002delm_002dpackage_002dname][¶]] :: Given the =guix-name= of an Elm package, returns the inferred upstream name, or =#f= if the upstream name can't be inferred. If the result is not =#f=, supplying it to =elm->package-name= would produce =guix-name=.
+- Procedure: infer-elm-package-name =guix-name= :: Given the =guix-name= of an Elm package, returns the inferred upstream name, or =#f= if the upstream name can't be inferred. If the result is not =#f=, supplying it to =elm->package-name= would produce =guix-name=.
 
 --------------
 
-Next: [[id:guix--Fonts][Fonts]], Previous: [[id:guix--Rust-Crates][Rust Crates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Fonts][Fonts]], Previous: [[id:guix--Rust-Crates][Rust Crates]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

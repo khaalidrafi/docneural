@@ -36,20 +36,23 @@ Next:
 [[../..][]]
 
 <<Audio-Services>>
-Next: [[id:guix--Virtualization-Services][Virtualization Services]], Previous: [[id:guix--Power-Management-Services][Power Management Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Virtualization-Services][Virtualization Services]], Previous: [[id:guix--Power-Management-Services][Power Management Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.32 Audio Services [[#Audio-Services-1][¶]]
+<<Audio-Services-1>>
+**** 11.10.30 Audio Services
 :PROPERTIES:
-:CUSTOM_ID: Audio-Services-1
+:CUSTOM_ID: audio-services
 :CLASS: subsection
 :END:
-The =(gnu services audio)= module provides services to start MPD (the Music Player Daemon) and Snapcast, a multi-room audio streaming system.
+The =(gnu services audio)= module provides a service to start MPD (the Music Player Daemon).
 
-**** Music Player Daemon [[#Music-Player-Daemon][¶]]
+<<index-mpd>> <<Music-Player-Daemon>>
+**** Music Player Daemon
 :PROPERTIES:
-:CUSTOM_ID: Music-Player-Daemon
+:CUSTOM_ID: music-player-daemon
 :CLASS: subsubheading
 :END:
 The Music Player Daemon (MPD) is a service that can play music while being controlled from the local machine or over the network by a variety of clients.
@@ -75,13 +78,17 @@ herd update mpd
 
 All the MPD configuration fields are documented below, and a more complex example follows.
 
-- Variable: *mpd-service-type* [[#index-mpd_002dservice_002dtype][¶]] :: The service type for =mpd=
+- Variable: mpd-service-type  :: The service type for =mpd=
 
-- Data Type: *mpd-configuration* [[#index-mpd_002dconfiguration][¶]] :: Available =mpd-configuration= fields are:
+- Data Type: mpd-configuration  :: Available =mpd-configuration= fields are:
 
   - =package= (default: =mpd=) (type: file-like) :: The MPD package.
 
   - =user= (type: user-account) :: The user to run mpd as.
+
+  - =group= (type: user-group) :: The group to run mpd as.
+
+    The default =%mpd-group= is a system group with name “mpd”.
 
   - =shepherd-requirement= (default: ='()=) (type: list-of-symbols) :: A list of symbols naming Shepherd services that this service will depend on.
 
@@ -137,7 +144,7 @@ All the MPD configuration fields are documented below, and a more complex exampl
 
   - =extra-options= (default: ='()=) (type: alist) :: An association list of option symbols/strings to string values to be appended to the configuration.
 
-- Data Type: *mpd-plugin* [[#index-mpd_002dplugin][¶]] :: Data type representing a =mpd= plugin.
+- Data Type: mpd-plugin  :: Data type representing a =mpd= plugin.
 
   - =plugin= (type: maybe-string) :: Plugin name.
 
@@ -147,13 +154,13 @@ All the MPD configuration fields are documented below, and a more complex exampl
 
   - =extra-options= (default: ='()=) (type: alist) :: An association list of option symbols/strings to string values to be appended to the plugin configuration. See [[https://mpd.readthedocs.io/en/latest/plugins.html][MPD plugin reference]] for available options.
 
-- Data Type: *mpd-partition* [[#index-mpd_002dpartition][¶]] :: Data type representing a =mpd= partition.
+- Data Type: mpd-partition  :: Data type representing a =mpd= partition.
 
   - =name= (type: string) :: Partition name.
 
   - =extra-options= (default: ='()=) (type: alist) :: An association list of option symbols/strings to string values to be appended to the partition configuration. See [[https://mpd.readthedocs.io/en/latest/user.html#configuring-partitions][Configuring Partitions]] for available options.
 
-- Data Type: *mpd-output* [[#index-mpd_002doutput][¶]] :: Available =mpd-output= fields are:
+- Data Type: mpd-output  :: Available =mpd-output= fields are:
 
   - =name= (default: ="MPD"=) (type: string) :: The name of the audio output.
 
@@ -200,11 +207,13 @@ The following example shows a configuration of =mpd= that configures some of its
                         (extra-options `((type . 0)))))))
 #+end_src
 
-**** myMPD [[#myMPD][¶]]
+<<myMPD>>
+**** myMPD
 :PROPERTIES:
-:CUSTOM_ID: myMPD
+:CUSTOM_ID: mympd
 :CLASS: subsubheading
 :END:
+<<index-MPD_002c-web-interface>> <<index-myMPD-service>>
 [[https://jcorporation.github.io/myMPD/][myMPD]] is a web server frontend for MPD that provides a mobile friendly web client for MPD.
 
 The following example shows a myMPD instance listening on port 80, with album cover caching disabled.
@@ -216,9 +225,9 @@ The following example shows a myMPD instance listening on port 80, with album co
           (covercache-ttl 0)))
 #+end_src
 
-- Variable: *mympd-service-type* [[#index-mympd_002dservice_002dtype][¶]] :: The service type for =mympd=.
+- Variable: mympd-service-type  :: The service type for =mympd=.
 
-- Data Type: *mympd-configuration* [[#index-mympd_002dconfiguration][¶]] :: Available =mympd-configuration= fields are:
+- Data Type: mympd-configuration  :: Available =mympd-configuration= fields are:
 
   - =package= (default: =mympd=) (type: file-like) :: The package object of the myMPD server.
 
@@ -268,97 +277,12 @@ The following example shows a myMPD instance listening on port 80, with album co
 
   - =save-caches?= (type: maybe-boolean) :: Whether to preserve caches between service restarts.
 
-- Data Type: *mympd-ip-acl* [[#index-mympd_002dip_002dacl][¶]] :: Available =mympd-ip-acl= fields are:
+- Data Type: mympd-ip-acl  :: Available =mympd-ip-acl= fields are:
 
   - =allow= (default: ='()=) (type: list-of-strings) :: Allowed IP addresses.
 
   - =deny= (default: ='()=) (type: list-of-strings) :: Disallowed IP addresses.
 
-**** Snapcast [[#Snapcast][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Snapcast
-:CLASS: subsubheading
-:END:
-[[https://github.com/badaix/snapcast][Snapcast]] is a multi-room audio streaming system: =snapserver= receives audio from one or more sources and streams it to =snapclient= instances, which play it back in sync.
-
-The following example runs =snapserver= with a single named pipe as its audio source, in addition to the default HTTP interface on port 1780 and the client-facing streaming interface on port 1704.
-
-#+begin_src lisp
-(service snapserver-service-type
-         (snapserver-configuration
-          (streams (list (snapserver-stream
-                          (name "mpd")
-                          (location "/run/snapserver/mpd"))))))
-#+end_src
-
-=snapserver= creates the named pipes of its =pipe= sources when it starts, as the ‘=snapserver=' user; make sure the program feeding such a pipe---the =fifo= output of MPD, for instance---is allowed to write to it.
-
-- Variable: *snapserver-service-type* [[#index-snapserver_002dservice_002dtype][¶]] :: The service type for =snapserver=.
-
-- Data Type: *snapserver-configuration* [[#index-snapserver_002dconfiguration][¶]] :: Available =snapserver-configuration= fields are:
-
-  - =package= (default: =snapcast=) (type: file-like) :: The Snapcast package to use.
-
-  - =user= (default: =%snapserver-user=) (type: user-account) :: Owner of the =snapserver= process.
-
-  - =group= (default: =%snapserver-group=) (type: user-group) :: Owner group of the =snapserver= process.
-
-  - =shepherd-requirement= (default: ='()=) (type: list-of-symbols) :: This is a list of symbols naming Shepherd services that this service will depend on.
-
-  - =log-file= (default: ="/var/log/snapserver.log"=) (type: string) :: File where =snapserver= writes its log.
-
-  - =log-filter= (default: ="*:info"=) (type: string) :: Log filter, given as =tag==:==level= pairs separated by commas, where =tag= is =*= or a log tag and =level= is one of =trace=, =debug=, =info=, =notice=, =warning=, =error= or =fatal=.
-
-  - =data-directory= (default: ="/var/lib/snapserver"=) (type: string) :: Directory where =snapserver= stores persistent data, such as client settings.
-
-  - =mdns?= (default: =#t=) (type: boolean) :: Whether to publish the Snapcast services over mDNS. This requires =avahi-service-type= (see [[id:guix--Networking-Services][Networking Services]]).
-
-  - =http?= (default: =#t=) (type: boolean) :: Whether to enable the HTTP JSON-RPC interface, which also serves the Snapweb web interface.
-
-  - =http-port= (default: =1780=) (type: integer) :: Port the HTTP server listens on.
-
-  - =http-bind-address= (default: ="::"=) (type: string) :: Address the HTTP server listens on.
-
-  - =doc-root= (type: maybe-file-like) :: Directory served by the HTTP server. It defaults to the Snapweb web interface bundled with the =package= field.
-
-  - =tcp-control?= (default: =#t=) (type: boolean) :: Whether to enable the TCP JSON-RPC control interface.
-
-  - =tcp-control-port= (default: =1705=) (type: integer) :: Port the TCP control interface listens on.
-
-  - =tcp-streaming?= (default: =#t=) (type: boolean) :: Whether to enable TCP streaming, which is what Snapcast clients connect to.
-
-  - =tcp-streaming-port= (default: =1704=) (type: integer) :: Port the TCP streaming interface listens on.
-
-  - =streams= (type: list-of-snapserver-stream) :: List of =snapserver-stream= records describing the audio sources =snapserver= reads from.
-
-  - =codec= (default: ="flac"=) (type: string) :: Default codec used to send audio to clients, given as =codec==[:==options==]= where =codec= is one of =flac=, =ogg=, =opus= or =pcm=.
-
-  - =sampleformat= (default: ="48000:16:2"=) (type: string) :: Default sample format of the streams, given as =rate==:==bits==:==channels=.
-
-  - =buffer-ms= (default: =1000=) (type: integer) :: End-to-end latency, in milliseconds.
-
-  - =chunk-ms= (default: =20=) (type: integer) :: Default duration, in milliseconds, of the audio chunks read from the sources.
-
-  - =send-to-muted?= (default: =#f=) (type: boolean) :: Whether to send audio to muted clients.
-
-  - =extra-content= (type: maybe-string) :: Content appended verbatim to =snapserver.conf=, for options that are not covered by the fields above, such as the =[ssl]= and =[authorization]= sections.
-
-- Data Type: *snapserver-stream* [[#index-snapserver_002dstream][¶]] :: Available =snapserver-stream= fields are:
-
-  - =name= (default: ="default"=) (type: string) :: Name of the stream, as shown by Snapcast clients.
-
-  - =type= (default: =pipe=) (type: snapserver-stream-type) :: Type of the stream source: one of =pipe=, =file=, =process=, =librespot=, =airplay=, =tcp=, =alsa= or =meta=.
-
-  - =location= (default: ="/run/snapserver/snapfifo"=) (type: string) :: Location of the stream source: a file name for =pipe=, =file= and =process= streams, a host name for =tcp= streams, a device name for =alsa= streams, and a slash-separated list of stream names for =meta= streams.
-
-  - =codec= (type: maybe-string) :: Codec to use for this stream, overriding the =codec= field of =snapserver-configuration=.
-
-  - =sampleformat= (type: maybe-string) :: Sample format of this stream, given as =rate==:==bits==:==channels=, overriding the =sampleformat= field of =snapserver-configuration=.
-
-  - =chunk-ms= (type: maybe-integer) :: Duration, in milliseconds, of the audio chunks read from this source, overriding the =chunk-ms= field of =snapserver-configuration=.
-
-  - =parameters= (default: ='()=) (type: alist) :: Additional source parameters, given as an association list, for example ='(("controlscript" . "meta_mpd.py"))=.
-
 --------------
 
-Next: [[id:guix--Virtualization-Services][Virtualization Services]], Previous: [[id:guix--Power-Management-Services][Power Management Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Virtualization-Services][Virtualization Services]], Previous: [[id:guix--Power-Management-Services][Power Management Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Drag-and-Drop][Drag and Drop]]   Previous: [[id:emacs--Scroll-Bars][Scroll Bars]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Window-Dividers>>
+
+--------------
+
 *** 23.13 Window Dividers [[#Window-Dividers-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Window-Dividers-1
@@ -23,5 +26,3 @@ To adjust the width of window dividers displayed by this mode customize the opti
 When vertical scroll bars are disabled, dividers can be also useful to make the first pixel column of a window visible, which would be otherwise covered by the vertical border used to separate side-by-side windows (see [[id:emacs--Scroll-Bars][Scroll Bars]]).
 
 For more details about window dividers see [[../elisp_html/Window-Dividers.html#Window-Dividers][Window Dividers]] in The Emacs Lisp Reference Manual.
-
---------------

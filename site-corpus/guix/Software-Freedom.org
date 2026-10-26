@@ -36,21 +36,20 @@ Next:
 [[../..][]]
 
 <<Software-Freedom>>
-Next: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.1 Software Freedom [[#Software-Freedom-1][¶]]
+<<Software-Freedom-1>>
+**** 22.8.1 Software Freedom
 :PROPERTIES:
-:CUSTOM_ID: Software-Freedom-1
+:CUSTOM_ID: software-freedom
 :CLASS: subsection
 :END:
+<<index-free-software>>
 The GNU operating system has been developed so that users can have freedom in their computing. GNU is /free software/, meaning that users have the [[https://www.gnu.org/philosophy/free-sw.html][four essential freedoms]]: to run the program, to study and change the program in source code form, to redistribute exact copies, and to distribute modified versions. Packages found in the GNU distribution provide only software that conveys these four freedoms.
 
 In addition, the GNU distribution follow the [[https://www.gnu.org/distros/free-system-distribution-guidelines.html][free software distribution guidelines]]. Among other things, these guidelines reject non-free firmware, recommendations of non-free software, and discuss ways to deal with trademarks and patents.
 
 Some otherwise free upstream package sources contain a small and optional subset that violates the above guidelines, for instance because this subset is itself non-free code. When that happens, the offending items are removed with appropriate patches or code snippets in the =origin= form of the package (see [[id:guix--Defining-Packages][Defining Packages]]). This way, =guix build --source= returns the “freed” source rather than the unmodified upstream source.
-
---------------
-
-Next: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

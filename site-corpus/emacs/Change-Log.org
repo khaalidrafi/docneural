@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Change Log
 
-Next: [[id:emacs--Xref#Xref][Find Identifier References]]   Previous: [[id:emacs--Projects#Projects][Working with Projects]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
+Next: [[id:emacs--Xref][Find Identifier References]]   Previous: [[id:emacs--Projects][Working with Projects]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
 
 <<Change-Log>>
+
+--------------
+
 *** 30.3 Change Logs [[#Change-Logs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Change-Logs
@@ -14,73 +17,5 @@ Next: [[id:emacs--Xref#Xref][Find Identifier References]]   Previous: [[id:emacs
 :END:
 Many software projects keep a /change log/. This is a file, normally named =ChangeLog=, containing a chronological record of when and how the program was changed. Sometimes, these files are automatically generated from the change log entries stored in version control systems, or are used to generate these change log entries. Sometimes, there are several change log files, each recording the changes in one directory or directory tree.
 
---------------
-
-<<Change-Log-Commands>>
-**** 30.3.1 Change Log Commands [[#Change-Log-Commands-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Change-Log-Commands-1
-:CLASS: subsection
-:END:
-The Emacs command C-x 4 a adds a new entry to the change log file for the file you are editing (=add-change-log-entry-other-window=). If that file is actually a backup file, it makes an entry appropriate for the file's parent---that is useful for making log entries for functions that have been deleted in the current version.
-
-C-x 4 a visits the change log file and creates a new entry unless the most recent entry is for today's date and your name. It also creates a new item for the current file. For many languages, it can even guess the name of the function or other object that was changed.
-
-To find the change log file, Emacs searches up the directory tree from the file you are editing. By default, it stops if it finds a directory that seems to be the root of a version-control repository. To change this, customize =change-log-directory-files=.
-
-When the variable =add-log-keep-changes-together= is non-=nil=, C-x 4 a adds to any existing item for the file, rather than starting a new item.
-
-You can combine multiple changes of the same nature. If you don't enter any text after the initial C-x 4 a, any subsequent C-x 4 a adds another symbol to the change log entry.
-
-If =add-log-always-start-new-record= is non-=nil=, C-x 4 a always makes a new entry, even if the last entry was made by you and on the same date.
-
-If the value of the variable =change-log-version-info-enabled= is non-=nil=, C-x 4 a adds the file's version number to the change log entry. It finds the version number by searching the first ten percent of the file, using regular expressions from the variable =change-log-version-number-regexp-list=.
-
-The change log file is visited in Change Log mode. In this major mode, each bunch of grouped items counts as one paragraph, and each entry is considered a page. This facilitates editing the entries. C-j and auto-fill indent each new line like the previous line; this is convenient for entering the contents of an entry.
-
-You can use the command =change-log-goto-source= (by default bound to C-c C-c) to go to the source location of the change log entry near point, when Change Log mode is on. Then subsequent invocations of the =next-error= command (by default bound to M-g M-n and C-x `) will move between entries in the change log. You will jump to the actual site in the file that was changed, not just to the next change log entry. You can also use =previous-error= to move back through the change log entries.
-
-You can use the command M-x change-log-merge to merge other log files into a buffer in Change Log Mode, preserving the date ordering of entries.
-
-Version control systems are another way to keep track of changes in your program and keep a change log. Many projects that use a VCS don't keep a separate versioned change log file nowadays, so you may wish to avoid having such a file in the repository. If the value of =add-log-dont-create-changelog-file= is non-=nil=, commands like C-x 4 a (=add-change-log-entry-other-window=) will record changes in a suitably named temporary buffer instead of a file, if such a file does not already exist.
-
-Whether you have a change log file or use a temporary buffer for change logs, you can type C-c C-a (=log-edit-insert-changelog=) in the VC Log buffer to insert the relevant change log entries, if they exist. See [[id:emacs--Version-Control::#Log-Buffer][Features of the Log Entry Buffer]].
-
---------------
-
-<<Format-of-ChangeLog>>
-**** 30.3.2 Format of ChangeLog [[#Format-of-ChangeLog-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Format-of-ChangeLog-1
-:CLASS: subsection
-:END:
-A change log entry starts with a header line that contains the current date, your name (taken from the variable =add-log-full-name=), and your email address (taken from the variable =add-log-mailing-address=). Aside from these header lines, every line in the change log starts with a space or a tab. The bulk of the entry consists of /items/, each of which starts with a line starting with whitespace and a star. Here are two entries, both dated in May 1993, with two items and one item respectively.
-
-#+begin_example
-1993-05-25  Richard Stallman  <rms@gnu.org>
-
-        * man.el: Rename symbols 'man-*' to 'Man-*'.
-        (manual-entry): Make prompt string clearer.
-
-        * simple.el (blink-matching-paren-distance):
-        Change default to 12,000.
-
-1993-05-24  Richard Stallman  <rms@gnu.org>
-
-        * vc.el (minor-mode-map-alist): Don't use it if it's void.
-        (vc-cancel-version): Doc fix.
-#+end_example
-
-One entry can describe several changes; each change should have its own item, or its own line in an item. Normally there should be a blank line between items. When items are related (parts of the same change, in different places), group them by leaving no blank line between them.
-
-You should put a copyright notice and permission notice at the end of the change log file. Here is an example:
-
-#+begin_example
-Copyright 1997--1998, 2025 Free Software Foundation, Inc.
-Copying and distribution of this file, with or without modification, are
-permitted provided the copyright notice and this notice are preserved.
-#+end_example
-
-Of course, you should substitute the proper years and copyright holder.
-
---------------
+- [[id:emacs--Change-Log-Commands][Change Log Commands]]
+- [[id:emacs--Format-of-ChangeLog][Format of ChangeLog]]

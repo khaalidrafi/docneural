@@ -36,24 +36,29 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-home>>
-Previous: [[id:guix--Home-Services][Home Services]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Home-Services][Home Services]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 13.5 Invoking =guix home= [[#Invoking-guix-home-1][¶]]
+<<Invoking-guix-home-1>>
+*** 13.4 Invoking =guix home=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-home-1
+:CUSTOM_ID: invoking-guix-home
 :CLASS: section
 :END:
+<<index-guix-home>>
 Once you have written a home environment declaration (see [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], it can be /instantiated/ using the =guix home= command. The synopsis is:
 
 #+begin_example
-guix home options... action file
+guix home options… action file
 #+end_example
 
 =file= must be the name of a file containing a =home-environment= declaration. =action= specifies how the home environment is instantiated, but there are few auxiliary actions which don't instantiate it. Currently the following values are supported:
 
 - =search= :: Display available home service type definitions that match the given regular expressions, sorted by relevance:
+
+  <<index-shell-1>> <<index-shell_002dprofile>> <<index-bash-1>> <<index-zsh-1>>
 
   #+begin_example
   $ guix home search shell
@@ -82,18 +87,20 @@ guix home options... action file
   description: Install and configure GNU Bash.
   relevance: 1
 
-  ...
-#+end_example
+  …
+  #+end_example
 
-  As for =guix search=, the result is written in =recutils= format, which makes it easy to filter the output (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
+  As for =guix search=, the result is written in =recutils= format, which makes it easy to filter the output (see [[https://www.gnu.org/software/recutils/manual/html_node/index.html#Top][GNU recutils databases]] in GNU recutils manual).
 
-- <<index-container_002c-for-guix-home-1>>=container= [[#index-container_002c-for-guix-home-1][¶]] :: Spawn a shell in an isolated environment---a /container/---containing your home as specified by =file=.
+  <<index-container_002c-for-guix-home-1>>
+
+- =container= :: Spawn a shell in an isolated environment---a /container/---containing your home as specified by =file=.
 
   For example, this is how you would start an interactive shell in a container with your home:
 
   #+begin_example
   guix home container config.scm
-#+end_example
+  #+end_example
 
   This is a throw-away container where you can lightheartedly fiddle with files; any changes made within the container, any process started---all this disappears as soon as you exit that shell.
 
@@ -109,17 +116,19 @@ guix home options... action file
 
   #+begin_example
   guix home container config.scm -- herd status
-#+end_example
+  #+end_example
 
   The command to run in the container must come after =--= (double hyphen).
 
--  <<index-service-type-definition_002c-editing-1>>=edit= [[#index-service-type-definition_002c-editing-1][¶]] :: Edit or view the definition of the given Home service types.
+  <<index-service-type-definition_002c-editing-1>> <<index-editing_002c-service-type-definition-1>>
+
+- =edit= :: Edit or view the definition of the given Home service types.
 
   For example, the command below opens your editor, as specified by the =EDITOR= environment variable, on the definition of the =home-mcron= service type:
 
   #+begin_example
   guix home edit home-mcron
-#+end_example
+  #+end_example
 
 - =reconfigure= :: Build the home environment described in =file=, and switch to it. Switching means that the activation script will be evaluated and (in basic scenario) symlinks to configuration files generated from =home-environment= declaration will be created in =~=. If the file with the same path already exists in home folder it will be moved to =~/==timestamp==-guix-home-legacy-configs-backup=, where =timestamp= is a current UNIX epoch time.
 
@@ -132,11 +141,13 @@ guix home options... action file
 
   This command creates a new generation whose number is one greater than the current generation (as reported by =guix home list-generations=). If that generation already exists, it will be overwritten. This behavior mirrors that of =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
 
+  <<index-provenance-tracking_002c-of-the-home-environment>>
+
   Upon completion, the new home is deployed under =~/.guix-home=. This directory contains /provenance meta-data/: the list of channels in use (see [[id:guix--Channels][Channels]]) and =file= itself, when available. You can view the provenance information by running:
 
   #+begin_example
   guix home describe
-#+end_example
+  #+end_example
 
   This information is useful should you later want to inspect how this particular generation was built. In fact, assuming =file= is self-contained, you can later rebuild generation =n= of your home environment with:
 
@@ -145,7 +156,7 @@ guix home options... action file
     -C /var/guix/profiles/per-user/USER/guix-home-n-link/channels.scm -- \
     home reconfigure \
     /var/guix/profiles/per-user/USER/guix-home-n-link/configuration.scm
-#+end_example
+  #+end_example
 
   You can think of it as some sort of built-in version control! Your home is not just a binary artifact: /it carries its own source/.
 
@@ -154,37 +165,39 @@ guix home options... action file
 
   #+end_quote
 
-- <<index-home-generations>>=switch-generation= [[#index-home-generations][¶]] :: Switch to an existing home generation. This action atomically switches the home profile to the specified home generation.
+- =switch-generation= [[#index-home-generations][¶]] :: Switch to an existing home generation. This action atomically switches the home profile to the specified home generation.
 
   The target generation can be specified explicitly by its generation number. For example, the following invocation would switch to home generation 7:
 
   #+begin_example
   guix home switch-generation 7
-#+end_example
+  #+end_example
 
   The target generation can also be specified relative to the current generation with the form =+N= or =-N=, where =+3= means “3 generations ahead of the current generation,” and =-1= means “1 generation prior to the current generation.” When specifying a negative value such as =-1=, you must precede it with =--= to prevent it from being parsed as an option. For example:
 
   #+begin_example
   guix home switch-generation -- -1
-#+end_example
+  #+end_example
 
   This action will fail if the specified generation does not exist.
 
-- <<index-rolling-back-3>>=roll-back= [[#index-rolling-back-3][¶]] :: Switch to the preceding home generation. This is the inverse of =reconfigure=, and it is exactly the same as invoking =switch-generation= with an argument of =-1=.
+- =roll-back= [[#index-rolling-back-3][¶]] :: Switch to the preceding home generation. This is the inverse of =reconfigure=, and it is exactly the same as invoking =switch-generation= with an argument of =-1=.
 
--  <<index-deleting-home-generations>>=delete-generations= [[#index-deleting-home-generations][¶]] :: Delete home generations, making them candidates for garbage collection (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for information on how to run the “garbage collector”).
+- =delete-generations= [[#index-deleting-home-generations][¶]] :: <<index-saving-space-1>>
+
+  Delete home generations, making them candidates for garbage collection (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for information on how to run the “garbage collector”).
 
   This works in the same way as ‘=guix package --delete-generations=' (see [[id:guix--Invoking-guix-package][=--delete-generations=]]). With no arguments, all home generations but the current one are deleted:
 
   #+begin_example
   guix home delete-generations
-#+end_example
+  #+end_example
 
   You can also select the generations you want to delete. The example below deletes all the home generations that are more than two months old:
 
   #+begin_example
   guix home delete-generations 2m
-#+end_example
+  #+end_example
 
 - =build= :: Build the derivation of the home environment, which includes all the configuration files and programs needed. This action does not actually install anything.
 
@@ -194,7 +207,7 @@ guix home options... action file
 
   #+begin_example
   guix home describe --list-installed=emacs
-#+end_example
+  #+end_example
 
 - =list-generations= :: List a summary of each generation of the home environment available on disk, in a human-readable way. This is similar to the =--list-generations= option of =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
 
@@ -202,7 +215,7 @@ guix home options... action file
 
   #+begin_example
   guix home list-generations 10d
-#+end_example
+  #+end_example
 
   The =--list-installed= flag may also be specified, with the same syntax that is used in =guix home describe=. This may be helpful if trying to determine when a package was added to the home profile.
 
@@ -211,23 +224,27 @@ guix home options... action file
   #+begin_example
   $ guix home import ~/guix-config
   guix home: '/home/alice/guix-config' populated with all the Home configuration files
-#+end_example
+  #+end_example
 
 And there's more! =guix home= also provides the following sub-commands to visualize how the services of your home environment relate to one another:
 
-- <<index-service-extension-graph_002c-of-a-home-environment>>=extension-graph= [[#index-service-extension-graph_002c-of-a-home-environment][¶]] :: Emit to standard output the /service extension graph/ of the home environment defined in =file= (see [[id:guix--Service-Composition][Service Composition]], for more information on service extensions). By default the output is in Dot/Graphviz format, but you can choose a different format with =--graph-backend=, as with =guix graph= (see [[id:guix--Invoking-guix-graph][=--backend=]]):
+<<index-service-extension-graph_002c-of-a-home-environment>>
+=extension-graph=
+Emit to standard output the /service extension graph/ of the home environment defined in =file= (see [[id:guix--Service-Composition][Service Composition]], for more information on service extensions). By default the output is in Dot/Graphviz format, but you can choose a different format with =--graph-backend=, as with =guix graph= (see [[id:guix--Invoking-guix-graph][=--backend=]]):
 
-  The command:
+The command:
 
-  #+begin_example
-  guix home extension-graph file | xdot -
+#+begin_example
+guix home extension-graph file | xdot -
 #+end_example
 
-  shows the extension relations among services.
+shows the extension relations among services.
 
-- <<index-Shepherd-dependency-graph_002c-for-a-home-environment>>=shepherd-graph= [[#index-Shepherd-dependency-graph_002c-for-a-home-environment][¶]] :: Emit to standard output the /dependency graph/ of shepherd services of the home environment defined in =file=. See [[id:guix--Shepherd-Services][Shepherd Services]], for more information and for an example graph.
+<<index-Shepherd-dependency-graph_002c-for-a-home-environment>>
+=shepherd-graph=
+Emit to standard output the /dependency graph/ of shepherd services of the home environment defined in =file=. See [[id:guix--Shepherd-Services][Shepherd Services]], for more information and for an example graph.
 
-  Again, the default output format is Dot/Graphviz, but you can pass =--graph-backend= to select a different one.
+Again, the default output format is Dot/Graphviz, but you can pass =--graph-backend= to select a different one.
 
 =options= can contain any of the common build options (see [[id:guix--Common-Build-Options][Common Build Options]]). In addition, =options= can contain one of the following:
 
@@ -240,4 +257,4 @@ And there's more! =guix home= also provides the following sub-commands to visual
 
 --------------
 
-Previous: [[id:guix--Home-Services][Home Services]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Home-Services][Home Services]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

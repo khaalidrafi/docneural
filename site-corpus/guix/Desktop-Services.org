@@ -36,20 +36,22 @@ Next:
 [[../..][]]
 
 <<Desktop-Services>>
-Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.10 Desktop Services [[#Desktop-Services-1][¶]]
+<<Desktop-Services-1>>
+**** 11.10.9 Desktop Services
 :PROPERTIES:
-:CUSTOM_ID: Desktop-Services-1
+:CUSTOM_ID: desktop-services
 :CLASS: subsection
 :END:
 The =(gnu services desktop)= module provides services that are usually useful in the context of a “desktop” setup---that is, on a machine running a graphical display server, possibly with graphical user interfaces, etc. It also defines services that provide specific desktop environments like GNOME, Xfce or MATE.
 
 To simplify things, the module defines a variable containing the set of services that users typically expect on a machine with a graphical environment and networking:
 
-- Variable: *%desktop-services* [[#index-_0025desktop_002dservices][¶]] :: This is a list of services that builds upon =%base-services= and adds or adjusts services for a typical “desktop” setup.
+- Variable: %desktop-services  :: This is a list of services that builds upon =%base-services= and adds or adjusts services for a typical “desktop” setup.
 
   In particular, it adds a graphical login manager (see [[id:guix--X-Window][=gdm-service-type=]]), screen lockers, a network management tool (see [[id:guix--Networking-Services][=network-manager-service-type=]]) with modem support (see [[id:guix--Networking-Services][=modem-manager-service-type=]]), energy and color management services, the =elogind= login and seat manager, the Polkit privilege service, the GeoClue location service, the AccountsService daemon that allows authorized users change system passwords, a NTP client (see [[id:guix--Networking-Services][Networking Services]]) and the Avahi daemon.
 
@@ -68,11 +70,11 @@ These service types add “metapackages” such as =gnome= or =plasma= to the sy
 
 For example, they may elevate privileges on a limited number of special-purpose system interfaces and programs. This allows backlight adjustment helpers, power management utilities, screen lockers, and other integrated functionality to work as expected.
 
-- Variable: *gnome-desktop-service-type* [[#index-gnome_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://www.gnome.org][GNOME]] desktop environment. Its value is a =gnome-desktop-configuration= object (see below).
+- Variable: gnome-desktop-service-type  :: This is the type of the service that adds the [[https://www.gnome.org][GNOME]] desktop environment. Its value is a =gnome-desktop-configuration= object (see below).
 
   This service adds the =gnome= package to the system profile, and extends polkit with the actions from =gnome-settings-daemon=.
 
-- Data Type: *gnome-desktop-configuration* [[#index-gnome_002ddesktop_002dconfiguration][¶]] :: Configuration record for the GNOME desktop environment. Available =gnome-desktop-configuration= fields are:
+- Data Type: gnome-desktop-configuration  :: Configuration record for the GNOME desktop environment. Available =gnome-desktop-configuration= fields are:
 
   - =core-services= (type: list-of-packages) :: A list of packages that the GNOME Shell and applications may rely on.
 
@@ -90,45 +92,45 @@ For example, they may elevate privileges on a limited number of special-purpose 
 
   - =keyring= (type: gnome-keyring-configuration-or-#f) :: A <gnome-keyring-configuration> record used to better integrate the GNOME keyring with the system. Refer to the documentation of the =gnome-keyring-service-type= for more information. If you'd rather avoid integrating the GNOME keyring, you can set this to =#f=.
 
-- Variable: *plasma-desktop-service-type* [[#index-plasma_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://kde.org/plasma-desktop/][Plasma]] desktop environment. Its value is a =plasma-desktop-configuration= object (see below).
+- Variable: plasma-desktop-service-type  :: This is the type of the service that adds the [[https://kde.org/plasma-desktop/][Plasma]] desktop environment. Its value is a =plasma-desktop-configuration= object (see below).
 
   This service adds the =plasma= package to the system profile.
 
-- Data Type: *plasma-desktop-configuration* [[#index-plasma_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Plasma desktop environment.
+- Data Type: plasma-desktop-configuration  :: Configuration record for the Plasma desktop environment.
 
   - =plasma= (default: =plasma=) :: The Plasma package to use.
 
-- Variable: *xfce-desktop-service-type* [[#index-xfce_002ddesktop_002dservice_002dtype][¶]] :: This is the type of a service to run the [[https://xfce.org/][Xfce]] desktop environment. Its value is an =xfce-desktop-configuration= object (see below).
+- Variable: xfce-desktop-service-type  :: This is the type of a service to run the [[file:Xfce][https://xfce.org/]] desktop environment. Its value is an =xfce-desktop-configuration= object (see below).
 
   This service adds the =xfce= package to the system profile, and extends polkit with the ability for =thunar= to manipulate the file system as root from within a user session, after the user has authenticated with the administrator's password.
 
   Note that =xfce4-panel= and its plugin packages should be installed in the same profile to ensure compatibility. When using this service, you should add extra plugins (=xfce4-whiskermenu-plugin=, =xfce4-weather-plugin=, etc.) to the =packages= field of your =operating-system=.
 
-- Data Type: *xfce-desktop-configuration* [[#index-xfce_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Xfce desktop environment.
+- Data Type: xfce-desktop-configuration  :: Configuration record for the Xfce desktop environment.
 
   - =xfce= (default: =xfce=) :: The Xfce package to use.
 
-- Variable: *mate-desktop-service-type* [[#index-mate_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://mate-desktop.org/][MATE desktop environment]]. Its value is a =mate-desktop-configuration= object (see below).
+- Variable: mate-desktop-service-type  :: This is the type of the service that runs the [[https://mate-desktop.org/][MATE desktop environment]]. Its value is a =mate-desktop-configuration= object (see below).
 
   This service adds the =mate= package to the system profile, and extends polkit with the actions from =mate-settings-daemon=.
 
-- Data Type: *mate-desktop-configuration* [[#index-mate_002ddesktop_002dconfiguration][¶]] :: Configuration record for the MATE desktop environment.
+- Data Type: mate-desktop-configuration  :: Configuration record for the MATE desktop environment.
 
   - =mate= (default: =mate=) :: The MATE package to use.
 
-- Variable: *lxqt-desktop-service-type* [[#index-lxqt_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://lxqt-project.org][LXQt desktop environment]]. Its value is a =lxqt-desktop-configuration= object (see below).
+- Variable: lxqt-desktop-service-type  :: This is the type of the service that runs the [[https://lxqt-project.org][LXQt desktop environment]]. Its value is a =lxqt-desktop-configuration= object (see below).
 
   This service adds the =lxqt= package to the system profile.
 
-- Data Type: *lxqt-desktop-configuration* [[#index-lxqt_002ddesktop_002dconfiguration][¶]] :: Configuration record for the LXQt desktop environment.
+- Data Type: lxqt-desktop-configuration  :: Configuration record for the LXQt desktop environment.
 
   - =lxqt= (default: =lxqt=) :: The LXQT package to use.
 
-- Variable: *sugar-desktop-service-type* [[#index-sugar_002ddesktop_002dservice_002dtype][¶]] :: This is the type of the service that runs the [[https://www.sugarlabs.org][Sugar desktop environment]]. Its value is a =sugar-desktop-configuration= object (see below).
+- Variable: sugar-desktop-service-type  :: This is the type of the service that runs the [[https://www.sugarlabs.org][Sugar desktop environment]]. Its value is a =sugar-desktop-configuration= object (see below).
 
   This service adds the =sugar= package to the system profile, as well as any selected Sugar activities. By default it only includes a minimal set of activities.
 
-- Data Type: *sugar-desktop-configuration* [[#index-sugar_002ddesktop_002dconfiguration][¶]] :: Configuration record for the Sugar desktop environment.
+- Data Type: sugar-desktop-configuration  :: Configuration record for the Sugar desktop environment.
 
   - =sugar= (default: =sugar=) :: The Sugar package to use.
 
@@ -154,9 +156,9 @@ The following example configures the Sugar desktop environment with a number of 
   ...)
 #+end_src
 
-- Variable: *enlightenment-desktop-service-type* [[#index-enlightenment_002ddesktop_002dservice_002dtype][¶]] :: Return a service that adds the =enlightenment= package to the system profile, and extends dbus with actions from =efl=.
+- Variable: enlightenment-desktop-service-type  :: Return a service that adds the =enlightenment= package to the system profile, and extends dbus with actions from =efl=.
 
-- Data Type: *enlightenment-desktop-service-configuration* [[#index-enlightenment_002ddesktop_002dservice_002dconfiguration][¶]] :: - =enlightenment= (default: =enlightenment=) :: The enlightenment package to use.
+- Data Type: enlightenment-desktop-service-configuration  :: - =enlightenment= (default: =enlightenment=) :: The enlightenment package to use.
 
 Because the GNOME, Xfce and MATE desktop services pull in so many packages, the default =%desktop-services= variable doesn't include any of them by default. To add GNOME, Xfce or MATE, just =cons= them onto =%desktop-services= in the =services= field of your =operating-system=:
 
@@ -176,11 +178,11 @@ These desktop environments will then be available as options in the graphical lo
 
 The actual service definitions included in =%desktop-services= and provided by =(gnu services dbus)= and =(gnu services desktop)= are described below.
 
-- Variable: *dbus-root-service-type* [[#index-dbus_002droot_002dservice_002dtype][¶]] :: Type for a service that runs the D-Bus “system bus”. [[#FOOT35][^{35}]]
+- Variable: dbus-root-service-type  :: Type for a service that runs the D-Bus “system bus”. [[#FOOT33][^{33}]]
 
   The value for this service type is a =<dbus-configuration>= record.
 
-- Data Type: *dbus-configuration* [[#index-dbus_002dconfiguration][¶]] :: Data type representing the configuration for =dbus-root-service-type=.
+- Data Type: dbus-configuration  :: Data type representing the configuration for =dbus-root-service-type=.
 
   - =dbus= (default: =dbus=) (type: file-like) :: Package object for dbus.
 
@@ -188,18 +190,19 @@ The actual service definitions included in =%desktop-services= and provided by =
 
   - =verbose?= (default: =#f=) (type: boolean) :: When =#t=, D-Bus is launched with environment variable ‘=DBUS_VERBOSE=' set to ‘=1='. A verbose-enabled D-Bus package such as =dbus-verbose= should be provided to =dbus= in this scenario. The verbose output is logged to =/var/log/dbus-daemon.log=.
 
-**** Elogind [[#Elogind][¶]]
+<<Elogind>>
+**** Elogind
 :PROPERTIES:
-:CUSTOM_ID: Elogind
+:CUSTOM_ID: elogind
 :CLASS: subsubheading
 :END:
 [[https://github.com/elogind/elogind][Elogind]] is a login and seat management daemon that also handles most system-level power events for a computer, for example suspending the system when a lid is closed, or shutting it down when the power button is pressed.
 
 It also provides a D-Bus interface that can be used to know which users are logged in, know what kind of sessions they have open, suspend the system, inhibit system suspend, reboot the system, and other tasks.
 
-- Variable: *elogind-service-type* [[#index-elogind_002dservice_002dtype][¶]] :: Type of the service that runs =elogind=, a login and seat management daemon. The value for this service is a =<elogind-configuration>= object.
+- Variable: elogind-service-type  :: Type of the service that runs =elogind=, a login and seat management daemon. The value for this service is a =<elogind-configuration>= object.
 
-- Data Type: *elogind-configuration* [[#index-elogind_002dconfiguration][¶]] :: Available =elogind-configuration= fields are:
+- Data Type: elogind-configuration  :: Available =elogind-configuration= fields are:
 
   - =elogind= (default: =elogind=) (type: file-like) :: The elogind package to use.
 
@@ -211,9 +214,9 @@ It also provides a D-Bus interface that can be used to know which users are logg
 
   - =allow-suspend-interrupts?= (default: =#f=) (type: maybe-boolean) :: Likewise as the =allow-power-off-interrupts?= option, but for the suspend action.
 
-  - =broadcast-power-off-interrupts?= (default: =#t=) (type: maybe-boolean) :: Whether an interrupt of a power-off action is broadcasted.
+  - =broadcast-power-off-interrupts?= (default: =#f=) (type: maybe-boolean) :: Whether an interrupt of a power-off action is broadcasted.
 
-  - =broadcast-suspend-interrupts?= (default: =#t=) (type: maybe-boolean) :: Whether an interrupt of a suspend action is broadcasted.
+  - =broadcast-suspend-interrupts?= (default: =#f=) (type: maybe-boolean) :: Whether an interrupt of a suspend action is broadcasted.
 
   - =kill-user-processes?= (default: =#f=) (type: maybe-boolean) :: Whether the processes of a user should be killed when the user logs out.
 
@@ -223,17 +226,11 @@ It also provides a D-Bus interface that can be used to know which users are logg
 
   - =inhibit-delay-max-seconds= (default: =5=) (type: maybe-non-negative-integer) :: The maximum time a system shutdown or sleep request is delayed due to an inhibitor lock of type delay being active before the inhibitor is ignored and the operation executes anyway.
 
-  - =handle-power-key= (default: =poweroff=) (type: maybe-action) :: The action done when the power key is pressed.
+  - =handle-power-key= (default: =poweroff=) (type: maybe-action) :: The action done when the power key is pressed. The compiled default is ='poweroff=.
 
-  - =handle-power-key-long-press= (default: =ignore=) (type: maybe-action) :: The action done when the power key is long pressed.
-
-  - =handle-suspend-key= (default: =suspend=) (type: maybe-action) :: The action done when the suspend key is pressed.
-
-  - =handle-suspend-key-long-press= (default: =hibernate=) (type: maybe-action) :: The action done when the suspend key is long pressed.
+  - =handle-suspend-key= (default: =suspend=) (type: maybe-action) :: The action done when the suspend key is pressed. The
 
   - =handle-hibernate-key= (default: =hibernate=) (type: maybe-action) :: The action done when the hibernate key is pressed.
-
-  - =handle-hibernate-key-long-press= (default: =ignore=) (type: maybe-action) :: The action done when the hibernate key is long pressed.
 
   - =handle-lid-switch= (default: =suspend=) (type: maybe-action) :: The action done when the lid is closed.
 
@@ -255,7 +252,9 @@ It also provides a D-Bus interface that can be used to know which users are logg
 
   - =idle-action-seconds= (type: maybe-non-negative-integer) :: The delay after which the action configured in =idle-action= is taken after the system is idle.
 
-  - =runtime-directory-size= (default: ='(10 . %)=) (type: maybe-non-negative-integer-and-suffix) :: Set the size limit on the =XDG_RUNTIME_DIR= runtime directory for each user who logs in. The size in bytes can be given as an integer and paired with symbols: K, M, G, or T. When paired with ='%=, the integer represents the limit as a percentage share of the total amount of physical RAM (read access memory).
+  - =runtime-directory-size-percent= (type: maybe-percent) :: Set the size limit, in percent, on the =XDG_RUNTIME_DIR= runtime directory for each user who logs in. This specifies the per-user size limit relative to the amount of physical RAM (read access memory). This value takes precedence over that specified via =runtime-directory-size=.
+
+  - =runtime-directory-size= (type: maybe-non-negative-integer) :: Set the size limit, in bytes, on the =XDG_RUNTIME_DIR= runtime directory for each user who logs in.
 
   - =remove-ipc?= (default: =#t=) (type: maybe-boolean) :: Whether IPC (inter-process communication) objects belonging to the user shall be removed when the user fully logs out.
 
@@ -267,33 +266,29 @@ It also provides a D-Bus interface that can be used to know which users are logg
 
   - =hibernate-mode= (default: =(platform shutdown)=) (type: maybe-list-of-hibernation-modes) :: The hibernation mode values to write to =/sys/power/disk= by elogind when hibernating the system.
 
-  - =hibernate-on-ac-power= (default: =#t=) (type: maybe-boolean) :: Whether to allow hibernation when the system has AC power. This option is only used if =hibernate-delay-seconds= is set. If this option is disabled, the coutdown of =hibernate-delay-seconds= starts only after AC power is disconnected, keeping the system in the suspend state otherwise.
-
   - =hibernate-delay-seconds= (type: maybe-non-negative-integer) :: The amount of time the system spends in suspend mode before the system is automatically put into hibernate mode.
 
-- Variable: *gardenhostd-service-type* [[#index-gardenhostd_002dservice_002dtype][¶]] :: Type for the service that runs gardenhostd, a partial implementation of the systemd-hostnamed daemon. It provides the org.freedesktop.hostname1 D-Bus interface, which helps applications like gnome-control-center retrieve and modify the system's hostname, as well as set a pretty hostname for display.
+  - =hibernate-state= (type: maybe-list-of-strings) :: Deprecated option.
 
-  The value for this service is a =<gardenhostd-configuration>= object.
+  - =hybrid-sleep-state= (type: maybe-list-of-strings) :: Deprecated option.
 
-- Data Type: *gardenhostd-configuration* [[#index-gardenhostd_002dconfiguration][¶]] :: Available =gardenhostd-configuration= fields are:
+  - =hybrid-sleep-mode= (type: maybe-list-of-strings) :: Deprecated option.
 
-  - =gardenhostd= (default: =gardenhostd=) (type: package) :: The gardenhostd package to use.
-
-- Variable: *accountsservice-service-type* [[#index-accountsservice_002dservice_002dtype][¶]] :: Type for the service that runs AccountsService, a system service that can list available accounts, change their passwords, and so on. AccountsService integrates with PolicyKit to enable unprivileged users to acquire the capability to modify their system configuration. See [[https://www.freedesktop.org/wiki/Software/AccountsService/][AccountsService]] for more information.
+- Variable: accountsservice-service-type  :: Type for the service that runs AccountsService, a system service that can list available accounts, change their passwords, and so on. AccountsService integrates with PolicyKit to enable unprivileged users to acquire the capability to modify their system configuration. See [[https://www.freedesktop.org/wiki/Software/AccountsService/][AccountsService]] for more information.
 
   The value for this service is a file-like object, by default it is set to =accountsservice= (the package object for AccountsService).
 
-- Variable: *polkit-service-type* [[#index-polkit_002dservice_002dtype][¶]] :: Type for the service that runs the [[https://www.freedesktop.org/wiki/Software/polkit/][Polkit privilege management service]], which allows system administrators to grant access to privileged operations in a structured way. By querying the Polkit service, a privileged system component can know when it should grant additional capabilities to ordinary users. For example, an ordinary user can be granted the capability to suspend the system if the user is logged in locally.
+- Variable: polkit-service-type  :: Type for the service that runs the [[https://www.freedesktop.org/wiki/Software/polkit/][Polkit privilege management service]], which allows system administrators to grant access to privileged operations in a structured way. By querying the Polkit service, a privileged system component can know when it should grant additional capabilities to ordinary users. For example, an ordinary user can be granted the capability to suspend the system if the user is logged in locally.
 
   The value for this service is a =<polkit-configuration>= object.
 
-- Variable: *polkit-wheel-service* [[#index-polkit_002dwheel_002dservice][¶]] :: Service that adds the =wheel= group as admins to the Polkit service. This makes it so that users in the =wheel= group are queried for their own passwords when performing administrative actions instead of =root='s, similar to the behaviour used by =sudo=.
+- Variable: polkit-wheel-service  :: Service that adds the =wheel= group as admins to the Polkit service. This makes it so that users in the =wheel= group are queried for their own passwords when performing administrative actions instead of =root='s, similar to the behaviour used by =sudo=.
 
-- Variable: *upower-service-type* [[#index-upower_002dservice_002dtype][¶]] :: Service that runs [[https://upower.freedesktop.org/][=upowerd=]], a system-wide monitor for power consumption and battery levels, with the given configuration settings.
+- Variable: upower-service-type  :: Service that runs [[https://upower.freedesktop.org/][=upowerd=]], a system-wide monitor for power consumption and battery levels, with the given configuration settings.
 
   It implements the =org.freedesktop.UPower= D-Bus interface, and is notably used by GNOME.
 
-- Data Type: *upower-configuration* [[#index-upower_002dconfiguration][¶]] :: Data type representation the configuration for UPower.
+- Data Type: upower-configuration  :: Data type representation the configuration for UPower.
 
   - =upower= (default: =upower=) :: Package to use for =upower=.
 
@@ -325,43 +320,28 @@ It also provides a D-Bus interface that can be used to know which users are logg
     - ='hibernate=
     - ='hybrid-sleep=.
 
-- Variable: *udisks-service-type* [[#index-udisks_002dservice_002dtype][¶]] :: Type for the service that runs [[https://udisks.freedesktop.org/docs/latest/][UDisks]], a /disk management/ daemon that provides user interfaces with notifications and ways to mount/unmount disks. Programs that talk to UDisks include the =udisksctl= command, part of UDisks, and GNOME Disks. Note that Udisks relies on the =mount= command, so it will only be able to use the file-system utilities installed in the system profile. For example if you want to be able to mount NTFS file-systems in read and write fashion, you'll need to have =ntfs-3g= installed system-wide.
+- Variable: udisks-service-type  :: Type for the service that runs [[https://udisks.freedesktop.org/docs/latest/][UDisks]], a /disk management/ daemon that provides user interfaces with notifications and ways to mount/unmount disks. Programs that talk to UDisks include the =udisksctl= command, part of UDisks, and GNOME Disks. Note that Udisks relies on the =mount= command, so it will only be able to use the file-system utilities installed in the system profile. For example if you want to be able to mount NTFS file-systems in read and write fashion, you'll need to have =ntfs-3g= installed system-wide.
 
   The value for this service is a =<udisks-configuration>= object.
 
-- Data Type: *udisks-configuration* [[#index-udisks_002dconfiguration][¶]] :: Data type representing the configuration for =udisks-service-type=.
+- Data Type: udisks-configuration  :: Data type representing the configuration for =udisks-service-type=.
 
   - =udisks= (default: =udisks=) (type: file-like) :: Package object for UDisks.
 
-- Variable: *gvfs-service-type* [[#index-gvfs_002dservice_002dtype][¶]] :: Type for the service that provides virtual file systems for GIO applications, which enables support for =trash://=, =ftp://=, =sftp://= and many other location schemas in file managers like Nautilus (GNOME Files) and Thunar.
+- Variable: gvfs-service-type  :: Type for the service that provides virtual file systems for GIO applications, which enables support for =trash://=, =ftp://=, =sftp://= and many other location schemas in file managers like Nautilus (GNOME Files) and Thunar.
 
   The value for this service is a =<gvfs-configuration>= object.
 
-- Data Type: *gvfs-configuration* [[#index-gvfs_002dconfiguration][¶]] :: Data type representing the configuration for =gvfs-service-type=.
+- Data Type: gvfs-configuration  :: Data type representing the configuration for =gvfs-service-type=.
 
   - =gvfs= (default: =gvfs=) (type: file-like) :: Package object for GVfs.
 
-- Variable: *kanata-service-type* [[#index-kanata_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/jtroo/kanata][Kanata]], a keyboard layout re-mapper. Its value is a =kanata-configuration= object. This service allows spawning =kanata= configurations to manage keyboards.
+- Variable: colord-service-type  :: This is the type of the service that runs =colord=, a system service with a D-Bus interface to manage the color profiles of input and output devices such as screens and scanners. It is notably used by the GNOME Color Manager graphical tool. See [[https://www.freedesktop.org/software/colord/][the colord web site]] for more information.
 
-- Data Type: *kanata-configuration* [[#index-kanata_002dconfiguration][¶]] :: Configuration record for the Kanata service.
+<<index-scanner-access>>
+- Variable: sane-service-type  :: This service provides access to scanners /via/ [[http://www.sane-project.org][SANE]] by installing the necessary udev rules and pluggable backends. It is included in =%desktop-services= (see [[#Desktop-Services][Desktop Services]]) and relies by default on =sane-backends= package (see below) for hardware support.
 
-  - =kanata= (default: =kanata=) (type: package) :: The Kanata package to use.
-
-  - =keymaps= (default: =()=) (type: list-of-file-likes) :: List of =kanata= configuration files (file-like objects). See [[https://jtroo.github.io/config.html#linux-only-linux-dev][Kanata's device specification documentation]].
-
-- Variable: *kmonad-service-type* [[#index-kmonad_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/kmonad/kmonad][KMonad]]. Its value is a =kmonad-configuration= object. This service allows spawning =kmonad= configurations to manage keyboards.
-
-- Data Type: *kmonad-configuration* [[#index-kmonad_002dconfiguration][¶]] :: Available =kmonad-configuration= fields are:
-
-  - =kmonad= (default: =kmonad=) (type: package) :: The KMonad package to use.
-
-  - =keymaps= (default: =()=) (type: list-of-file-likes) :: A list of KMonad configurations (file-like objects). See [[https://github.com/kmonad/kmonad/blob/master/keymap/tutorial.kbd][KMonad - Keymap Tutorial]]
-
-- Variable: *colord-service-type* [[#index-colord_002dservice_002dtype][¶]] :: This is the type of the service that runs =colord=, a system service with a D-Bus interface to manage the color profiles of input and output devices such as screens and scanners. It is notably used by the GNOME Color Manager graphical tool. See [[https://www.freedesktop.org/software/colord/][the colord web site]] for more information.
-
-- Variable: *sane-service-type* [[#index-sane_002dservice_002dtype][¶]] :: This service provides access to scanners /via/ [[http://www.sane-project.org][SANE]] by installing the necessary udev rules and pluggable backends. It is included in =%desktop-services= (see [[#Desktop-Services][Desktop Services]]) and relies by default on =sane-backends= package (see below) for hardware support.
-
-- Data Type: *sane-configuration* [[#index-sane_002dconfiguration][¶]] :: Data type representing the configuration for SANE.
+- Data Type: sane-configuration  :: Data type representing the configuration for SANE.
 
   - =sane= (default: =sane=) :: Package containing SANE library.
 
@@ -377,10 +357,10 @@ In order to use additional backends on a system which relies on =%desktop-servic
 #+begin_src lisp
 (use-modules (gnu))
 (use-service-modules
-  ...
+  …
   desktop)
 (use-package-modules
-  ...
+  …
   scanner)
 
 (define %my-desktop-services
@@ -391,19 +371,19 @@ In order to use additional backends on a system which relies on =%desktop-servic
         (backends (list sane-backends sane-airscan))))))
 
 (operating-system
-  ...
+  …
   (services %my-desktop-services))
 #+end_src
 
-- Procedure: *geoclue-application* =name [#:allowed? #t] [#:system? #f] [#:users ’()]= [[#index-geoclue_002dapplication][¶]] :: Return a configuration allowing an application to access GeoClue location data. =name= is the Desktop ID of the application, without the =.desktop= part. If =allowed?= is true, the application will have access to location information by default. The boolean =system?= value indicates whether an application is a system component or not. Finally =users= is a list of UIDs of all users for which this application is allowed location info access. An empty users list means that all users are allowed.
+- Procedure: geoclue-application name [#:allowed? #t] [#:system? #f] [#:users '()] :: Return a configuration allowing an application to access GeoClue location data. =name= is the Desktop ID of the application, without the =.desktop= part. If =allowed?= is true, the application will have access to location information by default. The boolean =system?= value indicates whether an application is a system component or not. Finally =users= is a list of UIDs of all users for which this application is allowed location info access. An empty users list means that all users are allowed.
 
-- Variable: *%standard-geoclue-applications* [[#index-_0025standard_002dgeoclue_002dapplications][¶]] :: The standard list of well-known GeoClue application configurations, granting authority to the GNOME date-and-time utility to ask for the current location in order to set the time zone, and allowing the IceCat and Epiphany web browsers to request location information. IceCat and Epiphany both query the user before allowing a web page to know the user's location.
+- Variable: %standard-geoclue-applications  :: The standard list of well-known GeoClue application configurations, granting authority to the GNOME date-and-time utility to ask for the current location in order to set the time zone, and allowing the IceCat and Epiphany web browsers to request location information. IceCat and Epiphany both query the user before allowing a web page to know the user's location.
 
-- Variable: *geoclue-service-type* [[#index-geoclue_002dservice_002dtype][¶]] :: Type for the service that runs the [[https://wiki.freedesktop.org/www/Software/GeoClue/][GeoClue]] location service. This service provides a D-Bus interface to allow applications to request access to a user's physical location, and optionally to add information to online location databases.
+- Variable: geoclue-service-type  :: Type for the service that runs the [[https://wiki.freedesktop.org/www/Software/GeoClue/][GeoClue]] location service. This service provides a D-Bus interface to allow applications to request access to a user's physical location, and optionally to add information to online location databases.
 
   The value for this service is a =<geoclue-configuration>= object.
 
-- Variable: *iio-sensor-proxy-service-type* [[#index-iio_002dsensor_002dproxy_002dservice_002dtype][¶]] :: Type for the service that runs [[https://gitlab.freedesktop.org/hadess/iio-sensor-proxy][IIO sensor proxy]], a daemon that proxies low-level sensor data from Industrial I/O (IIO) devices into a D-Bus interface. It enables user-space applications, such as desktop environments like GNOME and KDE, and services like GeoClue, to access data from various sensors commonly found in devices like ultrabooks and 2-in-1s. This allows for:
+- Variable: iio-sensor-proxy-service-type  :: Type for the service that runs [[https://gitlab.freedesktop.org/hadess/iio-sensor-proxy][IIO sensor proxy]], a daemon that proxies low-level sensor data from Industrial I/O (IIO) devices into a D-Bus interface. It enables user-space applications, such as desktop environments like GNOME and KDE, and services like GeoClue, to access data from various sensors commonly found in devices like ultrabooks and 2-in-1s. This allows for:
 
   - Automatic screen rotation based on accelerometer data.
   - Ambient brightness adjustment using light sensor data.
@@ -411,11 +391,11 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
   The value for this service is a =<iio-sensor-proxy-configuration>= object.
 
-- Data Type: *iio-sensor-proxy-configuration* [[#index-iio_002dsensor_002dproxy_002dconfiguration][¶]] :: Data type representing the configuration for =iio-sensor-proxy-service-type=.
+- Data Type: iio-sensor-proxy-configuration  :: Data type representing the configuration for =iio-sensor-proxy-service-type=.
 
   - =iio-sensor-proxy= (default: =iio-sensor-proxy=) (type: file-like) :: Package object of iio-sensor-proxy.
 
-- Variable: *bluetooth-service-type* [[#index-bluetooth_002dservice_002dtype][¶]] :: This is the type for the [[https://bluez.org/][Linux Bluetooth Protocol Stack]] (BlueZ) system, which generates the =/etc/bluetooth/main.conf= configuration file. The value for this type is a =bluetooth-configuration= record as in this example:
+- Variable: bluetooth-service-type  :: This is the type for the [[https://bluez.org/][Linux Bluetooth Protocol Stack]] (BlueZ) system, which generates the =/etc/bluetooth/main.conf= configuration file. The value for this type is a =bluetooth-configuration= record as in this example:
 
   #+begin_src lisp
   (service bluetooth-service-type)
@@ -423,7 +403,7 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
   See below for details about =bluetooth-configuration=.
 
-- Data Type: *bluetooth-configuration* [[#index-bluetooth_002dconfiguration][¶]] :: Data type representing the configuration for =bluetooth-service=.
+- Data Type: bluetooth-configuration  :: Data type representing the configuration for =bluetooth-service=.
 
   - =bluez= (default: =bluez=) :: =bluez= package to use.
 
@@ -632,11 +612,11 @@ In order to use additional backends on a system which relies on =%desktop-servic
     - =N = #xXX=: Report advertisements every N x 100 msec (range: #x01 to #xFE)
     - =#xFF=: Report only one advertisement per device during monitoring period.
 
-- Variable: *gnome-keyring-service-type* [[#index-gnome_002dkeyring_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://wiki.gnome.org/Projects/GnomeKeyring][GNOME Keyring]]. Its value is a =gnome-keyring-configuration= object (see below). Note that there is no need to use this service when using =gnome-desktop-service-type=, which includes it.
+- Variable: gnome-keyring-service-type  :: This is the type of the service that adds the [[https://wiki.gnome.org/Projects/GnomeKeyring][GNOME Keyring]]. Its value is a =gnome-keyring-configuration= object (see below). Note that there is no need to use this service when using =gnome-desktop-service-type=, which includes it.
 
   This service adds the =gnome-keyring= package to the system profile and extends PAM with entries using =pam_gnome_keyring.so=, unlocking a user's login keyring when they log in or setting its password with passwd.
 
-- Data Type: *gnome-keyring-configuration* [[#index-gnome_002dkeyring_002dconfiguration][¶]] :: Configuration record for the GNOME Keyring service.
+- Data Type: gnome-keyring-configuration  :: Configuration record for the GNOME Keyring service.
 
   - =keyring= (default: =gnome-keyring=) :: The GNOME keyring package to use.
 
@@ -646,11 +626,11 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
     By default, this field contains “gdm-password” with the value =login= and “passwd” is with the value =passwd=.
 
-- Variable: *kwallet-service-type* [[#index-kwallet_002dservice_002dtype][¶]] :: This is the type of the service that adds the [[https://invent.kde.org/plasma/kwallet-pam][KWallet keyring]]. Its value is a =kwallet-configuration= object (see below). Note that, contrary to =gnome-desktop-service-type=, which includes the respective keyring for that service, =gnome-keyring-service-type=, =plasma-desktop-service-type= does not include =kwallet-service-type=.
+- Variable: kwallet-service-type  :: This is the type of the service that adds the [[https://invent.kde.org/plasma/kwallet-pam][KWallet keyring]]. Its value is a =kwallet-configuration= object (see below). Note that, contrary to =gnome-desktop-service-type=, which includes the respective keyring for that service, =gnome-keyring-service-type=, =plasma-desktop-service-type= does not include =kwallet-service-type=.
 
   This service adds the =kwallet-pam= package to the system profile and extends PAM with entries using =pam_kwallet5.so=. It can unlock the user's login keyring or set their password with =passwd= at the time they log in.
 
-- Data Type: *kwallet-configuration* [[#index-kwallet_002dconfiguration][¶]] :: Configuration record for the KWallet Keyring service.
+- Data Type: kwallet-configuration  :: Configuration record for the KWallet Keyring service.
 
   - =keyring= (default: =kwallet-pam=) :: The KWallet keyring package to use.
 
@@ -660,7 +640,7 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
     By default, it takes for value an alist associating the ="sddm"= key with the ='login= value, and the ="passwd"= key with the ='passwd= value.
 
-- Variable: *seatd-service-type* [[#index-seatd_002dservice_002dtype][¶]] :: [[https://sr.ht/~kennylevinsen/seatd/][seatd]] is a minimal seat management daemon.
+- Variable: seatd-service-type  :: [[https://sr.ht/~kennylevinsen/seatd/][seatd]] is a minimal seat management daemon.
 
   Seat management takes care of mediating access to shared devices (graphics, input), without requiring the applications needing access to be root.
 
@@ -690,7 +670,7 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
   Depending on your setup, you will have to not only add regular users, but also system users to this group. For instance, some greetd greeters require graphics and therefore also need to negotiate with seatd.
 
-- Data Type: *seatd-configuration* [[#index-seatd_002dconfiguration][¶]] :: Configuration record for the seatd daemon service.
+- Data Type: seatd-configuration  :: Configuration record for the seatd daemon service.
 
   - =seatd= (default: =seatd=) :: The seatd package to use.
 
@@ -702,14 +682,6 @@ In order to use additional backends on a system which relies on =%desktop-servic
 
   - =loglevel= (default: ‘="error"=') :: Log level to output logs. Possible values: ‘="silent"=', ‘="error"=', ‘="info"=' and ‘="debug"='.
 
-- Variable: *rtkit-service-type* [[#index-rtkit_002dservice_002dtype][¶]] :: Type for the service that allows D-Bus to start the RealtimeKit D-Bus service. The RTKit service provides a system D-Bus interface for user processes, such as PipeWire, to securely use realtime scheduling.
-
-  The value for this service is a =<rtkit-configuration>= object.
-
-- Data Type: *rtkit-configuration* [[#index-rtkit_002dconfiguration][¶]] :: Data type representing the configuration for =rtkit-service-type=.
-
-  - =rtkit= (default: =rtkit=) (type: file-like) :: Package object for RTKit.
-
 --------------
 
 **** Footnotes
@@ -717,13 +689,12 @@ In order to use additional backends on a system which relies on =%desktop-servic
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF35][(35)]]
+***** [[#DOCF33][(33)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 [[https://dbus.freedesktop.org/][D-Bus]] is an inter-process communication facility. Its system bus is used to allow system services to communicate and to be notified of system-wide events.
 
 --------------
 
-Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Sound-Services][Sound Services]], Previous: [[id:guix--Printing-Services][Printing Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

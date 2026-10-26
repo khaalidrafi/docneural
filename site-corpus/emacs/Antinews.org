@@ -7,12 +7,15 @@
 Next: [[id:emacs--Mac-OS-_002f-GNUstep][Emacs and macOS / GNUstep]]   Previous: [[id:emacs--X-Resources][X Options and Resources]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Antinews>>
+
+--------------
+
 ** Appendix E Emacs 29 Antinews [[#Emacs-29-Antinews][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Emacs-29-Antinews
 :CLASS: appendix
 :END:
-For those users who live backwards in time, here is information about downgrading to Emacs version 29.4. We hope you will enjoy the greater simplicity that results from the absence of many Emacs  features.
+For those users who live backwards in time, here is information about downgrading to Emacs version 29.4. We hope you will enjoy the greater simplicity that results from the absence of many Emacs 30.1 features.
 
 - Emacs can no longer be built for Android mobile devices. We have removed the Android support because it was deemed unnecessary, what with the screens of the mobile devices becoming smaller and smaller as you move back in time. We expect Android users to enjoy the much simpler text editors available on their devices. As a nice bonus, removing Android support allowed us to get rid of gobs of related files, thus making the release tarballs much leaner.
 

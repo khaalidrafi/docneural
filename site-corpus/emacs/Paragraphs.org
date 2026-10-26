@@ -7,6 +7,9 @@
 Next: [[id:emacs--Pages][Pages]]   Previous: [[id:emacs--Sentences][Sentences]]   Up: [[id:emacs--Text][Commands for Human Languages]]
 
 <<Paragraphs>>
+
+--------------
+
 *** 27.3 Paragraphs [[#Paragraphs-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Paragraphs-1
@@ -28,7 +31,7 @@ The definition of a paragraph depends on the major mode. In Fundamental mode, as
 
 Note that an indented line is /not/ itself a paragraph break in Text mode. If you want indented lines to separate paragraphs, use Paragraph-Indent Text mode instead. See [[id:emacs--Text-Mode][Text Mode]].
 
-If you set a fill prefix, then paragraphs are delimited by all lines which don't start with the fill prefix. See [[id:emacs--Filling::#Filling][Filling Text]].
+If you set a fill prefix, then paragraphs are delimited by all lines which don't start with the fill prefix. See [[id:emacs--Filling][Filling Text]].
 
 The precise definition of a paragraph boundary is controlled by the variables =paragraph-separate= and =paragraph-start=. The value of =paragraph-start= is a regular expression that should match lines that either start or separate paragraphs (see [[id:emacs--Regexps][Syntax of Regular Expressions]]). The value of =paragraph-separate= is another regular expression that should match lines that separate paragraphs without being part of any paragraph (for example, blank lines). Lines that start a new paragraph and are contained in it must match only =paragraph-start=, not =paragraph-separate=. For example, in Fundamental mode, =paragraph-start= is ="\f\\|[ \t]*$"=, and =paragraph-separate= is ="[ \t\f]*$"=.
 

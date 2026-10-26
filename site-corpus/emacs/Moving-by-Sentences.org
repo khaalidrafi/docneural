@@ -4,6 +4,44 @@
 #+filetags: :emacs:
 #+title: Moving by Sentences
 
-Next:
+Next: [[id:emacs--Imenu][Imenu]]   Previous: [[id:emacs--Moving-by-Defuns][Moving by Defuns]]   Up: [[id:emacs--Defuns][Top-Level Definitions, or Defuns]]
 
-The node you are looking for is at [[id:emacs--Defuns::#Moving-by-Sentences][Moving by Sentences]].
+<<Moving-by-Sentences>>
+
+--------------
+
+**** 28.2.3 Moving by Sentences [[#Moving-by-Sentences-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Moving-by-Sentences-1
+:CLASS: subsection
+:END:
+These commands move point or set up the region based on units of code, also called /sentences/. Even though sentences are usually considered when writing human languages, Emacs can use the same commands to move over certain constructs in programming languages (see [[id:emacs--Sentences][Sentences]], see [[id:emacs--Moving-by-Defuns][Moving by Defuns]]). In a programming language a sentence is usually a complete language construct smaller than defuns, but larger than sexps (see [[../elisp_html/List-Motion.html#List-Motion][List Motion]] in The Emacs Lisp Reference Manual). What exactly is a sentence in this case depends on the programming language, but usually it is a complete statement, such as a variable definition and initialization, or a conditional statement. An example of a sentence in the C language could be
+
+#+begin_example
+int x = 5;
+#+end_example
+
+or in the JavaScript language it could look like
+
+#+begin_example
+const thing = () => console.log("Hi");
+#+end_example
+
+#+begin_example
+const foo = [1] == '1'
+  ? "No way"
+  : "...";
+#+end_example
+
+#+begin_example
+#+end_example
+
+- M-a :: Move to beginning of current or preceding sentence (=backward-sentence=).
+
+- M-e :: Move to end of current or following sentence (=forward-sentence=).
+
+The commands to move to the beginning and end of the current sentence are M-a (=backward-sentence=) and M-e (=forward-sentence=). If you repeat one of these commands, or use a positive numeric argument, each repetition moves to the next sentence in the direction of motion.
+
+M-a with a negative argument −=n= moves forward =n= times to the next end of a sentence. Likewise, M-e with a negative argument moves back to the start of a sentence.
+
+--------------

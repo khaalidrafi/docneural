@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<Guix-Home-Services>>
-Next: [[id:guix--Backup-Home-Services][Backup Services]], Previous: [[id:guix--XDG-Home-Services][XDG Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Backup-Home-Services][Backup Services]], Previous: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.10 Guix Home Services [[#Guix-Home-Services-1][¶]]
+<<Guix-Home-Services-1>>
+**** 13.3.9 Guix Home Services
 :PROPERTIES:
-:CUSTOM_ID: Guix-Home-Services-1
+:CUSTOM_ID: guix-home-services
 :CLASS: subsection
 :END:
 The =(gnu home services guix)= module provides services for user-specific Guix configuration.
 
-- Variable: *home-channels-service-type* [[#index-home_002dchannels_002dservice_002dtype][¶]] :: This is the service type for managing =$XDG_CONFIG_HOME/guix/channels.scm=, the file that controls the channels received on =guix pull= (see [[id:guix--Channels][Channels]]). Its associated value is a list of =channel= records, defined in the =(guix channels)= module.
+- Variable: home-channels-service-type  :: This is the service type for managing =$XDG_CONFIG_HOME/guix/channels.scm=, the file that controls the channels received on =guix pull= (see [[id:guix--Channels][Channels]]). Its associated value is a list of =channel= records, defined in the =(guix channels)= module.
 
   Generally, it is better to extend this service than to directly configure it, as its default value is the default guix channel(s) defined by =%default-channels=. If you configure this service directly, be sure to include a guix channel. See [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]] and [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]] for more details.
 
@@ -61,7 +63,3 @@ The =(gnu home services guix)= module provides services for user-specific Guix c
                     (name 'variant-packages)
                     (url "https://example.org/variant-packages.git"))))
   #+end_src
-
---------------
-
-Next: [[id:guix--Backup-Home-Services][Backup Services]], Previous: [[id:guix--XDG-Home-Services][XDG Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

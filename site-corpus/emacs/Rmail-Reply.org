@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Rmail Reply
 
-Next: [[id:emacs--Rmail-Summary#Rmail-Summary][Summaries]]   Previous: [[id:emacs--Rmail-Attributes][Rmail Attributes]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
+Next: [[id:emacs--Rmail-Summary][Summaries]]   Previous: [[id:emacs--Rmail-Attributes][Rmail Attributes]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Rmail-Reply>>
+
+--------------
+
 *** 35.10 Sending Replies [[#Sending-Replies][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Sending-Replies
@@ -32,7 +35,7 @@ You can exclude certain recipients from being included automatically in replies,
 
 To reply only to the sender of the original message, enter the reply command with a numeric argument: C-u r or 1 r. This omits the ‘=CC=' field completely for a particular reply.
 
-Once the mail composition buffer has been initialized, editing and sending the mail goes as usual (see [[id:emacs--Sending-Mail][Sending Mail]]). You can edit the presupplied header fields if they are not what you want. You can also use commands such as C-c C-y, which yanks in the message that you are replying to (see [[id:emacs--Mail-Commands::#Mail-Commands][Mail Commands]]). You can also switch to the Rmail buffer, select a different message there, switch back, and yank the new current message.
+Once the mail composition buffer has been initialized, editing and sending the mail goes as usual (see [[id:emacs--Sending-Mail][Sending Mail]]). You can edit the presupplied header fields if they are not what you want. You can also use commands such as C-c C-y, which yanks in the message that you are replying to (see [[id:emacs--Mail-Commands][Mail Commands]]). You can also switch to the Rmail buffer, select a different message there, switch back, and yank the new current message.
 
 Sometimes a message does not reach its destination. Mailers usually send the failed message back to you, enclosed in a /failure message/. The Rmail command M-m (=rmail-retry-failure=) prepares to send the same message a second time: it sets up a mail composition buffer with the same text and header fields as before. If you type C-c C-c right away, you send the message again exactly the same as the first time. Alternatively, you can edit the text or headers and then send it. The variable =rmail-retry-ignored-headers=, in the same format as =rmail-ignored-headers= (see [[id:emacs--Rmail-Display][Display of Messages]]), controls which headers are stripped from the failed message when retrying it.
 

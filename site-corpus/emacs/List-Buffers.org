@@ -7,6 +7,9 @@
 Next: [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]]   Previous: [[id:emacs--Select-Buffer][Creating and Selecting Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
 
 <<List-Buffers>>
+
+--------------
+
 *** 21.2 Listing Existing Buffers [[#Listing-Existing-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Listing-Existing-Buffers
@@ -16,7 +19,7 @@ Next: [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]]   Previous: [[i
 
 To display a list of existing buffers, type C-x C-b. This pops up a buffer menu in a buffer named =*Buffer List*=. Each line in the list shows one buffer's name, size, major mode and visited file. The buffers are listed in the order that they were current; the buffers that were current most recently come first. This section describes how the list of buffers is displayed and how to interpret the various indications in the list; see [[id:emacs--Several-Buffers][Operating on Several Buffers]], for description of the special mode in the =*Buffer List*= buffer and the commands available there.
 
-‘=.=' in the first field of a line indicates that the buffer is current. ‘=%=' indicates a read-only buffer. ‘=*=' indicates that the buffer is modified. If several buffers are modified, it may be time to save some with C-x s (see [[id:emacs--Saving::#Save-Commands][Commands for Saving Files]]). Here is an example of a buffer list:
+‘=.=' in the first field of a line indicates that the buffer is current. ‘=%=' indicates a read-only buffer. ‘=*=' indicates that the buffer is modified. If several buffers are modified, it may be time to save some with C-x s (see [[id:emacs--Save-Commands][Commands for Saving Files]]). Here is an example of a buffer list:
 
 #+begin_example
 CRM Buffer                Size  Mode              File

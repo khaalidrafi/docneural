@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Unattended-Upgrades>>
-Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.7 Unattended Upgrades [[#Unattended-Upgrades-1][¶]]
+<<Unattended-Upgrades-1>>
+**** 11.10.6 Unattended Upgrades
 :PROPERTIES:
-:CUSTOM_ID: Unattended-Upgrades-1
+:CUSTOM_ID: unattended-upgrades
 :CLASS: subsection
 :END:
+<<index-unattended-upgrades>> <<index-upgrades_002c-unattended>>
 The =(gnu services admin)= module provides a service to perform /unattended upgrades/: periodically, the system automatically reconfigures itself from the latest Guix. Guix System has several properties that make unattended upgrades safe:
 
 - upgrades are transactional (either the upgrade succeeds or it fails, but you cannot end up with an “in-between” system state);
@@ -64,13 +67,13 @@ There are several things that can be configured, in particular the periodicity a
 
 To ensure that upgrades are actually happening, you can run =guix system describe=. To investigate upgrade failures, visit the unattended upgrade log file (see below).
 
-- Variable: *unattended-upgrade-service-type* [[#index-unattended_002dupgrade_002dservice_002dtype][¶]] :: This is the service type for unattended upgrades. It sets up a Shepherd Timer (see [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]) that runs =guix system reconfigure= from the latest version of the specified channels.
+- Variable: unattended-upgrade-service-type  :: This is the service type for unattended upgrades. It sets up a Shepherd Timer (see [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]) that runs =guix system reconfigure= from the latest version of the specified channels.
 
   Its value must be a =unattended-upgrade-configuration= record (see below).
 
-- Data Type: *unattended-upgrade-configuration* [[#index-unattended_002dupgrade_002dconfiguration][¶]] :: This data type represents the configuration of the unattended upgrade service. The following fields are available:
+- Data Type: unattended-upgrade-configuration  :: This data type represents the configuration of the unattended upgrade service. The following fields are available:
 
-  - =schedule= (default: ="30 01 * * 0"=) :: This is the schedule of upgrades, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+  - =schedule= (default: ="30 01 * * 0"=) :: This is the schedule of upgrades, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
 
   - =channels= (default: =#~%default-channels=) :: This gexp specifies the channels to use for the upgrade (see [[id:guix--Channels][Channels]]). By default, the tip of the official =guix= channel is used.
 
@@ -122,4 +125,4 @@ To ensure that upgrades are actually happening, you can run =guix system describ
 
 --------------
 
-Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

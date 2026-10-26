@@ -7,6 +7,9 @@
 Next: [[id:emacs--X-Resources][X Options and Resources]]   Previous: [[id:emacs--GNU-Free-Documentation-License][GNU Free Documentation License]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Emacs-Invocation>>
+
+--------------
+
 ** Appendix C Command Line Arguments for Emacs Invocation [[#Command-Line-Arguments-for-Emacs-Invocation][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Command-Line-Arguments-for-Emacs-Invocation
@@ -23,5 +26,18 @@ There are two ways of writing options: the short forms that start with a single 
 The long forms with ‘=--=' are easier to remember, but longer to type. However, you don't have to spell out the whole option name; any unambiguous abbreviation is enough. When a long option requires an argument, you can use either a space or an equal sign to separate the option name and the argument. Thus, for the option ‘=--display=', you can write either ‘=--display sugar-bombs:0.0=' or ‘=--display=sugar-bombs:0.0='. We recommend an equal sign because it makes the relationship clearer, and the tables below always show an equal sign.
 
 Most options specify how to initialize Emacs, or set parameters for the Emacs session. We call them /initial options/. A few options specify things to do, such as loading libraries or calling Lisp functions. These are called /action options/. These and file names together are called /action arguments/. The action arguments are stored as a list of strings in the variable =command-line-args=. (Actually, when Emacs starts up, =command-line-args= contains all the arguments passed from the command line; during initialization, the initial arguments are removed from this list when they are processed, leaving only the action arguments.)
+
+- [[id:emacs--Action-Arguments][Action Arguments]]
+- [[id:emacs--Initial-Options][Initial Options]]
+- [[id:emacs--Command-Example][Command Argument Example]]
+- [[id:emacs--Environment][Environment Variables]]
+- [[id:emacs--Display-X][Specifying the Display Name]]
+- [[id:emacs--Font-X][Font Specification Options]]
+- [[id:emacs--Colors-X][Window Color Options]]
+- [[id:emacs--Window-Size-X][Options for Window Size and Position]]
+- [[id:emacs--Borders-X][Internal and Outer Borders]]
+- [[id:emacs--Title-X][Frame Titles]]
+- [[id:emacs--Icons-X][Icons]]
+- [[id:emacs--Misc-X][Other Display Options]]
 
 --------------

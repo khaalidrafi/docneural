@@ -7,6 +7,9 @@
 Next: [[id:emacs--Rmail-Scrolling][Scrolling Within a Message]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Rmail-Basics>>
+
+--------------
+
 *** 35.1 Basic Concepts of Rmail [[#Basic-Concepts-of-Rmail][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Basic-Concepts-of-Rmail
@@ -20,6 +23,6 @@ Within the Rmail file, messages are normally arranged sequentially in order of r
 
 Following the usual conventions of Emacs, changes in an Rmail file become permanent only when you save the file. You can save it with s (=rmail-expunge-and-save=), which also expunges deleted messages from the file first (see [[id:emacs--Rmail-Deletion][Deleting Messages]]). To save the file without expunging, use C-x C-s. Rmail automatically saves the Rmail file after merging new mail from an inbox file (see [[id:emacs--Rmail-Inbox][Rmail Files and Inboxes]]).
 
-You can exit Rmail with q (=rmail-quit=); this expunges and saves the Rmail file, then buries the Rmail buffer as well as its summary buffer, if present (see [[id:emacs--Rmail-Summary::#Rmail-Summary][Summaries]]). But there is no need to exit formally. If you switch from Rmail to editing in other buffers, and never switch back, you have exited. Just make sure to save the Rmail file eventually (like any other file you have changed). C-x s is a suitable way to do this (see [[id:emacs--Saving::#Save-Commands][Commands for Saving Files]]). The Rmail command b, =rmail-bury=, buries the Rmail buffer and its summary without expunging and saving the Rmail file.
+You can exit Rmail with q (=rmail-quit=); this expunges and saves the Rmail file, then buries the Rmail buffer as well as its summary buffer, if present (see [[id:emacs--Rmail-Summary][Summaries]]). But there is no need to exit formally. If you switch from Rmail to editing in other buffers, and never switch back, you have exited. Just make sure to save the Rmail file eventually (like any other file you have changed). C-x s is a suitable way to do this (see [[id:emacs--Save-Commands][Commands for Saving Files]]). The Rmail command b, =rmail-bury=, buries the Rmail buffer and its summary without expunging and saving the Rmail file.
 
 --------------

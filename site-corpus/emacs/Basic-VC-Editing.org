@@ -4,6 +4,29 @@
 #+filetags: :emacs:
 #+title: Basic VC Editing
 
-Next:
+Next: [[id:emacs--Log-Buffer][Features of the Log Entry Buffer]]   Previous: [[id:emacs--VC-Mode-Line][Version Control and the Mode Line]]   Up: [[id:emacs--Version-Control][Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Basic-VC-Editing][Basic VC Editing]].
+<<Basic-VC-Editing>>
+
+--------------
+
+**** 30.1.3 Basic Editing under Version Control [[#Basic-Editing-under-Version-Control][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Basic-Editing-under-Version-Control
+:CLASS: subsection
+:END:
+Most VC commands operate on /VC filesets/. A VC fileset is a collection of one or more files that a VC operation acts upon. When you type VC commands in a buffer visiting a version-controlled file, the VC fileset is simply that one file. When you type them in a VC Directory buffer, and some files in it are marked, the VC fileset consists of the marked files (see [[id:emacs--VC-Directory-Mode][VC Directory Mode]]). Likewise, when you invoke a VC command from a Dired buffer, the VC fileset consists of the marked files (see [[id:emacs--Marks-vs-Flags][Dired Marks vs. Flags]]), defaulting to the file shown on the current line if no files are marked.
+
+With modern changeset-based version control systems (see [[id:emacs--VCS-Changesets][Changeset-based vs File-based Version Control]]), such as Git, Mercurial, and Bazaar, VC commands handle multi-file VC filesets as a group. For example, committing a multi-file VC fileset generates a single revision, containing the changes to all those files. On older file-based version control systems like CVS, each file in a multi-file VC fileset is handled individually; thus, committing a fileset generates one revision for each changed file in the fileset.
+
+- C-x v v :: Perform the next appropriate version control operation on the current VC fileset.
+
+The principal VC command is a multi-purpose command, C-x v v (=vc-next-action=), which performs the most appropriate action on the current VC fileset: either registering it with a version control system, or committing it, or unlocking it, or merging changes into it. The precise actions for each situation are described in detail in the following subsections. You can use C-x v v either in a file-visiting buffer, in a Dired buffer, or in a VC Directory buffer; in the latter two cases the command operates on the fileset consisting of the marked files. You can also use C-x v v, in a buffer with patches under Diff Mode (see [[id:emacs--Diff-Mode][Diff Mode]]), in which case the command operates on the files whose diffs are shown in the buffer.
+
+Note that VC filesets are distinct from the named filesets used for viewing and visiting files in functional groups (see [[id:emacs--Filesets][Filesets]]). Unlike named filesets, VC filesets are not named and don't persist across sessions.
+
+- [[id:emacs--VC-With-A-Merging-VCS][Basic Version Control with Merging]]
+- [[id:emacs--VC-With-A-Locking-VCS][Basic Version Control with Locking]]
+- [[id:emacs--Advanced-C_002dx-v-v][Advanced Control in C-x v v]]
+
+--------------

@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Bug Reference
 
-Next:   Previous: [[id:emacs--Emerge#Emerge][Merging Files with Emerge]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
+Next:   Previous: [[id:emacs--Emerge][Merging Files with Emerge]]   Up: [[id:emacs--Maintaining][Maintaining Large Programs]]
 
 <<Bug-Reference>>
+
+--------------
+
 *** 30.7 Bug Reference [[#Bug-Reference-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Bug-Reference-1
@@ -16,7 +19,7 @@ Most projects with a certain amount of users track bug reports in some issue tra
 
 The minor modes =bug-reference-mode= and =bug-reference-prog-mode= highlight such bug references and make it possible to follow them to the corresponding bug report on the project's issue tracker. =bug-reference-prog-mode= is a variant of =bug-reference-mode= which highlights bug references only inside source code comments and strings.
 
-For its working, bug reference mode needs to know the syntax of bug references (=bug-reference-bug-regexp=), and the URL of the tracker where bug reports can be looked up (=bug-reference-url-format=). Since those are typically different from project to project, it makes sense to specify them in see [[id:emacs--Variables::#Directory-Variables][Per-Directory Local Variables]] or see [[id:emacs--Variables::#File-Variables][Local Variables in Files]].
+For its working, bug reference mode needs to know the syntax of bug references (=bug-reference-bug-regexp=), and the URL of the tracker where bug reports can be looked up (=bug-reference-url-format=). Since those are typically different from project to project, it makes sense to specify them in see [[id:emacs--Directory-Variables][Per-Directory Local Variables]] or see [[id:emacs--File-Variables][Local Variables in Files]].
 
 For example, let's assume in our project, we usually write references to bug reports as bug#1234, or Bug-1234 and that this bug's page on the issue tracker is [[https://project.org/issues/1234]], then these local variables section would do.
 

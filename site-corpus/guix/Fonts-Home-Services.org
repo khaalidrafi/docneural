@@ -36,18 +36,20 @@ Next:
 [[../..][]]
 
 <<Fonts-Home-Services>>
-Next: [[id:guix--Sound-Home-Services][Sound Home Services]], Previous: [[id:guix--Backup-Home-Services][Backup Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Sound-Home-Services][Sound Home Services]], Previous: [[id:guix--Backup-Home-Services][Backup Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.12 Fonts Home Services [[#Fonts-Home-Services-1][¶]]
+<<Fonts-Home-Services-1>>
+**** 13.3.11 Fonts Home Services
 :PROPERTIES:
-:CUSTOM_ID: Fonts-Home-Services-1
+:CUSTOM_ID: fonts-home-services
 :CLASS: subsection
 :END:
 The =(gnu home services fontutils)= module provides services for user-specific Fontconfig setup. The [[https://www.freedesktop.org/wiki/Software/fontconfig][Fontconfig]] library is used by many applications to access fonts on the system.
 
-- Variable: *home-fontconfig-service-type* [[#index-home_002dfontconfig_002dservice_002dtype][¶]] :: This is the service type for generating configurations for Fontconfig. Its associated value is a list of either strings (or gexps) pointing to fonts locations, or SXML (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SXML.html#SXML][SXML]] in GNU Guile Reference Manual) fragments to be converted into XML and put inside the main =fontconfig= node.
+- Variable: home-fontconfig-service-type  :: This is the service type for generating configurations for Fontconfig. Its associated value is a list of either strings (or gexps) pointing to fonts locations, or SXML (see [[https://www.gnu.org/software/guile/manual/html_node/SXML.html#SXML][SXML]] in GNU Guile Reference Manual) fragments to be converted into XML and put inside the main =fontconfig= node.
 
   Generally, it is better to extend this service than to directly configure it, as its default value is the default Guix Home's profile font installation path (=~/.guix-home/profile/share/fonts=). If you configure this service directly, be sure to include the above directory.
 
@@ -62,7 +64,3 @@ The =(gnu home services fontutils)= module provides services for user-specific F
                           (prefer
                            (family "Liberation Mono")))))
   #+end_src
-
---------------
-
-Next: [[id:guix--Sound-Home-Services][Sound Home Services]], Previous: [[id:guix--Backup-Home-Services][Backup Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

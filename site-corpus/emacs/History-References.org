@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: History References
 
-Next:
+Next:   Previous: [[id:emacs--Shell-History-Copying][Shell History Copying]]   Up: [[id:emacs--Shell-History][Shell Command History]]
 
-The node you are looking for is at [[id:emacs--Shell-History::#History-References][History References]].
+<<History-References>>
+
+--------------
+
+**** 40.5.3 Shell History References [[#Shell-History-References][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shell-History-References
+:CLASS: subsection subsubsection-level-set-subsection
+:END:
+Various shells, including csh and bash, support /history references/ that begin with ‘=!=' and ‘=^='. Shell mode recognizes these constructs, and can perform the history substitution for you.
+
+If you insert a history reference and type TAB, this searches the input history for a matching command, performs substitution if necessary, and places the result in the buffer in place of the history reference. For example, you can fetch the most recent command beginning with ‘=mv=' with ! m v TAB. You can edit the command if you wish, and then resubmit the command to the shell by typing RET.
+
+Shell mode can optionally expand history references in the buffer when you send them to the shell. To request this, set the variable =comint-input-autoexpand= to =input=. You can make SPC perform history expansion by binding SPC to the command =comint-magic-space=. See [[id:emacs--Rebinding][Changing Key Bindings Interactively]].
+
+Shell mode recognizes history references when they follow a prompt. See [[id:emacs--Shell-Prompts][Shell Prompts]], for how Shell mode recognizes prompts.

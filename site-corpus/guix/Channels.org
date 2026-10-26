@@ -36,21 +36,23 @@ Next:
 [[../..][]]
 
 <<Channels>>
-Next: [[id:guix--Development][Development]], Previous: [[id:guix--Package-Management][Package Management]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Development][Development]], Previous: [[id:guix--Package-Management][Package Management]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 6 Channels [[#Channels-1][¶]]
+<<Channels-1>>
+** 6 Channels
 :PROPERTIES:
-:CUSTOM_ID: Channels-1
+:CUSTOM_ID: channels
 :CLASS: chapter
 :END:
+<<index-channels>> <<index-channels_002escm_002c-configuration-file-1>> <<index-configuration-file-for-channels-1>> <<index-guix-pull_002c-configuration-file>> <<index-configuration-of-guix-pull>>
 Guix and its package collection are updated by running =guix pull=. By default =guix pull= downloads and deploys Guix itself from the official GNU Guix repository. This can be customized by providing a file specifying the set of /channels/ to pull from (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]). A channel specifies the URL and branch of a Git repository to be deployed, and =guix pull= can be instructed to pull from one or more channels. In other words, channels can be used to /customize/ and to /extend/ Guix, as we will see below. Guix is able to take into account security concerns and deal with authenticated updates.
 
 - [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]]
 - [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]]
 - [[id:guix--Replicating-Guix][Replicating Guix]]
-- [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]]
 - [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]]
 - [[id:guix--Channel-Authentication][Channel Authentication]]
 - [[id:guix--Channels-with-Substitutes][Channels with Substitutes]]
@@ -60,7 +62,3 @@ Guix and its package collection are updated by running =guix pull=. By default =
 - [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]]
 - [[id:guix--Primary-URL][Primary URL]]
 - [[id:guix--Writing-Channel-News][Writing Channel News]]
-
---------------
-
-Next: [[id:guix--Development][Development]], Previous: [[id:guix--Package-Management][Package Management]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,82 @@
+:PROPERTIES:
+:ID: guix--Debbugs-Usertags
+:END:
+#+filetags: :guix:
+#+title: Debbugs Usertags
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Debbugs-Usertags>>
+
+Next: [[id:guix--Cuirass-Build-Notifications][Cuirass Build Notifications]], Previous: [[id:guix--Debbugs-User-Interfaces][Debbugs User Interfaces]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
+
+--------------
+
+<<Debbugs-Usertags-1>>
+**** 22.11.4 Debbugs Usertags
+:PROPERTIES:
+:CUSTOM_ID: debbugs-usertags
+:CLASS: subsection
+:END:
+<<index-usertags_002c-for-debbugs>> <<index-Debbugs-usertags>>
+Debbugs provides a feature called /usertags/ that allows any user to tag any bug with an arbitrary label. Bugs can be searched by usertag, so this is a handy way to organize bugs[[#FOOT50][^{50}]]. If you use Emacs Debbugs, the entry-point to consult existing usertags is the ‘=C-u M-x debbugs-gnu-usertags=' procedure. To set a usertag, press ‘=C=' while consulting a bug within the *Guix-Patches* buffer opened with ‘=C-u M-x debbugs-gnu-bugs=' buffer, then select =usertag= and follow the instructions.
+
+For example, to view all the bug reports (or patches, in the case of =guix-patches=) tagged with the usertag =powerpc64le-linux= for the user =guix=, open a URL like the following in a web browser: [[https://debbugs.gnu.org/cgi-bin/pkgreport.cgi?tag=powerpc64le-linux;users=guix]].
+
+For more information on how to use usertags, please refer to the documentation for Debbugs or the documentation for whatever tool you use to interact with Debbugs.
+
+In Guix, we are experimenting with usertags to keep track of architecture-specific issues, as well as reviewed ones. To facilitate collaboration, all our usertags are associated with the single user =guix=. The following usertags currently exist for that user:
+
+- =powerpc64le-linux= :: The purpose of this usertag is to make it easy to find the issues that matter most for the =powerpc64le-linux= system type. Please assign this usertag to bugs or patches that affect =powerpc64le-linux= but not other system types. In addition, you may use it to identify issues that for some reason are particularly important for the =powerpc64le-linux= system type, even if the issue affects other system types, too.
+
+- =reproducibility= :: For issues related to reproducibility. For example, it would be appropriate to assign this usertag to a bug report for a package that fails to build reproducibly.
+
+- =reviewed-looks-good= :: You have reviewed the series and it looks good to you (LGTM).
+
+If you're a committer and you want to add a usertag, just start using it with the =guix= user. If the usertag proves useful to you, consider updating this section of the manual so that others will know what your usertag means.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF50][(50)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:END:
+The list of usertags is public information, and anyone can modify any user's list of usertags, so keep that in mind if you choose to use this feature.
+
+--------------
+
+Next: [[id:guix--Cuirass-Build-Notifications][Cuirass Build Notifications]], Previous: [[id:guix--Debbugs-User-Interfaces][Debbugs User Interfaces]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

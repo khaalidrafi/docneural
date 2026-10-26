@@ -7,6 +7,9 @@
 Next: [[id:emacs--Screen-Garbled][Garbage on the Screen]]   Up: [[id:emacs--Lossage][Dealing with Emacs Trouble]]
 
 <<Stuck-Recursive>>
+
+--------------
+
 *** 53.1 Recursive Editing Levels [[#Recursive-Editing-Levels-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Recursive-Editing-Levels-1
@@ -15,5 +18,3 @@ Next: [[id:emacs--Screen-Garbled][Garbage on the Screen]]   Up: [[id:emacs--Loss
 Recursive editing levels are important and useful features of Emacs, but they can seem like malfunctions if you do not understand them.
 
 If the mode line has square brackets ‘=[…]=' around the parentheses that contain the names of the major and minor modes, you have entered a recursive editing level. If you did not do this on purpose, or if you don't understand what that means, you should just get out of the recursive editing level. To do so, type M-x top-level. See [[id:emacs--Recursive-Edit][Recursive Editing Levels]].
-
---------------

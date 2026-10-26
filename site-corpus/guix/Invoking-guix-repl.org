@@ -36,16 +36,19 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-repl>>
-Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.13 Invoking =guix repl= [[#Invoking-guix-repl-1][¶]]
+<<Invoking-guix-repl-1>>
+*** 8.13 Invoking =guix repl=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-repl-1
+:CUSTOM_ID: invoking-guix-repl
 :CLASS: section
 :END:
-The =guix repl= command makes it easier to program Guix in Guile by launching a Guile /read-eval-print loop/ (REPL) for interactive programming (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Using-Guile-Interactively.html#Using-Guile-Interactively][Using Guile Interactively]] in GNU Guile Reference Manual), or by running Guile scripts (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Running-Guile-Scripts.html#Running-Guile-Scripts][Running Guile Scripts]] in GNU Guile Reference Manual). Compared to just launching the =guile= command, =guix repl= guarantees that all the Guix modules and all its dependencies are available in the search path.
+<<index-guix-repl>> <<index-REPL_002c-read_002deval_002dprint-loop_002c-script>>
+The =guix repl= command makes it easier to program Guix in Guile by launching a Guile /read-eval-print loop/ (REPL) for interactive programming (see [[https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Interactively.html#Using-Guile-Interactively][Using Guile Interactively]] in GNU Guile Reference Manual), or by running Guile scripts (see [[https://www.gnu.org/software/guile/manual/html_node/Running-Guile-Scripts.html#Running-Guile-Scripts][Running Guile Scripts]] in GNU Guile Reference Manual). Compared to just launching the =guile= command, =guix repl= guarantees that all the Guix modules and all its dependencies are available in the search path.
 
 The general syntax is:
 
@@ -88,6 +91,7 @@ scheme@(guile-user)> coreutils
 $1 = #<package coreutils@8.29 gnu/packages/base.scm:327 3e28300>
 #+end_example
 
+<<index-inferiors-1>>
 In addition, =guix repl= implements a simple machine-readable REPL protocol for use by =(guix inferior)=, a facility to interact with /inferiors/, separate processes running a potentially different revision of Guix.
 
 The available options are as follows:
@@ -119,4 +123,4 @@ The available options are as follows:
 
 --------------
 
-Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Using-Guix-Interactively][Using Guix Interactively]], Previous: [[id:guix--G_002dExpressions][G-Expressions]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

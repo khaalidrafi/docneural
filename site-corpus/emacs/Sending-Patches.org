@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Checklist][Checklist for Bug Reports]]   Up: [[id:emacs--Bugs][Reporting Bugs]]
 
 <<Sending-Patches>>
+
+--------------
+
 *** 54.5 Sending Patches for GNU Emacs [[#Sending-Patches-for-GNU-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Sending-Patches-for-GNU-Emacs
@@ -48,7 +51,7 @@ Here's what we ask you to provide as part of your patch submissions:
 
   The purpose of the commit log is to explain the rationale of the changes, the way the modified code solves whatever problems your patch is trying to fix, and also show people where to find what was changed. So you need to be specific about what functions you changed and why. For the details about our style and requirements for good commit log messages, please see the “Commit messages” section of the file =CONTRIBUTE= in the Emacs source tree.
 
-  Please also look at the commit log entries of recent commits to see what sorts of information to put in, and to learn the style that we use. Note that, unlike some other projects, we do require commit logs for documentation, i.e., Texinfo files. See [[id:emacs--Change-Log::#Change-Log][Change Logs]], See [[../standards_html/Change-Log-Concepts.html#Change-Log-Concepts][Change Log Concepts]] in GNU Coding Standards.
+  Please also look at the commit log entries of recent commits to see what sorts of information to put in, and to learn the style that we use. Note that, unlike some other projects, we do require commit logs for documentation, i.e., Texinfo files. See [[id:emacs--Change-Log][Change Logs]], See [[../standards_html/Change-Log-Concepts.html#Change-Log-Concepts][Change Log Concepts]] in GNU Coding Standards.
 
 - When you write the fix, keep in mind that we can't install a change that would break other systems. Please think about what effect your change will have if compiled and/or used on another type of system.
 

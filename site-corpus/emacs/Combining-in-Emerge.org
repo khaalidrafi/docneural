@@ -4,6 +4,29 @@
 #+filetags: :emacs:
 #+title: Combining in Emerge
 
-Next:
+Next: [[id:emacs--Fine-Points-of-Emerge][Fine Points of Emerge]]   Previous: [[id:emacs--Exiting-Emerge][Exiting Emerge]]   Up: [[id:emacs--Emerge][Merging Files with Emerge]]
 
-The node you are looking for is at [[id:emacs--Emerge::#Combining-in-Emerge][Combining in Emerge]].
+<<Combining-in-Emerge>>
+
+--------------
+
+**** 30.6.6 Combining the Two Versions [[#Combining-the-Two-Versions][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Combining-the-Two-Versions
+:CLASS: subsection
+:END:
+Sometimes you want to keep /both/ alternatives for a particular difference. To do this, use x c, which edits the merge buffer like this:
+
+#+begin_example
+#ifdef NEW
+version from B buffer
+#else /* not NEW */
+version from A buffer
+#endif /* not NEW */
+#+end_example
+
+While this example shows C preprocessor conditionals delimiting the two alternative versions, you can specify the strings to use by setting the variable =emerge-combine-versions-template= to a string of your choice. In the string, ‘=%a=' says where to put version A, and ‘=%b=' says where to put version B. The default setting, which produces the results shown above, looks like this:
+
+#+begin_example
+"#ifdef NEW\n%b#else /* not NEW */\n%a#endif /* not NEW */\n"
+#+end_example

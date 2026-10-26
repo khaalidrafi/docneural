@@ -4,6 +4,41 @@
 #+filetags: :emacs:
 #+title: Change Logs and VC
 
-Next:
+Next: [[id:emacs--VC-Delete_002fRename][Deleting and Renaming Version-Controlled Files]]   Up: [[id:emacs--Miscellaneous-VC][Miscellaneous Commands and Features of VC]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Change-Logs-and-VC][Change Logs and VC]].
+<<Change-Logs-and-VC>>
+
+--------------
+
+**** 30.1.12.1 Change Logs and VC [[#Change-Logs-and-VC-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Change-Logs-and-VC-1
+:CLASS: subsubsection
+:END:
+If you use RCS or CVS for a program with a =ChangeLog= file (see [[id:emacs--Change-Log][Change Logs]]), you can generate change log entries from the version control log entries of previous commits.
+
+Note that this only works with RCS or CVS. This procedure would be particularly incorrect on a modern changeset-based version control system, where changes to the =ChangeLog= file would normally be committed as part of a changeset. In that case, you should write the change log entries first, then pull them into the ‘=*vc-log*=' buffer when you commit (see [[id:emacs--Log-Buffer][Features of the Log Entry Buffer]]).
+
+-  <<index-C_002dx-v-a>>C-x v a [[#index-C_002dx-v-a][¶]] :: Visit the current directory's =ChangeLog= file and, for registered files in that directory, create new entries for versions committed since the most recent change log entry (=vc-update-change-log=).
+
+- C-u C-x v a :: As above, but only find entries for the current buffer's file.
+
+For example, suppose the first line of =ChangeLog= is dated 1999-04-10, and that the only check-in since then was by Nathaniel Bowditch to =rcs2log= on 1999-05-22 with log entry ‘=Ignore log messages that start with '#'.='. Then C-x v a inserts this =ChangeLog= entry:
+
+#+begin_example
+1999-05-22  Nathaniel Bowditch  <nat@apn.org>
+
+        * rcs2log: Ignore log messages that start with '#'.
+#+end_example
+
+If the version control log entry specifies a function name (in parenthesis at the beginning of a line), that is reflected in the =ChangeLog= entry. For example, if a log entry for =vc.el= is ‘=(vc-do-command): Check call-process status.=', the =ChangeLog= entry is:
+
+#+begin_example
+1999-05-06  Nathaniel Bowditch  <nat@apn.org>
+
+        * vc.el (vc-do-command): Check call-process status.
+#+end_example
+
+When C-x v a adds several change log entries at once, it groups related log entries together if they all are checked in by the same author at nearly the same time. If the log entries for several such files all have the same text, it coalesces them into a single entry.
+
+--------------

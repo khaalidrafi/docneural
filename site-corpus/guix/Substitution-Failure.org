@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Substitution-Failure>>
-Next: [[id:guix--On-Trusting-Binaries][On Trusting Binaries]], Previous: [[id:guix--Proxy-Settings][Proxy Settings]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--On-Trusting-Binaries][On Trusting Binaries]], Previous: [[id:guix--Proxy-Settings][Proxy Settings]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 5.3.7 Substitution Failure [[#Substitution-Failure-1][¶]]
+<<Substitution-Failure-1>>
+**** 5.3.6 Substitution Failure
 :PROPERTIES:
-:CUSTOM_ID: Substitution-Failure-1
+:CUSTOM_ID: substitution-failure
 :CLASS: subsection
 :END:
 Even when a substitute for a derivation is available, sometimes the substitution attempt will fail. This can happen for a variety of reasons: the substitute server might be offline, the substitute may recently have been deleted, the connection might have been interrupted, etc.
@@ -50,7 +52,3 @@ Even when a substitute for a derivation is available, sometimes the substitution
 When substitutes are enabled and a substitute for a derivation is available, but the substitution attempt fails, Guix will attempt to build the derivation locally depending on whether or not =--fallback= was given (see [[id:guix--Common-Build-Options::#fallback_002doption][common build option =--fallback=]]). Specifically, if =--fallback= was omitted, then no local build will be performed, and the derivation is considered to have failed. However, if =--fallback= was given, then Guix will attempt to build the derivation locally, and the success or failure of the derivation depends on the success or failure of the local build. Note that when substitutes are disabled or no substitute is available for the derivation in question, a local build will /always/ be performed, regardless of whether or not =--fallback= was given.
 
 To get an idea of how many substitutes are available right now, you can try running the =guix weather= command (see [[id:guix--Invoking-guix-weather][Invoking =guix weather=]]). This command provides statistics on the substitutes provided by a server.
-
---------------
-
-Next: [[id:guix--On-Trusting-Binaries][On Trusting Binaries]], Previous: [[id:guix--Proxy-Settings][Proxy Settings]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

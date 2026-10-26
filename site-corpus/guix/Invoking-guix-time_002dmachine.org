@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-time_002dmachine>>
-Next: [[id:guix--Inferiors][Inferiors]], Previous: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Inferiors][Inferiors]], Previous: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.8 Invoking =guix time-machine= [[#Invoking-guix-time_002dmachine-1][¶]]
+<<Invoking-guix-time_002dmachine-1>>
+*** 5.8 Invoking =guix time-machine=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-time_002dmachine-1
+:CUSTOM_ID: invoking-guix-time-machine
 :CLASS: section
 :END:
+<<index-guix-time_002dmachine>> <<index-pinning_002c-channels>> <<index-replicating-Guix>> <<index-reproducibility_002c-of-Guix>>
 The =guix time-machine= command provides access to other revisions of Guix, for example to install older versions of packages, or to reproduce a computation in an identical environment. The revision of Guix to be used is defined by a commit or by a channel description file created by =guix describe= (see [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]).
 
 Let's assume that you want to travel to those days of November 2020 when version 1.2.0 of Guix was released and, once you're there, run the =guile= of that time:
@@ -79,7 +82,7 @@ will thus build the package =hello= as defined in the main branch of Guix, witho
 The general syntax is:
 
 #+begin_example
-guix time-machine options... -- command arg...
+guix time-machine options… -- command arg…
 #+end_example
 
 where =command= and =arg=... are passed unmodified to the =guix= command of the specified revision. The =options= that define this revision are the same as for =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]):
@@ -88,62 +91,17 @@ where =command= and =arg=... are passed unmodified to the =guix= command of the 
   =--commit===commit=\\
   =--branch===branch= :: Use the =guix= channel from the specified =url=, at the given =commit= (a valid Git commit ID represented as a hexadecimal string or the name of a tag), or =branch=.
 
-- =--channels===file-or-uri=\\
-  =-C ==file-or-uri= :: Read the list of channels from =file-or-uri=. =file-or-uri= must contain Scheme code that evaluates to a list of channel objects. See [[id:guix--Channels][Channels]] for more information.
-
-  When =file-or-uri= is a URL, channels are transparently downloaded. In the example below, we pull from the latest revision of Guix that was successfully evaluated:
-
-  #+begin_example
-  guix time-machine \
-    -C https://ci.guix.gnu.org/eval/latest/channels.scm?spec=master \
-    -- describe
-#+end_example
-
-  Note that downloading a channel file potentially harms reproducibility: the file might vanish or be modified on the server behind your back. From a reproducibility viewpoint the safe approach is to keep channel files under version control, or to refer to them by their [[https://swhid.org][Software Hash Identifier]], or SWHID, which uniquely and unambiguously identifies contents. Here is an example:
-
-  #+begin_example
-  guix time-machine \
-    -C swh:1:cnt:ae02d8ba3538a385ee799e61cdd0dfc5e14a8d1b \
-    -- ...
-#+end_example
-
-  This command downloads the data designated by the identifier from [[https://archive.softwareheritage.org][the Software Heritage archive]]; it is fully reproducible because the data it refers to is immutable.
-
-  See [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], for more information, and see [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], for info on how to compute the SWHID of a file.
-
-- =--allow-untrusted-channels[=yes|no]= :: Whether to allow pulls from untrusted channels.
-
-  #+begin_quote
-  *Warning:* Allowing untrusted channels can effectively lead to arbitrary code execution on your system.
-
-  #+end_quote
-
-  See [[id:guix--Invoking-guix-pull::#trusted_002dchannels][=guix pull= documentation]], for more info.
-
-- =--unsafe-channel-evaluation= :: Allow arbitrary code execution from channels files.
-
-  #+begin_quote
-  *Warning:* When using =--unsafe-channel-evaluation=, channel files can /run arbitrary code on your machine/. Only use =--unsafe-channel-evaluation= when you fully understand the code of the channel files you use!
-
-  See [[id:guix--Invoking-guix-pull::#unsafe_002dchannel_002devaluation][=--unsafe-channel-evaluation= in =guix pull=]], for background information.
-
-  #+end_quote
-
-- <<index-indirection_002c-for-downloaded-channels-1>>=--max-indirections===n= [[#index-indirection_002c-for-downloaded-channels-1][¶]] :: Allow up to =n= channel indirections /via/ =downloaded-channels= (see [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]]). The default is 2. Setting it to zero disallows use of =downloaded-channels=.
+- =--channels===file=\\
+  =-C ==file= :: Read the list of channels from =file=. =file= must contain Scheme code that evaluates to a list of channel objects. See [[id:guix--Channels][Channels]] for more information.
 
 - =--no-channel-files=\\
   =-q= :: Inhibit loading of the user and system channel files, =~/.config/guix/channels.scm= and =/etc/guix/channels.scm=.
 
-  Thus, =guix time-machine -q= is equivalent to the following Bash command, using the “process substitution” syntax (see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Process-Substitution.html#Process-Substitution][Process Substitution]] in The GNU Bash Reference Manual):
+  Thus, =guix time-machine -q= is equivalent to the following Bash command, using the “process substitution” syntax (see [[https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html#Process-Substitution][Process Substitution]] in The GNU Bash Reference Manual):
 
   #+begin_example
-  guix time-machine -C <(echo %default-channels) ...
-#+end_example
-
-- =--select=\\
-  =-e=\\
-  =--exclude=\\
-  =-x= :: Select or exclude channels that need to be updated. See [[id:guix--Invoking-guix-pull::#pull_002dselect][pull-select]], for more info.
+  guix time-machine -C <(echo %default-channels) …
+  #+end_example
 
 Note that =guix time-machine= can trigger builds of channels and their dependencies, and these are controlled by the standard build options (see [[id:guix--Common-Build-Options][Common Build Options]]).
 
@@ -159,10 +117,9 @@ If =guix time-machine= is executed without any command, it prints the file name 
 ***** [[#DOCF11][(11)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 If you don't know what a DeLorean is, consider traveling back to the 1980's. ([[https://www.imdb.com/title/tt0088763/][Back to the Future (1985)]])
 
 --------------
 
-Next: [[id:guix--Inferiors][Inferiors]], Previous: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Inferiors][Inferiors]], Previous: [[id:guix--Invoking-guix-pull][Invoking =guix pull=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

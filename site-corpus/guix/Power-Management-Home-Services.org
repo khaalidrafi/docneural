@@ -36,20 +36,23 @@ Next:
 [[../..][]]
 
 <<Power-Management-Home-Services>>
-Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.4 Power Management Home Services [[#Power-Management-Home-Services-1][¶]]
+<<Power-Management-Home-Services-1>>
+**** 13.3.4 Power Management Home Services
 :PROPERTIES:
-:CUSTOM_ID: Power-Management-Home-Services-1
+:CUSTOM_ID: power-management-home-services
 :CLASS: subsection
 :END:
+<<index-power-management>>
 The =(gnu home services pm)= module provides home services pertaining to battery power.
 
-- Variable: *home-batsignal-service-type* [[#index-home_002dbatsignal_002dservice_002dtype][¶]] :: Service for =batsignal=, a program that monitors battery levels and warns the user through desktop notifications when their battery is getting low. You can also configure a command to be run when the battery level passes a point deemed “dangerous”. This service is configured with the =home-batsignal-configuration= record.
+- Variable: home-batsignal-service-type  :: Service for =batsignal=, a program that monitors battery levels and warns the user through desktop notifications when their battery is getting low. You can also configure a command to be run when the battery level passes a point deemed “dangerous”. This service is configured with the =home-batsignal-configuration= record.
 
-- Data Type: *home-batsignal-configuration* [[#index-home_002dbatsignal_002dconfiguration][¶]] :: Data type representing the configuration for batsignal.
+- Data Type: home-batsignal-configuration  :: Data type representing the configuration for batsignal.
 
   - =warning-level= (default: =15=) :: The battery level to send a warning message at.
 
@@ -83,4 +86,4 @@ The =(gnu home services pm)= module provides home services pertaining to battery
 
 --------------
 
-Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

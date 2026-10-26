@@ -4,6 +4,39 @@
 #+filetags: :emacs:
 #+title: Enriched Faces
 
-Next:
+Next: [[id:emacs--Enriched-Indentation][Indentation in Enriched Text]]   Previous: [[id:emacs--Editing-Format-Info][Editing Format Information]]   Up: [[id:emacs--Enriched-Text][Enriched Text]]
 
-The node you are looking for is at [[id:emacs--Enriched-Text::#Enriched-Faces][Enriched Faces]].
+<<Enriched-Faces>>
+
+--------------
+
+**** 27.14.4 Faces in Enriched Text [[#Faces-in-Enriched-Text][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Faces-in-Enriched-Text
+:CLASS: subsection
+:END:
+The following commands can be used to add or remove faces (see [[id:emacs--Faces][Text Faces]]). Each applies to the text in the region if the mark is active, and to the next self-inserting character if the mark is inactive. With a prefix argument, each command applies to the next self-inserting character even if the region is active.
+
+-  <<index-M_002do-d-_0028Enriched-mode_0029>>M-o d [[#index-M_002do-d-_0028Enriched-mode_0029][¶]] :: Remove all =face= properties (=facemenu-set-default=).
+
+-  <<index-M_002do-b-_0028Enriched-mode_0029>>M-o b [[#index-M_002do-b-_0028Enriched-mode_0029][¶]] :: Apply the =bold= face (=facemenu-set-bold=).
+
+-  <<index-M_002do-i-_0028Enriched-mode_0029>>M-o i [[#index-M_002do-i-_0028Enriched-mode_0029][¶]] :: Apply the =italic= face (=facemenu-set-italic=).
+
+-  <<index-M_002do-l-_0028Enriched-mode_0029>>M-o l [[#index-M_002do-l-_0028Enriched-mode_0029][¶]] :: Apply the =bold-italic= face (=facemenu-set-bold-italic=).
+
+-  <<index-M_002do-u-_0028Enriched-mode_0029>>M-o u [[#index-M_002do-u-_0028Enriched-mode_0029][¶]] :: Apply the =underline= face (=facemenu-set-underline=).
+
+-  <<index-M_002do-o-_0028Enriched-mode_0029>>M-o o =face= RET [[#index-M_002do-o-_0028Enriched-mode_0029][¶]] :: Apply the face =face= (=facemenu-set-face=).
+
+- <<index-facemenu_002dset_002dforeground>>M-x facemenu-set-foreground [[#index-facemenu_002dset_002dforeground][¶]] :: Prompt for a color (see [[id:emacs--Colors][Colors for Faces]]), and apply it as a foreground color.
+
+- <<index-facemenu_002dset_002dbackground>>M-x facemenu-set-background [[#index-facemenu_002dset_002dbackground][¶]] :: Prompt for a color, and apply it as a background color.
+
+These commands are also available via the Text Properties menu.
+
+A self-inserting character normally inherits the face properties (and most other text properties) from the preceding character in the buffer. If you use one of the above commands to specify the face for the next self-inserting character, that character will not inherit the faces properties from the preceding character, but it will still inherit other text properties.
+
+Enriched mode defines two additional faces: =excerpt= and =fixed=. These correspond to codes used in the text/enriched file format. The =excerpt= face is intended for quotations; by default, it appears the same as =italic=. The =fixed= face specifies fixed-width text; by default, it appears the same as =bold=.
+
+--------------

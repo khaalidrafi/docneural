@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Creating-a-Channel>>
-Next: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Previous: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Previous: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.8 Creating a Channel [[#Creating-a-Channel-1][¶]]
+<<Creating-a-Channel-1>>
+*** 6.7 Creating a Channel
 :PROPERTIES:
-:CUSTOM_ID: Creating-a-Channel-1
+:CUSTOM_ID: creating-a-channel
 :CLASS: section
 :END:
+<<index-personal-packages-_0028channels_0029>> <<index-channels_002c-for-personal-packages>>
 Let's say you have a bunch of custom package variants or personal packages that you think would make little sense to contribute to the Guix project, but would like to have these packages transparently available to you at the command line. By creating a /channel/, you can use and publish such a package collection. This involves the following steps:
 
 1. A channel lives in a Git repository so the first step, when creating a channel, is to create its repository:
@@ -53,7 +56,7 @@ Let's say you have a bunch of custom package variants or personal packages that 
    mkdir my-channel
    cd my-channel
    git init
-#+end_example
+   #+end_example
 
 2. The next step is to create files containing package modules (see [[id:guix--Package-Modules][Package Modules]]), each of which will contain one or more package definitions (see [[id:guix--Defining-Packages][Defining Packages]]). A channel can provide things other than packages, such as build systems or services; we're using packages as it's the most common use case.
 
@@ -63,7 +66,7 @@ Let's say you have a bunch of custom package variants or personal packages that 
    mkdir -p alice/packages
    $EDITOR alice/packages/greetings.scm
    git add alice/packages/greetings.scm
-#+end_example
+   #+end_example
 
    You can name your package modules however you like; the main constraint to keep in mind is to avoid name clashes with other package collections, which is why our hypothetical Alice wisely chose the =(alice packages …)= name space.
 
@@ -73,15 +76,15 @@ Let's say you have a bunch of custom package variants or personal packages that 
 
    #+begin_example
    guix build -L. hi-from-alice
-#+end_example
+   #+end_example
 
-   ... where =-L.= adds the current directory to Guile's load path (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Load-Paths.html#Load-Paths][Load Paths]] in GNU Guile Reference Manual).
+   ... where =-L.= adds the current directory to Guile's load path (see [[https://www.gnu.org/software/guile/manual/html_node/Load-Paths.html#Load-Paths][Load Paths]] in GNU Guile Reference Manual).
 
 4. It might take Alice a few iterations to obtain satisfying package definitions. Eventually Alice will commit this file:
 
    #+begin_example
    git commit
-#+end_example
+   #+end_example
 
    As a channel author, consider bundling authentication material with your channel so that users can authenticate it. See [[id:guix--Channel-Authentication][Channel Authentication]], and [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], for info on how to do it.
 
@@ -90,7 +93,7 @@ Let's say you have a bunch of custom package variants or personal packages that 
    #+begin_example
    $EDITOR ~/.config/guix/channels.scm
    guix pull
-#+end_example
+   #+end_example
 
    Guix will now behave as if the root directory of that channel's Git repository had been permanently added to the Guile load path. In this example, =(alice packages greetings)= will automatically be found by the =guix= command.
 
@@ -109,4 +112,4 @@ You've been warned! Having said this, we believe external channels are a practic
 
 --------------
 
-Next: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Previous: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Previous: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

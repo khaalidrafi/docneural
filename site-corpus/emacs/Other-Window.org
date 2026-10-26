@@ -7,6 +7,9 @@
 Next: [[id:emacs--Pop-Up-Window][Displaying in Another Window]]   Previous: [[id:emacs--Split-Window][Splitting Windows]]   Up: [[id:emacs--Windows][Multiple Windows]]
 
 <<Other-Window>>
+
+--------------
+
 *** 22.3 Using Other Windows [[#Using-Other-Windows][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Using-Other-Windows
@@ -24,7 +27,7 @@ Next: [[id:emacs--Pop-Up-Window][Displaying in Another Window]]   Previous: [[id
 
 With the keyboard, you can switch windows by typing C-x o (=other-window=). That is an o, for “other”, not a zero. When there are more than two windows, this command moves through all the windows in a cyclic order, generally top to bottom and left to right. After the rightmost and bottommost window, it goes back to the one at the upper left corner. A numeric argument means to move several steps in the cyclic order of windows. A negative argument moves around the cycle in the opposite order. When the minibuffer is active, the minibuffer window is the last window in the cycle; you can switch from the minibuffer window to one of the other windows, and later switch back and finish supplying the minibuffer argument that is requested. See [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]].
 
-The =other-window= command will normally only switch to the next window in the current frame (unless otherwise configured). If you work in a multi-frame environment and you want windows in all frames to be part of the cycle, you can rebind C-x o to the =next-window-any-frame= command. (See [[id:emacs--Key-Bindings::#Rebinding][Changing Key Bindings Interactively]], for how to rebind a command.)
+The =other-window= command will normally only switch to the next window in the current frame (unless otherwise configured). If you work in a multi-frame environment and you want windows in all frames to be part of the cycle, you can rebind C-x o to the =next-window-any-frame= command. (See [[id:emacs--Rebinding][Changing Key Bindings Interactively]], for how to rebind a command.)
 
 The usual scrolling commands (see [[id:emacs--Display][Controlling the Display]]) apply to the selected window only, but there are also commands to scroll the next window. C-M-v (=scroll-other-window=) scrolls the window that C-x o would select. In other respects, the command behaves like C-v; both move the buffer text upward relative to the window, and take positive and negative arguments. (In the minibuffer, C-M-v scrolls the help window associated with the minibuffer, if any, rather than the next window in the standard cyclic order; see [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]].) C-M-S-v (=scroll-other-window-down=) scrolls the next window downward in a similar way. Likewise, C-M-S-l (=recenter-other-window=) behaves like C-l (=recenter-top-bottom=) in the next window.
 

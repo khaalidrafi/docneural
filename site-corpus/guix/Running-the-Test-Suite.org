@@ -36,35 +36,23 @@ Next:
 [[../..][]]
 
 <<Running-the-Test-Suite>>
-Next: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Previous: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Previous: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.3 Running the Test Suite [[#Running-the-Test-Suite-1][¶]]
+<<Running-the-Test-Suite-1>>
+*** 22.3 Running the Test Suite
 :PROPERTIES:
-:CUSTOM_ID: Running-the-Test-Suite-1
+:CUSTOM_ID: running-the-test-suite
 :CLASS: section
 :END:
+<<index-test-suite>>
 After a successful =configure= and =make= run, it is a good idea to run the test suite. It can help catch issues with the setup or environment, or bugs in Guix itself---and really, reporting test failures is a good way to help improve the software. To run the test suite, type:
 
 #+begin_example
 make check
 #+end_example
-
-Some tests might fail or be skipped, depending on your environment. For example, many tests require Internet access to download test binaries into the temporary store used for testing.
-
-Assuming you set up your environment with =guix shell=, this is what you can expect:
-
-- =--pure= :: all tests should either pass or be skipped. This will also set up the test store;
-
-- =-CPWN= :: all tests should either pass or be skipped and this should also set up the test store[[#FOOT46][^{46}]];
-
-- =-CPW= :: all network tests should automatically be skipped, but tests that require the test store are run, so those will fail unless the test store has been set up during an earlier test run with network access.
-
-#+begin_quote
-*Note:* Some tests are skipped for other reasons, for example because they are only applicable for a specific system.
-
-#+end_quote
 
 Test cases can run in parallel: you can use the =-j= option of GNU make to speed things up. The first run may take a few minutes on a recent machine; subsequent runs will be faster because the store that is created for test purposes will already have various things in cache.
 
@@ -101,7 +89,7 @@ make check SCM_LOG_DRIVER_FLAGS="--brief=no --show-duration=yes"
 
 See [[https://www.gnu.org/software/automake/manual/html_node/Parallel-Test-Harness.html#Parallel-Test-Harness][Parallel Test Harness]] in GNU Automake for more information about the Automake Parallel Test Harness.
 
-Upon failure, please see if there already exists an issue which describes your problem on [[https://codeberg.org/guix/guix/issues][Codeberg]], else create a new one and attach the =test-suite.log= file. Please specify the Guix version being used as well as version numbers of the dependencies (see [[id:guix--Requirements][Requirements]]) in your message by running =./pre-inst-env guix describe=.
+Upon failure, please email [[mailto:bug-guix@gnu.org][bug-guix@gnu.org]] and attach the =test-suite.log= file. Please specify the Guix version being used as well as version numbers of the dependencies (see [[id:guix--Requirements][Requirements]]) in your message.
 
 Guix also comes with a whole-system test suite that tests complete Guix System instances. It can only run on systems where Guix is already installed, using:
 
@@ -128,22 +116,8 @@ hint: Did you forget `(use-modules (gnu tests))'?
 
 there may be inconsistencies in the work tree from previous builds. To resolve this, try running =make clean-go= followed by =make=.
 
-Again in case of test failures, open an issue on [[https://codeberg.org/guix/guix/issues][Codeberg]] with all the details.
+Again in case of test failures, please send [[mailto:bug-guix@gnu.org][bug-guix@gnu.org]] all the details.
 
 --------------
 
-**** Footnotes
-:PROPERTIES:
-:CUSTOM_ID: footnotes
-:CLASS: footnotes-heading
-:END:
-***** [[#DOCF46][(46)]]
-:PROPERTIES:
-:CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
-:END:
-At the time of writing, June 2026, some tests might fail in a =-CPWN= shell; those are [[https://codeberg.org/guix/guix/issues/9381][bugs]].
-
---------------
-
-Next: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Previous: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Previous: [[id:guix--Building-from-Git][Building from Git]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

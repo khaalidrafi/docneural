@@ -36,16 +36,26 @@ Next:
 [[../..][]]
 
 <<Using-TeX-and-LaTeX>>
-Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 18 Using TeX and LaTeX [[#Using-TeX-and-LaTeX-1][¶]]
+<<Using-TeX-and-LaTeX-1>>
+** 18 Using TeX and LaTeX
 :PROPERTIES:
-:CUSTOM_ID: Using-TeX-and-LaTeX-1
+:CUSTOM_ID: using-tex-and-latex
 :CLASS: chapter
 :END:
-Guix provides packages for the TeX, LaTeX, ConTeXt, LuaTeX, and related typesetting systems, taken from the [[https://www.tug.org/texlive/][TeX Live distribution]]. Because TeX Live is so huge and because finding one's way in this maze is tricky, this section provides some guidance on how to deploy the relevant packages to compile TeX and LaTeX documents. Guix contains the full TeX Live distribution in a modular setup, in which you only install the packages you need, whose name is always prefixed with ‘=texlive-='.
+<<index-TeX-packages>> <<index-LaTeX-packages>>
+Guix provides packages for the TeX, LaTeX, ConTeXt, LuaTeX, and related typesetting systems, taken from the [[https://www.tug.org/texlive/][TeX Live distribution]]. Because TeX Live is so huge and because finding one's way in this maze is tricky, this section provides some guidance on how to deploy the relevant packages to compile TeX and LaTeX documents.
+
+TeX Live currently comes in two mutually exclusive flavors in Guix:
+
+- The “monolithic” =texlive= package: it comes with /every single TeX Live package/ (roughly 4,200), but it is huge---more than 4 GiB for a single package!
+- A “modular” TeX Live distribution, in which you only install the packages you need, whose name is always prefixed with ‘=texlive-='.
+
+To insist, these two flavors cannot be combined[[#FOOT39][^{39}]]. If in the modular setting your document does not compile, the solution is not to add the monolithic =texlive= package, but to add the set of missing packages from the modular distribution.
 
 Building a coherent system that provides all the essential tools and, at the same time, satisfies all of its internal dependencies can be a difficult task. It is therefore recommended to start with sets of packages, called /collections/, and /schemes/, the name for collections of collections. The following command lists available schemes and collections (see [[id:guix--Invoking-guix-package::#guix_002dsearch][Invoking guix package]]):
 
@@ -92,7 +102,7 @@ How do you determine what the missing package is? In the first case, you will fi
 $ guix search texlive tikz
 name: texlive-pgf
 version: 59745
-...
+…
 #+end_example
 
 In the second case, =guix search= turns up nothing. Instead, you can search the TeX Live package database using the =tlmgr= command:
@@ -117,4 +127,17 @@ The file is available in the TeX Live =helvetic= package, which is known in Guix
 
 --------------
 
-Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF39][(39)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:END:
+No rule without exception! As the monolithic TeX Live does not contain the =biber= executable, it is okay to combine it with =texlive-biber=, which does.
+
+--------------
+
+Next: [[id:guix--Security-Updates][Security Updates]], Previous: [[id:guix--Installing-Debugging-Files][Installing Debugging Files]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Using-a-Custom-Guix-Channel>>
-Next: [[id:guix--Replicating-Guix][Replicating Guix]], Previous: [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Replicating-Guix][Replicating Guix]], Previous: [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.2 Using a Custom Guix Channel [[#Using-a-Custom-Guix-Channel-1][¶]]
+<<Using-a-Custom-Guix-Channel-1>>
+*** 6.2 Using a Custom Guix Channel
 :PROPERTIES:
-:CUSTOM_ID: Using-a-Custom-Guix-Channel-1
+:CUSTOM_ID: using-a-custom-guix-channel
 :CLASS: section
 :END:
 The channel called =guix= specifies where Guix itself---its command-line tools as well as its package collection---should be downloaded. For instance, suppose you want to update from another copy of the Guix repository at =example.org=, and specifically the =super-hacks= branch, you can write in =~/.config/guix/channels.scm= this specification:
@@ -65,7 +67,3 @@ Note that you can specify a local directory on the =url= field above if the chan
 #+end_example
 
 This also applies to the root user unless when called with =sudo= by the directory owner.
-
---------------
-
-Next: [[id:guix--Replicating-Guix][Replicating Guix]], Previous: [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

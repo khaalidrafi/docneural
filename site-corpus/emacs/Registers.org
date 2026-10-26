@@ -7,6 +7,9 @@
 Next: [[id:emacs--Display][Controlling the Display]]   Previous: [[id:emacs--Killing][Killing and Moving Text]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Registers>>
+
+--------------
+
 ** 15 Registers [[#Registers-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Registers-1
@@ -35,5 +38,14 @@ All of the commands that prompt for a register will by default display a preview
 - =never= :: This value is like =nil=, but it disables the preview.
 
 /Bookmarks/ record files and positions in them, so you can return to those positions when you look at the file again. Bookmarks are similar in spirit to registers, so they are also documented in this chapter.
+
+- [[id:emacs--Position-Registers][Saving Positions in Registers]]
+- [[id:emacs--Text-Registers][Saving Text in Registers]]
+- [[id:emacs--Rectangle-Registers][Saving Rectangles in Registers]]
+- [[id:emacs--Configuration-Registers][Saving Window and Frame Configurations in Registers]]
+- [[id:emacs--Number-Registers][Keeping Numbers in Registers]]
+- [[id:emacs--File-and-Buffer-Registers][Keeping File and Buffer Names in Registers]]
+- [[id:emacs--Keyboard-Macro-Registers][Keyboard Macro Registers]]
+- [[id:emacs--Bookmarks][Bookmarks]]
 
 --------------

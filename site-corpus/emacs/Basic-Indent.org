@@ -4,6 +4,25 @@
 #+filetags: :emacs:
 #+title: Basic Indent
 
-Next:
+Next: [[id:emacs--Multi_002dline-Indent][Indenting Several Lines]]   Up: [[id:emacs--Program-Indent][Indentation for Programs]]
 
-The node you are looking for is at [[id:emacs--Program-Indent::#Basic-Indent][Basic Indent]].
+<<Basic-Indent>>
+
+--------------
+
+**** 28.3.1 Basic Program Indentation Commands [[#Basic-Program-Indentation-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Basic-Program-Indentation-Commands
+:CLASS: subsection
+:END:
+- TAB :: Adjust indentation of current line (=indent-for-tab-command=).
+
+- RET :: Insert a newline, then adjust indentation of following line (=newline=).
+
+The basic indentation command is TAB (=indent-for-tab-command=), which was documented in [[id:emacs--Indentation][Indentation]]. In programming language modes, TAB indents the current line, based on the indentation and syntactic content of the preceding lines; if the region is active, TAB indents each line within the region, not just the current line.
+
+The command RET (=newline=), which was documented in [[id:emacs--Inserting-Text][Inserting Text]], does the same as C-j followed by TAB: it inserts a new line, then adjusts the line's indentation.
+
+When indenting a line that starts within a parenthetical grouping, Emacs usually places the start of the line under the preceding line within the group, or under the text after the parenthesis. If you manually give one of these lines a nonstandard indentation (e.g., for aesthetic purposes), the lines below will follow it.
+
+The indentation commands for most programming language modes assume that an open-parenthesis, open-brace or other opening delimiter at the left margin is the start of a function. If the code you are editing violates this assumption---even if the delimiters occur in strings or comments---you must set =open-paren-in-column-0-is-defun-start= to =nil= for indentation to work properly. See [[id:emacs--Left-Margin-Paren][Left Margin Convention]].

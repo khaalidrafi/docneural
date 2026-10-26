@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Introduction>>
-Next: [[id:guix--Installation][Installation]], Previous: [[id:guix--index][GNU Guix]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Installation][Installation]], Previous: [[id:guix--index][GNU Guix]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 1 Introduction [[#Introduction-1][¶]]
+<<Introduction-1>>
+** 1 Introduction
 :PROPERTIES:
-:CUSTOM_ID: Introduction-1
+:CUSTOM_ID: introduction
 :CLASS: chapter
 :END:
+<<index-purpose>>
 GNU Guix[[#FOOT1][^{1}]] is a package management tool for and distribution of the GNU system. Guix makes it easy for unprivileged users to install, upgrade, or remove software packages, to roll back to a previous package set, to build packages from source, and generally assists with the creation and maintenance of software environments.
 
+<<index-Guix-System>> <<index-GuixSD_002c-now-Guix-System>> <<index-Guix-System-Distribution_002c-now-Guix-System>>
 You can install GNU Guix on top of an existing GNU/Linux system where it complements the available tools without interference (see [[id:guix--Installation][Installation]]), or you can use it as a standalone operating system distribution, /Guix System/[[#FOOT2][^{2}]]. See [[id:guix--GNU-Distribution][GNU Distribution]].
 
 - [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]]
@@ -62,13 +66,11 @@ You can install GNU Guix on top of an existing GNU/Linux system where it comple
 ***** [[#DOCF1][(1)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 “Guix” is pronounced like “geeks”, or “ɡiːks” using the international phonetic alphabet (IPA).
 
 ***** [[#DOCF2][(2)]]
 :PROPERTIES:
 :CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 We used to refer to Guix System as “Guix System Distribution” or “GuixSD”. We now consider it makes more sense to group everything under the “Guix” banner since, after all, Guix System is readily available through the =guix system= command, even if you're using a different distro underneath!

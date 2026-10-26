@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Defining-Package-Variants>>
-Next: [[id:guix--Writing-Manifests][Writing Manifests]], Previous: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Writing-Manifests][Writing Manifests]], Previous: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.3 Defining Package Variants [[#Defining-Package-Variants-1][¶]]
+<<Defining-Package-Variants-1>>
+*** 8.3 Defining Package Variants
 :PROPERTIES:
-:CUSTOM_ID: Defining-Package-Variants-1
+:CUSTOM_ID: defining-package-variants
 :CLASS: section
 :END:
+<<index-customizing-packages>> <<index-variants_002c-of-packages>>
 One of the nice things with Guix is that, given a package definition, you can easily /derive/ variants of that package---for a different upstream version, with different dependencies, different compilation options, and so on. Some of these custom packages can be defined straight from the command line (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]). This section describes how to define package variants in code. This can be useful in “manifests” (see [[id:guix--Writing-Manifests][Writing Manifests]]) and in your own package collection (see [[id:guix--Creating-a-Channel][Creating a Channel]]), among others!
 
+<<index-inherit_002c-for-package-definitions>>
 As discussed earlier, packages are first-class objects in the Scheme language. The =(guix packages)= module provides the =package= construct to define new package objects (see [[id:guix--package-Reference][=package= Reference]]). The easiest way to define a package variant is using the =inherit= keyword together with =package=. This allows you to inherit from a package definition while overriding the fields you want.
 
 For example, given the =hello= variable, which contains a definition for the current version of GNU Hello, here's how you would define a variant for version 2.2 (released in 2006, it's vintage!):
@@ -75,23 +79,15 @@ You can just as well define variants with a different set of dependencies than t
 (use-modules (gnu packages gdb))   ;for 'gdb'
 
 (define gdb-sans-guile
-  (package/inherit gdb
-    (inputs (modify-inputs inputs
+  (package
+    (inherit gdb)
+    (inputs (modify-inputs (package-inputs gdb)
               (delete "guile")))))
 #+end_src
 
-In the body of the =inputs= field above, =inputs= is bound to the inherited value. Thus, the =modify-inputs= form above removes the ="guile"= package from the =inputs= field of =gdb=.
+The =modify-inputs= form above removes the ="guile"= package from the =inputs= field of =gdb=. The =modify-inputs= macro is a helper that can prove useful anytime you want to remove, add, or replace package inputs.
 
-#+begin_quote
-*Note:* The example above uses =(package/inherit gdb …)= instead of the usual =(package (inherit gdb) …)=. While the latter would work, =package/inherit= does extra work: if =gdb= has a =replacement= field (see [[id:guix--Security-Updates][Security Updates]]), =package/inherit= propagates the =inputs= changes of this variant to the replacement.
-
-In other words, =package/inherit= ensures the variant gets a consistent =replacement= when the original package has one. Thus, one should generally use =package/inherit= when creating a variant for the same version, but not when targeting a different version, as in the =hello= example we saw earlier, where the replacement may be incorrect.
-
-#+end_quote
-
-The =modify-inputs= macro is a helper that can prove useful anytime you want to remove, add, or replace package inputs.
-
-- Macro: *modify-inputs* =inputs clauses= [[#index-modify_002dinputs][¶]] :: Modify the given package inputs, as returned by =package-inputs= & co., according to the given clauses. Each clause must have one of the following forms:
+- Macro: modify-inputs inputs clauses :: Modify the given package inputs, as returned by =package-inputs= & co., according to the given clauses. Each clause must have one of the following forms:
 
   - =(delete ==name==…)= :: Delete from the inputs packages with the given =name=s (strings).
 
@@ -137,11 +133,12 @@ In some cases, you may find it useful to write functions (“procedures”, in S
   (make-lua-socket "lua5.2-socket" lua-5.2))
 #+end_src
 
-Here we have defined packages =lua5.1-socket= and =lua5.2-socket= by calling =make-lua-socket= with different arguments. See [[https://doc.guix.gnu.org/guile/latest/en/html_node/Procedures.html#Procedures][Procedures]] in GNU Guile Reference Manual, for more info on procedures. Having top-level public definitions for these two packages means that they can be referred to from the command line (see [[id:guix--Package-Modules][Package Modules]]).
+Here we have defined packages =lua5.1-socket= and =lua5.2-socket= by calling =make-lua-socket= with different arguments. See [[https://www.gnu.org/software/guile/manual/html_node/Procedures.html#Procedures][Procedures]] in GNU Guile Reference Manual, for more info on procedures. Having top-level public definitions for these two packages means that they can be referred to from the command line (see [[id:guix--Package-Modules][Package Modules]]).
 
+<<index-package-transformations>>
 These are pretty simple package variants. As a convenience, the =(guix transformations)= module provides a high-level interface that directly maps to the more sophisticated package transformation options (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]):
 
-- Procedure: *options->transformation* =opts [#:warn? #t]= [[#index-options_002d_003etransformation][¶]] :: Return a procedure that, when passed an object to build (package, derivation, etc.), applies the transformations specified by =opts= and returns the resulting objects. =opts= must be a list of symbol/string pairs such as:
+- Procedure: options->transformation opts :: Return a procedure that, when passed an object to build (package, derivation, etc.), applies the transformations specified by =opts= and returns the resulting objects. =opts= must be a list of symbol/string pairs such as:
 
   #+begin_src lisp
   ((with-branch . "guile-gcrypt=master")
@@ -149,8 +146,6 @@ These are pretty simple package variants. As a convenience, the =(guix transform
   #+end_src
 
   Each symbol names a transformation and the corresponding string is an argument to that transformation.
-
-  When =warn?= is true, warn about packages for which a transformation had no effect.
 
 For instance, a manifest equivalent to this command:
 
@@ -175,11 +170,12 @@ guix build guix \
  (list (transform (specification->package "guix"))))
 #+end_src
 
+<<index-input-rewriting>> <<index-dependency-graph-rewriting>>
 The =options->transformation= procedure is convenient, but it's perhaps also not as flexible as you may like. How is it implemented? The astute reader probably noticed that most package transformation options go beyond the superficial changes shown in the first examples of this section: they involve /input rewriting/, whereby the dependency graph of a package is rewritten by replacing specific inputs by others.
 
 Dependency graph rewriting, for the purposes of swapping packages in the graph, is what the =package-input-rewriting= procedure in =(guix packages)= implements.
 
-- Procedure: *package-input-rewriting* =replacements [rewrite-name] [#:deep? #t] [#:recursive? #f]= [[#index-package_002dinput_002drewriting][¶]] :: Return a procedure that, when passed a package, replaces its direct and indirect dependencies, including implicit inputs when =deep?= is true, according to =replacements=. =replacements= is a list of package pairs; the first element of each pair is the package to replace, and the second one is the replacement.
+- Procedure: package-input-rewriting replacements [rewrite-name] [#:deep? #t] [#:recursive? #f] :: Return a procedure that, when passed a package, replaces its direct and indirect dependencies, including implicit inputs when =deep?= is true, according to =replacements=. =replacements= is a list of package pairs; the first element of each pair is the package to replace, and the second one is the replacement.
 
   When =recursive?= is true, apply replacements to the right-hand sides of =replacements= as well, recursively.
 
@@ -201,7 +197,7 @@ Here we first define a rewriting procedure that replaces =openssl= with =libress
 
 The following variant of =package-input-rewriting= can match packages to be replaced by name rather than by identity.
 
-- Procedure: *package-input-rewriting/spec* =replacements== [#:deep? #t] [#:replace-hidden? #t]= [[#index-package_002dinput_002drewriting_002fspec][¶]] :: Return a procedure that, given a package, applies the given =replacements= to all the package graph, including implicit inputs unless =deep?= is false.
+- Procedure: package-input-rewriting/spec =replacements= [#:deep? #t] [#:replace-hidden? #t] :: Return a procedure that, given a package, applies the given =replacements= to all the package graph, including implicit inputs unless =deep?= is false.
 
   =replacements= is a list of spec/procedures pair; each spec is a package specification such as ="gcc"= or ="guile@2"=, and each procedure takes a matching package and returns a replacement for that package. Matching packages that have the =hidden?= property set are not replaced unless =replace-hidden?= is set to true.
 
@@ -217,7 +213,7 @@ The key difference here is that, this time, packages are matched by spec and not
 
 A more generic procedure to rewrite a package dependency graph is =package-mapping=: it supports arbitrary changes to nodes in the graph.
 
-- Procedure: *package-mapping* =proc [cut?] [#:deep? #f]= [[#index-package_002dmapping][¶]] :: Return a procedure that, given a package, applies =proc= to all the packages depended on and returns the resulting package. The procedure stops recursion when =cut?= returns true for a given package. When =deep?= is true, =proc= is applied to implicit inputs as well.
+- Procedure: package-mapping proc [cut?] [#:deep? #f] :: Return a procedure that, given a package, applies =proc= to all the packages depended on and returns the resulting package. The procedure stops recursion when =cut?= returns true for a given package. When =deep?= is true, =proc= is applied to implicit inputs as well.
 
 #+begin_quote
 *Tips:* Understanding what a variant really looks like can be difficult as one starts combining the tools shown above. There are several ways to inspect a package before attempting to build it that can prove handy:
@@ -229,4 +225,4 @@ A more generic procedure to rewrite a package dependency graph is =package-mappi
 
 --------------
 
-Next: [[id:guix--Writing-Manifests][Writing Manifests]], Previous: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Writing-Manifests][Writing Manifests]], Previous: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

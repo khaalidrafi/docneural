@@ -7,6 +7,9 @@
 Next: [[id:emacs--Several-Buffers][Operating on Several Buffers]]   Previous: [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
 
 <<Kill-Buffer>>
+
+--------------
+
 *** 21.4 Killing Buffers [[#Killing-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Killing-Buffers
@@ -30,10 +33,10 @@ The command M-x kill-matching-buffers prompts for a regular expression and kills
 
 The Buffer Menu feature is also convenient for killing various buffers. See [[id:emacs--Several-Buffers][Operating on Several Buffers]].
 
-If you want to do something special every time a buffer is killed, you can add hook functions to the hook =kill-buffer-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]).
+If you want to do something special every time a buffer is killed, you can add hook functions to the hook =kill-buffer-hook= (see [[id:emacs--Hooks][Hooks]]).
 
 If you run one Emacs session for a period of days, as many people do, it can fill up with buffers that you used several days ago. The command M-x clean-buffer-list is a convenient way to purge them; it kills all the unmodified buffers that you have not used for a long time. An ordinary buffer is killed if it has not been displayed for three days; however, you can specify certain buffers that should never be killed automatically, and others that should be killed if they have been unused for a mere hour. These defaults, and other aspects of this command's behavior, can be controlled by customizing several options described in the doc string of =clean-buffer-list=.
 
-You can also have this buffer purging done for you, once a day, by enabling Midnight mode. Midnight mode operates each day at midnight; at that time, it runs =clean-buffer-list=, or whichever functions you have placed in the normal hook =midnight-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]). To enable Midnight mode, use the Customization buffer to set the variable =midnight-mode= to =t=. See [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]].
+You can also have this buffer purging done for you, once a day, by enabling Midnight mode. Midnight mode operates each day at midnight; at that time, it runs =clean-buffer-list=, or whichever functions you have placed in the normal hook =midnight-hook= (see [[id:emacs--Hooks][Hooks]]). To enable Midnight mode, use the Customization buffer to set the variable =midnight-mode= to =t=. See [[id:emacs--Easy-Customization][Easy Customization Interface]].
 
 --------------

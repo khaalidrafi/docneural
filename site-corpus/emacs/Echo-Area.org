@@ -7,6 +7,9 @@
 Next: [[id:emacs--Mode-Line][The Mode Line]]   Previous: [[id:emacs--Point][Point]]   Up: [[id:emacs--Screen][The Organization of the Screen]]
 
 <<Echo-Area>>
+
+--------------
+
 *** 1.2 The Echo Area [[#The-Echo-Area][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Echo-Area
@@ -20,7 +23,7 @@ The echo area is also used to display an /error message/ when a command cannot d
 
 Some commands display informative messages in the echo area to tell you what the command has done, or to provide you with some specific information. These /informative/ messages, unlike error messages, are not accompanied with a beep or flash. For example, C-x = (hold down Ctrl and type x, then let go of Ctrl and type =) displays a message describing the character at point, its position in the buffer, and its current column in the window. Commands that take a long time often display messages ending in ‘=...=' while they are working (sometimes also indicating how much progress has been made, as a percentage), and add ‘=done=' when they are finished.
 
-Informative echo area messages are saved in a special buffer named =*Messages*=. (We have not explained buffers yet; see [[id:emacs--Buffers][Using Multiple Buffers]], for more information about them.) If you miss a message that appeared briefly on the screen, you can switch to the =*Messages*= buffer to see it again. The =*Messages*= buffer is limited to a certain number of lines, specified by the variable =message-log-max=. (We have not explained variables either; see [[id:emacs--Variables::#Variables][Variables]], for more information about them.) Beyond this limit, one line is deleted from the beginning whenever a new message line is added at the end.
+Informative echo area messages are saved in a special buffer named =*Messages*=. (We have not explained buffers yet; see [[id:emacs--Buffers][Using Multiple Buffers]], for more information about them.) If you miss a message that appeared briefly on the screen, you can switch to the =*Messages*= buffer to see it again. The =*Messages*= buffer is limited to a certain number of lines, specified by the variable =message-log-max=. (We have not explained variables either; see [[id:emacs--Variables][Variables]], for more information about them.) Beyond this limit, one line is deleted from the beginning whenever a new message line is added at the end.
 
 See [[id:emacs--Display-Custom][Customization of Display]], for options that control how Emacs uses the echo area.
 

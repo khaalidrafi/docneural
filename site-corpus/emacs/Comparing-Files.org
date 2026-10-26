@@ -7,6 +7,9 @@
 Next: [[id:emacs--Diff-Mode][Diff Mode]]   Previous: [[id:emacs--Directories][File Directories]]   Up: [[id:emacs--Files][File Handling]]
 
 <<Comparing-Files>>
+
+--------------
+
 *** 20.9 Comparing Files [[#Comparing-Files-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Comparing-Files-1
@@ -32,6 +35,6 @@ With a numeric argument, =compare-windows= ignores changes in whitespace. If the
 
 You can use M-x smerge-mode to turn on Smerge mode, a minor mode for editing output from the =diff3= program. This is typically the result of a failed merge from a version control system update outside VC, due to conflicting changes to a file. Smerge mode provides commands to resolve conflicts by selecting specific changes.
 
-See [[id:emacs--Emerge::#Emerge][Merging Files with Emerge]], for the Emerge facility, which provides a powerful interface for merging files.
+See [[id:emacs--Emerge][Merging Files with Emerge]], for the Emerge facility, which provides a powerful interface for merging files.
 
 --------------

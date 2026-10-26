@@ -7,6 +7,9 @@
 Next: [[id:emacs--Blank-Lines][Blank Lines]]   Previous: [[id:emacs--Basic-Files][Files]]   Up: [[id:emacs--Basic][Basic Editing Commands]]
 
 <<Basic-Help>>
+
+--------------
+
 *** 9.6 Help [[#Help-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Help-1
@@ -17,5 +20,3 @@ If you forget what a key does, you can find out by typing C-h k (=describe-key=)
 The prefix key C-h stands for “help”. The key F1 serves as an alias for C-h. Apart from C-h k, there are many other help commands providing different kinds of help.
 
 See [[id:emacs--Help][Help]], for details.
-
---------------

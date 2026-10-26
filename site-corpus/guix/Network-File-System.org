@@ -36,29 +36,34 @@ Next:
 [[../..][]]
 
 <<Network-File-System>>
-Next: [[id:guix--Samba-Services][Samba Services]], Previous: [[id:guix--DAV-Services][DAV Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Samba-Services][Samba Services]], Previous: [[id:guix--VPN-Services][VPN Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.28 Network File System [[#Network-File-System-1][¶]]
+<<Network-File-System-1>>
+**** 11.10.26 Network File System
 :PROPERTIES:
-:CUSTOM_ID: Network-File-System-1
+:CUSTOM_ID: network-file-system
 :CLASS: subsection
 :END:
+<<index-NFS>>
 The =(gnu services nfs)= module provides the following services, which are most commonly used in relation to mounting or exporting directory trees as /network file systems/ (NFS).
 
 While it is possible to use the individual components that together make up a Network File System service, we recommended to configure an NFS server with the =nfs-service-type=.
 
-**** NFS Service [[#NFS-Service][¶]]
+<<NFS-Service>>
+**** NFS Service
 :PROPERTIES:
-:CUSTOM_ID: NFS-Service
+:CUSTOM_ID: nfs-service
 :CLASS: subsubheading
 :END:
+<<index-NFS_002c-server>>
 The NFS service takes care of setting up all NFS component services, kernel configuration file systems, and installs configuration files in the locations that NFS expects.
 
-- Variable: *nfs-service-type* [[#index-nfs_002dservice_002dtype][¶]] :: A service type for a complete NFS server.
+- Variable: nfs-service-type  :: A service type for a complete NFS server.
 
-- Data Type: *nfs-configuration* [[#index-nfs_002dconfiguration][¶]] :: This data type represents the configuration of the NFS service and all of its subsystems.
+- Data Type: nfs-configuration  :: This data type represents the configuration of the NFS service and all of its subsystems.
 
   It has the following parameters:
 
@@ -97,59 +102,67 @@ The NFS service takes care of setting up all NFS component services, kernel conf
 
 If you don't need a complete NFS service or prefer to build it yourself you can use the individual component services that are documented below.
 
-**** RPC Bind Service [[#RPC-Bind-Service][¶]]
+<<RPC-Bind-Service>>
+**** RPC Bind Service
 :PROPERTIES:
-:CUSTOM_ID: RPC-Bind-Service
+:CUSTOM_ID: rpc-bind-service
 :CLASS: subsubheading
 :END:
+<<index-rpcbind>>
 The RPC Bind service provides a facility to map program numbers into universal addresses. Many NFS related services use this facility. Hence it is automatically started when a dependent service starts.
 
-- Variable: *rpcbind-service-type* [[#index-rpcbind_002dservice_002dtype][¶]] :: A service type for the RPC portmapper daemon.
+- Variable: rpcbind-service-type  :: A service type for the RPC portmapper daemon.
 
-- Data Type: *rpcbind-configuration* [[#index-rpcbind_002dconfiguration][¶]] :: Data type representing the configuration of the RPC Bind Service. This type has the following parameters:
+- Data Type: rpcbind-configuration  :: Data type representing the configuration of the RPC Bind Service. This type has the following parameters:
 
   - =rpcbind= (default: =rpcbind=) :: The rpcbind package to use.
 
   - =warm-start?= (default: =#t=) :: If this parameter is =#t=, then the daemon will read a state file on startup thus reloading state information saved by a previous instance.
 
-**** Pipefs Pseudo File System [[#Pipefs-Pseudo-File-System][¶]]
+<<Pipefs-Pseudo-File-System>>
+**** Pipefs Pseudo File System
 :PROPERTIES:
-:CUSTOM_ID: Pipefs-Pseudo-File-System
+:CUSTOM_ID: pipefs-pseudo-file-system
 :CLASS: subsubheading
 :END:
+<<index-pipefs>> <<index-rpc_005fpipefs>>
 The pipefs file system is used to transfer NFS related data between the kernel and user space programs.
 
-- Variable: *pipefs-service-type* [[#index-pipefs_002dservice_002dtype][¶]] :: A service type for the pipefs pseudo file system.
+- Variable: pipefs-service-type  :: A service type for the pipefs pseudo file system.
 
-- Data Type: *pipefs-configuration* [[#index-pipefs_002dconfiguration][¶]] :: Data type representing the configuration of the pipefs pseudo file system service. This type has the following parameters:
+- Data Type: pipefs-configuration  :: Data type representing the configuration of the pipefs pseudo file system service. This type has the following parameters:
 
   - =mount-point= (default: ="/var/lib/nfs/rpc_pipefs"=) :: The directory to which the file system is to be attached.
 
-**** GSS Daemon Service [[#GSS-Daemon-Service][¶]]
+<<GSS-Daemon-Service>>
+**** GSS Daemon Service
 :PROPERTIES:
-:CUSTOM_ID: GSS-Daemon-Service
+:CUSTOM_ID: gss-daemon-service
 :CLASS: subsubheading
 :END:
+<<index-GSSD>> <<index-GSS>> <<index-global-security-system>>
 The /global security system/ (GSS) daemon provides strong security for RPC based protocols. Before exchanging RPC requests an RPC client must establish a security context. Typically this is done using the Kerberos command =kinit= or automatically at login time using PAM services (see [[id:guix--Kerberos-Services][Kerberos Services]]).
 
-- Variable: *gss-service-type* [[#index-gss_002dservice_002dtype][¶]] :: A service type for the Global Security System (GSS) daemon.
+- Variable: gss-service-type  :: A service type for the Global Security System (GSS) daemon.
 
-- Data Type: *gss-configuration* [[#index-gss_002dconfiguration][¶]] :: Data type representing the configuration of the GSS daemon service. This type has the following parameters:
+- Data Type: gss-configuration  :: Data type representing the configuration of the GSS daemon service. This type has the following parameters:
 
   - =nfs-utils= (default: =nfs-utils=) :: The package in which the =rpc.gssd= command is to be found.
 
   - =pipefs-directory= (default: ="/var/lib/nfs/rpc_pipefs"=) :: The directory where the pipefs file system is mounted.
 
-**** IDMAP Daemon Service [[#IDMAP-Daemon-Service][¶]]
+<<IDMAP-Daemon-Service>>
+**** IDMAP Daemon Service
 :PROPERTIES:
-:CUSTOM_ID: IDMAP-Daemon-Service
+:CUSTOM_ID: idmap-daemon-service
 :CLASS: subsubheading
 :END:
+<<index-idmapd>> <<index-name-mapper>>
 The idmap daemon service provides mapping between user IDs and user names. Typically it is required in order to access file systems mounted via NFSv4.
 
-- Variable: *idmap-service-type* [[#index-idmap_002dservice_002dtype][¶]] :: A service type for the Identity Mapper (IDMAP) daemon.
+- Variable: idmap-service-type  :: A service type for the Identity Mapper (IDMAP) daemon.
 
-- Data Type: *idmap-configuration* [[#index-idmap_002dconfiguration][¶]] :: Data type representing the configuration of the IDMAP daemon service. This type has the following parameters:
+- Data Type: idmap-configuration  :: Data type representing the configuration of the IDMAP daemon service. This type has the following parameters:
 
   - =nfs-utils= (default: =nfs-utils=) :: The package in which the =rpc.idmapd= command is to be found.
 
@@ -159,12 +172,13 @@ The idmap daemon service provides mapping between user IDs and user names. Typic
 
   - =verbosity= (default: =0=) :: The verbosity level of the daemon.
 
-
-**** Autofs Service [[#Autofs-Service][¶]]
+<<Autofs-Service>>
+**** Autofs Service
 :PROPERTIES:
-:CUSTOM_ID: Autofs-Service
+:CUSTOM_ID: autofs-service
 :CLASS: subsubheading
 :END:
+<<index-autofs>> <<index-automount>>
 The autofs service automatically mounts and unmounts filesystems. It can mount both network and local storage, but is most often used to manage NFS mounts.
 
 A typical configuration might look like:
@@ -192,13 +206,13 @@ A typical configuration might look like:
     %base-services)))
 #+end_src
 
-- Data Type: *autofs-indirect-map* [[#index-autofs_002dindirect_002dmap][¶]] :: Available =autofs-indirect-map= fields are:
+- Data Type: autofs-indirect-map  :: Available =autofs-indirect-map= fields are:
 
   - =mount-point= (type: string) :: Where to mount the indirect map.
 
   - =entries= (default: =()=) (type: autofs-map-entries) :: Entries in this map.
 
-- Data Type: *autofs-map-entry* [[#index-autofs_002dmap_002dentry][¶]] :: Available =autofs-map-entry= fields are:
+- Data Type: autofs-map-entry  :: Available =autofs-map-entry= fields are:
 
   - =type= (default: ="auto"=) (type: string) :: The type of the filesystem.
 
@@ -235,7 +249,7 @@ A typical configuration might look like:
 
   - =options= (default: =()=) (type: file-system-options) :: List of mount options. Some options are simple flags, such as ro, noexec, nosuid, etc. These may be expressed as strings or symbols. Other options also accept a value. These are expressed as pairs of =(option . value)=. =option= may be a string or symbol, as with flags. =value= may be a string, symbol, or number. Example: =(ro (errors . remount-ro) noexec)=
 
-- Data Type: *autofs-configuration* [[#index-autofs_002dconfiguration][¶]] :: Available =autofs-configuration= fields are:
+- Data Type: autofs-configuration  :: Available =autofs-configuration= fields are:
 
   - =autofs= (default: =autofs=) (type: package) :: The autofs package to use.
 
@@ -279,4 +293,4 @@ A typical configuration might look like:
 
 --------------
 
-Next: [[id:guix--Samba-Services][Samba Services]], Previous: [[id:guix--DAV-Services][DAV Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Samba-Services][Samba Services]], Previous: [[id:guix--VPN-Services][VPN Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

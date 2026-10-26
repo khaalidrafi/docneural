@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-describe>>
-Next: [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], Previous: [[id:guix--Inferiors][Inferiors]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], Previous: [[id:guix--Inferiors][Inferiors]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.10 Invoking =guix describe= [[#Invoking-guix-describe-1][¶]]
+<<Invoking-guix-describe-1>>
+*** 5.10 Invoking =guix describe=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-describe-1
+:CUSTOM_ID: invoking-guix-describe
 :CLASS: section
 :END:
+<<index-reproducibility-1>> <<index-replicating-Guix-1>> <<index-guix-describe>>
 Often you may want to answer questions like: “Which revision of Guix am I using?” or “Which channels am I using?” This is useful information in many situations: if you want to /replicate/ an environment on a different machine or user account, if you want to report a bug or to determine what change in the channels you are using caused it, or if you want to record your system state for reproducibility purposes. The =guix describe= command answers these questions.
 
 When run from a =guix pull=ed =guix=, =guix describe= displays the channel(s) that it was built from, including their repository URL and commit IDs (see [[id:guix--Channels][Channels]]):
@@ -89,7 +92,7 @@ The details of the options supported by =guix describe= are as follows:
 
   - =channels-sans-intro= :: like =channels=, but omit the =introduction= field; use it to produce a channel specification suitable for Guix version 1.1.0 or earlier---the =introduction= field has to do with channel authentication (see [[id:guix--Channels][Channel Authentication]]) and is not supported by these older versions;
 
-  - <<index-JSON>>=json= [[#index-JSON][¶]] :: produce a list of channel specifications in JSON format;
+  - =json= [[#index-JSON][¶]] :: produce a list of channel specifications in JSON format;
 
   - =recutils= :: produce a list of channel specifications in Recutils format.
 
@@ -100,4 +103,4 @@ The details of the options supported by =guix describe= are as follows:
 
 --------------
 
-Next: [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], Previous: [[id:guix--Inferiors][Inferiors]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-archive][Invoking =guix archive=]], Previous: [[id:guix--Inferiors][Inferiors]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

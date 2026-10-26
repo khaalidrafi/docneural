@@ -36,19 +36,22 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-graph>>
-Next: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Previous: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Previous: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.10 Invoking =guix graph= [[#Invoking-guix-graph-1][¶]]
+<<Invoking-guix-graph-1>>
+*** 9.10 Invoking =guix graph=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-graph-1
+:CUSTOM_ID: invoking-guix-graph
 :CLASS: section
 :END:
+<<index-DAG>> <<index-guix-graph>> <<index-package-dependencies-1>>
 Packages and their dependencies form a /graph/, specifically a directed acyclic graph (DAG). It can quickly become difficult to have a mental model of the package DAG, so the =guix graph= command provides a visual representation of the DAG. By default, =guix graph= emits a DAG representation in the input format of [[https://www.graphviz.org/][Graphviz]], so its output can be passed directly to the =dot= command of Graphviz. It can also emit an HTML page with embedded JavaScript code to display a “chord diagram” in a Web browser, using the [[https://d3js.org/][d3.js]] library, or emit Cypher queries to construct a graph in a graph database supporting the [[https://www.opencypher.org/][openCypher]] query language. With =--path=, it simply displays the shortest path between two packages. The general syntax is:
 
 #+begin_example
-guix graph options package...
+guix graph options package…
 #+end_example
 
 For example, the following command generates a PDF file representing the package DAG for the GNU Core Utilities, showing its build-time dependencies:
@@ -75,7 +78,7 @@ But there is more than one graph! The one above is concise: it is the graph of p
 
   #+begin_example
   guix graph --type=reverse-package ocaml
-#+end_example
+  #+end_example
 
   ... yields the graph of packages that /explicitly/ depend on OCaml (if you are also interested in cases where OCaml is an implicit dependency, see =reverse-bag= below).
 
@@ -87,7 +90,7 @@ But there is more than one graph! The one above is concise: it is the graph of p
 
   #+begin_example
   guix graph --type=bag-emerged coreutils
-#+end_example
+  #+end_example
 
   ... yields this bigger graph:
 
@@ -103,7 +106,7 @@ But there is more than one graph! The one above is concise: it is the graph of p
 
   #+begin_example
   guix graph -t reverse-bag dune
-#+end_example
+  #+end_example
 
   ... yields the graph of all packages that depend on Dune, directly or indirectly. Since Dune is an /implicit/ dependency of many packages /via/ =dune-build-system=, this shows a large number of packages, whereas =reverse-package= would show very few if any.
 
@@ -113,13 +116,13 @@ But there is more than one graph! The one above is concise: it is the graph of p
 
   #+begin_example
   guix graph -t derivation $(guix system build -d my-config.scm)
-#+end_example
+  #+end_example
 
 - =module= :: This is the graph of /package modules/ (see [[id:guix--Package-Modules][Package Modules]]). For example, the following command shows the graph for the package module that defines the =guile= package:
 
   #+begin_example
   guix graph -t module guile | xdot -
-#+end_example
+  #+end_example
 
 All the types above correspond to /build-time dependencies/. The following graph type represents the /run-time dependencies/:
 
@@ -131,7 +134,7 @@ All the types above correspond to /build-time dependencies/. The following graph
 
   #+begin_example
   guix graph -t references $(readlink -f ~/.guix-profile)
-#+end_example
+  #+end_example
 
 - =referrers= :: This is the graph of the /referrers/ of a store item, as returned by =guix gc --referrers= (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]).
 
@@ -139,6 +142,7 @@ All the types above correspond to /build-time dependencies/. The following graph
 
   It can help determine what is preventing a store item from being garbage collected.
 
+<<index-shortest-path_002c-between-packages>>
 Often, the graph of the package you are interested in does not fit on your screen, and anyway all you want to know is /why/ that package actually depends on some seemingly unrelated package. The =--path= option instructs =guix graph= to display the shortest path between two packages (or derivations, or store items, etc.):
 
 #+begin_example
@@ -147,13 +151,13 @@ emacs@26.3
 mailutils@3.9
 libunistring@0.9.10
 $ guix graph --path -t derivation emacs libunistring
-/gnu/store/...-emacs-26.3.drv
-/gnu/store/...-mailutils-3.9.drv
-/gnu/store/...-libunistring-0.9.10.drv
+/gnu/store/…-emacs-26.3.drv
+/gnu/store/…-mailutils-3.9.drv
+/gnu/store/…-libunistring-0.9.10.drv
 $ guix graph --path -t references emacs libunistring
-/gnu/store/...-emacs-26.3
-/gnu/store/...-libidn2-2.2.0
-/gnu/store/...-libunistring-0.9.10
+/gnu/store/…-emacs-26.3
+/gnu/store/…-libidn2-2.2.0
+/gnu/store/…-libunistring-0.9.10
 #+end_example
 
 Sometimes you still want to visualize the graph but would like to trim it so it can actually be displayed. One way to do it is via the =--max-depth= (or =-M=) option, which lets you specify the maximum depth of the graph. In the example below, we visualize only =libreoffice= and the nodes whose distance to =libreoffice= is at most 2:
@@ -182,11 +186,11 @@ The available options are the following:
 
   #+begin_example
   $ guix graph --path -t references libreoffice llvm
-  /gnu/store/...-libreoffice-6.4.2.2
-  /gnu/store/...-libepoxy-1.5.4
-  /gnu/store/...-mesa-19.3.4
-  /gnu/store/...-llvm-9.0.1
-#+end_example
+  /gnu/store/…-libreoffice-6.4.2.2
+  /gnu/store/…-libepoxy-1.5.4
+  /gnu/store/…-mesa-19.3.4
+  /gnu/store/…-llvm-9.0.1
+  #+end_example
 
 - =--expression===expr=\\
   =-e ==expr= :: Consider the package =expr= evaluates to.
@@ -195,7 +199,7 @@ The available options are the following:
 
   #+begin_example
   guix graph -e '(@@ (gnu packages commencement) gnu-make-final)'
-#+end_example
+  #+end_example
 
 - =--system===system=\\
   =-s ==system= :: Display the graph for =system=---e.g., =i686-linux=.
@@ -217,4 +221,4 @@ So many possibilities, so much fun!
 
 --------------
 
-Next: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Previous: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Previous: [[id:guix--Invoking-guix-size][Invoking =guix size=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

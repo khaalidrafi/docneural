@@ -36,27 +36,32 @@ Next:
 [[../..][]]
 
 <<G_002dExpressions>>
-Next: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Previous: [[id:guix--The-Store-Monad][The Store Monad]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Previous: [[id:guix--The-Store-Monad][The Store Monad]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 8.12 G-Expressions [[#G_002dExpressions-1][¶]]
+<<G_002dExpressions-1>>
+*** 8.12 G-Expressions
 :PROPERTIES:
-:CUSTOM_ID: G_002dExpressions-1
+:CUSTOM_ID: g-expressions
 :CLASS: section
 :END:
+<<index-G_002dexpression>> <<index-build-code-quoting>>
 So we have “derivations”, which represent a sequence of build actions to be performed to produce an item in the store (see [[id:guix--Derivations][Derivations]]). These build actions are performed when asking the daemon to actually build the derivations; they are run by the daemon in a container (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]).
 
+<<index-code-staging-1>> <<index-staging_002c-of-code-1>> <<index-strata-of-code>>
 It should come as no surprise that we like to write these build actions in Scheme. When we do that, we end up with two /strata/ of Scheme code[[#FOOT23][^{23}]]: the “host code”---code that defines packages, talks to the daemon, etc.---and the “build code”---code that actually performs build actions, such as making directories, invoking =make=, and so on (see [[id:guix--Build-Phases][Build Phases]]).
 
 To describe a derivation and its build actions, one typically needs to embed build code inside host code. It boils down to manipulating build code as data, and the homoiconicity of Scheme---code has a direct representation as data---comes in handy for that. But we need more than the normal =quasiquote= mechanism in Scheme to construct build expressions.
 
-The =(guix gexp)= module implements /G-expressions/, a form of S-expressions adapted to build expressions. G-expressions, or /gexps/, consist essentially of three syntactic forms: =gexp=, =ungexp=, and =ungexp-splicing= (or simply: =#~=, =#$=, and =#$@=), which are comparable to =quasiquote=, =unquote=, and =unquote-splicing=, respectively (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Expression-Syntax.html#Expression-Syntax][=quasiquote=]] in GNU Guile Reference Manual). However, there are major differences:
+The =(guix gexp)= module implements /G-expressions/, a form of S-expressions adapted to build expressions. G-expressions, or /gexps/, consist essentially of three syntactic forms: =gexp=, =ungexp=, and =ungexp-splicing= (or simply: =#~=, =#$=, and =#$@=), which are comparable to =quasiquote=, =unquote=, and =unquote-splicing=, respectively (see [[https://www.gnu.org/software/guile/manual/html_node/Expression-Syntax.html#Expression-Syntax][=quasiquote=]] in GNU Guile Reference Manual). However, there are major differences:
 
 - Gexps are meant to be written to a file and run or manipulated by other processes.
 - When a high-level object such as a package or derivation is unquoted inside a gexp, the result is as if its output file name had been introduced.
 - Gexps carry information about the packages or derivations they refer to, and these dependencies are automatically added as inputs to the build processes that use them.
 
+<<index-lowering_002c-of-high_002dlevel-objects-in-gexps>>
 This mechanism is not limited to package and derivation objects: /compilers/ able to “lower” other high-level objects to derivations or files in the store can be defined, such that these objects can also be inserted into gexps. For example, a useful type of high-level objects that can be inserted in a gexp is “file-like objects”, which make it easy to add files to the store and to refer to them in derivations and such (see =local-file= and =plain-file= below).
 
 To illustrate the idea, here is an example of a gexp:
@@ -78,6 +83,7 @@ This gexp can be passed to =gexp->derivation=; we obtain a derivation that build
 
 As one would expect, the ="/gnu/store/…-coreutils-8.22"= string is substituted to the reference to the =coreutils= package in the actual build code, and =coreutils= is automatically made an input to the derivation. Likewise, =#$output= (equivalent to =(ungexp output)=) is replaced by a string containing the directory name of the output of the derivation.
 
+<<index-cross-compilation>>
 In a cross-compilation context, it is useful to distinguish between references to the /native/ build of a package---that can run on the host---versus references to cross builds of a package. To that end, the =#+= plays the same role as =#$=, but is a reference to a native package build:
 
 #+begin_src lisp
@@ -94,6 +100,7 @@ In a cross-compilation context, it is useful to distinguish between references t
 
 In the example above, the native build of =coreutils= is used, so that =ln= can actually run on the host; but then the cross-compiled build of =emacs= is referenced.
 
+<<index-imported-modules_002c-for-gexps>> <<index-with_002dimported_002dmodules>>
 Another gexp feature is /imported modules/: sometimes you want to be able to use certain Guile modules from the “host environment” in the gexp, so those modules should be imported in the “build environment”. The =with-imported-modules= form allows you to express that:
 
 #+begin_src lisp
@@ -110,6 +117,7 @@ Another gexp feature is /imported modules/: sometimes you want to be able to use
 
 In this example, the =(guix build utils)= module is automatically pulled into the isolated build environment of our gexp, such that =(use-modules (guix build utils))= works as expected.
 
+<<index-module-closure>> <<index-source_002dmodule_002dclosure>>
 Usually you want the /closure/ of the module to be imported---i.e., the module itself and all the modules it depends on---rather than just the module; failing to do that, attempts to use the module will fail because of missing dependent modules. The =source-module-closure= procedure computes the closure of a module by looking at its source file headers, which comes in handy in this case:
 
 #+begin_src lisp
@@ -122,9 +130,10 @@ Usually you want the /closure/ of the module to be imported---i.e., the module i
                     #~(begin
                         (use-modules (guix build utils)
                                      (gnu build image))
-                        ...)))
+                        …)))
 #+end_src
 
+<<index-extensions_002c-for-gexps>> <<index-with_002dextensions>>
 In the same vein, sometimes you want to import not just pure-Scheme modules, but also “extensions” such as Guile bindings to C libraries or other “full-blown” packages. Say you need the =guile-json= package available on the build side, here's how you would do it:
 
 #+begin_src lisp
@@ -134,18 +143,13 @@ In the same vein, sometimes you want to import not just pure-Scheme modules, but
   (gexp->derivation "something-with-json"
                     #~(begin
                         (use-modules (json))
-                        ...)))
+                        …)))
 #+end_src
-
-#+begin_quote
-*Going Further:* To learn more about the design of g-expressions, read [[https://arxiv.org/abs/1709.00833][/Code Staging in GNU Guix/]] (2017).
-
-#+end_quote
 
 The syntactic form to construct gexps is summarized below.
 
 - Macro: *#~=exp=* [[#index-_0023_007eexp][¶]]\\
-  Macro: *(gexp* =exp==)= [[#index-_0028gexp][¶]] :: Return a G-expression containing =exp=. =exp= may contain one or more of the following forms:
+  Macro: (gexp =exp=) :: Return a G-expression containing =exp=. =exp= may contain one or more of the following forms:
 
   - =#$==obj=\\
     =(ungexp ==obj==)= :: Introduce a reference to =obj=. =obj= may have one of the supported types, for example a package or a derivation, in which case the =ungexp= form is replaced by its output file name---e.g., ="/gnu/store/…-coreutils-8.22=.
@@ -179,7 +183,7 @@ The syntactic form to construct gexps is summarized below.
 
   G-expressions created by =gexp= or =#~= are run-time objects of the =gexp?= type (see below).
 
-- Macro: *with-imported-modules* =modules body…= [[#index-with_002dimported_002dmodules-1][¶]] :: Mark the gexps defined in =body=... as requiring =modules= in their execution environment.
+- Macro: with-imported-modules modules body... :: Mark the gexps defined in =body=... as requiring =modules= in their execution environment.
 
   Each item in =modules= can be the name of a module, such as =(guix build utils)=, or it can be a module name, followed by an arrow, followed by a file-like object:
 
@@ -187,38 +191,22 @@ The syntactic form to construct gexps is summarized below.
   `((guix build utils)
     (guix gcrypt)
     ((guix config) => ,(scheme-file "config.scm"
-                                    #~(define-module ...))))
+                                    #~(define-module …))))
   #+end_src
 
   In the example above, the first two modules are taken from the search path, and the last one is created from the given file-like object.
 
   This form has /lexical/ scope: it has an effect on the gexps directly defined in =body=..., but not on those defined, say, in procedures called from =body=....
 
-  #+begin_quote
-  *Caveat:* It is important to distinguish between modules available in the build environment and modules in scope. The =with-imported-modules= form pulls modules in the build environment of the gexp but it does /not/ import them. To do so, you still need to use =use-modules= in the gexp:
-
-  #+begin_src lisp
-  (with-imported-modules '((guix build utils))
-    #~(begin
-        (use-modules (guix build utils))
-        ...))
-  #+end_src
-
-  See [[https://doc.guix.gnu.org/guile/latest/en/html_node/Using-Guile-Modules.html#Using-Guile-Modules][Using Guile Modules]] in GNU Guile Reference Manual, for more information on =use-modules=.
-
-  Likewise, to import a module provided by Guile---e.g., =(srfi srfi-1)=---add a =use-modules= form in your gexp. Do /not/ add Guile-provided modules such as =(srfi srfi-1)= to a =with-imported-modules=; doing so would force a potentially incompatible version into your environment.
-
-  #+end_quote
-
-- Macro: *with-extensions* =extensions body…= [[#index-with_002dextensions-1][¶]] :: Mark the gexps defined in =body=... as requiring =extensions= in their build and execution environment. =extensions= is typically a list of package objects such as those defined in the =(gnu packages guile)= module.
+- Macro: with-extensions extensions body... :: Mark the gexps defined in =body=... as requiring =extensions= in their build and execution environment. =extensions= is typically a list of package objects such as those defined in the =(gnu packages guile)= module.
 
   Concretely, the packages listed in =extensions= are added to the load path while compiling imported modules in =body=...; they are also added to the load path of the gexp returned by =body=....
 
-- Procedure: *gexp?* =obj= [[#index-gexp_003f][¶]] :: Return =#t= if =obj= is a G-expression.
+- Procedure: gexp? obj :: Return =#t= if =obj= is a G-expression.
 
 G-expressions are meant to be written to disk, either as code building some derivation, or as plain files in the store. The monadic procedures below allow you to do that (see [[id:guix--The-Store-Monad][The Store Monad]], for more information about monads).
 
-- Monadic Procedure: *gexp->derivation* =name== ==exp== [#:system (%current-system)] [#:target #f] [#:graft? #t] [#:hash #f] [#:hash-algo #f] [#:recursive? #f] [#:env-vars ’()] [#:modules ’()] [#:module-path ==%load-path==] [#:effective-version "2.2"] [#:references-graphs #f] [#:allowed-references #f] [#:disallowed-references #f] [#:leaked-env-vars #f] [#:script-name (string-append ==name== "-builder")] [#:deprecation-warnings #f] [#:local-build? #f] [#:substitutable? #t] [#:properties ’()] [#:guile-for-build #f]= [[#index-gexp_002d_003ederivation][¶]] :: Return a derivation =name= that runs =exp= (a gexp) with =guile-for-build= (a derivation) on =system=; =exp= is stored in a file called =script-name=. When =target= is true, it is used as the cross-compilation target triplet for packages referred to by =exp=.
+- Monadic Procedure: gexp->derivation =name= =exp= [#:system (%current-system)] [#:target #f] [#:graft? #t] [#:hash #f] [#:hash-algo #f] [#:recursive? #f] [#:env-vars '()] [#:modules '()] [#:module-path =%load-path=] [#:effective-version "2.2"] [#:references-graphs #f] [#:allowed-references #f] [#:disallowed-references #f] [#:leaked-env-vars #f] [#:script-name (string-append =name= "-builder")] [#:deprecation-warnings #f] [#:local-build? #f] [#:substitutable? #t] [#:properties '()] [#:guile-for-build #f] :: Return a derivation =name= that runs =exp= (a gexp) with =guile-for-build= (a derivation) on =system=; =exp= is stored in a file called =script-name=. When =target= is true, it is used as the cross-compilation target triplet for packages referred to by =exp=.
 
   =modules= is deprecated in favor of =with-imported-modules=. Its meaning is to make =modules= available in the evaluation context of =exp=; =modules= is a list of names of Guile modules searched in =module-path= to be copied in the store, compiled, and made available in the load path during the execution of =exp=---e.g., =((guix build utils) (guix build gnu-build-system))=.
 
@@ -233,7 +221,7 @@ G-expressions are meant to be written to disk, either as code building some deri
   (file-name obj output)
   (file-name gexp-input)
   (file-name store-item)
-#+end_example
+  #+end_example
 
   The right-hand-side of each element of =references-graphs= is automatically made an input of the build process of =exp=. In the build environment, each =file-name= contains the reference graph of the corresponding item, in a simple text format.
 
@@ -243,6 +231,7 @@ G-expressions are meant to be written to disk, either as code building some deri
 
   The other arguments are as for =derivation= (see [[id:guix--Derivations][Derivations]]).
 
+<<index-file_002dlike-objects>>
 The =local-file=, =plain-file=, =computed-file=, =program-file=, and =scheme-file= procedures below return /file-like objects/. That is, when unquoted in a G-expression, these objects lead to a file in the store. Consider this G-expression:
 
 #+begin_src lisp
@@ -252,11 +241,13 @@ The =local-file=, =plain-file=, =computed-file=, =program-file=, and =scheme-fil
 
 The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the store. Once expanded, for instance /via/ =gexp->derivation=, the G-expression refers to that copy under =/gnu/store=; thus, modifying or removing the file in =/tmp= does not have any effect on what the G-expression does. =plain-file= can be used similarly; it differs in that the file content is directly passed as a string.
 
-- Procedure: *local-file* =file [name] [#:recursive? #f] [#:select? (const #t)]= [[#index-local_002dfile][¶]] :: Return an object representing local file =file= to add to the store; this object can be used in a gexp. If =file= is a literal string denoting a relative file name, it is looked up relative to the source file where it appears; if =file= is not a literal string, it is looked up relative to the current working directory at run time. =file= will be added to the store under =name=--by default the base name of =file=.
+- Procedure: local-file file [name] [#:recursive? #f] [#:select? (const #t)] :: Return an object representing local file =file= to add to the store; this object can be used in a gexp. If =file= is a literal string denoting a relative file name, it is looked up relative to the source file where it appears; if =file= is not a literal string, it is looked up relative to the current working directory at run time. =file= will be added to the store under =name=--by default the base name of =file=.
 
   When =recursive?= is true, the contents of =file= are added recursively; if =file= designates a flat file and =recursive?= is true, its contents are added, and its permission bits are kept.
 
   When =recursive?= is true, call =(==select?== ==file== ==stat==)= for each directory entry, where =file= is the entry's absolute file name and =stat= is the result of =lstat=; exclude entries for which =select?= does not return true.
+
+  <<index-assume_002dvalid_002dfile_002dname>>
 
   =file= can be wrapped in the =assume-valid-file-name= syntactic keyword. When this is done, there will not be a warning when =local-file= is used with a non-literal path. The path is still looked up relative to the current working directory at run time. Wrapping is done like this:
 
@@ -266,19 +257,21 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
   (local-file (assume-valid-file-name alice-key-file-path))
   #+end_src
 
+  <<index-relative-file-name_002c-in-local_002dfile>> <<index-assume_002dsource_002drelative_002dfile_002dname>>
+
   =file= can be wrapped in the =assume-source-relative-file-name= syntactic keyword. When this is done, the file name will be looked up relative to the source file where it appears even when it is not a string literal.
 
   This is the declarative counterpart of the =interned-file= monadic procedure (see [[id:guix--The-Store-Monad][=interned-file=]]).
 
-- Procedure: *plain-file* =name content= [[#index-plain_002dfile][¶]] :: Return an object representing a text file called =name= with the given =content= (a string or a bytevector) to be added to the store.
+- Procedure: plain-file name content :: Return an object representing a text file called =name= with the given =content= (a string or a bytevector) to be added to the store.
 
   This is the declarative counterpart of =text-file=.
 
-- Procedure: *computed-file* =name== ==gexp== [#:guile] [#:local-build? #t] [#:options ’()]= [[#index-computed_002dfile][¶]] :: Return an object representing the store item =name=, a file or directory computed by =gexp=. When =local-build?= is true (the default), the derivation is built locally. =options= is a list of additional arguments to pass to =gexp->derivation=.
+- Procedure: computed-file =name= =gexp= [#:guile] [#:local-build? #t] [#:options '()] :: Return an object representing the store item =name=, a file or directory computed by =gexp=. When =local-build?= is true (the default), the derivation is built locally. =options= is a list of additional arguments to pass to =gexp->derivation=.
 
   This is the declarative counterpart of =gexp->derivation=.
 
-- Monadic Procedure: *gexp->script* =name== ==exp== [#:guile (default-guile)] [#:module-path %load-path] [#:system (%current-system)] [#:target ’current]= [[#index-gexp_002d_003escript][¶]] :: Return an executable script =name= that runs =exp= using =guile=, with =exp='s imported modules in its search path. Look up =exp='s modules in =module-path=.
+- Monadic Procedure: gexp->script =name= =exp= [#:guile (default-guile)] [#:module-path %load-path] [#:system (%current-system)] [#:target 'current] :: Return an executable script =name= that runs =exp= using =guile=, with =exp='s imported modules in its search path. Look up =exp='s modules in =module-path=.
 
   The example below builds a script that simply invokes the =ls= command:
 
@@ -293,26 +286,26 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
   When “running” it through the store (see [[id:guix--The-Store-Monad][=run-with-store=]]), we obtain a derivation that produces an executable file =/gnu/store/…-list-files= along these lines:
 
   #+begin_example
-  #!/gnu/store/...-guile-2.0.11/bin/guile -ds
+  #!/gnu/store/…-guile-2.0.11/bin/guile -ds
   !#
-  (execl "/gnu/store/...-coreutils-8.22"/bin/ls" "ls")
-#+end_example
+  (execl "/gnu/store/…-coreutils-8.22"/bin/ls" "ls")
+  #+end_example
 
-- Procedure: *program-file* =name exp [#:guile #f] [#:module-path %load-path]= [[#index-program_002dfile][¶]] :: Return an object representing the executable store item =name= that runs =gexp=. =guile= is the Guile package used to execute that script. Imported modules of =gexp= are looked up in =module-path=.
+- Procedure: program-file name exp [#:guile #f] [#:module-path %load-path] :: Return an object representing the executable store item =name= that runs =gexp=. =guile= is the Guile package used to execute that script. Imported modules of =gexp= are looked up in =module-path=.
 
   This is the declarative counterpart of =gexp->script=.
 
-- Monadic Procedure: *gexp->file* =name== ==exp== [#:set-load-path? #t] [#:module-path %load-path] [#:splice? #f] [#:guile (default-guile)] [#:system (%current-system)] [#:target ’current]= [[#index-gexp_002d_003efile][¶]] :: Return a derivation that builds a file =name= containing =exp=. When =splice?= is true, =exp= is considered to be a list of expressions that will be spliced in the resulting file.
+- Monadic Procedure: gexp->file =name= =exp= [#:set-load-path? #t] [#:module-path %load-path] [#:splice? #f] [#:guile (default-guile)] [#:system (%current-system)] [#:target 'current] :: Return a derivation that builds a file =name= containing =exp=. When =splice?= is true, =exp= is considered to be a list of expressions that will be spliced in the resulting file.
 
   When =set-load-path?= is true, emit code in the resulting file to set =%load-path= and =%load-compiled-path= to honor =exp='s imported modules. Look up =exp='s modules in =module-path=.
 
   The resulting file holds references to all the dependencies of =exp= or a subset thereof.
 
-- Procedure: *scheme-file* =name exp [#:splice? #f] [#:guile #f] [#:set-load-path? #t]= [[#index-scheme_002dfile][¶]] :: Return an object representing the Scheme file =name= that contains =exp=. =guile= is the Guile package used to produce that file.
+- Procedure: scheme-file name exp [#:splice? #f] [#:guile #f] [#:set-load-path? #t] :: Return an object representing the Scheme file =name= that contains =exp=. =guile= is the Guile package used to produce that file.
 
   This is the declarative counterpart of =gexp->file=.
 
-- Monadic Procedure: *text-file** =name== ==text== …= [[#index-text_002dfile_002a][¶]] :: Return as a monadic value a derivation that builds a text file containing all of =text=. =text= may list, in addition to strings, objects of any type that can be used in a gexp: packages, derivations, local file objects, etc. The resulting store file holds references to all these.
+- Monadic Procedure: text-file* =name= =text= ... :: Return as a monadic value a derivation that builds a text file containing all of =text=. =text= may list, in addition to strings, objects of any type that can be used in a gexp: packages, derivations, local file objects, etc. The resulting store file holds references to all these.
 
   This variant should be preferred over =text-file= anytime the file to create will reference items from the store. This is typically the case when building a configuration file that embeds store file names, like this:
 
@@ -327,7 +320,7 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   In this example, the resulting =/gnu/store/…-profile.sh= file will reference =coreutils=, =grep=, and =sed=, thereby preventing them from being garbage-collected during its lifetime.
 
-- Procedure: *mixed-text-file* =name text …= [[#index-mixed_002dtext_002dfile][¶]] :: Return an object representing store file =name= containing =text=. =text= is a sequence of strings and file-like objects, as in:
+- Procedure: mixed-text-file name text ... :: Return an object representing store file =name= containing =text=. =text= is a sequence of strings and file-like objects, as in:
 
   #+begin_src lisp
   (mixed-text-file "profile"
@@ -336,7 +329,7 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   This is the declarative counterpart of =text-file*=.
 
-- Procedure: *file-union* =name files [#:dangling-symlinks? #f]= [[#index-file_002dunion][¶]] :: Return a =<computed-file>= that builds a directory containing all of =files=. Each item in =files= must be a two-element list where the first element is the file name to use in the new directory, and the second element is a gexp denoting the target file. =#:dangling-symlinks?= controls if gexps must lower to an existing file. Here's an example:
+- Procedure: file-union name files [#:dangling-symlinks? #f] :: Return a =<computed-file>= that builds a directory containing all of =files=. Each item in =files= must be a two-element list where the first element is the file name to use in the new directory, and the second element is a gexp denoting the target file. =#:dangling-symlinks?= controls if gexps must lower to an existing file. Here's an example:
 
   #+begin_src lisp
   (file-union "etc"
@@ -348,14 +341,14 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   This yields an =etc= directory containing these two files.
 
-- Procedure: *symlink-to* =target= [[#index-symlink_002dto][¶]] :: Return a =<computed-file>= that is a symbolic link to target. Note, that the target does not need to exist at the build time. One of uses is to put arbitrary symlinks into user's home:
+- Procedure: symlink-to target :: Return a =<computed-file>= that is a symbolic link to target. Note, that the target does not need to exist at the build time. One of uses is to put arbitrary symlinks into user's home:
 
   #+begin_src lisp
   (service home-files-service-type
     `(("Sync" ,(symlink-to "/storage/Sync"))))
   #+end_src
 
-- Procedure: *directory-union* =name things= [[#index-directory_002dunion][¶]] :: Return a directory that is the union of =things=, where =things= is a list of file-like objects denoting directories. For example:
+- Procedure: directory-union name things :: Return a directory that is the union of =things=, where =things= is a list of file-like objects denoting directories. For example:
 
   #+begin_src lisp
   (directory-union "guile+emacs" (list guile emacs))
@@ -363,7 +356,7 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   yields a directory that is the union of the =guile= and =emacs= packages.
 
-- Procedure: *file-append* =obj suffix …= [[#index-file_002dappend][¶]] :: Return a file-like object that expands to the concatenation of =obj= and =suffix=, where =obj= is a lowerable object and each =suffix= is a string.
+- Procedure: file-append obj suffix ... :: Return a file-like object that expands to the concatenation of =obj= and =suffix=, where =obj= is a lowerable object and each =suffix= is a string.
 
   As an example, consider this gexp:
 
@@ -383,8 +376,8 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   There is one difference though: in the =file-append= case, the resulting script contains the absolute file name as a string, whereas in the second case, the resulting script contains a =(string-append …)= expression to construct the file name /at run time/.
 
-- Macro: *let-system* =system body…= [[#index-let_002dsystem][¶]]\\
-  Macro: *let-system* =(system target) body…= [[#index-let_002dsystem-1][¶]] :: Bind =system= to the currently targeted system---e.g., ="x86_64-linux"=---within =body=.
+- Macro: let-system system body...\\
+  Macro: let-system (system target) body... :: Bind =system= to the currently targeted system---e.g., ="x86_64-linux"=---within =body=.
 
   In the second case, additionally bind =target= to the current cross-compilation target---a GNU triplet such as ="arm-linux-gnueabihf"=---or =#f= if we are not cross-compiling.
 
@@ -402,7 +395,7 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
      "-net" "user" #$image)
   #+end_src
 
-- Macro: *with-parameters* =((parameter value) …) exp= [[#index-with_002dparameters][¶]] :: This macro is similar to the =parameterize= form for dynamically-bound /parameters/ (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Parameters.html#Parameters][Parameters]] in GNU Guile Reference Manual). The key difference is that it takes effect when the file-like object returned by =exp= is lowered to a derivation or store item.
+- Macro: with-parameters ((parameter value) ...) exp :: This macro is similar to the =parameterize= form for dynamically-bound /parameters/ (see [[https://www.gnu.org/software/guile/manual/html_node/Parameters.html#Parameters][Parameters]] in GNU Guile Reference Manual). The key difference is that it takes effect when the file-like object returned by =exp= is lowered to a derivation or store item.
 
   A typical use of =with-parameters= is to force the system in effect for a given object:
 
@@ -413,27 +406,8 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
   The example above returns an object that corresponds to the i686 build of Coreutils, regardless of the current value of =%current-system=.
 
-- Procedure: *with-transformation* =proc== ==mval= [[#index-with_002dtransformation][¶]] :: Install =proc= as a file-like transformation procedure, and return =mval=, a value in the store monad, in this context. =proc= is passed any file-like that gets lowered and must return another file-like object. A typical use case is to replace one package by another.
-
-  For example, one might replace occurrences of =coreutils= with =coreutils-minimal= in an operating system by doing something like this:
-
-  #+begin_src lisp
-  (with-transformation (lambda (p)
-                         (if (eq? p coreutils)
-                             coreutils-minimal
-                             p))
-    (lower-object (operating-system ...)))
-  #+end_src
-
-  To modify not just the “surface” of things but also entire package dependency graph, one might instead resort to procedures like =options->transformation= as the transformation procedure (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]).
-
-  The =with-transformation= procedure is the ultimate customization mechanism since it gets to “see” every file-like object that makes up the bigger object being lowered.
-
-- Macro: *delayed-object* =exp= [[#index-delayed_002dobject][¶]] :: This macro delays the evaluation of =exp= until the returned object is lowered to a derivation or store item.
-
-  Its intended use case is to prevent the use of a non-delayed top-level variable of another module, e.g. when using a gexp in the =source= field of a =package=.
-
-- Procedure: *gexp-input* =obj== [==output==] [#:native? #f]= [[#index-gexp_002dinput][¶]] :: Return a /gexp input/ record for the given =output= of file-like object =obj=, with =#:native?= determining whether this is a native reference (as with =ungexp-native=) or not.
+<<gexp_002dinput>>
+- Procedure: gexp-input =obj= [=output=] [#:native? #f] :: Return a /gexp input/ record for the given =output= of file-like object =obj=, with =#:native?= determining whether this is a native reference (as with =ungexp-native=) or not.
 
   This procedure is helpful when you want to pass a reference to a specific output of an object to some procedure that may not know about that output. For example, assume you have this procedure, which takes one file-like object:
 
@@ -458,11 +432,12 @@ The effect here is to “intern” =/tmp/my-nscd.conf= by copying it to the stor
 
 Of course, in addition to gexps embedded in “host” code, there are also modules containing build tools. To make it clear that they are meant to be used in the build stratum, these modules are kept in the =(guix build …)= name space.
 
+<<index-lowering_002c-of-high_002dlevel-objects-in-gexps-1>>
 Internally, high-level objects are /lowered/, using their compiler, to either derivations or store items. For instance, lowering a package yields a derivation, and lowering a =plain-file= yields a store item. This is achieved using the =lower-object= monadic procedure.
 
-- Monadic Procedure: *lower-object* =obj== [==system==] [#:target #f]= [[#index-lower_002dobject][¶]] :: Return as a value in =%store-monad= the derivation or store item corresponding to =obj= for =system=, cross-compiling for =target= if =target= is true. =obj= must be an object that has an associated gexp compiler, such as a =<package>=.
+- Monadic Procedure: lower-object =obj= [=system=] [#:target #f] :: Return as a value in =%store-monad= the derivation or store item corresponding to =obj= for =system=, cross-compiling for =target= if =target= is true. =obj= must be an object that has an associated gexp compiler, such as a =<package>=.
 
-- Procedure: *gexp->approximate-sexp* =gexp= [[#index-gexp_002d_003eapproximate_002dsexp][¶]] :: Sometimes, it may be useful to convert a G-exp into a S-exp. For example, some linters (see [[id:guix--Invoking-guix-lint][Invoking =guix lint=]]) peek into the build phases of a package to detect potential problems. This conversion can be achieved with this procedure. However, some information can be lost in the process. More specifically, lowerable objects will be silently replaced with some arbitrary object -- currently the list =(*approximate*)=, but this may change.
+- Procedure: gexp->approximate-sexp gexp :: Sometimes, it may be useful to convert a G-exp into a S-exp. For example, some linters (see [[id:guix--Invoking-guix-lint][Invoking =guix lint=]]) peek into the build phases of a package to detect potential problems. This conversion can be achieved with this procedure. However, some information can be lost in the process. More specifically, lowerable objects will be silently replaced with some arbitrary object -- currently the list =(*approximate*)=, but this may change.
 
 --------------
 
@@ -474,10 +449,9 @@ Internally, high-level objects are /lowered/, using their compiler, to either de
 ***** [[#DOCF23][(23)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The term /stratum/ in this context was coined by Manuel Serrano et al. in the context of their work on Hop. Oleg Kiselyov, who has written insightful [[http://okmij.org/ftp/meta-programming/#meta-scheme][essays and code on this topic]], refers to this kind of code generation as /staging/.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Previous: [[id:guix--The-Store-Monad][The Store Monad]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-repl][Invoking =guix repl=]], Previous: [[id:guix--The-Store-Monad][The Store Monad]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

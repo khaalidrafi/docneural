@@ -7,6 +7,9 @@
 Next: [[id:emacs--Killing][Killing and Moving Text]]   Previous: [[id:emacs--Help][Help]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Mark>>
+
+--------------
+
 ** 13 The Mark and the Region [[#The-Mark-and-the-Region][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Mark-and-the-Region
@@ -18,7 +21,7 @@ The region is the portion of the buffer between /the mark/ and the current /poin
 
 The region always extends between point and the mark, no matter which of them comes earlier in the text; each time you move point, the region changes.
 
-Setting the mark at a position in the text /activates/ it. When the mark is active, we say also that the region is active; Emacs indicates its extent by highlighting the text within it, using the =region= face (see [[id:emacs--Easy-Customization::#Face-Customization][Customizing Faces]]).
+Setting the mark at a position in the text /activates/ it. When the mark is active, we say also that the region is active; Emacs indicates its extent by highlighting the text within it, using the =region= face (see [[id:emacs--Face-Customization][Customizing Faces]]).
 
 After certain non-motion commands, including any command that changes the text in the buffer, Emacs automatically /deactivates/ the mark; this turns off the highlighting. You can also explicitly deactivate the mark at any time, by typing C-g (see [[id:emacs--Quitting][Quitting and Aborting]]).
 
@@ -31,5 +34,13 @@ The above behavior, which is the default in interactive sessions, is known as Tr
 Setting the mark in one buffer has no effect on the marks in other buffers. When you return to a buffer with an active mark, the mark is at the same place as before. When multiple windows show the same buffer, they can have different values of point, and thus different regions, but they all share one common mark position. See [[id:emacs--Windows][Multiple Windows]]. Ordinarily, only the selected window highlights its region; however, if the variable =highlight-nonselected-windows= is non-=nil=, each window highlights its own region.
 
 There is another kind of region: the rectangular region. See [[id:emacs--Rectangles][Rectangles]].
+
+- [[id:emacs--Setting-Mark][Setting the Mark]]
+- [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]]
+- [[id:emacs--Using-Region][Operating on the Region]]
+- [[id:emacs--Mark-Ring][The Mark Ring]]
+- [[id:emacs--Global-Mark-Ring][The Global Mark Ring]]
+- [[id:emacs--Shift-Selection][Shift Selection]]
+- [[id:emacs--Disabled-Transient-Mark][Disabling Transient Mark Mode]]
 
 --------------

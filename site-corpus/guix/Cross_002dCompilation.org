@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Cross_002dCompilation>>
-Next: [[id:guix--Native-Builds][Native Builds]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Native-Builds][Native Builds]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 10.1 Cross-Compilation [[#Cross_002dCompilation-1][¶]]
+<<Cross_002dCompilation-1>>
+*** 10.1 Cross-Compilation
 :PROPERTIES:
-:CUSTOM_ID: Cross_002dCompilation-1
+:CUSTOM_ID: cross-compilation
 :CLASS: section
 :END:
+<<index-foreign-architectures>>
 The commands supporting cross-compilation are proposing the =--list-targets= and =--target= options.
 
 The =--list-targets= option lists all the supported targets that can be passed as an argument to =--target=.
@@ -81,11 +84,7 @@ $ guix build --target=aarch64-linux-gnu hello
 
 $ file /gnu/store/9926by9qrxa91ijkhw9ndgwp4bn24g9h-hello-2.12/bin/hello
 /gnu/store/9926by9qrxa91ijkhw9ndgwp4bn24g9h-hello-2.12/bin/hello: ELF
-64-bit LSB executable, ARM aarch64 ...
+64-bit LSB executable, ARM aarch64 …
 #+end_example
 
 The major benefit of cross-compilation is that there are no performance penalty compared to emulation using QEMU. There are however higher risks that some packages fail to cross-compile because fewer users are using this mechanism extensively.
-
---------------
-
-Next: [[id:guix--Native-Builds][Native Builds]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

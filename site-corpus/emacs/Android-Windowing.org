@@ -7,6 +7,9 @@
 Next: [[id:emacs--Android-Fonts][Font Backends and Selection under Android]]   Previous: [[id:emacs--Android-Environment][Running Emacs under Android]]   Up: [[id:emacs--Android][Emacs and Android]]
 
 <<Android-Windowing>>
+
+--------------
+
 *** H.6 The Android Window System [[#The-Android-Window-System][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Android-Window-System
@@ -31,7 +34,7 @@ Emacs only supports a limited subset of GUI features on Android; the limitations
 - The =alpha=, =alpha-background=, =z-group=, =override-redirect=, =mouse-color=, =title=, =wait-for-wm=, =sticky=, and =undecorated= frame parameters (see [[../elisp_html/Frame-Parameters.html#Frame-Parameters][Frame Parameters]] in the Emacs Lisp Reference Manual) are unsupported.
 - On Android 4.0 and earlier, the =fullscreen= frame parameter is always =maximized= for top-level frames; on later versions of Android, it can also be =fullscreen=.
 
-Emacs does not implement all selection related features supported under the X Window System on Android. For example, only the =CLIPBOARD= and =PRIMARY= selections (see [[id:emacs--Cut-and-Paste::#Cut-and-Paste][“Cut and Paste” Operations on Graphical Displays]]) are supported, and Emacs is only able to set selections to plain text.
+Emacs does not implement all selection related features supported under the X Window System on Android. For example, only the =CLIPBOARD= and =PRIMARY= selections (see [[id:emacs--Cut-and-Paste][“Cut and Paste” Operations on Graphical Displays]]) are supported, and Emacs is only able to set selections to plain text.
 
 In addition, the Android system itself places certain restrictions on what selection data Emacs can access:
 
@@ -49,7 +52,7 @@ Emacs is unable to display dialog boxes (see [[id:emacs--Dialog-Boxes][Using Dia
 System -> Apps -> Emacs -> More -> Display over other apps
 #+end_example
 
-There is a direct relation between physical modifier keys and Emacs modifiers (see [[id:emacs--Key-Bindings::#Modifier-Keys][Modifier Keys]]) reported within key events, subject to a single exception: if Alt on your keyboard is depressed, then the Meta modifier will be reported by Emacs in its place, and vice versa. This irregularity is since most keyboards possess no special Meta key, and the Alt modifier is seldom employed in Emacs.
+There is a direct relation between physical modifier keys and Emacs modifiers (see [[id:emacs--Modifier-Keys][Modifier Keys]]) reported within key events, subject to a single exception: if Alt on your keyboard is depressed, then the Meta modifier will be reported by Emacs in its place, and vice versa. This irregularity is since most keyboards possess no special Meta key, and the Alt modifier is seldom employed in Emacs.
 
 Bear in mind that Android uses a different name for the Super modifier: it is referred to as SYM on Android keyboards and within the Settings keymap menu.
 
@@ -59,7 +62,7 @@ If this proves unwanted (for instance, if the input method treats C-SPC as a sho
 
 The keyboard bell installed within Android systems takes the form of a vibrating element that is activated for a number of milliseconds whenever the bell is rung. The duration of this vibration can be customized through altering the variable =android-keyboard-bell-duration= to any value between =10= and =1000=.
 
-Color-related characteristics of the display are not automatically detectable on Android, so the variable =android-display-planes= should be configured to a suitable value if Emacs is to realize faces and images in a manner consistent with the true visual attributes of a grayscale or monochrome display: to =8= for the former class of display, and =1= for the latter, which will, respectively, force all colors to be rendered in 256 grays, or in monochrome. As this variable is processed at the time the display connection is established, customizations will not take effect unless they be performed from =early-init.el= (see [[id:emacs--Init-File::#Early-Init-File][The Early Init File]]).
+Color-related characteristics of the display are not automatically detectable on Android, so the variable =android-display-planes= should be configured to a suitable value if Emacs is to realize faces and images in a manner consistent with the true visual attributes of a grayscale or monochrome display: to =8= for the former class of display, and =1= for the latter, which will, respectively, force all colors to be rendered in 256 grays, or in monochrome. As this variable is processed at the time the display connection is established, customizations will not take effect unless they be performed from =early-init.el= (see [[id:emacs--Early-Init-File][The Early Init File]]).
 
 The value of this variable does not affect anti-aliasing in the font driver, as monochrome displays nevertheless expect Emacs to provide antialiased text, which they receive after it is processed into bitmap data by the display driver.
 

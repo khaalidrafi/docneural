@@ -36,13 +36,16 @@ Next:
 [[../..][]]
 
 <<Proxy-Settings>>
-Next: [[id:guix--Substitution-Failure][Substitution Failure]], Previous: [[id:guix--Substitute-Authentication][Substitute Authentication]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Substitution-Failure][Substitution Failure]], Previous: [[id:guix--Substitute-Authentication][Substitute Authentication]], Up: [[id:guix--Substitutes][Substitutes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 5.3.6 Proxy Settings [[#Proxy-Settings-1][¶]]
+<<Proxy-Settings-1>>
+**** 5.3.5 Proxy Settings
 :PROPERTIES:
-:CUSTOM_ID: Proxy-Settings-1
+:CUSTOM_ID: proxy-settings
 :CLASS: subsection
 :END:
+<<index-http_005fproxy-1>> <<index-https_005fproxy-1>>
 Substitutes are downloaded over HTTP or HTTPS. The =http_proxy= and =https_proxy= environment variables can be set in the environment of =guix-daemon= and are honored for downloads of substitutes. Note that the value of those environment variables in the environment where =guix build=, =guix package=, and other client commands are run has /absolutely no effect/.

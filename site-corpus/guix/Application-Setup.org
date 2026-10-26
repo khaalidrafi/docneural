@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Application-Setup>>
-Next: [[id:guix--Upgrading-Guix][Upgrading Guix]], Previous: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Upgrading-Guix][Upgrading Guix]], Previous: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 2.4 Application Setup [[#Application-Setup-1][¶]]
+<<Application-Setup-1>>
+*** 2.4 Application Setup
 :PROPERTIES:
-:CUSTOM_ID: Application-Setup-1
+:CUSTOM_ID: application-setup
 :CLASS: section
 :END:
+<<index-foreign-distro-1>>
 When using Guix on top of GNU/Linux distribution other than Guix System---a so-called /foreign distro/---a few additional steps are needed to get everything in place. Here are some of them.
 
 - [[#Locales-1][Locales]]
@@ -54,11 +57,12 @@ When using Guix on top of GNU/Linux distribution other than Guix System---a so-c
 - [[#Emacs-Packages-1][Emacs Packages]]
 
 <<Locales-1>>
-**** 2.4.1 Locales [[#Locales-1][¶]]
+**** 2.4.1 Locales
 :PROPERTIES:
 :CUSTOM_ID: locales
 :CLASS: subsection
 :END:
+<<locales_002dand_002dlocpath>><<index-locales_002c-when-not-on-Guix-System>> <<index-LOCPATH>> <<index-GUIX_005fLOCPATH>>
 Packages installed /via/ Guix will not use the locale data of the host system. Instead, you must first install one of the locale packages available with Guix and then define the =GUIX_LOCPATH= environment variable:
 
 #+begin_example
@@ -78,7 +82,7 @@ Note that the =glibc-locales= package contains data for all the locales supporte
    #:name "glibc-canadian-utf8-locales"))
 #+end_src
 
-The =GUIX_LOCPATH= variable plays a role similar to =LOCPATH= (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Locale-Names.html#Locale-Names][=LOCPATH=]] in The GNU C Library Reference Manual). There are two important differences though:
+The =GUIX_LOCPATH= variable plays a role similar to =LOCPATH= (see [[https://www.gnu.org/software/libc/manual/html_node/Locale-Names.html#Locale-Names][=LOCPATH=]] in The GNU C Library Reference Manual). There are two important differences though:
 
 1. =GUIX_LOCPATH= is honored only by the libc in Guix, and not by the libc provided by foreign distros. Thus, using =GUIX_LOCPATH= allows you to make sure the programs of the foreign distro will not end up loading incompatible locale data.
 2. libc suffixes each entry of =GUIX_LOCPATH= with =/X.Y=, where =X.Y= is the libc version---e.g., =2.22=. This means that, should your Guix profile contain a mixture of programs linked against different libc version, each libc version will only try to load locale data in the right format.
@@ -86,16 +90,19 @@ The =GUIX_LOCPATH= variable plays a role similar to =LOCPATH= (see [[https://doc
 This is important because the locale data format used by different libc versions may be incompatible.
 
 <<Name-Service-Switch-1>>
-**** 2.4.2 Name Service Switch [[#Name-Service-Switch-1][¶]]
+**** 2.4.2 Name Service Switch
 :PROPERTIES:
 :CUSTOM_ID: name-service-switch
 :CLASS: subsection
 :END:
+<<index-name-service-switch_002c-glibc>> <<index-NSS-_0028name-service-switch_0029_002c-glibc>> <<index-nscd>>
 When using Guix on a foreign distro, we /strongly recommend/ that the system run the GNU C library's /name service cache daemon/, =nscd=, which should be listening on the =/var/run/nscd/socket= socket. Failing to do that, applications installed with Guix may fail to look up host names or user accounts, or may even crash. The next paragraphs explain why.
 
-The GNU C library implements a /name service switch/ (NSS), which is an extensible mechanism for “name lookups” in general: host name resolution, user accounts, and more (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Name-Service-Switch.html#Name-Service-Switch][Name Service Switch]] in The GNU C Library Reference Manual).
+<<index-nsswitch_002econf>>
+The GNU C library implements a /name service switch/ (NSS), which is an extensible mechanism for “name lookups” in general: host name resolution, user accounts, and more (see [[https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html#Name-Service-Switch][Name Service Switch]] in The GNU C Library Reference Manual).
 
-Being extensible, the NSS supports /plugins/, which provide new name lookup implementations: for example, the =nss-mdns= plugin allow resolution of =.local= host names, the =nis= plugin allows user account lookup using the Network information service (NIS), and so on. These extra “lookup services” are configured system-wide in =/etc/nsswitch.conf=, and all the programs running on the system honor those settings (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Reference Manual).
+<<index-Network-information-service-_0028NIS_0029>> <<index-NIS-_0028Network-information-service_0029>>
+Being extensible, the NSS supports /plugins/, which provide new name lookup implementations: for example, the =nss-mdns= plugin allow resolution of =.local= host names, the =nis= plugin allows user account lookup using the Network information service (NIS), and so on. These extra “lookup services” are configured system-wide in =/etc/nsswitch.conf=, and all the programs running on the system honor those settings (see [[https://www.gnu.org/software/libc/manual/html_node/NSS-Configuration-File.html#NSS-Configuration-File][NSS Configuration File]] in The GNU C Reference Manual).
 
 When they perform a name lookup---for instance by calling the =getaddrinfo= function in C---applications first try to connect to the nscd; on success, nscd performs name lookups on their behalf. If the nscd is not running, then they perform the name lookup by themselves, by loading the name lookup services into their own address space and running it. These name lookup services---the =libnss_*.so= files---are =dlopen='d, but they may come from the host system's C library, rather than from the C library the application is linked against (the C library coming from Guix).
 
@@ -103,16 +110,19 @@ And this is where the problem is: if your application is linked against Guix's C
 
 Running =nscd= on the system, among other advantages, eliminates this binary incompatibility problem because those =libnss_*.so= files are loaded in the =nscd= process, not in applications themselves.
 
+<<index-nsncd_002c-replacement-for-nscd>>
 Note that =nscd= is no longer provided on some GNU/Linux distros, such as Arch Linux (as of Dec. 2024). =nsncd= can be used as a drop-in-replacement. See [[https://github.com/twosigma/nsncd][the nsncd repository]] and [[https://flokli.de/posts/2022-11-18-nsncd/][this blog post]] for more information.
 
 <<X11-Fonts>>
-**** 2.4.3 X11 Fonts [[#X11-Fonts][¶]]
+**** 2.4.3 X11 Fonts
 :PROPERTIES:
 :CUSTOM_ID: x11-fonts
 :CLASS: subsection
 :END:
+<<index-fonts>>
 The majority of graphical applications use Fontconfig to locate and load fonts and perform X11-client-side rendering. The =fontconfig= package in Guix looks for fonts in =$HOME/.guix-profile= by default. Thus, to allow graphical applications installed with Guix to display fonts, you have to install fonts with Guix as well. Essential font packages include =font-ghostscript=, =font-dejavu=, and =font-gnu-freefont=.
 
+<<index-fc_002dcache>> <<index-font-cache>>
 Once you have installed or removed fonts, or when you notice an application that does not find fonts, you may need to install Fontconfig and to force an update of its font cache by running:
 
 #+begin_example
@@ -126,6 +136,7 @@ To display text written in Chinese languages, Japanese, or Korean in graphical a
 guix install font-adobe-source-han-sans:cn
 #+end_example
 
+<<index-xterm>>
 Older programs such as =xterm= do not use Fontconfig and instead rely on server-side font rendering. Such programs require to specify a full name of a font using XLFD (X Logical Font Description), like this:
 
 #+begin_example
@@ -138,26 +149,30 @@ To be able to use such full names for the TrueType fonts installed in your Guix 
 xset +fp $(dirname $(readlink -f ~/.guix-profile/share/fonts/truetype/fonts.dir))
 #+end_example
 
+<<index-xlsfonts>>
 After that, you can run =xlsfonts= (from =xlsfonts= package) to make sure your TrueType fonts are listed there.
 
 <<X_002e509-Certificates-1>>
-**** 2.4.4 X.509 Certificates [[#X_002e509-Certificates-1][¶]]
+**** 2.4.4 X.509 Certificates
 :PROPERTIES:
 :CUSTOM_ID: x.509-certificates
 :CLASS: subsection
 :END:
+<<index-nss_002dcerts>>
 The =nss-certs= package provides X.509 certificates, which allow programs to authenticate Web servers accessed over HTTPS.
 
 When using Guix on a foreign distro, you can install this package and define the relevant environment variables so that packages know where to look for certificates. See [[id:guix--X_002e509-Certificates][X.509 Certificates]], for detailed information.
 
 <<Emacs-Packages-1>>
-**** 2.4.5 Emacs Packages [[#Emacs-Packages-1][¶]]
+**** 2.4.5 Emacs Packages
 :PROPERTIES:
 :CUSTOM_ID: emacs-packages
 :CLASS: subsection
 :END:
+<<index-emacs>>
 When you install Emacs packages with Guix, the Elisp files are placed under the =share/emacs/site-lisp/= directory of the profile in which they are installed. The Elisp libraries are made available to Emacs through the =EMACSLOADPATH= environment variable, which is set when installing Emacs itself.
 
+<<index-guix_002demacs_002dautoload_002dpackages_002c-refreshing-Emacs-packages>>
 Additionally, autoload definitions are automatically evaluated at the initialization of Emacs, by the Guix-specific =guix-emacs-autoload-packages= procedure. This procedure can be interactively invoked to have newly installed Emacs packages discovered, without having to restart Emacs. If, for some reason, you want to avoid auto-loading the Emacs packages installed with Guix, you can do so by running Emacs with the =--no-site-file= option (see [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File][Init File]] in The GNU Emacs Manual).
 
 #+begin_quote
@@ -181,10 +196,9 @@ Further note, that =emacs-minimal=---the default Emacs for building packages---h
 ***** [[#DOCF8][(8)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The size of the =glibc-locales= package is reduced down to about 213 MiB with store deduplication and further down to about 67 MiB when using a zstd-compressed Btrfs file system.
 
 --------------
 
-Next: [[id:guix--Upgrading-Guix][Upgrading Guix]], Previous: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Upgrading-Guix][Upgrading Guix]], Previous: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

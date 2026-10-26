@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Calendar_002fDiary
+:END:
+#+filetags: :emacs:
+#+title: Calendar/Diary
+
+Next: [[id:emacs--Sending-Mail][Sending Mail]]   Previous: [[id:emacs--Dired][Dired, the Directory Editor]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Calendar_002fDiary>>
+** 33 The Calendar and the Diary [[#The-Calendar-and-the-Diary][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Calendar-and-the-Diary
+:CLASS: chapter
+:END:
+Emacs provides the functions of a desk calendar, with a diary of planned or past events. It also has facilities for managing your appointments, and keeping track of how much time you spend working on certain projects.
+
+To enter the calendar, type M-x calendar. This displays a three-month calendar centered on the current month, with point on the current date. With a numeric argument, as in C-u M-x calendar, it prompts you for the month and year to be the center of the three-month calendar. The calendar uses its own buffer, whose major mode is Calendar mode.
+
+mouse-3 in the calendar brings up a menu of operations on a particular date; mouse-2 brings up a menu of commonly used calendar features that are independent of any particular date. To exit the calendar, type q.
+
+--------------

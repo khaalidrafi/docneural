@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: guix--Power-Management-Home-Services
+:END:
+#+filetags: :guix:
+#+title: Power Management Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Power-Management-Home-Services>>
+Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.4 Power Management Home Services [[#Power-Management-Home-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Power-Management-Home-Services-1
+:CLASS: subsection
+:END:
+The =(gnu home services pm)= module provides home services pertaining to battery power.
+
+- Variable: *home-batsignal-service-type* [[#index-home_002dbatsignal_002dservice_002dtype][¶]] :: Service for =batsignal=, a program that monitors battery levels and warns the user through desktop notifications when their battery is getting low. You can also configure a command to be run when the battery level passes a point deemed “dangerous”. This service is configured with the =home-batsignal-configuration= record.
+
+- Data Type: *home-batsignal-configuration* [[#index-home_002dbatsignal_002dconfiguration][¶]] :: Data type representing the configuration for batsignal.
+
+  - =warning-level= (default: =15=) :: The battery level to send a warning message at.
+
+  - =warning-message= (default: =#f=) :: The message to send as a notification when the battery level reaches the =warning-level=. Setting to =#f= uses the default message.
+
+  - =critical-level= (default: =5=) :: The battery level to send a critical message at.
+
+  - =critical-message= (default: =#f=) :: The message to send as a notification when the battery level reaches the =critical-level=. Setting to =#f= uses the default message.
+
+  - =danger-level= (default: =2=) :: The battery level to run the =danger-command= at.
+
+  - =danger-command= (default: =#f=) :: The command to run when the battery level reaches the =danger-level=. Setting to =#f= disables running the command entirely.
+
+  - =full-level= (default: =#f=) :: The battery level to send a full message at. Setting to =#f= disables sending the full message entirely.
+
+  - =full-message= (default: =#f=) :: The message to send as a notification when the battery level reaches the =full-level=. Setting to =#f= uses the default message.
+
+  - =batteries= (default: ='()=) :: The batteries to monitor. Setting to ='()= tries to find batteries automatically.
+
+  - =poll-delay= (default: =60=) :: The time in seconds to wait before checking the batteries again.
+
+  - =icon= (default: =#f=) :: A file-like object to use as the icon for battery notifications. Setting to =#f= disables notification icons entirely.
+
+  - =notifications?= (default: =#t=) :: Whether to send any notifications.
+
+  - =notifications-expire?= (default: =#f=) :: Whether notifications sent expire after a time.
+
+  - =notification-command= (default: =#f=) :: Command to use to send messages. Setting to =#f= sends a notification through =libnotify=.
+
+  - =ignore-missing?= (default: =#f=) :: Whether to ignore missing battery errors.
+
+--------------
+
+Next: [[id:guix--Shepherd-Home-Service][Managing User Daemons]], Previous: [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

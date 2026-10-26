@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID: org--Tables-in-HTML-export
+:END:
+#+filetags: :org:
+#+title: Tables in HTML export (The Org Manual)
+
+Next:
+
+<<Tables-in-HTML-export>>
+Next: [[id:org--Images-in-HTML-export][Images in HTML export]], Previous: [[id:org--Links-in-HTML-export][Links in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.9 Tables in HTML export [[#Tables-in-HTML-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tables-in-HTML-export-1
+:CLASS: subsection
+:END:
+The HTML export backend uses =org-html-table-default-attributes= when exporting Org tables to HTML. By default, the exporter does not draw frames and cell borders. To change for this for a table, use the following lines before the table in the Org file:
+
+#+begin_example
+#+CAPTION: This is a table with lines around and between cells
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+end_example
+
+Note that table attributes are deprecated in HTML5 in favor of CSS. When the doctype is set to HTML5 (see [[id:org--HTML-doctypes][HTML doctypes]]), Org ignores =org-html-table-default-attributes=. ‘=#+ATTR_HTML:=' is still respected, but not recommended.
+
+The HTML export backend preserves column groupings in Org tables (see [[id:org--Column-Groups][Column Groups]]) when exporting to HTML.
+
+Additional options for customizing tables for HTML export.
+
+- <<index-org_002dhtml_002dtable_002dalign_002dindividual_002dfields>>=org-html-table-align-individual-fields= [[#index-org_002dhtml_002dtable_002dalign_002dindividual_002dfields][¶]] :: Non-=nil= attaches style attributes for alignment to each table field.
+
+- <<index-org_002dhtml_002dtable_002dcaption_002dabove>>=org-html-table-caption-above= [[#index-org_002dhtml_002dtable_002dcaption_002dabove][¶]] :: Non-=nil= places caption string at the beginning of the table.
+
+- <<index-org_002dhtml_002dtable_002ddata_002dtags>>=org-html-table-data-tags= [[#index-org_002dhtml_002dtable_002ddata_002dtags][¶]] :: Opening and ending tags for table data fields.
+
+- <<index-org_002dhtml_002dtable_002ddefault_002dattributes>>=org-html-table-default-attributes= [[#index-org_002dhtml_002dtable_002ddefault_002dattributes][¶]] :: Default attributes and values for table tags.
+
+- <<index-org_002dhtml_002dtable_002dheader_002dtags>>=org-html-table-header-tags= [[#index-org_002dhtml_002dtable_002dheader_002dtags][¶]] :: Opening and ending tags for table's header fields.
+
+- <<index-org_002dhtml_002dtable_002drow_002dtags>>=org-html-table-row-tags= [[#index-org_002dhtml_002dtable_002drow_002dtags][¶]] :: Opening and ending tags for table rows.
+
+- <<index-org_002dhtml_002dtable_002duse_002dheader_002dtags_002dfor_002dfirst_002dcolumn>>=org-html-table-use-header-tags-for-first-column= [[#index-org_002dhtml_002dtable_002duse_002dheader_002dtags_002dfor_002dfirst_002dcolumn][¶]] :: Non-=nil= formats column one in tables with header tags.
+
+--------------
+
+Next: [[id:org--Images-in-HTML-export][Images in HTML export]], Previous: [[id:org--Links-in-HTML-export][Links in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,193 @@
+:PROPERTIES:
+:ID: guix--Daemon-Offload-Setup
+:END:
+#+filetags: :guix:
+#+title: Daemon Offload Setup
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Daemon-Offload-Setup>>
+Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 2.2.2 Using the Offload Facility [[#Using-the-Offload-Facility][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-the-Offload-Facility
+:CLASS: subsection
+:END:
+When desired, the build daemon can /offload/ derivation builds to other machines running Guix, using the =offload= /build hook/[[#FOOT7][^{7}]]. When that feature is enabled, a list of user-specified build machines is read from =/etc/guix/machines.scm=; every time a build is requested, for instance via =guix build=, the daemon attempts to offload it to one of the machines that satisfy the constraints of the derivation, in particular its system types---e.g., =x86_64-linux=. A single machine can have multiple system types, either because its architecture natively supports it, via emulation (see [[id:guix--Virtualization-Services::#transparent_002demulation_002dqemu][Transparent Emulation with QEMU]]), or both. Missing prerequisites for the build are copied over SSH to the target machine, which then proceeds with the build; upon success the output(s) of the build are copied back to the initial machine. The offload facility comes with a basic scheduler that attempts to select the best machine. The best machine is chosen among the available machines based on criteria such as:
+
+1. The availability of a build slot. A build machine can have as many build slots (connections) as the value of the =parallel-builds= field of its =build-machine= object.
+2. Its relative speed, as defined via the =speed= field of its =build-machine= object.
+3. Its load. The normalized machine load must be lower than a threshold value, configurable via the =overload-threshold= field of its =build-machine= object.
+4. Disk space availability. More than 100 MiB must be available.
+
+The =/etc/guix/machines.scm= file typically looks like this:
+
+#+begin_src lisp
+(list (build-machine
+        (name "eightysix.example.org")
+        (systems (list "x86_64-linux" "i686-linux"))
+        (host-key "ssh-ed25519 AAAAC3Nza...")
+        (user "bob")
+        (speed 2.))     ;incredibly fast!
+
+      (build-machine
+        (name "armeight.example.org")
+        (systems (list "aarch64-linux"))
+        (host-key "ssh-rsa AAAAB3Nza...")
+        (user "alice")
+
+        ;; Remember 'guix offload' is spawned by
+        ;; 'guix-daemon' as root.
+        (private-key "/root/.ssh/identity-for-guix")))
+#+end_src
+
+In the example above we specify a list of two build machines, one for the =x86_64= and =i686= architectures and one for the =aarch64= architecture.
+
+In fact, this file is---not surprisingly!---a Scheme file that is evaluated when the =offload= hook is started. Its return value must be a list of =build-machine= objects. While this example shows a fixed list of build machines, one could imagine, say, using DNS-SD to return a list of potential build machines discovered in the local network (see [[https://doc.guix.gnu.org/guile-avahi/latest/en/html_node/Introduction.html#Introduction][Guile-Avahi]] in Using Avahi in Guile Scheme Programs). The =build-machine= data type is detailed below.
+
+- Data Type: *build-machine* [[#index-build_002dmachine][¶]] :: This data type represents build machines to which the daemon may offload builds. The important fields are:
+
+  - =name= :: The host name of the remote machine.
+
+  - =systems= :: The system types the remote machine supports---e.g., =(list "x86_64-linux" "i686-linux")=.
+
+  - =user= :: The user account on the remote machine to use when connecting over SSH. Note that the SSH key pair must /not/ be passphrase-protected, to allow non-interactive logins.
+
+  - =host-key= :: This must be the machine's SSH /public host key/ in OpenSSH format. This is used to authenticate the machine when we connect to it. It is a long string that looks like this:
+
+    #+begin_example
+    ssh-ed25519 AAAAC3NzaC...mde+UhL hint@example.org
+#+end_example
+
+    If the machine is running the OpenSSH daemon, =sshd=, the host key can be found in a file such as =/etc/ssh/ssh_host_ed25519_key.pub=.
+
+  A number of optional fields may be specified:
+
+  - =port= (default: =22=) :: Port number of SSH server on the machine.
+
+  - =private-key= (default: =~root/.ssh/id_rsa=) :: The SSH private key file to use when connecting to the machine, in OpenSSH format. This key must not be protected with a passphrase.
+
+    Note that the default value is the private key /of the root account/. Make sure it exists if you use the default.
+
+  - =compression= (default: ="zlib@openssh.com,zlib"=)\\
+    =compression-level= (default: =3=) :: The SSH-level compression methods and compression level requested.
+
+    Note that offloading relies on SSH compression to reduce bandwidth usage when transferring files to and from build machines.
+
+  - =daemon-socket= (default: ="/var/guix/daemon-socket/socket"=) :: File name of the Unix-domain socket =guix-daemon= is listening to on that machine.
+
+  - =overload-threshold= (default: =0.8=) :: The load threshold above which a potential offload machine is disregarded by the offload scheduler. The value roughly translates to the total processor usage of the build machine, ranging from 0.0 (0%) to 1.0 (100%). It can also be disabled by setting =overload-threshold= to =#f=.
+
+  - =parallel-builds= (default: =1=) :: The number of builds that may run in parallel on the machine.
+
+  - =speed= (default: =1.0=) :: A “relative speed factor”. The offload scheduler will tend to prefer machines with a higher speed factor.
+
+  - =features= (default: ='()=) :: A list of strings denoting specific features supported by the machine. An example is ="kvm"= for machines that have the KVM Linux modules and corresponding hardware support. Derivations can request features by name, and they will be scheduled on matching build machines.
+
+#+begin_quote
+*Note:* On Guix System, instead of managing =/etc/guix/machines.scm= independently, you can choose to specify build machines directly in the =operating-system= declaration, in the =build-machines= field of =guix-configuration=. See [[id:guix--Base-Services::#guix_002dconfiguration_002dbuild_002dmachines][=build-machines= field of =guix-configuration=]].
+
+#+end_quote
+
+The =guix= command must be in the search path on the build machines. You can check whether this is the case by running:
+
+#+begin_example
+ssh build-machine guix repl --version
+#+end_example
+
+There is one last thing to do once =machines.scm= is in place. As explained above, when offloading, files are transferred back and forth between the machine stores. For this to work, you first need to generate a key pair on each machine to allow the daemon to export signed archives of files from the store (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]):
+
+#+begin_example
+# guix archive --generate-key
+#+end_example
+
+#+begin_quote
+*Note:* This key pair is not related to the SSH key pair that was previously mentioned in the description of the =build-machine= data type.
+
+#+end_quote
+
+Each build machine must authorize the key of the master machine so that it accepts store items it receives from the master:
+
+#+begin_example
+# guix archive --authorize < master-public-key.txt
+#+end_example
+
+Likewise, the master machine must authorize the key of each build machine.
+
+All the fuss with keys is here to express pairwise mutual trust relations between the master and the build machines. Concretely, when the master receives files from a build machine (and /vice versa/), its build daemon can make sure they are genuine, have not been tampered with, and that they are signed by an authorized key.
+
+To test whether your setup is operational, run this command on the master node:
+
+#+begin_example
+# guix offload test
+#+end_example
+
+This will attempt to connect to each of the build machines specified in =/etc/guix/machines.scm=, make sure Guix is available on each machine, attempt to export to the machine and import from it, and report any error in the process.
+
+If you want to test a different machine file, just specify it on the command line:
+
+#+begin_example
+# guix offload test machines-qualif.scm
+#+end_example
+
+Last, you can test the subset of the machines whose name matches a regular expression like this:
+
+#+begin_example
+# guix offload test machines.scm '\.gnu\.org$'
+#+end_example
+
+To display the current load of all build hosts, run this command on the main node:
+
+#+begin_example
+# guix offload status
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF7][(7)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+This feature is available only when [[https://github.com/artyom-poptsov/guile-ssh][Guile-SSH]] is present.
+
+--------------
+
+Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

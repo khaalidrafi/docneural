@@ -1,0 +1,112 @@
+:PROPERTIES:
+:ID: guix--Security-Updates
+:END:
+#+filetags: :guix:
+#+title: Security Updates
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Security-Updates>>
+Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 19 Security Updates [[#Security-Updates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Security-Updates-1
+:CLASS: chapter
+:END:
+Occasionally, important security vulnerabilities are discovered in software packages and must be patched. Guix developers try hard to keep track of known vulnerabilities and to apply fixes as soon as possible in the =master= branch of Guix (we do not yet provide a “stable” branch containing only security updates). The =guix lint= tool helps developers find out about vulnerable versions of software packages in the distribution:
+
+#+begin_example
+$ guix lint -c cve
+gnu/packages/base.scm:652:2: glibc@2.21: probably vulnerable to CVE-2015-1781, CVE-2015-7547
+gnu/packages/gcc.scm:334:2: gcc@4.9.3: probably vulnerable to CVE-2015-5276
+gnu/packages/image.scm:312:2: openjpeg@2.1.0: probably vulnerable to CVE-2016-1923, CVE-2016-1924
+...
+#+end_example
+
+See [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], for more information.
+
+Guix follows a functional package management discipline (see [[id:guix--Introduction][Introduction]]), which implies that, when a package is changed, /every package that depends on it/ must be rebuilt. This can significantly slow down the deployment of fixes in core packages such as libc or Bash, since basically the whole distribution would need to be rebuilt. Using pre-built binaries helps (see [[id:guix--Substitutes][Substitutes]]), but deployment may still take more time than desired.
+
+To address this, Guix implements /grafts/, a mechanism that allows for fast deployment of critical updates without the costs associated with a whole-distribution rebuild. The idea is to rebuild only the package that needs to be patched, and then to “graft” it onto packages explicitly installed by the user and that were previously referring to the original package. The cost of grafting is typically very low, and order of magnitudes lower than a full rebuild of the dependency chain.
+
+For instance, suppose a security update needs to be applied to Bash. Guix developers will provide a package definition for the “fixed” Bash, say =bash-fixed=, in the usual way (see [[id:guix--Defining-Packages][Defining Packages]]). Then, the original package definition is augmented with a =replacement= field pointing to the package containing the bug fix:
+
+#+begin_src lisp
+(define bash
+  (package
+    (name "bash")
+    ;; ...
+    (replacement bash-fixed)))
+#+end_src
+
+From there on, any package depending directly or indirectly on Bash---as reported by =guix gc --requisites= (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]])---that is installed is automatically “rewritten” to refer to =bash-fixed= instead of =bash=. This grafting process takes time proportional to the size of the package, usually less than a minute for an “average” package on a recent machine. Grafting is recursive: when an indirect dependency requires grafting, then grafting “propagates” up to the package that the user is installing.
+
+Currently, the length of the name and version of the graft and that of the package it replaces (=bash-fixed= and =bash= in the example above) must be equal. This restriction mostly comes from the fact that grafting works by patching files, including binary files, directly. Other restrictions may apply: for instance, when adding a graft to a package providing a shared library, the original shared library and its replacement must have the same =SONAME= and be binary-compatible.
+
+The =--no-grafts= command-line option allows you to forcefully avoid grafting (see [[id:guix--Common-Build-Options][=--no-grafts=]]). Thus, the command:
+
+#+begin_example
+guix build bash --no-grafts
+#+end_example
+
+returns the store file name of the original Bash, whereas:
+
+#+begin_example
+guix build bash
+#+end_example
+
+returns the store file name of the “fixed”, replacement Bash. This allows you to distinguish between the two variants of Bash.
+
+To verify which Bash your whole profile refers to, you can run (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]):
+
+#+begin_example
+guix gc -R $(readlink -f ~/.guix-profile) | grep bash
+#+end_example
+
+... and compare the store file names that you get with those above. Likewise for a complete Guix system generation:
+
+#+begin_example
+guix gc -R $(guix system build my-config.scm) | grep bash
+#+end_example
+
+Lastly, to check which Bash running processes are using, you can use the =lsof= command:
+
+#+begin_example
+lsof | grep /gnu/store/.*bash
+#+end_example
+
+--------------
+
+Next: [[id:guix--Bootstrapping][Bootstrapping]], Previous: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

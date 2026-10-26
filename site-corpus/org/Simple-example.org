@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID: org--Simple-example
+:END:
+#+filetags: :org:
+#+title: Simple example (The Org Manual)
+
+Next:
+
+<<Simple-example>>
+Next: [[id:org--Complex-example][Example: complex publishing configuration]], Up: [[id:org--Sample-Configuration][Sample Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 14.3.1 Example: simple publishing configuration [[#Example_003a-simple-publishing-configuration][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Example_003a-simple-publishing-configuration
+:CLASS: subsection
+:END:
+This example publishes a set of Org files to the ‘=public_html=' directory on the local machine.
+
+#+begin_src lisp-preformatted
+(setq org-publish-project-alist
+      '(("org"
+         :base-directory "~/org/"
+         :publishing-function org-html-publish-to-html
+         :publishing-directory "~/public_html"
+         :section-numbers nil
+         :with-toc nil
+         :html-head "<link rel=\"stylesheet\"
+                    href=\"../other/mystyle.css\"
+                    type=\"text/css\"/>")))
+#+end_src

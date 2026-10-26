@@ -1,0 +1,162 @@
+:PROPERTIES:
+:ID: emacs--Program-Indent
+:END:
+#+filetags: :emacs:
+#+title: Program Indent
+
+Next: [[id:emacs--Parentheses#Parentheses][Commands for Editing with Parentheses]]   Previous: [[id:emacs--Defuns#Defuns][Top-Level Definitions, or Defuns]]   Up: [[id:emacs--Programs][Editing Programs]]
+
+<<Program-Indent>>
+*** 28.3 Indentation for Programs [[#Indentation-for-Programs][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Indentation-for-Programs
+:CLASS: section
+:END:
+The best way to keep a program properly indented is to use Emacs to reindent it as you change it. Emacs has commands to indent either a single line, a specified number of lines, or all of the lines inside a single parenthetical grouping.
+
+See [[id:emacs--Indentation][Indentation]], for general information about indentation. This section describes indentation features specific to programming language modes.
+
+Emacs also provides a Lisp pretty-printer in the =pp= package, which reformats Lisp objects with nice-looking indentation. See [[../elisp_html/Output-Functions.html#Output-Functions][pp]] in The Emacs Lisp Reference Manual.
+
+--------------
+
+<<Basic-Indent>>
+**** 28.3.1 Basic Program Indentation Commands [[#Basic-Program-Indentation-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Basic-Program-Indentation-Commands
+:CLASS: subsection
+:END:
+- TAB :: Adjust indentation of current line (=indent-for-tab-command=).
+
+- RET :: Insert a newline, then adjust indentation of following line (=newline=).
+
+The basic indentation command is TAB (=indent-for-tab-command=), which was documented in [[id:emacs--Indentation][Indentation]]. In programming language modes, TAB indents the current line, based on the indentation and syntactic content of the preceding lines; if the region is active, TAB indents each line within the region, not just the current line.
+
+The command RET (=newline=), which was documented in [[id:emacs--Inserting-Text][Inserting Text]], does the same as C-j followed by TAB: it inserts a new line, then adjusts the line's indentation.
+
+When indenting a line that starts within a parenthetical grouping, Emacs usually places the start of the line under the preceding line within the group, or under the text after the parenthesis. If you manually give one of these lines a nonstandard indentation (e.g., for aesthetic purposes), the lines below will follow it.
+
+The indentation commands for most programming language modes assume that an open-parenthesis, open-brace or other opening delimiter at the left margin is the start of a function. If the code you are editing violates this assumption---even if the delimiters occur in strings or comments---you must set =open-paren-in-column-0-is-defun-start= to =nil= for indentation to work properly. See [[id:emacs--Defuns::#Left-Margin-Paren][Left Margin Convention]].
+
+--------------
+
+<<Multi_002dline-Indent>>
+**** 28.3.2 Indenting Several Lines [[#Indenting-Several-Lines][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Indenting-Several-Lines
+:CLASS: subsection
+:END:
+Sometimes, you may want to reindent several lines of code at a time. One way to do this is to use the mark; when the mark is active and the region is non-empty, TAB indents every line in the region. Alternatively, the command C-M-\ (=indent-region=) indents every line in the region, whether or not the mark is active (see [[id:emacs--Indentation-Commands][Indentation Commands]]).
+
+In addition, Emacs provides the following commands for indenting large chunks of code:
+
+- C-M-q :: Reindent all the lines within one parenthetical grouping.
+
+- M-q :: Fill a single paragraph in a defun, or reindent all the lines within that defun.
+
+- C-u TAB :: Shift an entire parenthetical grouping rigidly sideways so that its first line is properly indented.
+
+- M-x indent-code-rigidly :: Shift all the lines in the region rigidly sideways, but do not alter lines that start inside comments and strings.
+
+To reindent the contents of a single parenthetical grouping, position point before the beginning of the grouping and type C-M-q. This changes the relative indentation within the grouping, without affecting its overall indentation (i.e., the indentation of the line where the grouping starts). The function that C-M-q runs depends on the major mode; it is =indent-pp-sexp= in Lisp mode, =c-indent-exp= in C mode, etc. To correct the overall indentation as well, type TAB first.
+
+To reindent the entire defun around point, type M-q (=prog-fill-reindent-defun=). If point is in a comment or a string, this command fills and indents the comment or string instead. What exactly constitutes a comment, a string, or a defun depends on the major mode: the bounds of a defun are decided by the variables =beginning-of-defun-function= and =end-of-defun-function= (see [[../elisp_html/List-Motion.html#List-Motion][List Motion]] in The Emacs Lisp Reference Manual), and the filling mechanism is decided by =fill-paragraph-function= (see [[../elisp_html/Filling.html#Filling][Filling]] in The Emacs Lisp Reference Manual).
+
+If you like the relative indentation within a grouping but not the indentation of its first line, move point to that first line and type C-u TAB. In Lisp, C, and some other major modes, TAB with a numeric argument reindents the current line as usual, then reindents by the same amount all the lines in the parenthetical grouping starting on the current line. It is clever, though, and does not alter lines that start inside strings. Neither does it alter C preprocessor lines when in C mode, but it does reindent any continuation lines that may be attached to them.
+
+The command M-x indent-code-rigidly rigidly shifts all the lines in the region sideways, like =indent-rigidly= does (see [[id:emacs--Indentation-Commands][Indentation Commands]]). It doesn't alter the indentation of lines that start inside a string, unless the region also starts inside that string. The prefix arg specifies the number of columns to indent.
+
+--------------
+
+<<Lisp-Indent>>
+**** 28.3.3 Customizing Lisp Indentation [[#Customizing-Lisp-Indentation][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-Lisp-Indentation
+:CLASS: subsection
+:END:
+The indentation pattern for a Lisp expression can depend on the function called by the expression. For each Lisp function, you can choose among several predefined patterns of indentation, or define an arbitrary one with a Lisp program.
+
+The standard pattern of indentation is as follows: the second line of the expression is indented under the first argument, if that is on the same line as the beginning of the expression; otherwise, the second line is indented underneath the function name. Each following line is indented under the previous line whose nesting depth is the same.
+
+If the variable =lisp-indent-offset= is non-=nil=, it overrides the usual indentation pattern for the second line of an expression, so that such lines are always indented =lisp-indent-offset= more columns than the containing list.
+
+Certain functions override the standard pattern. Functions whose names start with =def= treat the second lines as the start of a /body/, by indenting the second line =lisp-body-indent= additional columns beyond the open-parenthesis that starts the expression.
+
+You can override the standard pattern in various ways for individual functions, according to the =lisp-indent-function= property of the function name. This is normally done for macro definitions, using the =declare= construct. See [[../elisp_html/Defining-Macros.html#Defining-Macros][Defining Macros]] in The Emacs Lisp Reference Manual.
+
+In Emacs Lisp, lists are usually indented as if they are function-like forms:
+
+#+begin_src lisp-preformatted
+(setq foo '(bar zot
+                gazonk))
+#+end_src
+
+However, if you add a space after the opening parenthesis, this tells Emacs that it's a data list instead of a piece of code, and Emacs will then indent it like this:
+
+#+begin_src lisp-preformatted
+(setq foo '( bar zot
+             gazonk))
+#+end_src
+
+--------------
+
+<<C-Indent>>
+**** 28.3.4 Commands for C Indentation [[#Commands-for-C-Indentation][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Commands-for-C-Indentation
+:CLASS: subsection
+:END:
+Here are special features for indentation in C mode and related modes:
+
+-  <<index-C_002dc-C_002dq-_0028C-mode_0029>>C-c C-q [[#index-C_002dc-C_002dq-_0028C-mode_0029][¶]] :: Reindent the current top-level function definition or aggregate type declaration (=c-indent-defun= in CC mode, =c-ts-mode-indent-defun= in =c-ts-mode= based on tree-sitter).
+
+-  <<index-C_002dM_002dq-_0028C-mode_0029>>C-M-q [[#index-C_002dM_002dq-_0028C-mode_0029][¶]] :: Reindent each line in the balanced expression (see [[id:emacs--Parentheses::#Expressions][Expressions with Balanced Parentheses]]), also known as “sexp”, that follows point. In CC mode, this invokes =c-indent-exp=; in tree-sitter based =c-ts-mode= this invokes a more general =prog-indent-sexp=. A prefix argument inhibits warning messages about invalid syntax.
+
+- <<index-c_002dindent_002dline_002dor_002dregion>>TAB [[#index-c_002dindent_002dline_002dor_002dregion][¶]] :: Reindent the current line, active region, or block starting on this line (=c-indent-line-or-region=). With prefix argument, rigidly reindent the balanced expression which starts on the current line, if the current line needs reindentation.
+
+  If =c-tab-always-indent= is =t=, this command always reindents the current line and does nothing else. This is the default.
+
+  If that variable is =nil=, this command reindents the current line only if point is at the left margin or in the line's indentation; otherwise, it inserts a tab (or the equivalent number of spaces, if =indent-tabs-mode= is =nil=).
+
+  Any other value (not =nil= or =t=) means always reindent the line, and also insert a tab if within a comment or a string.
+
+To reindent the whole current buffer, type C-x h C-M-\. This first selects the whole buffer as the region, then reindents that region.
+
+To reindent the current block, use C-M-u C-M-q. This moves to the front of the block and then reindents it all.
+
+--------------
+
+<<Custom-C-Indent>>
+**** 28.3.5 Customizing C Indentation [[#Customizing-C-Indentation][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-C-Indentation
+:CLASS: subsection
+:END:
+C mode and related modes use a flexible mechanism for customizing indentation. C mode indents a source line in two steps: first it classifies the line syntactically according to its contents and context; second, it determines the indentation offset associated by your selected /style/ with the syntactic construct and adds this onto the indentation of the /anchor statement/.
+
+- C-c . =style= RET :: Select a predefined style =style= (=c-set-style= in CC mode, =c-ts-mode-set-style= in =c-ts-mode= based on tree-sitter).
+
+A /style/ is a named collection of customizations that can be used in C mode and the related modes. [[../ccmode_html/Styles.html#Styles][Styles]] in The CC Mode Manual, for a complete description. Emacs comes with several predefined styles, including =gnu=, =k&r=, =bsd=, =stroustrup=, =linux=, =python=, =java=, =whitesmith=, =ellemtel=, and =awk=. Some of these styles are primarily intended for one language, but any of them can be used with any of the languages supported by these modes. To find out what a style looks like, select it and reindent some code, e.g., by typing C-M-q at the start of a function definition.
+
+To choose a style for the current buffer, use the command C-c .. Specify a style name as an argument (case is not significant). This command affects the current buffer only, and it affects only future invocations of the indentation commands; it does not reindent the code already in the buffer. To reindent the whole buffer in the new style, you can type C-x h C-M-\.
+
+When using CC mode, you can also set the variable =c-default-style= to specify the default style for various major modes. Its value should be either the style's name (a string) or an alist, in which each element specifies one major mode and which indentation style to use for it. For example,
+
+#+begin_example
+(setq c-default-style
+      '((java-mode . "java")
+        (awk-mode . "awk")
+        (other . "gnu")))
+#+end_example
+
+specifies explicit choices for Java and AWK modes, and the default ‘=gnu=' style for the other C-like modes. (These settings are actually the defaults.) This variable takes effect when you select one of the C-like major modes; thus, if you specify a new default style for Java mode, you can make it take effect in an existing Java mode buffer by typing M-x java-mode there.
+
+When using the tree-sitter based =c-ts-mode=, you can set the default indentation style by customizing the variable =c-ts-mode-indent-style=.
+
+The =gnu= style specifies the formatting recommended by the GNU Project for C; it is the default, so as to encourage use of our recommended style.
+
+See [[../ccmode_html/Indentation-Engine-Basics.html#Indentation-Engine-Basics][Indentation Engine Basics]] in the CC Mode Manual, and [[../ccmode_html/Customizing-Indentation.html#Customizing-Indentation][Customizing Indentation]] in the CC Mode Manual, for more information on customizing indentation for C and related modes, including how to override parts of an existing style and how to define your own styles.
+
+As an alternative to specifying a style, you can tell Emacs to guess a style by typing M-x c-guess in a sample code buffer. You can then apply the guessed style to other buffers with M-x c-guess-install. See [[../ccmode_html/Guessing-the-Style.html#Guessing-the-Style][Guessing the Style]] in the CC Mode Manual, for details.
+
+--------------

@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID: emacs--Kmacro-Menu
+:END:
+#+filetags: :emacs:
+#+title: Kmacro Menu
+
+Next:   Previous: [[id:emacs--Keyboard-Macro-Step_002dEdit][Stepwise Editing a Keyboard Macro]]   Up: [[id:emacs--Keyboard-Macros][Keyboard Macros]]
+
+<<Kmacro-Menu>>
+*** 19.8 Listing and Editing Keyboard Macros [[#Listing-and-Editing-Keyboard-Macros][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Listing-and-Editing-Keyboard-Macros
+:CLASS: section
+:END:
+To display a list of existing keyboard macros, type M-x list-keyboard-macros RET. This pops up the /Kmacro Menu/ in a buffer named =*Keyboard Macro List*=. Each line in the list shows one macro's position, counter value, counter format, that counter value using that format, and macro keys. Here is an example of a macro list:
+
+#+begin_example
+Position  Counter  Format  Formatted  Keys
+0               8  %02d    08         N : SPC <F3> RET
+1               0  %d      0          l o n g SPC p h r a s e
+#+end_example
+
+The macros are listed with the current macro at the top in position number zero and the older macros in the order in which they are found in the keyboard macro ring (see [[id:emacs--Keyboard-Macro-Ring][The Keyboard Macro Ring]]). Using the Kmacro Menu, you can change the order of the macros and change their counters, counter formats, and keys. The Kmacro Menu is a read-only buffer, and can be changed only through the special commands described in this section. After a command is run, the Kmacro Menu displays changes to reflect the new values of the macro properties and the macro ring. You can use the usual cursor motion commands in this buffer, as well as special motion commands for navigating the table. To view a list of the special commands, type C-h m or ? (=describe-mode=) in the Kmacro Menu.
+
+You can use the following commands to change a macro's properties:
+
+-  <<index-kmacro_002dmenu_002dedit_002dposition>># [[#index-kmacro_002dmenu_002dedit_002dposition][¶]] :: Change the position of the macro on the current line (see [[id:emacs--Keyboard-Macro-Ring][The Keyboard Macro Ring]]).
+
+-  <<index-kmacro_002dmenu_002dtranspose>>C-x C-t [[#index-kmacro_002dmenu_002dtranspose][¶]] :: Move the macro on the current line to the line above, like in =transpose-lines=.
+
+-  <<index-kmacro_002dmenu_002dedit_002dcounter>>c [[#index-kmacro_002dmenu_002dedit_002dcounter][¶]] :: Change the counter value of the macro on the current line (see [[id:emacs--Keyboard-Macro-Counter][The Keyboard Macro Counter]]).
+
+-  <<index-kmacro_002dmenu_002dedit_002dformat>>f [[#index-kmacro_002dmenu_002dedit_002dformat][¶]] :: Change the counter format of the macro on the current line.
+
+-  <<index-kmacro_002dmenu_002dedit_002dkeys>>e [[#index-kmacro_002dmenu_002dedit_002dkeys][¶]] :: Change the keys of the macro on the current line using =edit-kbd-macro= (see [[id:emacs--Edit-Keyboard-Macro][Editing a Keyboard Macro]]).
+
+-  <<index-kmacro_002dmenu_002dedit_002dcolumn>>RET [[#index-kmacro_002dmenu_002dedit_002dcolumn][¶]] :: Change the value in the current column of the macro on the current line using commands above.
+
+The following commands delete or duplicate macros in the list:
+
+- <<index-kmacro_002dmenu_002dflag_002dfor_002ddeletion>>d [[#index-kmacro_002dmenu_002dflag_002dfor_002ddeletion][¶]]\\
+  d (Kmacro Menu) :: Flag the macro on the current line for deletion, then move point to the next line (=kmacro-menu-flag-for-deletion=). The deletion flag is indicated by the character ‘=D=' at the start of line. The deletion occurs only when you type the x command (see below).
+
+  If the region is active, this command flags all of the macros in the region.
+
+- <<index-kmacro_002dmenu_002ddo_002dflagged_002ddelete>>x [[#index-kmacro_002dmenu_002ddo_002dflagged_002ddelete][¶]]\\
+  x (Kmacro Menu) :: Delete the macros in the list that have been flagged for deletion (=kmacro-menu-do-flagged-delete=).
+
+- <<index-kmacro_002dmenu_002dmark>>m [[#index-kmacro_002dmenu_002dmark][¶]]\\
+  m (Kmacro Menu) :: Mark the macro on the current line, then move point to the next line (=kmacro-menu-mark=). Marked macros are indicated by the character ‘=*=' at the start of line. Marked macros can be operated on by the C and D commands (see below).
+
+  If the region is active, this command marks all of the macros in the region.
+
+- <<index-kmacro_002dmenu_002ddo_002dcopy>>C [[#index-kmacro_002dmenu_002ddo_002dcopy][¶]]\\
+  C (Kmacro Menu) :: This command copies macros by duplicating them at their current positions in the list (=kmacro-menu-do-copy=). For example, running this command on the macro at position number zero will insert a copy of that macro into position number one and move the remaining macros down.
+
+  If the region is active, this command duplicates the macros in the region. Otherwise, if there are marked macros, this command duplicates the marked macros. If there is no region nor are there marked macros, this command duplicates the macro on the current line. In the first two cases, the command prompts for confirmation before duplication.
+
+- <<index-kmacro_002dmenu_002ddo_002ddelete>>D [[#index-kmacro_002dmenu_002ddo_002ddelete][¶]]\\
+  D (Kmacro Menu) :: This command deletes macros, removing them from the ring (=kmacro-menu-do-delete=). For example, running this command on the macro at position number zero will delete the current macro and then make the first macro in the macro ring (previously at position number one) the new current macro, popping it from the ring.
+
+  If the region is active, this command deletes the macros in the region. Otherwise, if there are marked macros, this command deletes the marked macros. If there is no region nor are there marked macros, this command deletes the macro on the current line. In all cases, the command prompts for confirmation before deletion.
+
+  This command is an alternative to the d and x commands (see above).
+
+- <<index-kmacro_002dmenu_002dunmark>>u [[#index-kmacro_002dmenu_002dunmark][¶]]\\
+  u (Kmacro Menu) :: Unmark and unflag the macro on the current line, then move point down to the next line (=kmacro-menu-unmark=). If there is an active region, this command unmarks and unflags all of the macros in the region.
+
+- <<index-kmacro_002dmenu_002dunmark_002dbackward>>DEL [[#index-kmacro_002dmenu_002dunmark_002dbackward][¶]]\\
+  DEL (Kmacro Menu) :: Like the u command (see above), but move point up to the previous line when there is no active region (=kmacro-menu-unmark-backward=).
+
+- <<index-kmacro_002dmenu_002dunmark_002dall>>U [[#index-kmacro_002dmenu_002dunmark_002dall][¶]]\\
+  U (Kmacro Menu) :: Unmark and unflag all macros in the list (=kmacro-menu-unmark-all=).
+
+--------------

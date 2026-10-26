@@ -1,0 +1,131 @@
+:PROPERTIES:
+:ID: guix--Service-Types-and-Services
+:END:
+#+filetags: :guix:
+#+title: Service Types and Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Service-Types-and-Services>>
+Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.19.2 Service Types and Services [[#Service-Types-and-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Service-Types-and-Services-1
+:CLASS: subsection
+:END:
+A /service type/ is a node in the DAG described above. Let us start with a simple example, the service type for the Guix build daemon (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]):
+
+#+begin_src lisp
+(define guix-service-type
+  (service-type
+   (name 'guix)
+   (extensions
+    (list (service-extension shepherd-root-service-type guix-shepherd-service)
+          (service-extension account-service-type guix-accounts)
+          (service-extension activation-service-type guix-activation)))
+   (default-value (guix-configuration))))
+#+end_src
+
+It defines three things:
+
+1. A name, whose sole purpose is to make inspection and debugging easier.
+
+2. A list of /service extensions/, where each extension designates the target service type and a procedure that, given the parameters of the service, returns a list of objects to extend the service of that type.
+
+   Every service type has at least one service extension. The only exceptions are the /system service type/ and the /home service type/, which are the ultimate services for Guix System and Guix Home, respectively.
+
+3. Optionally, a default value for instances of this type.
+
+In this example, =guix-service-type= extends three services:
+
+- =shepherd-root-service-type= :: The =guix-shepherd-service= procedure defines how the Shepherd service is extended. Namely, it returns a =<shepherd-service>= object that defines how =guix-daemon= is started and stopped (see [[id:guix--Shepherd-Services][Shepherd Services]]).
+
+- =account-service-type= :: This extension for this service is computed by =guix-accounts=, which returns a list of =user-group= and =user-account= objects representing the build user accounts (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]).
+
+- =activation-service-type= :: Here =guix-activation= is a procedure that returns a gexp, which is a code snippet to run at “activation time”---e.g., when the service is booted.
+
+A service of this type is instantiated like this:
+
+#+begin_src lisp
+(service guix-service-type
+         (guix-configuration
+           (build-accounts 5)
+           (extra-options '("--gc-keep-derivations"))))
+#+end_src
+
+The second argument to the =service= form is a value representing the parameters of this specific service instance. See [[id:guix--Base-Services::#guix_002dconfiguration_002dtype][=guix-configuration=]], for information about the =guix-configuration= data type. When the value is omitted, the default value specified by =guix-service-type= is used:
+
+#+begin_src lisp
+(service guix-service-type)
+#+end_src
+
+=guix-service-type= is quite simple because it extends other services but is not extensible itself.
+
+The service type for an /extensible/ service looks like this:
+
+#+begin_src lisp
+(define udev-service-type
+  (service-type (name 'udev)
+                (extensions
+                 (list (service-extension shepherd-root-service-type
+                                          udev-shepherd-service)))
+
+                (compose concatenate)       ;concatenate the list of rules
+                (extend (lambda (config rules)
+                          (udev-configuration
+                           (inherit config)
+                           (rules (append (udev-configuration-rules config)
+                                          rules)))))))
+#+end_src
+
+This is the service type for the [[https://github.com/eudev-project/eudev][eudev device management daemon]]. Compared to the previous example, in addition to an extension of =shepherd-root-service-type=, we see two new fields:
+
+- =compose= :: This is the procedure to /compose/ the list of extensions to services of this type.
+
+  Services can extend the udev service by passing it lists of rules; we compose those extensions simply by concatenating them.
+
+- =extend= :: This procedure defines how the value of the service is /extended/ with the composition of the extensions.
+
+  Udev extensions are composed into a list of rules, but the udev service value is itself a =<udev-configuration>= record. So here, we extend that record by appending the list of rules it contains to the list of contributed rules.
+
+- =description= :: This is a string giving an overview of the service type. The string can contain Texinfo markup (see [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Overview.html#Overview][Overview]] in GNU Texinfo). The =guix system search= command searches these strings and displays them (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]).
+
+There can be only one instance of an extensible service type such as =udev-service-type=. If there were more, the =service-extension= specifications would be ambiguous.
+
+Still here? The next section provides a reference of the programming interface for services.
+
+--------------
+
+Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

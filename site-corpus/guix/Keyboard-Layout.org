@@ -1,0 +1,136 @@
+:PROPERTIES:
+:ID: guix--Keyboard-Layout
+:END:
+#+filetags: :guix:
+#+title: Keyboard Layout
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Keyboard-Layout>>
+Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.8 Keyboard Layout [[#Keyboard-Layout-2][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Keyboard-Layout-2
+:CLASS: section
+:END:
+To specify what each key of your keyboard does, you need to tell the operating system what /keyboard layout/ you want to use. The default, when nothing is specified, is the US English QWERTY layout for 105-key PC keyboards. However, German speakers will usually prefer the German QWERTZ layout, French speakers will want the AZERTY layout, and so on; hackers might prefer Dvorak or bépo, and they might even want to further customize the effect of some of the keys. This section explains how to get that done.
+
+There are three components that will want to know about your keyboard layout:
+
+- The /bootloader/ may want to know what keyboard layout you want to use (see [[id:guix--Bootloader-Configuration][=keyboard-layout=]]). This is useful if you want, for instance, to make sure that you can type the passphrase of your encrypted root partition using the right layout.
+- The /operating system kernel/, Linux, will need that so that the console is properly configured (see [[id:guix--operating_002dsystem-Reference][=keyboard-layout=]]).
+- The /graphical display server/, usually Xorg, also has its own idea of the keyboard layout (see [[id:guix--X-Window][=keyboard-layout=]]).
+
+Guix allows you to configure all three separately but, fortunately, it allows you to share the same keyboard layout for all three components.
+
+Keyboard layouts are represented by records created by the =keyboard-layout= procedure of =(gnu system keyboard)=. Following the X Keyboard extension (XKB), each layout has four attributes: a name (often a language code such as “fi” for Finnish or “jp” for Japanese), an optional variant name, an optional keyboard model name, and a possibly empty list of additional options. In most cases the layout name is all you care about.
+
+- Procedure: *keyboard-layout* =name [variant] [#:model] [#:options ’()]= [[#index-keyboard_002dlayout][¶]] :: Return a new keyboard layout with the given =name= and =variant=.
+
+  =name= must be a string such as ="fr"=; =variant= must be a string such as ="bepo"= or ="nodeadkeys"=. See the =xkeyboard-config= package for valid options.
+
+Here are a few examples:
+
+#+begin_src lisp
+;; The German QWERTZ layout.  Here we assume a standard
+;; "pc105" keyboard model.
+(keyboard-layout "de")
+
+;; The bépo variant of the French layout.
+(keyboard-layout "fr" "bepo")
+
+;; The Catalan layout.
+(keyboard-layout "es" "cat")
+
+;; Arabic layout with "Alt-Shift" to switch to US layout.
+(keyboard-layout "ar,us" #:options '("grp:alt_shift_toggle"))
+
+;; The Latin American Spanish layout.  In addition, the
+;; "Caps Lock" key is used as an additional "Ctrl" key,
+;; and the "Menu" key is used as a "Compose" key to enter
+;; accented letters.
+(keyboard-layout "latam"
+                 #:options '("ctrl:nocaps" "compose:menu"))
+
+;; The Russian layout for a ThinkPad keyboard.
+(keyboard-layout "ru" #:model "thinkpad")
+
+;; The "US international" layout, which is the US layout plus
+;; dead keys to enter accented characters.  This is for an
+;; Apple MacBook keyboard.
+(keyboard-layout "us" "intl" #:model "macbook78")
+#+end_src
+
+See the =share/X11/xkb= directory of the =xkeyboard-config= package for a complete list of supported layouts, variants, and models.
+
+Let's say you want your system to use the Turkish keyboard layout throughout your system---bootloader, console, and Xorg. Here's what your system configuration would look like:
+
+#+begin_src lisp
+;; Using the Turkish layout for the bootloader, the console,
+;; and for Xorg.
+
+(operating-system
+  ;; ...
+  (keyboard-layout (keyboard-layout "tr"))  ;for the console
+  (bootloader (bootloader-configuration
+                (bootloader grub-efi-bootloader)
+                (targets '("/boot/efi"))
+                (keyboard-layout keyboard-layout))) ;for GRUB
+  (services (cons (set-xorg-configuration
+                    (xorg-configuration             ;for Xorg
+                      (keyboard-layout keyboard-layout)))
+                  %desktop-services)))
+#+end_src
+
+In the example above, for GRUB and for Xorg, we just refer to the =keyboard-layout= field defined above, but we could just as well refer to a different layout. The =set-xorg-configuration= procedure communicates the desired Xorg configuration to the graphical log-in manager, by default GDM.
+
+We've discussed how to specify the /default/ keyboard layout of your system when it starts, but you can also adjust it at run time:
+
+- If you're using GNOME, its settings panel has a “Region & Language” entry where you can select one or more keyboard layouts.
+- Under Xorg, the =setxkbmap= command (from the same-named package) allows you to change the current layout. For example, this is how you would change the layout to US Dvorak:
+
+  #+begin_example
+  setxkbmap us dvorak
+#+end_example
+
+- The =loadkeys= command changes the keyboard layout in effect in the Linux console. However, note that =loadkeys= does /not/ use the XKB keyboard layout categorization described above. The command below loads the French bépo layout:
+
+  #+begin_example
+  loadkeys fr-bepo
+#+end_example
+
+--------------
+
+Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

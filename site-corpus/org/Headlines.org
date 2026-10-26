@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--Headlines
+:END:
+#+filetags: :org:
+#+title: Headlines (The Org Manual)
+
+Next:
+
+<<Headlines>>
+Next: [[id:org--Visibility-Cycling][Visibility Cycling]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 2.1 Headlines [[#Headlines-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Headlines-1
+:CLASS: section
+:END:
+Headlines define the structure of an outline tree. Org headlines start on the left margin[[#FOOT3][^{3}]] with one or more stars followed by a space. For example:
+
+#+begin_example
+* First (top) level headline
+** Second level
+*** Third level
+    some text
+*** Third level
+    more text
+* Another first (top) level headline
+#+end_src
+
+The name defined in =org-footnote-section= is reserved. Do not use it as a title for your own headings.
+
+Some people find the many stars too noisy and would prefer an outline that has whitespace followed by a single star as headline markers. This can be achieved using the Org Indent minor mode. See [[id:org--Clean-View][A Cleaner Outline View]] for more information.
+
+Headlines are not numbered. However, you may want to dynamically number some, or all, of them. See [[id:org--Dynamic-Headline-Numbering][Dynamic Headline Numbering]].
+
+An empty line after the end of a subtree is considered part of it and is hidden when the subtree is folded. However, if you leave at least two empty lines, one empty line remains visible after folding the subtree, in order to structure the collapsed view. See the variable =org-cycle-separator-lines= to modify this behavior.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF3][(3)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See the variables =org-special-ctrl-a/e=, =org-special-ctrl-k=, and =org-ctrl-k-protect-subtree= to configure special behavior of C-a, C-e, and C-k in headlines. Note also that clocking only works with headings indented less than 30 stars.
+
+--------------
+
+Next: [[id:org--Visibility-Cycling][Visibility Cycling]], Up: [[id:org--Document-Structure][Document Structure]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

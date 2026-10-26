@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Literal-examples-in-ODT-export
+:END:
+#+filetags: :org:
+#+title: Literal examples in ODT export (The Org Manual)
+
+Next:
+
+<<Literal-examples-in-ODT-export>>
+Next: [[id:org--Advanced-topics-in-ODT-export][Advanced topics in ODT export]], Previous: [[id:org--Labels-and-captions-in-ODT-export][Labels and captions in ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.11 Literal examples in ODT export [[#Literal-examples-in-ODT-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Literal-examples-in-ODT-export-1
+:CLASS: subsection
+:END:
+The ODT export backend supports literal examples (see [[id:org--Literal-Examples][Literal Examples]]) with full fontification. Internally, the ODT export backend relies on ‘=htmlfontify.el=' to generate the style definitions needed for fancy listings. The auto-generated styles get ‘=OrgSrc=' prefix and inherit colors from the faces used by Emacs Font Lock library for that source language.
+
+For custom fontification styles, customize the =org-odt-create-custom-styles-for-srcblocks= option.
+
+To turn off fontification of literal examples, customize the =org-odt-fontify-srcblocks= option.

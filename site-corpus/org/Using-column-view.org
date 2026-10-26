@@ -1,0 +1,72 @@
+:PROPERTIES:
+:ID: org--Using-column-view
+:END:
+#+filetags: :org:
+#+title: Using column view (The Org Manual)
+
+Next:
+
+<<Using-column-view>>
+Next: [[id:org--Capturing-column-view][Capturing column view]], Previous: [[id:org--Defining-columns][Defining columns]], Up: [[id:org--Column-View][Column View]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 7.5.2 Using column view [[#Using-column-view-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-column-view-1
+:CLASS: subsection
+:END:
+**** Turning column view on or off [[#Turning-column-view-on-or-off-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Turning-column-view-on-or-off-1
+:CLASS: subsubheading
+:END:
+-  <<index-C_002dc-C_002dx-C_002dc>>C-c C-x C-c (=org-columns=) [[#index-C_002dc-C_002dx-C_002dc][¶]] :: Turn on column view. If point is before the first headline in the file, column view is turned on for the entire file, using the ‘=#+COLUMNS=' definition. If point is somewhere inside the outline, this command searches the hierarchy, up from point, for a ‘=COLUMNS=' property that defines a format. When one is found, the column view table is established for the tree starting at the entry that contains the ‘=COLUMNS=' property. If no such property is found, the format is taken from the ‘=#+COLUMNS=' line or from the variable =org-columns-default-format=, and column view is established for the current entry and its subtree.
+
+-  <<index-r>>r or g on a columns view line (=org-columns-redo=) [[#index-r][¶]] :: Recreate the column view, to include recent changes made in the buffer.
+
+-  <<index-q-1>>C-c C-c or q on a columns view line (=org-columns-quit=) [[#index-q-1][¶]] :: Exit column view.
+
+**** Editing values [[#Editing-values-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Editing-values-1
+:CLASS: subsubheading
+:END:
+- LEFT, RIGHT, UP, DOWN :: Move through the column view from field to field.
+
+- <<index-1_002e_002e9_002c0>>1..9,0 [[#index-1_002e_002e9_002c0][¶]] :: Directly select the Nth allowed value, 0 selects the 10th value.
+
+-  <<index-n>>n or S-RIGHT (=org-columns-next-allowed-value=) [[#index-n][¶]]\\
+  p or S-LEFT (=org-columns-previous-allowed-value=) :: Switch to the next/previous allowed value of the field. For this, you have to have specified allowed values for a property.
+
+-  <<index-e>>e (=org-columns-edit-value=) [[#index-e][¶]] :: Edit the property at point. For the special properties, this invokes the same interface that you normally use to change that property. For example, the tag completion or fast selection interface pops up when editing a ‘=TAGS=' property.
+
+-  <<index-C_002dc-C_002dc-11>>C-c C-c (=org-columns-toggle-or-columns-quit=) [[#index-C_002dc-C_002dc-11][¶]] :: When there is a checkbox at point, toggle it. Else exit column view.
+
+-  <<index-v>>v (=org-columns-show-value=) [[#index-v][¶]] :: View the full value of this property. This is useful if the width of the column is smaller than that of the value.
+
+-  <<index-a>>a (=org-columns-edit-allowed=) [[#index-a][¶]] :: Edit the list of allowed values for this property. If the list is found in the hierarchy, the modified values are stored there. If no list is found, the new value is stored in the first entry that is part of the current column view.
+
+**** Modifying column view on-the-fly [[#Modifying-column-view-on_002dthe_002dfly-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Modifying-column-view-on_002dthe_002dfly-1
+:CLASS: subsubheading
+:END:
+-  <<index-_003c>>< (=org-columns-narrow=) [[#index-_003c][¶]]\\
+  > (=org-columns-widen=) :: Make the column narrower/wider by one character.
+
+-  <<index-S_002dM_002dRIGHT>>S-M-RIGHT (=org-columns-new=) [[#index-S_002dM_002dRIGHT][¶]] :: Insert a new column, to the left of the current column.
+
+-  <<index-S_002dM_002dLEFT>>S-M-LEFT (=org-columns-delete=) [[#index-S_002dM_002dLEFT][¶]] :: Delete the current column.
+
+-  <<index-M_002dLEFT-3>>M-LEFT (=org-columns-move-left=) [[#index-M_002dLEFT-3][¶]] :: Move the current column left.
+
+-  <<index-M_002dRIGHT-3>>M-RIGHT (=org-columns-move-right=) [[#index-M_002dRIGHT-3][¶]] :: Move the current column right.
+
+-  <<index-M_002dUP-4>>M-UP (=org-columns-move-row-up=) [[#index-M_002dUP-4][¶]] :: Move the current row up.
+
+-  <<index-M_002dDOWN-4>>M-DOWN (=org-columns-move-row-down=) [[#index-M_002dDOWN-4][¶]] :: Move the current row down.
+
+--------------
+
+Next: [[id:org--Capturing-column-view][Capturing column view]], Previous: [[id:org--Defining-columns][Defining columns]], Up: [[id:org--Column-View][Column View]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

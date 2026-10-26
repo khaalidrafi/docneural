@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID: org--Emphasis-and-Monospace
+:END:
+#+filetags: :org:
+#+title: Emphasis and Monospace (The Org Manual)
+
+Next:
+
+<<Emphasis-and-Monospace>>
+Next: [[id:org--Subscripts-and-Superscripts][Subscripts and Superscripts]], Previous: [[id:org--Paragraphs][Paragraphs]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.2 Emphasis and Monospace [[#Emphasis-and-Monospace-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Emphasis-and-Monospace-1
+:CLASS: section
+:END:
+You can make words ‘=*bold*=', ‘=/italic/=', ‘=_underlined_=', ‘==verbatim==' and ‘=~code~=', and, if you must, ‘=+strike-through+='. Text in the code and verbatim string is not processed for Org specific syntax; it is exported verbatim. Org provides a single command as entry point for inserting the marker character.
+
+-  <<index-C_002dc-C_002dx-C_002df>>C-c C-x C-f (=org-emphasize=) [[#index-C_002dc-C_002dx-C_002df][¶]] :: Prompt for a marker character and insert or change an emphasis. If there is an active region, change that region to a new emphasis. If there is no region, just insert the marker characters and position the cursor between them.
+
+To turn off fontification for marked up text, you can set =org-fontify-emphasized-text= to =nil=. To narrow down the list of the fontified markup syntax, you can customize =org-emphasis-alist=[[#FOOT109][^{109}]].
+
+To hide the emphasis markup characters in your buffers, set =org-hide-emphasis-markers= to =t=.
+
+Sometimes, when marked text also contains the marker character itself, the result may be unsettling. For example,
+
+#+begin_example
+/One may expect this whole sentence to be italicized, but the
+following ~user/?variable~ contains =/= character, which effectively
+stops emphasis there./
+#+end_example
+
+You can use zero width space to help Org sorting out the ambiguity. See [[id:org--Escape-Character][Escape Character]] for more details.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF109][(109)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The markup will still be recognized. Just not highlighted visually in Emacs.
+
+--------------
+
+Next: [[id:org--Subscripts-and-Superscripts][Subscripts and Superscripts]], Previous: [[id:org--Paragraphs][Paragraphs]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

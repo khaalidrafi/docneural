@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--Triggering-Publication
+:END:
+#+filetags: :org:
+#+title: Triggering Publication (The Org Manual)
+
+Next:
+
+<<Triggering-Publication>>
+Previous: [[id:org--Sample-Configuration][Sample Configuration]], Up: [[id:org--Publishing][Publishing]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 14.4 Triggering Publication [[#Triggering-Publication-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Triggering-Publication-1
+:CLASS: section
+:END:
+Once properly configured, Org can publish with the following commands:
+
+-  <<index-C_002dc-C_002de-P-x>>C-c C-e P x (=org-publish=) [[#index-C_002dc-C_002de-P-x][¶]] :: Prompt for a specific project and publish all files that belong to it.
+
+-  <<index-C_002dc-C_002de-P-p>>C-c C-e P p (=org-publish-current-project=) [[#index-C_002dc-C_002de-P-p][¶]] :: Publish the project containing the current file.
+
+-  <<index-C_002dc-C_002de-P-f>>C-c C-e P f (=org-publish-current-file=) [[#index-C_002dc-C_002de-P-f][¶]] :: Publish only the current file.
+
+-  <<index-C_002dc-C_002de-P-a>>C-c C-e P a (=org-publish-all=) [[#index-C_002dc-C_002de-P-a][¶]] :: Publish every project.
+
+Org uses timestamps to track when a file has changed. The above functions normally only publish changed files. You can override this and force publishing of all files by giving a prefix argument to any of the commands above, or by customizing the variable =org-publish-use-timestamps-flag=. This may be necessary in particular if files include other files via ‘=SETUPFILE=' or ‘=INCLUDE=' keywords.
+
+--------------
+
+Previous: [[id:org--Sample-Configuration][Sample Configuration]], Up: [[id:org--Publishing][Publishing]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

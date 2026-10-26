@@ -1,0 +1,138 @@
+:PROPERTIES:
+:ID: emacs--Defuns
+:END:
+#+filetags: :emacs:
+#+title: Defuns
+
+Next: [[id:emacs--Program-Indent#Program-Indent][Indentation for Programs]]   Previous: [[id:emacs--Program-Modes][Major Modes for Programming Languages]]   Up: [[id:emacs--Programs][Editing Programs]]
+
+<<Defuns>>
+*** 28.2 Top-Level Definitions, or Defuns [[#Top_002dLevel-Definitions_002c-or-Defuns][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Top_002dLevel-Definitions_002c-or-Defuns
+:CLASS: section
+:END:
+In Emacs, a major definition at the top level in the buffer, such as a function, is called a /defun/. The name comes from Lisp, but in Emacs we use it for all languages.
+
+--------------
+
+<<Left-Margin-Paren>>
+**** 28.2.1 Left Margin Convention [[#Left-Margin-Convention][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Left-Margin-Convention
+:CLASS: subsection
+:END:
+Many programming-language modes have traditionally assumed that any opening parenthesis or brace found at the left margin is the start of a top-level definition, or defun. So, by default, commands which seek the beginning of a defun accept such a delimiter as signifying that position.
+
+If you want to override this convention, you can do so by setting the user option =open-paren-in-column-0-is-defun-start= to =nil=. If this option is set to =t= (the default), commands seeking the start of a defun will stop at opening parentheses or braces at column zero which aren't in a comment or string. When it is =nil=, defuns are found by searching for parens or braces at the outermost level. Since low-level Emacs routines no longer depend on this convention, you usually won't need to change =open-paren-in-column-0-is-defun-start= from its default.
+
+--------------
+
+<<Moving-by-Defuns>>
+**** 28.2.2 Moving by Defuns [[#Moving-by-Defuns-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Moving-by-Defuns-1
+:CLASS: subsection
+:END:
+These commands move point or set up the region based on top-level major definitions, also called /defuns/.
+
+- C-M-a :: Move to beginning of current or preceding defun (=beginning-of-defun=).
+
+- C-M-e :: Move to end of current or following defun (=end-of-defun=).
+
+- C-M-h :: Put region around whole current or following defun (=mark-defun=).
+
+The commands to move to the beginning and end of the current defun are C-M-a (=beginning-of-defun=) and C-M-e (=end-of-defun=). If you repeat one of these commands, or use a positive numeric argument, each repetition moves to the next defun in the direction of motion.
+
+C-M-a with a negative argument −=n= moves forward =n= times to the next beginning of a defun. This is not exactly the same place that C-M-e with argument =n= would move to; the end of this defun is not usually exactly the same place as the beginning of the following defun. (Whitespace, comments, and perhaps declarations can separate them.) Likewise, C-M-e with a negative argument moves back to an end of a defun, which is not quite the same as C-M-a with a positive argument.
+
+To operate on the current defun, use C-M-h (=mark-defun=), which sets the mark at the end of the current defun and puts point at its beginning. See [[id:emacs--Marking-Objects][Commands to Mark Textual Objects]]. This is the easiest way to get ready to kill the defun in order to move it to a different place in the file. If the defun is directly preceded by comments (with no intervening blank lines), they are marked, too. If you use the command while point is between defuns, it uses the following defun. If you use the command while the mark is already active, it extends the end of the region to include one more defun. With a prefix argument, it marks that many defuns or extends the region by the appropriate number of defuns. With negative prefix argument it marks defuns in the opposite direction and also changes the direction of selecting for subsequent uses of =mark-defun=.
+
+In C mode, C-M-h runs the function =c-mark-function=, which is almost the same as =mark-defun=; the difference is that it backs up over the argument declarations, function name and returned data type so that the entire C function is inside the region. This is an example of how major modes adjust the standard key bindings so that they do their standard jobs in a way better fitting a particular language. Other major modes may replace any or all of these key bindings for that purpose.
+
+Some programming languages supported /nested defuns/, whereby a defun (such as a function or a method or a class) can be defined inside (i.e., as part of the body) of another defun. The commands described above by default find the beginning and the end of the /innermost/ defun around point. Major modes based on the tree-sitter library provide control of this behavior: if the variable =treesit-defun-tactic= is set to the value =top-level=, the defun commands will find the /outermost/ defuns instead.
+
+--------------
+
+<<Moving-by-Sentences>>
+**** 28.2.3 Moving by Sentences [[#Moving-by-Sentences-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Moving-by-Sentences-1
+:CLASS: subsection
+:END:
+These commands move point or set up the region based on units of code, also called /sentences/. Even though sentences are usually considered when writing human languages, Emacs can use the same commands to move over certain constructs in programming languages (see [[id:emacs--Sentences][Sentences]], see [[#Moving-by-Defuns][Moving by Defuns]]). In a programming language a sentence is usually a complete language construct smaller than defuns, but larger than sexps (see [[../elisp_html/List-Motion.html#List-Motion][List Motion]] in The Emacs Lisp Reference Manual). What exactly is a sentence in this case depends on the programming language, but usually it is a complete statement, such as a variable definition and initialization, or a conditional statement. An example of a sentence in the C language could be
+
+#+begin_example
+int x = 5;
+#+end_example
+
+or in the JavaScript language it could look like
+
+#+begin_example
+const thing = () => console.log("Hi");
+#+end_example
+
+#+begin_example
+const foo = [1] == '1'
+  ? "No way"
+  : "...";
+#+end_example
+
+#+begin_example
+#+end_example
+
+- M-a :: Move to beginning of current or preceding sentence (=backward-sentence=).
+
+- M-e :: Move to end of current or following sentence (=forward-sentence=).
+
+The commands to move to the beginning and end of the current sentence are M-a (=backward-sentence=) and M-e (=forward-sentence=). If you repeat one of these commands, or use a positive numeric argument, each repetition moves to the next sentence in the direction of motion.
+
+M-a with a negative argument −=n= moves forward =n= times to the next end of a sentence. Likewise, M-e with a negative argument moves back to the start of a sentence.
+
+--------------
+
+<<Imenu>>
+**** 28.2.4 Imenu [[#Imenu-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Imenu-1
+:CLASS: subsection
+:END:
+The Imenu facility offers a way to find the major definitions in a file by name. It is useful both in programming-language major modes, where the definitions are variables, functions, etc., and in text formatter major modes, where it treats each chapter, section, etc., as a definition. (See [[id:emacs--Xref::#Xref][Find Identifier References]], for a more powerful feature that handles multiple files together.)
+
+If you type M-g i (=imenu=), it reads the name of a definition using the minibuffer, then moves point to that definition. You can use completion to specify the name; the command displays the list of matching valid names in the completions buffer. If the index is hierarchical, then by default the completion candidates are also shown hierarchically, as a nested list: first you need to choose a section, then a subsection, etc., and finally the name of the definition. However, if you set =imenu-flatten= to a non-=nil= value, then instead of the nested menu you can select a completion candidate from a flattened list of definitions. How the sections and subsections are shown in the flattened list of completion candidates depends on the value of =imenu-flatten=, which can be one of the following:
+
+- <<index-imenu_002dlevel_002dseparator>>=prefix= [[#index-imenu_002dlevel_002dseparator][¶]] :: This shows each candidate prefixed by names of its section, subsection, subsubsection, etc., with each level separated from the next by the string that is the value of =imenu-level-separator=, by default ‘=:='.
+
+- =annotation= :: This shows the section names as annotations, following each definition name.
+
+- =group= :: This shows the completion candidates grouped by their sections.
+
+Alternatively, you can bind the command =imenu= to a mouse click. Then it displays mouse menus for you to select a definition name. You can also add the buffer's index to the menu bar by calling =imenu-add-menubar-index=. If you want to have this menu bar item available for all buffers in a certain major mode, you can do this by adding =imenu-add-menubar-index= to its mode hook. But if you have done that, you will have to wait a little while each time you visit a file in that mode, while Emacs finds all the definitions in that buffer.
+
+When you change the contents of a buffer, if you add or delete definitions, you can update the buffer's index based on the new contents by invoking the ‘=*Rescan*=' item in the menu. Rescanning happens automatically if you set =imenu-auto-rescan= to a non-=nil= value. There is no need to rescan because of small changes in the text.
+
+=imenu-auto-rescan= will be disabled in buffers that are larger than =imenu-auto-rescan-maxout= in bytes, and scanning is stopped if it takes more than =imenu-max-index-time= seconds.
+
+You can customize the way the menus are sorted by setting the variable =imenu-sort-function=. By default, names are ordered as they occur in the buffer; if you want alphabetic sorting, use the symbol =imenu--sort-by-name= as the value. You can also define your own comparison function by writing Lisp code.
+
+You can also customize how Imenu completions are sorted by changing the variable =completion-category-overrides= and setting its =display-sort-function= for the category =imenu=.
+
+If Eglot is activated for the current buffer's project (see [[id:emacs--Projects::#Projects][Working with Projects]]) and the current buffer's major mode, Eglot provides its own facility for producing the buffer's index based on the analysis of the program source by the language-server which manages the current buffer. See [[../eglot_html/Eglot-Features.html#Eglot-Features][Eglot Features]] in Eglot: The Emacs LSP Client.
+
+Imenu provides the information to guide Which Function mode (see [[#Which-Function][Which Function Mode]]). The Speedbar can also use it (see [[id:emacs--Speedbar][Speedbar Frames]]).
+
+--------------
+
+<<Which-Function>>
+**** 28.2.5 Which Function Mode [[#Which-Function-Mode][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Which-Function-Mode
+:CLASS: subsection
+:END:
+Which Function mode is a global minor mode (see [[id:emacs--Minor-Modes][Minor Modes]]) which displays the current function name in the mode line or header line, updating it as you move around in a buffer.
+
+To either enable or disable Which Function mode, use the command M-x which-function-mode. Which Function mode is a global minor mode. By default, it takes effect in all major modes that know how to support it (i.e., all the major modes that support Imenu). You can restrict it to a specific list of major modes by changing the value of the variable =which-func-modes= from =t= (which means to support all available major modes) to a list of major mode names.
+
+By default, Which Function mode displays the current function name using the mode line. Customize =which-func-display= to =header=, =mode=, or =mode-and-header= to use the header line, mode line, or both, respectively.
+
+--------------

@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID: org--LaTeX-fragments
+:END:
+#+filetags: :org:
+#+title: LaTeX fragments (The Org Manual)
+
+Next:
+
+<<LaTeX-fragments>>
+Next: [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 12.5.1 LaTeX fragments [[#LaTeX-fragments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: LaTeX-fragments-1
+:CLASS: subsection
+:END:
+Org mode can contain LaTeX math fragments, and it supports ways to process these for several export backends. When exporting to LaTeX, the code is left as it is. When exporting to HTML, Org can use either [[https://www.mathjax.org][MathJax]] (see [[id:org--Math-formatting-in-HTML-export][Math formatting in HTML export]]) or transcode the math into images (see [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]]).
+
+LaTeX fragments do not need any special marking at all. The following snippets are identified as LaTeX source code:
+
+- Environments of any kind[[#FOOT114][^{114}]]. The only requirement is that the ‘=\begin=' statement appears on a new line, preceded by only whitespace.
+
+- Text within the usual LaTeX math delimiters. Prefer ‘=\(...\)=' for inline fragments. The ‘=$...$=' alternative has some restrictions and may be a source of confusion. To avoid conflicts with currency specifications, single ‘=$=' characters are only recognized as math delimiters if the enclosed text contains at most two line breaks, is directly attached to the ‘=$=' characters with no whitespace in between, and if the closing ‘=$=' is followed by whitespace or punctuation (but not a dash).
+
+  Sometimes, it may be necessary to have a literal dollar symbol even when it is recognized as LaTeX math delimiter. Org provides ‘=\dollar=' and ‘=\USD=' entities (see [[id:org--Special-Symbols][Special Symbols]]) that are rendered as ‘=$=' for such scenarios. Also, see [[id:org--Escape-Character][Escape Character]].
+
+For example:
+
+#+begin_example
+\begin{equation}                        % arbitrary environments,
+x=\sqrt{b}                              % even tables, figures, etc
+\end{equation}
+
+If $a^2=b$ and \( b=2 \), then the solution must be
+either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
+#+end_example
+
+LaTeX processing can be configured with the variable =org-export-with-latex=. The default setting is =t= which means MathJax for HTML, and no processing for ASCII and LaTeX backends. You can also set this variable on a per-file basis using one of these lines:
+
+| ‘=#+OPTIONS: tex:t='        | Do the right thing automatically (MathJax) |
+| ‘=#+OPTIONS: tex:nil='      | Do not process LaTeX fragments at all      |
+| ‘=#+OPTIONS: tex:verbatim=' | Verbatim export, for jsMath or so          |
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF114][(114)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+When MathJax is used, only the environments recognized by MathJax are processed. When dvipng, dvisvgm, or ImageMagick suite is used to create images, any LaTeX environment is handled.
+
+--------------
+
+Next: [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

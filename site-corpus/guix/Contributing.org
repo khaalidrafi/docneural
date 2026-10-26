@@ -1,0 +1,77 @@
+:PROPERTIES:
+:ID: guix--Contributing
+:END:
+#+filetags: :guix:
+#+title: Contributing
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Contributing>>
+Next: [[id:guix--Acknowledgments][Acknowledgments]], Previous: [[id:guix--Porting][Porting to a New Platform]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 22 Contributing [[#Contributing-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Contributing-1
+:CLASS: chapter
+:END:
+This project is a cooperative effort, and we need your help to make it grow! Please get in touch with us on [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] and =#guix= on the Libera Chat IRC network. We welcome ideas, bug reports, patches, and anything that may be helpful to the project. We particularly welcome help on packaging (see [[id:guix--Packaging-Guidelines][Packaging Guidelines]]).
+
+We want to provide a warm, friendly, and harassment-free environment, so that anyone can contribute to the best of their abilities. To this end our project uses a “Contributor Covenant”, which was adapted from [[https://contributor-covenant.org/]]. You can find a local version in the =CODE-OF-CONDUCT= file in the source tree.
+
+Contributors are not required to use their legal name in patches and on-line communication; they can use any name or pseudonym of their choice.
+
+- [[id:guix--Requirements][Requirements]]
+- [[id:guix--Building-from-Git][Building from Git]]
+- [[id:guix--Running-the-Test-Suite][Running the Test Suite]]
+- [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]]
+- [[id:guix--The-Perfect-Setup][The Perfect Setup]]
+- [[id:guix--Source-Tree-Structure][Source Tree Structure]]
+- [[id:guix--Packaging-Guidelines][Packaging Guidelines]]
+- [[id:guix--Coding-Style][Coding Style]]
+- [[id:guix--Copyright-Matters][Copyright Matters]]
+- [[id:guix--Submitting-Patches][Submitting Patches]]
+- [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]
+- [[id:guix--Teams][Teams]]
+- [[id:guix--Making-Decisions][Making Decisions]]
+- [[id:guix--Commit-Access][Commit Access]]
+- [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]]
+- [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]]
+- [[id:guix--Deprecation-Policy][Deprecation Policy]]
+- [[id:guix--Writing-Documentation][Writing Documentation]]
+- [[id:guix--Translating-Guix][Translating Guix]]
+- [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]
+
+--------------
+
+Next: [[id:guix--Acknowledgments][Acknowledgments]], Previous: [[id:guix--Porting][Porting to a New Platform]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

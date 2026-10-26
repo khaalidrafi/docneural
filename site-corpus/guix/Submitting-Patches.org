@@ -1,0 +1,166 @@
+:PROPERTIES:
+:ID: guix--Submitting-Patches
+:END:
+#+filetags: :guix:
+#+title: Submitting Patches
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Submitting-Patches>>
+Next: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Previous: [[id:guix--Copyright-Matters][Copyright Matters]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.10 Submitting Patches [[#Submitting-Patches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Submitting-Patches-1
+:CLASS: section
+:END:
+Development is done using the Git distributed version control system. Thus, access to the repository is not strictly necessary. We welcome contributions as /pull requests/ (PR) at [[https://codeberg.org/guix/guix/pulls/]][[#FOOT49][^{49}]].
+
+There are two ways to create a pull request:
+
+- By creating a personal “fork” of [[https://codeberg.org/guix/guix][the repository]], creating a branch with your changes, and [[https://docs.codeberg.org/collaborating/pull-requests-and-git-flow/][submitting a pull request for that branch]].
+
+-  By following the [[https://forgejo.org/docs/next/user/agit-support/][/AGit workflow/]], which is somewhat more convenient and consumes less disk space at Codeberg since it removes the need to create a “fork”.
+
+  Assuming your local checkout is on the branch containing the changes you would like to submit for inclusion in the =master= branch, run:
+
+  #+begin_example
+  git push origin HEAD:refs/for/master \
+    -o topic=topic \
+    -o title=title -o description=description
+#+end_example
+
+  =topic= must be an identifier without whitespace, similar to a branch name; =title= and =description= are arbitrary text that can be omitted, in which case the message of the last commit on the branch fills that role.
+
+  To send an update to an AGit pull request of yours, run:
+
+  #+begin_example
+  git push origin HEAD:refs/for/master \
+    -o topic=topic -o force-push=yes
+#+end_example
+
+  Codeberg automatically figures out which pull request =topic= corresponds to and updates the associated branch.
+
+Contributors are encouraged to take a moment to set some Git repository options (see [[id:guix--Configuring-Git][Configuring Git]]) first, which can improve the readability of patches. Seasoned Guix developers may also want to look at the section on commit access (see [[id:guix--Commit-Access][Commit Access]]).
+
+Please write commit logs in the ChangeLog format (see [[https://www.gnu.org/prep/standards/html_node/Change-Logs.html#Change-Logs][Change Logs]] in GNU Coding Standards); you can check the commit history for examples.
+
+You can help make the review process more efficient, and increase the chance that your patch will be reviewed quickly, by describing the context of your patch and the impact you expect it to have. For example, if your patch is fixing something that is broken, describe the problem and how your patch fixes it. Tell us how you have tested your patch. Will users of the code changed by your patch have to adjust their workflow at all? If so, tell us how. In general, try to imagine what questions a reviewer will ask, and answer those questions in advance.
+
+Before submitting a patch that adds or modifies a package definition, please run through this check list:
+
+1. If the authors of the packaged software provide a cryptographic signature for the release tarball, make an effort to verify the authenticity of the archive. For a detached GPG signature file this would be done with the =gpg --verify= command.
+
+2. Take some time to provide an adequate synopsis and description for the package. See [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], for some guidelines.
+
+3. Run =guix lint ==package=, where =package= is the name of the new or modified package, and fix any errors it reports (see [[id:guix--Invoking-guix-lint][Invoking =guix lint=]]).
+
+4. Run =guix style ==package= to format the new package definition according to the project's conventions (see [[id:guix--Invoking-guix-style][Invoking =guix style=]]).
+
+5. Make sure the package builds on your platform, using =guix build ==package=. Also build at least its direct dependents with =guix build --dependents=1 ==package= (see [[id:guix--Additional-Build-Options::#build_002ddependents][=guix build=]]).
+
+6. We recommend you also try building the package on other supported platforms. As you may not have access to actual hardware platforms, we recommend using the =qemu-binfmt-service-type= to emulate them. In order to enable it, add the =virtualization= service module and the following service to the list of services in your =operating-system= configuration:
+
+   #+begin_src lisp
+   (service qemu-binfmt-service-type
+    (qemu-binfmt-configuration
+      (platforms (lookup-qemu-platforms "arm" "aarch64"))))
+   #+end_src
+
+   Then reconfigure your system.
+
+   You can then build packages for different platforms by specifying the =--system= option. For example, to build the "hello" package for the armhf or aarch64 architectures, you would run the following commands, respectively:
+
+   #+begin_example
+   guix build --system=armhf-linux --rounds=2 hello
+   guix build --system=aarch64-linux --rounds=2 hello
+#+end_example
+
+7.  Make sure the package does not use bundled copies of software already available as separate packages.
+
+   Sometimes, packages include copies of the source code of their dependencies as a convenience for users. However, as a distribution, we want to make sure that such packages end up using the copy we already have in the distribution, if there is one. This improves resource usage (the dependency is built and stored only once), and allows the distribution to make transverse changes such as applying security updates for a given software package in a single place and have them affect the whole system---something that bundled copies prevent.
+
+8. Take a look at the profile reported by =guix size= (see [[id:guix--Invoking-guix-size][Invoking =guix size=]]). This will allow you to notice references to other packages unwillingly retained. It may also help determine whether to split the package (see [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]]), and which optional dependencies should be used. In particular, avoid adding =texlive= as a dependency: because of its extreme size, use =texlive-local-tree= procedure instead.
+
+9. Check that dependent packages (if applicable) are not affected by the change; =guix refresh --list-dependent ==package= will help you do that (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
+
+10.  Check whether the package's build process is deterministic. This typically means checking whether an independent build of the package yields the exact same result that you obtained, bit for bit.
+
+    A simple way to do that is by building the same package several times in a row on your machine (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]):
+
+    #+begin_example
+    guix build --rounds=2 my-package
+#+end_example
+
+    This is enough to catch a class of common non-determinism issues, such as timestamps or randomly-generated output in the build result.
+
+    Another option is to use =guix challenge= (see [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]]). You may run it once the package has been committed and built by =bordeaux.guix.gnu.org= to check whether it obtains the same result as you did. Better yet: Find another machine that can build it and run =guix publish=. Since the remote build machine is likely different from yours, this can catch non-determinism issues related to the hardware---e.g., use of different instruction set extensions---or to the operating system kernel---e.g., reliance on =uname= or =/proc= files.
+
+11. When writing documentation, please use gender-neutral wording when referring to people, such as [[https://en.wikipedia.org/wiki/Singular_they][singular “they”, “their”, “them”]], and so forth.
+
+12. Verify that your patch contains only one set of related changes. Bundling unrelated changes together makes reviewing harder and slower.
+
+    Examples of unrelated changes include the addition of several packages, or a package update along with fixes to that package.
+
+13. Please follow our code formatting rules, possibly running =guix style= script to do that automatically for you (see [[id:guix--Formatting-Code][Formatting Code]]).
+
+14. When possible, use mirrors in the source URL (see [[id:guix--Invoking-guix-download][Invoking =guix download=]]). Use reliable URLs, not generated ones. For instance, GitHub archives are not necessarily identical from one generation to the next, so in this case it's often better to clone the repository. Don't use the =name= field in the URL: it is not very useful and if the name changes, the URL will probably be wrong.
+
+15. Check if Guix builds (see [[id:guix--Building-from-Git][Building from Git]]) and address the warnings, especially those about use of undefined symbols.
+
+16. Make sure your changes do not break Guix and simulate a =guix pull= with:
+
+    #+begin_example
+    guix pull --url=/path/to/your/checkout --profile=/tmp/guix.master --disable-authentication
+#+end_example
+
+- [[id:guix--Configuring-Git][Configuring Git]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF49][(49)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Before January 1st, 2026, changes would be submitted by email to [[mailto:guix-patches@gnu.org][guix-patches@gnu.org]] and could be [[https://issues.guix.gnu.org][browsed online]]. In accordance with [[https://codeberg.org/guix/guix-consensus-documents/src/branch/main/002-codeberg.md][Guix Consensus Document 002]], this method is no longer supported.
+
+--------------
+
+Next: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]], Previous: [[id:guix--Copyright-Matters][Copyright Matters]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

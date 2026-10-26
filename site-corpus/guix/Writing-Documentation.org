@@ -1,0 +1,65 @@
+:PROPERTIES:
+:ID: guix--Writing-Documentation
+:END:
+#+filetags: :guix:
+#+title: Writing Documentation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Writing-Documentation>>
+Next: [[id:guix--Translating-Guix][Translating Guix]], Previous: [[id:guix--Deprecation-Policy][Deprecation Policy]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.18 Writing Documentation [[#Writing-Documentation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Writing-Documentation-1
+:CLASS: section
+:END:
+Guix is documented using the Texinfo system. If you are not yet familiar with it, we accept contributions for documentation in most formats. That includes plain text, Markdown, Org, etc.
+
+Documentation contributions can be sent to [[mailto:guix-patches@gnu.org][guix-patches@gnu.org]]. Prepend ‘=[DOCUMENTATION]=' to the subject.
+
+When you need to make more than a simple addition to the documentation, we prefer that you send a proper patch as opposed to sending an email as described above. See [[id:guix--Submitting-Patches][Submitting Patches]] for more information on how to send your patches.
+
+To modify the documentation, you need to edit =doc/guix.texi= and =doc/contributing.texi= (which contains this documentation section), or =doc/guix-cookbook.texi= for the cookbook. If you compiled the Guix repository before, you will have many more =.texi= files that are translations of these documents. Do not modify them, the translation is managed through [[https://translate.codeberg.org/projects/guix][Weblate]]. See [[id:guix--Translating-Guix][Translating Guix]] for more information.
+
+To render documentation, you must first make sure that you ran =./configure= in your source tree (see [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]]). After that you can run one of the following commands:
+
+- ‘=make doc/guix.info=' to compile the Info manual. You can check it with =info doc/guix.info=.
+- ‘=make doc/guix.html=' to compile the HTML version. You can point your browser to the relevant file in the =doc/guix.html= directory.
+- ‘=make doc/guix-cookbook.info=' for the cookbook Info manual.
+- ‘=make doc/guix-cookbook.html=' for the cookbook HTML version.
+
+--------------
+
+Next: [[id:guix--Translating-Guix][Translating Guix]], Previous: [[id:guix--Deprecation-Policy][Deprecation Policy]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

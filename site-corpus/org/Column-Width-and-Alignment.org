@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID: org--Column-Width-and-Alignment
+:END:
+#+filetags: :org:
+#+title: Column Width and Alignment (The Org Manual)
+
+Next:
+
+<<Column-Width-and-Alignment>>
+Next: [[id:org--Column-Groups][Column Groups]], Previous: [[id:org--Built_002din-Table-Editor][Built-in Table Editor]], Up: [[id:org--Tables][Tables]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 3.2 Column Width and Alignment [[#Column-Width-and-Alignment-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Column-Width-and-Alignment-1
+:CLASS: section
+:END:
+The width of columns is automatically determined by the table editor. The alignment of a column is determined automatically from the fraction of number-like versus non-number fields in the column.
+
+Editing a field may modify the alignment of the table. Moving a contiguous row or column---i.e., using TAB or RET---automatically re-aligns it. If you want to disable this behavior, set =org-table-automatic-realign= to =nil=. In any case, you can always align manually a table:
+
+-  <<index-C_002dc-C_002dc-2>>C-c C-c (=org-table-align=) [[#index-C_002dc-C_002dc-2][¶]] :: Align the current table.
+
+Setting the option =org-startup-align-all-tables= re-aligns all tables in a file upon visiting it. You can also set this option on a per-file basis with:
+
+#+begin_example
+#+STARTUP: align
+#+STARTUP: noalign
+#+end_example
+
+Sometimes a single field or a few fields need to carry more text, leading to inconveniently wide columns. Maybe you want to hide away several columns or display them with a fixed width, regardless of content, as shown in the following example.
+
+#+begin_example
+|---+---------------------+--------|           |---+-------…+…|
+|   | <6>                 |        |           |   | <6>   …|…|
+| 1 | one                 | some   |   ----\   | 1 | one   …|…|
+| 2 | two                 | boring |   ----/   | 2 | two   …|…|
+| 3 | This is a long text | column |           | 3 | This i…|…|
+|---+---------------------+--------|           |---+-------…+…|
+#+end_example
+
+To set the width of a column, one field anywhere in the column may contain just the string ‘=<N>=' where =N= specifies the width as a number of characters. You control displayed width of columns with the following tools:
+
+-  <<index-C_002dc-TAB-1>>C-c TAB (=org-table-toggle-column-width=) [[#index-C_002dc-TAB-1][¶]] :: Shrink or expand current column.
+
+  If a width cookie specifies a width W for the column, shrinking it displays the first W visible characters only. Otherwise, the column is shrunk to a single character.
+
+  When called before the first column or after the last one, ask for a list of column ranges to operate on.
+
+-  <<index-C_002du-C_002dc-TAB>>C-u C-c TAB (=org-table-shrink=) [[#index-C_002du-C_002dc-TAB][¶]] :: Shrink all columns with a column width. Expand the others.
+
+-  <<index-C_002du-C_002du-C_002dc-TAB>>C-u C-u C-c TAB (=org-table-expand=) [[#index-C_002du-C_002du-C_002dc-TAB][¶]] :: Expand all columns.
+
+To see the full text of a shrunk field, hold the mouse over it: a tooltip window then shows the full contents of the field. Alternatively, C-h . (=display-local-help=) reveals them, too. For convenience, any change near the shrunk part of a column expands it.
+
+Setting the option =org-startup-shrink-all-tables= shrinks all columns containing a width cookie in a file the moment it is visited. You can also set this option on a per-file basis with:
+
+#+begin_example
+#+STARTUP: shrink
+#+end_example
+
+If you would like to overrule the automatic alignment of number-rich columns to the right and of string-rich columns to the left, you can use ‘=<r>=', ‘=<c>=' or ‘=<l>=' in a similar fashion. You may also combine alignment and field width like this: ‘=<r10>='.
+
+Lines which only contain these formatting cookies are removed automatically upon exporting the document.
+
+--------------
+
+Next: [[id:org--Column-Groups][Column Groups]], Previous: [[id:org--Built_002din-Table-Editor][Built-in Table Editor]], Up: [[id:org--Tables][Tables]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

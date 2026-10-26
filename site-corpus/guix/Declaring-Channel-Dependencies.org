@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID: guix--Declaring-Channel-Dependencies
+:END:
+#+filetags: :guix:
+#+title: Declaring Channel Dependencies
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Declaring-Channel-Dependencies>>
+Next: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Previous: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.10 Declaring Channel Dependencies [[#Declaring-Channel-Dependencies-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Declaring-Channel-Dependencies-1
+:CLASS: section
+:END:
+Channel authors may decide to augment a package collection provided by other channels. They can declare their channel to be dependent on other channels in a meta-data file =.guix-channel=, which is to be placed in the root of the channel repository.
+
+The meta-data file should contain a simple S-expression like this:
+
+#+begin_src lisp
+(channel
+ (version 0)
+ (dependencies
+  (channel
+   (name some-collection)
+   (url "https://example.org/first-collection.git")
+
+   ;; The 'introduction' bit below is optional: you would
+   ;; provide it for dependencies that can be authenticated.
+   (introduction
+    (channel-introduction
+      (version 0)
+      (commit "a8883b58dc82e167c96506cf05095f37c2c2c6cd")
+      (signer "CABB A931 C0FF EEC6 900D  0CFB 090B 1199 3D9A EBB5"))))
+  (channel
+   (name some-other-collection)
+   (url "https://example.org/second-collection.git")
+   (branch "testing"))))
+#+end_src
+
+In the above example this channel is declared to depend on two other channels, which will both be fetched automatically. The modules provided by the channel will be compiled in an environment where the modules of all these declared channels are available.
+
+For the sake of reliability and maintainability, you should avoid dependencies on channels that you don't control, and you should aim to keep the number of dependencies to a minimum.
+
+--------------
+
+Next: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Previous: [[id:guix--Package-Modules-in-a-Sub_002ddirectory][Package Modules in a Sub-directory]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

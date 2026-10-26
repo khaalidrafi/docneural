@@ -1,0 +1,124 @@
+:PROPERTIES:
+:ID: guix--Derivations
+:END:
+#+filetags: :guix:
+#+title: Derivations
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Derivations>>
+Next: [[id:guix--The-Store-Monad][The Store Monad]], Previous: [[id:guix--The-Store][The Store]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.10 Derivations [[#Derivations-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Derivations-1
+:CLASS: section
+:END:
+Low-level build actions and the environment in which they are performed are represented by /derivations/. A derivation contains the following pieces of information:
+
+- The outputs of the derivation---derivations produce at least one file or directory in the store, but may produce more.
+-  The inputs of the derivation---i.e., its build-time dependencies---which may be other derivations or plain files in the store (patches, build scripts, etc.).
+- The system type targeted by the derivation---e.g., =x86_64-linux=.
+- The file name of a build script in the store, along with the arguments to be passed.
+- A list of environment variables to be defined.
+
+Derivations allow clients of the daemon to communicate build actions to the store. They exist in two forms: as an in-memory representation, both on the client- and daemon-side, and as files in the store whose name end in =.drv=---these files are referred to as /derivation paths/. Derivations paths can be passed to the =build-derivations= procedure to perform the build actions they prescribe (see [[id:guix--The-Store][The Store]]).
+
+Operations such as file downloads and version-control checkouts for which the expected content hash is known in advance are modeled as /fixed-output derivations/. Unlike regular derivations, the outputs of a fixed-output derivation are independent of its inputs---e.g., a source code download produces the same result regardless of the download method and tools being used.
+
+The outputs of derivations---i.e., the build results---have a set of /references/, as reported by the =references= RPC or the =guix gc --references= command (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]). References are the set of run-time dependencies of the build results. References are a subset of the inputs of the derivation; this subset is automatically computed by the build daemon by scanning all the files in the outputs.
+
+The =(guix derivations)= module provides a representation of derivations as Scheme objects, along with procedures to create and otherwise manipulate derivations. The lowest-level primitive to create a derivation is the =derivation= procedure:
+
+- Procedure: *derivation* =store name builder args [#:outputs ’("out")] [#:hash #f] [#:hash-algo #f] [#:recursive? #f] [#:inputs ’()] [#:env-vars ’()] [#:system (%current-system)] [#:references-graphs #f] [#:allowed-references #f] [#:disallowed-references #f] [#:leaked-env-vars #f] [#:local-build? #f] [#:substitutable? #t] [#:properties ’()]= [[#index-derivation-2][¶]] :: Build a derivation with the given arguments, and return the resulting =<derivation>= object.
+
+  When =hash= and =hash-algo= are given, a /fixed-output derivation/ is created---i.e., one whose result is known in advance, such as a file download. If, in addition, =recursive?= is true, then that fixed output may be an executable file or a directory and =hash= must be the hash of an archive containing this output.
+
+  When =references-graphs= is true, it must be a list of file name/store path pairs. In that case, the reference graph of each store path is exported in the build environment in the corresponding file, in a simple text format.
+
+  When =allowed-references= is true, it must be a list of store items or outputs that the derivation's output may refer to. Likewise, =disallowed-references=, if true, must be a list of things the outputs may /not/ refer to.
+
+  When =leaked-env-vars= is true, it must be a list of strings denoting environment variables that are allowed to “leak” from the daemon's environment to the build environment. This is only applicable to fixed-output derivations---i.e., when =hash= is true. The main use is to allow variables such as =http_proxy= to be passed to derivations that download files.
+
+  When =local-build?= is true, declare that the derivation is not a good candidate for offloading and should rather be built locally (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]). This is the case for small derivations where the costs of data transfers would outweigh the benefits.
+
+  When =substitutable?= is false, declare that substitutes of the derivation's output should not be used (see [[id:guix--Substitutes][Substitutes]]). This is useful, for instance, when building packages that capture details of the host CPU instruction set.
+
+  =properties= must be an association list describing “properties” of the derivation. It is kept as-is, uninterpreted, in the derivation.
+
+Here's an example with a shell script as its builder, assuming =store= is an open connection to the daemon, and =bash= points to a Bash executable in the store:
+
+#+begin_src lisp
+(use-modules (guix utils)
+             (guix store)
+             (guix derivations))
+
+(let ((builder   ; add the Bash script to the store
+        (add-text-to-store store "my-builder.sh"
+                           "echo hello world > $out\n" '())))
+  (derivation store "foo"
+              bash `("-e" ,builder)
+              #:inputs `((,bash) (,builder))
+              #:env-vars '(("HOME" . "/homeless"))))
+⇒ #<derivation /gnu/store/...-foo.drv => /gnu/store/...-foo>
+#+end_src
+
+As can be guessed, this primitive is cumbersome to use directly. A better approach is to write build scripts in Scheme, of course! The best course of action for that is to write the build code as a “G-expression”, and to pass it to =gexp->derivation=. For more information, see [[id:guix--G_002dExpressions][G-Expressions]].
+
+Once upon a time, =gexp->derivation= did not exist and constructing derivations with build code written in Scheme was achieved with =build-expression->derivation=, documented below. This procedure is now deprecated in favor of the much nicer =gexp->derivation=.
+
+- Procedure: *build-expression->derivation* =store name exp [#:system (%current-system)] [#:inputs ’()] [#:outputs ’("out")] [#:hash #f] [#:hash-algo #f] [#:recursive? #f] [#:env-vars ’()] [#:modules ’()] [#:references-graphs #f] [#:allowed-references #f] [#:disallowed-references #f] [#:local-build? #f] [#:substitutable? #t] [#:guile-for-build #f]= [[#index-build_002dexpression_002d_003ederivation][¶]] :: Return a derivation that executes Scheme expression =exp= as a builder for derivation =name=. =inputs= must be a list of =(name drv-path sub-drv)= tuples; when =sub-drv= is omitted, ="out"= is assumed. =modules= is a list of names of Guile modules from the current search path to be copied in the store, compiled, and made available in the load path during the execution of =exp=---e.g., =((guix build utils) (guix build gnu-build-system))=.
+
+  =exp= is evaluated in an environment where =%outputs= is bound to a list of output/path pairs, and where =%build-inputs= is bound to a list of string/output-path pairs made from =inputs=. Optionally, =env-vars= is a list of string pairs specifying the name and value of environment variables visible to the builder. The builder terminates by passing the result of =exp= to =exit=; thus, when =exp= returns =#f=, the build is considered to have failed.
+
+  =exp= is built using =guile-for-build= (a derivation). When =guile-for-build= is omitted or is =#f=, the value of the =%guile-for-build= fluid is used instead.
+
+  See the =derivation= procedure for the meaning of =references-graphs=, =allowed-references=, =disallowed-references=, =local-build?=, and =substitutable?=.
+
+Here's an example of a single-output derivation that creates a directory containing one file:
+
+#+begin_src lisp
+(let ((builder '(let ((out (assoc-ref %outputs "out")))
+                  (mkdir out)    ; create /gnu/store/...-goo
+                  (call-with-output-file (string-append out "/test")
+                    (lambda (p)
+                      (display '(hello guix) p))))))
+  (build-expression->derivation store "goo" builder))
+
+⇒ #<derivation /gnu/store/...-goo.drv => ...>
+#+end_src
+
+--------------
+
+Next: [[id:guix--The-Store-Monad][The Store Monad]], Previous: [[id:guix--The-Store][The Store]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

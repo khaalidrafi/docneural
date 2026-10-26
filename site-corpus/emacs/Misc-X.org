@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: emacs--Misc-X
+:END:
+#+filetags: :emacs:
+#+title: Misc X
+
+Next:   Previous: [[id:emacs--Icons-X][Icons]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Misc-X>>
+*** C.12 Other Display Options [[#Other-Display-Options][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Other-Display-Options
+:CLASS: appendixsec
+:END:
+- ‘=--parent-id ==id=' :: Open Emacs as a client X window via the XEmbed protocol, with =id= as the parent X window id. Currently, this option is mainly useful for developers.
+
+-  <<index-_002d_002dvertical_002dscroll_002dbars>>‘=-vb=' [[#index-_002d_002dvertical_002dscroll_002dbars][¶]] :: 
+- ‘=--vertical-scroll-bars=' :: Enable vertical scroll bars.
+
+-  <<index-_002d_002dline_002dspacing>>‘=-lsp ==pixels=' [[#index-_002d_002dline_002dspacing][¶]] :: 
+- ‘=--line-spacing===pixels=' :: Specify =pixels= as additional space to put between lines, in pixels.
+
+-  <<index-_002d_002dno_002dblinking_002dcursor>>‘=-nbc=' [[#index-_002d_002dno_002dblinking_002dcursor][¶]] :: 
+- ‘=--no-blinking-cursor=' :: Disable the blinking cursor on graphical displays.
+
+- <<index-_002d_002dbasic_002ddisplay>>‘=-D=' [[#index-_002d_002dbasic_002ddisplay][¶]] :: 
+- ‘=--basic-display=' :: Disable the menu-bar, the tool-bar, the scroll-bars, tool tips, and turn off font-lock-mode and the blinking cursor. This can be useful for making a test case that simplifies debugging of display problems.
+
+The ‘=--xrm=' option (see [[id:emacs--Resources][X Resources]]) specifies additional X resource values.
+
+--------------

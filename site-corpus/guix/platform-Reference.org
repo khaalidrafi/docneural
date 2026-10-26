@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID: guix--platform-Reference
+:END:
+#+filetags: :guix:
+#+title: platform Reference
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<platform-Reference>>
+Next: [[id:guix--Supported-Platforms][Supported Platforms]], Up: [[id:guix--Platforms][Platforms]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 15.1 =platform= Reference [[#platform-Reference-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: platform-Reference-1
+:CLASS: section
+:END:
+The =platform= data type describes a /platform/: an ISA (instruction set architecture), combined with an operating system and possibly additional system-wide settings such as the ABI (application binary interface).
+
+- Data Type: *platform* [[#index-platform][¶]] :: This is the data type representing a platform.
+
+  - =target= :: This field specifies the platform's GNU triplet as a string (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf).
+
+  - =system= :: This string is the system type as it is known to Guix and passed, for instance, to the =--system= option of most commands.
+
+    It usually has the form ="==cpu==-==kernel=="=, where =cpu= is the target CPU and =kernel= the target operating system kernel.
+
+    It can be for instance ="aarch64-linux"= or ="armhf-linux"=. You will encounter system types when you perform native builds (see [[id:guix--Native-Builds][Native Builds]]).
+
+  - =linux-architecture= (default: =#false=) :: This optional string field is only relevant if the kernel is Linux. In that case, it corresponds to the ARCH variable used when building Linux, ="mips"= for instance.
+
+  - =rust-target= (default: =#false=) :: This optional string field is used to determine which rust target is best supported by this platform. For example, the base level system targeted by =armhf-linux= system is closest to =armv7-unknown-linux-gnueabihf=.
+
+  - =glibc-dynamic-linker= :: This field is the name of the GNU C Library dynamic linker for the corresponding system, as a string. It can be ="/lib/ld-linux-armhf.so.3"=.
+
+--------------
+
+Next: [[id:guix--Supported-Platforms][Supported Platforms]], Up: [[id:guix--Platforms][Platforms]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

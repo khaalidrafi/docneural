@@ -1,0 +1,159 @@
+:PROPERTIES:
+:ID: guix--Swap-Space
+:END:
+#+filetags: :guix:
+#+title: Swap Space
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Swap-Space>>
+Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.6 Swap Space [[#Swap-Space-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Swap-Space-1
+:CLASS: section
+:END:
+Swap space, as it is commonly called, is a disk area specifically designated for paging: the process in charge of memory management (the Linux kernel or Hurd's default pager) can decide that some memory pages stored in RAM which belong to a running program but are unused should be stored on disk instead. It unloads those from the RAM, freeing up precious fast memory, and writes them to the swap space. If the program tries to access that very page, the memory management process loads it back into memory for the program to use.
+
+A common misconception about swap is that it is only useful when small amounts of RAM are available to the system. However, it should be noted that kernels often use all available RAM for disk access caching to make I/O faster, and thus paging out unused portions of program memory will expand the RAM available for such caching.
+
+For a more detailed description of how memory is managed from the viewpoint of a monolithic kernel, see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Memory-Concepts.html#Memory-Concepts][Memory Concepts]] in The GNU C Library Reference Manual.
+
+The Linux kernel has support for swap partitions and swap files: the former uses a whole disk partition for paging, whereas the second uses a file on a file system for that (the file system driver needs to support it). On a comparable setup, both have the same performance, so one should consider ease of use when deciding between them. Partitions are “simpler” and do not need file system support, but need to be allocated at disk formatting time (logical volumes notwithstanding), whereas files can be allocated and deallocated at any time.
+
+Swap space is also required to put the system into /hibernation/ (also called /suspend to disk/), whereby memory is dumped to swap before shutdown so it can be restored when the machine is eventually restarted. Hibernation uses at most half the size of the RAM in the configured swap space. The Linux kernel needs to know about the swap space to be used to resume from hibernation on boot (/via/ a kernel argument). When using a swap file, its offset in the device holding it also needs to be given to the kernel; that value has to be updated if the file is initialized again as swap---e.g., because its size was changed. See [[id:guix--Initial-RAM-Disk][Initial RAM Disk]] for details about the kernel arguments.
+
+Note that swap space is not zeroed on shutdown, so sensitive data (such as passwords) may linger on it if it was paged out. As such, you should consider having your swap reside on an encrypted device (see [[id:guix--Mapped-Devices][Mapped Devices]]).
+
+- Data Type: *swap-space* [[#index-swap_002dspace][¶]] :: Objects of this type represent swap spaces. They contain the following members:
+
+  - =target= :: The device or file to use, either a UUID, a =file-system-label= or a string, as in the definition of a =file-system= (see [[id:guix--File-Systems][File Systems]]).
+
+  - =dependencies= (default: ='()=) :: A list of =file-system= or =mapped-device= objects, upon which the availability of the space depends. Note that just like for =file-system= objects, dependencies which are needed for boot and mounted in early userspace are not managed by the Shepherd, and so automatically filtered out for you.
+
+  - =priority= (default: =#f=) :: Only supported by the Linux kernel. Either =#f= to disable swap priority, or an integer between 0 and 32767. The kernel will first use swap spaces of higher priority when paging, and use same priority spaces on a round-robin basis. The kernel will use swap spaces without a set priority after prioritized spaces, and in the order that they appeared in (not round-robin).
+
+  - =discard?= (default: =#f=) :: Only supported by the Linux kernel. When true, the kernel will notify the disk controller of discarded pages, for example with the TRIM operation on Solid State Drives.
+
+Here are some examples:
+
+#+begin_src lisp
+(swap-space (target (uuid "4dab5feb-d176-45de-b287-9b0a6e4c01cb")))
+#+end_src
+
+Use the swap partition with the given UUID. You can learn the UUID of a Linux swap partition by running =swaplabel ==device=, where =device= is the =/dev= file name of that partition.
+
+#+begin_src lisp
+(swap-space
+  (target (file-system-label "swap"))
+  (dependencies mapped-devices))
+#+end_src
+
+Use the partition with label =swap=, which can be found after all the =mapped-devices= mapped devices have been opened. Again, the =swaplabel= command allows you to view and change the label of a Linux swap partition.
+
+Here's a more involved example with the corresponding =file-systems= part of an =operating-system= declaration.
+
+#+begin_src lisp
+(file-systems
+  (list (file-system
+          (device (file-system-label "root"))
+          (mount-point "/")
+          (type "ext4"))
+        (file-system
+          (device (file-system-label "btrfs"))
+          (mount-point "/btrfs")
+          (type "btrfs"))))
+
+(swap-devices
+  (list
+    (swap-space
+      (target "/btrfs/swapfile")
+      (dependencies (filter (file-system-mount-point-predicate "/btrfs")
+                            file-systems)))))
+#+end_src
+
+Use the file =/btrfs/swapfile= as swap space, which depends on the file system mounted at =/btrfs=. Note how we use Guile's filter to select the file system in an elegant fashion!
+
+#+begin_src lisp
+(swap-devices
+  (list
+    (swap-space
+      (target "/dev/mapper/my-swap")
+      (dependencies mapped-devices))))
+
+(kernel-arguments
+  (cons* "resume=/dev/mapper/my-swap"
+         %default-kernel-arguments))
+#+end_src
+
+The above snippet of an =operating-system= declaration enables the mapped device =/dev/mapper/my-swap= (which may be part of an encrypted device) as swap space, and tells the kernel to use it for hibernation via the =resume= kernel argument (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], =kernel-arguments=).
+
+#+begin_src lisp
+(swap-devices
+  (list
+    (swap-space
+      (target "/swapfile")
+      (dependencies (filter (file-system-mount-point-predicate "/")
+                            file-systems)))))
+
+(kernel-arguments
+  (cons* "resume=/dev/sda3"        ;device that holds /swapfile
+         "resume_offset=92514304"  ;offset of /swapfile on device
+         %default-kernel-arguments))
+#+end_src
+
+This other snippet of =operating-system= enables the swap file =/swapfile= for hibernation by telling the kernel about the partition containing it (=resume= argument) and its offset on that partition (=resume_offset= argument). The latter value can be found in the output of the command =filefrag -e= as the first number right under the =physical_offset= column header (the second command extracts its value directly):
+
+#+begin_example
+$ sudo filefrag -e /swapfile
+Filesystem type is: ef53
+File size of /swapfile is 2463842304 (601524 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..    2047:   92514304..  92516351:   2048:
+...
+$ sudo filefrag -e /swapfile | grep '^ *0:' | cut -d: -f3 | cut -d. -f1
+   92514304
+#+end_example
+
+Note that if the swap file is on a Btrfs file system use =btrfs inspect-internal map-swapfile -r= instead of =filefrag= to get the offset as the latter will not give the right offset.
+
+#+begin_example
+$ sudo btrfs inspect-internal map-swapfile -r /swapfile
+   163845376
+#+end_example
+
+--------------
+
+Next: [[id:guix--User-Accounts][User Accounts]], Previous: [[id:guix--Mapped-Devices][Mapped Devices]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

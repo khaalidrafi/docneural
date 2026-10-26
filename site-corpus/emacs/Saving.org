@@ -1,0 +1,314 @@
+:PROPERTIES:
+:ID: emacs--Saving
+:END:
+#+filetags: :emacs:
+#+title: Saving
+
+Next: [[id:emacs--Reverting][Reverting a Buffer]]   Previous: [[id:emacs--Visiting][Visiting Files]]   Up: [[id:emacs--Files][File Handling]]
+
+<<Saving>>
+*** 20.3 Saving Files [[#Saving-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Saving-Files
+:CLASS: section
+:END:
+/Saving/ a buffer in Emacs means writing its contents back into the file that was visited in the buffer.
+
+--------------
+
+<<Save-Commands>>
+**** 20.3.1 Commands for Saving Files [[#Commands-for-Saving-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Commands-for-Saving-Files
+:CLASS: subsection
+:END:
+These are the commands that relate to saving and writing files.
+
+- C-x C-s :: Save the current buffer to its file (=save-buffer=).
+
+- C-x s :: Save any or all buffers to their files (=save-some-buffers=).
+
+- M-~ :: Forget that the current buffer has been changed (=not-modified=). With prefix argument (C-u), mark the current buffer as changed.
+
+- C-x C-w :: Save the current buffer with a specified file name (=write-file=).
+
+- M-x set-visited-file-name :: Change the file name under which the current buffer will be saved.
+
+- M-x rename-visited-file :: The same as M-x set-visited-file-name, but also rename the file the buffer is visiting (if any).
+
+When you wish to save the file and make your changes permanent, type C-x C-s (=save-buffer=). After saving is finished, C-x C-s displays a message like this:
+
+#+begin_example
+Wrote /u/rms/gnu/gnu.tasks
+#+end_example
+
+If the current buffer is not modified (no changes have been made in it since the buffer was created or last saved), saving is not really done, because it would have no effect. Instead, C-x C-s displays a message like this in the echo area:
+
+#+begin_example
+(No changes need to be saved)
+#+end_example
+
+With a prefix argument, C-u C-x C-s, Emacs also marks the buffer to be backed up when the next save is done. See [[#Backup][Backup Files]].
+
+The command C-x s (=save-some-buffers=) offers to save any or all modified buffers. It asks you what to do with each buffer. The possible responses are analogous to those of =query-replace=:
+
+- y\\
+  SPC :: Save this buffer and ask about the rest of the buffers.
+
+- n\\
+  DEL :: Don't save this buffer, but ask about the rest of the buffers.
+
+- ! :: Save this buffer and all the rest with no more questions.
+
+- q\\
+  RET :: Terminate =save-some-buffers= without any more saving.
+
+- . :: Save this buffer, then exit =save-some-buffers= without even asking about other buffers.
+
+- C-r :: View the buffer that you are currently being asked about. When you exit View mode, you get back to =save-some-buffers=, which asks the question again.
+
+- C-f :: Exit =save-some-buffers= and visit the buffer that you are currently being asked about.
+
+- d :: Diff the buffer against its corresponding file, so you can see what changes you would be saving. This calls the command =diff-buffer-with-file= (see [[id:emacs--Comparing-Files][Comparing Files]]).
+
+- C-h :: Display a help message about these options.
+
+You can customize the value of =save-some-buffers-default-predicate= to control which buffers Emacs will ask about.
+
+C-x C-c, the key sequence to exit Emacs, invokes =save-some-buffers= and therefore asks the same questions.
+
+If you have changed a buffer but do not wish to save the changes, you should take some action to prevent it. Otherwise, each time you use C-x s or C-x C-c, you are liable to save this buffer by mistake. One thing you can do is type M-~ (=not-modified=), which clears out the indication that the buffer is modified. If you do this, none of the save commands will believe that the buffer needs to be saved. (‘=~=' is often used as a mathematical symbol for “not”; thus M-~ is “not”, metafied.) Alternatively, you can cancel all the changes made since the file was visited or saved, by reading the text from the file again. This is called /reverting/. See [[id:emacs--Reverting][Reverting a Buffer]]. (You could also undo all the changes by repeating the undo command C-x u until you have undone all the changes; but reverting is easier.)
+
+M-x set-visited-file-name alters the name of the file that the current buffer is visiting. It reads the new file name using the minibuffer. Then it marks the buffer as visiting that file name, and changes the buffer name correspondingly. =set-visited-file-name= does not save the buffer in the newly visited file; it just alters the records inside Emacs in case you do save later. It also marks the buffer as modified so that C-x C-s in that buffer /will/ save.
+
+If you wish to mark the buffer as visiting a different file and save it right away, use C-x C-w (=write-file=). This is equivalent to =set-visited-file-name= followed by C-x C-s, except that C-x C-w asks for confirmation if the file exists. C-x C-s used on a buffer that is not visiting a file has the same effect as C-x C-w; that is, it reads a file name, marks the buffer as visiting that file, and saves it there. The default file name in a buffer that is not visiting a file is made by combining the buffer name with the buffer's default directory (see [[id:emacs--File-Names][File Names]]).
+
+If the new file name implies a major mode, then C-x C-w switches to that major mode, in most cases. The command =set-visited-file-name= also does this. See [[id:emacs--Choosing-Modes][Choosing File Modes]].
+
+If you wish to save the current buffer to a different file without visiting that file, use =mark-whole-buffer= (C-x h), then M-x write-region (see [[id:emacs--Misc-File-Ops][Miscellaneous File Operations]]).
+
+If Emacs is about to save a file and sees that the date of the latest version on disk does not match what Emacs last read or wrote, Emacs notifies you of this fact, because it probably indicates a problem caused by simultaneous editing and requires your immediate attention. See [[#Interlocking][Simultaneous Editing]].
+
+--------------
+
+<<Backup>>
+**** 20.3.2 Backup Files [[#Backup-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Backup-Files
+:CLASS: subsection
+:END:
+On most operating systems, rewriting a file automatically destroys all record of what the file used to contain. Thus, saving a file from Emacs throws away the old contents of the file---or it would, except that Emacs carefully copies the old contents to another file, called the /backup/ file, before actually saving.
+
+Emacs makes a backup for a file only the first time the file is saved from the buffer that visits it. No matter how many times you subsequently save the file, its backup remains unchanged. However, if you kill the buffer and then visit the file again, a new backup file will be made.
+
+For most files, the variable =make-backup-files= determines whether to make backup files. On most operating systems, its default value is =t=, so that Emacs does write backup files.
+
+For files managed by a version control system (see [[id:emacs--Version-Control::#Version-Control][Version Control]]), the variable =vc-make-backup-files= determines whether to make backup files. By default it is =nil=, since backup files are redundant when you store all the previous versions in a version control system. See [[id:emacs--Version-Control::#General-VC-Options][General Options]].
+
+At your option, Emacs can keep either a single backup for each file, or make a series of numbered backup files for each file that you edit. See [[#Backup-Names][Single or Numbered Backups]].
+
+The default value of the =backup-enable-predicate= variable prevents backup files being written for files in the directories used for temporary files, specified by =temporary-file-directory= or =small-temporary-file-directory=.
+
+You can explicitly tell Emacs to make another backup file from a buffer, even though that buffer has been saved before. If you save the buffer with C-u C-x C-s, the version thus saved will be made into a backup file if you save the buffer again. C-u C-u C-x C-s saves the buffer, but first makes the previous file contents into a new backup file. C-u C-u C-u C-x C-s does both things: it makes a backup from the previous contents, and arranges to make another from the newly saved contents if you save again.
+
+You can customize the variable =backup-directory-alist= to specify that files matching certain patterns should be backed up in specific directories. A typical use is to add an element =("." . ==dir==)= to make all backups in the directory with absolute name =dir=. Emacs modifies the backup file names to avoid clashes between files with the same names originating in different directories. Alternatively, adding, =("." . ".~")= would make backups in the invisible subdirectory =.~= of the original file's directory. Emacs creates the directory, if necessary, to make the backup.
+
+--------------
+
+<<Backup-Names>>
+**** 20.3.2.1 Single or Numbered Backups [[#Single-or-Numbered-Backups][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Single-or-Numbered-Backups
+:CLASS: subsubsection
+:END:
+When Emacs makes a backup file, its name is normally constructed by appending ‘=~=' to the file name being edited; thus, the backup file for =eval.c= would be =eval.c~=.
+
+If access control stops Emacs from writing backup files under the usual names, it writes the backup file as =~/.emacs.d/%backup%~=. Only one such file can exist, so only the most recently made such backup is available.
+
+Emacs can also make /numbered backup files/. Numbered backup file names contain ‘=.~=', the number, and another ‘=~=' after the original file name. Thus, the backup files of =eval.c= would be called =eval.c.~1~=, =eval.c.~2~=, and so on, all the way through names like =eval.c.~259~= and beyond.
+
+The variable =version-control= determines whether to make single backup files or multiple numbered backup files. Its possible values are:
+
+- =nil= :: Make numbered backups for files that have numbered backups already. Otherwise, make single backups. This is the default.
+
+- =t= :: Make numbered backups.
+
+- =never= :: Never make numbered backups; always make single backups.
+
+The usual way to set this variable is globally, through your init file or the customization buffer. However, you can set =version-control= locally in an individual buffer to control the making of backups for that buffer's file (see [[id:emacs--Variables::#Locals][Local Variables]]). Some modes, such as Rmail mode, set this variable. You can also have Emacs set =version-control= locally whenever you visit a given file (see [[id:emacs--Variables::#File-Variables][Local Variables in Files]]).
+
+If you set the environment variable =VERSION_CONTROL=, to tell various GNU utilities what to do with backup files, Emacs also obeys the environment variable by setting the Lisp variable =version-control= accordingly at startup. If the environment variable's value is ‘=t=' or ‘=numbered=', then =version-control= becomes =t=; if the value is ‘=nil=' or ‘=existing=', then =version-control= becomes =nil=; if it is ‘=never=' or ‘=simple=', then =version-control= becomes =never=.
+
+If you set the variable =make-backup-file-name-function= to a suitable Lisp function, you can override the usual way Emacs constructs backup file names.
+
+--------------
+
+<<Backup-Deletion>>
+**** 20.3.2.2 Automatic Deletion of Backups [[#Automatic-Deletion-of-Backups][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Automatic-Deletion-of-Backups
+:CLASS: subsubsection
+:END:
+To prevent excessive consumption of disk space, Emacs can delete numbered backup versions automatically. Generally Emacs keeps the first few backups and the latest few backups, deleting any in between. This happens every time a new backup is made.
+
+The two variables =kept-old-versions= and =kept-new-versions= control this deletion. Their values are, respectively, the number of oldest (lowest-numbered) backups to keep and the number of newest (highest-numbered) ones to keep, each time a new backup is made. The backups in the middle (excluding those oldest and newest) are the excess middle versions---those backups are deleted. These variables' values are used when it is time to delete excess versions, just after a new backup version is made; the newly made backup is included in the count in =kept-new-versions=. By default, both variables are 2.
+
+If =delete-old-versions= is =t=, Emacs deletes the excess backup files silently. If it is =nil=, the default, Emacs asks you whether it should delete the excess backup versions. If it has any other value, then Emacs never automatically deletes backups.
+
+Dired's . (Period) command can also be used to delete old versions. See [[id:emacs--Flagging-Many-Files][Flagging Many Files at Once]].
+
+--------------
+
+<<Backup-Copying>>
+**** 20.3.2.3 Copying vs. Renaming [[#Copying-vs_002e-Renaming][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Copying-vs_002e-Renaming
+:CLASS: subsubsection
+:END:
+Backup files can be made by copying the old file or by renaming it. This makes a difference when the old file has multiple names (hard links). If the old file is renamed into the backup file, then the alternate names become names for the backup file. If the old file is copied instead, then the alternate names remain names for the file that you are editing, and the contents accessed by those names will be the new contents.
+
+The method of making a backup file may also affect the file's owner and group. If copying is used, these do not change. If renaming is used, you become the file's owner, and the file's group becomes the default (different operating systems have different defaults for the group).
+
+The choice of renaming or copying is made as follows:
+
+- If the variable =backup-by-copying= is non-=nil= (the default is =nil=), use copying.
+
+- Otherwise, if the variable =backup-by-copying-when-linked= is non-=nil= (the default is =nil=), and the file has multiple names, use copying.
+
+- Otherwise, if the variable =backup-by-copying-when-mismatch= is non-=nil= (the default is =t=), and renaming would change the file's owner or group, use copying.
+
+  If you change =backup-by-copying-when-mismatch= to =nil=, Emacs checks the numeric user-id of the file's owner and the numeric group-id of the file's group. If either is no greater than =backup-by-copying-when-privileged-mismatch=, then it behaves as though =backup-by-copying-when-mismatch= is non-=nil= anyway.
+
+- Otherwise, renaming is the default choice.
+
+When a file is managed with a version control system (see [[id:emacs--Version-Control::#Version-Control][Version Control]]), Emacs does not normally make backups in the usual way for that file. But /committing/ (a.k.a. /checking in/, see [[id:emacs--Version-Control::#VCS-Concepts][Concepts of Version Control]]) new versions of files is similar in some ways to making backups. One unfortunate similarity is that these operations typically break hard links, disconnecting the file name you visited from any alternate names for the same file. This has nothing to do with Emacs---the version control system does it.
+
+Some file storage services support /file versioning/: they record history of previous versions of files, and allow reverting to those previous versions. If you want to be able to do that with files hosted by those services when editing them with Emacs, customize =backup-by-copying= to a non-=nil= value.
+
+Copying the old file for backup is also useful when editing precious files, because it makes sure the old file keeps its name if something fails between the backup and the saving of your edits. Alternatively, you can customize =file-precious-flag= to a non-=nil= value, which implies backups by copying and also protects against I/O errors while saving your edits.
+
+--------------
+
+<<Customize-Save>>
+**** 20.3.3 Customizing Saving of Files [[#Customizing-Saving-of-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-Saving-of-Files
+:CLASS: subsection
+:END:
+If the value of the variable =require-final-newline= is =t=, saving or writing a file silently puts a newline at the end if there isn't already one there. If the value is =visit=, Emacs adds a newline at the end of any file that doesn't have one, just after it visits the file. (This marks the buffer as modified, and you can undo it.) If the value is =visit-save=, Emacs adds such newlines both on visiting and on saving. If the value is =nil=, Emacs leaves the end of the file unchanged; any other non-=nil= value means Emacs asks you whether to add a newline. The default is =nil=.
+
+Some major modes are designed for specific kinds of files that are always supposed to end in newlines. Such major modes set the variable =require-final-newline= to the value of =mode-require-final-newline=, which defaults to =t=. By setting the latter variable, you can control how these modes handle final newlines.
+
+If this option is non-=nil= and you're visiting a file via a symbolic link, Emacs will break the symbolic link upon saving the buffer, and will write the buffer to a file with the same name as the symbolic link, if the value of =file-precious-flag= is non-=nil= (see [[../elisp_html/Saving-Buffers.html#Saving-Buffers][file-precious-flag]] in The Emacs Lisp Reference Manual). If you want Emacs to save the buffer to the file the symbolic link points to (thereby preserving the link) in these cases, customize the variable =file-preserve-symlinks-on-save= to =t=.
+
+Normally, when a program writes a file, the operating system briefly caches the file's data in main memory before committing the data to secondary storage. Although this can greatly improve performance, it risks data loss if the system loses power before committing the cache, and on some platforms other processes might not immediately notice the file's change.
+
+To lessen this risk, Emacs can invoke the =fsync= system call after saving a file. Using =fsync= does not eliminate the risk of data loss or slow notification, partly because many systems do not support =fsync= properly, and partly because Emacs's file-saving procedure typically relies also on directory updates that might not survive a crash even if =fsync= works properly.
+
+The =write-region-inhibit-fsync= variable controls whether Emacs invokes =fsync= after saving a file. The variable's default value is =t=.
+
+Emacs never uses =fsync= when writing auto-save files, as these files might lose data anyway.
+
+--------------
+
+<<Interlocking>>
+**** 20.3.4 Protection against Simultaneous Editing [[#Protection-against-Simultaneous-Editing][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Protection-against-Simultaneous-Editing
+:CLASS: subsection
+:END:
+Simultaneous editing occurs when two users visit the same file, both make changes, and then both save them. If nobody is informed that this is happening, whichever user saves first would later find that their changes were lost.
+
+On some systems, Emacs notices immediately when the second user starts to change the file, and issues an immediate warning. On all systems, Emacs checks when you save the file, and warns if you are about to overwrite another user's changes. You can prevent loss of the other user's work by taking the proper corrective action instead of saving the file.
+
+When you make the first modification in an Emacs buffer that is visiting a file, Emacs records that the file is /locked/ by you. (It does this by creating a specially-named symbolic link[[#FOOT7][^{7}]] with special contents in the same directory. See [[../elisp_html/File-Locks.html#File-Locks][(elisp)File Locks]], for more details.) Emacs removes the lock when you save the changes. The idea is that the file is locked whenever an Emacs buffer visiting it has unsaved changes.
+
+You can prevent the creation of lock files by setting the variable =create-lockfiles= to =nil=. *Caution:* by doing so you will lose the benefits that this feature provides. You can also control where lock files are written by using the =lock-file-name-transforms= variable.
+
+If you begin to modify the buffer while the visited file is locked by someone else, this constitutes a /collision/. When Emacs detects a collision, it asks you what to do, by calling the Lisp function =ask-user-about-lock=. You can redefine this function for the sake of customization. The standard definition of this function asks you a question and accepts three possible answers:
+
+- s :: Steal the lock. Whoever was already changing the file loses the lock, and you gain the lock.
+
+- p :: Proceed. Go ahead and edit the file despite its being locked by someone else.
+
+- q :: Quit. This causes an error (=file-locked=), and the buffer contents remain unchanged---the modification you were trying to make does not actually take place.
+
+If Emacs or the operating system crashes, this may leave behind lock files which are stale, so you may occasionally get warnings about spurious collisions. When you determine that the collision is spurious, just use p to tell Emacs to go ahead anyway.
+
+Note that locking works on the basis of a file name; if a file has multiple names, Emacs does not prevent two users from editing it simultaneously under different names.
+
+A lock file cannot be written in some circumstances, e.g., if Emacs lacks the system permissions or cannot create lock files for some other reason. In these cases, Emacs can still detect the collision when you try to save a file, by checking the file's last-modification date. If the file has changed since the last time Emacs visited or saved it, that implies that changes have been made in some other way, and will be lost if Emacs proceeds with saving. Emacs then displays a warning message and asks for confirmation before saving; answer yes to save, and no or C-g cancel the save.
+
+If you are notified that simultaneous editing has already taken place, one way to compare the buffer to its file is the M-x diff-buffer-with-file command. See [[id:emacs--Comparing-Files][Comparing Files]].
+
+You can prevent the creation of remote lock files by setting the variable =remote-file-name-inhibit-locks= to =t=.
+
+The minor mode =lock-file-mode=, called interactively, toggles the local value of =create-lockfiles= in the current buffer.
+
+--------------
+
+<<File-Shadowing>>
+**** 20.3.5 Shadowing Files [[#Shadowing-Files][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shadowing-Files
+:CLASS: subsection
+:END:
+You can arrange to keep identical /shadow/ copies of certain files in more than one place---possibly on different machines. To do this, first you must set up a /shadow file group/, which is a set of identically-named files shared between a list of sites. The file group is permanent and applies to further Emacs sessions as well as the current one. Once the group is set up, every time you exit Emacs, it will copy the file you edited to the other files in its group. You can also do the copying without exiting Emacs, by typing M-x shadow-copy-files.
+
+A /shadow cluster/ is a group of hosts that share directories, so that copying to or from one of them is sufficient to update the file on all of them. Each shadow cluster has a name, and specifies the network address of a primary host (the one we copy files to), and a regular expression that matches the host names of all the other hosts in the cluster. You can define a shadow cluster with M-x shadow-define-cluster.
+
+- M-x shadow-initialize :: Set up file shadowing.
+
+- M-x shadow-define-literal-group :: Declare a single file to be shared between sites.
+
+- M-x shadow-define-regexp-group :: Make all files that match each of a group of files be shared between hosts.
+
+- M-x shadow-define-cluster RET =name= RET :: Define a shadow file cluster =name=.
+
+- M-x shadow-copy-files :: Copy all pending shadow files.
+
+- M-x shadow-cancel :: Cancel the instruction to shadow some files.
+
+To set up a shadow file group, use M-x shadow-define-literal-group or M-x shadow-define-regexp-group. See their documentation strings for further information.
+
+Before copying a file to its shadows, Emacs asks for confirmation. You can answer “no” to bypass copying of this file, this time. If you want to cancel the shadowing permanently for a certain file, use M-x shadow-cancel to eliminate or change the shadow file group.
+
+File Shadowing is not available on MS Windows.
+
+--------------
+
+<<Time-Stamps>>
+**** 20.3.6 Updating Time Stamps Automatically [[#Updating-Time-Stamps-Automatically][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Updating-Time-Stamps-Automatically
+:CLASS: subsection
+:END:
+You can arrange to put a time stamp in a file, so that it is updated automatically each time you edit and save the file. The time stamp must be in the first eight lines of the file, and you should insert it like this:
+
+#+begin_example
+Time-stamp: <>
+#+end_example
+
+or like this:
+
+#+begin_example
+Time-stamp: " "
+#+end_example
+
+Then add the function =time-stamp= to the hook =before-save-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]). When you save the file, this function then automatically updates the time stamp with the current date and time. You can also use the command M-x time-stamp to update the time stamp manually. By default the time stamp is formatted according to your locale setting (see [[id:emacs--Environment::#Environment][Environment Variables]]) and time zone (see [[../elisp_html/Time-of-Day.html#Time-of-Day][Time of Day]] in The Emacs Lisp Reference Manual). For customizations, see the Custom group =time-stamp=.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF7][(7)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If your file system does not support symbolic links, a regular file is used.
+
+--------------

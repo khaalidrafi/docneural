@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID: org--Quote-blocks-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Quote blocks in LaTeX export (The Org Manual)
+
+Next:
+
+<<Quote-blocks-in-LaTeX-export>>
+Next: [[id:org--Controlling-the-way-the-table-of-contents-is-generated][Controlling the way the table of contents is generated]], Previous: [[id:org--Verse-blocks-in-LaTeX-export][Verse blocks in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.13 Quote blocks in LaTeX export [[#Quote-blocks-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quote-blocks-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend accepts two attributes for quote blocks: ‘=:environment=', for an arbitrary quoting environment (the default value is that of =org-latex-default-quote-environment=: ="quote"=) and ‘=:options='. For example, to choose the environment ‘=quotation=', included as an alternative to ‘=quote=' in standard LaTeX classes:
+
+#+begin_example
+#+ATTR_LATEX: :environment quotation
+#+BEGIN_QUOTE
+some text...
+#+END_QUOTE
+#+end_example
+
+To choose the ‘=foreigndisplayquote=' environment, included in the LaTeX package ‘=csquotes=', with the ‘=german=' option, use this syntax:
+
+#+begin_example
+#+LATEX_HEADER:\usepackage[autostyle=true]{csquotes}
+#+ATTR_LATEX: :environment foreigndisplayquote :options {german}
+#+BEGIN_QUOTE
+some text in German...
+#+END_QUOTE
+#+end_example
+
+which is exported to LaTeX as
+
+#+begin_example
+\begin{foreigndisplayquote}{german}
+some text in German...
+\end{foreigndisplayquote}
+#+end_example

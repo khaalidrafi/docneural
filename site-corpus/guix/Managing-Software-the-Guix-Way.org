@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID: guix--Managing-Software-the-Guix-Way
+:END:
+#+filetags: :guix:
+#+title: Managing Software the Guix Way
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Managing-Software-the-Guix-Way>>
+Next: [[id:guix--GNU-Distribution][GNU Distribution]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 1.1 Managing Software the Guix Way [[#Managing-Software-the-Guix-Way-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Managing-Software-the-Guix-Way-1
+:CLASS: section
+:END:
+Guix provides a command-line package management interface (see [[id:guix--Package-Management][Package Management]]), tools to help with software development (see [[id:guix--Development][Development]]), command-line utilities for more advanced usage (see [[id:guix--Utilities][Utilities]]), as well as Scheme programming interfaces (see [[id:guix--Programming-Interface][Programming Interface]]). Its /build daemon/ is responsible for building packages on behalf of users (see [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]) and for downloading pre-built binaries from authorized sources (see [[id:guix--Substitutes][Substitutes]]).
+
+Guix includes package definitions for many GNU and non-GNU packages, all of which [[https://www.gnu.org/philosophy/free-sw.html][respect the user's computing freedom]]. It is /extensible/: users can write their own package definitions (see [[id:guix--Defining-Packages][Defining Packages]]) and make them available as independent package modules (see [[id:guix--Package-Modules][Package Modules]]). It is also /customizable/: users can /derive/ specialized package definitions from existing ones, including from the command line (see [[id:guix--Package-Transformation-Options][Package Transformation Options]]).
+
+Under the hood, Guix implements the /functional package management/ discipline pioneered by Nix (see [[id:guix--Acknowledgments][Acknowledgments]]). In Guix, the package build and installation process is seen as a /function/, in the mathematical sense. That function takes inputs, such as build scripts, a compiler, and libraries, and returns an installed package. As a pure function, its result depends solely on its inputs---for instance, it cannot refer to software or scripts that were not explicitly passed as inputs. A build function always produces the same result when passed a given set of inputs. It cannot alter the environment of the running system in any way; for instance, it cannot create, modify, or delete files outside of its build and installation directories. This is achieved by running build processes in isolated environments (or /containers/), where only their explicit inputs are visible.
+
+The result of package build functions is /cached/ in the file system, in a special directory called /the store/ (see [[id:guix--The-Store][The Store]]). Each package is installed in a directory of its own in the store---by default under =/gnu/store=. The directory name contains a hash of all the inputs used to build that package; thus, changing an input yields a different directory name.
+
+This approach is the foundation for the salient features of Guix: support for transactional package upgrade and rollback, per-user installation, and garbage collection of packages (see [[id:guix--Features][Features]]).
+
+--------------
+
+Next: [[id:guix--GNU-Distribution][GNU Distribution]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

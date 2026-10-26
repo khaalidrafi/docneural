@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--X-Resources
+:END:
+#+filetags: :emacs:
+#+title: X Resources
+
+Next: [[id:emacs--Antinews][Emacs 29 Antinews]]   Previous: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<X-Resources>>
+** Appendix D X Options and Resources [[#X-Options-and-Resources][¶]]
+:PROPERTIES:
+:CUSTOM_ID: X-Options-and-Resources
+:CLASS: appendix
+:END:
+You can customize some X-related aspects of Emacs behavior using X resources, as is usual for programs that use X.
+
+When Emacs is compiled with GTK+ support, the appearance of various graphical widgets, such as the menu-bar, scroll-bar, and dialog boxes, is determined by GTK+ resources, which we will also describe. When Emacs is built without GTK+ support, the appearance of these widgets is determined by additional X resources.
+
+On MS-Windows, you can customize some of the same aspects using the system registry (see [[id:emacs--Environment::#MS_002dWindows-Registry][The MS-Windows System Registry]]).
+
+--------------

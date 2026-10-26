@@ -1,0 +1,434 @@
+:PROPERTIES:
+:ID: guix--File_002dSharing-Services
+:END:
+#+filetags: :guix:
+#+title: File-Sharing Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<File_002dSharing-Services>>
+Next: [[id:guix--Monitoring-Services][Monitoring Services]], Previous: [[id:guix--Telephony-Services][Telephony Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.17 File-Sharing Services [[#File_002dSharing-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: File_002dSharing-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services file-sharing)= module provides services that assist with transferring files over peer-to-peer file-sharing networks.
+
+**** Transmission Daemon Service [[#Transmission-Daemon-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Transmission-Daemon-Service
+:CLASS: subsubheading
+:END:
+[[https://transmissionbt.com/][Transmission]] is a flexible BitTorrent client that offers a variety of graphical and command-line interfaces. A =transmission-daemon-service-type= service provides Transmission's headless variant, =transmission-daemon=, as a system service, allowing users to share files via BitTorrent even when they are not logged in.
+
+- Variable: *transmission-daemon-service-type* [[#index-transmission_002ddaemon_002dservice_002dtype][¶]] :: The service type for the Transmission Daemon BitTorrent client. Its value must be a =transmission-daemon-configuration= object as in this example:
+
+  #+begin_src lisp
+  (service transmission-daemon-service-type
+           (transmission-daemon-configuration
+            ;; Restrict access to the RPC ("control") interface
+            (rpc-authentication-required? #t)
+            (rpc-username "transmission")
+            (rpc-password
+             (transmission-password-hash
+              "transmission" ; desired password
+              "uKd1uMs9"))   ; arbitrary salt value
+
+            ;; Accept requests from this and other hosts on the
+            ;; local network
+            (rpc-whitelist-enabled? #t)
+            (rpc-whitelist '("::1" "127.0.0.1" "192.168.0.*"))
+
+            ;; Limit bandwidth use during work hours
+            (alt-speed-down (* 1024 2)) ;   2 MB/s
+            (alt-speed-up 512)          ; 512 kB/s
+
+            (alt-speed-time-enabled? #t)
+            (alt-speed-time-day 'weekdays)
+            (alt-speed-time-begin
+             (+ (* 60 8) 30))           ; 8:30 am
+            (alt-speed-time-end
+             (+ (* 60 (+ 12 5)) 30))))  ; 5:30 pm
+  #+end_src
+
+Once the service is started, users can interact with the daemon through its Web interface (at =http://localhost:9091/=) or by using the =transmission-remote= command-line tool, available in the =transmission= package. (Emacs users may want to also consider the =emacs-transmission= package.) Both communicate with the daemon through its remote procedure call (RPC) interface, which by default is available to all users on the system; you may wish to change this by assigning values to the =rpc-authentication-required?=, =rpc-username= and =rpc-password= settings, as shown in the example above and documented further below.
+
+The value for =rpc-password= must be a password hash of the type generated and used by Transmission clients. This can be copied verbatim from an existing =settings.json= file, if another Transmission client is already being used. Otherwise, the =transmission-password-hash= and =transmission-random-salt= procedures provided by this module can be used to obtain a suitable hash value.
+
+- Procedure: *transmission-password-hash* =password salt= [[#index-transmission_002dpassword_002dhash][¶]] :: Returns a string containing the result of hashing =password= together with =salt=, in the format recognized by Transmission clients for their =rpc-password= configuration setting.
+
+  =salt= must be an eight-character string. The =transmission-random-salt= procedure can be used to generate a suitable salt value at random.
+
+- Procedure: *transmission-random-salt* [[#index-transmission_002drandom_002dsalt][¶]] :: Returns a string containing a random, eight-character salt value of the type generated and used by Transmission clients, suitable for passing to the =transmission-password-hash= procedure.
+
+These procedures are accessible from within a Guile REPL started with the =guix repl= command (see [[id:guix--Invoking-guix-repl][Invoking =guix repl=]]). This is useful for obtaining a random salt value to provide as the second parameter to ‘transmission-password-hash‘, as in this example session:
+
+#+begin_example
+$ guix repl
+scheme@(guix-user)> ,use (gnu services file-sharing)
+scheme@(guix-user)> (transmission-random-salt)
+$1 = "uKd1uMs9"
+#+end_example
+
+Alternatively, a complete password hash can generated in a single step:
+
+#+begin_example
+scheme@(guix-user)> (transmission-password-hash "transmission"
+(transmission-random-salt))
+$2 = "{c8bbc6d1740cd8dc819a6e25563b67812c1c19c9VtFPfdsX"
+#+end_example
+
+The resulting string can be used as-is for the value of =rpc-password=, allowing the password to be kept hidden even in the operating-system configuration.
+
+Torrent files downloaded by the daemon are directly accessible only to users in the “transmission” user group, who receive read-only access to the directory specified by the =download-dir= configuration setting (and also the directory specified by =incomplete-dir=, if =incomplete-dir-enabled?= is =#t=). Downloaded files can be moved to another directory or deleted altogether using =transmission-remote= with its =--move= and =--remove-and-delete= options.
+
+If the =watch-dir-enabled?= setting is set to =#t=, users in the “transmission” group are able also to place =.torrent= files in the directory specified by =watch-dir= to have the corresponding torrents added by the daemon. (The =trash-original-torrent-files?= setting controls whether the daemon deletes these files after processing them.)
+
+Some of the daemon's configuration settings can be changed temporarily by =transmission-remote= and similar tools. To undo these changes, use the service's =reload= action to have the daemon reload its settings from disk:
+
+#+begin_example
+# herd reload transmission-daemon
+#+end_example
+
+The full set of available configuration settings is defined by the =transmission-daemon-configuration= data type.
+
+- Data Type: *transmission-daemon-configuration* [[#index-transmission_002ddaemon_002dconfiguration][¶]] :: The data type representing configuration settings for Transmission Daemon. These correspond directly to the settings recognized by Transmission clients in their =settings.json= file.
+
+Available =transmission-daemon-configuration= fields are:
+
+- =transmission-daemon-configuration= parameter: =package= *transmission* [[#index-transmission][¶]] :: The Transmission package to use.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *stop-wait-period* [[#index-stop_002dwait_002dperiod][¶]] :: The period, in seconds, to wait when stopping the service for =transmission-daemon= to exit before killing its process. This allows the daemon time to complete its housekeeping and send a final update to trackers as it shuts down. On slow hosts, or hosts with a slow network connection, this value may need to be increased.
+
+  Defaults to ‘=10='.
+
+- =transmission-daemon-configuration= parameter: =string= *download-dir* [[#index-download_002ddir][¶]] :: The directory to which torrent files are downloaded.
+
+  Defaults to ‘="/var/lib/transmission-daemon/downloads"='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *incomplete-dir-enabled?* [[#index-incomplete_002ddir_002denabled_003f][¶]] :: If =#t=, files will be held in =incomplete-dir= while their torrent is being downloaded, then moved to =download-dir= once the torrent is complete. Otherwise, files for all torrents (including those still being downloaded) will be placed in =download-dir=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =maybe-string= *incomplete-dir* [[#index-incomplete_002ddir][¶]] :: The directory in which files from incompletely downloaded torrents will be held when =incomplete-dir-enabled?= is =#t=.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =umask= *umask* [[#index-umask][¶]] :: The file mode creation mask used for downloaded files. (See the =umask= man page for more information.)
+
+  Defaults to ‘=18='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *rename-partial-files?* [[#index-rename_002dpartial_002dfiles_003f][¶]] :: When =#t=, “.part” is appended to the name of partially downloaded files.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =preallocation-mode= *preallocation* [[#index-preallocation][¶]] :: The mode by which space should be preallocated for downloaded files, one of =none=, =fast= (or =sparse=) and =full=. Specifying =full= will minimize disk fragmentation at a cost to file-creation speed.
+
+  Defaults to ‘=fast='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *watch-dir-enabled?* [[#index-watch_002ddir_002denabled_003f][¶]] :: If =#t=, the directory specified by =watch-dir= will be watched for new =.torrent= files and the torrents they describe added automatically (and the original files removed, if =trash-original-torrent-files?= is =#t=).
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =maybe-string= *watch-dir* [[#index-watch_002ddir][¶]] :: The directory to be watched for =.torrent= files indicating new torrents to be added, when =watch-dir-enabled= is =#t=.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *trash-original-torrent-files?* [[#index-trash_002doriginal_002dtorrent_002dfiles_003f][¶]] :: When =#t=, =.torrent= files will be deleted from the watch directory once their torrent has been added (see =watch-directory-enabled?=).
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *speed-limit-down-enabled?* [[#index-speed_002dlimit_002ddown_002denabled_003f][¶]] :: When =#t=, the daemon's download speed will be limited to the rate specified by =speed-limit-down=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *speed-limit-down* [[#index-speed_002dlimit_002ddown][¶]] :: The default global-maximum download speed, in kilobytes per second.
+
+  Defaults to ‘=100='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *speed-limit-up-enabled?* [[#index-speed_002dlimit_002dup_002denabled_003f][¶]] :: When =#t=, the daemon's upload speed will be limited to the rate specified by =speed-limit-up=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *speed-limit-up* [[#index-speed_002dlimit_002dup][¶]] :: The default global-maximum upload speed, in kilobytes per second.
+
+  Defaults to ‘=100='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *alt-speed-enabled?* [[#index-alt_002dspeed_002denabled_003f][¶]] :: When =#t=, the alternate speed limits =alt-speed-down= and =alt-speed-up= are used (in place of =speed-limit-down= and =speed-limit-up=, if they are enabled) to constrain the daemon's bandwidth usage. This can be scheduled to occur automatically at certain times during the week; see =alt-speed-time-enabled?=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *alt-speed-down* [[#index-alt_002dspeed_002ddown][¶]] :: The alternate global-maximum download speed, in kilobytes per second.
+
+  Defaults to ‘=50='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *alt-speed-up* [[#index-alt_002dspeed_002dup][¶]] :: The alternate global-maximum upload speed, in kilobytes per second.
+
+  Defaults to ‘=50='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *alt-speed-time-enabled?* [[#index-alt_002dspeed_002dtime_002denabled_003f][¶]] :: When =#t=, the alternate speed limits =alt-speed-down= and =alt-speed-up= will be enabled automatically during the periods specified by =alt-speed-time-day=, =alt-speed-time-begin= and =alt-time-speed-end=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =day-list= *alt-speed-time-day* [[#index-alt_002dspeed_002dtime_002dday][¶]] :: The days of the week on which the alternate-speed schedule should be used, specified either as a list of days (=sunday=, =monday=, and so on) or using one of the symbols =weekdays=, =weekends= or =all=.
+
+  Defaults to ‘=all='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *alt-speed-time-begin* [[#index-alt_002dspeed_002dtime_002dbegin][¶]] :: The time of day at which to enable the alternate speed limits, expressed as a number of minutes since midnight.
+
+  Defaults to ‘=540='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *alt-speed-time-end* [[#index-alt_002dspeed_002dtime_002dend][¶]] :: The time of day at which to disable the alternate speed limits, expressed as a number of minutes since midnight.
+
+  Defaults to ‘=1020='.
+
+- =transmission-daemon-configuration= parameter: =string= *bind-address-ipv4* [[#index-bind_002daddress_002dipv4][¶]] :: The IP address at which to listen for peer connections, or “0.0.0.0” to listen at all available IP addresses.
+
+  Defaults to ‘="0.0.0.0"='.
+
+- =transmission-daemon-configuration= parameter: =string= *bind-address-ipv6* [[#index-bind_002daddress_002dipv6][¶]] :: The IPv6 address at which to listen for peer connections, or “::” to listen at all available IPv6 addresses.
+
+  Defaults to ‘="::"='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *peer-port-random-on-start?* [[#index-peer_002dport_002drandom_002don_002dstart_003f][¶]] :: If =#t=, when the daemon starts it will select a port at random on which to listen for peer connections, from the range specified (inclusively) by =peer-port-random-low= and =peer-port-random-high=. Otherwise, it listens on the port specified by =peer-port=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =port-number= *peer-port-random-low* [[#index-peer_002dport_002drandom_002dlow][¶]] :: The lowest selectable port number when =peer-port-random-on-start?= is =#t=.
+
+  Defaults to ‘=49152='.
+
+- =transmission-daemon-configuration= parameter: =port-number= *peer-port-random-high* [[#index-peer_002dport_002drandom_002dhigh][¶]] :: The highest selectable port number when =peer-port-random-on-start= is =#t=.
+
+  Defaults to ‘=65535='.
+
+- =transmission-daemon-configuration= parameter: =port-number= *peer-port* [[#index-peer_002dport][¶]] :: The port on which to listen for peer connections when =peer-port-random-on-start?= is =#f=.
+
+  Defaults to ‘=51413='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *port-forwarding-enabled?* [[#index-port_002dforwarding_002denabled_003f][¶]] :: If =#t=, the daemon will attempt to configure port-forwarding on an upstream gateway automatically using UPnP and NAT-PMP.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =encryption-mode= *encryption* [[#index-encryption][¶]] :: The encryption preference for peer connections, one of =prefer-unencrypted-connections=, =prefer-encrypted-connections= or =require-encrypted-connections=.
+
+  Defaults to ‘=prefer-encrypted-connections='.
+
+- =transmission-daemon-configuration= parameter: =maybe-string= *peer-congestion-algorithm* [[#index-peer_002dcongestion_002dalgorithm][¶]] :: The TCP congestion-control algorithm to use for peer connections, specified using a string recognized by the operating system in calls to =setsockopt=. When left unspecified, the operating-system default is used.
+
+  Note that on GNU/Linux systems, the kernel must be configured to allow processes to use a congestion-control algorithm not in the default set; otherwise, it will deny these requests with “Operation not permitted”. To see which algorithms are available on your system and which are currently permitted for use, look at the contents of the files =tcp_available_congestion_control= and =tcp_allowed_congestion_control= in the =/proc/sys/net/ipv4= directory.
+
+  As an example, to have Transmission Daemon use [[http://www-ece.rice.edu/networks/TCP-LP/][the TCP Low Priority congestion-control algorithm]], you'll need to modify your kernel configuration to build in support for the algorithm, then update your operating-system configuration to allow its use by adding a =sysctl-service-type= service (or updating the existing one's configuration) with lines like the following:
+
+  #+begin_src lisp
+  (service sysctl-service-type
+           (sysctl-configuration
+            (settings
+             ("net.ipv4.tcp_allowed_congestion_control" .
+              "reno cubic lp"))))
+  #+end_src
+
+  The Transmission Daemon configuration can then be updated with
+
+  #+begin_src lisp
+  (peer-congestion-algorithm "lp")
+  #+end_src
+
+  and the system reconfigured to have the changes take effect.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =tcp-type-of-service= *peer-socket-tos* [[#index-peer_002dsocket_002dtos][¶]] :: The type of service to request in outgoing TCP packets, one of =default=, =low-cost=, =throughput=, =low-delay= and =reliability=.
+
+  Defaults to ‘=default='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *peer-limit-global* [[#index-peer_002dlimit_002dglobal][¶]] :: The global limit on the number of connected peers.
+
+  Defaults to ‘=200='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *peer-limit-per-torrent* [[#index-peer_002dlimit_002dper_002dtorrent][¶]] :: The per-torrent limit on the number of connected peers.
+
+  Defaults to ‘=50='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *upload-slots-per-torrent* [[#index-upload_002dslots_002dper_002dtorrent][¶]] :: The maximum number of peers to which the daemon will upload data simultaneously for each torrent.
+
+  Defaults to ‘=14='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *peer-id-ttl-hours* [[#index-peer_002did_002dttl_002dhours][¶]] :: The maximum lifespan, in hours, of the peer ID associated with each public torrent before it is regenerated.
+
+  Defaults to ‘=6='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *blocklist-enabled?* [[#index-blocklist_002denabled_003f][¶]] :: When =#t=, the daemon will ignore peers mentioned in the blocklist it has most recently downloaded from =blocklist-url=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =maybe-string= *blocklist-url* [[#index-blocklist_002durl][¶]] :: The URL of a peer blocklist (in P2P-plaintext or eMule =.dat= format) to be periodically downloaded and applied when =blocklist-enabled?= is =#t=.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *download-queue-enabled?* [[#index-download_002dqueue_002denabled_003f][¶]] :: If =#t=, the daemon will be limited to downloading at most =download-queue-size= non-stalled torrents simultaneously.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *download-queue-size* [[#index-download_002dqueue_002dsize][¶]] :: The size of the daemon's download queue, which limits the number of non-stalled torrents it will download at any one time when =download-queue-enabled?= is =#t=.
+
+  Defaults to ‘=5='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *seed-queue-enabled?* [[#index-seed_002dqueue_002denabled_003f][¶]] :: If =#t=, the daemon will be limited to seeding at most =seed-queue-size= non-stalled torrents simultaneously.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *seed-queue-size* [[#index-seed_002dqueue_002dsize][¶]] :: The size of the daemon's seed queue, which limits the number of non-stalled torrents it will seed at any one time when =seed-queue-enabled?= is =#t=.
+
+  Defaults to ‘=10='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *queue-stalled-enabled?* [[#index-queue_002dstalled_002denabled_003f][¶]] :: When =#t=, the daemon will consider torrents for which it has not shared data in the past =queue-stalled-minutes= minutes to be stalled and not count them against its =download-queue-size= and =seed-queue-size= limits.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *queue-stalled-minutes* [[#index-queue_002dstalled_002dminutes][¶]] :: The maximum period, in minutes, a torrent may be idle before it is considered to be stalled, when =queue-stalled-enabled?= is =#t=.
+
+  Defaults to ‘=30='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *ratio-limit-enabled?* [[#index-ratio_002dlimit_002denabled_003f][¶]] :: When =#t=, a torrent being seeded will automatically be paused once it reaches the ratio specified by =ratio-limit=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-rational= *ratio-limit* [[#index-ratio_002dlimit][¶]] :: The ratio at which a torrent being seeded will be paused, when =ratio-limit-enabled?= is =#t=.
+
+  Defaults to ‘=2.0='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *idle-seeding-limit-enabled?* [[#index-idle_002dseeding_002dlimit_002denabled_003f][¶]] :: When =#t=, a torrent being seeded will automatically be paused once it has been idle for =idle-seeding-limit= minutes.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *idle-seeding-limit* [[#index-idle_002dseeding_002dlimit][¶]] :: The maximum period, in minutes, a torrent being seeded may be idle before it is paused, when =idle-seeding-limit-enabled?= is =#t=.
+
+  Defaults to ‘=30='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *dht-enabled?* [[#index-dht_002denabled_003f][¶]] :: Enable [[http://bittorrent.org/beps/bep_0005.html][the distributed hash table (DHT) protocol]], which supports the use of trackerless torrents.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *lpd-enabled?* [[#index-lpd_002denabled_003f][¶]] :: Enable [[https://en.wikipedia.org/wiki/Local_Peer_Discovery][local peer discovery]] (LPD), which allows the discovery of peers on the local network and may reduce the amount of data sent over the public Internet.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *pex-enabled?* [[#index-pex_002denabled_003f][¶]] :: Enable [[https://en.wikipedia.org/wiki/Peer_exchange][peer exchange]] (PEX), which reduces the daemon's reliance on external trackers and may improve its performance.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *utp-enabled?* [[#index-utp_002denabled_003f][¶]] :: Enable [[http://bittorrent.org/beps/bep_0029.html][the micro transport protocol]] (uTP), which aims to reduce the impact of BitTorrent traffic on other users of the local network while maintaining full utilization of the available bandwidth.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *rpc-enabled?* [[#index-rpc_002denabled_003f][¶]] :: If =#t=, enable the remote procedure call (RPC) interface, which allows remote control of the daemon via its Web interface, the =transmission-remote= command-line client, and similar tools.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =string= *rpc-bind-address* [[#index-rpc_002dbind_002daddress][¶]] :: The IP address at which to listen for RPC connections, or “0.0.0.0” to listen at all available IP addresses.
+
+  Defaults to ‘="0.0.0.0"='.
+
+- =transmission-daemon-configuration= parameter: =port-number= *rpc-port* [[#index-rpc_002dport][¶]] :: The port on which to listen for RPC connections.
+
+  Defaults to ‘=9091='.
+
+- =transmission-daemon-configuration= parameter: =string= *rpc-url* [[#index-rpc_002durl][¶]] :: The path prefix to use in the RPC-endpoint URL.
+
+  Defaults to ‘="/transmission/"='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *rpc-authentication-required?* [[#index-rpc_002dauthentication_002drequired_003f][¶]] :: When =#t=, clients must authenticate (see =rpc-username= and =rpc-password=) when using the RPC interface. Note this has the side effect of disabling host-name whitelisting (see =rpc-host-whitelist-enabled?=.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =maybe-string= *rpc-username* [[#index-rpc_002dusername][¶]] :: The username required by clients to access the RPC interface when =rpc-authentication-required?= is =#t=.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =maybe-transmission-password-hash= *rpc-password* [[#index-rpc_002dpassword][¶]] :: The password required by clients to access the RPC interface when =rpc-authentication-required?= is =#t=. This must be specified using a password hash in the format recognized by Transmission clients, either copied from an existing =settings.json= file or generated using the =transmission-password-hash= procedure.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *rpc-whitelist-enabled?* [[#index-rpc_002dwhitelist_002denabled_003f][¶]] :: When =#t=, RPC requests will be accepted only when they originate from an address specified in =rpc-whitelist=.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =string-list= *rpc-whitelist* [[#index-rpc_002dwhitelist][¶]] :: The list of IP and IPv6 addresses from which RPC requests will be accepted when =rpc-whitelist-enabled?= is =#t=. Wildcards may be specified using ‘=*='.
+
+  Defaults to ‘='("127.0.0.1" "::1")='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *rpc-host-whitelist-enabled?* [[#index-rpc_002dhost_002dwhitelist_002denabled_003f][¶]] :: When =#t=, RPC requests will be accepted only when they are addressed to a host named in =rpc-host-whitelist=. Note that requests to “localhost” or “localhost.”, or to a numeric address, are always accepted regardless of these settings.
+
+  Note also this functionality is disabled when =rpc-authentication-required?= is =#t=.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =string-list= *rpc-host-whitelist* [[#index-rpc_002dhost_002dwhitelist][¶]] :: The list of host names recognized by the RPC server when =rpc-host-whitelist-enabled?= is =#t=.
+
+  Defaults to ‘='()='.
+
+- =transmission-daemon-configuration= parameter: =message-level= *message-level* [[#index-message_002dlevel][¶]] :: The minimum severity level of messages to be logged (to =/var/log/transmission.log=) by the daemon, one of =none= (no logging), =error=, =info= and =debug=.
+
+  Defaults to ‘=info='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *start-added-torrents?* [[#index-start_002dadded_002dtorrents_003f][¶]] :: When =#t=, torrents are started as soon as they are added; otherwise, they are added in “paused” state.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *script-torrent-done-enabled?* [[#index-script_002dtorrent_002ddone_002denabled_003f][¶]] :: When =#t=, the script specified by =script-torrent-done-filename= will be invoked each time a torrent completes.
+
+  Defaults to ‘=#f='.
+
+- =transmission-daemon-configuration= parameter: =maybe-file-object= *script-torrent-done-filename* [[#index-script_002dtorrent_002ddone_002dfilename][¶]] :: A file name or file-like object specifying a script to run each time a torrent completes, when =script-torrent-done-enabled?= is =#t=.
+
+  Defaults to ‘=disabled='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *scrape-paused-torrents-enabled?* [[#index-scrape_002dpaused_002dtorrents_002denabled_003f][¶]] :: When =#t=, the daemon will scrape trackers for a torrent even when the torrent is paused.
+
+  Defaults to ‘=#t='.
+
+- =transmission-daemon-configuration= parameter: =non-negative-integer= *cache-size-mb* [[#index-cache_002dsize_002dmb][¶]] :: The amount of memory, in megabytes, to allocate for the daemon's in-memory cache. A larger value may increase performance by reducing the frequency of disk I/O.
+
+  Defaults to ‘=4='.
+
+- =transmission-daemon-configuration= parameter: =boolean= *prefetch-enabled?* [[#index-prefetch_002denabled_003f][¶]] :: When =#t=, the daemon will try to improve I/O performance by hinting to the operating system which data is likely to be read next from disk to satisfy requests from peers.
+
+  Defaults to ‘=#t='.
+
+--------------
+
+Next: [[id:guix--Monitoring-Services][Monitoring Services]], Previous: [[id:guix--Telephony-Services][Telephony Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

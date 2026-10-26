@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--CDLaTeX-mode
+:END:
+#+filetags: :org:
+#+title: CDLaTeX mode (The Org Manual)
+
+Next:
+
+<<CDLaTeX-mode>>
+Previous: [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 12.5.3 Using CDLaTeX to enter math [[#Using-CDLaTeX-to-enter-math][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-CDLaTeX-to-enter-math
+:CLASS: subsection
+:END:
+CDLaTeX mode is a minor mode that is normally used in combination with a major LaTeX mode like AUCTeX in order to speed-up insertion of environments and math templates. Inside Org mode, you can make use of some of the features of CDLaTeX mode. You need to install ‘=cdlatex.el=' and ‘=texmathp.el=' (the latter comes also with AUCTeX). The ‘=cdlatex=' package can be installed from [[https://elpa.nongnu.org/nongnu/cdlatex.html][NonGNU ELPA]] with the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html][Emacs packaging system]]. Do not use CDLaTeX mode itself under Org mode, but use the special version Org CDLaTeX minor mode that comes as part of Org. Turn it on for the current buffer with M-x org-cdlatex-mode, or for all Org files with
+
+#+begin_src lisp-preformatted
+(add-hook 'org-mode-hook #'turn-on-org-cdlatex)
+#+end_src
+
+When this mode is enabled, the following features are present (for more details see the documentation of CDLaTeX mode):
+
+- <<index-C_002dc-_007b-1>>C-c { [[#index-C_002dc-_007b-1][¶]] :: Insert an environment template.
+
+- <<index-TAB-7>>TAB [[#index-TAB-7][¶]] :: The TAB key expands the template if point is inside a LaTeX fragment[[#FOOT116][^{116}]]. For example, TAB expands ‘=fr=' to ‘=\frac{}{}=' and position point correctly inside the first brace. Another TAB gets you into the second brace.
+
+  Even outside fragments, TAB expands environment abbreviations at the beginning of a line. For example, if you write ‘=equ=' at the beginning of a line and press TAB, this abbreviation is expanded to an ‘=equation=' environment. To get a list of all abbreviations, type M-x cdlatex-command-help.
+
+-  <<index-_005f>>^, _ [[#index-_005f][¶]] :: Pressing _ and ^ inside a LaTeX fragment inserts these characters together with a pair of braces. If you use TAB to move out of the braces, and if the braces surround only a single character or macro, they are removed again (depending on the variable =cdlatex-simplify-sub-super-scripts=).
+
+- <<index-_0060>>` [[#index-_0060][¶]] :: Pressing the backquote followed by a character inserts math macros, also outside LaTeX fragments. If you wait more than 1.5 seconds after the backquote, a help window pops up.
+
+- <<index-_0027>>' [[#index-_0027][¶]] :: Pressing the single-quote followed by another character modifies the LaTeX symbol before point with an accent or a font. If you wait more than 1.5 seconds after the single-quote, a help window pops up. Character modification works only inside LaTeX fragments; outside the quote is normal.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF116][(116)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Org mode has a method to test if point is inside such a fragment, see the documentation of the function =org-inside-LaTeX-fragment-p=.
+
+--------------
+
+Previous: [[id:org--Previewing-LaTeX-fragments][Previewing LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

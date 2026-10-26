@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID: guix--Configuring-the-Shell
+:END:
+#+filetags: :guix:
+#+title: Configuring the Shell
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Configuring-the-Shell>>
+Next: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 13.2 Configuring the Shell [[#Configuring-the-Shell-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Configuring-the-Shell-1
+:CLASS: section
+:END:
+This section is safe to skip if your shell or shells are managed by Guix Home. Otherwise, read it carefully.
+
+There are a few scripts that must be evaluated by a login shell to activate the home environment. The shell startup files only read by login shells often have =profile= suffix. For more information about login shells see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Invoking-Bash.html#Invoking-Bash][Invoking Bash]] in The GNU Bash Reference Manual and see [[https://doc.guix.gnu.org/bash/latest/en/html_node/Bash-Startup-Files.html#Bash-Startup-Files][Bash Startup Files]] in The GNU Bash Reference Manual.
+
+The first script that needs to be sourced is =setup-environment=, which sets all the necessary environment variables (including variables declared by the user) and the second one is =on-first-login=, which starts Shepherd for the current user and performs actions declared by other home services that extends =home-run-on-first-login-service-type=.
+
+Guix Home will always create =~/.profile=, which contains the following lines:
+
+#+begin_example
+HOME_ENVIRONMENT=$HOME/.guix-home
+. $HOME_ENVIRONMENT/setup-environment
+$HOME_ENVIRONMENT/on-first-login
+#+end_example
+
+This makes POSIX compliant login shells activate the home environment. However, in most cases this file won't be read by most modern shells, because they are run in non POSIX mode by default and have their own =*profile= startup files. For example Bash will prefer =~/.bash_profile= in case it exists and only if it doesn't will it fallback to =~/.profile=. Zsh (if no additional options are specified) will ignore =~/.profile=, even if =~/.zprofile= doesn't exist.
+
+To make your shell respect =~/.profile=, add =. ~/.profile= or =source ~/.profile= to the startup file for the login shell. In case of Bash, it is =~/.bash_profile=, and in case of Zsh, it is =~/.zprofile=.
+
+#+begin_quote
+*Note:* This step is only required if your shell is /not/ managed by Guix Home. Otherwise, everything will be done automatically.
+
+#+end_quote
+
+--------------
+
+Next: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Previous: [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

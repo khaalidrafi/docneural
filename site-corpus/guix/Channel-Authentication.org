@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID: guix--Channel-Authentication
+:END:
+#+filetags: :guix:
+#+title: Channel Authentication
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Channel-Authentication>>
+Next: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Previous: [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.6 Channel Authentication [[#Channel-Authentication-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Channel-Authentication-1
+:CLASS: section
+:END:
+The =guix pull= and =guix time-machine= commands /authenticate/ the code retrieved from channels: they make sure each commit that is fetched is signed by an authorized developer. The goal is to protect from unauthorized modifications to the channel that would lead users to run malicious code.
+
+As a user, you must provide a /channel introduction/ in your channels file so that Guix knows how to authenticate its first commit. A channel specification, including its introduction, looks something along these lines:
+
+#+begin_src lisp
+(channel
+  (name 'some-channel)
+  (url "https://example.org/some-channel.git")
+  (introduction
+   (make-channel-introduction
+    "6f0d8cc0d88abb59c324b2990bfee2876016bb86"
+    (openpgp-fingerprint
+     "CABB A931 C0FF EEC6 900D  0CFB 090B 1199 3D9A EBB5"))))
+#+end_src
+
+The specification above shows the name and URL of the channel. The call to =make-channel-introduction= above specifies that authentication of this channel starts at commit =6f0d8cc…=, which is signed by the OpenPGP key with fingerprint =CABB A931…=.
+
+For the main channel, called =guix=, you automatically get that information from your Guix installation. For other channels, include the channel introduction provided by the channel authors in your =channels.scm= file. Make sure you retrieve the channel introduction from a trusted source since that is the root of your trust.
+
+If you're curious about the authentication mechanics, read on!
+
+--------------
+
+Next: [[id:guix--Channels-with-Substitutes][Channels with Substitutes]], Previous: [[id:guix--Customizing-the-System_002dWide-Guix][Customizing the System-Wide Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

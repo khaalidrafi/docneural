@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID: org--Moving-subtrees
+:END:
+#+filetags: :org:
+#+title: Moving subtrees (The Org Manual)
+
+Next:
+
+<<Moving-subtrees>>
+Next: [[id:org--Internal-archiving][Internal archiving]], Up: [[id:org--Archiving][Archiving]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 9.2.1 Moving a tree to an archive file [[#Moving-a-tree-to-an-archive-file][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Moving-a-tree-to-an-archive-file
+:CLASS: subsection
+:END:
+The most common archiving action is to move a project tree to another file, called the archive file.
+
+-  <<index-C_002dc-C_002dx-C_002ds>>C-c C-x C-s or short C-c $ (=org-archive-subtree=) [[#index-C_002dc-C_002dx-C_002ds][¶]] :: Archive the subtree starting at point position to the location given by =org-archive-location=.
+
+- <<index-C_002du-C_002dc-C_002dx-C_002ds>>C-u C-c C-x C-s [[#index-C_002du-C_002dc-C_002dx-C_002ds][¶]] :: Check if any direct children of the current headline could be moved to the archive. To do this, check each subtree for open TODO entries. If none is found, the command offers to move it to the archive location. If point is /not/ on a headline when this command is invoked, check level 1 trees.
+
+- <<index-C_002du-C_002du-C_002dc-C_002dx-C_002ds>>C-u C-u C-c C-x C-s [[#index-C_002du-C_002du-C_002dc-C_002dx-C_002ds][¶]] :: As above, but check subtree for timestamps instead of TODO entries. The command offers to archive the subtree if it /does/ contain a timestamp, and that timestamp is in the past.
+
+The default archive location is a file in the same directory as the current file, with the name derived by appending ‘=_archive=' to the current file name. You can also choose what heading to file archived items under, with the possibility to add them to a datetree in a file. For information and examples on how to specify the file and the heading, see the documentation string of the variable =org-archive-location=.
+
+There is also an in-buffer option for setting this variable, for example:
+
+#+begin_example
+#+ARCHIVE: %s_done::
+#+end_example
+
+If you would like to have a special archive location for a single entry or a (sub)tree, give the entry an ‘=ARCHIVE=' property with the location as the value (see [[id:org--Properties-and-Columns][Properties and Columns]]).
+
+When a subtree is moved, it receives a number of special properties that record context information like the file from where the entry came, its outline path, the archiving time etc. Configure the variable =org-archive-save-context-info= to adjust the amount of information added.
+
+When =org-archive-subtree-save-file-p= is non-=nil=, save the target archive buffer.
+
+--------------
+
+Next: [[id:org--Internal-archiving][Internal archiving]], Up: [[id:org--Archiving][Archiving]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

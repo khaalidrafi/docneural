@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Capture
+:END:
+#+filetags: :org:
+#+title: Capture (The Org Manual)
+
+Next:
+
+<<Capture>>
+Next: [[id:org--Attachments][Attachments]], Up: [[id:org--Capture-and-Attachments][Capture and Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 10.1 Capture [[#Capture-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Capture-1
+:CLASS: section
+:END:
+Capture lets you quickly store notes with little interruption of your work flow. Org's method for capturing new items is heavily inspired by John Wiegley's excellent Remember package.
+
+- [[id:org--Setting-up-capture][Setting up capture]]
+- [[id:org--Using-capture][Using capture]]
+- [[id:org--Capture-templates][Capture templates]]

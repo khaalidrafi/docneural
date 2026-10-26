@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID: org--Publishing-links
+:END:
+#+filetags: :org:
+#+title: Publishing links (The Org Manual)
+
+Next:
+
+<<Publishing-links>>
+Next: [[id:org--Site-map][Generating a sitemap]], Previous: [[id:org--Publishing-options][Options for the exporters]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 14.1.6 Publishing links [[#Publishing-links-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Publishing-links-1
+:CLASS: subsection
+:END:
+To create a link from one Org file to another, you would use something like ‘=[[file:foo.org][The foo]]=' or simply ‘=[[file:foo.org]]=' (see [[id:org--External-Links][External Links]]). When published, this link becomes a link to ‘=foo.html='. You can thus interlink the pages of your “Org web” project and the links will work as expected when you publish them to HTML. If you also publish the Org source file and want to link to it, use an ‘=http=' link instead of a ‘=file:=' link, because ‘=file=' links are converted to link to the corresponding ‘=.html=' file.
+
+Links to encrypted Org files, like ‘=[[file:foo.org.gpg]]=' are also supported.
+
+You may also link to related files, such as images. Provided you are careful with relative file names, and provided you have also configured Org to upload the related files, these links will work too. See [[id:org--Complex-example][Example: complex publishing configuration]], for an example of this usage.
+
+Links between published documents can contain some search options (see [[id:org--Search-Options][Search Options in File Links]]), which will be resolved to the appropriate location in the linked file. For example, once published to HTML, the following links all point to a dedicated anchor in ‘=foo.html='.
+
+#+begin_example
+[[file:foo.org::*heading]]
+[[file:foo.org::#custom-id]]
+[[file:foo.org::target]]
+#+end_example
+
+--------------
+
+Next: [[id:org--Site-map][Generating a sitemap]], Previous: [[id:org--Publishing-options][Options for the exporters]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

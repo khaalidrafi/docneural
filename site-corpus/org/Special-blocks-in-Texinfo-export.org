@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID: org--Special-blocks-in-Texinfo-export
+:END:
+#+filetags: :org:
+#+title: Special blocks in Texinfo export (The Org Manual)
+
+Next:
+
+<<Special-blocks-in-Texinfo-export>>
+Next: [[id:org--A-Texinfo-example][A Texinfo example]], Previous: [[id:org--Key-bindings-in-Texinfo-export][Key bindings in Texinfo export]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.14 Special blocks in Texinfo export [[#Special-blocks-in-Texinfo-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Special-blocks-in-Texinfo-export-1
+:CLASS: subsection
+:END:
+The Texinfo export backend supports two approaches to writing Texinfo definition commands. One of them is described here, the other in [[id:org--Plain-lists-in-Texinfo-export][Plain lists in Texinfo export]].
+
+The Texinfo export backend converts special blocks to commands with the same name. It also adds any ‘=:options=' attributes to the end of the command, as shown in this example:
+
+#+begin_example
+#+ATTR_TEXINFO: :options org-org-export-to-org ...
+#+BEGIN_defun
+  A somewhat obsessive function name.
+#+end_example
+#+end_src
+
+becomes
+
+#+begin_example
+@defun org-org-export-to-org ...
+  A somewhat obsessive function name.
+@end defun
+#+end_example

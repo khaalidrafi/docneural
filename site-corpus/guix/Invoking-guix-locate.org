@@ -1,0 +1,123 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-locate
+:END:
+#+filetags: :guix:
+#+title: Invoking guix locate
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-locate>>
+Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 5.5 Invoking =guix locate= [[#Invoking-guix-locate-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-locate-1
+:CLASS: section
+:END:
+There's so much free software out there that sooner or later, you will need to search for packages. The =guix search= command that we've seen before (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]) lets you search by keywords:
+
+#+begin_example
+guix search video editor
+#+end_example
+
+Sometimes, you instead want to find which package provides a given file, and this is where =guix locate= comes in. Here is how you can find which package provides the =ls= command:
+
+#+begin_example
+$ guix locate ls
+coreutils@9.1       /gnu/store/...-coreutils-9.1/bin/ls
+#+end_example
+
+Of course the command works for any file, not just commands:
+
+#+begin_example
+$ guix locate unistr.h
+icu4c@71.1          /gnu/store/.../include/unicode/unistr.h
+libunistring@1.0    /gnu/store/.../include/unistr.h
+#+end_example
+
+You may also specify /glob patterns/ with wildcards. For example, here is how you would search for packages providing =.service= files:
+
+#+begin_example
+$ guix locate -g '*.service'
+man-db@2.11.1        .../lib/systemd/system/man-db.service
+wpa-supplicant@2.10  .../system-services/fi.w1.wpa_supplicant1.service
+#+end_example
+
+The =guix locate= command relies on a database that maps file names to package names. By default, it automatically creates that database if it does not exist yet by traversing packages available /locally/, which can take a few minutes (depending on the size of your store and the speed of your storage device).
+
+#+begin_quote
+*Note:* For now, =guix locate= builds its database based on purely local knowledge---meaning that you will not find packages that never reached your store. Eventually it will support downloading a pre-built database so you can potentially find more packages.
+
+#+end_quote
+
+By default, =guix locate= first tries to look for a system-wide database, usually under =/var/cache/guix/locate=; if it does not exist or is too old, it falls back to the per-user database, by default under =~/.cache/guix/locate=. On a multi-user system, administrators may want to periodically update the system-wide database so that all users can benefit from it, for instance by setting up =package-database-service-type= (see [[id:guix--File-Search-Services][=package-database-service-type=]]).
+
+The general syntax is:
+
+#+begin_example
+guix locate [options...] file...
+#+end_example
+
+... where =file= is the name of a file to search for (specifically, the “base name” of the file: files whose parent directories are called =file= are not matched).
+
+The available options are as follows:
+
+- =--glob=\\
+  =-g= :: Interpret =file=... as /glob patterns/---patterns that may include wildcards, such as ‘=*.scm=' to denote all files ending in ‘=.scm='.
+
+- =--stats= :: Display database statistics.
+
+- =--update=\\
+  =-u= :: Update the file database.
+
+  By default, the database is automatically updated when it is too old.
+
+- =--clear= :: Clear the database and re-populate it.
+
+  This option lets you start anew, ensuring old data is removed from the database, which also avoids having an endlessly growing database. By default =guix locate= automatically does that periodically, though infrequently.
+
+- =--database===file= :: Use =file= as the database, creating it if necessary.
+
+  By default, =guix locate= picks the database under =~/.cache/guix= or =/var/cache/guix=, whichever is the most recent one.
+
+- =--method===method=\\
+  =-m ==method= :: Use =method= to select the set of packages to index. Possible values are:
+
+  - =manifests= :: This is the default method: it works by traversing profiles on the machine and recording packages it encounters---packages you or other users of the machine installed, directly or indirectly. It is fast but it can miss other packages available in the store but not referred to by any profile.
+
+  - =store= :: This is a slower but more exhaustive method: it checks among all the existing packages those that are available in the store and records them.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Previous: [[id:guix--Packages-with-Multiple-Outputs][Packages with Multiple Outputs]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID: emacs--Gnus-Summary-Buffer
+:END:
+#+filetags: :emacs:
+#+title: Gnus Summary Buffer
+
+Next:   Previous: [[id:emacs--Gnus-Group-Buffer][Using the Gnus Group Buffer]]   Up: [[id:emacs--Gnus][Email and Usenet News with Gnus]]
+
+<<Gnus-Summary-Buffer>>
+*** 36.4 Using the Gnus Summary Buffer [[#Using-the-Gnus-Summary-Buffer][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-the-Gnus-Summary-Buffer
+:CLASS: section subsection-level-set-section
+:END:
+The following commands are available in the Gnus summary buffer:
+
+-  <<index-SPC-_0028Gnus-Summary-mode_0029>>SPC [[#index-SPC-_0028Gnus-Summary-mode_0029][¶]] :: If there is no article selected, select the article on the current line and display its article buffer. Otherwise, try scrolling the selected article buffer in its window; on reaching the end of the buffer, select the next unread article (=gnus-summary-next-page=).
+
+  Thus, you can read through all articles by repeatedly typing SPC.
+
+-  <<index-DEL-_0028Gnus-Summary-mode_0029>>DEL [[#index-DEL-_0028Gnus-Summary-mode_0029][¶]] :: Scroll the text of the article backwards (=gnus-summary-prev-page=).
+
+-  <<index-n-_0028Gnus-Summary-mode_0029>>n [[#index-n-_0028Gnus-Summary-mode_0029][¶]] :: Select the next unread article (=gnus-summary-next-unread-article=).
+
+-  <<index-p-_0028Gnus-Summary-mode_0029>>p [[#index-p-_0028Gnus-Summary-mode_0029][¶]] :: Select the previous unread article (=gnus-summary-prev-unread-article=).
+
+-  <<index-s-_0028Gnus-Summary-mode_0029>>s [[#index-s-_0028Gnus-Summary-mode_0029][¶]] :: Do an incremental search on the selected article buffer (=gnus-summary-isearch-article=), as if you switched to the buffer and typed C-s (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]).
+
+-  <<index-M_002ds-M_002ds-_0028Gnus-Summary-mode_0029>>M-s M-s =regexp= RET [[#index-M_002ds-M_002ds-_0028Gnus-Summary-mode_0029][¶]] :: Search forward for articles containing a match for =regexp= (=gnus-summary-search-article-forward=).
+
+-  <<index-M_002ds-M_002dr-_0028Gnus-Summary-mode_0029>>M-r =regexp= RET [[#index-M_002ds-M_002dr-_0028Gnus-Summary-mode_0029][¶]] :: Search back for articles containing a match for =regexp= (=gnus-summary-search-article-backward=).
+
+- <<index-q-_0028Gnus-Summary-mode_0029>>q [[#index-q-_0028Gnus-Summary-mode_0029][¶]] :: Exit the summary buffer and return to the group buffer (=gnus-summary-exit=).
+
+--------------

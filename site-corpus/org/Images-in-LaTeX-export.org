@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID: org--Images-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Images in LaTeX export (The Org Manual)
+
+Next:
+
+<<Images-in-LaTeX-export>>
+Next: [[id:org--Plain-lists-in-LaTeX-export][Plain lists in LaTeX export]], Previous: [[id:org--Tables-in-LaTeX-export][Tables in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.6 Images in LaTeX export [[#Images-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Images-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend processes image links in Org files that do not have descriptions, such as these links ‘=[[file:img.jpg]]=' or ‘=[[./img.jpg]]=', as direct image insertions in the final PDF output. In the PDF, they are no longer links, but actual images embedded on the page. The LaTeX export backend uses ‘=\includegraphics=' macro to insert the image. But for TikZ ([[https://sourceforge.net/projects/pgf/]]) images, the backend uses an =\input= macro wrapped within a =tikzpicture= environment.
+
+For specifying image ‘=:width=', ‘=:height=', ‘=:scale=' and other ‘=:options=', use this syntax:
+
+#+begin_example
+#+ATTR_LATEX: :width 5cm :options angle=90
+[[./img/sed-hr4049.pdf]]
+#+end_example
+
+A ‘=:scale=' attribute overrides both ‘=:width=' and ‘=:height=' attributes.
+
+For custom commands for captions, use the ‘=:caption=' attribute. It overrides the default ‘=#+CAPTION=' value:
+
+#+begin_example
+#+ATTR_LATEX: :caption \bicaption{HeadingA}{HeadingB}
+[[./img/sed-hr4049.pdf]]
+#+end_example
+
+When captions follow the method as described in [[id:org--Captions][Captions]], the LaTeX export backend wraps the picture in a floating ‘=figure=' environment. To float an image without specifying a caption, set the ‘=:float=' attribute to one of the following:
+
+- ‘=t=' :: For a default ‘=figure=' environment.
+
+- ‘=multicolumn=' :: To span the image across multiple columns of a page; the backend wraps the image in a ‘=figure*=' environment.
+
+- ‘=wrap=' :: For text to flow around the image on the right; the figure occupies the left half of the page.
+
+- ‘=sideways=' :: For a new page with the image sideways, rotated ninety degrees, in a ‘=sidewaysfigure=' environment; overrides ‘=:placement=' setting.
+
+- ‘=nil=' :: To avoid a ‘=:float=' even if using a caption.
+
+- Any arbitrary value :: For example, a user-defined float type with the ‘=float=' LaTeX package.
+
+Use the ‘=placement=' attribute to modify a floating environment's placement.
+
+#+begin_example
+#+ATTR_LATEX: :float wrap :width 0.38\textwidth :placement {r}{0.4\textwidth}
+[[./img/hst.png]]
+#+end_example
+
+The LaTeX export backend centers all images by default. Setting ‘=:center=' to ‘=nil=' disables centering. To disable centering globally, set =org-latex-images-centered= to ‘=nil='.
+
+Set the ‘=:comment-include=' attribute to non-=nil= value for the LaTeX export backend to comment out the ‘=\includegraphics=' macro.
+
+--------------
+
+Next: [[id:org--Plain-lists-in-LaTeX-export][Plain lists in LaTeX export]], Previous: [[id:org--Tables-in-LaTeX-export][Tables in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--Regular-Expressions
+:END:
+#+filetags: :org:
+#+title: Regular Expressions (The Org Manual)
+
+Next:
+
+<<Regular-Expressions>>
+Next: [[id:org--Org-Syntax][Org Syntax]], Previous: [[id:org--In_002dbuffer-Settings][Summary of In-Buffer Settings]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.9 Regular Expressions [[#Regular-Expressions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Regular-Expressions-1
+:CLASS: section
+:END:
+Org, as an Emacs mode, makes use of Elisp regular expressions for searching, matching and filtering. Elisp regular expressions have a somewhat different syntax then some common standards. Most notably, alternation is indicated using ‘=\|=' and matching groups are denoted by ‘=\(...\)='. For example the string ‘=home\|work=' matches either ‘=home=' or ‘=work='.
+
+For more information, see [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Regexps.html#Regexps][Regular Expressions in Emacs]].

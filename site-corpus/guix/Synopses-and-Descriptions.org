@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID: guix--Synopses-and-Descriptions
+:END:
+#+filetags: :guix:
+#+title: Synopses and Descriptions
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Synopses-and-Descriptions>>
+Next: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Previous: [[id:guix--Version-Numbers][Version Numbers]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.5 Synopses and Descriptions [[#Synopses-and-Descriptions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Synopses-and-Descriptions-1
+:CLASS: subsection
+:END:
+As we have seen before, each package in GNU Guix includes a synopsis and a description (see [[id:guix--Defining-Packages][Defining Packages]]). Synopses and descriptions are important: They are what =guix package --search= searches, and a crucial piece of information to help users determine whether a given package suits their needs. Consequently, packagers should pay attention to what goes into them.
+
+Synopses must start with a capital letter and must not end with a period. They must not start with “a” or “the”, which usually does not bring anything; for instance, prefer “File-frobbing tool” over “A tool that frobs files”. The synopsis should say what the package is---e.g., “Core GNU utilities (file, text, shell)”---or what it is used for---e.g., the synopsis for GNU grep is “Print lines matching a pattern”.
+
+Keep in mind that the synopsis must be meaningful for a very wide audience. For example, “Manipulate alignments in the SAM format” might make sense for a seasoned bioinformatics researcher, but might be fairly unhelpful or even misleading to a non-specialized audience. It is a good idea to come up with a synopsis that gives an idea of the application domain of the package. In this example, this might give something like “Manipulate nucleotide sequence alignments”, which hopefully gives the user a better idea of whether this is what they are looking for.
+
+Descriptions should take between five and ten lines. Use full sentences, and avoid using acronyms without first introducing them. Please avoid marketing phrases such as “world-leading”, “industrial-strength”, and “next-generation”, and avoid superlatives like “the most advanced”---they are not helpful to users looking for a package and may even sound suspicious. Instead, try to be factual, mentioning use cases and features.
+
+Descriptions can include Texinfo markup, which is useful to introduce ornaments such as =@code= or =@dfn=, bullet lists, or hyperlinks (see [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Overview.html#Overview][Overview]] in GNU Texinfo). However you should be careful when using some characters for example ‘=@=' and curly braces which are the basic special characters in Texinfo (see [[https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Special-Characters.html#Special-Characters][Special Characters]] in GNU Texinfo). User interfaces such as =guix show= take care of rendering it appropriately.
+
+Synopses and descriptions are translated by volunteers [[https://translate.codeberg.org/projects/guix/packages][at Weblate]] so that as many users as possible can read them in their native language. User interfaces search them and display them in the language specified by the current locale.
+
+To allow =xgettext= to extract them as translatable strings, synopses and descriptions /must be literal strings/. This means that you cannot use =string-append= or =format= to construct these strings:
+
+#+begin_src lisp
+(package
+  ;; ...
+  (synopsis "This is translatable")
+  (description (string-append "This is " "*not*" " translatable.")))
+#+end_src
+
+Translation is a lot of work so, as a packager, please pay even more attention to your synopses and descriptions as every change may entail additional work for translators. In order to help them, it is possible to make recommendations or instructions visible to them by inserting special comments like this (see [[https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html#xgettext-Invocation][xgettext Invocation]] in GNU Gettext):
+
+#+begin_src lisp
+;; TRANSLATORS: "X11 resize-and-rotate" should not be translated.
+(description "ARandR is designed to provide a simple visual front end
+for the X11 resize-and-rotate (RandR) extension. ...")
+#+end_src
+
+--------------
+
+Next: [[id:guix--Snippets-versus-Phases][Snippets versus Phases]], Previous: [[id:guix--Version-Numbers][Version Numbers]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

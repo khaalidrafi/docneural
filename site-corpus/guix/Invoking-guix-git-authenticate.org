@@ -1,0 +1,93 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-git-authenticate
+:END:
+#+filetags: :guix:
+#+title: Invoking guix git authenticate
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-git-authenticate>>
+Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 7.5 Invoking =guix git authenticate= [[#Invoking-guix-git-authenticate-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-git-authenticate-1
+:CLASS: section
+:END:
+The =guix git authenticate= command authenticates a Git checkout following the same rule as for channels (see [[id:guix--Channel-Authentication::#channel_002dauthentication][channel authentication]]). That is, starting from a given commit, it ensures that all subsequent commits are signed by an OpenPGP key whose fingerprint appears in the =.guix-authorizations= file of its parent commit(s).
+
+You will find this command useful if you maintain a channel. But in fact, this authentication mechanism is useful in a broader context, so you might want to use it for Git repositories that have nothing to do with Guix.
+
+The general syntax is:
+
+#+begin_example
+guix git authenticate commit signer [options...]
+#+end_example
+
+By default, this command authenticates the Git checkout in the current directory; it outputs nothing and exits with exit code zero on success and non-zero on failure. =commit= above denotes the first commit where authentication takes place, and =signer= is the OpenPGP fingerprint of public key used to sign =commit=. Together, they form a /channel introduction/ (see [[id:guix--Channel-Authentication::#channel_002dauthentication][channel introduction]]). On your first successful run, the introduction is recorded in the =.git/config= file of your checkout, allowing you to omit them from subsequent invocations:
+
+#+begin_example
+guix git authenticate [options...]
+#+end_example
+
+Should you have branches that require different introductions, you can specify them directly in =.git/config=. For example, if the branch called =personal-fork= has a different introduction than other branches, you can extend =.git/config= along these lines:
+
+#+begin_example
+[guix "authentication-personal-fork"]
+    introduction-commit = cabba936fd807b096b48283debdcddccfea3900d
+    introduction-signer = C0FF EECA BBA9 E6A8 0D1D  E643 A2A0 6DF2 A33A 54FA
+    keyring = keyring
+#+end_example
+
+The first run also attempts to install pre-push and post-merge hooks, such that =guix git authenticate= is invoked as soon as you run =git push=, =git pull=, and related commands; it does not overwrite preexisting hooks though.
+
+The command-line options described below allow you to fine-tune the process.
+
+- =--repository===directory=\\
+  =-r ==directory= :: Open the Git repository in =directory= instead of the current directory.
+
+- =--keyring===reference=\\
+  =-k ==reference= :: Load OpenPGP keyring from =reference=, the reference of a branch such as =origin/keyring= or =my-keyring=. The branch must contain OpenPGP public keys in =.key= files, either in binary form or “ASCII-armored”. By default the keyring is loaded from the branch named =keyring=.
+
+- =--end===commit= :: Authenticate revisions up to =commit=.
+
+- =--stats= :: Display commit signing statistics upon completion.
+
+- =--cache-key===key= :: Previously-authenticated commits are cached in a file under =~/.cache/guix/authentication=. This option forces the cache to be stored in file =key= in that directory.
+
+- =--historical-authorizations===file= :: By default, any commit whose parent commit(s) lack the =.guix-authorizations= file is considered inauthentic. In contrast, this option considers the authorizations in =file= for any commit that lacks =.guix-authorizations=. The format of =file= is the same as that of =.guix-authorizations= (see [[id:guix--Specifying-Channel-Authorizations::#channel_002dauthorizations][=.guix-authorizations= format]]).
+
+--------------
+
+Previous: [[id:guix--The-GCC-toolchain][The GCC toolchain]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

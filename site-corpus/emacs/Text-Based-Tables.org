@@ -1,0 +1,255 @@
+:PROPERTIES:
+:ID: emacs--Text-Based-Tables
+:END:
+#+filetags: :emacs:
+#+title: Text Based Tables
+
+Next: [[id:emacs--Two_002dColumn][Two-Column Editing]]   Previous: [[id:emacs--Enriched-Text#Enriched-Text][Enriched Text]]   Up: [[id:emacs--Text][Commands for Human Languages]]
+
+<<Text-Based-Tables>>
+*** 27.15 Editing Text-based Tables [[#Editing-Text_002dbased-Tables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Editing-Text_002dbased-Tables
+:CLASS: section
+:END:
+The =table= package provides commands to easily edit text-based tables. Here is an example of what such a table looks like:
+
+#+begin_example
++-----------------+--------------------------------+-----------------+
+|     Command     |          Description           |   Key Binding   |
++-----------------+--------------------------------+-----------------+
+|  forward-char   |Move point right N characters   |       C-f       |
+|                 |(left if N is negative).        |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+|  backward-char  |Move point left N characters    |       C-b       |
+|                 |(right if N is negative).       |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+#+end_example
+
+When Emacs recognizes such a stretch of text as a table (see [[#Table-Recognition][Table Recognition]]), editing the contents of each table cell will automatically resize the table, whenever the contents become too large to fit in the cell. You can use the commands defined in the following sections for navigating and editing the table layout.
+
+Type M-x table-fixed-width-mode to toggle the automatic table resizing feature.
+
+--------------
+
+<<Table-Definition>>
+**** 27.15.1 What is a Text-based Table? [[#What-is-a-Text_002dbased-Table_003f][¶]]
+:PROPERTIES:
+:CUSTOM_ID: What-is-a-Text_002dbased-Table_003f
+:CLASS: subsection
+:END:
+A /table/ consists of a rectangular text area which is divided into /cells/. Each cell must be at least one character wide and one character high, not counting its border lines. A cell can be subdivided into more cells, but they cannot overlap.
+
+Cell border lines are drawn with three special characters, specified by the following variables:
+
+- <<index-table_002dcell_002dvertical_002dchar>>=table-cell-vertical-char= [[#index-table_002dcell_002dvertical_002dchar][¶]] :: The character used for vertical lines. The default is ‘=|='.
+
+- <<index-table_002dcell_002dhorizontal_002dchars>>=table-cell-horizontal-chars= [[#index-table_002dcell_002dhorizontal_002dchars][¶]] :: The characters used for horizontal lines. The default is ‘="-="='.
+
+- <<index-table_002dcell_002dintersection_002dchar>>=table-cell-intersection-char= [[#index-table_002dcell_002dintersection_002dchar][¶]] :: The character used for the intersection of horizontal and vertical lines. The default is ‘=+='.
+
+The following are examples of /invalid/ tables:
+
+#+begin_example
+   +-----+       +--+    +-++--+
+   |     |       |  |    | ||  |
+   |     |       |  |    | ||  |
+   +--+  |    +--+--+    +-++--+
+   |  |  |    |  |  |    +-++--+
+   |  |  |    |  |  |    | ||  |
+   +--+--+    +--+--+    +-++--+
+      a          b          c
+#+end_example
+
+From left to right:
+
+1. Overlapped cells or non-rectangular cells are not allowed.
+2. The border must be rectangular.
+3. Cells must have a minimum width/height of one character.
+
+--------------
+
+<<Table-Creation>>
+**** 27.15.2 Creating a Table [[#Creating-a-Table][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Creating-a-Table
+:CLASS: subsection
+:END:
+To create a text-based table from scratch, type M-x table-insert. This command prompts for the number of table columns, the number of table rows, cell width and cell height. The cell width and cell height do not include the cell borders; each can be specified as a single integer (which means each cell is given the same width/height), or as a sequence of integers separated by spaces or commas (which specify the width/height of the individual table columns/rows, counting from left to right for table columns and from top to bottom for table rows). The specified table is then inserted at point.
+
+The table inserted by M-x table-insert contains special text properties, which tell Emacs to treat it specially as a text-based table. If you save the buffer to a file and visit it again later, those properties are lost, and the table appears to Emacs as an ordinary piece of text. See the next section, for how to convert it back into a table.
+
+--------------
+
+<<Table-Recognition>>
+**** 27.15.3 Table Recognition [[#Table-Recognition-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-Recognition-1
+:CLASS: subsection
+:END:
+Existing text-based tables in a buffer, which lack the special text properties applied by M-x table-insert, are not treated specially as tables. To apply those text properties, type M-x table-recognize. This command scans the current buffer, /recognizes/ valid table cells, and applies the relevant text properties. Conversely, type M-x table-unrecognize to /unrecognize/ all tables in the current buffer, removing the special text properties and converting tables back to plain text.
+
+You can also use the following commands to selectively recognize or unrecognize tables:
+
+- <<index-table_002drecognize_002dregion>>M-x table-recognize-region [[#index-table_002drecognize_002dregion][¶]] :: Recognize tables within the current region.
+
+- <<index-table_002dunrecognize_002dregion>>M-x table-unrecognize-region [[#index-table_002dunrecognize_002dregion][¶]] :: Unrecognize tables within the current region.
+
+- <<index-table_002drecognize_002dtable>>M-x table-recognize-table [[#index-table_002drecognize_002dtable][¶]] :: Recognize the table at point and activate it.
+
+- <<index-table_002dunrecognize_002dtable>>M-x table-unrecognize-table [[#index-table_002dunrecognize_002dtable][¶]] :: Deactivate the table at point.
+
+- <<index-table_002drecognize_002dcell>>M-x table-recognize-cell [[#index-table_002drecognize_002dcell][¶]] :: Recognize the cell at point and activate it.
+
+- <<index-table_002dunrecognize_002dcell>>M-x table-unrecognize-cell [[#index-table_002dunrecognize_002dcell][¶]] :: Deactivate the cell at point.
+
+See [[#Table-Conversion][Converting Between Plain Text and Tables]], for another way to recognize a table.
+
+--------------
+
+<<Cell-Commands>>
+**** 27.15.4 Commands for Table Cells [[#Commands-for-Table-Cells][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Commands-for-Table-Cells
+:CLASS: subsection
+:END:
+The commands M-x table-forward-cell and M-x table-backward-cell move point from the current cell to an adjacent cell. The order is cyclic: when point is in the last cell of a table, M-x table-forward-cell moves to the first cell. Likewise, when point is on the first cell, M-x table-backward-cell moves to the last cell.
+
+M-x table-span-cell prompts for a direction---right, left, above, or below---and merges the current cell with the adjacent cell in that direction. This command signals an error if the merge would result in an illegitimate cell layout.
+
+M-x table-split-cell splits the current cell vertically or horizontally, prompting for the direction with the minibuffer. To split in a specific direction, use M-x table-split-cell-vertically and M-x table-split-cell-horizontally. When splitting vertically, the old cell contents are automatically split between the two new cells. When splitting horizontally, you are prompted for how to divide the cell contents, if the cell is non-empty; the options are ‘=split=' (divide the contents at point), ‘=left=' (put all the contents in the left cell), and ‘=right=' (put all the contents in the right cell).
+
+The following commands enlarge or shrink a cell. By default, they resize by one row or column; if a numeric argument is supplied, that specifies the number of rows or columns to resize by.
+
+- <<index-table_002dheighten_002dcell>>M-x table-heighten-cell [[#index-table_002dheighten_002dcell][¶]] :: Enlarge the current cell vertically.
+
+- <<index-table_002dshorten_002dcell>>M-x table-shorten-cell [[#index-table_002dshorten_002dcell][¶]] :: Shrink the current cell vertically.
+
+- <<index-table_002dwiden_002dcell>>M-x table-widen-cell [[#index-table_002dwiden_002dcell][¶]] :: Enlarge the current cell horizontally.
+
+- <<index-table_002dnarrow_002dcell>>M-x table-narrow-cell [[#index-table_002dnarrow_002dcell][¶]] :: Shrink the current cell horizontally.
+
+--------------
+
+<<Cell-Justification>>
+**** 27.15.5 Cell Justification [[#Cell-Justification-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Cell-Justification-1
+:CLASS: subsection
+:END:
+The command M-x table-justify imposes /justification/ on one or more cells in a text-based table. Justification determines how the text in the cell is aligned, relative to the edges of the cell. Each cell in a table can be separately justified.
+
+M-x table-justify first prompts for what to justify; the options are ‘=cell=' (just the current cell), ‘=column=' (all cells in the current table column) and ‘=row=' (all cells in the current table row). The command then prompts for the justification style; the options are =left=, =center=, =right=, =top=, =middle=, =bottom=, or =none= (meaning no vertical justification).
+
+Horizontal and vertical justification styles are specified independently, and both types can be in effect simultaneously; for instance, you can call M-x table-justify twice, once to specify =right= justification and once to specify =bottom= justification, to align the contents of a cell to the bottom right.
+
+The justification style is stored in the buffer as a text property, and is lost when you kill the buffer or exit Emacs. However, the table recognition commands, such as M-x table-recognize (see [[#Table-Recognition][Table Recognition]]), attempt to determine and re-apply each cell's justification style, by examining its contents. To disable this feature, change the variable =table-detect-cell-alignment= to =nil=.
+
+--------------
+
+<<Table-Rows-and-Columns>>
+**** 27.15.6 Table Rows and Columns [[#Table-Rows-and-Columns-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-Rows-and-Columns-1
+:CLASS: subsection
+:END:
+M-x table-insert-row inserts a row of cells before the current table row. The current row, together with point, is pushed down past the new row. To insert a row after the last row at the bottom of a table, invoke this command with point below the table, just below the bottom edge. You can insert more than one row at a time by using a numeric prefix argument.
+
+Similarly, M-x table-insert-column inserts a column of cells to the left of the current table column. To insert a column to the right side of the rightmost column, invoke this command with point to the right of the rightmost column, outside the table. A numeric prefix argument specifies the number of columns to insert.
+
+M-x table-delete-column deletes the column of cells at point. Similarly, M-x table-delete-row deletes the row of cells at point. A numeric prefix argument to either command specifies the number of columns or rows to delete.
+
+--------------
+
+<<Table-Conversion>>
+**** 27.15.7 Converting Between Plain Text and Tables [[#Converting-Between-Plain-Text-and-Tables][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Converting-Between-Plain-Text-and-Tables
+:CLASS: subsection
+:END:
+The command M-x table-capture captures plain text in a region and turns it into a table. Unlike M-x table-recognize (see [[#Table-Recognition][Table Recognition]]), the original text does not need to have a table appearance; it only needs to have a logical table-like structure.
+
+For example, suppose we have the following numbers, which are divided into three lines and separated horizontally by commas:
+
+#+begin_example
+1, 2, 3, 4
+5, 6, 7, 8
+, 9, 10
+#+end_example
+
+Invoking M-x table-capture on that text produces this table:
+
+#+begin_example
++-----+-----+-----+-----+
+|1    |2    |3    |4    |
++-----+-----+-----+-----+
+|5    |6    |7    |8    |
++-----+-----+-----+-----+
+|     |9    |10   |     |
++-----+-----+-----+-----+
+#+end_example
+
+M-x table-release does the opposite: it converts a table back to plain text, removing its cell borders.
+
+One application of this pair of commands is to edit a text in layout. Look at the following three paragraphs:
+
+#+begin_example
+table-capture is a powerful command.
+Here are some things it can do:
+
+Parse Cell Items   Using row and column delimiter regexps,
+                   it parses the specified text area and
+                   extracts cell items into a table.
+#+end_example
+
+Applying =table-capture= to a region containing the above text, with empty strings for the column and row delimiter regexps, creates a table with a single cell like the following one.
+
+#+begin_example
++----------------------------------------------------------+
+|table-capture is a powerful command.                      |
+|Here are some things it can do:                           |
+|                                                          |
+|Parse Cell Items   Using row and column delimiter regexps,|
+|                   it parses the specified text area and  |
+|                   extracts cell items into a table.      |
++----------------------------------------------------------+
+#+end_example
+
+We can then use the cell splitting commands (see [[#Cell-Commands][Commands for Table Cells]]) to subdivide the table so that each paragraph occupies a cell:
+
+#+begin_example
++----------------------------------------------------------+
+|table-capture is a powerful command.                      |
+|Here are some things it can do:                           |
++-----------------+----------------------------------------+
+|Parse Cell Items | Using row and column delimiter regexps,|
+|                 | it parses the specified text area and  |
+|                 | extracts cell items into a table.      |
++-----------------+----------------------------------------+
+#+end_example
+
+Each cell can now be edited independently without affecting the layout of other cells. When finished, we can invoke M-x table-release to convert the table back to plain text.
+
+--------------
+
+<<Table-Misc>>
+**** 27.15.8 Table Miscellany [[#Table-Miscellany][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Table-Miscellany
+:CLASS: subsection
+:END:
+The command =table-query-dimension= reports the layout of the table and table cell at point. Here is an example of its output:
+
+#+begin_example
+Cell: (21w, 6h), Table: (67w, 16h), Dim: (2c, 3r), Total Cells: 5
+#+end_example
+
+This indicates that the current cell is 21 characters wide and 6 lines high, the table is 67 characters wide and 16 lines high with 2 columns and 3 rows, and a total of 5 cells.
+
+M-x table-insert-sequence traverses the cells of a table inserting a sequence of text strings into each cell as it goes. It asks for the base string of the sequence, and then produces the sequence by “incrementing” the base string, either numerically (if the base string ends in numerical characters) or in the ASCII order. In addition to the base string, the command prompts for the number of elements in the sequence, the increment, the cell interval, and the justification of the text in each cell.
+
+M-x table-generate-source generates a table formatted for a specific markup language. It asks for a language (which must be one of =html=, =latex=, =cals=, =wiki= or =mediawiki=), a destination buffer in which to put the result, and a table caption, and then inserts the generated table into the specified buffer. The default destination buffer is =table.==lang=, where =lang= is the language you specified.
+
+--------------

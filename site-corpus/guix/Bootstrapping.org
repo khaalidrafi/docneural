@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID: guix--Bootstrapping
+:END:
+#+filetags: :guix:
+#+title: Bootstrapping
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Bootstrapping>>
+Next: [[id:guix--Porting][Porting to a New Platform]], Previous: [[id:guix--Security-Updates][Security Updates]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 20 Bootstrapping [[#Bootstrapping-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Bootstrapping-1
+:CLASS: chapter
+:END:
+Bootstrapping in our context refers to how the distribution gets built “from nothing”. Remember that the build environment of a derivation contains nothing but its declared inputs (see [[id:guix--Introduction][Introduction]]). So there's an obvious chicken-and-egg problem: how does the first package get built? How does the first compiler get compiled?
+
+It is tempting to think of this question as one that only die-hard hackers may care about. However, while the answer to that question is technical in nature, its implications are wide-ranging. How the distribution is bootstrapped defines the extent to which we, as individuals and as a collective of users and hackers, can trust the software we run. It is a central concern from the standpoint of /security/ and from a /user freedom/ viewpoint.
+
+The GNU system is primarily made of C code, with libc at its core. The GNU build system itself assumes the availability of a Bourne shell and command-line tools provided by GNU Coreutils, Awk, Findutils, ‘sed', and ‘grep'. Furthermore, build programs---programs that run =./configure=, =make=, etc.---are written in Guile Scheme (see [[id:guix--Derivations][Derivations]]). Consequently, to be able to build anything at all, from scratch, Guix relies on pre-built binaries of Guile, GCC, Binutils, libc, and the other packages mentioned above---the /bootstrap binaries/.
+
+These bootstrap binaries are “taken for granted”, though we can also re-create them if needed (see [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries][Preparing to Use the Bootstrap Binaries]]).
+
+- [[id:guix--Full_002dSource-Bootstrap][The Full-Source Bootstrap]]
+- [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries][Preparing to Use the Bootstrap Binaries]]
+- [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries::#Building-the-Build-Tools][Building the Build Tools]]
+- [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries::#Building-the-Bootstrap-Binaries][Building the Bootstrap Binaries]]
+- [[id:guix--Preparing-to-Use-the-Bootstrap-Binaries::#Reducing-the-Set-of-Bootstrap-Binaries][Reducing the Set of Bootstrap Binaries]]
+
+--------------
+
+Next: [[id:guix--Porting][Porting to a New Platform]], Previous: [[id:guix--Security-Updates][Security Updates]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

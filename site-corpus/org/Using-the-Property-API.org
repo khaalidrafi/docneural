@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID: org--Using-the-Property-API
+:END:
+#+filetags: :org:
+#+title: Using the Property API (The Org Manual)
+
+Next:
+
+<<Using-the-Property-API>>
+Next: [[id:org--Using-the-Mapping-API][Using the Mapping API]], Previous: [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** A.11 Using the Property API [[#Using-the-Property-API-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-the-Property-API-1
+:CLASS: appendixsec
+:END:
+Here is a description of the functions that can be used to work with properties.
+
+- Function: *org-entry-properties* =&optional pom which= [[#index-org_002dentry_002dproperties][¶]] :: Get all properties of the entry at point-or-marker =POM=. This includes the TODO keyword, the tags, time strings for deadline, scheduled, and clocking, and any additional properties defined in the entry. The return value is an alist. Keys may occur multiple times if the property key was used several times. =POM= may also be =nil=, in which case the current entry is used. If =WHICH= is =nil= or =all=, get all properties. If =WHICH= is =special= or =standard=, only get that subclass.
+
+- Function: *org-entry-get* =pom property &optional inherit= [[#index-org_002dentry_002dget][¶]] :: Get value of =PROPERTY= for entry at point-or-marker =POM=. By default, this only looks at properties defined locally in the entry. If =INHERIT= is non-=nil= and the entry does not have the property, then also check higher levels of the hierarchy. If =INHERIT= is the symbol =selective=, use inheritance if and only if the setting of =org-use-property-inheritance= selects =PROPERTY= for inheritance.
+
+- Function: *org-entry-delete* =pom property= [[#index-org_002dentry_002ddelete][¶]] :: Delete the property =PROPERTY= from entry at point-or-marker =POM=.
+
+- Function: *org-entry-put* =pom property value= [[#index-org_002dentry_002dput][¶]] :: Set =PROPERTY= to =VALUES= for entry at point-or-marker POM.
+
+- Function: *org-buffer-property-keys* =&optional include-specials= [[#index-org_002dbuffer_002dproperty_002dkeys][¶]] :: Get all property keys in the current buffer.
+
+- Function: *org-insert-property-drawer* [[#index-org_002dinsert_002dproperty_002ddrawer-1][¶]] :: Insert a property drawer for the current entry.
+
+- Function: *org-entry-put-multivalued-property* =pom property &rest values= [[#index-org_002dentry_002dput_002dmultivalued_002dproperty][¶]] :: Set =PROPERTY= at point-or-marker =POM= to =VALUES=. =VALUES= should be a list of strings. They are concatenated, with spaces as separators.
+
+- Function: *org-entry-get-multivalued-property* =pom property= [[#index-org_002dentry_002dget_002dmultivalued_002dproperty][¶]] :: Treat the value of the property =PROPERTY= as a whitespace-separated list of values and return the values as a list of strings.
+
+- Function: *org-entry-add-to-multivalued-property* =pom property value= [[#index-org_002dentry_002dadd_002dto_002dmultivalued_002dproperty][¶]] :: Treat the value of the property =PROPERTY= as a whitespace-separated list of values and make sure that =VALUE= is in this list.
+
+- Function: *org-entry-remove-from-multivalued-property* =pom property value= [[#index-org_002dentry_002dremove_002dfrom_002dmultivalued_002dproperty][¶]] :: Treat the value of the property =PROPERTY= as a whitespace-separated list of values and make sure that =VALUE= is /not/ in this list.
+
+- Function: *org-entry-member-in-multivalued-property* =pom property value= [[#index-org_002dentry_002dmember_002din_002dmultivalued_002dproperty][¶]] :: Treat the value of the property =PROPERTY= as a whitespace-separated list of values and check if =VALUE= is in this list.
+
+- User Option: *org-property-allowed-value-functions* [[#index-org_002dproperty_002dallowed_002dvalue_002dfunctions][¶]] :: Hook for functions supplying allowed values for a specific property. The functions must take a single argument, the name of the property, and return a flat list of allowed values. If ‘=:ETC=' is one of the values, use the values as completion help, but allow also other values to be entered. The functions must return =nil= if they are not responsible for this property.
+
+--------------
+
+Next: [[id:org--Using-the-Mapping-API][Using the Mapping API]], Previous: [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

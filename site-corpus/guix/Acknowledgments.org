@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: guix--Acknowledgments
+:END:
+#+filetags: :guix:
+#+title: Acknowledgments
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Acknowledgments>>
+Next: [[id:guix--GNU-Free-Documentation-License][GNU Free Documentation License]], Previous: [[id:guix--Contributing][Contributing]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 23 Acknowledgments [[#Acknowledgments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Acknowledgments-1
+:CLASS: chapter
+:END:
+Guix is based on the [[https://nixos.org/nix/][Nix package manager]], which was designed and implemented by Eelco Dolstra, with contributions from other people (see the =nix/AUTHORS= file in Guix). Nix pioneered functional package management, and promoted unprecedented features, such as transactional package upgrades and rollbacks, per-user profiles, and referentially transparent build processes. Without this work, Guix would not exist.
+
+The Nix-based software distributions, Nixpkgs and NixOS, have also been an inspiration for Guix.
+
+GNU Guix itself is a collective work with contributions from a number of people. See the =AUTHORS= file in Guix for more information on these fine people. The =THANKS= file lists people who have helped by reporting bugs, taking care of the infrastructure, providing artwork and themes, making suggestions, and more---thank you!

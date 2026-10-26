@@ -1,0 +1,152 @@
+:PROPERTIES:
+:ID: guix--Defining-Packages
+:END:
+#+filetags: :guix:
+#+title: Defining Packages
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Defining-Packages>>
+Next: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Previous: [[id:guix--Package-Modules][Package Modules]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.2 Defining Packages [[#Defining-Packages-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Defining-Packages-1
+:CLASS: section
+:END:
+The high-level interface to package definitions is implemented in the =(guix packages)= and =(guix build-system)= modules. As an example, the package definition, or /recipe/, for the GNU Hello package looks like this:
+
+#+begin_src lisp
+(define-module (gnu packages hello)
+  #:use-module (guix gexp)
+  #:use-module (guix packages)
+  #:use-module (guix download)
+  #:use-module (guix build-system gnu)
+  #:use-module (guix licenses)
+  #:use-module (gnu packages gawk))
+
+(define-public hello
+  (package
+    (name "hello")
+    (version "2.10")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://gnu/hello/hello-" version
+                                  ".tar.gz"))
+              (sha256
+               (base32
+                "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list #:configure-flags #~(list "--enable-silent-rules")))
+    (inputs (list gawk))
+    (synopsis "Hello, GNU world: An example GNU package")
+    (description "Guess what GNU Hello prints!")
+    (home-page "https://www.gnu.org/software/hello/")
+    (license gpl3+)))
+#+end_src
+
+Without being a Scheme expert, the reader may have guessed the meaning of the various fields here. This expression binds the variable =hello= to a =<package>= record (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SRFI_002d9.html#SRFI_002d9][Scheme records]] in GNU Guile Reference Manual). This package object can be inspected using procedures found in the =(guix packages)= module; for instance, =(package-name hello)= returns---surprise!---="hello"=.
+
+#+begin_quote
+*Quick start:* Impatient? With luck, you may be able to import part or all of the definition of the package you are interested in from another repository, using the =guix import= command (see [[id:guix--Invoking-guix-import][Invoking =guix import=]]).
+
+Alternatively, try out the [[https://guix-hpc.gitlabpages.inria.fr/guix-packager/][Guix-Packager interface]] in your web browser to produce a preliminary package definition.
+
+#+end_quote
+
+In the example above, =hello= is defined in a module of its own, =(gnu packages hello)=. Technically, this is not strictly necessary, but it is convenient to do so: all the packages defined in modules under =(gnu packages …)= are automatically known to the command-line tools (see [[id:guix--Package-Modules][Package Modules]]).
+
+There are a few points worth noting in the above package definition:
+
+- The =source= field of the package is an =<origin>= object (see [[id:guix--origin-Reference][=origin= Reference]], for the complete reference). Here, the =url-fetch= method from =(guix download)= is used, meaning that the source is a file to be downloaded over FTP or HTTP.
+
+  The =mirror://gnu= prefix instructs =url-fetch= to use one of the GNU mirrors defined in =(guix download)=.
+
+  The =sha256= field specifies the expected SHA256 hash of the file being downloaded. It is mandatory, and allows Guix to check the integrity of the file. The =(base32 …)= form introduces the base32 representation of the hash. You can obtain this information with =guix download= (see [[id:guix--Invoking-guix-download][Invoking =guix download=]]) and =guix hash= (see [[id:guix--Invoking-guix-hash][Invoking =guix hash=]]).
+
+  When needed, the =origin= form can also have a =patches= field listing patches to be applied, and a =snippet= field giving a Scheme expression to modify the source code.
+
+-  The =build-system= field specifies the procedure to build the package (see [[id:guix--Build-Systems][Build Systems]]). Here, =gnu-build-system= represents the familiar GNU Build System, where packages may be configured, built, and installed with the usual =./configure && make && make check && make install= command sequence.
+
+  When you start packaging non-trivial software, you may need tools to manipulate those build phases, manipulate files, and so on. See [[id:guix--Build-Utilities][Build Utilities]], for more on this.
+
+- The =arguments= field specifies options for the build system (see [[id:guix--Build-Systems][Build Systems]]). Here it is interpreted by =gnu-build-system= as a request run =configure= with the =--enable-silent-rules= flag.
+
+  The value of the =arguments= field is a list of arguments passed to the build system and that end up being applied, as with =apply= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Fly-Evaluation.html#Fly-Evaluation][=apply=]] in GNU Guile Reference Manual).
+
+  The hash-colon (=#:=) sequence defines a Scheme /keyword/ (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Keywords.html#Keywords][Keywords]] in GNU Guile Reference Manual), and =#:configure-flags= is a keyword used to pass a keyword argument to the build system (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Coding-With-Keywords.html#Coding-With-Keywords][Coding With Keywords]] in GNU Guile Reference Manual).
+
+  What about these hash-tilde (=#~=) characters? This is Guix-specific syntax introducing a so-called /G-expression/ (see [[id:guix--G_002dExpressions][G-Expressions]]), which denotes code that is /staged/ for eventual evaluation: this staged code is only evaluated if and when attempting to build the package, by the build daemon. In this example, the staged code is the =(list …)= expression, which builds a list of one element, the configure flag.
+
+- The =inputs= field specifies inputs to the build process---i.e., build-time or run-time dependencies of the package. Here, we add an input, a reference to the =gawk= variable; =gawk= is itself bound to a =<package>= object.
+
+  Note that GCC, Coreutils, Bash, and other essential tools do not need to be specified as inputs here. Instead, =gnu-build-system= takes care of ensuring that they are present (see [[id:guix--Build-Systems][Build Systems]]).
+
+  However, any other dependencies need to be specified in the =inputs= field. Any dependency not specified here will simply be unavailable to the build process, possibly leading to a build failure.
+
+See [[id:guix--package-Reference][=package= Reference]], for a full description of possible fields.
+
+#+begin_quote
+
+*Going further:* Intimidated by the Scheme language or curious about it? The Cookbook has a short section to get started that recaps some of the things shown above and explains the fundamentals. See [[https://guix.gnu.org/cookbook/en/html_node/A-Scheme-Crash-Course.html#A-Scheme-Crash-Course][A Scheme Crash Course]] in GNU Guix Cookbook, for more information.
+
+See [[id:guix--The-Perfect-Setup][The Perfect Setup]], on how to set up your editor for Scheme hacking.
+
+#+end_quote
+
+Once a package definition is in place, the package may actually be built using the =guix build= command-line tool (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]), troubleshooting any build failures you encounter (see [[id:guix--Debugging-Build-Failures][Debugging Build Failures]]). You can easily jump back to the package definition using the =guix edit= command (see [[id:guix--Invoking-guix-edit][Invoking =guix edit=]]). See [[id:guix--Packaging-Guidelines][Packaging Guidelines]], for more information on how to test package definitions, and [[id:guix--Invoking-guix-lint][Invoking =guix lint=]], for information on how to check a definition for style conformance. Lastly, see [[id:guix--Channels][Channels]], for information on how to extend the distribution by adding your own package definitions in a “channel”.
+
+Finally, updating the package definition to a new upstream version can be partly automated by the =guix refresh= command (see [[id:guix--Invoking-guix-refresh][Invoking =guix refresh=]]).
+
+Behind the scenes, a derivation corresponding to the =<package>= object is first computed by the =package-derivation= procedure. That derivation is stored in a =.drv= file under =/gnu/store=. The build actions it prescribes may then be realized by using the =build-derivations= procedure (see [[id:guix--The-Store][The Store]]).
+
+- Procedure: *package-derivation* =store package [system]= [[#index-package_002dderivation][¶]] :: Return the =<derivation>= object of =package= for =system= (see [[id:guix--Derivations][Derivations]]).
+
+  =package= must be a valid =<package>= object, and =system= must be a string denoting the target system type---e.g., ="x86_64-linux"= for an x86_64 Linux-based GNU system. =store= must be a connection to the daemon, which operates on the store (see [[id:guix--The-Store][The Store]]).
+
+Similarly, it is possible to compute a derivation that cross-builds a package for some other system:
+
+- Procedure: *package-cross-derivation* =store package target [system]= [[#index-package_002dcross_002dderivation][¶]] :: Return the =<derivation>= object of =package= cross-built from =system= to =target=.
+
+  =target= must be a valid GNU triplet denoting the target hardware and operating system, such as ="aarch64-linux-gnu"= (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][Specifying Target Triplets]] in Autoconf).
+
+Once you have package definitions, you can easily define /variants/ of those packages. See [[id:guix--Defining-Package-Variants][Defining Package Variants]], for more on that.
+
+- [[id:guix--package-Reference][=package= Reference]]
+- [[id:guix--origin-Reference][=origin= Reference]]
+
+--------------
+
+Next: [[id:guix--Defining-Package-Variants][Defining Package Variants]], Previous: [[id:guix--Package-Modules][Package Modules]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

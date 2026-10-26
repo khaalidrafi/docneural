@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--Quoting-HTML-tags
+:END:
+#+filetags: :org:
+#+title: Quoting HTML tags (The Org Manual)
+
+Next:
+
+<<Quoting-HTML-tags>>
+Next: [[id:org--Headlines-in-HTML-export][Headlines in HTML export]], Previous: [[id:org--Bare-HTML][Exporting to minimal HTML]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.6 Quoting HTML tags [[#Quoting-HTML-tags-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quoting-HTML-tags-1
+:CLASS: subsection
+:END:
+The HTML export backend transforms ‘=<=' and ‘=>=' to ‘=&lt;=' and ‘=&gt;='. To include raw HTML code in the Org file, so the HTML export backend can insert that HTML code in the output, use this inline syntax: ‘=@@html:...@@='. For example:
+
+#+begin_example
+@@html:<b>@@bold text@@html:</b>@@
+#+end_example
+
+For larger raw HTML code blocks, use these HTML export code blocks:
+
+#+begin_example
+#+HTML: Literal HTML code for export
+
+#+BEGIN_EXPORT html
+  All lines between these markers are exported literally
+#+END_EXPORT
+#+end_example

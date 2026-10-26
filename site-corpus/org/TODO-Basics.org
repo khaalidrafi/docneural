@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID: org--TODO-Basics
+:END:
+#+filetags: :org:
+#+title: TODO Basics (The Org Manual)
+
+Next:
+
+<<TODO-Basics>>
+Next: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 5.1 Basic TODO Functionality [[#Basic-TODO-Functionality][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Basic-TODO-Functionality
+:CLASS: section
+:END:
+Any headline becomes a TODO item when it starts with the word ‘=TODO=', for example:
+
+#+begin_example
+*** TODO Write letter to Sam Fortune
+#+end_src
+
+The most important commands to work with TODO entries are:
+
+-  <<index-C_002dc-C_002dt>>C-c C-t (=org-todo=) [[#index-C_002dc-C_002dt][¶]] :: Rotate the TODO state of the current item among
+
+  #+begin_example
+  ,-> (unmarked) -> TODO -> DONE --.
+  '--------------------------------'
+#+end_example
+
+  If TODO keywords have fast access keys (see [[id:org--Fast-access-to-TODO-states][Fast access to TODO states]]), prompt for a TODO keyword through the fast selection interface; this is the default behavior when =org-use-fast-todo-selection= is non-=nil=.
+
+  The same state changing can also be done “remotely” from the agenda buffer with the t command key (see [[id:org--Agenda-Commands][Commands in the Agenda Buffer]]).
+
+-  <<index-S_002dRIGHT-3>>S-RIGHT S-LEFT [[#index-S_002dRIGHT-3][¶]] :: Select the following/preceding TODO state, similar to cycling. Useful mostly if more than two TODO states are possible (see [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]). See also [[id:org--Conflicts][Packages that conflict with Org mode]] for a discussion of the interaction with shift-selection. See also the variable =org-treat-S-cursor-todo-selection-as-state-change=.
+
+-  <<index-C_002dc-_002f-t>>C-c / t (=org-show-todo-tree=) [[#index-C_002dc-_002f-t][¶]] :: View TODO items in a /sparse tree/ (see [[id:org--Sparse-Trees][Sparse Trees]]). Folds the entire buffer, but shows all TODO items---with a not-DONE state---and the headings hierarchy above them. With a prefix argument, or by using C-c / T, search for a specific TODO. You are prompted for the keyword, and you can also give a list of keywords like ‘=KWD1|KWD2|...=' to list entries that match any one of these keywords. With a numeric prefix argument N, show the tree for the Nth keyword in the variable =org-todo-keywords=. With two prefix arguments, find all TODO states, both un-done and done.
+
+- <<index-t-_0028Agenda-dispatcher_0029>>M-x org-agenda t (=org-todo-list=) [[#index-t-_0028Agenda-dispatcher_0029][¶]] :: Show the global TODO list. Collects the TODO items (with not-DONE states) from all agenda files (see [[id:org--Agenda-Views][Agenda Views]]) into a single buffer. The new buffer is in Org Agenda mode, which provides commands to examine and manipulate the TODO entries from the new buffer (see [[id:org--Agenda-Commands][Commands in the Agenda Buffer]]). See [[id:org--Global-TODO-list][The global TODO list]] for more information.
+
+-  <<index-S_002dM_002dRET>>S-M-RET (=org-insert-todo-heading=) [[#index-S_002dM_002dRET][¶]] :: Insert a new TODO entry below the current one.
+
+Changing a TODO state can also trigger tag changes. See the docstring of the option =org-todo-state-tags-triggers= for details.
+
+--------------
+
+Next: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

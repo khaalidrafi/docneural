@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID: guix--Formatting-Code
+:END:
+#+filetags: :guix:
+#+title: Formatting Code
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Formatting-Code>>
+Previous: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.8.4 Formatting Code [[#Formatting-Code-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Formatting-Code-1
+:CLASS: subsection
+:END:
+When writing Scheme code, we follow common wisdom among Scheme programmers. In general, we follow the [[https://mumble.net/~campbell/scheme/style.txt][Riastradh's Lisp Style Rules]]. This document happens to describe the conventions mostly used in Guile's code too. It is very thoughtful and well written, so please do read it.
+
+Some special forms introduced in Guix, such as the =substitute*= macro, have special indentation rules. These are defined in the =.dir-locals.el= file, which Emacs automatically uses. Also note that Emacs-Guix provides =guix-devel-mode= mode that indents and highlights Guix code properly (see [[https://doc.guix.gnu.org/emacs-guix/latest/en/html_node/Development.html#Development][Development]] in The Emacs-Guix Reference Manual).
+
+If you do not use Emacs, please make sure your editor knows these rules. To automatically indent a package definition, you can also run:
+
+#+begin_example
+./pre-inst-env guix style package
+#+end_example
+
+See [[id:guix--Invoking-guix-style][Invoking =guix style=]], for more information.
+
+We require all top-level procedures to carry a docstring. This requirement can be relaxed for simple private procedures in the =(guix build …)= name space, though.
+
+Procedures should not have more than four positional parameters. Use keyword parameters for procedures that take more than four parameters.
+
+--------------
+
+Previous: [[id:guix--Data-Types-and-Pattern-Matching][Data Types and Pattern Matching]], Up: [[id:guix--Coding-Style][Coding Style]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

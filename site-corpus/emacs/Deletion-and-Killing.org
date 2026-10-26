@@ -1,0 +1,145 @@
+:PROPERTIES:
+:ID: emacs--Deletion-and-Killing
+:END:
+#+filetags: :emacs:
+#+title: Deletion and Killing
+
+Next: [[id:emacs--Yanking#Yanking][Yanking]]   Up: [[id:emacs--Killing][Killing and Moving Text]]
+
+<<Deletion-and-Killing>>
+*** 14.1 Deletion and Killing [[#Deletion-and-Killing-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Deletion-and-Killing-1
+:CLASS: section
+:END:
+Most commands which erase text from the buffer save it in the kill ring (see [[id:emacs--Yanking::#Kill-Ring][The Kill Ring]]). These are known as /kill/ commands, and their names normally contain the word ‘=kill=' (e.g., =kill-line=). The kill ring stores several recent kills, not just the last one, so killing is a very safe operation: you don't have to worry much about losing text that you previously killed. The kill ring is shared by all buffers, so text that is killed in one buffer can be yanked into another buffer.
+
+When you use C-/ (=undo=) to undo a kill command (see [[id:emacs--Undo][Undo]]), that brings the killed text back into the buffer, but does not remove it from the kill ring.
+
+On graphical displays, killing text also copies it to the system clipboard. See [[id:emacs--Cut-and-Paste::#Cut-and-Paste][“Cut and Paste” Operations on Graphical Displays]].
+
+Commands that erase text but do not save it in the kill ring are known as /delete/ commands; their names usually contain the word ‘=delete='. These include C-d (=delete-char=) and DEL (=delete-backward-char=), which delete only one character at a time, and those commands that delete only spaces or newlines. Commands that can erase significant amounts of nontrivial data generally do a kill operation instead.
+
+You can also use the mouse to kill and yank. See [[id:emacs--Cut-and-Paste::#Cut-and-Paste][“Cut and Paste” Operations on Graphical Displays]].
+
+--------------
+
+<<Deletion>>
+**** 14.1.1 Deletion [[#Deletion-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Deletion-1
+:CLASS: subsection
+:END:
+Deletion means erasing text and not saving it in the kill ring. For the most part, the Emacs commands that delete text are those that erase just one character or only whitespace.
+
+- DEL\\
+  BACKSPACE :: Delete the previous character, or the text in the region if it is active (=delete-backward-char=).
+
+- Delete :: Delete the next character, or the text in the region if it is active (=delete-forward-char=).
+
+- C-d :: Delete the next character (=delete-char=).
+
+- M-\ :: Delete spaces and tabs around point (=delete-horizontal-space=).
+
+- M-x just-one-space :: Delete spaces and tabs around point, leaving one space.
+
+- M-SPC :: Delete spaces and tabs around point in flexible ways (=cycle-spacing=).
+
+- C-x C-o :: Delete blank lines around the current line (=delete-blank-lines=).
+
+- M-^ :: Join two lines by deleting the intervening newline, along with any indentation following it (=delete-indentation=).
+
+We have already described the basic deletion commands DEL (=delete-backward-char=), delete (=delete-forward-char=), and C-d (=delete-char=). See [[id:emacs--Erasing][Erasing Text]]. With a numeric argument, they delete the specified number of characters. If the numeric argument is omitted or one, DEL and delete delete all the text in the region if it is active (see [[id:emacs--Using-Region][Operating on the Region]]).
+
+The other delete commands are those that delete only whitespace characters: spaces, tabs and newlines. M-\ (=delete-horizontal-space=) deletes all the spaces and tab characters before and after point. With a prefix argument, this only deletes spaces and tab characters before point.
+
+M-x just-one-space deletes tabs and spaces around point, but leaves a single space before point, regardless of the number of spaces that existed previously (even if there were none before). With a numeric argument =n=, it leaves =n= spaces before point if =n= is positive; if =n= is negative, it deletes newlines in addition to spaces and tabs, leaving −=n= spaces before point.
+
+The command =cycle-spacing= (M-SPC) acts like a more flexible version of =just-one-space=. It performs different space cleanup actions defined by =cycle-spacing-actions=, in a cyclic manner, if you call it repeatedly in succession. By default, the first invocation does the same as =just-one-space=, the second deletes all whitespace characters around point like =delete-horizontal-space=, and the third restores the original whitespace characters; then it cycles. If invoked with a prefix argument, each action is given that value of the argument. The user option =cycle-spacing-actions= can include other members; see the doc string of that option for the details.
+
+C-x C-o (=delete-blank-lines=) deletes all blank lines after the current line. If the current line is blank, it deletes all blank lines preceding the current line as well (leaving one blank line, the current line). On a solitary blank line, it deletes that line.
+
+M-^ (=delete-indentation=) joins the current line and the previous line, by deleting a newline and all surrounding spaces, usually leaving a single space. See [[id:emacs--Indentation][M-^]].
+
+The command =delete-duplicate-lines= searches the region for identical lines, and removes all but one copy of each. Normally it keeps the first instance of each repeated line, but with a C-u prefix argument it keeps the last. With a C-u C-u prefix argument, it only searches for adjacent identical lines. This is a more efficient mode of operation, useful when the lines have already been sorted. With a C-u C-u C-u prefix argument, it retains repeated blank lines.
+
+--------------
+
+<<Killing-by-Lines>>
+**** 14.1.2 Killing by Lines [[#Killing-by-Lines-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Killing-by-Lines-1
+:CLASS: subsection
+:END:
+- C-k :: Kill rest of line or one or more lines (=kill-line=).
+
+- C-S-backspace :: Kill an entire line at once (=kill-whole-line=)
+
+The simplest kill command is C-k (=kill-line=). If used at the end of a line, it kills the line-ending newline character, merging the next line into the current one (thus, a blank line is entirely removed). Otherwise, C-k kills all the text from point up to the end of the line; if point was originally at the beginning of the line, this leaves the line blank.
+
+Spaces and tabs at the end of the line are ignored when deciding which case applies. As long as point is after the last non-whitespace character in the line, you can be sure that C-k will kill the newline. To kill an entire non-blank line, go to the beginning and type C-k twice.
+
+In this context, “line” means a logical text line, not a screen line (see [[id:emacs--Continuation-Lines][Continuation Lines]]).
+
+When C-k is given a positive argument =n=, it kills =n= lines and the newlines that follow them (text on the current line before point is not killed). With a negative argument −=n=, it kills =n= lines preceding the current line, together with the text on the current line before point. C-k with an argument of zero kills the text before point on the current line.
+
+If the variable =kill-whole-line= is non-=nil=, C-k at the very beginning of a line kills the entire line including the following newline. This variable is normally =nil=.
+
+C-S-backspace (=kill-whole-line=) kills a whole line including its newline, regardless of the position of point within the line. Note that many text terminals will prevent you from typing the key sequence C-S-backspace.
+
+--------------
+
+<<Other-Kill-Commands>>
+**** 14.1.3 Other Kill Commands [[#Other-Kill-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Other-Kill-Commands-1
+:CLASS: subsection
+:END:
+- C-w :: Kill the region (=kill-region=).
+
+- M-w :: Copy the region into the kill ring (=kill-ring-save=).
+
+- M-d :: Kill the next word (=kill-word=). See [[id:emacs--Words][Words]].
+
+- M-DEL :: Kill one word backwards (=backward-kill-word=).
+
+- C-x DEL :: Kill back to beginning of sentence (=backward-kill-sentence=). See [[id:emacs--Sentences][Sentences]].
+
+- M-k :: Kill to the end of the sentence (=kill-sentence=).
+
+- C-M-k :: Kill the following balanced expression (=kill-sexp=). See [[id:emacs--Parentheses::#Expressions][Expressions with Balanced Parentheses]].
+
+- M-z =char= :: Kill through the next occurrence of =char= (=zap-to-char=).
+
+- M-x zap-up-to-char =char= :: Kill up to, but not including, the next occurrence of =char=.
+
+One of the commonly-used kill commands is C-w (=kill-region=), which kills the text in the region (see [[id:emacs--Mark][The Mark and the Region]]). Similarly, M-w (=kill-ring-save=) copies the text in the region into the kill ring without removing it from the buffer. If the mark is inactive when you type C-w or M-w, the command acts on the text between point and where you last set the mark (see [[id:emacs--Using-Region][Operating on the Region]]).
+
+Emacs also provides commands to kill specific syntactic units: words, with M-DEL and M-d (see [[id:emacs--Words][Words]]); balanced expressions, with C-M-k (see [[id:emacs--Parentheses::#Expressions][Expressions with Balanced Parentheses]]); and sentences, with C-x DEL and M-k (see [[id:emacs--Sentences][Sentences]]).
+
+The command M-z (=zap-to-char=) combines killing with searching: it reads a character and kills from point up to (and including) the next occurrence of that character in the buffer. A numeric argument acts as a repeat count; a negative argument means to search backward and kill text before point. A history of previously used characters is maintained and can be accessed via the M-p/M-n keystrokes. This is mainly useful if the character to be used has to be entered via a complicated input method. A similar command =zap-up-to-char= kills from point up to, but not including the next occurrence of a character, with numeric argument acting as a repeat count.
+
+--------------
+
+<<Kill-Options>>
+**** 14.1.4 Options for Killing [[#Options-for-Killing][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Options-for-Killing
+:CLASS: subsection
+:END:
+Some specialized buffers contain /read-only text/, which cannot be modified and therefore cannot be killed. The kill commands work specially in a read-only buffer: they move over text and copy it to the kill ring, without actually deleting it from the buffer. Normally, they also beep and display an error message when this happens. But if you set the variable =kill-read-only-ok= to a non-=nil= value, they just print a message in the echo area to explain why the text has not been erased.
+
+Before saving the kill to the kill ring, you can transform the string using =kill-transform-function=. It's called with the string to be killed, and it should return the string you want to be saved. It can also return =nil=, in which case the string won't be saved to the kill ring. For instance, if you never want to save a pure white space string to the kill ring, you can say:
+
+#+begin_src lisp-preformatted
+(setq kill-transform-function
+      (lambda (string)
+        (and (not (string-blank-p string))
+             string)))
+#+end_src
+
+If you change the variable =kill-do-not-save-duplicates= to a non-=nil= value, identical subsequent kills yield a single kill-ring entry, without duplication.
+
+If you enable the minor mode =kill-ring-deindent-mode=, text saved to the kill-ring will have its indentation decreased by the amount of indentation of the first saved line. That is, if the first line of the saved text was indented =n= columns, this mode will remove that number of columns from the indentation of each saved line.
+
+--------------

@@ -1,0 +1,76 @@
+:PROPERTIES:
+:ID: guix--partition-Reference
+:END:
+#+filetags: :guix:
+#+title: partition Reference
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<partition-Reference>>
+Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 16.1.1 =partition= Reference [[#partition-Reference-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: partition-Reference-1
+:CLASS: subsection
+:END:
+In =image= record may contain some partitions.
+
+- Data Type: *partition* [[#index-partition][¶]] :: This is the data type representing an image partition.
+
+  - =size= (default: ='guess=) :: The partition size in bytes or ='guess=. The ='guess= symbol, which is the default, means that the partition size will be inferred based on the partition content.
+
+  - =offset= (default: =0=) :: The partition's start offset in bytes, relative to the image start or the previous partition end. It defaults to =0= which means that there is no offset applied.
+
+  - =file-system= (default: ="ext4"=) :: The partition file system as a string, defaulting to ="ext4"=.
+
+    The supported values are ="btrfs"=, ="erofs"=, ="ext4"=, ="fat16"=, ="f2fs"=, ="fat32"=, ="vfat"=, ="squashfs"=, and ="swap"=.
+
+    ="vfat"=, ="fat16"=, and ="fat32"= partitions without the ='esp= flag are by default LBA compatible.
+
+  - =file-system-options= (default: ='()=) :: The partition file system creation options that should be passed to the partition creation tool, as a list of strings. This is only supported when creating ="vfat"=, ="fat16"=, ="fat32"= or ="ext4"= partitions.
+
+    See the ="extended-options"= man page section of the ="mke2fs"= tool for a more complete reference.
+
+  - =label= :: The partition label as a mandatory string, ="my-root"= for instance.
+
+  - =uuid= (default: =#false=) :: The partition UUID as an =uuid= record (see [[id:guix--File-Systems][File Systems]]). By default it is =#false=, which means that the partition creation tool will attribute a random UUID to the partition.
+
+  - =flags= (default: ='()=) :: The partition flags as a list of symbols. Possible values are ='boot= and ='esp=. The ='boot= flags should be set if you want to boot from this partition. Exactly one partition should have this flag set, usually the root one. The ='esp= flag identifies a UEFI System Partition.
+
+  - =initializer= (default: =#false=) :: The partition initializer procedure as a gexp. This procedure is called to populate a partition. If no initializer is passed, the =initialize-root-partition= procedure from the =(gnu build image)= module is used.
+
+--------------
+
+Up: [[id:guix--image-Reference][=image= Reference]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

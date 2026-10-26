@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Text-Garbled
+:END:
+#+filetags: :emacs:
+#+title: Text Garbled
+
+Next: [[id:emacs--Memory-Full][Running out of Memory]]   Previous: [[id:emacs--Screen-Garbled][Garbage on the Screen]]   Up: [[id:emacs--Lossage][Dealing with Emacs Trouble]]
+
+<<Text-Garbled>>
+*** 53.3 Garbage in the Text [[#Garbage-in-the-Text][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Garbage-in-the-Text
+:CLASS: section subsection-level-set-section
+:END:
+If C-l shows that the text is wrong, first type C-h l (=view-lossage=) to see what commands you typed to produce the observed results. Then try undoing the changes step by step using C-x u (=undo=), until it gets back to a state you consider correct.
+
+If a large portion of text appears to be missing at the beginning or end of the buffer, check for the word ‘=Narrow=' in the mode line. If it appears, the text you don't see is probably still present, but temporarily off-limits. To make it accessible again, type C-x n w (=widen=). See [[id:emacs--Narrowing][Narrowing]].
+
+--------------

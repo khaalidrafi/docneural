@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID: org--Drag-and-Drop-_0026-yank_002dmedia
+:END:
+#+filetags: :org:
+#+title: Drag and Drop &amp; yank-media (The Org Manual)
+
+Next:
+
+<<Drag-and-Drop-_0026-yank_002dmedia>>
+Next: [[id:org--Repeating-commands][Repeating commands]], Previous: [[id:org--Org-Mobile][Org Mobile]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.19 Drag and Drop & =yank-media= [[#Drag-and-Drop-_0026-yank_002dmedia-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Drag-and-Drop-_0026-yank_002dmedia-1
+:CLASS: section
+:END:
+Org mode supports drag and drop (DnD) of files. By default, Org asks the user what must be done with the dropped file: attach it, insert ‘=file:=' link, or open the file. Customize =org-yank-dnd-method= to set the default DnD action.
+
+When DnD method is “attach”, Org mode first consults DnD metadata to decide the attach method. For example, when file/files are dragged from a file manager, Org may attach by copying or by moving.
+
+If Org cannot figure out which attachment method to use from the metadata, it defaults to =org-yank-dnd-default-attach-method= [[#FOOT173][^{173}]]
+
+Starting from Emacs 29, Org mode supports =yank-media= command to yank images from the clipboard, files from a file manager and tables copied from LibreOffice Calc documents.
+
+When yanking images from clipboard, Org saves the image on disk and inserts the image link to Org buffer. Images can be saved as attachments to heading (default), to a globally defined directory, or to a directory returned by a function call. The save location is controlled by =org-yank-image-save-method=.
+
+The yanked images are saved under automatically generated name. You can customize =org-yank-image-file-name-function= to make Org query the image names or change the naming scheme.
+
+When yanking files copied from a file manager, Org respects the value of =org-yank-dnd-method=. Image files pasted this way also respect the value of =org-yank-image-save-method= when the action to perform is ‘=attach='.
+
+Tables copied from LibreOffice Calc documents are yanked as Org tables.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF173][(173)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+By default, =org-yank-dnd-default-attach-method= is set to nil -- use the same value as =org-attach-method= (=cp= by default).
+
+--------------
+
+Next: [[id:org--Repeating-commands][Repeating commands]], Previous: [[id:org--Org-Mobile][Org Mobile]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

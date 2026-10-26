@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: emacs--Rmail-Editing
+:END:
+#+filetags: :emacs:
+#+title: Rmail Editing
+
+Next: [[id:emacs--Rmail-Digest][Digest Messages]]   Previous: [[id:emacs--Rmail-Coding][Rmail and Coding Systems]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
+
+<<Rmail-Editing>>
+*** 35.15 Editing Within a Message [[#Editing-Within-a-Message][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Editing-Within-a-Message
+:CLASS: section
+:END:
+Most of the usual Emacs key bindings are available in Rmail mode, though a few, such as C-M-n and C-M-h, are redefined by Rmail for other purposes. However, the Rmail buffer is normally read only, and most of the letters are redefined as Rmail commands. If you want to edit the text of a message, you must use the Rmail command e.
+
+- e :: Edit the current message as ordinary text.
+
+The e command (=rmail-edit-current-message=) switches from Rmail mode into Rmail Edit mode, another major mode which is nearly the same as Text mode. The mode line indicates this change.
+
+In Rmail Edit mode, letters insert themselves as usual and the Rmail commands are not available. You can edit the message body and header fields. When you are finished editing the message, type C-c C-c (=rmail-cease-edit=) to switch back to Rmail mode. Alternatively, you can return to Rmail mode but cancel any editing that you have done, by typing C-c C-] (=rmail-abort-edit=).
+
+Entering Rmail Edit mode runs the hook =text-mode-hook=; then it runs the hook =rmail-edit-mode-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]). Returning to ordinary Rmail mode adds the attribute ‘=edited=' to the message, if you have made any changes in it (see [[id:emacs--Rmail-Attributes][Rmail Attributes]]).
+
+--------------

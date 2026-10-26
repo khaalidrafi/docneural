@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID: guix--Image-Modules
+:END:
+#+filetags: :guix:
+#+title: Image Modules
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Image-Modules>>
+Previous: [[id:guix--image_002dtype-Reference][image-type Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 16.4 Image Modules [[#Image-Modules-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Image-Modules-1
+:CLASS: section
+:END:
+Let's take the example of the Pine64, an ARM based machine. To be able to produce an image targeting this board, we need the following elements:
+
+- An =operating-system= record containing at least an appropriate kernel (=linux-libre-arm64-generic=) and bootloader =u-boot-pine64-lts-bootloader=) for the Pine64.
+- Possibly, an =image-type= record providing a way to turn an =operating-system= record to an =image= record suitable for the Pine64.
+- An actual =image= that can be instantiated with the =guix system image= command.
+
+The =(gnu system images pine64)= module provides all those elements: =pine64-barebones-os=, =pine64-image-type= and =pine64-barebones-raw-image= respectively.
+
+The module returns the =pine64-barebones-raw-image= in order for users to be able to run:
+
+#+begin_example
+guix system image gnu/system/images/pine64.scm
+#+end_example
+
+Now, thanks to the =pine64-image-type= record declaring the ='pine64-raw= =image-type=, one could also prepare a =my-pine.scm= file with the following content:
+
+#+begin_src lisp
+(use-modules (gnu system images pine64))
+(operating-system
+  (inherit pine64-barebones-os)
+  (timezone "Europe/Athens"))
+#+end_src
+
+to customize the =pine64-barebones-os=, and run:
+
+#+begin_example
+$ guix system image --image-type=pine64-raw my-pine.scm
+#+end_example
+
+Note that there are other modules in the =gnu/system/images= directory targeting =Novena=, =Pine64=, =PinebookPro= and =Rock64= machines.
+
+--------------
+
+Previous: [[id:guix--image_002dtype-Reference][image-type Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

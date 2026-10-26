@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID: org--Quoting-LaTeX-code
+:END:
+#+filetags: :org:
+#+title: Quoting LaTeX code (The Org Manual)
+
+Next:
+
+<<Quoting-LaTeX-code>>
+Next: [[id:org--Tables-in-LaTeX-export][Tables in LaTeX export]], Previous: [[id:org--LaTeX-header-and-sectioning][LaTeX header and sectioning structure]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.4 Quoting LaTeX code [[#Quoting-LaTeX-code-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quoting-LaTeX-code-1
+:CLASS: subsection
+:END:
+When the available LaTeX export customizations are not sufficient to fine-tune the desired output, it is possible to insert any arbitrary LaTeX code (see [[id:org--Embedded-LaTeX][Embedded LaTeX]]). There are three ways to embed such code in the Org file, and they all use different quoting syntax.
+
+Inserting in-line quoted with @ symbols:
+
+#+begin_example
+Code embedded in-line @@latex:any arbitrary LaTeX code@@ in a paragraph.
+#+end_example
+
+Inserting as one or more keyword lines in the Org file:
+
+#+begin_example
+#+LATEX: any arbitrary LaTeX code
+#+end_example
+
+Inserting as an export block in the Org file, where the backend exports any code between begin and end markers:
+
+#+begin_example
+#+BEGIN_EXPORT latex
+  any arbitrary LaTeX code
+#+END_EXPORT
+#+end_example

@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID: org--Workflow-states
+:END:
+#+filetags: :org:
+#+title: Workflow states (The Org Manual)
+
+Next:
+
+<<Workflow-states>>
+Next: [[id:org--TODO-types][TODO keywords as types]], Up: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 5.2.1 TODO keywords as workflow states [[#TODO-keywords-as-workflow-states][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TODO-keywords-as-workflow-states
+:CLASS: subsection
+:END:
+You can use TODO keywords to indicate different, possibly /sequential/ states in the process of working on an item, for example[[#FOOT38][^{38}]]:
+
+#+begin_src lisp-preformatted
+(setq org-todo-keywords
+      '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "DELEGATED")))
+#+end_src
+
+The vertical bar separates the TODO keywords (states that /need action/) from the DONE states (which need /no further action/). If you do not provide the separator bar, the last state is used as the DONE state.
+
+With this setup, the command C-c C-t cycles an entry from ‘=TODO=' to ‘=FEEDBACK=', then to ‘=VERIFY=', and finally to ‘=DONE=' and ‘=DELEGATED='. You may also use a numeric prefix argument to quickly select a specific state. For example C-3 C-c C-t changes the state immediately to ‘=VERIFY='. Or you can use S-RIGHT and S-LEFT to go forward and backward through the states. If you define many keywords, you can use in-buffer completion (see [[id:org--Completion][Completion]]) or a special one-key selection scheme (see [[id:org--Fast-access-to-TODO-states][Fast access to TODO states]]) to insert these words into the buffer. Changing a TODO state can be logged with a timestamp; see [[id:org--Tracking-TODO-state-changes][Tracking TODO state changes]] for more information.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF38][(38)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Changing the variable =org-todo-keywords= only becomes effective after restarting Org mode in a buffer.
+
+--------------
+
+Next: [[id:org--TODO-types][TODO keywords as types]], Up: [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

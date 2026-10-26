@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: guix--After-System-Installation
+:END:
+#+filetags: :guix:
+#+title: After System Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<After-System-Installation>>
+Next: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Previous: [[id:guix--Manual-Installation][Manual Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 3.7 After System Installation [[#After-System-Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: After-System-Installation-1
+:CLASS: section
+:END:
+Success, you've now booted into Guix System! Login to the system using the non-=root= user that you created during installation. You can upgrade the system whenever you want by running:
+
+#+begin_example
+guix pull
+sudo guix system reconfigure /etc/config.scm
+#+end_example
+
+This builds a new system /generation/ with the latest packages and services.
+
+Now, see [[id:guix--Getting-Started-with-the-System][Getting Started]], and join us on =#guix= on the Libera.Chat IRC network or on [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] to share your experience!

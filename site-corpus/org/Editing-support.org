@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Editing-support
+:END:
+#+filetags: :org:
+#+title: Editing support (The Org Manual)
+
+Next:
+
+<<Editing-support>>
+Next: [[id:org--A-Beamer-example][A Beamer example]], Previous: [[id:org--Beamer-specific-syntax][Beamer specific syntax]], Up: [[id:org--Beamer-Export][Beamer Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.8.5 Editing support [[#Editing-support-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Editing-support-1
+:CLASS: subsection
+:END:
+Org Beamer mode is a special minor mode for faster editing of Beamer documents.
+
+#+begin_example
+#+STARTUP: beamer
+#+end_example
+
+-  <<index-C_002dc-C_002db-1>>C-c C-b (=org-beamer-select-environment=) [[#index-C_002dc-C_002db-1][¶]] :: Org Beamer mode provides this key for quicker selections in Beamer normal environments, and for selecting the ‘=BEAMER_COL=' property.

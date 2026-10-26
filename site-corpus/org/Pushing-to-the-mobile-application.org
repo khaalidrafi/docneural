@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID: org--Pushing-to-the-mobile-application
+:END:
+#+filetags: :org:
+#+title: Pushing to the mobile application (The Org Manual)
+
+Next:
+
+<<Pushing-to-the-mobile-application>>
+Next: [[id:org--Pulling-from-the-mobile-application][Pulling from the mobile application]], Previous: [[id:org--Setting-up-the-staging-area][Setting up the staging area]], Up: [[id:org--Org-Mobile][Org Mobile]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 17.18.2 Pushing to the mobile application [[#Pushing-to-the-mobile-application-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Pushing-to-the-mobile-application-1
+:CLASS: subsection
+:END:
+The command =org-mobile-push= copies files listed in =org-mobile-files= into the staging area. Files include agenda files (as listed in =org-agenda-files=). Customize =org-mobile-files= to add other files. File names are staged with paths relative to =org-directory=, so all files should be inside this directory[[#FOOT169][^{169}]].
+
+Push creates a special Org file ‘=agendas.org=' with custom agenda views defined by the user[[#FOOT170][^{170}]].
+
+Finally, Org writes the file ‘=index.org=', containing links to other files. The mobile application reads this file first from the server to determine what other files to download for agendas. For faster downloads, it is expected to only read files whose checksums[[#FOOT171][^{171}]] have changed.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF169][(169)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Symbolic links in =org-directory= need to have the same name as their targets.
+
+***** [[#DOCF170][(170)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+While creating the agendas, Org mode forces ‘=ID=' properties on all referenced entries, so that these entries can be uniquely identified if Org Mobile flags them for further action. To avoid setting properties configure the variable =org-mobile-force-id-on-agenda-items= to =nil=. Org mode then relies on outline paths, assuming they are unique.
+
+***** [[#DOCF171][(171)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+Checksums are stored automatically in the file ‘=checksums.dat='.

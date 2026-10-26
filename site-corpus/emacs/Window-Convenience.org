@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: emacs--Window-Convenience
+:END:
+#+filetags: :emacs:
+#+title: Window Convenience
+
+Next: [[id:emacs--Tab-Line][Window Tab Line]]   Previous: [[id:emacs--Displaying-Buffers#Displaying-Buffers][Displaying a Buffer in a Window]]   Up: [[id:emacs--Windows][Multiple Windows]]
+
+<<Window-Convenience>>
+*** 22.7 Convenience Features for Window Handling [[#Convenience-Features-for-Window-Handling][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Convenience-Features-for-Window-Handling
+:CLASS: section
+:END:
+Winner mode is a global minor mode that records the changes in the window configuration (i.e., how the frames are partitioned into windows), so that you can undo them. You can toggle Winner mode with M-x winner-mode, or by customizing the variable =winner-mode=. When the mode is enabled, C-c left (=winner-undo=) undoes the last window configuration change. If you change your mind while undoing, you can redo the changes you had undone using C-c right (=M-x winner-redo=). To prevent Winner mode from binding C-c left and C-c right, you can customize the variable =winner-dont-bind-my-keys= to a non-=nil= value. By default, Winner mode stores a maximum of 200 window configurations per frame, but you can change that by modifying the variable =winner-ring-size=. If there are some buffers whose windows you wouldn't want Winner mode to restore, add their names to the list variable =winner-boring-buffers= or to the regexp =winner-boring-buffers-regexp=.
+
+Follow mode (M-x follow-mode) synchronizes several windows on the same buffer so that they always display adjacent sections of that buffer. See [[id:emacs--Follow-Mode][Follow Mode]].
+
+The Windmove package defines commands for moving directionally between neighboring windows in a frame. M-x windmove-right selects the window immediately to the right of the currently selected one, and similarly for the left, up, and down counterparts. =windmove-default-keybindings= binds these commands to S-right etc.; doing so disables shift selection for those keys (see [[id:emacs--Shift-Selection][Shift Selection]]). In the same way as key bindings can be defined for commands that select windows directionally, you can use =windmove-display-default-keybindings= to define keybindings for commands that specify in what direction to display the window for the buffer that the next command is going to display. Also there is =windmove-delete-default-keybindings= to define keybindings for commands that delete windows directionally, and =windmove-swap-states-default-keybindings= that defines key bindings for commands that swap the window contents of the selected window with the window in the specified direction.
+
+The command M-x compare-windows lets you compare the text shown in different windows. See [[id:emacs--Comparing-Files][Comparing Files]].
+
+Scroll All mode (M-x scroll-all-mode) is a global minor mode that causes scrolling commands and point motion commands to apply to every single window.
+
+--------------

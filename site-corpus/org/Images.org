@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID: org--Images
+:END:
+#+filetags: :org:
+#+title: Images (The Org Manual)
+
+Next:
+
+<<Images>>
+Up: [[id:org--Images-and-link-previews][Images and link previews]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 12.7.1 Images [[#Images-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Images-1
+:CLASS: subsection
+:END:
+An image is a link to an image file[[#FOOT124][^{124}]] that does not have a description part, for example
+
+#+begin_example
+./img/cat.jpg
+#+end_example
+
+If you wish to define a caption for the image (see [[id:org--Captions][Captions]]) and maybe a label for internal cross-references (see [[id:org--Internal-Links][Internal Links]]), make sure that the link is on a line by itself and precede it with ‘=CAPTION=' and ‘=NAME=' keywords as follows:
+
+#+begin_example
+#+CAPTION: This is the caption for the next figure link (or table)
+#+NAME:   fig:SED-HR4049
+[[./img/a.jpg]]
+#+end_example
+
+When link previews are displayed as images, the image size and alignment can be further customized.
+
+By default, Org mode displays inline images according to their actual width, but no wider than =fill-column= characters.
+
+You can customize the displayed image width using =org-image-actual-width= variable (globally) or ‘=ORG-IMAGE-ACTUAL-WIDTH=' property (subtree-level)[[#FOOT125][^{125}]]. Their value can be the following:
+
+- (default) Non-=nil=, use the actual width of images when inlining them. If the actual width is too wide, limit it according to =org-image-max-width=.
+
+- When set to a number, use ImageMagick (when available) to set the image's width to this value.
+
+- When set to a number in a list, try to get the width from any ‘=#+ATTR.*=' keyword if it matches a width specification like:
+
+  #+begin_example
+  #+ATTR_HTML: :width 300px
+#+end_example
+
+  and fall back on that number if none is found.
+
+- When set to =nil=, try to get the width from an ‘=#+ATTR.*=' keyword and fall back on the original width or =org-image-max-width= if none is found.
+
+=org-image-max-width= limits the maximum displayed image width, but only when the image width is not set explicitly. Possible maximum width can be set to:
+
+- (default) =fill-column=, limit width to =fill-column= number of characters.
+- =window=, limit width to current window width.
+- integer number, limit width to that specified number of pixels.
+- =nil=, do not limit the width.
+
+Org mode can left-align, center or right-align the display of inline images. This setting is controlled (globally) by =org-image-align=. Only standalone images are affected, corresponding to links with no surrounding text in their paragraph except for whitespace. Its value can be the following:
+
+- (default) The symbol =left=, which inserts the image where the link appears in the buffer.
+- The symbol =center=, which will preview links centered in the Emacs window.
+- The symbol =right=, which will preview links right-aligned in the Emacs window.
+
+Inline image alignment can be specified for each link using the ‘=#+ATTR.*=' keyword if it matches an alignment specification like:
+
+#+begin_example
+#+ATTR_HTML: :align center
+#+end_example
+
+Org will use the alignment specification from any ‘=#+ATTR.*=' keyword, such as ‘=#+ATTR_HTML=' or ‘=#+ATTR_LATEX=', but ‘=#+ATTR_ORG=' (if present) will override the others. For instance, this link
+
+#+begin_example
+#+ATTR_HTML: :align right
+#+ATTR_ORG: :align center
+[[/path/to/image/file.png]]
+#+end_example
+
+will be displayed centered in Emacs but exported right-aligned to HTML.
+
+When ‘=#+ATTR_ORG=' is not set, inline image alignment is also read from the ‘=:center=' attribute supported by some export backends (like HTML, LaTeX and Beamer.)
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF124][(124)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+What Emacs considers to be an image depends on =image-file-name-extensions= and =image-file-name-regexps=.
+
+***** [[#DOCF125][(125)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The width can be customized in Emacs >= 24.1, built with ImageMagick support.
+
+--------------
+
+Up: [[id:org--Images-and-link-previews][Images and link previews]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

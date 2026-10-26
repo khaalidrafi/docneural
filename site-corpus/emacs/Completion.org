@@ -1,0 +1,206 @@
+:PROPERTIES:
+:ID: emacs--Completion
+:END:
+#+filetags: :emacs:
+#+title: Completion
+
+Next: [[id:emacs--Minibuffer-History][Minibuffer History]]   Previous: [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]]   Up: [[id:emacs--Minibuffer][The Minibuffer]]
+
+<<Completion>>
+*** 10.4 Completion [[#Completion-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Completion-1
+:CLASS: section
+:END:
+You can often use a feature called /completion/ to help enter arguments. This means that after you type part of the argument, Emacs can fill in the rest, or some of it, based on what was typed so far.
+
+When completion is available, certain keys (usually TAB, RET, and SPC) are rebound in the minibuffer to special completion commands (see [[#Completion-Commands][Completion Commands]]). These commands attempt to complete the text in the minibuffer, based on a set of /completion alternatives/ provided by the command that requested the argument. You can usually type ? to see a list of completion alternatives.
+
+Although completion is usually done in the minibuffer, the feature is sometimes available in ordinary buffers too. See [[id:emacs--Symbol-Completion][Completion for Symbol Names]].
+
+--------------
+
+<<Completion-Example>>
+**** 10.4.1 Completion Example [[#Completion-Example-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Completion-Example-1
+:CLASS: subsection
+:END:
+A simple example may help here. M-x uses the minibuffer to read the name of a command, so completion works by matching the minibuffer text against the names of existing Emacs commands. Suppose you wish to run the command =auto-fill-mode=. You can do that by typing M-x auto-fill-mode RET, but it is easier to use completion.
+
+If you type M-x a u TAB, the TAB looks for completion alternatives (in this case, command names) that start with ‘=au='. There are several, including =auto-fill-mode= and =autoconf-mode=, but they all begin with =auto=, so the ‘=au=' in the minibuffer completes to ‘=auto='. (More commands may be defined in your Emacs session. For example, if a command called =authorize-me= was defined, Emacs could only complete as far as ‘=aut='.)
+
+If you type TAB again immediately, it cannot determine the next character; it could be ‘=-=', ‘=a=', or ‘=c='. So it does not add any characters; instead, TAB displays a list of all possible completions in another window.
+
+Next, type -f. The minibuffer now contains ‘=auto-f=', and the only command name that starts with this is =auto-fill-mode=. If you now type TAB, completion fills in the rest of the argument ‘=auto-fill-mode=' into the minibuffer.
+
+Hence, typing just a u TAB - f TAB allows you to enter ‘=auto-fill-mode='.
+
+TAB also works while point is not at the end of the minibuffer. In that case, it will fill in text both at point and at the end of the minibuffer. If you type M-x autocm, then press C-b to move point before the ‘=m=', you can type TAB to insert the text ‘=onf-=' at point and ‘=ode=' at the end of the minibuffer, so that the minibuffer contains ‘=autoconf-mode='.
+
+--------------
+
+<<Completion-Commands>>
+**** 10.4.2 Completion Commands [[#Completion-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Completion-Commands-1
+:CLASS: subsection
+:END:
+Here is a list of the completion commands defined in the minibuffer when completion is allowed.
+
+- TAB :: Complete the text in the minibuffer as much as possible; if unable to complete, display a list of possible completions.
+
+- SPC :: Complete up to one word from the minibuffer text before point.
+
+- C-x UP :: Complete the text in the minibuffer using minibuffer history.
+
+- C-x DOWN :: Complete the text in the minibuffer using minibuffer defaults.
+
+- RET :: Submit the text in the minibuffer as the argument, possibly completing first. See [[#Completion-Exit][Completion Exit]].
+
+- ? :: Display a list of completions and a few useful key bindings (=minibuffer-completion-help=).
+
+- M-DOWN\\
+  M-UP :: Navigate through list of completions.
+
+- M-v\\
+  M-g M-c\\
+  PageUp\\
+  prior :: While in the minibuffer, select the window showing the completion list.
+
+- RET :: In the completions buffer, choose the completion at point.
+
+- mouse-1\\
+  mouse-2 :: In the completions buffer, choose the completion at mouse click.
+
+- TAB\\
+  RIGHT\\
+  n :: In the completions buffer, move to the following completion candidate.
+
+- S-TAB\\
+  LEFT\\
+  p :: In the completions buffer, move to the previous completion candidate.
+
+- q :: Quit the completions window and switch to the minibuffer window.
+
+- z :: Kill the completions buffer and delete the window showing it.
+
+TAB (=minibuffer-complete=) is the most fundamental completion command. It searches for all possible completions that match the existing minibuffer text, and attempts to complete as much as it can. See [[#Completion-Styles][How Completion Alternatives Are Chosen]], for how completion alternatives are chosen.
+
+SPC (=minibuffer-complete-word=) completes like TAB, but only up to the next hyphen or space. If you have ‘=auto-f=' in the minibuffer and type SPC, it finds that the completion is ‘=auto-fill-mode=', but it only inserts ‘=ill-=', giving ‘=auto-fill-='. Another SPC at this point completes all the way to ‘=auto-fill-mode='. This command is not available for arguments that often include spaces, such as file names.
+
+If TAB or SPC is unable to complete, it displays in another window a list of matching completion alternatives (if there are any) and a few useful commands to select a completion candidate. You can display the same completion list and help with ? (=minibuffer-completion-help=). The following commands can be used with the completion list:
+
+While in the minibuffer or in the completion list buffer, M-DOWN (=minibuffer-next-completion= and M-UP (=minibuffer-previous-completion=) navigate through the completions displayed in the completions buffer. When =minibuffer-completion-auto-choose= is non-=nil= (which is the default), using these commands also inserts the current completion candidate into the minibuffer. If =minibuffer-completion-auto-choose= is =nil=, you can use the M-RET command (=minibuffer-choose-completion=) to insert the completion candidates into the minibuffer. By default, that exits the minibuffer, but with a prefix argument, C-u M-RET inserts the currently active candidate without exiting the minibuffer.
+
+Typing M-v, while in the minibuffer, selects the window showing the completion list (=switch-to-completions=). This paves the way for using the commands below. PageUp, prior and M-g M-c do the same. You can also select the window in other ways (see [[id:emacs--Windows][Multiple Windows]]).
+
+While in the completion list buffer, RET chooses the completion candidate at point (=choose-completion=) and mouse-1 and mouse-2 choose the completion at mouse click. With a prefix argument, C-u RET inserts the completion at point into the minibuffer, but doesn't exit the minibuffer---thus, you can change your mind and choose another candidate.
+
+While in the completion list buffer, you can use TAB, RIGHT, or n to move point to the following completion candidate (=next-completion=). You can also use S-TAB, LEFT, and p to move point to the previous completion alternative (=previous-completion=).
+
+You can also complete using the history of minibuffer inputs for the command which prompted you. C-x UP (=minibuffer-complete-history=) works like TAB, but completes using minibuffer history instead of the usual completion candidates. A similar command C-x DOWN (=minibuffer-complete-defaults=) completes using the default input items provided by the prompting command.
+
+Finally, q quits the window showing it and selects the window showing the minibuffer (=quit-window=), and z kills the completion buffer and delete the window showing it (=kill-current-buffer=).
+
+If the variable =minibuffer-visible-completions= is customized to a non-=nil= value, it changes the commands bound to the arrow keys: instead of moving in the minibuffer, they move between completion candidates, like meta-arrow keys do by default. Similarly, RET selects the current candidate, like M-RET does normally. =C-g= hides the completion window, but leaves the minibuffer active, so you can continue typing at the prompt.
+
+--------------
+
+<<Completion-Exit>>
+**** 10.4.3 Completion Exit [[#Completion-Exit-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Completion-Exit-1
+:CLASS: subsection
+:END:
+When a command reads an argument using the minibuffer with completion, it also controls what happens when you type RET (=minibuffer-complete-and-exit=) to submit the argument. There are four types of behavior:
+
+- /Strict completion/ accepts only exact completion matches. Typing RET exits the minibuffer only if the minibuffer text is an exact match, or completes to one. Otherwise, Emacs refuses to exit the minibuffer; instead it tries to complete, and if no completion can be done it momentarily displays ‘=[No match]=' after the minibuffer text. (You can still leave the minibuffer by typing C-g to cancel the command.)
+
+  An example of a command that uses this behavior is M-x, since it is meaningless for it to accept a non-existent command name.
+
+- /Cautious completion/ is like strict completion, except RET exits only if the text is already an exact match. If the text completes to an exact match, RET performs that completion but does not exit yet; you must type a second RET to exit.
+
+  Cautious completion is used for reading file names for files that must already exist, for example.
+
+- /Permissive completion/ allows any input; the completion candidates are just suggestions. Typing RET does not complete, it just submits the argument as you have entered it.
+
+-  /Permissive completion with confirmation/ is like permissive completion, with an exception: if you typed TAB and this completed the text up to some intermediate state (i.e., one that is not yet an exact completion match), typing RET right afterward does not submit the argument. Instead, Emacs asks for confirmation by momentarily displaying ‘=[Confirm]=' after the text; type RET again to confirm and submit the text. This catches a common mistake, in which one types RET before realizing that TAB did not complete as far as desired.
+
+  You can tweak the confirmation behavior by customizing the variable =confirm-nonexistent-file-or-buffer=. The default value, =after-completion=, gives the behavior we have just described. If you change it to =nil=, Emacs does not ask for confirmation, falling back on permissive completion. If you change it to any other non-=nil= value, Emacs asks for confirmation whether or not the preceding command was TAB.
+
+  This behavior is used by most commands that read file names, like C-x C-f, and commands that read buffer names, like C-x b.
+
+--------------
+
+<<Completion-Styles>>
+**** 10.4.4 How Completion Alternatives Are Chosen [[#How-Completion-Alternatives-Are-Chosen][¶]]
+:PROPERTIES:
+:CUSTOM_ID: How-Completion-Alternatives-Are-Chosen
+:CLASS: subsection
+:END:
+Completion commands work by narrowing a large list of possible completion alternatives to a smaller subset that matches what you have typed in the minibuffer. In [[#Completion-Example][Completion Example]], we gave a simple example of such matching. The procedure of determining what constitutes a match is quite intricate. Emacs attempts to offer plausible completions under most circumstances.
+
+Emacs performs completion using one or more /completion styles/---sets of criteria for matching minibuffer text to completion alternatives. During completion, Emacs tries each completion style in turn. If a style yields one or more matches, that is used as the list of completion alternatives. If a style produces no matches, Emacs falls back on the next style.
+
+The list variable =completion-styles= specifies the completion styles to use. Each list element is the name of a completion style (a Lisp symbol). The available style symbols are stored in the variable =completion-styles-alist= (see [[../elisp_html/Completion-Variables.html#Completion-Variables][Completion Variables]] in The Emacs Lisp Reference Manual). The default completion styles are (in order):
+
+- <<index-basic_002c-completion-style>>=basic= [[#index-basic_002c-completion-style][¶]] :: A matching completion alternative must have the same beginning as the text in the minibuffer before point. Furthermore, if there is any text in the minibuffer after point, the rest of the completion alternative must contain that text as a substring.
+
+-  <<index-partial-completion>>=partial-completion= [[#index-partial-completion][¶]] :: This aggressive completion style divides the minibuffer text into words separated by hyphens or spaces, and completes each word separately. (For example, when completing command names, ‘=em-l-m=' completes to ‘=emacs-lisp-mode='.)
+
+  Furthermore, a ‘=*=' in the minibuffer text is treated as a /wildcard/---it matches any string of characters at the corresponding position in the completion alternative.
+
+- <<index-emacs22_002c-completion-style>>=emacs22= [[#index-emacs22_002c-completion-style][¶]] :: This completion style is similar to =basic=, except that it ignores the text in the minibuffer after point. It is so-named because it corresponds to the completion behavior in Emacs 22.
+
+The following additional completion styles are also defined, and you can add them to =completion-styles= if you wish (see [[id:emacs--Customization][Customization]]):
+
+- <<index-substring_002c-completion-style>>=substring= [[#index-substring_002c-completion-style][¶]] :: A matching completion alternative must contain the text in the minibuffer before point, and the text in the minibuffer after point, as substrings (in that same order).
+
+  Thus, if the text in the minibuffer is ‘=foobar=', with point between ‘=foo=' and ‘=bar=', that matches ‘=a==foo==b==bar==c=', where =a=, =b=, and =c= can be any string including the empty string.
+
+- <<index-flex_002c-completion-style>>=flex= [[#index-flex_002c-completion-style][¶]] :: This aggressive completion style, also known as =flx= or =fuzzy= or =scatter= completion, attempts to complete using in-order substrings. For example, it can consider ‘=foo=' to match ‘=frodo=' or ‘=fbarbazoo='.
+
+- <<index-initials_002c-completion-style>>=initials= [[#index-initials_002c-completion-style][¶]] :: This very aggressive completion style attempts to complete acronyms and initialisms. For example, when completing command names, it matches ‘=lch=' to ‘=list-command-history='.
+
+There is also a very simple completion style called =emacs21=. In this style, if the text in the minibuffer is ‘=foobar=', only matches starting with ‘=foobar=' are considered.
+
+You can use different completion styles in different situations, by setting the variable =completion-category-overrides=. For example, the default setting says to use only =basic= and =substring= completion for buffer names.
+
+--------------
+
+<<Completion-Options>>
+**** 10.4.5 Completion Options [[#Completion-Options-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Completion-Options-1
+:CLASS: subsection
+:END:
+Case is significant when completing case-sensitive arguments, such as command names. For example, when completing command names, ‘=AU=' does not complete to ‘=auto-fill-mode='. Case differences are ignored when completing arguments in which case does not matter.
+
+When completing file names, case differences are ignored if the variable =read-file-name-completion-ignore-case= is non-=nil=. The default value is =nil= on systems that have case-sensitive file-names, such as GNU/Linux; it is non-=nil= on systems that have case-insensitive file-names, such as Microsoft Windows. When completing buffer names, case differences are ignored if the variable =read-buffer-completion-ignore-case= is non-=nil=; the default is =nil=.
+
+When completing file names, Emacs usually omits certain alternatives that are considered unlikely to be chosen, as determined by the list variable =completion-ignored-extensions=. Each element in the list should be a string; any file name ending in such a string is ignored as a completion alternative. Any element ending in a slash (=/=) represents a subdirectory name. The standard value of =completion-ignored-extensions= has several elements including =".o"=, =".elc"=, and ="~"=. For example, if a directory contains ‘=foo.c=' and ‘=foo.elc=', ‘=foo=' completes to ‘=foo.c='. However, if /all/ possible completions end in otherwise-ignored strings, they are not ignored: in the previous example, ‘=foo.e=' completes to ‘=foo.elc='. Emacs disregards =completion-ignored-extensions= when showing completion alternatives in the completion list.
+
+Shell completion is an extended version of filename completion, see [[id:emacs--Shell-Options][Shell Mode Options]].
+
+If =completion-auto-help= is set to =nil=, the completion commands never display the completion list buffer; you must type ? to display the list. If the value is =lazy=, Emacs only shows the completion list buffer on the second attempt to complete. In other words, if there is nothing to complete, the first TAB echoes ‘=Next char not unique='; the second TAB shows the completion list buffer. If the value is =always=, the completion list buffer is always shown when completion is attempted.
+
+The display of the completion list buffer after it is shown for the first time is also controlled by =completion-auto-help=. If the value is =t= or =lazy=, the window showing the completions pops down when Emacs is able to complete (and may pop up again if Emacs is again unable to complete after you type some more text); if the value is =always=, the window pops down only when you exit the completion. The value =visible= is a hybrid: it behaves like =t= when it decides whether to pop up the window showing the completion list buffer, and like =always= when it decides whether to pop it down.
+
+Emacs can optionally select the window showing the completions when it shows that window. To enable this behavior, customize the user option =completion-auto-select= to =t=, which changes the behavior of TAB when Emacs pops up the completions: pressing TAB will switch to the completion list buffer, and you can then move to a candidate by cursor motion commands and select it with RET. If the value of =completion-auto-select= is =second-tab=, then the first TAB will pop up the completions list buffer, and the second one will switch to it.
+
+When the window showing the completions is selected, either because you customized =completion-auto-select= or because you switched to it by typing C-x o, the UP and DOWN arrow keys (=previous-line-completion= and =next-line-completion=, respectively) move by lines between completion candidates; with a prefix numeric argument, they move that many lines. If =completion-auto-wrap= is non-=nil=, these commands will wrap at bottom and top of the candidate list.
+
+If =completion-cycle-threshold= is non-=nil=, completion commands can cycle through completion alternatives. Normally, if there is more than one completion alternative for the text in the minibuffer, a completion command completes up to the longest common substring. If you change =completion-cycle-threshold= to =t=, the completion command instead completes to the first of those completion alternatives; each subsequent invocation of the completion command replaces that with the next completion alternative, in a cyclic manner. If you give =completion-cycle-threshold= a numeric value =n=, completion commands switch to this cycling behavior only when there are =n= or fewer alternatives.
+
+When displaying completions, Emacs will normally pop up a new buffer to display the completions. The completions will by default be sorted horizontally, using as many columns as will fit in the window-width, but this can be changed by customizing the =completions-format= user option. If its value is =vertical=, Emacs will sort the completions vertically instead, and if it's =one-column=, Emacs will use just one column.
+
+The =completions-sort= user option controls the order in which the completions are sorted in the ‘=*Completions*=' buffer. The default is =alphabetical=, which sorts in alphabetical order. The value =nil= disables sorting; the value =historical= sorts alphabetically first, and then rearranges according to the order of the candidates in the minibuffer history. The value can also be a function, which will be called with the list of completions, and should return the list in the desired order.
+
+When =completions-max-height= is non-=nil=, it limits the size of the completions window. It is specified in lines and include mode, header line and a bottom divider, if any. For a more complex control of the Completion window display properties, you can use =display-buffer-alist= (see [[../elisp_html/Buffer-Display-Action-Alists.html#Buffer-Display-Action-Alists][Action Alists for Buffer Display]] in The Emacs Lisp Reference Manual).
+
+The variable =completions-header-format= is a format spec string to control the informative line shown before the completions list of candidates. If it contains a ‘=%s=' construct, that get replaced by the number of completions shown in the completion list buffer. To suppress the display of the heading line, customize this variable to =nil=. The string that is the value of this variable can have text properties to change the visual appearance of the heading line; some useful properties =face= or =cursor-intangible= (see [[../elisp_html/Special-Properties.html#Special-Properties][Properties with Special Meanings]] in The Emacs Lisp Reference Manual).
+
+When =completions-highlight-face= names a face, the current completion candidate, the one that will be selected by typing RET or clicking the mouse, will be highlighted using that face. The default value of this variable is =completions-highlight=; the value is =nil= disables this highlighting. This feature uses the special text property =cursor-face=.
+
+--------------

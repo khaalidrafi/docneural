@@ -1,0 +1,315 @@
+:PROPERTIES:
+:ID: guix--Telephony-Services
+:END:
+#+filetags: :guix:
+#+title: Telephony Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Telephony-Services>>
+Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.16 Telephony Services [[#Telephony-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Telephony-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services telephony)= module contains Guix service definitions for telephony services. Currently it provides the following services:
+
+**** Jami [[#Jami][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Jami
+:CLASS: subsubheading
+:END:
+- Variable: *jami-service-type* [[#index-jami_002dservice_002dtype][¶]] :: The service type for running [[https://jami.net/][Jami]] as a service. It takes a =jami-configuration= object as a value, documented below. This section describes how to configure a Jami server that can be used to host video (or audio) conferences, among other uses. The following example demonstrates how to specify Jami account archives (backups) to be provisioned automatically:
+
+  #+begin_src lisp
+  (service jami-service-type
+           (jami-configuration
+            (accounts
+             (list (jami-account
+                    (archive "/etc/jami/unencrypted-account-1.gz"))
+                   (jami-account
+                    (archive "/etc/jami/unencrypted-account-2.gz"))))))
+  #+end_src
+
+  When the accounts field is specified, the Jami account files of the service found under =/var/lib/jami= are recreated every time the service starts.
+
+  Jami accounts and their corresponding backup archives can be generated using the =jami= or =jami-gnome= Jami clients. The accounts should not be password-protected, but it is wise to ensure their files are only readable by ‘=root='.
+
+  The next example shows how to declare that only some contacts should be allowed to communicate with a given account:
+
+  #+begin_src lisp
+  (service jami-service-type
+           (jami-configuration
+            (accounts
+             (list (jami-account
+                    (archive "/etc/jami/unencrypted-account-1.gz")
+                    (peer-discovery? #t)
+                    (rendezvous-point? #t)
+                    (allowed-contacts
+                     '("1dbcb0f5f37324228235564b79f2b9737e9a008f"
+                       "2dbcb0f5f37324228235564b79f2b9737e9a008f")))))))
+  #+end_src
+
+  In this mode, only the declared =allowed-contacts= can initiate communication with the Jami account. This can be used, for example, with rendezvous point accounts to create a private video conferencing space.
+
+  To put the system administrator in full control of the conferences hosted on their system, the Jami service supports the following actions:
+
+  #+begin_example
+  # herd doc jami list-actions
+  (list-accounts
+   list-account-details
+   list-banned-contacts
+   list-contacts
+   list-moderators
+   add-moderator
+   ban-contact
+   enable-account
+   disable-account)
+#+end_example
+
+  The above actions aim to provide the most valuable actions for moderation purposes, not to cover the whole Jami API. Users wanting to interact with the Jami daemon from Guile may be interested in experimenting with the =(gnu build jami-service)= module, which powers the above Shepherd actions.
+
+  The =add-moderator= and =ban-contact= actions accept a contact /fingerprint/ (40 characters long hash) as first argument and an account fingerprint or username as second argument:
+
+  #+begin_example
+  # herd add-moderator jami 1dbcb0f5f37324228235564b79f2b9737e9a008f \
+    f3345f2775ddfe07a4b0d95daea111d15fbc1199
+
+  # herd list-moderators jami
+  Moderators for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
+    - 1dbcb0f5f37324228235564b79f2b9737e9a008f
+#+end_example
+
+  In the case of =ban-contact=, the second username argument is optional; when omitted, the account is banned from all Jami accounts:
+
+  #+begin_example
+  # herd ban-contact jami 1dbcb0f5f37324228235564b79f2b9737e9a008f
+
+  # herd list-banned-contacts jami
+  Banned contacts for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
+    - 1dbcb0f5f37324228235564b79f2b9737e9a008f
+#+end_example
+
+  Banned contacts are also stripped from their moderation privileges.
+
+  The =disable-account= action allows to completely disconnect an account from the network, making it unreachable, while =enable-account= does the inverse. They accept a single account username or fingerprint as first argument:
+
+  #+begin_example
+  # herd disable-account jami f3345f2775ddfe07a4b0d95daea111d15fbc1199
+
+  # herd list-accounts jami
+  The following Jami accounts are available:
+    - f3345f2775ddfe07a4b0d95daea111d15fbc1199 (dummy) [disabled]
+#+end_example
+
+  The =list-account-details= action prints the detailed parameters of each accounts in the Recutils format, which means the =recsel= command can be used to select accounts of interest (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual). Note that period characters (‘=.=') found in the account parameter keys are mapped to underscores (‘=_=') in the output, to meet the requirements of the Recutils format. The following example shows how to print the account fingerprints for all accounts operating in the rendezvous point mode:
+
+  #+begin_example
+  # herd list-account-details jami | \
+    recsel -p Account.username -e 'Account.rendezVous ~ "true"'
+  Account_username: f3345f2775ddfe07a4b0d95daea111d15fbc1199
+#+end_example
+
+  The remaining actions should be self-explanatory.
+
+  The complete set of available configuration options is detailed below.
+
+- Data Type: *jami-configuration* [[#index-jami_002dconfiguration][¶]] :: Available =jami-configuration= fields are:
+
+  - =libjami= (default: =libjami=) (type: package) :: The Jami daemon package to use.
+
+  - =dbus= (default: =dbus-for-jami=) (type: package) :: The D-Bus package to use to start the required D-Bus session.
+
+  - =nss-certs= (default: =nss-certs=) (type: package) :: The nss-certs package to use to provide TLS certificates.
+
+  - =enable-logging?= (default: =#t=) (type: boolean) :: Whether to enable logging to =/var/log/jami=.
+
+  - =debug?= (default: =#f=) (type: boolean) :: Whether to enable debug level messages.
+
+  - =auto-answer?= (default: =#f=) (type: boolean) :: Whether to force automatic answer to incoming calls.
+
+  - =accounts= (type: maybe-jami-account-list) :: A list of Jami accounts to be (re-)provisioned every time the Jami daemon service starts. When providing this field, the account directories under =/var/lib/jami/= are recreated every time the service starts, ensuring a consistent state.
+
+- Data Type: *jami-account* [[#index-jami_002daccount][¶]] :: Available =jami-account= fields are:
+
+  - =archive= (type: string-or-computed-file) :: The account archive (backup) file name of the account. This is used to provision the account when the service starts. The account archive should /not/ be encrypted. It is highly recommended to make it readable only to the ‘=root=' user (i.e., not in the store), to guard against leaking the secret key material of the Jami account it contains.
+
+  - =allowed-contacts= (type: maybe-account-fingerprint-list) :: The list of allowed contacts for the account, entered as their 40 characters long fingerprint. Messages or calls from accounts not in that list will be rejected. When left specified, the configuration of the account archive is used as-is with respect to contacts and public inbound calls/messaging allowance, which typically defaults to allow any contact to communicate with the account.
+
+  - =moderators= (type: maybe-account-fingerprint-list) :: The list of contacts that should have moderation privileges (to ban, mute, etc. other users) in rendezvous conferences, entered as their 40 characters long fingerprint. When left unspecified, the configuration of the account archive is used as-is with respect to moderation, which typically defaults to allow anyone to moderate.
+
+  - =rendezvous-point?= (type: maybe-boolean) :: Whether the account should operate in the rendezvous mode. In this mode, all the incoming audio/video calls are mixed into a conference. When left unspecified, the value from the account archive prevails.
+
+  - =peer-discovery?= (type: maybe-boolean) :: Whether peer discovery should be enabled. Peer discovery is used to discover other OpenDHT nodes on the local network, which can be useful to maintain communication between devices on such network even when the connection to the Internet has been lost. When left unspecified, the value from the account archive prevails.
+
+  - =bootstrap-hostnames= (type: maybe-list-of-strings) :: A list of hostnames or IPs pointing to OpenDHT nodes, that should be used to initially join the OpenDHT network. When left unspecified, the value from the account archive prevails.
+
+  - =name-server-uri= (type: maybe-string) :: The URI of the name server to use, that can be used to retrieve the account fingerprint for a registered username.
+
+**** Mumble server [[#Mumble-server][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mumble-server
+:CLASS: subsubheading
+:END:
+This section describes how to set up and run a [[https://mumble.info][Mumble]] server (formerly known as Murmur).
+
+- Variable: *mumble-server-service-type* [[#index-mumble_002dserver_002dservice_002dtype][¶]] :: This is the service to run a Mumble server. It takes a =mumble-server-configuration= object as its value, defined below.
+
+- Data Type: *mumble-server-configuration* [[#index-mumble_002dserver_002dconfiguration][¶]] :: The service type for the Mumble server. An example configuration can look like this:
+
+  #+begin_src lisp
+  (service mumble-server-service-type
+           (mumble-server-configuration
+            (welcome-text
+              "Welcome to this Mumble server running on Guix!")
+            (cert-required? #t) ;disallow text password logins
+            (ssl-cert "/etc/certs/mumble.example.com/fullchain.pem")
+            (ssl-key "/etc/certs/mumble.example.com/privkey.pem")))
+  #+end_src
+
+  After reconfiguring your system, you can manually set the mumble-server =SuperUser= password with the command that is printed during the activation phase.
+
+  It is recommended to register a normal Mumble user account and grant it admin or moderator rights. You can use the =mumble= client to login as new normal user, register yourself, and log out. For the next step login with the name =SuperUser= use the =SuperUser= password that you set previously, and grant your newly registered mumble user administrator or moderator rights and create some channels.
+
+  Available =mumble-server-configuration= fields are:
+
+  - =package= (default: =mumble=) :: Package that contains =bin/mumble-server=.
+
+  - =user= (default: ="mumble-server"=) :: User who will run the Mumble-Server server.
+
+  - =group= (default: ="mumble-server"=) :: Group of the user who will run the mumble-server server.
+
+  - =port= (default: =64738=) :: Port on which the server will listen.
+
+  - =welcome-text= (default: =""=) :: Welcome text sent to clients when they connect.
+
+  - =server-password= (default: =""=) :: Password the clients have to enter in order to connect.
+
+  - =max-users= (default: =100=) :: Maximum of users that can be connected to the server at once.
+
+  - =max-user-bandwidth= (default: =#f=) :: Maximum voice traffic a user can send per second.
+
+  - =database-file= (default: ="/var/lib/mumble-server/db.sqlite"=) :: File name of the sqlite database. The service's user will become the owner of the directory.
+
+  - =log-file= (default: ="/var/log/mumble-server/mumble-server.log"=) :: File name of the log file. The service's user will become the owner of the directory.
+
+  - =autoban-attempts= (default: =10=) :: Maximum number of logins a user can make in =autoban-timeframe= without getting auto banned for =autoban-time=.
+
+  - =autoban-timeframe= (default: =120=) :: Timeframe for autoban in seconds.
+
+  - =autoban-time= (default: =300=) :: Amount of time in seconds for which a client gets banned when violating the autoban limits.
+
+  - =opus-threshold= (default: =100=) :: Percentage of clients that need to support opus before switching over to opus audio codec.
+
+  - =channel-nesting-limit= (default: =10=) :: How deep channels can be nested at maximum.
+
+  - =channelname-regex= (default: =#f=) :: A string in form of a Qt regular expression that channel names must conform to.
+
+  - =username-regex= (default: =#f=) :: A string in form of a Qt regular expression that user names must conform to.
+
+  - =text-message-length= (default: =5000=) :: Maximum size in bytes that a user can send in one text chat message.
+
+  - =image-message-length= (default: =(* 128 1024)=) :: Maximum size in bytes that a user can send in one image message.
+
+  - =cert-required?= (default: =#f=) :: If it is set to =#t= clients that use weak password authentication will not be accepted. Users must have completed the certificate wizard to join.
+
+  - =remember-channel?= (default: =#f=) :: Should mumble-server remember the last channel each user was in when they disconnected and put them into the remembered channel when they rejoin.
+
+  - =allow-html?= (default: =#f=) :: Should html be allowed in text messages, user comments, and channel descriptions.
+
+  - =allow-ping?= (default: =#f=) :: Setting to true exposes the current user count, the maximum user count, and the server's maximum bandwidth per client to unauthenticated users. In the Mumble client, this information is shown in the Connect dialog.
+
+    Disabling this setting will prevent public listing of the server.
+
+  - =bonjour?= (default: =#f=) :: Should the server advertise itself in the local network through the bonjour protocol.
+
+  - =send-version?= (default: =#f=) :: Should the mumble-server server version be exposed in ping requests.
+
+  - =log-days= (default: =31=) :: Mumble also stores logs in the database, which are accessible via RPC. The default is 31 days of months, but you can set this setting to 0 to keep logs forever, or -1 to disable logging to the database.
+
+  - =obfuscate-ips?= (default: =#t=) :: Should logged ips be obfuscated to protect the privacy of users.
+
+  - =ssl-cert= (default: =#f=) :: File name of the SSL/TLS certificate used for encrypted connections.
+
+    #+begin_src lisp
+    (ssl-cert "/etc/certs/example.com/fullchain.pem")
+    #+end_src
+
+  - =ssl-key= (default: =#f=) :: Filepath to the ssl private key used for encrypted connections.
+
+    #+begin_src lisp
+    (ssl-key "/etc/certs/example.com/privkey.pem")
+    #+end_src
+
+  - =ssl-dh-params= (default: =#f=) :: File name of a PEM-encoded file with Diffie-Hellman parameters for the SSL/TLS encryption. Alternatively you set it to ="@ffdhe2048"=, ="@ffdhe3072"=, ="@ffdhe4096"=, ="@ffdhe6144"= or ="@ffdhe8192"= to use bundled parameters from RFC 7919.
+
+  - =ssl-ciphers= (default: =#f=) :: The =ssl-ciphers= option chooses the cipher suites to make available for use in SSL/TLS.
+
+    This option is specified using [[https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT][OpenSSL cipher list notation]].
+
+    It is recommended that you try your cipher string using 'openssl ciphers <string>' before setting it here, to get a feel for which cipher suites you will get. After setting this option, it is recommend that you inspect your Mumble server log to ensure that Mumble is using the cipher suites that you expected it to.
+
+    #+begin_quote
+    *Note:* Changing this option may impact the backwards compatibility of your Mumble-Server server, and can remove the ability for older Mumble clients to be able to connect to it.
+
+    #+end_quote
+
+  - =public-registration= (default: =#f=) :: Must be a =<mumble-server-public-registration-configuration>= record or =#f=.
+
+    You can optionally register your server in the public server list that the =mumble= client shows on startup. You cannot register your server if you have set a =server-password=, or set =allow-ping= to =#f=.
+
+    It might take a few hours until it shows up in the public list.
+
+  - =file= (default: =#f=) :: Optional alternative override for this configuration.
+
+- Data Type: *mumble-server-public-registration-configuration* [[#index-mumble_002dserver_002dpublic_002dregistration_002dconfiguration][¶]] :: Configuration for public registration of a mumble-server service.
+
+  - =name= :: This is a display name for your server. Not to be confused with the hostname.
+
+  - =password= :: A password to identify your registration. Subsequent updates will need the same password. Don't lose your password.
+
+  - =url= :: This should be a =http://= or =https://= link to your web site.
+
+  - =hostname= (default: =#f=) :: By default your server will be listed by its IP address. If it is set your server will be linked by this host name instead.
+
+#+begin_quote
+*Deprecation notice:* Due to historical reasons, all of the above =mumble-server-= procedures are also exported with the =murmur-= prefix. It is recommended that you switch to using =mumble-server-= going forward.
+
+#+end_quote
+
+--------------
+
+Next: [[id:guix--File_002dSharing-Services][File-Sharing Services]], Previous: [[id:guix--Messaging-Services][Messaging Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID: guix--Building-the-Installation-Image
+:END:
+#+filetags: :guix:
+#+title: Building the Installation Image
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Building-the-Installation-Image>>
+Previous: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 3.9 Building the Installation Image [[#Building-the-Installation-Image-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Building-the-Installation-Image-1
+:CLASS: section
+:END:
+The installation image described above was built using the =guix system= command, specifically:
+
+#+begin_example
+guix system image -t iso9660 gnu/system/install.scm
+#+end_example
+
+Have a look at =gnu/system/install.scm= in the source tree, and see also [[id:guix--Invoking-guix-system][Invoking =guix system=]] for more information about the installation image.
+
+<<Building-the-Installation-Image-for-ARM-Boards>>
+*** 3.10 Building the Installation Image for ARM Boards [[#Building-the-Installation-Image-for-ARM-Boards][¶]]
+:PROPERTIES:
+:CUSTOM_ID: building-the-installation-image-for-arm-boards
+:CLASS: section
+:END:
+Many ARM boards require a specific variant of the [[https://www.denx.de/wiki/U-Boot/][U-Boot]] bootloader.
+
+If you build a disk image and the bootloader is not available otherwise (on another boot drive etc), it's advisable to build an image that includes the bootloader, specifically:
+
+#+begin_example
+guix system image --system=armhf-linux -e '((@ (gnu system install) os-with-u-boot) (@ (gnu system install) installation-os) "A20-OLinuXino-Lime2")'
+#+end_example
+
+=A20-OLinuXino-Lime2= is the name of the board. If you specify an invalid board, a list of possible boards will be printed.
+
+--------------
+
+Previous: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

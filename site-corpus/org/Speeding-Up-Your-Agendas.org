@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--Speeding-Up-Your-Agendas
+:END:
+#+filetags: :org:
+#+title: Speeding Up Your Agendas (The Org Manual)
+
+Next:
+
+<<Speeding-Up-Your-Agendas>>
+Next: [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]], Previous: [[id:org--Special-Agenda-Views][Special Agenda Views]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** A.9 Speeding Up Your Agendas [[#Speeding-Up-Your-Agendas-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Speeding-Up-Your-Agendas-1
+:CLASS: appendixsec
+:END:
+Some agenda commands slow down when the Org files grow in size or number. Here are tips to speed up:
+
+- Reduce the number of Org agenda files to avoid slowdowns due to hard drive accesses.
+
+- Reduce the number of DONE and archived headlines so agenda operations that skip over these can finish faster.
+
+- Do not dim blocked tasks:
+
+  #+begin_src lisp-preformatted
+  (setq org-agenda-dim-blocked-tasks nil)
+  #+end_src
+
+- Stop preparing agenda buffers on startup:
+
+  #+begin_src lisp-preformatted
+  (setq org-agenda-inhibit-startup t)
+  #+end_src
+
+- Disable tag inheritance for agendas:
+
+  #+begin_src lisp-preformatted
+  (setq org-agenda-use-tag-inheritance nil)
+  #+end_src
+
+-  Disable parsing of some properties:
+
+  #+begin_src lisp-preformatted
+  (setq org-agenda-ignore-properties '(stats))
+  #+end_src
+
+  This will disable parsing and updating statistic cookies.
+
+These options can be applied to selected agenda views. For more details about generation of agenda views, see the docstrings for the relevant variables, and this [[https://orgmode.org/worg/agenda-optimization.html][dedicated Worg page]] for agenda optimization.
+
+--------------
+
+Next: [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]], Previous: [[id:org--Special-Agenda-Views][Special Agenda Views]], Up: [[id:org--Hacking][Hacking]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

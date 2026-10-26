@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID: guix--Home-Services
+:END:
+#+filetags: :guix:
+#+title: Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Home-Services>>
+Next: [[id:guix--Invoking-guix-home][Invoking =guix home=]], Previous: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 13.4 Home Services [[#Home-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Home-Services-1
+:CLASS: section
+:END:
+A /home service/ is not necessarily something that has a daemon and is managed by Shepherd (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual), in most cases it doesn't. It's a simple building block of the home environment, often declaring a set of packages to be installed in the home environment profile, a set of config files to be symlinked into =XDG_CONFIG_HOME= (=~/.config= by default), and environment variables to be set by a login shell.
+
+There is a service extension mechanism (see [[id:guix--Service-Composition][Service Composition]]) which allows home services to extend other home services and utilize capabilities they provide; for example: declare mcron jobs (see [[https://www.gnu.org/software/mcron/manual/html_node/index.html#Top][GNU Mcron]]) by extending [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]]; declare daemons by extending [[id:guix--Shepherd-Home-Service][Managing User Daemons]]; add commands, which will be invoked on by the Bash by extending [[id:guix--Shells-Home-Services][=home-bash-service-type=]].
+
+A good way to discover available home services is using the =guix home search= command (see [[id:guix--Invoking-guix-home][Invoking =guix home=]]). After the required home services are found, include its module with the =use-modules= form (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/use_002dmodules.html#use_002dmodules][Using Guile Modules]] in The GNU Guile Reference Manual), or the =#:use-modules= directive (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/define_002dmodule.html#define_002dmodule][Creating Guile Modules]] in The GNU Guile Reference Manual) and declare a home service using the =service= function, or extend a service type by declaring a new service with the =simple-service= procedure from =(gnu services)=.
+
+- [[id:guix--Essential-Home-Services][Essential Home Services]]
+- [[id:guix--Shells-Home-Services][Shells]]
+- [[id:guix--Mcron-Home-Service][Scheduled User's Job Execution]]
+- [[id:guix--Power-Management-Home-Services][Power Management Home Services]]
+- [[id:guix--Shepherd-Home-Service][Managing User Daemons]]
+- [[id:guix--Secure-Shell][Secure Shell]]
+- [[id:guix--GNU-Privacy-Guard][GNU Privacy Guard]]
+- [[id:guix--Desktop-Home-Services][Desktop Home Services]]
+- [[id:guix--XDG-Home-Services][XDG Home Services]]
+- [[id:guix--Guix-Home-Services][Guix Home Services]]
+- [[id:guix--Backup-Home-Services][Backup Services]]
+- [[id:guix--Fonts-Home-Services][Fonts Home Services]]
+- [[id:guix--Sound-Home-Services][Sound Home Services]]
+- [[id:guix--Mail-Home-Services][Mail Home Services]]
+- [[id:guix--Messaging-Home-Services][Messaging Home Services]]
+- [[id:guix--Media-Home-Services][Media Home Services]]
+- [[id:guix--mpv-Media-Player][mpv Media Player]]
+- [[id:guix--Niri-window-manager][Niri window manager]]
+- [[id:guix--Sway-window-manager][Sway window manager]]
+- [[id:guix--Networking-Home-Services][Networking Home Services]]
+- [[id:guix--Secrets-Home-Services][Secrets Home Services]]
+- [[id:guix--Miscellaneous-Home-Services][Miscellaneous Home Services]]
+
+--------------
+
+Next: [[id:guix--Invoking-guix-home][Invoking =guix home=]], Previous: [[id:guix--home_002denvironment-Reference][=home-environment= Reference]], Up: [[id:guix--Home-Configuration][Home Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

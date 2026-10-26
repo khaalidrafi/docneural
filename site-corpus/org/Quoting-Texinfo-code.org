@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Quoting-Texinfo-code
+:END:
+#+filetags: :org:
+#+title: Quoting Texinfo code (The Org Manual)
+
+Next:
+
+<<Quoting-Texinfo-code>>
+Next: [[id:org--Plain-lists-in-Texinfo-export][Plain lists in Texinfo export]], Previous: [[id:org--Indices][Indices]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.8 Quoting Texinfo code [[#Quoting-Texinfo-code-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quoting-Texinfo-code-1
+:CLASS: subsection
+:END:
+Use any of the following three methods to insert or escape raw Texinfo code:
+
+#+begin_example
+Richard @@texinfo:@sc{@@Stallman@@texinfo:}@@ commence' GNU.
+
+#+TEXINFO: @need800
+This paragraph is preceded by...
+
+#+BEGIN_EXPORT texinfo
+  @auindex Johnson, Mark
+  @auindex Lakoff, George
+#+END_EXPORT
+#+end_example

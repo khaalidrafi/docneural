@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: org--Horizontal-rules-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Horizontal rules in LaTeX export (The Org Manual)
+
+Next:
+
+<<Horizontal-rules-in-LaTeX-export>>
+Next: [[id:org--Verse-blocks-in-LaTeX-export][Verse blocks in LaTeX export]], Previous: [[id:org--Special-blocks-in-LaTeX-export][Special blocks in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.11 Horizontal rules in LaTeX export [[#Horizontal-rules-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Horizontal-rules-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend converts horizontal rules by the specified ‘=:width=' and ‘=:thickness=' attributes. For example:
+
+#+begin_example
+#+ATTR_LATEX: :width .6\textwidth :thickness 0.8pt
+-----
+#+end_example

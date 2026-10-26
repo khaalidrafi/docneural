@@ -1,0 +1,88 @@
+:PROPERTIES:
+:ID: guix--Customizing-the-System_002dWide-Guix
+:END:
+#+filetags: :guix:
+#+title: Customizing the System-Wide Guix
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Customizing-the-System_002dWide-Guix>>
+Next: [[id:guix--Channel-Authentication][Channel Authentication]], Previous: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.5 Customizing the System-Wide Guix [[#Customizing-the-System_002dWide-Guix-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-the-System_002dWide-Guix-1
+:CLASS: section
+:END:
+If you're running Guix System or building system images with it, maybe you will want to customize the system-wide =guix= it provides---specifically, =/run/current-system/profile/bin/guix=. For example, you might want to provide additional channels or to pin its revision.
+
+This can be done using the =guix-for-channels= procedure, which returns a package for the given channels, and using it as part of your operating system configuration, as in this example:
+
+#+begin_src lisp
+(use-modules (gnu packages package-management)
+             (guix channels))
+
+(define my-channels
+  ;; Channels that should be available to
+  ;; /run/current-system/profile/bin/guix.
+  (append
+   (list (channel
+          (name 'guix-science)
+          (url "https://codeberg.org/guix-science/guix-science")
+          (branch "master")))
+   %default-channels))
+
+(operating-system
+  ;; ...
+  (services
+    ;; Change the package used by 'guix-service-type'.
+    (modify-services %base-services
+      (guix-service-type
+       config => (guix-configuration
+                  (inherit config)
+                  (channels my-channels)
+                  (guix (guix-for-channels my-channels)))))))
+#+end_src
+
+The resulting operating system will have both the =guix= and the =guix-science= channels visible by default. The =channels= field of =guix-configuration= above further ensures that =/etc/guix/channels.scm=, which is used by =guix pull=, specifies the same set of channels (see [[id:guix--Base-Services::#guix_002dconfiguration_002dchannels][=channels= field of =guix-configuration=]]).
+
+The =(gnu packages package-management)= module exports the =guix-for-channels= procedure, described below.
+
+- Procedure: *guix-for-channels* =channels= [[#index-guix_002dfor_002dchannels][¶]] :: Return a package corresponding to =channels=.
+
+  The result is a “regular” package, which can be used in =guix-configuration= as shown above or in any other place that expects a package.
+
+--------------
+
+Next: [[id:guix--Channel-Authentication][Channel Authentication]], Previous: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

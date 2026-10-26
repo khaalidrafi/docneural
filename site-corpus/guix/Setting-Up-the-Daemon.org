@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID: guix--Setting-Up-the-Daemon
+:END:
+#+filetags: :guix:
+#+title: Setting Up the Daemon
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Setting-Up-the-Daemon>>
+Next: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Previous: [[id:guix--Binary-Installation][Binary Installation]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 2.2 Setting Up the Daemon [[#Setting-Up-the-Daemon-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-Up-the-Daemon-1
+:CLASS: section
+:END:
+During installation, the /build daemon/ that must be running to use Guix has already been set up and you can run =guix= commands in your terminal program, see [[id:guix--Getting-Started][Getting Started]]:
+
+#+begin_example
+guix build hello
+#+end_example
+
+If this runs through without error, feel free to skip this section. You should continue with the following section, [[id:guix--Application-Setup][Application Setup]].
+
+However, now would be a good time to replace outdated daemon versions, tweak it, perform builds on other machines (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]), or start it manually in special environments like “chroots” (see [[id:guix--Chrooting-into-an-existing-system][Chrooting into an existing system]]) or WSL (not needed for WSL images created with Guix, see [[id:guix--System-Images][=wsl2-image-type=]]). If you want to know more or optimize your system, this section is worth reading.
+
+Operations such as building a package or running the garbage collector are all performed by a specialized process, the build daemon, on behalf of clients. Only the daemon may access the store and its associated database. Thus, any operation that manipulates the store goes through the daemon. For instance, command-line tools such as =guix package= and =guix build= communicate with the daemon (/via/ remote procedure calls) to instruct it what to do.
+
+The following sections explain how to prepare the build daemon's environment. See [[id:guix--Substitutes][Substitutes]] for how to allow the daemon to download pre-built binaries.
+
+- [[id:guix--Build-Environment-Setup][Build Environment Setup]]
+- [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]
+- [[id:guix--SELinux-Support][SELinux Support]]
+- [[id:guix--AppArmor-Support][AppArmor Support]]
+
+--------------
+
+Next: [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]], Previous: [[id:guix--Binary-Installation][Binary Installation]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

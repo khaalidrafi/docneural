@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--X-Coding
+:END:
+#+filetags: :emacs:
+#+title: X Coding
+
+Next: [[id:emacs--Terminal-Coding][Coding Systems for Terminal I/O]]   Previous: [[id:emacs--File-Name-Coding][Coding Systems for File Names]]   Up: [[id:emacs--International][International Character Set Support]]
+
+<<X-Coding>>
+*** 24.12 Coding Systems for X Keyboard Input [[#Coding-Systems-for-X-Keyboard-Input][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Coding-Systems-for-X-Keyboard-Input
+:CLASS: section
+:END:
+Input methods under the X Window System specify their own coding systems that must be used to decode keyboard input. By default, Emacs determines the coding system used for each input method automatically upon establishing the connection to the input method server, and uses that specific coding system to decode keyboard input. However, that determination can sometimes fail; in that situation, the locale coding system (see [[id:emacs--Communication-Coding][Coding Systems for Interprocess Communication]]) is used instead.
+
+If the input method does not correctly announce the coding system it uses to encode text, then the coding system used by Emacs to decode text from input methods must be manually specified. The value of the variable =x-input-coding-system=, when set to a symbol, is unconditionally used as the coding system used to decode keyboard input from input methods.
+
+--------------

@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID: emacs--FFAP
+:END:
+#+filetags: :emacs:
+#+title: FFAP
+
+Next:   Previous: [[id:emacs--Goto-Address-mode][Activating URLs]]   Up: [[id:emacs--Hyperlinking][Hyperlinking and Web Navigation Features]]
+
+<<FFAP>>
+*** 48.5 Finding Files and URLs at Point [[#Finding-Files-and-URLs-at-Point][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Finding-Files-and-URLs-at-Point
+:CLASS: section subsection-level-set-section
+:END:
+The FFAP package replaces certain key bindings for finding files, such as C-x C-f, with commands that provide more sensible defaults. These commands behave like the ordinary ones when given a prefix argument. Otherwise, they get the default file name or URL from the text around point. If what is found in the buffer has the form of a URL rather than a file name, the commands use =browse-url= to view it (see [[id:emacs--Browse_002dURL][Following URLs]]).
+
+This feature is useful for following references in mail or news buffers, =README= files, =MANIFEST= files, and so on. For more information, view the package commentary by typing C-h P ffap RET.
+
+To enable FFAP, type M-x ffap-bindings. This makes the following key bindings, and also installs hooks for additional FFAP functionality in Rmail, Gnus and VM article buffers.
+
+- <<index-C_002dx-C_002df-_0028FFAP_0029>>C-x C-f =filename= RET [[#index-C_002dx-C_002df-_0028FFAP_0029][¶]] :: Find =filename=, guessing a default from text around point (=find-file-at-point=).
+
+- <<index-C_002dx-C_002dr-_0028FFAP_0029>>C-x C-r =filename= RET [[#index-C_002dx-C_002dr-_0028FFAP_0029][¶]] :: =ffap-read-only=, analogous to =find-file-read-only=.
+
+- <<index-C_002dx-C_002dv-_0028FFAP_0029>>C-x C-v =filename= RET [[#index-C_002dx-C_002dv-_0028FFAP_0029][¶]] :: =ffap-alternate-file=, analogous to =find-alternate-file=.
+
+- <<index-C_002dx-d-_0028FFAP_0029>>C-x d =directory= RET [[#index-C_002dx-d-_0028FFAP_0029][¶]] :: Start Dired on =directory=, defaulting to the directory at point (=dired-at-point=).
+
+- C-x C-d =directory= RET :: =ffap-list-directory=, analogous to =list-directory=.
+
+- <<index-C_002dx-4-f-_0028FFAP_0029>>C-x 4 f =filename= RET [[#index-C_002dx-4-f-_0028FFAP_0029][¶]] :: =ffap-other-window=, analogous to =find-file-other-window=.
+
+- C-x 4 r =filename= RET :: =ffap-read-only-other-window=, analogous to =find-file-read-only-other-window=.
+
+- C-x 4 d =directory= RET :: =ffap-dired-other-window=, like =dired-other-window=.
+
+- <<index-C_002dx-5-f-_0028FFAP_0029>>C-x 5 f =filename= RET [[#index-C_002dx-5-f-_0028FFAP_0029][¶]] :: =ffap-other-frame=, analogous to =find-file-other-frame=.
+
+- C-x 5 r =filename= RET :: =ffap-read-only-other-frame=, analogous to =find-file-read-only-other-frame=.
+
+- C-x 5 d =directory= RET :: =ffap-dired-other-frame=, analogous to =dired-other-frame=.
+
+- C-x t C-f =filename= return :: =ffap-other-tab=, analogous to =find-file-other-tab=.
+
+- C-x t C-r =filename= return :: =ffap-read-only-other-tab=, analogous to =find-file-read-only-other-tab=.
+
+- M-x ffap-next :: Search buffer for next file name or URL, then find that file or URL.
+
+- <<index-S_002dmouse_002d3-_0028FFAP_0029>>S-mouse-3 [[#index-S_002dmouse_002d3-_0028FFAP_0029][¶]] :: =ffap-at-mouse= finds the file guessed from text around the position of a mouse click.
+
+- <<index-C_002dS_002dmouse_002d3-_0028FFAP_0029>>C-S-mouse-3 [[#index-C_002dS_002dmouse_002d3-_0028FFAP_0029][¶]] :: Display a menu of files and URLs mentioned in current buffer, then find the one you select (=ffap-menu=).
+
+--------------

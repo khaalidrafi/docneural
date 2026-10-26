@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: emacs--Subdirectory-Motion
+:END:
+#+filetags: :emacs:
+#+title: Subdirectory Motion
+
+Next: [[id:emacs--Hiding-Subdirectories][Hiding Subdirectories]]   Previous: [[id:emacs--Subdir-Switches][Subdirectory Switches in Dired]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
+
+<<Subdirectory-Motion>>
+*** 32.14 Moving Over Subdirectories [[#Moving-Over-Subdirectories][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Moving-Over-Subdirectories
+:CLASS: section
+:END:
+When a Dired buffer lists subdirectories, you can use the page motion commands C-x [ and C-x ] to move by entire directories (see [[id:emacs--Pages][Pages]]).
+
+The following commands move across, up and down in the tree of directories within one Dired buffer. They move to /directory header lines/, which are the lines that give a directory's name, at the beginning of the directory's contents.
+
+-  <<index-dired_002dnext_002dsubdir>>C-M-n [[#index-dired_002dnext_002dsubdir][¶]] :: Go to next subdirectory header line, regardless of level (=dired-next-subdir=).
+
+-  <<index-dired_002dprev_002dsubdir>>C-M-p [[#index-dired_002dprev_002dsubdir][¶]] :: Go to previous subdirectory header line, regardless of level (=dired-prev-subdir=).
+
+-  <<index-dired_002dtree_002dup>>C-M-u [[#index-dired_002dtree_002dup][¶]] :: Go up to the parent directory's header line (=dired-tree-up=).
+
+-  <<index-dired_002dtree_002ddown>>C-M-d [[#index-dired_002dtree_002ddown][¶]] :: Go down in the directory tree, to the first subdirectory's header line (=dired-tree-down=).
+
+-  <<index-dired_002dprev_002ddirline>>< [[#index-dired_002dprev_002ddirline][¶]] :: Move up to the previous directory-file line (=dired-prev-dirline=). These lines are the ones that describe a directory as a file in its parent directory.
+
+-  <<index-dired_002dnext_002ddirline>>> [[#index-dired_002dnext_002ddirline][¶]] :: Move down to the next directory-file line (=dired-next-dirline=).
+
+-  <<index-dired_002dgoto_002dsubdir>>M-G [[#index-dired_002dgoto_002dsubdir][¶]] :: Prompt for a directory and move to its directory-file line (=dired-goto-subdir=).
+
+--------------

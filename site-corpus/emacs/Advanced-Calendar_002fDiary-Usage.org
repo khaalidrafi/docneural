@@ -1,0 +1,548 @@
+:PROPERTIES:
+:ID: emacs--Advanced-Calendar_002fDiary-Usage
+:END:
+#+filetags: :emacs:
+#+title: Advanced Calendar/Diary Usage
+
+Next:   Previous: [[id:emacs--Time-Intervals][Summing Time Intervals]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
+
+<<Advanced-Calendar_002fDiary-Usage>>
+*** 33.13 More advanced features of the Calendar and Diary [[#More-advanced-features-of-the-Calendar-and-Diary][¶]]
+:PROPERTIES:
+:CUSTOM_ID: More-advanced-features-of-the-Calendar-and-Diary
+:CLASS: section
+:END:
+This section describes some of the more advanced/specialized features of the calendar and diary. It starts with some of the many ways in which you can customize the calendar and diary to suit your personal tastes.
+
+--------------
+
+<<Calendar-Customizing>>
+**** 33.13.1 Customizing the Calendar [[#Customizing-the-Calendar][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-the-Calendar
+:CLASS: subsection
+:END:
+The calendar display unfortunately cannot be changed from three months, but you can customize the whitespace used by setting the variables: =calendar-left-margin=, =calendar-day-header-width=, =calendar-day-digit-width=, =calendar-column-width=, and =calendar-intermonth-spacing=. To display text /between/ the months, for example week numbers, customize the variables =calendar-intermonth-header= and =calendar-intermonth-text= as described in their documentation.
+
+The variable =calendar-month-header= controls the text that appears above each month in the calendar. By default, it shows the month and year. The variable =calendar-day-header-array= controls the text that appears above each day's column in every month. By default, it shows the first two letters of each day's name.
+
+The variable =calendar-holiday-marker= specifies how to mark a date that is a holiday. Its value may be a single-character string to insert next to the date, or a face name to use for displaying the date. Likewise, the variable =diary-entry-marker= specifies how to mark a date that has diary entries. The function =calendar-mark-today= uses =calendar-today-marker= to mark today's date. By default, the calendar uses faces named =holiday=, =diary=, and =calendar-today= for these purposes.
+
+Starting the calendar runs the normal hook =calendar-initial-window-hook=. Recomputation of the calendar display does not run this hook. But if you leave the calendar with the q command and reenter it, the hook runs again.
+
+The variable =calendar-today-visible-hook= is a normal hook run after the calendar buffer has been prepared with the calendar, when the current date is visible in the window. One use of this hook is to mark today's date; to do that use either of the functions =calendar-mark-today= or =calendar-star-date=:
+
+#+begin_example
+(add-hook 'calendar-today-visible-hook 'calendar-mark-today)
+#+end_example
+
+A similar normal hook, =calendar-today-invisible-hook= is run if the current date is /not/ visible in the window.
+
+Each of the calendar cursor motion commands runs the hook =calendar-move-hook= after it moves the cursor.
+
+--------------
+
+<<Holiday-Customizing>>
+**** 33.13.2 Customizing the Holidays [[#Customizing-the-Holidays][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-the-Holidays
+:CLASS: subsection
+:END:
+There are several variables listing the default holidays that Emacs knows about. These are: =holiday-general-holidays=, =holiday-local-holidays=, =holiday-solar-holidays=, =holiday-bahai-holidays=, =holiday-christian-holidays=, =holiday-hebrew-holidays=, =holiday-islamic-holidays=, =holiday-oriental-holidays=, and =holiday-other-holidays=. The names should be self-explanatory; e.g., =holiday-solar-holidays= lists sun- and moon-related holidays.
+
+You can customize these lists of holidays to your own needs, deleting or adding holidays as described below. Set any of them to =nil= to not show the associated holidays.
+
+The general holidays are, by default, holidays common throughout the United States. In contrast, =holiday-local-holidays= and =holiday-other-holidays= are both empty by default. These are intended for system-wide settings and your individual use, respectively.
+
+By default, Emacs does not include all the holidays of the religions that it knows, only those commonly found in secular calendars. For a more extensive collection of religious holidays, you can set any (or all) of the variables =calendar-bahai-all-holidays-flag=, =calendar-christian-all-holidays-flag=, =calendar-hebrew-all-holidays-flag=, or =calendar-islamic-all-holidays-flag= to =t=.
+
+Each of the holiday variables is a list of /holiday forms/, each form describing a holiday (or sometimes a list of holidays). Here is a table of the possible kinds of holiday form. Day numbers and month numbers count starting from 1, but /dayname/ numbers count Sunday as 0. The argument =string= is always the description of the holiday, as a string.
+
+- =(holiday-fixed ==month== ==day== ==string==)= :: A fixed date on the Gregorian calendar.
+
+- =(holiday-float ==month== ==dayname== ==k== ==string= :: &optional =day=) The =k=th =dayname= (=dayname==0 for Sunday, and so on) after or before Gregorian date =month=, =day=. Negative =k= means count back from the end of the month. Optional =day= defaults to 1 if =k= is positive, and the last day of =month= otherwise.
+
+- =(holiday-chinese ==month== ==day== ==string==)= :: A fixed date on the Chinese calendar.
+
+- =(holiday-hebrew ==month== ==day== ==string==)= :: A fixed date on the Hebrew calendar.
+
+- =(holiday-islamic ==month== ==day== ==string==)= :: A fixed date on the Islamic calendar.
+
+- =(holiday-julian ==month== ==day== ==string==)= :: A fixed date on the Julian calendar.
+
+- =(holiday-sexp ==sexp== ==string==)= :: A date calculated by the Lisp expression =sexp=. The expression should use the variable =year= to compute and return the date of a holiday in the form of a list =(==month== ==day== ==year==)=, or =nil= if the holiday doesn't happen this year.
+
+- =(if ==condition== ==holiday-form==)= :: A holiday that happens only if =condition= is true.
+
+- =(==function== ==[==args==]==)= :: A list of dates calculated by the function =function=, called with arguments =args=.
+
+For example, suppose you want to add Bastille Day, celebrated in France on July 14 (i.e., the fourteenth day of the seventh month). You can do this as follows:
+
+#+begin_example
+(setq holiday-other-holidays '((holiday-fixed 7 14 "Bastille Day")))
+#+end_example
+
+Many holidays occur on a specific day of the week, at a specific time of month. Here is a holiday form describing Hurricane Supplication Day, celebrated in the Virgin Islands on the fourth Monday in July:
+
+#+begin_example
+(holiday-float 7 1 4 "Hurricane Supplication Day")
+#+end_example
+
+Here the 7 specifies July, the 1 specifies Monday (Sunday is 0, Tuesday is 2, and so on), and the 4 specifies the fourth occurrence in the month (1 specifies the first occurrence, 2 the second occurrence, −1 the last occurrence, −2 the second-to-last occurrence, and so on).
+
+You can specify holidays that occur on fixed days of the Bahá'í, Chinese, Hebrew, Islamic, and Julian calendars too. For example,
+
+#+begin_example
+(setq holiday-other-holidays
+      '((holiday-hebrew 10 2 "Last day of Hanukkah")
+        (holiday-islamic 3 12 "Mohammed's Birthday")
+        (holiday-julian 4 2 "Jefferson's Birthday")))
+#+end_example
+
+adds the last day of Hanukkah (since the Hebrew months are numbered with 1 starting from Nisan), the Islamic feast celebrating Mohammed's birthday (since the Islamic months are numbered from 1 starting with Muharram), and Thomas Jefferson's birthday, which is 2 April 1743 on the Julian calendar.
+
+To include a holiday conditionally, use either Emacs Lisp's =if= or the =holiday-sexp= form. For example, American presidential elections occur on the first Tuesday after the first Monday in November of years divisible by 4:
+
+#+begin_example
+(holiday-sexp '(if (zerop (% year 4))
+                   (calendar-gregorian-from-absolute
+                    (1+ (calendar-dayname-on-or-before
+                          1 (+ 6 (calendar-absolute-from-gregorian
+                                  (list 11 1 year)))))))
+              "US Presidential Election")
+#+end_example
+
+or
+
+#+begin_example
+(if (zerop (% displayed-year 4))
+    (holiday-fixed 11
+           (calendar-extract-day
+             (calendar-gregorian-from-absolute
+               (1+ (calendar-dayname-on-or-before
+                     1 (+ 6 (calendar-absolute-from-gregorian
+                              (list 11 1 displayed-year)))))))
+           "US Presidential Election"))
+#+end_example
+
+Some holidays just don't fit into any of these forms because special calculations are involved in their determination. In such cases you must write a Lisp function to do the calculation. To include eclipses, for example, add =(eclipses)= to =holiday-other-holidays= and write an Emacs Lisp function =eclipses= that returns a (possibly empty) list of the relevant Gregorian dates among the range visible in the calendar window, with descriptive strings, like this:
+
+#+begin_example
+(((6 4 2012) "Lunar Eclipse") ((11 13 2012) "Solar Eclipse") ... )
+#+end_example
+
+--------------
+
+<<Mayan-Calendar>>
+**** 33.13.3 Converting from the Mayan Calendar [[#Converting-from-the-Mayan-Calendar][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Converting-from-the-Mayan-Calendar
+:CLASS: subsection
+:END:
+Here are the commands to select dates based on the Mayan calendar:
+
+- g m l :: Move to a date specified by the long count calendar (=calendar-mayan-goto-long-count-date=).
+
+- g m n t :: Move to the next occurrence of a place in the tzolkin calendar (=calendar-mayan-next-tzolkin-date=).
+
+- g m p t :: Move to the previous occurrence of a place in the tzolkin calendar (=calendar-mayan-previous-tzolkin-date=).
+
+- g m n h :: Move to the next occurrence of a place in the haab calendar (=calendar-mayan-next-haab-date=).
+
+- g m p h :: Move to the previous occurrence of a place in the haab calendar (=calendar-mayan-previous-haab-date=).
+
+- g m n c :: Move to the next occurrence of a place in the calendar round (=calendar-mayan-next-calendar-round-date=).
+
+- g m p c :: Move to the previous occurrence of a place in the calendar round (=calendar-mayan-previous-calendar-round-date=).
+
+To understand these commands, you need to understand the Mayan calendars. The /long count/ is a counting of days with these units:
+
+#+begin_src display-preformatted
+1 kin = 1 day   1 uinal = 20 kin   1 tun = 18 uinal
+1 katun = 20 tun   1 baktun = 20 katun
+#+end_src
+
+Thus, the long count date 12.16.11.16.6 means 12 baktun, 16 katun, 11 tun, 16 uinal, and 6 kin. The Emacs calendar can handle Mayan long count dates as early as 7.17.18.13.3, but no earlier. When you use the g m l command, type the Mayan long count date with the baktun, katun, tun, uinal, and kin separated by periods.
+
+The Mayan tzolkin calendar is a cycle of 260 days formed by a pair of independent cycles of 13 and 20 days. Since this cycle repeats endlessly, Emacs provides commands to move backward and forward to the previous or next point in the cycle. Type g m p t to go to the previous tzolkin date; Emacs asks you for a tzolkin date and moves point to the previous occurrence of that date. Similarly, type g m n t to go to the next occurrence of a tzolkin date.
+
+The Mayan haab calendar is a cycle of 365 days arranged as 18 months of 20 days each, followed by a 5-day monthless period. Like the tzolkin cycle, this cycle repeats endlessly, and there are commands to move backward and forward to the previous or next point in the cycle. Type g m p h to go to the previous haab date; Emacs asks you for a haab date and moves point to the previous occurrence of that date. Similarly, type g m n h to go to the next occurrence of a haab date.
+
+The Maya also used the combination of the tzolkin date and the haab date. This combination is a cycle of about 52 years called a /calendar round/. If you type g m p c, Emacs asks you for both a haab and a tzolkin date and then moves point to the previous occurrence of that combination. Use g m n c to move point to the next occurrence of a combination. These commands signal an error if the haab/tzolkin date combination you have typed is impossible.
+
+Emacs uses strict completion (see [[id:emacs--Completion::#Completion-Exit][Completion Exit]]) whenever it asks you to type a Mayan name, so you don't have to worry about spelling.
+
+--------------
+
+<<Date-Display-Format>>
+**** 33.13.4 Date Display Format [[#Date-Display-Format-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Date-Display-Format-1
+:CLASS: subsection
+:END:
+You can customize the way dates are displayed in the diary, mode lines, and messages by setting =calendar-date-display-form=. This variable holds a list of expressions that can involve the variables =month=, =day=, and =year=, which are all numbers in string form, and =monthname= and =dayname=, which are both alphabetic strings. In the American style, the default value of this list is as follows:
+
+#+begin_example
+((if dayname (concat dayname ", ")) monthname " " day ", " year)
+#+end_example
+
+while in the European style this value is the default:
+
+#+begin_example
+((if dayname (concat dayname ", ")) day " " monthname " " year)
+#+end_example
+
+The default ISO date representation is:
+
+#+begin_example
+((format "%s-%.2d-%.2d" year (string-to-number month)
+         (string-to-number day)))
+#+end_example
+
+Another typical American format is:
+
+#+begin_example
+(month "/" day "/" (substring year -2))
+#+end_example
+
+--------------
+
+<<Time-Display-Format>>
+**** 33.13.5 Time Display Format [[#Time-Display-Format-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Time-Display-Format-1
+:CLASS: subsection
+:END:
+The calendar and diary by default display times of day in the conventional American style with the hours from 1 through 12, minutes, and either ‘=am=' or ‘=pm='. If you prefer the European style, also known in the US as military, in which the hours go from 00 to 23, you can alter the variable =calendar-time-display-form=. This variable is a list of expressions that can involve the variables =12-hours=, =24-hours=, and =minutes=, which are all numbers in string form, and =am-pm= and =time-zone=, which are both alphabetic strings. The default value is:
+
+#+begin_example
+(12-hours ":" minutes am-pm
+          (if time-zone " (") time-zone (if time-zone ")"))
+#+end_example
+
+Here is a value that provides European style times:
+
+#+begin_example
+(24-hours ":" minutes
+          (if time-zone " (") time-zone (if time-zone ")"))
+#+end_example
+
+Note that few calendar functions return a time of day (at present, only solar functions).
+
+--------------
+
+<<Diary-Customizing>>
+**** 33.13.6 Customizing the Diary [[#Customizing-the-Diary][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-the-Diary
+:CLASS: subsection
+:END:
+Ordinarily, the diary window indicates any holidays that fall on the date of the diary entries, either in the mode line or the buffer itself. The process of checking for holidays can be slow, depending on the defined holidays. In that case, setting =diary-show-holidays-flag= to =nil= will speed up the diary display.
+
+The variable =diary-number-of-entries= controls the number of days of diary entries to be displayed at one time. It affects the initial display when =calendar-view-diary-initially-flag= is =t=, as well as the command M-x diary. For example, a value of 1 (the default) displays only the current day's diary entries, whereas a value of 2 will also show the next day's entries. The value can also be a vector of seven integers: for example, if the value is =[0 2 2 2 2 4 1]= then no diary entries appear on Sunday, the current date's and the next day's diary entries appear Monday through Thursday, Friday through Monday's entries appear on Friday, while on Saturday only that day's entries appear.
+
+You can customize the form of dates in your diary file by setting the variable =diary-date-forms=. This variable is a list of patterns for recognizing a date. Each date pattern is a list whose elements may be regular expressions (see [[../elisp_html/Regular-Expressions.html#Regular-Expressions][Regular Expressions]] in the Emacs Lisp Reference Manual) or the symbols =month=, =day=, =year=, =monthname=, and =dayname=. All these elements serve as patterns that match certain kinds of text in the diary file. In order for the date pattern as a whole to match, all of its elements must match consecutively.
+
+A regular expression in a date pattern matches in its usual fashion, using the standard syntax table altered so that ‘=*=' is a word constituent.
+
+The symbols =month=, =day=, =year=, =monthname=, and =dayname= match the month number, day number, year number, month name, and day name of the date being considered. The symbols that match numbers allow leading zeros; those that match names allow capitalization and abbreviation (as specified by =calendar-month-abbrev-array= and =calendar-day-abbrev-array=). All the symbols can match ‘=*='; since ‘=*=' in a diary entry means “any day”, “any month”, and so on, it should match regardless of the date being considered.
+
+The default value of =diary-date-forms= in the American style is provided by =diary-american-date-forms=:
+
+#+begin_example
+((month "/" day "[^/0-9]")
+ (month "/" day "/" year "[^0-9]")
+ (monthname " *" day "[^,0-9]")
+ (monthname " *" day ", *" year "[^0-9]")
+ (dayname "\\W"))
+#+end_example
+
+The variables =diary-european-date-forms= and =diary-iso-date-forms= provide other default styles.
+
+The date patterns in the list must be /mutually exclusive/ and must not match any portion of the diary entry itself, just the date and one character of whitespace. If, to be mutually exclusive, the pattern must match a portion of the diary entry text---beyond the whitespace that ends the date---then the first element of the date pattern /must/ be =backup=. This causes the date recognizer to back up to the beginning of the current word of the diary entry, after finishing the match. Even if you use =backup=, the date pattern must absolutely not match more than a portion of the first word of the diary entry. For example, the default value of =diary-european-date-forms= is:
+
+#+begin_example
+((day "/" month "[^/0-9]")
+ (day "/" month "/" year "[^0-9]")
+ (backup day " *" monthname "\\W+\\<\\([^*0-9]\\|\\([0-9]+[:aApP]\\)\\)")
+ (day " *" monthname " *" year "[^0-9]")
+ (dayname "\\W"))
+#+end_example
+
+Notice the use of =backup= in the third pattern, because it needs to match part of a word beyond the date itself to distinguish it from the fourth pattern.
+
+--------------
+
+<<Non_002dGregorian-Diary>>
+**** 33.13.7 Diary Entries Using non-Gregorian Calendars [[#Diary-Entries-Using-non_002dGregorian-Calendars][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Diary-Entries-Using-non_002dGregorian-Calendars
+:CLASS: subsection
+:END:
+As well as entries based on the standard Gregorian calendar, your diary can have entries based on Bahá'í, Chinese, Hebrew, or Islamic dates. Recognition of such entries can be time-consuming, however, and since most people don't use them, you must explicitly enable their use. If you want the diary to recognize Hebrew-date diary entries, for example, you must do this:
+
+#+begin_example
+(add-hook 'diary-nongregorian-listing-hook 'diary-hebrew-list-entries)
+(add-hook 'diary-nongregorian-marking-hook 'diary-hebrew-mark-entries)
+#+end_example
+
+Similarly, for Islamic, Bahá'í and Chinese entries, add =diary-islamic-list-entries= and =diary-islamic-mark-entries=, =diary-bahai-list-entries= and =diary-bahai-mark-entries=, or =diary-chinese-list-entries= and =diary-chinese-mark-entries=.
+
+These diary entries have the same formats as Gregorian-date diary entries; except that =diary-bahai-entry-symbol= (default ‘=B=') must precede a Bahá'í date, =diary-chinese-entry-symbol= (default ‘=C=') a Chinese date, =diary-hebrew-entry-symbol= (default ‘=H=') a Hebrew date, and =diary-islamic-entry-symbol= (default ‘=I=') an Islamic date. Moreover, non-Gregorian month names may not be abbreviated (because the first three letters are often not unique). (Note also that you must use “Adar I” if you want Adar of a common Hebrew year.) For example, a diary entry for the Hebrew date Heshvan 25 could look like this:
+
+#+begin_example
+HHeshvan 25 Happy Hebrew birthday!
+#+end_example
+
+and would appear in the diary for any date that corresponds to Heshvan 25 on the Hebrew calendar. And here is an Islamic-date diary entry that matches Dhu al-Qada 25:
+
+#+begin_example
+IDhu al-Qada 25 Happy Islamic birthday!
+#+end_example
+
+As with Gregorian-date diary entries, non-Gregorian entries are nonmarking if preceded by =diary-nonmarking-symbol= (default ‘=&=').
+
+Here is a table of commands used in the calendar to create diary entries that match the selected date and other dates that are similar in the Bahá'í, Chinese, Hebrew, or Islamic calendars:
+
+- i h d :: =diary-hebrew-insert-entry=
+
+- i h m :: =diary-hebrew-insert-monthly-entry=
+
+- i h y :: =diary-hebrew-insert-yearly-entry=
+
+- i i d :: =diary-islamic-insert-entry=
+
+- i i m :: =diary-islamic-insert-monthly-entry=
+
+- i i y :: =diary-islamic-insert-yearly-entry=
+
+- i B d :: =diary-bahai-insert-entry=
+
+- i B m :: =diary-bahai-insert-monthly-entry=
+
+- i B y :: =diary-bahai-insert-yearly-entry=
+
+- i C d :: =diary-chinese-insert-entry=
+
+- i C m :: =diary-chinese-insert-monthly-entry=
+
+- i C y :: =diary-chinese-insert-yearly-entry=
+
+- i C a :: =diary-chinese-insert-anniversary-entry=
+
+These commands work much like the corresponding commands for ordinary diary entries: they apply to the date that point is on in the calendar window, and what they do is insert just the date portion of a diary entry at the end of your diary file. You must then insert the rest of the diary entry. The basic commands add an entry for the specific non-Gregorian date, the ‘=monthly=' commands for the given non-Gregorian day-within-month in every month, and the ‘=yearly=' commands for the given non-Gregorian day and month in every year.
+
+--------------
+
+<<Diary-Display>>
+**** 33.13.8 Diary Display [[#Diary-Display-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Diary-Display-1
+:CLASS: subsection
+:END:
+Diary display works by preparing the list of diary entries and then running the function specified by the variable =diary-display-function=. The default value =diary-fancy-display= displays diary entries and holidays by copying them into a special buffer that exists only for the sake of display. Copying diary entries to a separate buffer provides an opportunity to change the displayed text to make it prettier---for example, to sort the entries by the dates they apply to.
+
+Ordinarily, the fancy diary buffer does not show days for which there are no diary entries, even if that day is a holiday. If you want such days to be shown in the fancy diary buffer, set the variable =diary-list-include-blanks= to =t=.
+
+The fancy diary buffer enables View mode (see [[id:emacs--View-Mode][View Mode]]).
+
+The alternative display method =diary-simple-display= shows the actual diary buffer, and uses invisible text to hide entries that don't apply. Holidays are shown in the mode line. The advantage of this method is that you can edit the buffer and save your changes directly to the diary file. This method is not as flexible as the fancy method, however. For example, it cannot sort entries. Another disadvantage is that invisible text can be confusing. For example, if you copy a region of text in order to paste it elsewhere, invisible text may be included. Similarly, since the diary buffer as you see it is an illusion, simply printing the buffer may not print what you see on your screen.
+
+For this reason, there is a special command to print hard copy of the diary buffer /as it appears/; this command is M-x diary-print-entries. It works with either display method, although with the fancy display you can also print the buffer like any other. To print a hard copy of a day-by-day diary for a week, position point on the first day of the week, type 7 d, and then do M-x diary-print-entries. As usual, the inclusion of the holidays slows down the display slightly; you can speed things up by setting the variable =diary-show-holidays-flag= to =nil=.
+
+This command prepares a temporary buffer that contains only the diary entries currently visible in the diary buffer. Unlike with the simple display, the other irrelevant entries are really absent, not just hidden. After preparing the buffer, it runs the hook =diary-print-entries-hook=. The default value of this hook sends the data directly to the printer with the command =lpr-buffer= (see [[id:emacs--Printing][Printing Hard Copies]]). If you want to use a different command to do the printing, just change the value of this hook. Other uses might include, for example, rearranging the lines into order by day and time.
+
+You can edit the diary entries as they appear in the simple diary window, but it is important to remember that the buffer displayed contains the /entire/ diary file, with portions of it concealed from view. This means, for instance, that the C-f (=forward-char=) command can put point at what appears to be the end of the line, but what is in reality the middle of some concealed line.
+
+/Be careful when editing the diary entries in the simple display!/ Inserting additional lines or adding/deleting characters in the middle of a visible line cannot cause problems, but editing at the end of a line may not do what you expect. Deleting a line may delete other invisible entries that follow it. Before editing the simple diary buffer, it is best to display the entire file with s (=diary-show-all-entries=).
+
+--------------
+
+<<Fancy-Diary-Display>>
+**** 33.13.9 Fancy Diary Display [[#Fancy-Diary-Display-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Fancy-Diary-Display-1
+:CLASS: subsection
+:END:
+The following features only work with the fancy diary display.
+
+You can use the normal hook =diary-list-entries-hook= to sort each day's diary entries by their time of day. Here's how:
+
+#+begin_example
+(add-hook 'diary-list-entries-hook 'diary-sort-entries t)
+#+end_example
+
+For each day, this sorts diary entries that begin with a recognizable time of day according to their times. Diary entries without times come first within each day. Note how the sort command is placed at the end of the hook list, in case earlier members of the list change the order of the diary entries, or add items.
+
+You can write ‘=comments=' in diary entries, by setting the variables =diary-comment-start= and =diary-comment-end= to strings that delimit comments. The fancy display does not print comments. You might want to put meta-data for the use of other packages (e.g., the appointment package, see [[id:emacs--Diary::#Appointments][Appointments]]) inside comments.
+
+Your main diary file can include other files. This permits a group of people to share a diary file for events that apply to all of them. Lines in the diary file starting with =diary-include-string=:
+
+#+begin_example
+#include "filename"
+#+end_example
+
+include the diary entries from the file =filename= in the fancy diary buffer. The include mechanism is recursive, so that included files can include other files, and so on (you must be careful not to have a cycle of inclusions, of course). Here is how to enable the include facility:
+
+#+begin_example
+(add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+(add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+#+end_example
+
+The include mechanism works only with the fancy diary display, because simple diary display shows the entries directly from your diary file.
+
+--------------
+
+<<Sexp-Diary-Entries>>
+**** 33.13.10 Sexp Entries and the Fancy Diary Display [[#Sexp-Entries-and-the-Fancy-Diary-Display][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sexp-Entries-and-the-Fancy-Diary-Display
+:CLASS: subsection
+:END:
+Sexp diary entries allow you to do more than just have complicated conditions under which a diary entry applies. Sexp entries should be preceded by =diary-sexp-entry-symbol= (default ‘=%%=') in the diary file. With the fancy diary display, sexp entries can generate the text of the entry depending on the date itself.
+
+For example, an anniversary diary entry can insert the number of years since the anniversary date into the text of the diary entry. Thus the ‘=%d=' in this diary entry:
+
+#+begin_example
+%%(diary-anniversary 10 31 1948) Arthur's birthday (%d years old)
+#+end_example
+
+gets replaced by the age, so on October 31, 1990 the entry appears in the fancy diary buffer like this:
+
+#+begin_example
+Arthur's birthday (42 years old)
+#+end_example
+
+If the diary file instead contains this entry:
+
+#+begin_example
+%%(diary-anniversary 10 31 1948) Arthur's %d%s birthday
+#+end_example
+
+the entry in the fancy diary buffer for October 31, 1990 appears like this:
+
+#+begin_example
+Arthur's 42nd birthday
+#+end_example
+
+Similarly, cyclic diary entries can interpolate the number of repetitions that have occurred:
+
+#+begin_example
+%%(diary-cyclic 50 1 1 2012) Renew medication (%d%s time)
+#+end_example
+
+looks like this:
+
+#+begin_example
+Renew medication (5th time)
+#+end_example
+
+in the fancy diary display on September 7, 2012.
+
+There is an early-reminder diary sexp that includes its entry in the diary not only on the date of occurrence, but also on earlier dates. For example, if you want a reminder a week before your anniversary, you can use
+
+#+begin_example
+%%(diary-remind '(diary-anniversary 12 22 1968) 7) Ed's anniversary
+#+end_example
+
+and the fancy diary will show ‘=Ed's anniversary=' both on December 15 and on December 22.
+
+The function =diary-date= applies to dates described by a month, day, year combination, each of which can be an integer, a list of integers, or =t= (meaning all values). For example,
+
+#+begin_example
+%%(diary-date '(10 11 12) 22 t) Rake leaves
+#+end_example
+
+causes the fancy diary to show
+
+#+begin_example
+Rake leaves
+#+end_example
+
+on October 22, November 22, and December 22 of every year.
+
+The function =diary-float= allows you to describe diary entries that apply to dates like the third Friday of November, or the last Tuesday in April. The parameters are the =month=, =dayname=, and an index =n=. The entry appears on the =n=th =dayname= after the first day of =month=, where =dayname==0 means Sunday, 1 means Monday, and so on. If =n= is negative it counts backward from the end of =month=. The value of =month= can be a list of months, a single month, or =t= to specify all months. You can also use an optional parameter =day= to specify the =n=th =dayname= on or after/before =day= of =month=; the value of =day= defaults to 1 if =n= is positive and to the last day of =month= if =n= is negative. For example,
+
+#+begin_example
+%%(diary-float t 1 -1) Pay rent
+#+end_example
+
+causes the fancy diary to show
+
+#+begin_example
+Pay rent
+#+end_example
+
+on the last Monday of every month.
+
+The generality of sexp diary entries lets you specify any diary entry that you can describe algorithmically. A sexp diary entry contains an expression that computes whether the entry applies to any given date. If its value is non-=nil=, the entry applies to that date; otherwise, it does not. The expression can use the variable =date= to find the date being considered; its value is a list (=month= =day= =year=) that refers to the Gregorian calendar.
+
+The sexp diary entry applies to a date when the expression's value is non-=nil=, but some values have more specific meanings. If the value is a string, that string is a description of the event which occurs on that date. The value can also have the form =(==mark== . ==string==)=; then =mark= specifies how to mark the date in the calendar, and =string= is the description of the event. If =mark= is a single-character string, that character appears next to the date in the calendar. If =mark= is a face name, the date is displayed in that face. If =mark= is =nil=, that specifies no particular highlighting for the date.
+
+Suppose you get paid on the 21st of the month if it is a weekday, and on the Friday before if the 21st is on a weekend. Here is how to write a sexp diary entry that matches those dates:
+
+#+begin_example
+&%%(let ((dayname (calendar-day-of-week date))
+         (day (cadr date)))
+      (or (and (= day 21) (memq dayname '(1 2 3 4 5)))
+          (and (memq day '(19 20)) (= dayname 5)))
+         ) Pay check deposited
+#+end_example
+
+The following sexp diary entries take advantage of the ability (in the fancy diary display) to concoct diary entries whose text varies based on the date:
+
+- =%%(diary-sunrise-sunset)= :: Make a diary entry for today's local times of sunrise and sunset.
+
+- =%%(diary-lunar-phases)= :: Make a diary entry for the phases (quarters) of the moon.
+
+- =%%(diary-day-of-year)= :: Make a diary entry with today's day number in the current year and the number of days remaining in the current year.
+
+- =%%(diary-iso-date)= :: Make a diary entry with today's equivalent ISO commercial date.
+
+- =%%(diary-julian-date)= :: Make a diary entry with today's equivalent Julian calendar date.
+
+- =%%(diary-astro-day-number)= :: Make a diary entry with today's equivalent astronomical (Julian) day number.
+
+- =%%(diary-bahai-date)= :: Make a diary entry with today's equivalent Bahá'í calendar date.
+
+- =%%(diary-chinese-date)= :: Make a diary entry with today's equivalent Chinese calendar date.
+
+- =%%(diary-coptic-date)= :: Make a diary entry with today's equivalent Coptic calendar date.
+
+- =%%(diary-ethiopic-date)= :: Make a diary entry with today's equivalent Ethiopic calendar date.
+
+- =%%(diary-french-date)= :: Make a diary entry with today's equivalent date on the French Revolutionary calendar.
+
+- =%%(diary-hebrew-date)= :: Make a diary entry with today's equivalent Hebrew calendar date.
+
+- =%%(diary-islamic-date)= :: Make a diary entry with today's equivalent Islamic calendar date.
+
+- =%%(diary-mayan-date)= :: Make a diary entry with today's equivalent Mayan calendar date.
+
+- =%%(diary-persian-date)= :: Make a diary entry with today's equivalent Persian calendar date.
+
+For example, including the diary entry
+
+#+begin_example
+&%%(diary-hebrew-date)
+#+end_example
+
+causes every day's diary display to contain the equivalent date on the Hebrew calendar, if you are using the fancy diary display. (With simple diary display, the literal line ‘=&%%(diary-hebrew-date)=' appears in the diary for any date.)
+
+This function has been used to construct certain standard Hebrew sexp diary entries:
+
+- =%%(diary-hebrew-rosh-hodesh)= :: Make a diary entry that tells the occurrence and ritual announcement of each new Hebrew month.
+
+- =%%(diary-hebrew-parasha)= :: Make a Saturday diary entry that tells the weekly synagogue scripture reading.
+
+- =%%(diary-hebrew-sabbath-candles)= :: Make a Friday diary entry that tells the /local time/ of Sabbath candle lighting.
+
+- =%%(diary-hebrew-omer)= :: Make a diary entry that gives the omer count, when appropriate.
+
+- =%%(diary-hebrew-yahrzeit ==month== ==day== ==year==) ==name= :: Make a diary entry marking the anniversary of a date of death. The date is the /Gregorian/ (civil) date of death. The diary entry appears on the proper Hebrew calendar anniversary and on the day before. (The order of the parameters changes according to the calendar date style; for example in the European style to =day=, =month=, =year=.)
+
+- =%%(diary-hebrew-birthday ==month== ==day== ==year==)= :: Make a diary entry for a birthday on the Hebrew calendar.
+
+All the functions documented above take an optional argument =mark= which specifies how to mark the date in the calendar display. If one of these functions decides that it applies to a certain date, it returns a value that contains =mark=, as described above.
+
+--------------

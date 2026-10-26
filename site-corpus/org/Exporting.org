@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID: org--Exporting
+:END:
+#+filetags: :org:
+#+title: Exporting (The Org Manual)
+
+Next:
+
+<<Exporting>>
+Next: [[id:org--Publishing][Publishing]], Previous: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 13 Exporting [[#Exporting-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Exporting-1
+:CLASS: chapter
+:END:
+At some point you might want to print your notes, publish them on the web, or share them with people not using Org. Org can convert and export documents to a variety of other formats while retaining as much structure (see [[id:org--Document-Structure][Document Structure]]) and markup (see [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]) as possible.
+
+The libraries responsible for translating Org files to other formats are called /backends/. Org ships with support for the following backends:
+
+- /ascii/ (ASCII format)
+- /beamer/ (LaTeX Beamer format)
+- /html/ (HTML format)
+- /icalendar/ (iCalendar format)
+- /latex/ (LaTeX format)
+- /md/ (Markdown format)
+- /odt/ (OpenDocument Text format)
+- /org/ (Org format)
+- /texinfo/ (Texinfo format)
+- /man/ (Man page format)
+
+Users can install libraries for additional formats from the Emacs packaging system. For easy discovery, these packages have a common naming scheme: =ox-NAME=, where =NAME= is a format. For example, =ox-koma-letter= for /koma-letter/ backend. More libraries can be found in the ‘=org-contrib=' repository (see [[id:org--Installation][Installation]]).
+
+Org only loads backends for the following formats by default: ASCII, HTML, iCalendar, LaTeX, and ODT. Additional backends can be loaded in either of two ways: by configuring the =org-export-backends= variable, or by requiring libraries in the Emacs init file. For example, to load the Markdown backend, add this to your Emacs config:
+
+#+begin_src lisp-preformatted
+(require 'ox-md)
+#+end_src
+
+- [[id:org--The-Export-Dispatcher][The Export Dispatcher]]
+- [[id:org--Export-Settings][Export Settings]]
+- [[id:org--Table-of-Contents][Table of Contents]]
+- [[id:org--Include-Files][Include Files]]
+- [[id:org--Macro-Replacement][Macro Replacement]]
+- [[id:org--Comment-Lines][Comment Lines]]
+- [[id:org--ASCII_002fLatin_002d1_002fUTF_002d8-export][ASCII/Latin-1/UTF-8 export]]
+- [[id:org--Beamer-Export][Beamer Export]]
+- [[id:org--HTML-Export][HTML Export]]
+- [[id:org--LaTeX-Export][LaTeX Export]]
+- [[id:org--Markdown-Export][Markdown Export]]
+- [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]
+- [[id:org--Org-Export][Org Export]]
+- [[id:org--Texinfo-Export][Texinfo Export]]
+- [[id:org--iCalendar-Export][iCalendar Export]]
+- [[id:org--Other-Built_002din-Backends][Other Built-in Backends]]
+- [[id:org--Advanced-Export-Configuration][Advanced Export Configuration]]
+- [[id:org--Export-Region][Export Region]]
+
+--------------
+
+Next: [[id:org--Publishing][Publishing]], Previous: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

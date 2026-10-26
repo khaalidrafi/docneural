@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID: guix--Making-Decisions
+:END:
+#+filetags: :guix:
+#+title: Making Decisions
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Making-Decisions>>
+Next: [[id:guix--Commit-Access][Commit Access]], Previous: [[id:guix--Teams][Teams]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.13 Making Decisions [[#Making-Decisions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Making-Decisions-1
+:CLASS: section
+:END:
+Every contribution to the project involves a form of decision making. It is expected from all contributors, and even more so from committers, to help build consensus and make decisions based on consensus. By using consensus, we are committed to finding solutions that everyone can live with. It implies that no decision is made against significant concerns and these concerns are actively resolved with proposals that work for everyone.
+
+A contributor (who may or may not have commit access) wishing to block a proposal bears a special responsibility for finding alternatives, proposing ideas/code or explain the rationale for the status quo to resolve the deadlock. To learn what consensus decision making means and understand its finer details, you are encouraged to read [[https://www.seedsforchange.org.uk/consensus]].
+
+Day-to-day decision making, for instance discussions about pull requests (see [[id:guix--Reviewing-the-Work-of-Others][Reviewing the Work of Others]]), happens informally among interested parties such as contributors and members of the relevant teams (see [[id:guix--Teams][Teams]]).
+
+Decisions that are expected to have an impact on most contributors and/or on the broader user community---e.g., changes to project-wide policies, to core functionality, and so on---are made following the GCD (Guix Consensus Document) process. The process provides a framework to formalize proposals and draw attention to them, to leave time for interested parties to discuss them, and to collectively accept or withdraw them based on input from participating team members. It is defined in [[https://consensus.guix.gnu.org/gcd/001-gcd-process.html][GCD 001]]. Past GCDs can be seen at [[https://consensus.guix.gnu.org]], and discussions take place at [[https://codeberg.org/guix/guix-consensus-documents]].
+
+--------------
+
+Next: [[id:guix--Commit-Access][Commit Access]], Previous: [[id:guix--Teams][Teams]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

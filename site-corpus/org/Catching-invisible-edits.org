@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--Catching-invisible-edits
+:END:
+#+filetags: :org:
+#+title: Catching invisible edits (The Org Manual)
+
+Next:
+
+<<Catching-invisible-edits>>
+Previous: [[id:org--Initial-visibility][Initial visibility]], Up: [[id:org--Visibility-Cycling][Visibility Cycling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 2.2.3 Catching invisible edits [[#Catching-invisible-edits-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Catching-invisible-edits-1
+:CLASS: subsection
+:END:
+Sometimes you may inadvertently edit an invisible part of the buffer and be confused about what has been edited and how to undo the mistake. By default, Org prevents such edits for a limited set of user commands. Users can control which commands are affected by customizing =org-fold-catch-invisible-edits-commands=.
+
+The strategy used to decide if a given edit is dangerous is controlled by =org-fold-catch-invisible-edits=. See the docstring of this option for the available strategies. Set the option to =nil= to disable catching invisible edits completely.

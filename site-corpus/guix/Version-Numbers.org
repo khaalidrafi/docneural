@@ -1,0 +1,121 @@
+:PROPERTIES:
+:ID: guix--Version-Numbers
+:END:
+#+filetags: :guix:
+#+title: Version Numbers
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Version-Numbers>>
+Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.4 Version Numbers [[#Version-Numbers-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Version-Numbers-1
+:CLASS: subsection
+:END:
+We usually package only the latest version of a given free software project. But sometimes, for instance for incompatible library versions, two (or more) versions of the same package are needed. These require different Scheme variable names. We use the name as defined in [[id:guix--Package-Naming][Package Naming]] for the most recent version; previous versions use the same name, suffixed by =-= and the smallest prefix of the version number that may distinguish the two versions.
+
+The name inside the package definition is the same for all versions of a package and does not contain any version number.
+
+For instance, the versions 2.24.20 and 3.9.12 of GTK+ may be packaged as follows:
+
+#+begin_src lisp
+(define-public gtk+
+  (package
+    (name "gtk+")
+    (version "3.9.12")
+    ...))
+(define-public gtk+-2
+  (package
+    (name "gtk+")
+    (version "2.24.20")
+    ...))
+#+end_src
+
+If we also wanted GTK+ 3.8.2, this would be packaged as
+
+#+begin_src lisp
+(define-public gtk+-3.8
+  (package
+    (name "gtk+")
+    (version "3.8.2")
+    ...))
+#+end_src
+
+Occasionally, we package snapshots of upstream's version control system (VCS) instead of formal releases. This should remain exceptional, because it is up to upstream developers to clarify what the stable release is. Yet, it is sometimes necessary. So, what should we put in the =version= field?
+
+Clearly, we need to make the commit identifier of the VCS snapshot visible in the version string, but we also need to make sure that the version string is monotonically increasing so that =guix package --upgrade= can determine which version is newer. Since commit identifiers, notably with Git, are not monotonically increasing, we add a revision number that we increase each time we upgrade to a newer snapshot. The resulting version string looks like this:
+
+#+begin_example
+2.0.11-3.cabba9e
+  ^    ^    ^
+  |    |    `-- upstream commit ID
+  |    |
+  |    `--- Guix package revision
+  |
+latest upstream version
+#+end_example
+
+It is a good idea to strip commit identifiers in the =version= field to, say, 7 digits. It avoids an aesthetic annoyance (assuming aesthetics have a role to play here) as well as problems related to OS limits such as the maximum shebang length (127 bytes for the Linux kernel). There are helper functions for doing this for packages using =git-fetch= or =hg-fetch= (see below). It is best to use the full commit identifiers in =origin=s, though, to avoid ambiguities. A typical package definition may look like this:
+
+#+begin_src lisp
+(define my-package
+  (let ((commit "c3f29bc928d5900971f65965feaae59e1272a3f7")
+        (revision "1"))          ;Guix package revision
+    (package
+      (version (git-version "0.9" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "git://example.org/my-package.git")
+                      (commit commit)))
+                (sha256 (base32 "1mbikn..."))
+                (file-name (git-file-name name version))))
+      ;; ...
+      )))
+#+end_src
+
+- Procedure: *git-version* =VERSION== ==REVISION== ==COMMIT= [[#index-git_002dversion][¶]] :: Return the version string for packages using =git-fetch=.
+
+  #+begin_src lisp
+  (git-version "0.2.3" "0" "93818c936ee7e2f1ba1b315578bde363a7d43d05")
+  ⇒ "0.2.3-0.93818c9"
+  #+end_src
+
+- Procedure: *hg-version* =VERSION== ==REVISION== ==CHANGESET= [[#index-hg_002dversion][¶]] :: Return the version string for packages using =hg-fetch=. It works in the same way as =git-version=.
+
+--------------
+
+Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

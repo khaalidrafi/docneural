@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID: org--A-Beamer-example
+:END:
+#+filetags: :org:
+#+title: A Beamer example (The Org Manual)
+
+Next:
+
+<<A-Beamer-example>>
+Previous: [[id:org--Editing-support][Editing support]], Up: [[id:org--Beamer-Export][Beamer Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.8.6 A Beamer example [[#A-Beamer-example-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: A-Beamer-example-1
+:CLASS: subsection
+:END:
+Here is an example of an Org document ready for Beamer export.
+
+#+begin_example
+#+TITLE: Example Presentation
+#+AUTHOR: Carsten Dominik
+#+OPTIONS: H:2 toc:t num:t
+#+LATEX_CLASS: beamer
+#+STARTUP: beamer
+#+LATEX_CLASS_OPTIONS: [presentation]
+#+BEAMER_THEME: Madrid
+#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col)
+
+* This is the first structural section
+
+** Frame 1
+*** Thanks to Eric Fraga                                           :B_block:
+    :PROPERTIES:
+    :BEAMER_COL: 0.48
+    :BEAMER_ENV: block
+    :END:
+    for the first viable Beamer setup in Org
+*** Thanks to everyone else                                        :B_block:
+    :PROPERTIES:
+    :BEAMER_COL: 0.48
+    :BEAMER_ACT: <2->
+    :BEAMER_ENV: block
+    :END:
+    for contributing to the discussion
+**** This will be formatted as a beamer note                       :B_note:
+     :PROPERTIES:
+     :BEAMER_env: note
+     :END:
+** Frame 2 (where we will not use columns)
+*** Request
+    Please test this stuff!
+#+end_src

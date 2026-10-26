@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID: org--TODO-Items
+:END:
+#+filetags: :org:
+#+title: TODO Items (The Org Manual)
+
+Next:
+
+<<TODO-Items>>
+Next: [[id:org--Tags][Tags]], Previous: [[id:org--Hyperlinks][Hyperlinks]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 5 TODO Items [[#TODO-Items-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TODO-Items-1
+:CLASS: chapter
+:END:
+Org mode does not maintain TODO lists as separate documents[[#FOOT37][^{37}]]. Instead, TODO items are an integral part of the notes file, because TODO items usually come up while taking notes! With Org mode, simply mark any entry in a tree as being a TODO item. In this way, information is not duplicated, and the entire context from which the TODO item emerged is always present.
+
+Of course, this technique for managing TODO items scatters them throughout your notes file. Org mode compensates for this by providing methods to give you an overview of all the things that you have to do.
+
+- [[id:org--TODO-Basics][Basic TODO Functionality]]
+- [[id:org--TODO-Extensions][Extended Use of TODO Keywords]]
+- [[id:org--Progress-Logging][Progress Logging]]
+- [[id:org--Priorities][Priorities]]
+- [[id:org--Breaking-Down-Tasks][Breaking Down Tasks into Subtasks]]
+- [[id:org--Checkboxes][Checkboxes]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF37][(37)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Of course, you can make a document that contains only long lists of TODO items, but this is not required.

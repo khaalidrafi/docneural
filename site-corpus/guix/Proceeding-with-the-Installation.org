@@ -1,0 +1,88 @@
+:PROPERTIES:
+:ID: guix--Proceeding-with-the-Installation
+:END:
+#+filetags: :guix:
+#+title: Proceeding with the Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Proceeding-with-the-Installation>>
+Previous: [[id:guix--Keyboard-Layout-and-Networking-and-Partitioning][Keyboard Layout, Networking, and Partitioning]], Up: [[id:guix--Manual-Installation][Manual Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 3.6.2 Proceeding with the Installation [[#Proceeding-with-the-Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Proceeding-with-the-Installation-1
+:CLASS: subsection
+:END:
+With the target partitions ready and the target root mounted on =/mnt=, we're ready to go. First, run:
+
+#+begin_example
+herd start cow-store /mnt
+#+end_example
+
+This makes =/gnu/store= copy-on-write, such that packages added to it during the installation phase are written to the target disk on =/mnt= rather than kept in memory. This is necessary because the first phase of the =guix system init= command (see below) entails downloads or builds to =/gnu/store= which, initially, is an in-memory file system.
+
+Next, you have to edit a file and provide the declaration of the operating system to be installed. To that end, the installation system comes with three text editors. We recommend GNU nano (see [[https://www.nano-editor.org/dist/latest/nano.html#Top][GNU nano Manual]]), which supports syntax highlighting and parentheses matching; other editors include mg (an Emacs clone), and nvi (a clone of the original BSD =vi= editor). We strongly recommend storing that file on the target root file system, say, as =/mnt/etc/config.scm=. Failing to do that, you will have lost your configuration file once you have rebooted into the newly-installed system.
+
+See [[id:guix--Using-the-Configuration-System][Using the Configuration System]], for an overview of the configuration file. The example configurations discussed in that section are available under =/etc/configuration= in the installation image. Thus, to get started with a system configuration providing a graphical display server (a “desktop” system), you can run something along these lines:
+
+#+begin_example
+# mkdir /mnt/etc
+# cp /etc/configuration/desktop.scm /mnt/etc/config.scm
+# nano /mnt/etc/config.scm
+#+end_example
+
+You should pay attention to what your configuration file contains, and in particular:
+
+- Make sure the =bootloader-configuration= form refers to the targets you want to install GRUB on. It should mention =grub-bootloader= if you are installing GRUB in the legacy way, or =grub-efi-bootloader= for newer UEFI systems. For legacy systems, the =targets= field contain the names of the devices, like =(list "/dev/sda")=; for UEFI systems it names the paths to mounted EFI partitions, like =(list "/boot/efi")=; do make sure the paths are currently mounted and a =file-system= entry is specified in your configuration.
+
+- Be sure that your file system labels match the value of their respective =device= fields in your =file-system= configuration, assuming your =file-system= configuration uses the =file-system-label= procedure in its =device= field.
+
+  If you are using Btrfs and your swap file is in a subvolume make sure to list the root partition as its dependency in its =file-system= entry to make sure everything is mounted in the right order.
+
+- If there are encrypted or RAID partitions, make sure to add a =mapped-devices= field to describe them (see [[id:guix--Mapped-Devices][Mapped Devices]]).
+
+Once you are done preparing the configuration file, the new system must be initialized (remember that the target root file system is mounted under =/mnt=):
+
+#+begin_example
+guix system init /mnt/etc/config.scm /mnt
+#+end_example
+
+This copies all the necessary files and installs GRUB on =/dev/sdX=, unless you pass the =--no-bootloader= option. For more information, see [[id:guix--Invoking-guix-system][Invoking =guix system=]]. This command may trigger downloads or builds of missing packages, which can take some time.
+
+Once that command has completed---and hopefully succeeded!---you can run =reboot= and boot into the new system. The =root= password in the new system is initially empty; other users' passwords need to be initialized by running the =passwd= command as =root=, unless your configuration specifies otherwise (see [[id:guix--User-Accounts::#user_002daccount_002dpassword][user account passwords]]). See [[id:guix--After-System-Installation][After System Installation]], for what's next!
+
+--------------
+
+Previous: [[id:guix--Keyboard-Layout-and-Networking-and-Partitioning][Keyboard Layout, Networking, and Partitioning]], Up: [[id:guix--Manual-Installation][Manual Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

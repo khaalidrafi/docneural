@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID: org--Tables
+:END:
+#+filetags: :org:
+#+title: Tables (The Org Manual)
+
+Next:
+
+<<Tables>>
+Next: [[id:org--Hyperlinks][Hyperlinks]], Previous: [[id:org--Document-Structure][Document Structure]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 3 Tables [[#Tables-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tables-1
+:CLASS: chapter
+:END:
+Org comes with a fast and intuitive table editor. Spreadsheet-like calculations are supported using the Emacs Calc package (see [[https://www.gnu.org/software/emacs/manual/html_node/calc/index.html#Top][GNU Emacs Calculator Manual]]).
+
+- [[id:org--Built_002din-Table-Editor][Built-in Table Editor]]
+- [[id:org--Column-Width-and-Alignment][Column Width and Alignment]]
+- [[id:org--Column-Groups][Column Groups]]
+- [[id:org--Orgtbl-Mode][The Orgtbl Minor Mode]]
+- [[id:org--The-Spreadsheet][The Spreadsheet]]
+- [[id:org--Org-Plot][Org Plot]]

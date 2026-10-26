@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID: org--Images-in-ODT-export
+:END:
+#+filetags: :org:
+#+title: Images in ODT export (The Org Manual)
+
+Next:
+
+<<Images-in-ODT-export>>
+Next: [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]], Previous: [[id:org--Tables-in-ODT-export][Tables in ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.8 Images in ODT export [[#Images-in-ODT-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Images-in-ODT-export-1
+:CLASS: subsection
+:END:
+**** Embedding images [[#Embedding-images-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Embedding-images-1
+:CLASS: subsubheading
+:END:
+The ODT export backend processes image links in Org files that do not have descriptions, such as these links ‘=[[file:img.jpg]]=' or ‘=[[./img.jpg]]=', as direct image insertions in the final output. Either of these examples works:
+
+#+begin_example
+[[file:img.png]]
+#+end_example
+
+#+begin_example
+[[./img.png]]
+#+end_example
+
+**** Embedding clickable images [[#Embedding-clickable-images-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Embedding-clickable-images-1
+:CLASS: subsubheading
+:END:
+For clickable images, provide a link whose description is another link to an image file. For example, to embed an image ‘=org-mode-unicorn.png=' which when clicked jumps to [[https://orgmode.org]] website, do the following
+
+#+begin_example
+[[https://orgmode.org][./org-mode-unicorn.png]]
+#+end_example
+
+**** Sizing and scaling of embedded images [[#Sizing-and-scaling-of-embedded-images-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sizing-and-scaling-of-embedded-images-1
+:CLASS: subsubheading
+:END:
+Control the size and scale of the embedded images with the ‘=ATTR_ODT=' attribute.
+
+The ODT export backend starts with establishing the size of the image in the final document. The dimensions of this size are measured in centimeters. The backend then queries the image file for its dimensions measured in pixels. For this measurement, the backend relies on ImageMagick's identify program or Emacs =create-image= and =image-size= API. ImageMagick is the preferred choice for large file sizes or frequent batch operations. The backend then converts the pixel dimensions using =org-odt-pixels-per-inch= into the familiar 72 dpi or 96 dpi. The default value for this is in =display-pixels-per-inch=, which can be tweaked for better results based on the capabilities of the output device. Here are some common image scaling operations:
+
+- Explicitly size the image :: To embed ‘=img.png=' as a 10 cm x 10 cm image, do the following:
+
+  #+begin_example
+  #+ATTR_ODT: :width 10 :height 10
+  [[./img.png]]
+#+end_example
+
+- Scale the image :: To embed ‘=img.png=' at half its size, do the following:
+
+  #+begin_example
+  #+ATTR_ODT: :scale 0.5
+  [[./img.png]]
+#+end_example
+
+- Scale the image to a specific width :: To embed ‘=img.png=' with a width of 10 cm while retaining the original height:width ratio, do the following:
+
+  #+begin_example
+  #+ATTR_ODT: :width 10
+  [[./img.png]]
+#+end_example
+
+- Scale the image to a specific height :: To embed ‘=img.png=' with a height of 10 cm while retaining the original height:width ratio, do the following:
+
+  #+begin_example
+  #+ATTR_ODT: :height 10
+  [[./img.png]]
+#+end_example
+
+**** Anchoring of images [[#Anchoring-of-images-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Anchoring-of-images-1
+:CLASS: subsubheading
+:END:
+The ODT export backend can anchor images to ‘=as-char=', ‘=paragraph=', or ‘=page='. Set the preferred anchor using the ‘=:anchor=' property of the ‘=ATTR_ODT=' line.
+
+To create an image that is anchored to a page:
+
+#+begin_example
+#+ATTR_ODT: :anchor page
+[[./img.png]]
+#+end_example
+
+--------------
+
+Next: [[id:org--Math-formatting-in-ODT-export][Math formatting in ODT export]], Previous: [[id:org--Tables-in-ODT-export][Tables in ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

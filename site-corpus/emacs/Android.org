@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Android
+:END:
+#+filetags: :emacs:
+#+title: Android
+
+Next: [[id:emacs--Microsoft-Windows][Emacs and Microsoft Windows/MS-DOS]]   Previous: [[id:emacs--Haiku][Emacs and Haiku]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Android>>
+** Appendix H Emacs and Android [[#Emacs-and-Android][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Emacs-and-Android
+:CLASS: appendix
+:END:
+Android is a mobile operating system developed by the Open Handset Alliance. This section describes the peculiarities of using Emacs on an Android device running Android 2.2 or later.
+
+Android devices commonly rely a touch screen or digitizer device and virtual keyboard for user input. For more information about using such devices with Emacs, see [[id:emacs--Other-Input][Touchscreen Input and Virtual Keyboards]].
+
+--------------

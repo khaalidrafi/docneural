@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--ODT-export-commands
+:END:
+#+filetags: :org:
+#+title: ODT export commands (The Org Manual)
+
+Next:
+
+<<ODT-export-commands>>
+Next: [[id:org--ODT-specific-export-settings][ODT specific export settings]], Previous: [[id:org--Pre_002drequisites-for-ODT-export][Pre-requisites for ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.2 ODT export commands [[#ODT-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ODT-export-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002de-o-o>>C-c C-e o o (=org-odt-export-to-odt=) [[#index-C_002dc-C_002de-o-o][¶]] :: Export as OpenDocument Text file.
+
+  If =org-odt-preferred-output-format= is specified, the ODT export backend automatically converts the exported file to that format.
+
+  For ‘=myfile.org=', Org exports to ‘=myfile.odt=', overwriting without warning. The ODT export backend exports a region only if a region was active.
+
+  If the selected region is a single tree, the ODT export backend makes the tree head the document title. Incidentally, C-c @ selects the current subtree. If the tree head entry has, or inherits, an ‘=EXPORT_FILE_NAME=' property, the ODT export backend uses that for file name.
+
+- <<index-C_002dc-C_002de-o-O>>C-c C-e o O [[#index-C_002dc-C_002de-o-O][¶]] :: Export as an OpenDocument Text file and open the resulting file.
+
+  If =org-export-odt-preferred-output-format= is specified, open the converted file instead. See [[id:org--Extending-ODT-export::#Automatically-exporting-to-other-formats][Automatically exporting to other formats]].
+
+--------------
+
+Next: [[id:org--ODT-specific-export-settings][ODT specific export settings]], Previous: [[id:org--Pre_002drequisites-for-ODT-export][Pre-requisites for ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

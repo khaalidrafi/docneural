@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: emacs--Command-Example
+:END:
+#+filetags: :emacs:
+#+title: Command Example
+
+Next: [[id:emacs--Environment#Environment][Environment Variables]]   Previous: [[id:emacs--Initial-Options][Initial Options]]   Up: [[id:emacs--Emacs-Invocation][Command Line Arguments for Emacs Invocation]]
+
+<<Command-Example>>
+*** C.3 Command Argument Example [[#Command-Argument-Example][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Command-Argument-Example
+:CLASS: appendixsec
+:END:
+Here is an example of using Emacs with arguments and options. It assumes you have a Lisp program file called =hack-c.el= which, when loaded, performs some useful operation on the current buffer, expected to be a C program.
+
+#+begin_example
+emacs --batch foo.c -l hack-c -f save-buffer >& log
+#+end_example
+
+This says to visit =foo.c=, load =hack-c.el= (which makes changes in the visited file), save =foo.c= (note that =save-buffer= is the function that C-x C-s is bound to), and then exit back to the shell (because of ‘=--batch='). ‘=--batch=' also guarantees there will be no problem redirecting output to =log=, because Emacs will not assume that it has a display terminal to work with.
+
+--------------

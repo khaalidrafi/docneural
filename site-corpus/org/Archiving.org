@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID: org--Archiving
+:END:
+#+filetags: :org:
+#+title: Archiving (The Org Manual)
+
+Next:
+
+<<Archiving>>
+Previous: [[id:org--Refile-and-Copy][Refile and Copy]], Up: [[id:org--Refiling-and-Archiving][Refiling and Archiving]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 9.2 Archiving [[#Archiving-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Archiving-1
+:CLASS: section
+:END:
+When a project represented by a (sub)tree is finished, you may want to move the tree out of the way and to stop it from contributing to the agenda. Archiving is important to keep your working files compact and global searches like the construction of agenda views fast.
+
+-  <<index-C_002dc-C_002dx-C_002da>>C-c C-x C-a (=org-archive-subtree-default=) [[#index-C_002dc-C_002dx-C_002da][¶]] :: Archive the current entry using the command specified in the variable =org-archive-default-command=.
+
+- [[id:org--Moving-subtrees][Moving a tree to an archive file]]
+- [[id:org--Internal-archiving][Internal archiving]]

@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: guix--Java-Packages
+:END:
+#+filetags: :guix:
+#+title: Java Packages
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Java-Packages>>
+Next: [[id:guix--Rust-Crates][Rust Crates]], Previous: [[id:guix--Perl-Modules][Perl Modules]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.12 Java Packages [[#Java-Packages-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Java-Packages-1
+:CLASS: subsection
+:END:
+Java programs standing for themselves are named as any other package, using the lowercase upstream name.
+
+To avoid confusion and naming clashes with other programming languages, it is desirable that the name of a package for a Java package is prefixed with =java-=. If a project already contains the word =java=, we drop this; for instance, the package =ngsjava= is packaged under the name =java-ngs=.
+
+For Java packages containing a single class or a small class hierarchy, we use the lowercase class name, replace all occurrences of =.= by dashes and prepend the prefix =java-=. So the class =apache.commons.cli= becomes package =java-apache-commons-cli=.

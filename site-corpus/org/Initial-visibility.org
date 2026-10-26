@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: org--Initial-visibility
+:END:
+#+filetags: :org:
+#+title: Initial visibility (The Org Manual)
+
+Next:
+
+<<Initial-visibility>>
+Next: [[id:org--Catching-invisible-edits][Catching invisible edits]], Previous: [[id:org--Global-and-local-cycling][Global and local cycling]], Up: [[id:org--Visibility-Cycling][Visibility Cycling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 2.2.2 Initial visibility [[#Initial-visibility-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Initial-visibility-1
+:CLASS: subsection
+:END:
+When Emacs first visits an Org file, the global state is set to =showeverything=, i.e., all file content is visible[[#FOOT6][^{6}]]. This can be configured through the variable =org-startup-folded=, or on a per-file basis by adding one of the following lines anywhere in the buffer:
+
+#+begin_example
+#+STARTUP: overview
+#+STARTUP: content
+#+STARTUP: showall
+#+STARTUP: show2levels
+#+STARTUP: show3levels
+#+STARTUP: show4levels
+#+STARTUP: show5levels
+#+STARTUP: showeverything
+#+end_example
+
+Furthermore, any entries with a ‘=VISIBILITY=' property (see [[id:org--Properties-and-Columns][Properties and Columns]]) get their visibility adapted accordingly. Allowed values for this property are ‘=folded=', ‘=children=', ‘=content=', and ‘=all='.
+
+-  <<index-C_002du-C_002du-TAB-1>>C-u C-u TAB (=org-cycle-set-startup-visibility=) [[#index-C_002du-C_002du-TAB-1][¶]] :: Switch back to the startup visibility of the buffer, i.e., whatever is requested by startup options and ‘=VISIBILITY=' properties in individual entries.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF6][(6)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+When =org-agenda-inhibit-startup= is non-=nil=, Org does not honor the default visibility state when first opening a file for the agenda (see [[id:org--Speeding-Up-Your-Agendas][Speeding Up Your Agendas]]).
+
+--------------
+
+Next: [[id:org--Catching-invisible-edits][Catching invisible edits]], Previous: [[id:org--Global-and-local-cycling][Global and local cycling]], Up: [[id:org--Visibility-Cycling][Visibility Cycling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

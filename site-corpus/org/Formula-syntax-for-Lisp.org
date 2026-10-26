@@ -1,0 +1,85 @@
+:PROPERTIES:
+:ID: org--Formula-syntax-for-Lisp
+:END:
+#+filetags: :org:
+#+title: Formula syntax for Lisp (The Org Manual)
+
+Next:
+
+<<Formula-syntax-for-Lisp>>
+Next: [[id:org--Durations-and-time-values][Durations and time values]], Previous: [[id:org--Formula-syntax-for-Calc][Formula syntax for Calc]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 3.5.3 Emacs Lisp forms as formulas [[#Emacs-Lisp-forms-as-formulas][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Emacs-Lisp-forms-as-formulas
+:CLASS: subsection
+:END:
+It is also possible to write a formula in Emacs Lisp. This can be useful for string manipulation and control structures, if Calc's functionality is not enough.
+
+A formula is evaluated as a Lisp form when it starts with a single-quote followed by an opening parenthesis. Cell table references are interpolated into the Lisp form before execution. The evaluation should return either a string or a number. Evaluation modes and a =format= string (similar to =printf=)[[#FOOT22][^{22}]] used to render the returned values can be specified after a semicolon.
+
+By default, references are interpolated as literal Lisp strings: the field content is replaced in the Lisp form stripped of leading and trailing white space and surrounded in double-quotes. For example:
+
+#+begin_example
+'(concat $1 $2)
+#+end_example
+
+concatenates the content of columns 1 and column 2.
+
+When the ‘=N=' flag is used, all referenced elements are parsed as numbers and interpolated as Lisp numbers, without quotes. Fields that cannot be parsed as numbers are interpolated as zeros. For example:
+
+#+begin_example
+'(+ $1 $2);N
+#+end_example
+
+adds columns 1 and 2, equivalent to Calc's ‘=$1+$2='. Ranges are inserted as space-separated fields, so they can be embedded in list or vector syntax. For example:
+
+#+begin_example
+'(apply '+ '($1..$4));N
+#+end_example
+
+computes the sum of columns 1 to 4, like Calc's ‘=vsum($1..$4)='.
+
+When the ‘=L=' flag is used, all fields are interpolated literally: the cell content is replaced in the Lisp form stripped of leading and trailing white space and without quotes. If a reference is intended to be interpreted as a string by the Lisp form, the reference operator itself should be enclosed in double-quotes, like ‘="$3"='. The ‘=L=' flag is useful when strings and numbers are used in the same Lisp form. For example:
+
+#+begin_example
+'(substring "$1" $2 $3);L
+#+end_example
+
+extracts the part of the string in column 1 between the character positions specified in the integers in column 2 and 3, and it is easier to read than the equivalent:
+
+#+begin_example
+'(substring $1 (string-to-number $2) (string-to-number $3))
+#+end_example
+
+When the formula itself contains ‘=;=' symbol, Org mode may incorrectly interpret everything past ‘=;=' as format specifier:
+
+#+begin_example
+'(concat $1 ";")
+#+end_example
+
+You can put an extra trailing ‘=;=' to indicate that all the earlier instances of ‘=;=' belong to the formula itself:
+
+#+begin_example
+'(concat $1 ";");
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF22][(22)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+=format= is similar to =printf= in =C= and other languages, but can handle arbitrary-precision integers and other Elisp objects. Consult [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Formatting-Strings.html#Formatting-Strings][(elisp)Formatting Strings]] and the docstring of =format= for details.
+
+--------------
+
+Next: [[id:org--Durations-and-time-values][Durations and time values]], Previous: [[id:org--Formula-syntax-for-Calc][Formula syntax for Calc]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

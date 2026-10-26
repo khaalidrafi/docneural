@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID: org--Document-Structure
+:END:
+#+filetags: :org:
+#+title: Document Structure (The Org Manual)
+
+Next:
+
+<<Document-Structure>>
+Next: [[id:org--Tables][Tables]], Previous: [[id:org--Introduction][Introduction]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 2 Document Structure [[#Document-Structure-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Document-Structure-1
+:CLASS: chapter
+:END:
+Org is an outliner. Outlines allow a document to be organized in a hierarchical structure, which, at least for me, is the best representation of notes and thoughts. An overview of this structure is achieved by folding, i.e., hiding large parts of the document to show only the general document structure and the parts currently being worked on. Org greatly simplifies the use of outlines by compressing the show and hide functionality into a single command, =org-cycle=, which is bound to the TAB key.
+
+- [[id:org--Headlines][Headlines]]
+- [[id:org--Visibility-Cycling][Visibility Cycling]]
+- [[id:org--Motion][Motion]]
+- [[id:org--Structure-Editing][Structure Editing]]
+- [[id:org--Sparse-Trees][Sparse Trees]]
+- [[id:org--Plain-Lists][Plain Lists]]
+- [[id:org--Drawers][Drawers]]
+- [[id:org--Blocks][Blocks]]

@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID: guix--Packages-with-Multiple-Outputs
+:END:
+#+filetags: :guix:
+#+title: Packages with Multiple Outputs
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Packages-with-Multiple-Outputs>>
+Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 5.4 Packages with Multiple Outputs [[#Packages-with-Multiple-Outputs-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Packages-with-Multiple-Outputs-1
+:CLASS: section
+:END:
+Often, packages defined in Guix have a single /output/---i.e., the source package leads to exactly one directory in the store. When running =guix install glibc=, one installs the default output of the GNU libc package; the default output is called =out=, but its name can be omitted as shown in this command. In this particular case, the default output of =glibc= contains all the C header files, shared libraries, static libraries, Info documentation, and other supporting files.
+
+Sometimes it is more appropriate to separate the various types of files produced from a single source package into separate outputs. For instance, the GLib C library (used by GTK+ and related packages) installs more than 20 MiB of reference documentation as HTML pages. To save space for users who do not need it, the documentation goes to a separate output, called =doc=. To install the main GLib output, which contains everything but the documentation, one would run:
+
+#+begin_example
+guix install glib
+#+end_example
+
+The command to install its documentation is:
+
+#+begin_example
+guix install glib:doc
+#+end_example
+
+While the colon syntax works for command-line specification of package outputs, it will not work when using a package /variable/ in Scheme code. For example, to add the documentation of =glib= to the globally installed packages of an =operating-system= (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]]), a list of two items, the first one being the package /variable/ and the second one the name of the output to select (a string), must be used instead:
+
+#+begin_src lisp
+(use-modules (gnu packages glib))
+;; glib-with-documentation is the Guile symbol for the glib package
+(operating-system
+ ...
+ (packages
+  (append
+   (list (list glib-with-documentation "doc"))
+         %base-packages)))
+#+end_src
+
+Some packages install programs with different “dependency footprints”. For instance, the WordNet package installs both command-line tools and graphical user interfaces (GUIs). The former depend solely on the C library, whereas the latter depend on Tcl/Tk and the underlying X libraries. In this case, we leave the command-line tools in the default output, whereas the GUIs are in a separate output. This allows users who do not need the GUIs to save space. The =guix size= command can help find out about such situations (see [[id:guix--Invoking-guix-size][Invoking =guix size=]]). =guix graph= can also be helpful (see [[id:guix--Invoking-guix-graph][Invoking =guix graph=]]).
+
+There are several such multiple-output packages in the GNU distribution. Other conventional output names include =lib= for libraries and possibly header files, =bin= for stand-alone programs, and =debug= for debugging information (see [[id:guix--Installing-Debugging-Files][Installing Debugging Files]]). The outputs of a package are listed in the third column of the output of =guix package --list-available= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+--------------
+
+Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

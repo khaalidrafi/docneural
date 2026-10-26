@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID: org--Hacking
+:END:
+#+filetags: :org:
+#+title: Hacking (The Org Manual)
+
+Next:
+
+<<Hacking>>
+Next: [[id:org--History-and-Acknowledgments][History and Acknowledgments]], Previous: [[id:org--Miscellaneous][Miscellaneous]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** Appendix A Hacking [[#Hacking-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Hacking-1
+:CLASS: appendix
+:END:
+This appendix describes some ways a user can extend the functionality of Org.
+
+- [[id:org--Hooks][Hooks]]
+- [[id:org--Add_002don-Packages][Add-on Packages]]
+- [[id:org--Adding-Hyperlink-Types][Adding Hyperlink Types]]
+- [[id:org--Adding-Hyperlink-preview][Adding Hyperlink preview]]
+- [[id:org--Adding-Export-Backends][Adding Export Backends]]
+- [[id:org--Tables-in-Arbitrary-Syntax][Tables in Arbitrary Syntax]]
+- [[id:org--Dynamic-Blocks][Dynamic Blocks]]
+- [[id:org--Special-Agenda-Views][Special Agenda Views]]
+- [[id:org--Speeding-Up-Your-Agendas][Speeding Up Your Agendas]]
+- [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]]
+- [[id:org--Using-the-Property-API][Using the Property API]]
+- [[id:org--Using-the-Mapping-API][Using the Mapping API]]

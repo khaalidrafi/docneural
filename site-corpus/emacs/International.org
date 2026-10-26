@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: emacs--International
+:END:
+#+filetags: :emacs:
+#+title: International
+
+Next: [[id:emacs--Modes][Major and Minor Modes]]   Previous: [[id:emacs--Frames][Frames and Graphical Displays]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<International>>
+** 24 International Character Set Support [[#International-Character-Set-Support][¶]]
+:PROPERTIES:
+:CUSTOM_ID: International-Character-Set-Support
+:CLASS: chapter
+:END:
+Emacs supports a wide variety of international character sets, including European and Vietnamese variants of the Latin alphabet, as well as Arabic scripts, Brahmic scripts (for languages such as Bengali, Hindi, and Thai), Cyrillic, Ethiopic, Georgian, Greek, Han (for Chinese and Japanese), Hangul (for Korean), Hebrew and IPA. Emacs also supports various encodings of these characters that are used by other internationalized software, such as word processors and mailers.
+
+Emacs allows editing text with international characters by supporting all the related activities:
+
+- You can visit files with non-ASCII characters, save non-ASCII text, and pass non-ASCII text between Emacs and programs it invokes (such as compilers, spell-checkers, and mailers). Setting your language environment (see [[id:emacs--Language-Environments][Language Environments]]) takes care of setting up the coding systems and other options for a specific language or culture. Alternatively, you can specify how Emacs should encode or decode text for each command; see [[id:emacs--Text-Coding][Specifying a Coding System for File Text]].
+
+- You can display non-ASCII characters encoded by the various scripts. This works by using appropriate fonts on graphics displays (see [[id:emacs--Defining-Fontsets][Defining Fontsets]]), and by sending special codes to text displays (see [[id:emacs--Terminal-Coding][Coding Systems for Terminal I/O]]). If some characters are displayed incorrectly, refer to [[id:emacs--Undisplayable-Characters][Undisplayable Characters]], which describes possible problems and explains how to solve them.
+
+- Characters from scripts whose natural ordering of text is from right to left are reordered for display (see [[id:emacs--Bidirectional-Editing][Bidirectional Editing]]). These scripts include Arabic, Hebrew, Syriac, Thaana, and a few others.
+
+- You can insert non-ASCII characters or search for them. To do that, you can specify an Emacs input method (see [[id:emacs--Select-Input-Method][Selecting an Input Method]]) suitable for your language, or use the default input method set up when you choose your language environment. If your keyboard can produce non-ASCII characters, you can select an appropriate keyboard coding system (see [[id:emacs--Terminal-Coding][Coding Systems for Terminal I/O]]), and Emacs will accept those characters. On graphical displays, modern systems typically provide their native input methods, and Latin-1 characters can also be input by using the C-x 8 prefix, see [[id:emacs--Unibyte-Mode][Unibyte Editing Mode]].
+
+  With the X Window System, your locale should be set to an appropriate value to make sure Emacs interprets keyboard input correctly; see [[id:emacs--Language-Environments][locales]], and [[id:emacs--X-Coding][Coding Systems for X Keyboard Input]].
+
+The rest of this chapter describes these issues in detail.
+
+--------------

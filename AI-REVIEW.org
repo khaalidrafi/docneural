@@ -1,5 +1,5 @@
 #+TITLE: AI-REVIEW — docneural exporter
-#+TODO: TODO QUESTION | NOTED RESOLVED
+#+TODO: TODO QUESTION REVIEW | NOTED RESOLVED
 
 * What to review in =scripts/docneural-export.el=
 
@@ -23,6 +23,7 @@
      HTML must be produced *before* reading failed, because the filter
      pushes onto failed during =org-export-as=.
 
+   :END:
 ** RESOLVED Anchor integrity: org-html-prefer-user-labels
    :ANCHORS:
 
@@ -47,6 +48,7 @@
      GONE — =org-html-prefer-user-labels= is the documented switch; do
      not reintroduce the hack.
 
+   :END:
 ** QUESTION ~1900 dead =#index-*= anchors — accept or strip?
    :DECISION:
 
@@ -69,6 +71,7 @@
      per-file anchor-set build → not worth the complexity on a potato.
      Revisit ONLY if a re-conversion still lacks the targets.
 
+   :END:
 ** RESOLVED check-anchors.py + =make linkcheck= build gate
    :TEST:
 
@@ -81,6 +84,7 @@
      =make linkcheck= wires it; current status 0 broken, 113/113 node
      anchors, gate green.
 
+   :END:
 ** TODO Three Org quirks neutralized for the Org manual corpus
    :CODE:
 
@@ -98,6 +102,7 @@
      which are ordinary links and survive.  Review that losing rendered
      [fn:] footnotes is acceptable for a navigation site (we believe yes).
 
+   :END:
 ** TODO lexical-binding gotcha: filter lambda capturing FAILED
    :REVIEW:
 
@@ -107,6 +112,7 @@
      were bindings of the same =let=.  A single-let version byte-compiles
      with a "free variable failed" warning and misbehaves.  Keep nested.
 
+   :END:
 ** TODO graph.json must encode nodes/links as vectors, not lists
    :BUGFIX:
 
@@ -116,6 +122,7 @@
      compile warning "reference to free variable nodes*" is gone (message
      moved inside the let that binds them).
 
+   :END:
 ** TODO Corpus scanning is a single pass, not per-query grep
    :PERF:
 
@@ -125,6 +132,7 @@
    - Review: =#+filetags:= split on =:=, tags default to the doc name so
      the theme groups by corpus ("org", "guix", ...).
 
+   :END:
 ** QUESTION .export/ artifacts — commit or regenerate?
    :DECISION:
 
@@ -132,6 +140,7 @@
      are committed.  Confirm we never commit generated fragments; CI or a
      local =make export= regenerates them.
 
+   :END:
 ** NOTED Verified by
    :TEST:
 
@@ -145,6 +154,7 @@
    - =make linkcheck= gate GREEN: 0 broken pages, node-name anchors
      113/113, dead-anchor 1944 (all INFO — upstream =@cindex= gap).
 
+   :END:
 * What to review in the Vite/Svelte site shell (task #4)
 
   The second build half is a thin Svelte host (this repo) that mounts the
@@ -163,6 +173,7 @@
      layout ever changes (e.g. a =data/= subdir), base and publicDir must
      change together.
 
+   :END:
 ** RESOLVED synapt consumed via alias, not a file: dependency
    :WIRING:
 
@@ -181,6 +192,7 @@
      repos.  =allow: ['../synapt']= alone caused 403s on our own =src/=
      — do not reintroduce that.
 
+   :END:
 ** NOTED Verified in a real browser (task #5, this unit)
 
    - =npm run dev= (5174; 5173 was an unrelated app) → app mounts against
@@ -216,6 +228,7 @@
      its own tree and the build ships TWO ~175 kB force-graph chunks.
      Verify =npm run build= output has exactly one.
 
+   :END:
 ** TODO Two filter semantics must never be merged
    :GOTCHA:
 
@@ -228,6 +241,7 @@
      Selection goes through the store's =setFocus({id})= (a fresh object
      is fine — act-on-identity), never by mutating the snapshot.
 
+   :END:
 ** RESOLVED Graph colors come from our CSS via orui's nine tokens
    :THEME:
 
@@ -245,6 +259,7 @@
      the palette length re-shuffles colors — cosmetic, but a saved
      palette screenshot then lies.
 
+   :END:
 ** TODO LLM artifacts are generated, so their invariants are the exporter's
    :EXPORTER:
 
@@ -261,6 +276,7 @@
      trade-off (~3.2 MB corpus).  QUESTION: ship it, or gate it behind
      =?full= / a build flag?
 
+   :END:
 ** NOTED Verified by (this unit)
 
    - =npm --prefix ../synapt run check= (svelte-check) clean; synapt
@@ -292,6 +308,7 @@
      spot-check =.export/graph.json=: emacs Top -> =emacs--distrib=,
      guix Top -> =guix--introduction= (verified this pass).
 
+   :END:
 ** TODO Top chainback synthesizes the missing first edge
    :GOTCHA:
 
@@ -302,6 +319,7 @@
    - Uniqueness is the safety valve: multi-predecessor nodes are real
      cross-references, never heads.
 
+   :END:
 ** RESOLVED Stubs stay edgeless on purpose
    :DECISION:
 
@@ -312,6 +330,7 @@
    - 1 non-stub isolated node remains (=org--gnu-free-documentation-license=,
      a legal appendix with no nav block); acceptable.
 
+   :END:
 * What to review in the neuron rebrand (synapt, tasks #26-#28)
 
 ** TODO Painting lives in the loadEngine seam, not GraphView props
@@ -326,6 +345,7 @@
      near-invisible dots. Verify on phone that nodes read as neurons
      (glow ring + title), not specks.
 
+   :END:
 ** RESOLVED Mobile graph: controls collapse, rail has height
    :UI:
 
@@ -333,6 +353,7 @@
      phones; header carries the live wire count so the panel now starts
      collapsed <= 600 px. SynapseRail got a fixed 260 px height on mobile.
 
+   :END:
 ** TODO Branding is per-theme tokens, zero JS
    :THEME:
 
@@ -342,6 +363,7 @@
      synapt is only the theme title — =src/App.svelte= passes
      =title="docneural"=.
 
+   :END:
 ** NOTED Verified by (this pass)
 
    - svelte-check 0 errors / 0 warnings; synapt =npm test= 27/27.
@@ -359,7 +381,7 @@
   theme swap fails silently — it looks fine and disagrees with the canvas.
 
 ** TODO One hue per source, derived by hash — and it must match the canvas
-   :CODE:CRITICAL:
+   :CODE-CRITICAL:
 
    - =src/lib/core/source.ts= re-implements orui's djb2 (=hashString=) and
      indexes the theme's =--sy-graph-palette= itself, because CSS cannot
@@ -382,6 +404,7 @@
      reads =var(--sy-src, var(--sy-accent))=: header rail, mode switches,
      tabs, breadcrumb chip, sidebar, palette rows, note preview border,
      reader pager, =h2::before= sigil, prose =pre= left rule.
+   :END:
 
 ** QUESTION Third-party webfonts in =index.html=: keep, self-host, or drop?
    :DECISION:
@@ -397,6 +420,7 @@
      latin-subset is a few hundred KB) or accept the fallback. Pick before
      this is public.
 
+   :END:
 ** TODO Perf choices were forced by this box, keep them that way
    :PERF:
 
@@ -412,6 +436,7 @@
      (multiply on dark, screen on light). It sits above everything at
      =z-index= — verify it never eats clicks (=pointer-events: none=).
 
+   :END:
 ** TODO Dark is the house style: =data-theme="dark"= in the shell
    :THEME:
 
@@ -424,6 +449,7 @@
      =prefers-color-scheme= block for pages with no =data-theme=); a new
      token must be added to all three or the light theme breaks.
 
+   :END:
 ** TODO Copy must not assume Emacs — three surfaces said "Manual"
    :COPY:
 
@@ -437,6 +463,7 @@
      are counted on both ends deliberately — check that reading is the one
      you want published.
 
+   :END:
 ** NOTED Verified by (this pass)
 
    - =node scripts/pw-verify.mjs= — Playwright-core (from the sibling
@@ -482,6 +509,7 @@
      synapt consumer gets it. If it should be opt-in, it needs its own
      stylesheet import — say so before this spreads.
 
+   :END:
 ** TODO The prompt is a literal identity: =you@docs:~$= / =system@docs:~$=
    :COPY:
 
@@ -494,6 +522,7 @@
      the machine's (it fetched the page). Keep that distinction if the
      prompts grow.
 
+   :END:
 ** TODO Errors are shaped like coreutils, which is a bet on the reader
    :COPY:
 
@@ -505,6 +534,7 @@
      reader can still act on it (the =— run ...= tail is the plain-words
      escape hatch).
 
+   :END:
 ** QUESTION Third-party webfonts are still the one external request
    :DECISION:
 
@@ -515,6 +545,7 @@
      first paint on this box). Self-hosting two woff2 subsets in
      =dist/= would remove the dependency and the privacy leak. Your call.
 
+   :END:
 ** NOTED Found while verifying (NOT fixed here)
 
    - The synapse rail's =AFFERENT= context lines show raw Org link syntax
@@ -565,6 +596,7 @@
      not a site bug, and it is the one number in TODOs.org that is not yet
      true for a visitor.
 
+   :END:
 ** TODO Review =flatten()= against YOUR corpus, not my test cases
    :EXPORT:
 
@@ -581,6 +613,7 @@
      flattening in the exporter, where the link is still structured data
      rather than a string that was already truncated.
 
+   :END:
 ** TODO Review the anchor plumbing in the store
    :STORE:
 
@@ -596,6 +629,7 @@
      copies of one fact. =notePosition()= is the only writer; if you find
      another, it should call that.
 
+   :END:
 ** QUESTION Are the reading keys the right keys?
    :UX:
 
@@ -613,6 +647,7 @@
      the only feedback is a 2.6 s tty toast. If you dislike it, the
      alternative is a real =#<a>= injected next to each heading.
 
+   :END:
 ** NOTED Perf claims that are load-bearing in the code
 
    - The progress hairline writes =style.transform= from a rAF callback and

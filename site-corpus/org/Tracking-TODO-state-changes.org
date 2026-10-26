@@ -1,0 +1,85 @@
+:PROPERTIES:
+:ID: org--Tracking-TODO-state-changes
+:END:
+#+filetags: :org:
+#+title: Tracking TODO state changes (The Org Manual)
+
+Next:
+
+<<Tracking-TODO-state-changes>>
+Next: [[id:org--Tracking-your-habits][Tracking your habits]], Previous: [[id:org--Closing-items][Closing items]], Up: [[id:org--Progress-Logging][Progress Logging]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 5.3.2 Tracking TODO state changes [[#Tracking-TODO-state-changes-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tracking-TODO-state-changes-1
+:CLASS: subsection
+:END:
+You might want to automatically keep track of when a state change occurred and maybe take a note about this change. You can either record just a timestamp, or a time-stamped note. These records are inserted after the headline as an itemized list, the newest first[[#FOOT44][^{44}]]. When taking a lot of notes, you might want to get the notes out of the way into a drawer (see [[id:org--Drawers][Drawers]]). Customize the variable =org-log-into-drawer= to get this behavior---the recommended drawer for this is called ‘=LOGBOOK='[[#FOOT45][^{45}]]. You can also overrule the setting of this variable for a subtree by setting a ‘=LOG_INTO_DRAWER=' property.
+
+Since it is normally too much to record a note for every state, Org mode expects configuration on a per-keyword basis for this. This is achieved by adding special markers ‘=!=' (for a timestamp) or ‘=@=' (for a note with timestamp) in parentheses after each keyword. For example, with the setting
+
+#+begin_src lisp-preformatted
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+#+end_src
+
+You not only define global TODO keywords and fast access keys, but also request that a time is recorded when the entry is set to ‘=DONE=', and that a note is recorded when switching to ‘=WAIT=' or ‘=CANCELED='[[#FOOT46][^{46}]]. The setting for ‘=WAIT=' is even more special: the ‘=!=' after the slash means that in addition to the note taken when entering the state, a timestamp should be recorded when /leaving/ the ‘=WAIT=' state, if and only if the /target/ state does not configure logging for entering it. So it has no effect when switching from ‘=WAIT=' to ‘=DONE=', because ‘=DONE=' is configured to record only a timestamp. But when switching from ‘=WAIT=' back to ‘=TODO=', the ‘=/!=' in the ‘=WAIT=' setting now triggers a timestamp even though ‘=TODO=' has no logging configured.
+
+You can use the exact same syntax for setting logging preferences local to a buffer:
+
+#+begin_example
+#+TODO: TODO(t) WAIT(w@/!) | DONE(d!) CANCELED(c@)
+#+end_example
+
+To record a timestamp without a note for TODO keywords configured with ‘=@=', just type C-c C-c to enter a blank note when prompted.
+
+In order to define logging settings that are local to a subtree or a single item, define a ‘=LOGGING=' property in this entry. Any non-empty ‘=LOGGING=' property resets all logging settings to =nil=. You may then turn on logging for this specific tree using ‘=STARTUP=' keywords like ‘=lognotedone=' or ‘=logrepeat=', as well as adding state specific settings like ‘=TODO(!)='. For example:
+
+#+begin_example
+* TODO Log each state with only a time
+  :PROPERTIES:
+  :LOGGING: TODO(!) WAIT(!) DONE(!) CANCELED(!)
+  :END:
+* TODO Only log when switching to WAIT, and when repeating
+  :PROPERTIES:
+  :LOGGING: WAIT(@) logrepeat
+  :END:
+* TODO No logging at all
+  :PROPERTIES:
+  :LOGGING: nil
+  :END:
+#+end_src
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF44][(44)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See the variable =org-log-states-order-reversed=.
+
+***** [[#DOCF45][(45)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Note that the ‘=LOGBOOK=' drawer is unfolded when pressing SPC in the agenda to show an entry---use C-u SPC to keep it folded here.
+
+***** [[#DOCF46][(46)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+It is possible that Org mode records two timestamps when you are using both =org-log-done= and state change logging. However, it never prompts for two notes: if you have configured both, the state change recording note takes precedence and cancel the closing note.
+
+--------------
+
+Next: [[id:org--Tracking-your-habits][Tracking your habits]], Previous: [[id:org--Closing-items][Closing items]], Up: [[id:org--Progress-Logging][Progress Logging]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

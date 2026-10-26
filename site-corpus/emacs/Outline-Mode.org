@@ -1,0 +1,212 @@
+:PROPERTIES:
+:ID: emacs--Outline-Mode
+:END:
+#+filetags: :emacs:
+#+title: Outline Mode
+
+Next: [[id:emacs--Org-Mode#Org-Mode][Org Mode]]   Previous: [[id:emacs--Text-Mode][Text Mode]]   Up: [[id:emacs--Text][Commands for Human Languages]]
+
+<<Outline-Mode>>
+*** 27.9 Outline Mode [[#Outline-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Mode-1
+:CLASS: section
+:END:
+Outline mode is a major mode derived from Text mode, which is specialized for editing outlines. It provides commands to navigate between entries in the outline structure, and commands to make parts of a buffer temporarily invisible, so that the outline structure may be more easily viewed. Type M-x outline-mode to switch to Outline mode. Entering Outline mode runs the hook =text-mode-hook= followed by the hook =outline-mode-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]).
+
+When you use an Outline mode command to make a line invisible (see [[#Outline-Visibility][Outline Visibility Commands]]), the line disappears from the screen. An ellipsis (three periods in a row) is displayed at the end of the previous visible line, to indicate the hidden text. Multiple consecutive invisible lines produce just one ellipsis.
+
+Editing commands that operate on lines, such as C-n and C-p, treat the text of the invisible line as part of the previous visible line. Killing the ellipsis at the end of a visible line really kills all the following invisible text associated with the ellipsis.
+
+--------------
+
+<<Outline-Minor-Mode>>
+**** 27.9.1 Outline Minor Mode [[#Outline-Minor-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Minor-Mode-1
+:CLASS: subsection
+:END:
+Outline minor mode is a buffer-local minor mode which provides the same commands as the major mode, Outline mode, but can be used in conjunction with other major modes. You can type M-x outline-minor-mode to toggle Outline minor mode in the current buffer, or use a file-local variable setting to enable it in a specific file (see [[id:emacs--Variables::#File-Variables][Local Variables in Files]]).
+
+The major mode, Outline mode, provides special key bindings on the C-c prefix. Outline minor mode provides similar bindings with C-c @ as the prefix; this is to reduce the conflicts with the major mode's special commands. (The variable =outline-minor-mode-prefix= controls the prefix used.)
+
+If =outline-minor-mode-use-buttons= is non-=nil=, Outline minor mode will use buttons at the beginning of the heading lines, in addition to ellipsis, to show that a section is hidden. Clicking the mouse on the button toggles display of the section. If the value of this variable is =insert=, the buttons are inserted directly into the buffer text, so RET on the button will also toggle display of the section, like a mouse click does. Using the value =insert= is not recommended in editable buffers because it modifies them. If the value is =in-margins=, Outline minor mode will use the window margins to indicate that a section is hidden. The buttons are customizable as icons (see [[id:emacs--Icons][Icons]]).
+
+If the =outline-minor-mode-cycle= user option is non-=nil=, the TAB and S-TAB keys that cycle the visibility are enabled on the outline heading lines (see [[#Outline-Visibility][outline-cycle]]). TAB cycles hiding, showing the sub-heading, and showing all for the current section. S-TAB does the same for the entire buffer.
+
+--------------
+
+<<Outline-Format>>
+**** 27.9.2 Format of Outlines [[#Format-of-Outlines][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Format-of-Outlines
+:CLASS: subsection
+:END:
+Outline mode assumes that the lines in the buffer are of two types: /heading lines/ and /body lines/. A heading line represents a topic in the outline. Heading lines start with one or more asterisk (‘=*=') characters; the number of asterisks determines the depth of the heading in the outline structure. Thus, a heading line with one ‘=*=' is a major topic; all the heading lines with two ‘=*='s between it and the next one-‘=*=' heading are its subtopics; and so on. Any line that is not a heading line is a body line. Body lines belong with the preceding heading line. Here is an example:
+
+#+begin_example
+* Food
+This is the body,
+which says something about the topic of food.
+
+** Delicious Food
+This is the body of the second-level header.
+
+** Distasteful Food
+This could have
+a body too, with
+several lines.
+
+*** Dormitory Food
+
+* Shelter
+Another first-level topic with its header line.
+#+end_src
+
+A heading line together with all following body lines is called collectively an /entry/. A heading line together with all following deeper heading lines and their body lines is called a /subtree/.
+
+You can customize the criterion for distinguishing heading lines by setting the variable =outline-regexp=. (The recommended ways to do this are in a major mode function or with a file local variable.) Any line whose beginning has a match for this regexp is considered a heading line. Matches that start within a line (not at the left margin) do not count.
+
+The length of the matching text determines the level of the heading; longer matches make a more deeply nested level. Thus, for example, if a text formatter has commands ‘=@chapter=', ‘=@section=' and ‘=@subsection=' to divide the document into chapters and sections, you could make those lines count as heading lines by setting =outline-regexp= to ‘="@chap\\|@\\(sub\\)*section"='. Note the trick: the two words ‘=chapter=' and ‘=section=' are equally long, but by defining the regexp to match only ‘=chap=' we ensure that the length of the text matched on a chapter heading is shorter, so that Outline mode will know that sections are contained in chapters. This works as long as no other command starts with ‘=@chap='.
+
+Instead of setting the variable =outline-regexp=, you can set the variable =outline-search-function= to a function that matches the current heading and searches for the next one (see [[../elisp_html/Outline-Minor-Mode.html#Outline-Minor-Mode][Outline Minor Mode]] in the Emacs Lisp Reference Manual).
+
+You can explicitly specify a rule for calculating the level of a heading line by setting the variable =outline-level=. The value of =outline-level= should be a function that takes no arguments and returns the level of the current heading. The recommended ways to set this variable are in a major mode command or with a file local variable.
+
+--------------
+
+<<Outline-Motion>>
+**** 27.9.3 Outline Motion Commands [[#Outline-Motion-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Motion-Commands
+:CLASS: subsection
+:END:
+Outline mode provides special motion commands that move backward and forward to heading lines.
+
+-  <<index-outline_002dnext_002dvisible_002dheading>>C-c C-n [[#index-outline_002dnext_002dvisible_002dheading][¶]] :: Move point to the next visible heading line (=outline-next-visible-heading=).
+
+-  <<index-outline_002dprevious_002dvisible_002dheading>>C-c C-p [[#index-outline_002dprevious_002dvisible_002dheading][¶]] :: Move point to the previous visible heading line (=outline-previous-visible-heading=).
+
+-  <<index-outline_002dforward_002dsame_002dlevel>>C-c C-f [[#index-outline_002dforward_002dsame_002dlevel][¶]] :: Move point to the next visible heading line at the same level as the one point is on (=outline-forward-same-level=).
+
+-  <<index-outline_002dbackward_002dsame_002dlevel>>C-c C-b [[#index-outline_002dbackward_002dsame_002dlevel][¶]] :: Move point to the previous visible heading line at the same level (=outline-backward-same-level=).
+
+-  <<index-outline_002dup_002dheading>>C-c C-u [[#index-outline_002dup_002dheading][¶]] :: Move point up to a lower-level (more inclusive) visible heading line (=outline-up-heading=).
+
+All of the above commands accept numeric arguments as repeat counts. For example, C-c C-f, when given an argument, moves forward that many visible heading lines on the same level, and C-c C-u with an argument moves out of that many nested levels.
+
+--------------
+
+<<Outline-Visibility>>
+**** 27.9.4 Outline Visibility Commands [[#Outline-Visibility-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Visibility-Commands
+:CLASS: subsection
+:END:
+Outline mode provides several commands for temporarily hiding or revealing parts of the buffer, based on the outline structure. These commands are not undoable; their effects are simply not recorded by the undo mechanism, so you can undo right past them (see [[id:emacs--Undo][Undo]]).
+
+Many of these commands act on the current heading line. If point is on a heading line, that is the current heading line; if point is on a body line, the current heading line is the nearest preceding header line.
+
+- C-c C-c :: Make the current heading line's body invisible (=outline-hide-entry=).
+
+- C-c C-e :: Make the current heading line's body visible (=outline-show-entry=).
+
+- C-c C-d :: Make everything under the current heading invisible, not including the heading itself (=outline-hide-subtree=).
+
+- C-c C-s :: Make everything under the current heading visible, including body, subheadings, and their bodies (=outline-show-subtree=).
+
+- C-c C-l :: Make the body of the current heading line, and of all its subheadings, invisible (=outline-hide-leaves=).
+
+- C-c C-k :: Make all subheadings of the current heading line, at all levels, visible (=outline-show-branches=).
+
+- C-c C-i :: Make immediate subheadings (one level down) of the current heading line visible (=outline-show-children=).
+
+- C-c C-t :: Make all body lines in the buffer invisible (=outline-hide-body=).
+
+- C-c C-a :: Make all lines in the buffer visible (=outline-show-all=).
+
+- C-c C-q :: Hide everything except the top =n= levels of heading lines (=outline-hide-sublevels=).
+
+- C-c C-o :: Hide everything except for the heading or body that point is in, plus the headings leading up from there to the top level of the outline (=outline-hide-other=).
+
+- C-c / h =regexp= RET :: Hide bodies of headings that match =regexp= (=outline-hide-by-heading-regexp=).
+
+- C-c / s =regexp= RET :: Show bodies of headings that match =regexp= (=outline-show-by-heading-regexp=).
+
+The simplest of these commands are C-c C-c (=outline-hide-entry=), which hides the body lines directly following the current heading line, and C-c C-e (=outline-show-entry=), which reveals them. Subheadings and their bodies are not affected.
+
+The commands C-c C-d (=outline-hide-subtree=) and C-c C-s (=outline-show-subtree=) are more powerful. They apply to the current heading line's /subtree/: its body, all of its subheadings, both direct and indirect, and all of their bodies.
+
+The command C-c C-l (=outline-hide-leaves=) hides the body of the current heading line as well as all the bodies in its subtree; the subheadings themselves are left visible. The command C-c C-k (=outline-show-branches=) reveals the subheadings, if they had previously been hidden (e.g., by C-c C-d). The command C-c C-i (=outline-show-children=) is a weaker version of this; it reveals just the direct subheadings, i.e., those one level down.
+
+The command C-c C-o (=outline-hide-other=) hides everything except the entry that point is in, plus its parents (the headers leading up from there to top level in the outline) and the top level headings. It also reveals body lines preceding the first heading in the buffer.
+
+The command C-c / h (=outline-hide-by-heading-regexp=) prompts for a regular expression, and hides all the body lines of headings which match the regular expression. The command C-c / s likewise prompts for a regular expression, and reveals the bodies of matching headings.
+
+The remaining commands affect the whole buffer. C-c C-t (=outline-hide-body=) makes all body lines invisible, so that you see just the outline structure (as a special exception, it will not hide lines at the top of the file, preceding the first header line, even though these are technically body lines). C-c C-a (=outline-show-all=) makes all lines visible. C-c C-q (=outline-hide-sublevels=) hides all but the top level headings at and above the level of the current heading line (defaulting to 1 if point is not on a heading); with a numeric argument =n=, it hides everything except the top =n= levels of heading lines. Note that it completely reveals all the =n= top levels and the body lines before the first heading.
+
+Outline also provides two convenience commands to cycle the visibility of each section and the whole buffer. Typing TAB (=outline-cycle=) on a heading cycles the current section between “hide all”, “subheadings”, and “show all” states. Typing S-TAB (=outline-cycle-buffer=) cycles the whole buffer between “only top-level headings”, “all headings and subheadings”, and “show all” states.
+
+When incremental search finds text that is hidden by Outline mode, it makes that part of the buffer visible. If you exit the search at that position, the text remains visible. To toggle whether or not an active incremental search can match hidden text, type M-s i. To change the default for future searches, customize the option =search-invisible=. (This option also affects how =query-replace= and related functions treat hidden text, see [[id:emacs--Replace::#Query-Replace][Query Replace]].) You can also automatically make text visible as you navigate in it by using Reveal mode (M-x reveal-mode), a buffer-local minor mode.
+
+The =outline-default-state= variable controls what headings will be visible after Outline mode is turned on. If non-=nil=, some headings are initially outlined. If equal to a number, show only headings up to and including the corresponding level. If equal to =outline-show-all=, all text of buffer is shown. If equal to =outline-show-only-headings=, show only headings, whatever their level is. If equal to a lambda function or function name, this function is expected to toggle headings visibility, and will be called without arguments after the mode is enabled.
+
+--------------
+
+<<Outline-Views>>
+**** 27.9.5 Viewing One Outline in Multiple Views [[#Viewing-One-Outline-in-Multiple-Views][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Viewing-One-Outline-in-Multiple-Views
+:CLASS: subsection
+:END:
+You can display two views of a single outline at the same time, in different windows. To do this, you must create an indirect buffer using M-x make-indirect-buffer. The first argument of this command is the existing outline buffer name, and its second argument is the name to use for the new indirect buffer. See [[id:emacs--Indirect-Buffers][Indirect Buffers]].
+
+Once the indirect buffer exists, you can display it in a window in the normal fashion, with C-x 4 b or other Emacs commands. The Outline mode commands to show and hide parts of the text operate on each buffer independently; as a result, each buffer can have its own view. If you want more than two views on the same outline, create additional indirect buffers.
+
+--------------
+
+<<Foldout>>
+**** 27.9.6 Folding Editing [[#Folding-Editing][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Folding-Editing
+:CLASS: subsection
+:END:
+The Foldout package extends Outline mode and Outline minor mode with folding commands. The idea of folding is that you zoom in on a nested portion of the outline, while hiding its relatives at higher levels.
+
+Consider an Outline mode buffer with all the text and subheadings under level-1 headings hidden. To look at what is hidden under one of these headings, you could use C-c C-e (M-x outline-show-entry) to expose the body, or C-c C-i to expose the child (level-2) headings.
+
+With Foldout, you use C-c C-z (M-x foldout-zoom-subtree). This exposes the body and child subheadings, and narrows the buffer so that only the level-1 heading, the body and the level-2 headings are visible. Now to look under one of the level-2 headings, position the cursor on it and use C-c C-z again. This exposes the level-2 body and its level-3 child subheadings and narrows the buffer again. Zooming in on successive subheadings can be done as much as you like. A string in the mode line shows how deep you've gone.
+
+When zooming in on a heading, to see only the child subheadings specify a numeric argument: C-u C-c C-z. The number of levels of children can be specified too (compare M-x outline-show-children), e.g., M-2 C-c C-z exposes two levels of child subheadings. Alternatively, the body can be specified with a negative argument: M-- C-c C-z. The whole subtree can be expanded, similarly to C-c C-s (M-x outline-show-subtree), by specifying a zero argument: M-0 C-c C-z.
+
+While you're zoomed in, you can still use Outline mode's exposure and hiding functions without disturbing Foldout. Also, since the buffer is narrowed, global editing actions will only affect text under the zoomed-in heading. This is useful for restricting changes to a particular chapter or section of your document.
+
+To unzoom (exit) a fold, use C-c C-x (M-x foldout-exit-fold). This hides all the text and subheadings under the top-level heading and returns you to the previous view of the buffer. Specifying a numeric argument exits that many levels of folds. Specifying a zero argument exits all folds.
+
+To cancel the narrowing of a fold without hiding the text and subheadings, specify a negative argument. For example, M--2 C-c C-x exits two folds and leaves the text and subheadings exposed.
+
+Foldout mode also provides mouse commands for entering and exiting folds, and for showing and hiding text:
+
+- C-M-mouse-1 zooms in on the heading clicked on :: - single click: expose body.
+  - double click: expose subheadings.
+  - triple click: expose body and subheadings.
+  - quad click: expose entire subtree.
+- C-M-mouse-2 exposes text under the heading clicked on :: - single click: expose body.
+  - double click: expose subheadings.
+  - triple click: expose body and subheadings.
+  - quad click: expose entire subtree.
+- C-M-mouse-3 hides text under the heading clicked on or exits fold :: - single click: hide subtree.
+  - double click: exit fold and hide text.
+  - triple click: exit fold without hiding text.
+  - quad click: exit all folds and hide text.
+
+You can specify different modifier keys (instead of Ctrl-Meta-) by setting =foldout-mouse-modifiers=; but if you have already loaded the =foldout.el= library, you must reload it in order for this to take effect.
+
+To use the Foldout package, you can type M-x load-library RET foldout RET; or you can arrange for to do that automatically by putting the following in your init file:
+
+#+begin_example
+(with-eval-after-load "outline"
+  (require 'foldout))
+#+end_example
+
+--------------

@@ -1,0 +1,110 @@
+:PROPERTIES:
+:ID: guix--Specifying-Channel-Authorizations
+:END:
+#+filetags: :guix:
+#+title: Specifying Channel Authorizations
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Specifying-Channel-Authorizations>>
+Next: [[id:guix--Primary-URL][Primary URL]], Previous: [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.11 Specifying Channel Authorizations [[#Specifying-Channel-Authorizations-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Specifying-Channel-Authorizations-1
+:CLASS: section
+:END:
+As we saw above, Guix ensures the source code it pulls from channels comes from authorized developers. As a channel author, you need to specify the list of authorized developers in the =.guix-authorizations= file in the channel's Git repository. The authentication rule is simple: each commit must be signed by a key listed in the =.guix-authorizations= file of its parent commit(s)[[#FOOT12][^{12}]] The =.guix-authorizations= file looks like this:
+
+#+begin_src lisp
+;; Example '.guix-authorizations' file.
+
+(authorizations
+ (version 0)               ;current file format version
+
+ (("AD17 A21E F8AE D8F1 CC02  DBD9 F8AE D8F1 765C 61E3"
+   (name "alice"))
+  ("2A39 3FFF 68F4 EF7A 3D29  12AF 68F4 EF7A 22FB B2D5"
+   (name "bob"))
+  ("CABB A931 C0FF EEC6 900D  0CFB 090B 1199 3D9A EBB5"
+   (name "charlie"))))
+#+end_src
+
+Each fingerprint is followed by optional key/value pairs, as in the example above. Currently these key/value pairs are ignored.
+
+This authentication rule creates a chicken-and-egg issue: how do we authenticate the first commit? Related to that: how do we deal with channels whose repository history contains unsigned commits and lack =.guix-authorizations=? And how do we fork existing channels?
+
+Channel introductions answer these questions by describing the first commit of a channel that should be authenticated. The first time a channel is fetched with =guix pull= or =guix time-machine=, the command looks up the introductory commit and verifies that it is signed by the specified OpenPGP key. From then on, it authenticates commits according to the rule above. Authentication fails if the target commit is neither a descendant nor an ancestor of the introductory commit.
+
+Additionally, your channel must provide all the OpenPGP keys that were ever mentioned in =.guix-authorizations=, stored as =.key= files, which can be either binary or “ASCII-armored”. By default, those =.key= files are searched for in the branch named =keyring= but you can specify a different branch name in =.guix-channel= like so:
+
+#+begin_src lisp
+(channel
+  (version 0)
+  (keyring-reference "my-keyring-branch"))
+#+end_src
+
+To summarize, as the author of a channel, there are three things you have to do to allow users to authenticate your code:
+
+1. Export the OpenPGP keys of past and present committers with =gpg --export= and store them in =.key= files, by default in a branch named =keyring= (we recommend making it an /orphan branch/).
+2. Introduce an initial =.guix-authorizations= in the channel's repository. Do that in a signed commit (see [[id:guix--Commit-Access][Commit Access]], for information on how to sign Git commits).
+3. Advertise the channel introduction, for instance on your channel's web page. The channel introduction, as we saw above, is the commit/key pair---i.e., the commit that introduced =.guix-authorizations=, and the fingerprint of the OpenPGP used to sign it.
+
+Before pushing to your public Git repository, you can run =guix git authenticate= to verify that you did sign all the commits you are about to push with an authorized key:
+
+#+begin_example
+guix git authenticate commit signer
+#+end_example
+
+where =commit= and =signer= are your channel introduction. See [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], for details.
+
+Publishing a signed channel requires discipline: any mistake, such as an unsigned commit or a commit signed by an unauthorized key, will prevent users from pulling from your channel---well, that's the whole point of authentication! Pay attention to merges in particular: merge commits are considered authentic if and only if they are signed by a key present in the =.guix-authorizations= file of /both/ branches.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF12][(12)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Git commits form a /directed acyclic graph/ (DAG). Each commit can have zero or more parents; “regular” commits have one parent and merge commits have two parent commits. Read [[https://eagain.net/articles/git-for-computer-scientists/][/Git for Computer Scientists/]] for a great overview.
+
+--------------
+
+Next: [[id:guix--Primary-URL][Primary URL]], Previous: [[id:guix--Declaring-Channel-Dependencies][Declaring Channel Dependencies]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

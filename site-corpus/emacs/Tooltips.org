@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: emacs--Tooltips
+:END:
+#+filetags: :emacs:
+#+title: Tooltips
+
+Next: [[id:emacs--Mouse-Avoidance][Mouse Avoidance]]   Previous: [[id:emacs--Dialog-Boxes][Using Dialog Boxes]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
+
+<<Tooltips>>
+*** 23.19 Tooltips [[#Tooltips-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tooltips-1
+:CLASS: section
+:END:
+/Tooltips/ are small special frames that display text information at the current mouse position. They activate when there is a pause in mouse movement over some significant piece of text in a window, or the mode line, or some other part of the Emacs frame such as a tool bar button or menu item.
+
+You can toggle the use of tooltips with the command M-x tooltip-mode. When Tooltip mode is disabled, the help text is displayed in the echo area instead. To control the use of tooltips at startup, customize the variable =tooltip-mode=.
+
+The following variables provide customization options for tooltip display:
+
+- <<index-tooltip_002ddelay>>=tooltip-delay= [[#index-tooltip_002ddelay][¶]] :: This variable specifies how long Emacs should wait before displaying the first tooltip. The value is in seconds.
+
+- <<index-tooltip_002dshort_002ddelay>>=tooltip-short-delay= [[#index-tooltip_002dshort_002ddelay][¶]] :: This variable specifies how long Emacs should wait before displaying subsequent tooltips on different items, having already displayed the first tooltip. The value is in seconds.
+
+- <<index-tooltip_002dhide_002ddelay>>=tooltip-hide-delay= [[#index-tooltip_002dhide_002ddelay][¶]] :: The number of seconds since displaying a tooltip to hide it, if the mouse doesn't move.
+
+- <<index-tooltip_002dx_002doffset>>=tooltip-x-offset= [[#index-tooltip_002dx_002doffset][¶]]\\
+  <<index-tooltip_002dy_002doffset>>=tooltip-y-offset= [[#index-tooltip_002dy_002doffset][¶]] :: The X and Y offsets, in pixels, of the left top corner of the tooltip from the mouse pointer position. Note that these are ignored if =tooltip-frame-parameters= was customized to include, respectively, the =left= and =top= parameters. The values of the offsets should be chosen so that the tooltip doesn't cover the mouse pointer's hot spot, or it might interfere with clicking the mouse.
+
+- <<index-tooltip_002dframe_002dparameters>>=tooltip-frame-parameters= [[#index-tooltip_002dframe_002dparameters][¶]] :: The frame parameters used for displaying tooltips. See [[../elisp_html/Frame-Parameters.html#Frame-Parameters][Frame Parameters]] in The Emacs Lisp Reference Manual, and also [[../elisp_html/Tooltips.html#Tooltips][Tooltips]] in The Emacs Lisp Reference Manual.
+
+For additional customization options for displaying tooltips, use M-x customize-group RET tooltip RET.
+
+If Emacs is built with the GTK+ toolkit, Nextstep windowing, or Haiku windowing support, it displays tooltips via the toolkit, using the default appearance of the toolkit's tooltips.[[#FOOT8][^{8}]] To disable this, change the variable =use-system-tooltips= to =nil=. If you do this, or if Emacs is built without the appropriate windowing support, most attributes of the tooltip text are specified by the =tooltip= face, and by X resources (see [[id:emacs--X-Resources][X Options and Resources]]).
+
+/GUD tooltips/ are special tooltips that show the values of variables when debugging a program with GUD. See [[id:emacs--Debuggers::#Debugger-Operation][Debugger Operation]].
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF8][(8)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The foreground and background colors of toolkit-created tooltips on Nextstep can also be customized by setting the =foreground= and =background= frame parameters that are part of =tooltip-frame-parameters=.
+
+--------------

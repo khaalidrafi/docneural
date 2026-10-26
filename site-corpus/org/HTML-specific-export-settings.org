@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID: org--HTML-specific-export-settings
+:END:
+#+filetags: :org:
+#+title: HTML specific export settings (The Org Manual)
+
+Next:
+
+<<HTML-specific-export-settings>>
+Next: [[id:org--HTML-doctypes][HTML doctypes]], Previous: [[id:org--HTML-export-commands][HTML export commands]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.2 HTML specific export settings [[#HTML-specific-export-settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: HTML-specific-export-settings-1
+:CLASS: subsection
+:END:
+HTML export has a number of keywords, similar to the general options settings described in [[id:org--Export-Settings][Export Settings]].
+
+- <<index-DESCRIPTION_002c-keyword-1>>‘=DESCRIPTION=' [[#index-DESCRIPTION_002c-keyword-1][¶]] :: This is the document's description, which the HTML exporter inserts it as an HTML meta tag in the HTML file. For long descriptions, use multiple ‘=DESCRIPTION=' lines. The exporter takes care of wrapping the lines properly.
+
+  The exporter includes a number of other meta tags, which can be customized by modifying =org-html-meta-tags=.
+
+-  <<index-HTML_005fDOCTYPE_002c-keyword>>‘=HTML_DOCTYPE=' [[#index-HTML_005fDOCTYPE_002c-keyword][¶]] :: Specify the document type, for example: HTML5 (=org-html-doctype=).
+
+-  <<index-HTML_005fCONTAINER_002c-keyword>>‘=HTML_CONTAINER=' [[#index-HTML_005fCONTAINER_002c-keyword][¶]] :: Specify the HTML container, such as ‘=div=', for wrapping sections and elements (=org-html-container-element=).
+
+-  <<index-HTML_005fLINK_005fHOME_002c-keyword>>‘=HTML_LINK_HOME=' [[#index-HTML_005fLINK_005fHOME_002c-keyword][¶]] :: The URL for home link (=org-html-link-home=).
+
+-  <<index-HTML_005fLINK_005fUP_002c-keyword>>‘=HTML_LINK_UP=' [[#index-HTML_005fLINK_005fUP_002c-keyword][¶]] :: The URL for the up link of exported HTML pages (=org-html-link-up=).
+
+-  <<index-HTML_005fMATHJAX_002c-keyword>>‘=HTML_MATHJAX=' [[#index-HTML_005fMATHJAX_002c-keyword][¶]] :: Options for MathJax (=org-html-mathjax-options=). MathJax is used to typeset LaTeX math in HTML documents. See [[id:org--Math-formatting-in-HTML-export][Math formatting in HTML export]], for an example.
+
+-  <<index-HTML_005fHEAD_002c-keyword>>‘=HTML_HEAD=' [[#index-HTML_005fHEAD_002c-keyword][¶]] :: Arbitrary lines for appending to the HTML document's head (=org-html-head=).
+
+-  <<index-HTML_005fHEAD_005fEXTRA_002c-keyword>>‘=HTML_HEAD_EXTRA=' [[#index-HTML_005fHEAD_005fEXTRA_002c-keyword][¶]] :: More arbitrary lines for appending to the HTML document's head (=org-html-head-extra=).
+
+- <<index-KEYWORDS_002c-keyword-1>>‘=KEYWORDS=' [[#index-KEYWORDS_002c-keyword-1][¶]] :: Keywords to describe the document's content. HTML exporter inserts these keywords as HTML meta tags. For long keywords, use multiple ‘=KEYWORDS=' lines.
+
+- <<index-LATEX_005fHEADER_002c-keyword>>‘=LATEX_HEADER=' [[#index-LATEX_005fHEADER_002c-keyword][¶]] :: Arbitrary lines for appending to the preamble; HTML exporter appends when transcoding LaTeX fragments to images (see [[id:org--Math-formatting-in-HTML-export][Math formatting in HTML export]]).
+
+- <<index-SUBTITLE_002c-keyword-2>>‘=SUBTITLE=' [[#index-SUBTITLE_002c-keyword-2][¶]] :: The document's subtitle. HTML exporter formats subtitle if document type is ‘=HTML5=' and the CSS has a ‘=subtitle=' class.
+
+Some of these keywords are explained in more detail in the following sections of the manual.
+
+--------------
+
+Next: [[id:org--HTML-doctypes][HTML doctypes]], Previous: [[id:org--HTML-export-commands][HTML export commands]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID: org--Project-alist
+:END:
+#+filetags: :org:
+#+title: Project alist (The Org Manual)
+
+Next:
+
+<<Project-alist>>
+Next: [[id:org--Sources-and-destinations][Sources and destinations for files]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 14.1.1 The variable =org-publish-project-alist= [[#The-variable-org_002dpublish_002dproject_002dalist][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-variable-org_002dpublish_002dproject_002dalist
+:CLASS: subsection
+:END:
+Publishing is configured almost entirely through setting the value of one variable, called =org-publish-project-alist=. Each element of the list configures one project, and may be in one of the two following forms:
+
+#+begin_src lisp-preformatted
+("project-name" :property value :property value ...)
+#+end_src
+
+i.e., a well-formed property list with alternating keys and values, or:
+
+#+begin_src lisp-preformatted
+("project-name" :components ("project-name" "project-name" ...))
+#+end_src
+
+In both cases, projects are configured by specifying property values. A project defines the set of files that are to be published, as well as the publishing configuration to use when publishing those files. When a project takes the second form listed above, the individual members of the =:components= property are taken to be sub-projects, which group together files requiring different publishing options. When you publish such a “meta-project”, all the components are also published, in the sequence given.
+
+--------------
+
+Next: [[id:org--Sources-and-destinations][Sources and destinations for files]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

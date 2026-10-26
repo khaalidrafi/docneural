@@ -1,0 +1,156 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-challenge
+:END:
+#+filetags: :guix:
+#+title: Invoking guix challenge
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-challenge>>
+Next: [[id:guix--Invoking-guix-copy][Invoking =guix copy=]], Previous: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.12 Invoking =guix challenge= [[#Invoking-guix-challenge-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-challenge-1
+:CLASS: section
+:END:
+Do the binaries provided by this server really correspond to the source code it claims to build? Is a package build process deterministic? These are the questions the =guix challenge= command attempts to answer.
+
+The former is obviously an important question: Before using a substitute server (see [[id:guix--Substitutes][Substitutes]]), one had better /verify/ that it provides the right binaries, and thus /challenge/ it. The latter is what enables the former: If package builds are deterministic, then independent builds of the package should yield the exact same result, bit for bit; if a server provides a binary different from the one obtained locally, it may be either corrupt or malicious.
+
+We know that the hash that shows up in =/gnu/store= file names is the hash of all the inputs of the process that built the file or directory---compilers, libraries, build scripts, etc. (see [[id:guix--Introduction][Introduction]]). Assuming deterministic build processes, one store file name should map to exactly one build output. =guix challenge= checks whether there is, indeed, a single mapping by comparing the build outputs of several independent builds of any given store item.
+
+The command output looks like this:
+
+#+begin_example
+$ guix challenge \
+  --substitute-urls="https://bordeaux.guix.gnu.org https://guix.example.org" \
+  openssl git pius coreutils grep
+updating substitutes from 'https://bordeaux.guix.gnu.org'... 100.0%
+updating substitutes from 'https://guix.example.org'... 100.0%
+/gnu/store/...-openssl-1.0.2d contents differ:
+  local hash: 0725l22r5jnzazaacncwsvp9kgf42266ayyp814v7djxs7nk963q
+  https://bordeaux.guix.gnu.org/nar/...-openssl-1.0.2d: 0725l22r5jnzazaacncwsvp9kgf42266ayyp814v7djxs7nk963q
+  https://guix.example.org/nar/...-openssl-1.0.2d: 1zy4fmaaqcnjrzzajkdn3f5gmjk754b43qkq47llbyak9z0qjyim
+  differing files:
+    /lib/libcrypto.so.1.1
+    /lib/libssl.so.1.1
+
+/gnu/store/...-git-2.5.0 contents differ:
+  local hash: 00p3bmryhjxrhpn2gxs2fy0a15lnip05l97205pgbk5ra395hyha
+  https://bordeaux.guix.gnu.org/nar/...-git-2.5.0: 069nb85bv4d4a6slrwjdy8v1cn4cwspm3kdbmyb81d6zckj3nq9f
+  https://guix.example.org/nar/...-git-2.5.0: 0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73
+  differing file:
+    /libexec/git-core/git-fsck
+
+/gnu/store/...-pius-2.1.1 contents differ:
+  local hash: 0k4v3m9z1zp8xzzizb7d8kjj72f9172xv078sq4wl73vnq9ig3ax
+  https://bordeaux.guix.gnu.org/nar/...-pius-2.1.1: 0k4v3m9z1zp8xzzizb7d8kjj72f9172xv078sq4wl73vnq9ig3ax
+  https://guix.example.org/nar/...-pius-2.1.1: 1cy25x1a4fzq5rk0pmvc8xhwyffnqz95h2bpvqsz2mpvlbccy0gs
+  differing file:
+    /share/man/man1/pius.1.gz
+
+...
+
+5 store items were analyzed:
+  - 2 (40.0%) were identical
+  - 3 (60.0%) differed
+  - 0 (0.0%) were inconclusive
+#+end_example
+
+In this example, =guix challenge= queries all the substitute servers for each of the fives packages specified on the command line. It then reports those store items for which the servers obtained a result different from the local build (if it exists) and/or different from one another; here, the ‘=local hash=' lines indicate that a local build result was available for each of these packages and shows its hash.
+
+As an example, =guix.example.org= always gets a different answer. Conversely, =bordeaux.guix.gnu.org= agrees with local builds, except in the case of Git. This might indicate that the build process of Git is non-deterministic, meaning that its output varies as a function of various things that Guix does not fully control, in spite of building packages in isolated environments (see [[id:guix--Features][Features]]). Most common sources of non-determinism include the addition of timestamps in build results, the inclusion of random numbers, and directory listings sorted by inode number. See [[https://reproducible-builds.org/docs/]], for more information.
+
+To find out what is wrong with this Git binary, the easiest approach is to run:
+
+#+begin_example
+guix challenge git \
+  --diff=diffoscope \
+  --substitute-urls="https://bordeaux.guix.gnu.org https://guix.example.org"
+#+end_example
+
+This automatically invokes =diffoscope=, which displays detailed information about files that differ.
+
+Alternatively, we can do something along these lines (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]):
+
+#+begin_example
+$ wget -q -O - https://bordeaux.guix.gnu.org/nar/lzip/...-git-2.5.0 \
+   | lzip -d | guix archive -x /tmp/git
+$ diff -ur --no-dereference /gnu/store/...-git.2.5.0 /tmp/git
+#+end_example
+
+This command shows the difference between the files resulting from the local build, and the files resulting from the build on =bordeaux.guix.gnu.org= (see [[https://www.gnu.org/software/diffutils/manual/html_node/Overview.html#Overview][Comparing and Merging Files]] in Comparing and Merging Files). The =diff= command works great for text files. When binary files differ, a better option is [[https://diffoscope.org/][Diffoscope]], a tool that helps visualize differences for all kinds of files.
+
+Once you have done that work, you can tell whether the differences are due to a non-deterministic build process or to a malicious server. We try hard to remove sources of non-determinism in packages to make it easier to verify substitutes, but of course, this is a process that involves not just Guix, but a large part of the free software community. In the meantime, =guix challenge= is one tool to help address the problem.
+
+If you are writing packages for Guix, you are encouraged to check whether =bordeaux.guix.gnu.org= and other substitute servers obtain the same build result as you did with:
+
+#+begin_example
+guix challenge package
+#+end_example
+
+The general syntax is:
+
+#+begin_example
+guix challenge options argument...
+#+end_example
+
+where =argument= is a package specification such as =guile@2.0= or =glibc:debug= or, alternatively, a store file name as returned, for example, by =guix build= or =guix gc --list-live=.
+
+When a difference is found between the hash of a locally-built item and that of a server-provided substitute, or among substitutes provided by different servers, the command displays it as in the example above and its exit code is 2 (other non-zero exit codes denote other kinds of errors).
+
+The one option that matters is:
+
+- =--substitute-urls===urls= :: Consider =urls= the whitespace-separated list of substitute source URLs to compare to.
+
+- =--diff===mode= :: Upon mismatches, show differences according to =mode=, one of:
+
+  - =simple= (the default) :: Show the list of files that differ.
+
+  - =diffoscope=\\
+    =command= :: Invoke [[https://diffoscope.org/][Diffoscope]], passing it two directories whose contents do not match.
+
+    When =command= is an absolute file name, run =command= instead of Diffoscope.
+
+  - =none= :: Do not show further details about the differences.
+
+  Thus, unless =--diff=none= is passed, =guix challenge= downloads the store items from the given substitute servers so that it can compare them.
+
+- =--verbose=\\
+  =-v= :: Show details about matches (identical contents) in addition to information about mismatches.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-copy][Invoking =guix copy=]], Previous: [[id:guix--Invoking-guix-publish][Invoking =guix publish=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

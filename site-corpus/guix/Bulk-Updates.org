@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID: guix--Bulk-Updates
+:END:
+#+filetags: :guix:
+#+title: Bulk Updates
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Bulk-Updates>>
+Next: [[id:guix--Emacs-Packages][Emacs Packages]], Previous: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.8 Bulk Updates [[#Bulk-Updates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Bulk-Updates-1
+:CLASS: subsection
+:END:
+Sometimes you may need to update a monotonic collection of grouped packages, in a particular module---e.g., =(gnu packages astronomy)=. Doing so requires refreshing package versions, creating commits following guidelines and testing them. Let's say there are 200+ packages with fresh versions, you may deal with this task by applying the following technique.
+
+Enter a development shell in your local Guix checkout, assuming you already ran =bootstrap= and =configure=:
+
+#+begin_example
+~$ guix shell --development guix
+[env: /gnu/store/...-profile]
+> ./pre-inst-env guix refresh --select=module:astronomy --update
+> ./pre-inst-env etc/committer.scm
+#+end_example
+
+The first command updates all packages in =(gnu packages astronomy)= to the latest versions and writes changes back to the file. The second invokes =etc/committer.scm= script, a helper script for larger scale updates; it identifies each package diff and creates corresponding commits with the correct style.
+
+If your machine is powerful enough, you may check that the whole collection has no regressions and can still be built successfully:
+
+#+begin_example
+[env: /gnu/store/...-profile]
+> ./pre-inst-env guix build $(./pre-inst-env guix package -A | awk '/astronomy.scm/{print $1"@"$2}')
+#+end_example
+
+--------------
+
+Next: [[id:guix--Emacs-Packages][Emacs Packages]], Previous: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

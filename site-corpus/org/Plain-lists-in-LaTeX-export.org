@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID: org--Plain-lists-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Plain lists in LaTeX export (The Org Manual)
+
+Next:
+
+<<Plain-lists-in-LaTeX-export>>
+Next: [[id:org--Source-blocks-in-LaTeX-export][Source blocks in LaTeX export]], Previous: [[id:org--Images-in-LaTeX-export][Images in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.7 Plain lists in LaTeX export [[#Plain-lists-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Plain-lists-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+The LaTeX export backend accepts the ‘=environment=' and ‘=options=' attributes for plain lists. Both attributes work together for customizing lists, as shown in the examples:
+
+#+begin_example
+#+LATEX_HEADER: \usepackage[inline]{enumitem}
+Some ways to say "Hello":
+#+ATTR_LATEX: :environment itemize*
+#+ATTR_LATEX: :options [label={}, itemjoin={,}, itemjoin*={, and}]
+- Hola
+- Bonjour
+- Guten Tag.
+#+end_example
+
+Since LaTeX supports only four levels of nesting for lists, use an external package, such as ‘=enumitem=' in LaTeX, for levels deeper than four:
+
+#+begin_example
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \renewlist{itemize}{itemize}{9}
+#+LATEX_HEADER: \setlist[itemize]{label=$\circ$}
+- One
+  - Two
+    - Three
+      - Four
+        - Five
+#+end_example

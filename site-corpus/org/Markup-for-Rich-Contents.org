@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID: org--Markup-for-Rich-Contents
+:END:
+#+filetags: :org:
+#+title: Markup for Rich Contents (The Org Manual)
+
+Next:
+
+<<Markup-for-Rich-Contents>>
+Next: [[id:org--Exporting][Exporting]], Previous: [[id:org--Agenda-Views][Agenda Views]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 12 Markup for Rich Contents [[#Markup-for-Rich-Contents-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Markup-for-Rich-Contents-1
+:CLASS: chapter
+:END:
+Org is primarily about organizing and searching through your plain-text notes. However, it also provides a lightweight yet robust markup language for rich text formatting and more. For instance, you may want to center or emphasize text. Or you may need to insert a formula or image in your writing. Org offers syntax for all of this and more. Used in conjunction with the export framework (see [[id:org--Exporting][Exporting]]), you can author beautiful documents in Org---like the fine manual you are currently reading.
+
+- [[id:org--Paragraphs][Paragraphs]]
+- [[id:org--Emphasis-and-Monospace][Emphasis and Monospace]]
+- [[id:org--Subscripts-and-Superscripts][Subscripts and Superscripts]]
+- [[id:org--Special-Symbols][Special Symbols]]
+- [[id:org--Embedded-LaTeX][Embedded LaTeX]]
+- [[id:org--Literal-Examples][Literal Examples]]
+- [[id:org--Images-and-link-previews][Images and link previews]]
+- [[id:org--Captions][Captions]]
+- [[id:org--Horizontal-Rules][Horizontal Rules]]
+- [[id:org--Creating-Footnotes][Creating Footnotes]]

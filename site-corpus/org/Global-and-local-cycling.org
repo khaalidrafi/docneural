@@ -1,0 +1,80 @@
+:PROPERTIES:
+:ID: org--Global-and-local-cycling
+:END:
+#+filetags: :org:
+#+title: Global and local cycling (The Org Manual)
+
+Next:
+
+<<Global-and-local-cycling>>
+Next: [[id:org--Initial-visibility][Initial visibility]], Up: [[id:org--Visibility-Cycling][Visibility Cycling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 2.2.1 Global and local cycling [[#Global-and-local-cycling-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Global-and-local-cycling-1
+:CLASS: subsection
+:END:
+Outlines make it possible to hide parts of the text in the buffer. Org uses just two commands, bound to TAB and S-TAB, to change the visibility in the buffer.
+
+-  <<index-TAB>>TAB (=org-cycle=) [[#index-TAB][¶]] :: /Subtree cycling/: Rotate current subtree among the states
+
+  #+begin_example
+  ,-> FOLDED -> CHILDREN -> SUBTREE --.
+  '-----------------------------------'
+#+end_example
+
+  Point must be on a headline for this to work[[#FOOT4][^{4}]].
+
+-  <<index-global-visibility-states>>S-TAB (=org-global-cycle=), C-u TAB [[#index-global-visibility-states][¶]] :: /Global cycling/: Rotate the entire buffer among the states
+
+  #+begin_example
+  ,-> OVERVIEW -> CONTENTS -> SHOW ALL --.
+  '--------------------------------------'
+#+end_example
+
+  When S-TAB is called with a numeric prefix argument =N=, view contents only up to headlines of level =N=.
+
+  Note that inside tables (see [[id:org--Tables][Tables]]), S-TAB jumps to the previous field instead.
+
+  You can run global cycling using TAB only if point is at the very beginning of the buffer, but not on a headline, and =org-cycle-global-at-bob= is set to a non-=nil= value.
+
+-  <<index-startup-visibility>>C-u C-u TAB (=org-cycle-set-startup-visibility=) [[#index-startup-visibility][¶]] :: Switch back to the startup visibility of the buffer (see [[id:org--Initial-visibility][Initial visibility]]).
+
+-  <<index-show-all_002c-command>>C-u C-u C-u TAB (=org-fold-show-all=) [[#index-show-all_002c-command][¶]] :: Show all, including drawers.
+
+-  <<index-revealing-context>>C-c C-r (=org-reveal=) [[#index-revealing-context][¶]] :: Reveal context around point, showing the current entry, the following heading, and the hierarchy above. It is useful for working near a location that has been exposed by a sparse tree command (see [[id:org--Sparse-Trees][Sparse Trees]]) or an agenda command (see [[id:org--Agenda-Commands][Commands in the Agenda Buffer]]). With a prefix argument, show, on each level, all sibling headings. With a double prefix argument, also show the entire subtree of the parent.
+
+-  <<index-show-branches_002c-command>>C-c C-k (=org-show-branches=) [[#index-show-branches_002c-command][¶]] :: Expose all the headings of the subtree, but not their bodies.
+
+-  <<index-show-children_002c-command>>C-c TAB (=org-fold-show-children=) [[#index-show-children_002c-command][¶]] :: Expose all direct children of the subtree. With a numeric prefix argument =N=, expose all children down to level =N=.
+
+-  <<index-C_002dc-C_002dx-b>>C-c C-x b (=org-tree-to-indirect-buffer=) [[#index-C_002dc-C_002dx-b][¶]] :: Show the current subtree in an indirect buffer[[#FOOT5][^{5}]]. With a numeric prefix argument =N=, go up to level =N= and then take that tree. If =N= is negative, then go up that many levels. With a C-u prefix, do not remove the previously used indirect buffer.
+
+-  <<index-C_002dc-C_002dx-v>>C-c C-x v (=org-copy-visible=) [[#index-C_002dc-C_002dx-v][¶]] :: Copy the /visible/ text in the region into the kill ring.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF4][(4)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See, however, the option =org-cycle-emulate-tab=.
+
+***** [[#DOCF5][(5)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The indirect buffer contains the entire buffer, but is narrowed to the current tree. Editing the indirect buffer also changes the original buffer, but without affecting visibility in that buffer. For more information about indirect buffers, see [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indirect-Buffers.html#Indirect-Buffers][GNU Emacs Manual]].
+
+--------------
+
+Next: [[id:org--Initial-visibility][Initial visibility]], Up: [[id:org--Visibility-Cycling][Visibility Cycling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

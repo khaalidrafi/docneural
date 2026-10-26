@@ -1,0 +1,283 @@
+:PROPERTIES:
+:ID: guix--Keyboard-Layout-and-Networking-and-Partitioning
+:END:
+#+filetags: :guix:
+#+title: Keyboard Layout and Networking and Partitioning
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Keyboard-Layout-and-Networking-and-Partitioning>>
+Next: [[id:guix--Proceeding-with-the-Installation][Proceeding with the Installation]], Up: [[id:guix--Manual-Installation][Manual Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 3.6.1 Keyboard Layout, Networking, and Partitioning [[#Keyboard-Layout_002c-Networking_002c-and-Partitioning][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Keyboard-Layout_002c-Networking_002c-and-Partitioning
+:CLASS: subsection
+:END:
+Before you can install the system, you may want to adjust the keyboard layout, set up networking, and partition your target hard disk. This section will guide you through this.
+
+- [[#Keyboard-Layout-1][Keyboard Layout]]
+- [[#Networking][Networking]]
+- [[#Disk-Partitioning][Disk Partitioning]]
+
+<<Keyboard-Layout-1>>
+**** 3.6.1.1 Keyboard Layout [[#Keyboard-Layout-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: keyboard-layout
+:CLASS: subsubsection
+:END:
+The installation image uses the US qwerty keyboard layout. If you want to change it, you can use the =loadkeys= command. For example, the following command selects the Dvorak keyboard layout:
+
+#+begin_example
+loadkeys dvorak
+#+end_example
+
+See the files under =/run/current-system/profile/share/keymaps= for a list of available keyboard layouts. Run =man loadkeys= for more information.
+
+<<Networking>>
+**** 3.6.1.2 Networking [[#Networking][¶]]
+:PROPERTIES:
+:CUSTOM_ID: networking
+:CLASS: subsubsection
+:END:
+Run the following command to see what your network interfaces are called:
+
+#+begin_example
+ifconfig -a
+#+end_example
+
+... or, using the GNU/Linux-specific =ip= command:
+
+#+begin_example
+ip address
+#+end_example
+
+Wired interfaces have a name starting with ‘=e='; for example, the interface corresponding to the first on-board Ethernet controller is called ‘=eno1='. Wireless interfaces have a name starting with ‘=w=', like ‘=w1p2s0='.
+
+- Wired connection :: To configure a wired network run the following command, substituting =interface= with the name of the wired interface you want to use.
+
+  #+begin_example
+  ifconfig interface up
+#+end_example
+
+  ... or, using the GNU/Linux-specific =ip= command:
+
+  #+begin_example
+  ip link set interface up
+#+end_example
+
+-  <<index-wireless>>Wireless connection [[#index-wireless][¶]] :: To configure wireless networking, you can create a configuration file for the =wpa_supplicant= configuration tool (its location is not important) using one of the available text editors such as =nano=:
+
+  #+begin_example
+  nano wpa_supplicant.conf
+#+end_example
+
+  As an example, the following stanza can go to this file and will work for many wireless networks, provided you give the actual SSID and passphrase for the network you are connecting to:
+
+  #+begin_example
+  network={
+    ssid="my-ssid"
+    key_mgmt=WPA-PSK
+    psk="the network's secret passphrase"
+  }
+#+end_example
+
+  Start the wireless service and run it in the background with the following command (substitute =interface= with the name of the network interface you want to use):
+
+  #+begin_example
+  wpa_supplicant -c wpa_supplicant.conf -i interface -B
+#+end_example
+
+  Run =man wpa_supplicant= for more information.
+
+At this point, you need to acquire an IP address. On a network where IP addresses are automatically assigned /via/ DHCP, you can run:
+
+#+begin_example
+dhcpcd interface
+#+end_example
+
+Try to ping a server to see if networking is up and running:
+
+#+begin_example
+ping -c 3 gnu.org
+#+end_example
+
+Setting up network access is almost always a requirement because the image does not contain all the software and tools that may be needed.
+
+If you need HTTP and HTTPS access to go through a proxy, run the following command:
+
+#+begin_example
+herd set-http-proxy guix-daemon URL
+#+end_example
+
+where =URL= is the proxy URL, for example =http://example.org:8118=.
+
+If you want to, you can continue the installation remotely by starting an SSH server:
+
+#+begin_example
+herd start ssh-daemon
+#+end_example
+
+Make sure to either set a password with =passwd=, or configure OpenSSH public key authentication before logging in.
+
+<<Disk-Partitioning>>
+**** 3.6.1.3 Disk Partitioning [[#Disk-Partitioning][¶]]
+:PROPERTIES:
+:CUSTOM_ID: disk-partitioning
+:CLASS: subsubsection
+:END:
+Unless this has already been done, the next step is to partition, and then format the target partition(s).
+
+The installation image includes several partitioning tools, including Parted (see [[https://www.gnu.org/software/parted/manual/html_node/Overview.html#Overview][Overview]] in GNU Parted User Manual), =fdisk=, and =cfdisk=. Run it and set up your disk with the partition layout you want:
+
+#+begin_example
+cfdisk
+#+end_example
+
+If your disk uses the GUID Partition Table (GPT) format and you plan to install BIOS-based GRUB (which is the default), make sure a BIOS Boot Partition is available (see [[https://doc.guix.gnu.org/grub/latest/en/html_node/BIOS-installation.html#BIOS-installation][BIOS installation]] in GNU GRUB manual).
+
+If you instead wish to use EFI-based GRUB, a FAT32 /EFI System Partition/ (ESP) is required. This partition can be mounted at =/boot/efi= for instance and must have the =esp= flag set. E.g., for =parted=:
+
+#+begin_example
+parted /dev/sda set 1 esp on
+#+end_example
+
+#+begin_quote
+
+*Note:* Unsure whether to use EFI- or BIOS-based GRUB? If the directory =/sys/firmware/efi= exists in the installation image, then you should probably perform an EFI installation, using =grub-efi-bootloader=. Otherwise you should use the BIOS-based GRUB, known as =grub-bootloader=. See [[id:guix--Bootloader-Configuration][Bootloader Configuration]], for more info on bootloaders.
+
+#+end_quote
+
+Once you are done partitioning the target hard disk drive, you have to create a file system on the relevant partition(s)[[#FOOT9][^{9}]].
+
+For the ESP, if you have one and assuming it is =/dev/sda1=, run:
+
+#+begin_example
+mkfs.fat -F32 /dev/sda1
+#+end_example
+
+For the root file system, ext4 is the most widely used format. Other file systems, such as Btrfs, support compression, which is reported to nicely complement file deduplication that the daemon performs independently of the file system (see [[id:guix--Invoking-guix_002ddaemon][deduplication]]).
+
+Preferably, assign file systems a label so that you can easily and reliably refer to them in =file-system= declarations (see [[id:guix--File-Systems][File Systems]]). This is typically done using the =-L= option of =mkfs.ext4= and related commands. So, assuming the target root partition lives at =/dev/sda2=, a file system with the label =my-root= can be created with:
+
+#+begin_example
+mkfs.ext4 -L my-root /dev/sda2
+#+end_example
+
+If you are instead planning to encrypt the root partition, you can use the Cryptsetup/LUKS utilities to do that (see [[https://linux.die.net/man/8/cryptsetup][=man cryptsetup=]] for more information).
+
+Assuming you want to store the root partition on =/dev/sda2=, the command sequence to format it as a LUKS partition would be along these lines:
+
+#+begin_example
+cryptsetup luksFormat /dev/sda2
+cryptsetup open /dev/sda2 my-partition
+mkfs.ext4 -L my-root /dev/mapper/my-partition
+#+end_example
+
+Once that is done, mount the target file system under =/mnt= with a command like (again, assuming =my-root= is the label of the root file system):
+
+#+begin_example
+mount LABEL=my-root /mnt
+#+end_example
+
+Also mount any other file systems you would like to use on the target system relative to this path. If you have opted for =/boot/efi= as an EFI mount point for example, mount it at =/mnt/boot/efi= now so it is found by =guix system init= afterwards.
+
+Finally, if you plan to use one or more swap partitions (see [[id:guix--Swap-Space][Swap Space]]), make sure to initialize them with =mkswap=. Assuming you have one swap partition on =/dev/sda3=, you would run:
+
+#+begin_example
+mkswap /dev/sda3
+swapon /dev/sda3
+#+end_example
+
+Alternatively, you may use a swap file, whose size can be trivially modified at a later date. Creating a swap file will look a bit different depending on what sort of file system your new system is using. We therefore have two examples on how to create a swap file, the first will work for many types of file systems (e.g., ext4) but not Btrfs[[#FOOT10][^{10}]]. The second example is specifically for Btrfs.
+
+For the common case, assuming that in the new system you want to use the file =/swapfile= as a swap file, you would run:
+
+#+begin_example
+# This is 10 GiB of swap space.  Adjust "count" to change the size.
+dd if=/dev/zero of=/mnt/swapfile bs=1MiB count=10240
+# For security, make the file readable and writable only by root.
+chmod 600 /mnt/swapfile
+mkswap /mnt/swapfile
+swapon /mnt/swapfile
+#+end_example
+
+When you use Btrfs the steps for creating a swap file are slightly different and it comes with a few caveats. I.e. it must be on a single device, the filesystem must only have =single= as the data profile and the subvolume that contains the active swap file or files cannot be snapshotted. It is therefore best to put the swap file in a separate subvolume to allow to snapshot the rest of the filesystem. This example assumes the label for the Btrfs file system is =btrfs-pool= and the subvolume for the root is =rootfs=.
+
+#+begin_example
+# Temporarily unmount btrfs-pool
+umount /mnt
+# Mount the top level subvolume
+mount LABEL=btrfs-pool -o subvolid=5 /mnt
+# Create the subvolume (swap) that will hold the swap file
+cd /mnt && btrfs subvolume create swap && cd -
+# Remount the target file system
+unmount /mnt
+mount LABEL=btrfs-pool -o subvol=rootfs /mnt
+# Create the directory where it should mount the swap subvolume
+mkdir /mnt/swap
+# Mount the swap subvolume
+mount LABEL=btrfs-pool -o subvol=swap /mnt/swap
+# Create a 10 GiB of swap space.  It accepts k/m/g/e/p as suffix
+btrfs filesystem mkswapfile --size 10G /mnt/swap/swapfile
+# Activate the swap file
+swapon /mnt/swap/swapfile
+#+end_example
+
+Note that if you have encrypted the root partition and created a swap file in its file system as described above, then the encryption also protects the swap file, just like any other file in that file system.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF9][(9)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Currently Guix System can mount only ext4, Btrfs, JFS, F2FS, and XFS file systems at boot time. In particular, code that reads file system UUIDs and labels works only for these file system types. The code for bcachefs is in place, but support for loading out-of-tree kernel modules in the initrd is not.
+
+***** [[#DOCF10][(10)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+For other copy-on-write file systems, the required steps may also be different. For details, see the manual pages for =mkswap= and =swapon=.
+
+--------------
+
+Next: [[id:guix--Proceeding-with-the-Installation][Proceeding with the Installation]], Up: [[id:guix--Manual-Installation][Manual Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

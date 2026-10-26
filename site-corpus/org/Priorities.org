@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID: org--Priorities
+:END:
+#+filetags: :org:
+#+title: Priorities (The Org Manual)
+
+Next:
+
+<<Priorities>>
+Next: [[id:org--Breaking-Down-Tasks][Breaking Down Tasks into Subtasks]], Previous: [[id:org--Progress-Logging][Progress Logging]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 5.4 Priorities [[#Priorities-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Priorities-1
+:CLASS: section
+:END:
+If you use Org mode extensively, you may end up with enough TODO items that it starts to make sense to prioritize them. Prioritizing can be done by placing a /priority cookie/ into the headline of a TODO item right after the TODO keyword, like this:
+
+#+begin_example
+*** TODO [#A] Write letter to Sam Fortune
+#+end_src
+
+By default, Org mode supports three priorities: ‘=A=', ‘=B=', and ‘=C='. ‘=A=' is the highest priority. An entry without a cookie is treated as if it had priority ‘=B='. Priorities make a difference only for sorting in the agenda (see [[id:org--Weekly_002fdaily-agenda][Weekly/daily agenda]]). Outside the agenda, they have no inherent meaning to Org mode. The cookies are displayed with the face defined by the variable =org-priority-faces=, which can be customized.
+
+You can also use numeric values for priorities, such as
+
+#+begin_example
+*** TODO [#1] Write letter to Sam Fortune
+#+end_src
+
+When using numeric priorities, you need to set =org-priority-highest=, =org-priority-lowest= and =org-priority-default= to integers, which must all be a non-negative integer between 0 and 64, inclusive.
+
+Priorities can be attached to any heading; they do not need to be TODO items.
+
+-  <<index-C_002dc-_002c>>C-c , (=org-priority=) [[#index-C_002dc-_002c][¶]] :: Set the priority of the current headline. The command prompts for a priority character ‘=A=', ‘=B=' or ‘=C='. When you press SPC instead, the priority cookie, if one is set, is removed from the headline. The priorities can also be changed “remotely” from the agenda buffer with the , command (see [[id:org--Agenda-Commands][Commands in the Agenda Buffer]]).
+
+-  <<index-S_002dUP-3>>S-UP (=org-priority-up=) [[#index-S_002dUP-3][¶]]\\
+  S-DOWN (=org-priority-down=) :: Increase/decrease the priority of the current headline[[#FOOT47][^{47}]]. Note that these keys are also used to modify timestamps (see [[id:org--Creating-Timestamps][Creating Timestamps]]). See also [[id:org--Conflicts][Packages that conflict with Org mode]] for a discussion of the interaction with shift-selection.
+
+You can change the range of allowed priorities by setting the variables =org-priority-highest=, =org-priority-lowest=, and =org-priority-default=. Valid priority values are single uppercase Latin alphabetical characters A-Z, and non-negative integers in between 0 and 64, inclusive. For an individual buffer, you may set these values (highest, lowest, default) like this (please make sure that the highest priority is earlier in the alphabet than the lowest priority):
+
+#+begin_example
+#+PRIORITIES: A C B
+#+end_example
+
+Or, using numeric values:
+
+#+begin_example
+#+PRIORITIES: 1 10 5
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF47][(47)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+See also the option =org-priority-start-cycle-with-default=.
+
+--------------
+
+Next: [[id:org--Breaking-Down-Tasks][Breaking Down Tasks into Subtasks]], Previous: [[id:org--Progress-Logging][Progress Logging]], Up: [[id:org--TODO-Items][TODO Items]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID: org--Property-Syntax
+:END:
+#+filetags: :org:
+#+title: Property Syntax (The Org Manual)
+
+Next:
+
+<<Property-Syntax>>
+Next: [[id:org--Special-Properties][Special Properties]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 7.1 Property Syntax [[#Property-Syntax-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Property-Syntax-1
+:CLASS: section
+:END:
+Properties are key--value pairs. When they are associated with a single entry or with a tree they need to be inserted into a special drawer (see [[id:org--Drawers][Drawers]]) with the name ‘=PROPERTIES=', which has to be located right below a headline, and its planning line (see [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]]) when applicable. Each property is specified on a single line, with the key---surrounded by colons---first, and the value after it. Keys are case-insensitive. Here is an example:
+
+#+begin_example
+* CD collection
+** Classic
+*** Goldberg Variations
+    :PROPERTIES:
+    :Title:     Goldberg Variations
+    :Composer:  J.S. Bach
+    :Artist:    Glenn Gould
+    :Publisher: Deutsche Grammophon
+    :NDisks:    1
+    :END:
+#+end_src
+
+Depending on the value of =org-use-property-inheritance=, a property set this way is associated either with a single entry, or with the subtree defined by the entry, see [[id:org--Property-Inheritance][Property Inheritance]].
+
+You may define the allowed values for a particular property ‘=Xyz=' by setting a property ‘=Xyz_ALL='. This special property is /inherited/, so if you set it in a level 1 entry, it applies to the entire tree. When allowed values are defined, setting the corresponding property becomes easier and is less prone to typing errors. For the example with the CD collection, we can pre-define publishers and the number of disks in a box like this:
+
+#+begin_example
+* CD collection
+  :PROPERTIES:
+  :NDisks_ALL:  1 2 3 4
+  :Publisher_ALL: "Deutsche Grammophon" Philips EMI
+  :END:
+#+end_src
+
+Properties can be inserted at the buffer level. That means they apply before the first headline and can be inherited by all entries in a file. Property blocks defined before the first headline must be at the top of the buffer with only comments above them.
+
+Properties can also be defined using lines like:
+
+#+begin_example
+#+PROPERTY: NDisks_ALL 1 2 3 4
+#+end_example
+
+If you want to add to the value of an existing property, append a ‘=+=' to the property name. The following results in the property ‘=var=' having the values ‘=foo=' and ‘=bar='.
+
+#+begin_example
+#+PROPERTY: var  foo
+#+PROPERTY: var+ bar
+#+end_example
+
+Using the appended ‘=+=', it is also possible to add to the values of inherited properties. The following results in the ‘=Genres=' property having the values ‘=Classic=', ‘=Baroque=', and ‘=Keyboard music=' under the ‘=Goldberg Variations=' subtree.
+
+#+begin_example
+* CD collection
+** Classic
+    :PROPERTIES:
+    :Genres: Classic
+    :END:
+*** Goldberg Variations
+    :PROPERTIES:
+    :Title:     Goldberg Variations
+    :Composer:  J.S. Bach
+    :Artist:    Glenn Gould
+    :Publisher: Deutsche Grammophon
+    :NDisks:    1
+    :Genres+:   Baroque
+    :Genres+:   Keyboard music
+    :END:
+#+end_src
+
+Note that a property can only have multiple entries per drawer when used with the appended ‘=+='. When a property has multiple entries without ‘=+=', the result is undefined.
+
+Property values set with the global variable =org-global-properties= can be inherited by all entries in all Org files.
+
+The following commands help to work with properties:
+
+-  <<index-M_002dTAB-3>>M-TAB (=pcomplete=) [[#index-M_002dTAB-3][¶]] :: After an initial colon in a line, complete property keys. All keys used in the current file are offered as possible completions.
+
+-  <<index-C_002dc-C_002dx-p>>C-c C-x p (=org-set-property=) [[#index-C_002dc-C_002dx-p][¶]] :: Set a property. This prompts for a property name and a value. If necessary, the property drawer is created as well.
+
+- <<index-org_002dinsert_002ddrawer-1>>C-u M-x org-insert-drawer [[#index-org_002dinsert_002ddrawer-1][¶]] :: Insert a property drawer into the current entry. The drawer is inserted early in the entry, but after the lines with planning information like deadlines. If before first headline the drawer is inserted at the top of the drawer after any potential comments.
+
+-  <<index-C_002dc-C_002dc-9>>C-c C-c (=org-property-action=) [[#index-C_002dc-C_002dc-9][¶]] :: With point in a property drawer, this executes property commands.
+
+-  <<index-C_002dc-C_002dc-s>>C-c C-c s (=org-set-property=) [[#index-C_002dc-C_002dc-s][¶]] :: Set a property in the current entry. Both the property and the value can be inserted using completion.
+
+-  <<index-S_002dRIGHT-5>>S-RIGHT (=org-property-next-allowed-value=), S-LEFT (=org-property-previous-allowed-value=) [[#index-S_002dRIGHT-5][¶]] :: Switch property at point to the next/previous allowed value.
+
+-  <<index-C_002dc-C_002dc-d>>C-c C-c d (=org-delete-property=) [[#index-C_002dc-C_002dc-d][¶]] :: Remove a property from the current entry.
+
+-  <<index-C_002dc-C_002dc-D>>C-c C-c D (=org-delete-property-globally=) [[#index-C_002dc-C_002dc-D][¶]] :: Globally remove a property, from all entries in the current file.
+
+-  <<index-C_002dc-C_002dc-c>>C-c C-c c (=org-compute-property-at-point=) [[#index-C_002dc-C_002dc-c][¶]] :: Compute the property at point, using the operator and scope from the nearest column format definition.
+
+--------------
+
+Next: [[id:org--Special-Properties][Special Properties]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

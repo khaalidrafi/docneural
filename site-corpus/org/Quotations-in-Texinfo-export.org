@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID: org--Quotations-in-Texinfo-export
+:END:
+#+filetags: :org:
+#+title: Quotations in Texinfo export (The Org Manual)
+
+Next:
+
+<<Quotations-in-Texinfo-export>>
+Next: [[id:org--Key-bindings-in-Texinfo-export][Key bindings in Texinfo export]], Previous: [[id:org--Images-in-Texinfo-export][Images in Texinfo export]], Up: [[id:org--Texinfo-Export][Texinfo Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.14.12 Quotations in Texinfo export [[#Quotations-in-Texinfo-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Quotations-in-Texinfo-export-1
+:CLASS: subsection
+:END:
+You can write the text of a quotation within a quote block (see [[id:org--Paragraphs][Paragraphs]]). You may also emphasize some text at the beginning of the quotation with the ‘=:tag=' attribute.
+
+#+begin_example
+#+ATTR_TEXINFO: :tag Warning
+#+BEGIN_QUOTE
+Striking your thumb with a hammer may cause severe pain and discomfort.
+#+END_QUOTE
+#+end_example
+
+To specify the author of the quotation, use the ‘=:author=' attribute.
+
+#+begin_example
+#+ATTR_TEXINFO: :author King Arthur
+#+BEGIN_QUOTE
+The Lady of the Lake, her arm clad in the purest shimmering samite,
+held aloft Excalibur from the bosom of the water, signifying by divine
+providence that I, Arthur, was to carry Excalibur.  That is why I am
+your king.
+#+END_QUOTE
+#+end_example

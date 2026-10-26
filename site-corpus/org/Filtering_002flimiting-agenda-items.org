@@ -1,0 +1,124 @@
+:PROPERTIES:
+:ID: org--Filtering_002flimiting-agenda-items
+:END:
+#+filetags: :org:
+#+title: Filtering/limiting agenda items (The Org Manual)
+
+Next:
+
+<<Filtering_002flimiting-agenda-items>>
+Previous: [[id:org--Sorting-of-agenda-items][Sorting of agenda items]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 11.4.4 Filtering/limiting agenda items [[#Filtering_002flimiting-agenda-items-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Filtering_002flimiting-agenda-items-1
+:CLASS: subsection
+:END:
+Agenda built-in or custom commands are statically defined. Agenda filters and limits allow flexibly narrowing down the list of agenda entries.
+
+/Filters/ only change the visibility of items, are very fast and are mostly used interactively[[#FOOT99][^{99}]]. You can switch quickly between different filters without having to recreate the agenda. /Limits/ on the other hand take effect before the agenda buffer is populated, so they are mostly useful when defined as local variables within custom agenda commands.
+
+**** Filtering in the agenda [[#Filtering-in-the-agenda-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Filtering-in-the-agenda-1
+:CLASS: subsubheading
+:END:
+The general filtering command is =org-agenda-filter=, bound to /. Before we introduce it, we describe commands for individual filter types. All filtering commands handle prefix arguments in the same way: A single C-u prefix negates the filter, so it removes lines selected by the filter. A double prefix adds the new filter condition to the one(s) already in place, so filter elements are accumulated.
+
+- <<index-org_002dagenda_002dfilter_002dby_002dtag>>\ (=org-agenda-filter-by-tag=) [[#index-org_002dagenda_002dfilter_002dby_002dtag][¶]] :: Filter the agenda view with respect to a tag. You are prompted for a tag selection letter; SPC means any tag at all. Pressing TAB at that prompt offers completion to select a tag, including any tags that do not have a selection character. The command then hides all entries that do not contain or inherit this tag. Pressing + or - at the prompt switches between filtering for and against the next tag. To clear the filter, press \ twice (once to call the command again, and once at the prompt).
+
+- <<index-org_002dagenda_002dfilter_002dby_002dcategory>>< (=org-agenda-filter-by-category=) [[#index-org_002dagenda_002dfilter_002dby_002dcategory][¶]] :: Filter by category of the line at point, and show only entries with this category. When called with a prefix argument, hide all entries with the category at point. To clear the filter, call this command again by pressing <.
+
+- <<index-org_002dagenda_002dfilter_002dby_002dregexp>>= (=org-agenda-filter-by-regexp=) [[#index-org_002dagenda_002dfilter_002dby_002dregexp][¶]] :: Filter the agenda view by a regular expression: only show agenda entries matching the regular expression the user entered. To clear the filter, call the command again by pressing =.
+
+- <<index-org_002dagenda_002dfilter_002dby_002deffort>>_ (=org-agenda-filter-by-effort=) [[#index-org_002dagenda_002dfilter_002dby_002deffort][¶]] :: Filter the agenda view with respect to effort estimates, so select tasks that take the right amount of time. You first need to set up a list of efforts globally, for example
+
+  #+begin_src lisp-preformatted
+  (setq org-global-properties
+        '(("Effort_ALL". "0 0:10 0:30 1:00 2:00 3:00 4:00")))
+  #+end_src
+
+  You can then filter for an effort by first typing an operator, one of <, > and =, and then the one-digit index of an effort estimate in your array of allowed values, where 0 means the 10th value. The filter then restricts to entries with effort smaller-or-equal, equal, or larger-or-equal than the selected value. For application of the operator, entries without a defined effort are treated according to the value of =org-agenda-sort-noeffort-is-high=. To clear the filter, press _ twice (once to call the command again, and once at the first prompt).
+
+- <<index-org_002dagenda_002dfilter_002dby_002dtop_002dheadline>>^ (=org-agenda-filter-by-top-headline=) [[#index-org_002dagenda_002dfilter_002dby_002dtop_002dheadline][¶]] :: Filter the current agenda view and only display items that fall under the same top-level headline as the current entry. To clear the filter, call this command again by pressing ^.
+
+- <<index-org_002dagenda_002dfilter>>/ (=org-agenda-filter=) [[#index-org_002dagenda_002dfilter][¶]] :: This is the unified interface to four of the five filter methods described above. At the prompt, specify different filter elements in a single string, with full completion support. For example,
+
+  #+begin_example
+  +work-John+<0:10-/plot/
+#+end_example
+
+  selects entries with category ‘=work=' and effort estimates below 10 minutes, and deselects entries with tag ‘=John=' or matching the regexp ‘=plot=' (see [[id:org--Regular-Expressions][Regular Expressions]]). You can leave ‘=+=' out if that does not lead to ambiguities. The sequence of elements is arbitrary. The filter syntax assumes that there is no overlap between categories and tags. Otherwise, tags take priority. If you reply to the prompt with the empty string, all filtering is removed. If a filter is specified, it replaces all current filters. But if you call the command with a double prefix argument, or if you add an additional ‘=+=' (e.g., ‘=++work=') to the front of the string, the new filter elements are added to the active ones. A single prefix argument applies the entire filter in a negative sense.
+
+- | (=org-agenda-filter-remove-all=) :: Remove all filters in the current agenda view.
+
+**** Computed tag filtering [[#Computed-tag-filtering-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Computed-tag-filtering-1
+:CLASS: subsubheading
+:END:
+If the variable =org-agenda-auto-exclude-function= is set to a user-defined function, that function can select tags that should be used as a tag filter when requested. The function will be called with lower-case versions of all tags represented in the current view. The function should return ‘="-tag"=' if the filter should remove entries with that tag, ‘="+tag"=' if only entries with this tag should be kept, or ‘=nil=' if that tag is irrelevant. For example, let's say you use a ‘=Net=' tag to identify tasks which need network access, an ‘=Errand=' tag for errands in town, and a ‘=Call=' tag for making phone calls. You could auto-exclude these tags based on the availability of the Internet, and outside of business hours, with something like this:
+
+#+begin_src lisp-preformatted
+(defun my-auto-exclude-fn (tag)
+  (when (cond ((string= tag "net")
+               (/= 0 (call-process "/sbin/ping" nil nil nil
+                                   "-c1" "-q" "-t1" "mail.gnu.org")))
+              ((member tag '("errand" "call"))
+               (let ((hr (nth 2 (decode-time))))
+                 (or (< hr 8) (> hr 21)))))
+    (concat "-" tag)))
+
+(setq org-agenda-auto-exclude-function #'my-auto-exclude-fn)
+#+end_src
+
+You can apply this self-adapting filter by using a triple prefix argument to =org-agenda-filter=, i.e. press C-u C-u C-u /, or by pressing RET in =org-agenda-filter-by-tag=.
+
+**** Setting limits for the agenda [[#Setting-limits-for-the-agenda-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-limits-for-the-agenda-1
+:CLASS: subsubheading
+:END:
+Here is a list of options that you can set, either globally, or locally in your custom agenda views (see [[id:org--Custom-Agenda-Views][Custom Agenda Views]]).
+
+- <<index-org_002dagenda_002dmax_002dentries>>=org-agenda-max-entries= [[#index-org_002dagenda_002dmax_002dentries][¶]] :: Limit the number of entries.
+
+- <<index-org_002dagenda_002dmax_002deffort>>=org-agenda-max-effort= [[#index-org_002dagenda_002dmax_002deffort][¶]] :: Limit the duration of accumulated efforts (as minutes).
+
+- <<index-org_002dagenda_002dmax_002dtodos>>=org-agenda-max-todos= [[#index-org_002dagenda_002dmax_002dtodos][¶]] :: Limit the number of entries with TODO keywords.
+
+- <<index-org_002dagenda_002dmax_002dtags>>=org-agenda-max-tags= [[#index-org_002dagenda_002dmax_002dtags][¶]] :: Limit the number of tagged entries.
+
+When set to a positive integer, each option excludes entries from other categories: for example, ‘=(setq org-agenda-max-effort 100)=' limits the agenda to 100 minutes of effort and exclude any entry that has no effort property. If you want to include entries with no effort property, use a negative value for =org-agenda-max-effort=. One useful setup is to use =org-agenda-max-entries= locally in a custom command. For example, this custom command displays the next five entries with a ‘=NEXT=' TODO keyword.
+
+#+begin_src lisp-preformatted
+(setq org-agenda-custom-commands
+      '(("n" todo "NEXT"
+         ((org-agenda-max-entries 5)))))
+#+end_src
+
+Once you mark one of these five entries as DONE, rebuilding the agenda will show the next five entries again, including the first entry that was excluded so far.
+
+You can also dynamically set temporary limits, which are lost when rebuilding the agenda:
+
+- <<index-org_002dagenda_002dlimit_002dinteractively>>~ (=org-agenda-limit-interactively=) [[#index-org_002dagenda_002dlimit_002dinteractively][¶]] :: This prompts for the type of limit to apply and its value.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF99][(99)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Custom agenda commands can preset a filter by binding one of the variables =org-agenda-tag-filter-preset=, =org-agenda-category-filter-preset=, =org-agenda-effort-filter-preset= or =org-agenda-regexp-filter-preset= as an option. This filter is then applied to the view and persists as a basic filter through refreshes and more secondary filtering. The filter is a global property of the entire agenda view---in a block agenda, you should only set this in the global options section, not in the section of an individual block.
+
+--------------
+
+Previous: [[id:org--Sorting-of-agenda-items][Sorting of agenda items]], Up: [[id:org--Presentation-and-Sorting][Presentation and Sorting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

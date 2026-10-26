@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID: org--Org-Crypt
+:END:
+#+filetags: :org:
+#+title: Org Crypt (The Org Manual)
+
+Next:
+
+<<Org-Crypt>>
+Next: [[id:org--Org-Mobile][Org Mobile]], Previous: [[id:org--Protocols][Protocols for External Access]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.17 Org Crypt [[#Org-Crypt-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-Crypt-1
+:CLASS: section
+:END:
+Org Crypt encrypts the text of an entry, but not the headline, or properties. Behind the scene, it uses the [[https://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top][Emacs EasyPG Library]] to encrypt and decrypt files, and EasyPG needs a correct [[https://www.gnupg.org/documentation/manuals/gnupg/index.html#Top][GnuPG]] setup.
+
+Any text below a headline that has a ‘=crypt=' tag is automatically encrypted when the file is saved. To use a different tag, customize the =org-crypt-tag-matcher= setting.
+
+Here is a suggestion for Org Crypt settings in Emacs init file:
+
+#+begin_src lisp-preformatted
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance '("crypt"))
+
+(setq org-crypt-key nil)
+;; GPG key to use for encryption.
+;; nil means  use symmetric encryption unconditionally.
+;; "" means use symmetric encryption unless heading sets CRYPTKEY property.
+
+(setq auto-save-default nil)
+;; Auto-saving does not cooperate with org-crypt.el: so you need to
+;; turn it off if you plan to use org-crypt.el quite often.  Otherwise,
+;; you'll get an (annoying) message each time you start Org.
+
+;; To turn it off only locally, you can insert this:
+;;
+;; # -*- buffer-auto-save-file-name: nil; -*-
+#+end_src
+
+It's possible to use different keys for different headings by specifying the respective key as property ‘=CRYPTKEY=', e.g.:
+
+#+begin_example
+* Totally secret :crypt:
+  :PROPERTIES:
+  :CRYPTKEY: 0x0123456789012345678901234567890123456789
+  :END:
+#+end_src
+
+Note that the ‘=CRYPTKEY=' property is only effective when =org-crypt-key= is non-=nil=. If =org-crypt-key= is =nil=, Org uses symmetric encryption unconditionally.
+
+Excluding the ‘=crypt=' tag from inheritance prevents already encrypted text from being encrypted again.
+
+--------------
+
+Next: [[id:org--Org-Mobile][Org Mobile]], Previous: [[id:org--Protocols][Protocols for External Access]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

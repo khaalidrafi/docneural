@@ -1,0 +1,242 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-pull
+:END:
+#+filetags: :guix:
+#+title: Invoking guix pull
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-pull>>
+Next: [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]], Previous: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 5.7 Invoking =guix pull= [[#Invoking-guix-pull-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-pull-1
+:CLASS: section
+:END:
+Packages are installed or upgraded to the latest version available in the distribution currently available on your local machine. To update that distribution, along with the Guix tools, you must run =guix pull=: the command downloads the latest Guix source code and package descriptions, and deploys it. Source code is downloaded from a [[https://git-scm.com/book/en/][Git]] repository, by default the official GNU Guix repository, though this can be customized. =guix pull= ensures that the code it downloads is /authentic/ by verifying that commits are signed by Guix developers.
+
+Specifically, =guix pull= downloads code from the /channels/ (see [[id:guix--Channels][Channels]]) specified by one of the following, in this order:
+
+1. the =--channels= option;
+2. the user's =~/.config/guix/channels.scm= file, unless =-q= is passed;
+3. the system-wide =/etc/guix/channels.scm= file, unless =-q= is passed (on Guix System, this file can be declared in the operating system configuration, see [[id:guix--Base-Services::#guix_002dconfiguration_002dchannels][=channels= field of =guix-configuration=]]);
+4. the built-in default channels specified in the =%default-channels= variable.
+
+On completion, =guix package= will use packages and package versions from this just-retrieved copy of Guix. Not only that, but all the Guix commands and Scheme modules will also be taken from that latest version. New =guix= sub-commands added by the update also become available.
+
+Any user can update their Guix copy using =guix pull=, and the effect is limited to the user who ran =guix pull=. For instance, when user =root= runs =guix pull=, this has no effect on the version of Guix that user =alice= sees, and vice versa.
+
+The result of running =guix pull= is a /profile/ available under =~/.config/guix/current= containing the latest Guix.
+
+The =--list-generations= or =-l= option lists past generations produced by =guix pull=, along with details about their provenance:
+
+#+begin_example
+$ guix pull -l
+Generation 1    Jun 10 2018 00:18:18
+  guix 65956ad
+    repository URL: https://git.guix.gnu.org/guix.git
+    branch: origin/master
+    commit: 65956ad3526ba09e1f7a40722c96c6ef7c0936fe
+
+Generation 2    Jun 11 2018 11:02:49
+  guix e0cc7f6
+    repository URL: https://git.guix.gnu.org/guix.git
+    branch: origin/master
+    commit: e0cc7f669bec22c37481dd03a7941c7d11a64f1d
+
+Generation 3    Jun 13 2018 23:31:07    (current)
+  guix 844cc1c
+    repository URL: https://git.guix.gnu.org/guix.git
+    branch: origin/master
+    commit: 844cc1c8f394f03b404c5bb3aee086922373490c
+#+end_example
+
+See [[id:guix--Invoking-guix-describe][=guix describe=]], for other ways to describe the current status of Guix.
+
+This =~/.config/guix/current= profile works exactly like the profiles created by =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). That is, you can list generations, roll back to the previous generation---i.e., the previous Guix---and so on:
+
+#+begin_example
+$ guix pull --roll-back
+switched from generation 3 to 2
+$ guix pull --delete-generations=1
+deleting /var/guix/profiles/per-user/charlie/current-guix-1-link
+#+end_example
+
+You can also use =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]) to manage the profile by naming it explicitly:
+
+#+begin_example
+$ guix package -p ~/.config/guix/current --roll-back
+switched from generation 3 to 2
+$ guix package -p ~/.config/guix/current --delete-generations=1
+deleting /var/guix/profiles/per-user/charlie/current-guix-1-link
+#+end_example
+
+The =guix pull= command is usually invoked with no arguments, but it supports the following options:
+
+- =--url===url=\\
+  =--commit===commit=\\
+  =--branch===branch= :: Download code for the =guix= channel from the specified =url=, at the given =commit= (a valid Git commit ID represented as a hexadecimal string or the name of a tag), or =branch=.
+
+  These options are provided for convenience, but you can also specify your configuration in the =~/.config/guix/channels.scm= file or using the =--channels= option (see below).
+
+- =--channels===file-or-uri=\\
+  =-C ==file-or-uri= :: Read the list of channels from =file-or-uri= instead of =~/.config/guix/channels.scm= or =/etc/guix/channels.scm=. =file-or-uri= must contain Scheme code that evaluates to a list of channel objects. See [[id:guix--Channels][Channels]], for more information.
+
+  As you can guess, =file-or-uri= can be a URL, in which case the given channels file is transparently downloaded. In the example below, we pull from the latest revision of Guix that was successfully evaluated:
+
+  #+begin_example
+  guix pull \
+    -C https://ci.guix.gnu.org/eval/latest/channels.scm?spec=master
+#+end_example
+
+  Alternatively, you can refer to a channel file by its [[https://swhid.org][Software Hash Identifier]], or SWHID, which uniquely and unambiguously identifies contents, as in this example:
+
+  #+begin_example
+  guix pull \
+    -C swh:1:cnt:ae02d8ba3538a385ee799e61cdd0dfc5e14a8d1b
+#+end_example
+
+  This command downloads the data designated by the given identifier from [[https://archive.softwareheritage.org][the Software Heritage archive]].
+
+  In both cases, the command errors out if the returned channels are not among the user's /trusted channels/, defined as:
+
+  - the channels returned by =~/.config/guix/trusted-channels.scm=, which has the same format as any channel file (these channels /must/ have an “introduction”, see [[id:guix--Channel-Authentication][Channel Authentication]]; channels are identified by their introduction and other fields are ignored, including =url= and =name=);
+  - or, if the above file doesn't exist, the currently-used channels as returned by =guix describe=.
+
+- =--allow-untrusted-channels[=yes|no]= :: Whether to allow pulls from untrusted channels.
+
+  By default, =guix pull= aborts when downloading a channel file that specifies an untrusted channel and merely warns if the list of channels comes from a local file. This option allows you to change that.
+
+  #+begin_quote
+  *Warning:* Allowing untrusted channels can effectively lead to arbitrary code execution on your system.
+
+  #+end_quote
+
+- =--unsafe-channel-evaluation= :: Allow arbitrary code execution from channel files, both the default =channels.scm= files and those passed with =--channels= as mentioned above.
+
+  By default, channel files are evaluated in an isolated “sandbox” where only trivial declarative code returning a list of channels is allowed---calls to procedures such as =list=, =cons=, =string-append=, as well as the =channel= constructor. Attempts from a channel file to access unauthorized bindings such as =system= (to run shell code) or to use additional modules with =use-modules= are impossible.
+
+  The =--unsafe-channel-evaluation= option disables these safeguards.
+
+  #+begin_quote
+  *Warning:* When using =--unsafe-channel-evaluation=, channel files can /run arbitrary code on your machine/. While this is useful in some cases, only use =--unsafe-channel-evaluation= when you fully understand the code of the channel files you use!
+
+  #+end_quote
+
+- <<index-indirection_002c-for-downloaded-channels>>=--max-indirections===n= [[#index-indirection_002c-for-downloaded-channels][¶]] :: Allow up to =n= channel indirections /via/ =downloaded-channels= (see [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]]). The default is 2. Setting it to zero disallows use of =downloaded-channels=.
+
+- =--no-channel-files=\\
+  =-q= :: Inhibit loading of the user and system channel files, =~/.config/guix/channels.scm= and =/etc/guix/channels.scm=.
+
+- =--select===channel=\\
+  =-e= :: Update only =channel=, keeping the commit of any other non-selected channel unchanged. In other words, any channel not selected with this option is effectively /pinned/ to its current commit. This option can be repeated.
+
+- =--exclude===channel=\\
+  =-x= :: Prevent =channel= from being updated, effectively /pinning/ it to its current commit as shown by =guix describe=. All the other channels will be updated. This option can be repeated.
+
+- <<index-channel-news>>=--news= [[#index-channel-news][¶]]\\
+  =-N= :: Display news written by channel authors for their users for changes made since the previous generation (see [[id:guix--Channels][Writing Channel News]]). When =--details= is passed, additionally display new and upgraded packages.
+
+  You can view that information for previous generations with =guix pull -l=.
+
+- =--list-generations[===pattern==]=\\
+  =-l [==pattern==]= :: List all the generations of =~/.config/guix/current= or, if =pattern= is provided, the subset of generations that match =pattern=. The syntax of =pattern= is the same as with =guix package --list-generations= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+  By default, this prints information about the channels used in each revision as well as the corresponding news entries. If you pass =--details=, it will also print the list of packages added and upgraded in each generation compared to the previous one.
+
+- =--details= :: Instruct =--list-generations= or =--news= to display more information about the differences between subsequent generations---see above.
+
+-  <<index-rolling-back-1>>=--roll-back= [[#index-rolling-back-1][¶]] :: Roll back to the previous /generation/ of =~/.config/guix/current=---i.e., undo the last transaction.
+
+- <<index-generations-2>>=--switch-generation===pattern= [[#index-generations-2][¶]]\\
+  =-S ==pattern= :: Switch to a particular generation defined by =pattern=.
+
+  =pattern= may be either a generation number or a number prefixed with “+” or “-”. The latter means: move forward/backward by a specified number of generations. For example, if you want to return to the latest generation after =--roll-back=, use =--switch-generation=+1=.
+
+- =--delete-generations[===pattern==]=\\
+  =-d [==pattern==]= :: When =pattern= is omitted, delete all generations except the current one.
+
+  This command accepts the same patterns as =--list-generations=. When =pattern= is specified, delete the matching generations. When =pattern= specifies a duration, generations /older/ than the specified duration match. For instance, =--delete-generations=1m= deletes generations that are more than one month old.
+
+  If the current generation matches, it is /not/ deleted.
+
+  Note that deleting generations prevents rolling back to them. Consequently, this command must be used with care.
+
+  See [[id:guix--Invoking-guix-describe][Invoking =guix describe=]], for a way to display information about the current generation only.
+
+- =--profile===profile=\\
+  =-p ==profile= :: Use =profile= instead of =~/.config/guix/current=.
+
+- =--dry-run=\\
+  =-n= :: Show which channel commit(s) would be used and what would be built or substituted but do not actually do it.
+
+- =--allow-downgrades= :: Allow pulling older or unrelated revisions of channels than those currently in use.
+
+  By default, =guix pull= protects against so-called “downgrade attacks” whereby the Git repository of a channel would be reset to an earlier or unrelated revision of itself, potentially leading you to install older, known-vulnerable versions of software packages.
+
+  #+begin_quote
+  *Note:* Make sure you understand its security implications before using =--allow-downgrades=.
+
+  #+end_quote
+
+- =--disable-authentication= :: Allow pulling channel code without authenticating it.
+
+  By default, =guix pull= authenticates code downloaded from channels by verifying that its commits are signed by authorized developers, and raises an error if this is not the case. This option instructs it to not perform any such verification.
+
+  #+begin_quote
+  *Note:* Make sure you understand its security implications before using =--disable-authentication=.
+
+  #+end_quote
+
+- =--no-check-certificate= :: Do not validate the X.509 certificates of HTTPS servers.
+
+  When using this option, you have /absolutely no guarantee/ that you are communicating with the authentic server responsible for the given URL. Unless the channel is authenticated, this makes you vulnerable to “man-in-the-middle” attacks.
+
+- =--system===system=\\
+  =-s ==system= :: Attempt to build for =system=---e.g., =i686-linux=---instead of the system type of the build host.
+
+- =--bootstrap= :: Use the bootstrap Guile to build the latest Guix. This option is only useful to Guix developers.
+
+The /channel/ mechanism allows you to instruct =guix pull= which repository and branch to pull from, as well as /additional/ repositories containing package modules that should be deployed. See [[id:guix--Channels][Channels]], for more information.
+
+In addition, =guix pull= supports all the common build options (see [[id:guix--Common-Build-Options][Common Build Options]]).
+
+Every time the user invokes a Guix command, Guix detects if the current installation has exceeded a certain duration (7 days by default) and alerts the user to update with =guix pull= if necessary. The duration can be configured with the following environment variable:
+
+- Environment Variable: *GUIX_DISTRO_AGE_WARNING* [[#index-GUIX_005fDISTRO_005fAGE_005fWARNING][¶]] :: This environment variable, if set, should be a string representing a duration. If the current Guix installation exceeds the duration, Guix will raise a warning for outdated installation.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-time_002dmachine][Invoking =guix time-machine=]], Previous: [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

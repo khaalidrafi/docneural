@@ -1,0 +1,41 @@
+:PROPERTIES:
+:ID: emacs--Gnus-Group-Buffer
+:END:
+#+filetags: :emacs:
+#+title: Gnus Group Buffer
+
+Next: [[id:emacs--Gnus-Summary-Buffer][Using the Gnus Summary Buffer]]   Previous: [[id:emacs--Gnus-Startup][When Gnus Starts Up]]   Up: [[id:emacs--Gnus][Email and Usenet News with Gnus]]
+
+<<Gnus-Group-Buffer>>
+*** 36.3 Using the Gnus Group Buffer [[#Using-the-Gnus-Group-Buffer][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-the-Gnus-Group-Buffer
+:CLASS: section subsection-level-set-section
+:END:
+The following commands are available in the Gnus group buffer:
+
+-  <<index-SPC-_0028Gnus-Group-mode_0029>>SPC [[#index-SPC-_0028Gnus-Group-mode_0029][¶]] :: Switch to the summary buffer for the group on the current line (=gnus-group-read-group=).
+
+-  <<index-l-_0028Gnus-Group-mode_0029>>l [[#index-l-_0028Gnus-Group-mode_0029][¶]]\\
+  A s :: In the group buffer, list only the groups to which you subscribe and which contain unread articles (=gnus-group-list-groups=; this is the default listing).
+
+-  <<index-L-_0028Gnus-Group-mode_0029>>L [[#index-L-_0028Gnus-Group-mode_0029][¶]]\\
+  A u :: List all subscribed and unsubscribed groups, but not killed or zombie groups (=gnus-group-list-all-groups=).
+
+-  <<index-A-k-_0028Gnus-Group-mode_0029>>A k [[#index-A-k-_0028Gnus-Group-mode_0029][¶]] :: List killed groups (=gnus-group-list-killed=).
+
+-  <<index-A-z-_0028Gnus-Group-mode_0029>>A z [[#index-A-z-_0028Gnus-Group-mode_0029][¶]] :: List zombie groups (=gnus-group-list-zombies=).
+
+-  <<index-u-_0028Gnus-Group-mode_0029>>u [[#index-u-_0028Gnus-Group-mode_0029][¶]] :: Toggle the subscription status of the group (=gnus-group-toggle-subscription-at-point=) on the current line. Invoking this on a killed or zombie group turns it into an unsubscribed group.
+
+-  <<index-C_002dk-_0028Gnus-Group-mode_0029>>C-k [[#index-C_002dk-_0028Gnus-Group-mode_0029][¶]] :: Kill the group on the current line (=gnus-group-kill-group=). Killed groups are not recorded in the =.newsrc= file, and they are not shown in the l or L listings.
+
+- <<index-DEL-_0028Gnus-Group-mode_0029>>DEL [[#index-DEL-_0028Gnus-Group-mode_0029][¶]] :: Move point to the previous group containing unread articles (=gnus-group-prev-unread-group=).
+
+-  <<index-n-_0028Gnus-Group-mode_0029>>n [[#index-n-_0028Gnus-Group-mode_0029][¶]] :: Move point to the next unread group (=gnus-group-next-unread-group=).
+
+-  <<index-p-_0028Gnus-Group-mode_0029>>p [[#index-p-_0028Gnus-Group-mode_0029][¶]] :: Move point to the previous unread group (=gnus-group-prev-unread-group=).
+
+-  <<index-q-_0028Gnus-Group-mode_0029>>q [[#index-q-_0028Gnus-Group-mode_0029][¶]] :: Update your Gnus settings, and quit Gnus (=gnus-group-exit=).
+
+--------------

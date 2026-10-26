@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID: org--Beamer-specific-export-settings
+:END:
+#+filetags: :org:
+#+title: Beamer specific export settings (The Org Manual)
+
+Next:
+
+<<Beamer-specific-export-settings>>
+Next: [[id:org--Frames-and-Blocks-in-Beamer][Frames and Blocks in Beamer]], Previous: [[id:org--Beamer-export-commands][Beamer export commands]], Up: [[id:org--Beamer-Export][Beamer Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.8.2 Beamer specific export settings [[#Beamer-specific-export-settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Beamer-specific-export-settings-1
+:CLASS: subsection
+:END:
+Beamer export backend has several additional keywords for customizing Beamer output. These keywords work similar to the general options settings (see [[id:org--Export-Settings][Export Settings]]).
+
+-  <<index-BEAMER_005fTHEME_002c-keyword>>‘=BEAMER_THEME=' [[#index-BEAMER_005fTHEME_002c-keyword][¶]] :: The Beamer layout theme (=org-beamer-theme=). Use square brackets for options. For example:
+
+  #+begin_example
+  #+BEAMER_THEME: Rochester [height=20pt]
+#+end_example
+
+- <<index-BEAMER_005fFONT_005fTHEME_002c-keyword>>‘=BEAMER_FONT_THEME=' [[#index-BEAMER_005fFONT_005fTHEME_002c-keyword][¶]] :: The Beamer font theme.
+
+- <<index-BEAMER_005fINNER_005fTHEME_002c-keyword>>‘=BEAMER_INNER_THEME=' [[#index-BEAMER_005fINNER_005fTHEME_002c-keyword][¶]] :: The Beamer inner theme.
+
+- <<index-BEAMER_005fOUTER_005fTHEME_002c-keyword>>‘=BEAMER_OUTER_THEME=' [[#index-BEAMER_005fOUTER_005fTHEME_002c-keyword][¶]] :: The Beamer outer theme.
+
+- <<index-BEAMER_005fHEADER_002c-keyword>>‘=BEAMER_HEADER=' [[#index-BEAMER_005fHEADER_002c-keyword][¶]] :: Arbitrary lines inserted in the preamble, just before the ‘=hyperref=' settings.
+
+- <<index-DESCRIPTION_002c-keyword>>‘=DESCRIPTION=' [[#index-DESCRIPTION_002c-keyword][¶]] :: The document description. For long descriptions, use multiple ‘=DESCRIPTION=' keywords. By default, ‘=hyperref=' inserts ‘=DESCRIPTION=' as metadata. Use =org-latex-hyperref-template= to configure document metadata. Use =org-latex-title-command= to configure typesetting of description as part of front matter.
+
+- <<index-KEYWORDS_002c-keyword>>‘=KEYWORDS=' [[#index-KEYWORDS_002c-keyword][¶]] :: The keywords for defining the contents of the document. Use multiple ‘=KEYWORDS=' lines if necessary. By default, ‘=hyperref=' inserts ‘=KEYWORDS=' as metadata. Use =org-latex-hyperref-template= to configure document metadata. Use =org-latex-title-command= to configure typesetting of keywords as part of front matter.
+
+- <<index-SUBTITLE_002c-keyword-1>>‘=SUBTITLE=' [[#index-SUBTITLE_002c-keyword-1][¶]] :: Document's subtitle. For typesetting, use =org-beamer-subtitle-format= string. Use =org-latex-hyperref-template= to configure document metadata. Use =org-latex-title-command= to configure typesetting of subtitle as part of front matter.
+
+--------------
+
+Next: [[id:org--Frames-and-Blocks-in-Beamer][Frames and Blocks in Beamer]], Previous: [[id:org--Beamer-export-commands][Beamer export commands]], Up: [[id:org--Beamer-Export][Beamer Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

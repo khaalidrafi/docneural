@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--Templates-in-contexts
+:END:
+#+filetags: :org:
+#+title: Templates in contexts (The Org Manual)
+
+Next:
+
+<<Templates-in-contexts>>
+Previous: [[id:org--Template-expansion][Template expansion]], Up: [[id:org--Capture-templates][Capture templates]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.1.3.3 Templates in contexts [[#Templates-in-contexts-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Templates-in-contexts-1
+:CLASS: subsubsection
+:END:
+To control whether a capture template should be accessible from a specific context, you can customize =org-capture-templates-contexts=. Let's say, for example, that you have a capture template “p” for storing Gnus emails containing patches. Then you would configure this option like this:
+
+#+begin_src lisp-preformatted
+(setq org-capture-templates-contexts
+      '(("p" ((in-mode . "message-mode")))))
+#+end_src
+
+You can also tell that the command key p should refer to another template. In that case, add this command key like this:
+
+#+begin_src lisp-preformatted
+(setq org-capture-templates-contexts
+      '(("p" "q" ((in-mode . "message-mode")))))
+#+end_src
+
+See the docstring of the variable for more information.

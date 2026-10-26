@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID: guix--Platforms
+:END:
+#+filetags: :guix:
+#+title: Platforms
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Platforms>>
+Next: [[id:guix--System-Images][Creating System Images]], Previous: [[id:guix--Documentation][Documentation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 15 Platforms [[#Platforms-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Platforms-1
+:CLASS: chapter
+:END:
+The packages and systems built by Guix are intended, like most computer programs, to run on a CPU with a specific instruction set, and under a specific operating system. Those programs are often also targeting a specific kernel and system library. Those constraints are captured by Guix in =platform= records.
+
+- [[id:guix--platform-Reference][=platform= Reference]]
+- [[id:guix--Supported-Platforms][Supported Platforms]]

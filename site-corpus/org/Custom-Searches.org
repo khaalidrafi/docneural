@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID: org--Custom-Searches
+:END:
+#+filetags: :org:
+#+title: Custom Searches (The Org Manual)
+
+Next:
+
+<<Custom-Searches>>
+Previous: [[id:org--Search-Options][Search Options in File Links]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 4.9 Custom Searches [[#Custom-Searches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Custom-Searches-1
+:CLASS: section
+:END:
+The default mechanism for creating search strings and for doing the actual search related to a file link may not work correctly in all cases. For example, BibTeX database files have many entries like =year="1993"= which would not result in good search strings, because the only unique identification for a BibTeX entry is the citation key.
+
+If you come across such a problem, you can write custom functions to set the right search string for a particular file type, and to do the search for the string in the file. Using =add-hook=, these functions need to be added to the hook variables =org-create-file-search-functions= and =org-execute-file-search-functions=. See the docstring for these variables for more information. Org actually uses this mechanism for BibTeX database files, and you can use the corresponding code as an implementation example. See the file ‘=ol-bibtex.el='.
+
+--------------
+
+Previous: [[id:org--Search-Options][Search Options in File Links]], Up: [[id:org--Hyperlinks][Hyperlinks]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

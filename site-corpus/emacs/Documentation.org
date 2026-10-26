@@ -1,0 +1,111 @@
+:PROPERTIES:
+:ID: emacs--Documentation
+:END:
+#+filetags: :emacs:
+#+title: Documentation
+
+Next: [[id:emacs--Hideshow][Hideshow minor mode]]   Previous: [[id:emacs--Comments#Comments][Manipulating Comments]]   Up: [[id:emacs--Programs][Editing Programs]]
+
+<<Documentation>>
+*** 28.6 Documentation Lookup [[#Documentation-Lookup][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Documentation-Lookup
+:CLASS: section
+:END:
+Emacs provides several features you can use to look up the documentation of functions, variables and commands that you plan to use in your program.
+
+--------------
+
+<<Info-Lookup>>
+**** 28.6.1 Info Documentation Lookup [[#Info-Documentation-Lookup][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Info-Documentation-Lookup
+:CLASS: subsection
+:END:
+For major modes that apply to languages which have documentation in Info, you can use C-h S (=info-lookup-symbol=) to view the Info documentation for a symbol used in the program. You specify the symbol with the minibuffer; the default is the symbol appearing in the buffer at point. For example, in C mode this looks for the symbol in the C Library Manual. The command only works if the appropriate manual's Info files are installed.
+
+Emacs determines where to look for documentation for the symbol---which Info files to look in, and which indices to search---based on the major mode. You can also use M-x info-lookup-file to look for documentation for a file name.
+
+If you use C-h S in a major mode that does not support it, it asks you to specify the symbol help mode. You should enter a command such as =c-mode= that would select a major mode which C-h S does support.
+
+--------------
+
+<<Man-Page>>
+**** 28.6.2 Man Page Lookup [[#Man-Page-Lookup][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Man-Page-Lookup
+:CLASS: subsection
+:END:
+On Unix, the main form of on-line documentation was the /manual page/ or /man page/. In the GNU operating system, we aim to replace man pages with better-organized manuals that you can browse with Info (see [[id:emacs--Misc-Help][Other Help Commands]]). This process is not finished, so it is still useful to read manual pages.
+
+You can read the man page for an operating system command, library function, or system call, with the M-x man command. This prompts for a topic, with completion (see [[id:emacs--Completion::#Completion][Completion]]), and runs the =man= program to format the corresponding man page. If the system permits, it runs =man= asynchronously, so that you can keep on editing while the page is being formatted. The result goes in a buffer named =*Man ==topic==*=. These buffers use a special major mode, Man mode, that facilitates scrolling and jumping to other manual pages. For details, type C-h m while in a Man mode buffer.
+
+Each man page belongs to one of ten or more /sections/, each named by a digit or by a digit and a letter. Sometimes there are man pages with the same name in different sections. To read a man page from a specific section, type ‘=topic==(==section==)=' or ‘=section== ==topic=' when M-x man prompts for the topic. For example, the man page for the C library function =chmod= is in section 2, but there is a shell command of the same name, whose man page is in section 1; to view the former, type M-x man RET chmod(2) RET.
+
+If you do not specify a section, M-x man normally displays only the first man page found. On some systems, the =man= program accepts a ‘=-a=' command-line option, which tells it to display all the man pages for the specified topic. To make use of this, change the value of the variable =Man-switches= to ‘="-a"='. Then, in the Man mode buffer, you can type M-n and M-p to switch between man pages in different sections. The mode line shows how many manual pages are available.
+
+By default, M-x man calls the =man= program asynchronously. You can force the invocation to be synchronous by customizing =Man-prefer-synchronous-call= to a non-=nil= value.
+
+If the user option =Man-support-remote-systems= is non-=nil=, and =default-directory= indicates a remote system (see [[id:emacs--Remote-Files][Remote Files]]), the man page is taken from the remote system. Calling the =man= command with a prefix like C-u M-x man reverts the value of =Man-support-remote-systems= for that call.
+
+An alternative way of reading manual pages is the M-x woman command. Unlike M-x man, it does not run any external programs to format and display the man pages; the formatting is done by Emacs, so it works on systems such as MS-Windows where the =man= program may be unavailable. It prompts for a man page, and displays it in a buffer named =*WoMan ==section== ==topic=.
+
+M-x woman computes the completion list for manpages the first time you invoke the command. With a numeric argument, it recomputes this list; this is useful if you add or delete manual pages.
+
+If you type a name of a manual page and M-x woman finds that several manual pages by the same name exist in different sections, it pops up a window with possible candidates asking you to choose one of them.
+
+Note that M-x woman doesn't yet support the latest features of modern man pages, so we recommend using M-x man if that is available on your system.
+
+For more information about setting up and using M-x woman, see the WoMan Info manual, which is distributed with Emacs.
+
+--------------
+
+<<Programming-Language-Doc>>
+**** 28.6.3 Programming Language Documentation Lookup [[#Programming-Language-Documentation-Lookup][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Programming-Language-Documentation-Lookup
+:CLASS: subsection
+:END:
+When editing Emacs Lisp code, you can use the commands C-h f (=describe-function=) and C-h v (=describe-variable=) to view the built-in documentation for the Lisp functions and variables that you want to use. See [[id:emacs--Name-Help][Help by Command or Variable Name]].
+
+ElDoc[[#FOOT15][^{15}]] is a buffer-local minor mode that helps with looking up documentation of symbols (functions, methods, classes, variables, etc.) in your program. When this mode is enabled, the echo area displays useful information whenever there is a documented symbol at point. For example, in buffers under the Emacs Lisp mode, it shows the argument list of a function at point, and for a Lisp variable it shows the first line of the variable's documentation string.
+
+To toggle ElDoc mode, type M-x eldoc-mode. There's also a Global ElDoc mode, which is turned on by default, and turns on the ElDoc mode in buffers whose major mode sets the variables described below. Use M-x global-eldoc-mode to turn it off globally.
+
+Various major modes configure the Global ElDoc mode to use their documentation functions. Examples include Emacs Lisp mode, Python mode, and Cfengine mode. In addition, Emacs features that provide support for several major modes configure ElDoc to use their facilities for retrieving the documentation. Examples include Eglot (see [[../eglot_html/Eglot-Features.html#Eglot-Features][Eglot Features]] in Eglot: The Emacs LSP Client), which provides documentation based on information from language servers; Semantic's Idle Summary mode (see [[../semantic_html/Idle-Summary-Mode.html#Idle-Summary-Mode][Idle Summary Mode]] in Semantic Manual); and Flymake, which uses ElDoc to show diagnostics at point (see [[../flymake_html/Finding-diagnostics.html#Finding-diagnostics][Finding diagnostics]] in GNU Flymake manual).
+
+The ElDoc mode works by scheduling the display of the available documentation for the symbol at point after Emacs has been idle for some short time. This avoids annoying flickering of documentation messages in the echo area or the mode line when you type quickly and without delay.
+
+You can also trigger the display of documentation for a symbol at point by using the command M-x eldoc-print-current-symbol-info.
+
+The following variables can be used to configure ElDoc mode:
+
+- <<index-eldoc_002didle_002ddelay>>=eldoc-idle-delay= [[#index-eldoc_002didle_002ddelay][¶]] :: The value of this user option controls the amount of idle time before the at-point documentation is displayed. It should be set to the number of seconds to wait; the value of zero means to display without any delay. The default is 0.5 sec.
+
+- <<index-eldoc_002dprint_002dafter_002dedit>>=eldoc-print-after-edit= [[#index-eldoc_002dprint_002dafter_002dedit][¶]] :: If this user option is non-=nil=, ElDoc will show documentation only after some editing command, like inserting or deleting some text. This comes in handy if you want Emacs to display documentation only about symbols that you type, but not about symbols that are already in the buffer (so just reading the source code will not show documentation). The default value is =nil=. If you change the value, you need to toggle =eldoc-mode= off and on again.
+
+- <<index-eldoc_002decho_002darea_002duse_002dmultiline_002dp>>=eldoc-echo-area-use-multiline-p= [[#index-eldoc_002decho_002darea_002duse_002dmultiline_002dp][¶]] :: This user option controls whether and how to truncate documentation text if it is longer than the echo-area can display as a single screen line. If the value is a positive number, it specifies the number of screen lines that ElDoc is allowed to display in the echo area without truncating the documentation. A positive integer specifies the absolute maximum number of screen lines to use; a floating-point number specifies the number of screen lines as a fraction of the frame's height. The value of =t= means never truncate the documentation (the echo-area will be resized up to the height allowed by =max-mini-window-height=, see [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]]), whereas the value of =nil= means truncate if the documentation is longer than a single screen line. Finally, the special value =truncate-sym-name-if-fit= (the default) means to truncate the part of the documentation that represents a symbol's name if doing that will allow the documentation to fit on a single screen line.
+
+- <<index-eldoc_002decho_002darea_002ddisplay_002dtruncation_002dmessage>>=eldoc-echo-area-display-truncation-message= [[#index-eldoc_002decho_002darea_002ddisplay_002dtruncation_002dmessage][¶]] :: If non-=nil= (the default), and documentation shown in the echo area is truncated because it's too long, follow the documentation by instructions about how to view the complete documentation text. If =nil=, just indicate with ‘=…=' that the documentation was truncated.
+
+-  <<index-eldoc_002decho_002darea_002dprefer_002ddoc_002dbuffer>>=eldoc-echo-area-prefer-doc-buffer= [[#index-eldoc_002decho_002darea_002dprefer_002ddoc_002dbuffer][¶]] :: If the value of this user option is =t=, ElDoc will not show the documentation in the echo area if the ElDoc buffer with the documentation is already displayed in some window. (You can use the command M-x eldoc-doc-buffer any time to show the ElDoc buffer.) If the value of this option is the symbol =maybe=, the documentation will not be displayed in the echo area if the ElDoc buffer is shown in some window, and the documentation text has to be truncated if displayed in the echo area. Finally, the value of =nil= (the default) means always show the documentation in the echo area.
+
+- <<index-eldoc_002ddocumentation_002dstrategy>>=eldoc-documentation-strategy= [[#index-eldoc_002ddocumentation_002dstrategy][¶]] :: This customizable variable's value is the function which is used to retrieve and display documentation for the symbol at point. The documentation is produced by the functions in the hook =eldoc-documentation-functions=. The default value of =eldoc-documentation-strategy= specifies that ElDoc should display the first documentation text produced by functions in the =eldoc-documentation-functions= hook, but you can customize =eldoc-documentation-strategy= to work in other ways, such as displaying all of the documentation texts concatenated together.
+
+- <<index-eldoc_002ddocumentation_002dfunctions>>=eldoc-documentation-functions= [[#index-eldoc_002ddocumentation_002dfunctions][¶]] :: This abnormal hook's value is a list of functions that can produce documentation for the symbol at point as appropriate for the current buffer's major-mode. These functions act as a collection of backends for ElDoc. Major modes register their documentation lookup functions with ElDoc by adding their functions to the buffer-local value of this variable.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF15][(15)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+The name “ElDoc” is a historical accident: this mode started by supporting Emacs Lisp buffers.
+
+--------------

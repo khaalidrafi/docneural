@@ -1,0 +1,119 @@
+:PROPERTIES:
+:ID: emacs--Option-Index
+:END:
+#+filetags: :emacs:
+#+title: Option Index
+
+Next: [[id:emacs--Command-Index][Command and Function Index]]   Previous: [[id:emacs--Key-Index][Key (Character) Index]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Option-Index>>
+** Command-Line Options Index [[#Command_002dLine-Options-Index][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Command_002dLine-Options-Index
+:CLASS: unnumbered
+:END:
+
+| Jump to:   | [[#Option-Index_op_symbol-1][*-*]]   [[#Option-Index_op_symbol-2][*+*]] |
+
+|                | Index Entry                                                                                  | Section                                          |
+| -------------- |                                                                                              |                                                  |
+| -              |                                                                                              |                                                  |
+|                | [[id:emacs--Colors-X::#index-_002d_002dbackground_002dcolor][=--background-color=]]            | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Misc-X::#index-_002d_002dbasic_002ddisplay][=--basic-display=]]                    | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dbatch][=--batch=]]                               | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002d_002dborder_002dcolor][=--border-color=]]                    | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Borders-X::#index-_002d_002dborder_002dwidth][=--border-width=]]                   | [[id:emacs--Borders-X][Borders X]]               |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dchdir][=--chdir=]]                               | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002d_002dcolor][=--color=]]                                      | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Colors-X::#index-_002d_002dcursor_002dcolor][=--cursor-color=]]                    | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Initial-Options::#index-_002d_002ddaemon][=--daemon=]]                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002ddebug_002dinit][=--debug-init=]]                 | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002ddirectory][=--directory=]]                      | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Initial-Options::#index-_002d_002ddisplay][=--display=]]                           | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002ddump_002dfile][=--dump-file=]]                   | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002deval][=--eval=]]                                | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dexecute][=--execute=]]                          | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dfile][=--file=]]                                | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dfind_002dfile][=--find-file=]]                  | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dfingerprint][=--fingerprint=]]                  | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Font-X::#index-_002d_002dfont][=--font=]]                                          | [[id:emacs--Font-X][Font X]]                     |
+|                | [[id:emacs--Colors-X::#index-_002d_002dforeground_002dcolor][=--foreground-color=]]            | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Window-Size-X::#index-_002d_002dfullheight][=--fullheight=]]                       | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Window-Size-X::#index-_002d_002dfullscreen][=--fullscreen=]]                       | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Window-Size-X::#index-_002d_002dfullwidth][=--fullwidth=]]                         | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dfuncall][=--funcall=]]                          | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Window-Size-X::#index-_002d_002dgeometry][=--geometry=]]                           | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dhelp][=--help=]]                                | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Icons-X::#index-_002d_002diconic][=--iconic=]]                                     | [[id:emacs--Icons-X][Icons X]]                   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dinit_002ddirectory][=--init-directory=]]         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dinsert][=--insert=]]                            | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Borders-X::#index-_002d_002dinternal_002dborder][=--internal-border=]]             | [[id:emacs--Borders-X][Borders X]]               |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dkill][=--kill=]]                                | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Misc-X::#index-_002d_002dline_002dspacing][=--line-spacing=]]                      | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dload][=--load=]]                                | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Window-Size-X::#index-_002d_002dmaximized][=--maximized=]]                         | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dmodule_002dassertions][=--module-assertions=]]   | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002d_002dmouse_002dcolor][=--mouse-color=]]                      | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Resources::#index-_002d_002dname][=--name=]]                                       | [[id:emacs--Resources][Resources]]               |
+|                | [[id:emacs--Icons-X::#index-_002d_002dno_002dbitmap_002dicon][=--no-bitmap-icon=]]             | [[id:emacs--Icons-X][Icons X]]                   |
+|                | [[id:emacs--Misc-X::#index-_002d_002dno_002dblinking_002dcursor][=--no-blinking-cursor=]]      | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dbuild_002ddetails][=--no-build-details=]] | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002ddesktop][=--no-desktop=]]                 | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dinit_002dfile][=--no-init-file=]]         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dsite_002dfile][=--no-site-file=]]         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dsite_002dlisp][=--no-site-lisp=]]         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dsplash][=--no-splash=]]                   | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dwindow_002dsystem][=--no-window-system=]] | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dno_002dx_002dresources][=--no-x-resources=]]     | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dquick][=--quick=]]                               | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002d_002dreverse_002dvideo][=--reverse-video=]]                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dscript][=--script=]]                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002dterminal][=--terminal=]]                         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Title-X::#index-_002d_002dtitle][=--title=]]                                       | [[id:emacs--Title-X][Title X]]                   |
+|                | [[id:emacs--Initial-Options::#index-_002d_002duser][=--user=]]                                 | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dversion][=--version=]]                          | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Misc-X::#index-_002d_002dvertical_002dscroll_002dbars][=--vertical-scroll-bars=]]  | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Action-Arguments::#index-_002d_002dvisit][=--visit=]]                              | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Resources::#index-_002d_002dxrm][=--xrm=]]                                         | [[id:emacs--Resources][Resources]]               |
+|                | [[id:emacs--Colors-X::#index-_002dbd][=-bd=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Colors-X::#index-_002dbg][=-bg=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Borders-X::#index-_002dbw][=-bw=]]                                                 | [[id:emacs--Borders-X][Borders X]]               |
+|                | [[id:emacs--Initial-Options::#index-_002dchdir][=-chdir=]]                                     | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002dcr][=-cr=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Initial-Options::#index-_002dd][=-d=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Misc-X::#index-_002dD][=-D=]]                                                      | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Initial-Options::#index-_002ddaemon][=-daemon=]]                                   | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Action-Arguments::#index-_002df][=-f=]]                                            | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Colors-X::#index-_002dfg][=-fg=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Window-Size-X::#index-_002dfh][=-fh=]]                                             | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Font-X::#index-_002dfn][=-fn=]]                                                    | [[id:emacs--Font-X][Font X]]                     |
+|                | [[id:emacs--Window-Size-X::#index-_002dfs][=-fs=]]                                             | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Window-Size-X::#index-_002dfw][=-fw=]]                                             | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Window-Size-X::#index-_002dg][=-g=]]                                               | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Borders-X::#index-_002dib][=-ib=]]                                                 | [[id:emacs--Borders-X][Borders X]]               |
+|                | [[id:emacs--Action-Arguments::#index-_002dl][=-l=]]                                            | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Action-Arguments::#index-_002dL][=-L=]]                                            | [[id:emacs--Action-Arguments][Action Arguments]] |
+|                | [[id:emacs--Misc-X::#index-_002dlsp][=-lsp=]]                                                  | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Window-Size-X::#index-_002dmm][=-mm=]]                                             | [[id:emacs--Window-Size-X][Window Size X]]       |
+|                | [[id:emacs--Colors-X::#index-_002dms][=-ms=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Misc-X::#index-_002dnbc][=-nbc=]]                                                  | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Icons-X::#index-_002dnbi][=-nbi=]]                                                 | [[id:emacs--Icons-X][Icons X]]                   |
+|                | [[id:emacs--Initial-Options::#index-_002dnsl][=-nsl=]]                                         | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002dnw][=-nw=]]                                           | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002dq][=-q=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Initial-Options::#index-_002dQ][=-Q=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Colors-X::#index-_002dr][=-r=]]                                                    | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Colors-X::#index-_002drv][=-rv=]]                                                  | [[id:emacs--Colors-X][Colors X]]                 |
+|                | [[id:emacs--Initial-Options::#index-_002dt][=-t=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Title-X::#index-_002dT][=-T=]]                                                     | [[id:emacs--Title-X][Title X]]                   |
+|                | [[id:emacs--Initial-Options::#index-_002du][=-u=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+|                | [[id:emacs--Misc-X::#index-_002dvb][=-vb=]]                                                    | [[id:emacs--Misc-X][Misc X]]                     |
+|                | [[id:emacs--Initial-Options::#index-_002dx][=-x=]]                                             | [[id:emacs--Initial-Options][Initial Options]]   |
+| -------------- |                                                                                              |                                                  |
+| +              |                                                                                              |                                                  |
+|                | [[id:emacs--Action-Arguments::#index-_002blinenum][=+==linenum=]]                              | [[id:emacs--Action-Arguments][Action Arguments]] |
+| -------------- |                                                                                              |                                                  |
+
+| Jump to:   | [[#Option-Index_op_symbol-1][*-*]]   [[#Option-Index_op_symbol-2][*+*]] |
+
+--------------

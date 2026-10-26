@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID: org--Publishing-action
+:END:
+#+filetags: :org:
+#+title: Publishing action (The Org Manual)
+
+Next:
+
+<<Publishing-action>>
+Next: [[id:org--Publishing-options][Options for the exporters]], Previous: [[id:org--Selecting-files][Selecting files]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 14.1.4 Publishing action [[#Publishing-action-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Publishing-action-1
+:CLASS: subsection
+:END:
+Publishing means that a file is copied to the destination directory and possibly transformed in the process. The default transformation is to export Org files as HTML files, and this is done by the function =org-html-publish-to-html= which calls the HTML exporter (see [[id:org--HTML-Export][HTML Export]]). But you can also publish your content as PDF files using =org-latex-publish-to-pdf=, or as ASCII, Texinfo, etc., using the corresponding functions.
+
+If you want to publish the Org file as an ‘=.org=' file but with /archived/, /commented/, and /tag-excluded/ trees removed, use =org-org-publish-to-org=. This produces ‘=file.org=' and puts it in the publishing directory. If you want a htmlized version of this file, set the parameter =:htmlized-source= to =t=. It produces ‘=file.org.html=' in the publishing directory[[#FOOT155][^{155}]].
+
+Other files like images only need to be copied to the publishing destination; for this you can use =org-publish-attachment=. For non-Org files, you always need to specify the publishing function:
+
+- =:publishing-function= :: Function executing the publication of a file. This may also be a list of functions, which are all called in turn.
+
+- =:htmlized-source= :: Non-=nil= means, publish an htmlized version of the source.
+
+The function must accept three arguments: a property list containing at least a =:publishing-directory= property, the name of the file to be published, and the path to the publishing directory of the output file. It should take the specified file, make the necessary transformation, if any, and place the result into the destination folder.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF155][(155)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If the publishing directory is the same as the source directory, ‘=file.org=' is exported as ‘=file.org.org=', so you probably do not want to do this.
+
+--------------
+
+Next: [[id:org--Publishing-options][Options for the exporters]], Previous: [[id:org--Selecting-files][Selecting files]], Up: [[id:org--Configuration][Configuration]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

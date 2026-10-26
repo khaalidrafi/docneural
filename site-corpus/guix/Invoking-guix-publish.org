@@ -1,0 +1,181 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-publish
+:END:
+#+filetags: :guix:
+#+title: Invoking guix publish
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-publish>>
+Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.11 Invoking =guix publish= [[#Invoking-guix-publish-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-publish-1
+:CLASS: section
+:END:
+The purpose of =guix publish= is to enable users to easily share their store with others, who can then use it as a substitute server (see [[id:guix--Substitutes][Substitutes]]).
+
+When =guix publish= runs, it spawns an HTTP server which allows anyone with network access to obtain substitutes from it. This means that any machine running Guix can also act as if it were a build farm, since the HTTP interface is compatible with Cuirass, the software behind the =bordeaux.guix.gnu.org= build farm.
+
+For security, each substitute is signed, allowing recipients to check their authenticity and integrity (see [[id:guix--Substitutes][Substitutes]]). Because =guix publish= uses the signing key of the system, which is only readable by the system administrator, it must be started as root; the =--user= option makes it drop root privileges early on.
+
+The signing key pair must be generated before =guix publish= is launched, using =guix archive --generate-key= (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]).
+
+When the =--advertise= option is passed, the server advertises its availability on the local network using multicast DNS (mDNS) and DNS service discovery (DNS-SD), currently /via/ Guile-Avahi (see [[https://doc.guix.gnu.org/guile-avahi/latest/en/html_node/index.html#Top][Using Avahi in Guile Scheme Programs]]).
+
+The general syntax is:
+
+#+begin_example
+guix publish options...
+#+end_example
+
+Running =guix publish= without any additional arguments will spawn an HTTP server on port 8080:
+
+#+begin_example
+guix publish
+#+end_example
+
+=guix publish= can also be started following the systemd “socket activation” protocol (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
+
+Once a publishing server has been authorized, the daemon may download substitutes from it. See [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]].
+
+By default, =guix publish= compresses archives on the fly as it serves them. This “on-the-fly” mode is convenient in that it requires no setup and is immediately available. However, when serving lots of clients, we recommend using the =--cache= option, which enables caching of the archives before they are sent to clients---see below for details. The =guix weather= command provides a handy way to check what a server provides (see [[id:guix--Invoking-guix-weather][Invoking =guix weather=]]).
+
+As a bonus, =guix publish= also serves as a content-addressed mirror for source files referenced in =origin= records (see [[id:guix--origin-Reference][=origin= Reference]]). For instance, assuming =guix publish= is running on =example.org=, the following URL returns the raw =hello-2.10.tar.gz= file with the given SHA256 hash (represented in =nix-base32= format, see [[id:guix--Invoking-guix-hash][Invoking =guix hash=]]):
+
+#+begin_example
+http://example.org/file/hello-2.10.tar.gz/sha256/0ssi1...ndq1i
+#+end_example
+
+Obviously, these URLs only work for files that are in the store; in other cases, they return 404 (“Not Found”).
+
+Build logs are available from =/log= URLs like:
+
+#+begin_example
+http://example.org/log/gwspk...-guile-2.2.3
+#+end_example
+
+When =guix-daemon= is configured to save compressed build logs, as is the case by default (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]), =/log= URLs return the compressed log as-is, with an appropriate =Content-Type= and/or =Content-Encoding= header. We recommend running =guix-daemon= with =--log-compression=gzip= since Web browsers can automatically decompress it, which is not the case with Bzip2 compression.
+
+The following options are available:
+
+- =--port===port=\\
+  =-p ==port= :: Listen for HTTP requests on =port=.
+
+- =--listen===host= :: Listen on the network interface for =host=. The default is to accept connections from any interface.
+
+- =--user===user=\\
+  =-u ==user= :: Change privileges to =user= as soon as possible---i.e., once the server socket is open and the signing key has been read.
+
+- =--compression[===method==[:==level==]]=\\
+  =-C [==method==[:==level==]]= :: Compress data using the given =method= and =level=. =method= is one of =lzip=, =zstd=, and =gzip=; when =method= is omitted, =gzip= is used.
+
+  When =level= is zero, disable compression. The range 1 to 9 corresponds to different compression levels: 1 is the fastest, and 9 is the best (CPU-intensive). The default is 3.
+
+  Usually, =lzip= compresses noticeably better than =gzip= for a small increase in CPU usage; see [[https://nongnu.org/lzip/lzip_benchmark.html][benchmarks on the lzip Web page]]. However, =lzip= achieves low decompression throughput (on the order of 50 MiB/s on modern hardware), which can be a bottleneck for someone who downloads over a fast network connection.
+
+  The compression ratio of =zstd= is between that of =lzip= and that of =gzip=; its main advantage is a [[https://facebook.github.io/zstd/][high decompression speed]].
+
+  Unless =--cache= is used, compression occurs on the fly and the compressed streams are not cached. Thus, to reduce load on the machine that runs =guix publish=, it may be a good idea to choose a low compression level, to run =guix publish= behind a caching proxy, or to use =--cache=. Using =--cache= has the advantage that it allows =guix publish= to add =Content-Length= HTTP header to its responses.
+
+  This option can be repeated, in which case every substitute gets compressed using all the selected methods, and all of them are advertised. This is useful when users may not support all the compression methods: they can select the one they support.
+
+- =--cache===directory=\\
+  =-c ==directory= :: Cache archives and meta-data (=.narinfo= URLs) to =directory= and only serve archives that are in cache.
+
+  When this option is omitted, archives and meta-data are created on-the-fly. This can reduce the available bandwidth, especially when compression is enabled, since this may become CPU-bound. Another drawback of the default mode is that the length of archives is not known in advance, so =guix publish= does not add a =Content-Length= HTTP header to its responses, which in turn prevents clients from knowing the amount of data being downloaded.
+
+  Conversely, when =--cache= is used, the first request for a store item (/via/ a =.narinfo= URL) triggers a background process to /bake/ the archive---computing its =.narinfo= and compressing the archive, if needed. Once the archive is cached in =directory=, subsequent requests succeed and are served directly from the cache, which guarantees that clients get the best possible bandwidth.
+
+  That first =.narinfo= request nonetheless returns 200, provided the requested store item is “small enough”, below the cache bypass threshold---see =--cache-bypass-threshold= below. That way, clients do not have to wait until the archive is baked. For larger store items, the first =.narinfo= request returns 404, meaning that clients have to wait until the archive is baked.
+
+  The “baking” process is performed by worker threads. By default, one thread per CPU core is created, but this can be customized. See =--workers= below.
+
+  When =--ttl= is used, cached entries are automatically deleted when they have expired.
+
+- =--workers===N= :: When =--cache= is used, request the allocation of =N= worker threads to “bake” archives.
+
+- =--ttl===ttl= :: Produce =Cache-Control= HTTP headers that advertise a time-to-live (TTL) of =ttl=. =ttl= must denote a duration: =5d= means 5 days, =1m= means 1 month, and so on.
+
+  This allows the user's Guix to keep substitute information in cache for =ttl=. However, note that =guix publish= does not itself guarantee that the store items it provides will indeed remain available for as long as =ttl=.
+
+  Additionally, when =--cache= is used, cached entries that have not been accessed for =ttl= and that no longer have a corresponding item in the store, may be deleted.
+
+- =--negative-ttl===ttl= :: Similarly produce =Cache-Control= HTTP headers to advertise the time-to-live (TTL) of /negative/ lookups---missing store items, for which the HTTP 404 code is returned. By default, no negative TTL is advertised.
+
+  This parameter can help adjust server load and substitute latency by instructing cooperating clients to be more or less patient when a store item is missing.
+
+- =--cache-bypass-threshold===size= :: When used in conjunction with =--cache=, store items smaller than =size= are immediately available, even when they are not yet in cache. =size= is a size in bytes, or it can be suffixed by =M= for megabytes and so on. The default is =10M=.
+
+  “Cache bypass” allows you to reduce the publication delay for clients at the expense of possibly additional I/O and CPU use on the server side: depending on the client access patterns, those store items can end up being baked several times until a copy is available in cache.
+
+  Increasing the threshold may be useful for sites that have few users, or to guarantee that users get substitutes even for store items that are not popular.
+
+- =--nar-path===path= :: Use =path= as the prefix for the URLs of “nar” files (see [[id:guix--Invoking-guix-archive][normalized archives]]).
+
+  By default, nars are served at a URL such as =/nar/gzip/…-coreutils-8.25=. This option allows you to change the =/nar= part to =path=.
+
+- =--public-key===file=\\
+  =--private-key===file= :: Use the specific =file=s as the public/private key pair used to sign the store items being published.
+
+  The files must correspond to the same key pair (the private key is used for signing and the public key is merely advertised in the signature metadata). They must contain keys in the canonical s-expression format as produced by =guix archive --generate-key= (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]). By default, =/etc/guix/signing-key.pub= and =/etc/guix/signing-key.sec= are used.
+
+- =--repl[===port==]=\\
+  =-r [==port==]= :: Spawn a Guile REPL server (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/REPL-Servers.html#REPL-Servers][REPL Servers]] in GNU Guile Reference Manual) on =port= (37146 by default). This is used primarily for debugging a running =guix publish= server.
+
+Enabling =guix publish= on Guix System is a one-liner: just instantiate a =guix-publish-service-type= service in the =services= field of the =operating-system= declaration (see [[id:guix--Base-Services::#guix_002dpublish_002dservice_002dtype][=guix-publish-service-type=]]).
+
+If you are instead running Guix on a “foreign distro”, follow these instructions:
+
+- If your host distro uses the systemd init system:
+
+  #+begin_example
+  # ln -s ~root/.guix-profile/lib/systemd/system/guix-publish.service \
+          /etc/systemd/system/
+  # systemctl start guix-publish && systemctl enable guix-publish
+#+end_example
+
+- If your host distro uses the Upstart init system:
+
+  #+begin_example
+  # ln -s ~root/.guix-profile/lib/upstart/system/guix-publish.conf /etc/init/
+  # start guix-publish
+#+end_example
+
+- Otherwise, proceed similarly with your distro's init system.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]], Previous: [[id:guix--Invoking-guix-graph][Invoking =guix graph=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

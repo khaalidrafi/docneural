@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID: emacs--Gnus
+:END:
+#+filetags: :emacs:
+#+title: Gnus
+
+Next: [[id:emacs--Host-Security][Host Security]]   Previous: [[id:emacs--Rmail][Reading Mail with Rmail]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Gnus>>
+** 36 Email and Usenet News with Gnus [[#Email-and-Usenet-News-with-Gnus][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Email-and-Usenet-News-with-Gnus
+:CLASS: chapter section-level-set-chapter
+:END:
+Gnus is an Emacs package primarily designed for reading and posting Usenet news. It can also be used to read and respond to messages from a number of other sources---email, remote directories, digests, and so on. Here we introduce Gnus and describe several basic features. For full details, see [[../gnus_html/index.html#Top][Gnus]] in The Gnus Manual.
+
+--------------

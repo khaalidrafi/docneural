@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: org--Captions
+:END:
+#+filetags: :org:
+#+title: Captions (The Org Manual)
+
+Next:
+
+<<Captions>>
+Next: [[id:org--Horizontal-Rules][Horizontal Rules]], Previous: [[id:org--Images-and-link-previews][Images and link previews]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.8 Captions [[#Captions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Captions-1
+:CLASS: section
+:END:
+You can assign a caption to a specific part of a document by inserting a ‘=CAPTION=' keyword immediately before it:
+
+#+begin_example
+#+CAPTION: This is the caption for the next table (or link)
+| ... | ... |
+|-----+-----|
+#+end_example
+
+Optionally, the caption can take the form:
+
+#+begin_example
+#+CAPTION[Short caption]: Longer caption.
+#+end_example
+
+Even though images and tables are prominent examples of captioned structures, the same caption mechanism can apply to many others---e.g., LaTeX equations, source code blocks. Depending on the export backend, those may or may not be handled.

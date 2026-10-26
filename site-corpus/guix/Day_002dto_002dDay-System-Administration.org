@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID: guix--Day_002dto_002dDay-System-Administration
+:END:
+#+filetags: :guix:
+#+title: Day-to-Day System Administration
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Day_002dto_002dDay-System-Administration>>
+Next: [[id:guix--On_002dSite-Intervention][On-Site Intervention]], Previous: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.20.3 Day-to-Day System Administration [[#Day_002dto_002dDay-System-Administration-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Day_002dto_002dDay-System-Administration-1
+:CLASS: subsection
+:END:
+We're also looking for people who'd be willing to have SSH access to some of the infrastructure to help with day-to-day maintenance: restarting a build, restarting the occasional service that has gone wild (that can happen), reconfiguring/upgrading a machine, rebooting, etc.
+
+This day-to-day activity requires you to be available some of the time (during office hours or not, during the week-end or not), whenever is convenient for you, so you can react to issues reported on IRC, on the mailing list, or elsewhere, and synchronize with other sysadmins.
+
+Prerequisite: Being a “known” member of the community, familiarity with Guix System administration, with some of the services/web sites being run, and with the infrastructure handbook:
+
+[[https://codeberg.org/guix/maintenance.git/src/branch/master/doc/infra-handbook.org][Infra-Handbook]]

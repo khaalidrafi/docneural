@@ -1,0 +1,115 @@
+:PROPERTIES:
+:ID: guix--The-Store
+:END:
+#+filetags: :guix:
+#+title: The Store
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<The-Store>>
+Next: [[id:guix--Derivations][Derivations]], Previous: [[id:guix--Search-Paths][Search Paths]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.9 The Store [[#The-Store-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Store-1
+:CLASS: section
+:END:
+Conceptually, the /store/ is the place where derivations that have been built successfully are stored---by default, =/gnu/store=. Sub-directories in the store are referred to as /store items/ or sometimes /store paths/. The store has an associated database that contains information such as the store paths referred to by each store path, and the list of /valid/ store items---results of successful builds. This database resides in =localstatedir==/guix/db=, where =localstatedir= is the state directory specified /via/ =--localstatedir= at configure time, usually =/var=.
+
+The store is /always/ accessed by the daemon on behalf of its clients (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]). To manipulate the store, clients connect to the daemon over a Unix-domain socket, send requests to it, and read the result---these are remote procedure calls, or RPCs.
+
+#+begin_quote
+*Note:* Users must /never/ modify files under =/gnu/store= directly. This would lead to inconsistencies and break the immutability assumptions of Guix's functional model (see [[id:guix--Introduction][Introduction]]).
+
+See [[id:guix--Invoking-guix-gc][=guix gc --verify=]], for information on how to check the integrity of the store and attempt recovery from accidental modifications.
+
+#+end_quote
+
+The =(guix store)= module provides procedures to connect to the daemon, and to perform RPCs. These are described below. By default, =open-connection=, and thus all the =guix= commands, connect to the local daemon or to the URI specified by the =GUIX_DAEMON_SOCKET= environment variable.
+
+- Environment Variable: *GUIX_DAEMON_SOCKET* [[#index-GUIX_005fDAEMON_005fSOCKET][¶]] :: When set, the value of this variable should be a file name or a URI designating the daemon endpoint. When it is a file name, it denotes a Unix-domain socket to connect to. In addition to file names, the supported URI schemes are:
+
+  - =file=\\
+    =unix= :: These are for Unix-domain sockets. =file:///var/guix/daemon-socket/socket= is equivalent to =/var/guix/daemon-socket/socket=.
+
+  -  <<index-daemon_002c-remote-access-1>>=guix= [[#index-daemon_002c-remote-access-1][¶]] :: These URIs denote connections over TCP/IP, without encryption nor authentication of the remote host. The URI must specify the host name and optionally a port number (by default port 44146 is used):
+
+    #+begin_example
+    guix://master.guix.example.org:1234
+#+end_example
+
+    This setup is suitable on local networks, such as clusters, where only trusted nodes may connect to the build daemon at =master.guix.example.org=.
+
+    The =--listen= option of =guix-daemon= can be used to instruct it to listen for TCP connections (see [[id:guix--Invoking-guix_002ddaemon][=--listen=]]).
+
+  - <<index-SSH-access-to-build-daemons>>=ssh= [[#index-SSH-access-to-build-daemons][¶]] :: These URIs allow you to connect to a remote daemon over SSH. This feature requires Guile-SSH (see [[id:guix--Requirements][Requirements]]) and a working =guile= binary in =PATH= on the destination machine. It supports public key and GSSAPI authentication. A typical URL might look like this:
+
+    #+begin_example
+    ssh://charlie@guix.example.org:22
+#+end_example
+
+    As for =guix copy=, the usual OpenSSH client configuration files are honored (see [[id:guix--Invoking-guix-copy][Invoking =guix copy=]]).
+
+  Additional URI schemes may be supported in the future.
+
+  #+begin_quote
+  *Note:* The ability to connect to remote build daemons is considered experimental as of ad54bd5. Please get in touch with us to share any problems or suggestions you may have (see [[id:guix--Contributing][Contributing]]).
+
+  #+end_quote
+
+- Procedure: *open-connection* =[uri] [#:reserve-space? #t]= [[#index-open_002dconnection][¶]] :: Connect to the daemon over the Unix-domain socket at =uri= (a string). When =reserve-space?= is true, instruct it to reserve a little bit of extra space on the file system so that the garbage collector can still operate should the disk become full. Return a server object.
+
+  =file= defaults to =%default-socket-path=, which is the normal location given the options that were passed to =configure=.
+
+- Procedure: *close-connection* =server= [[#index-close_002dconnection][¶]] :: Close the connection to =server=.
+
+- Variable: *current-build-output-port* [[#index-current_002dbuild_002doutput_002dport][¶]] :: This variable is bound to a SRFI-39 parameter, which refers to the port where build and error logs sent by the daemon should be written.
+
+Procedures that make RPCs all take a server object as their first argument.
+
+- Procedure: *valid-path?* =server path= [[#index-valid_002dpath_003f][¶]] :: Return =#t= when =path= designates a valid store item and =#f= otherwise (an invalid item may exist on disk but still be invalid, for instance because it is the result of an aborted or failed build).
+
+  A =&store-protocol-error= condition is raised if =path= is not prefixed by the store directory (=/gnu/store=).
+
+- Procedure: *add-text-to-store* =server name text [references]= [[#index-add_002dtext_002dto_002dstore][¶]] :: Add =text= under file =name= in the store, and return its store path. =references= is the list of store paths referred to by the resulting store path.
+
+- Procedure: *build-derivations* =store derivations [mode]= [[#index-build_002dderivations][¶]] :: Build =derivations=, a list of =<derivation>= objects, =.drv= file names, or derivation/output pairs, using the specified =mode=---=(build-mode normal)= by default.
+
+Note that the =(guix monads)= module provides a monad as well as monadic versions of the above procedures, with the goal of making it more convenient to work with code that accesses the store (see [[id:guix--The-Store-Monad][The Store Monad]]).
+
+/This section is currently incomplete./
+
+--------------
+
+Next: [[id:guix--Derivations][Derivations]], Previous: [[id:guix--Search-Paths][Search Paths]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

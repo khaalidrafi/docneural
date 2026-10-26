@@ -1,0 +1,215 @@
+:PROPERTIES:
+:ID: guix--Sound-Services
+:END:
+#+filetags: :guix:
+#+title: Sound Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Sound-Services>>
+Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.11 Sound Services [[#Sound-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sound-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services sound)= module provides a service to configure the Advanced Linux Sound Architecture (ALSA) system, which makes PulseAudio the preferred ALSA output driver.
+
+- Variable: *alsa-service-type* [[#index-alsa_002dservice_002dtype][¶]] :: This is the type for the [[https://alsa-project.org/][Advanced Linux Sound Architecture]] (ALSA) system, which generates the =/etc/asound.conf= configuration file. The value for this type is a =alsa-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service alsa-service-type)
+  #+end_src
+
+  See below for details about =alsa-configuration=.
+
+- Data Type: *alsa-pcm-configuration* [[#index-alsa_002dpcm_002dconfiguration][¶]] :: Data type representing an ALSA =pcm= block.
+
+  - =alsa-pcm-configuration-type= (type: symbol) :: The type of the PCM (if not builtin to alsa, should be introduced via a “pcm_type” block).
+
+  - =alsa-pcm-configuration-hint= (type: maybe-string) :: A human-readable description of the PCM.
+
+  - =alsa-pcm-configuration-configuration= (type: list-of-string) :: Raw additional configuration. Each item will be printed on a separate line.
+
+- Data Type: *alsa-ctl-configuration* [[#index-alsa_002dctl_002dconfiguration][¶]] :: Data type representing an ALSA =ctl= block.
+
+  - =alsa-pcm-configuration-type= (type: symbol) :: The type of the ctl (if not builtin to alsa, should be introduced via a “ctl_type” block).
+
+  - =alsa-pcm-configuration-configuration= (type: list-of-string) :: Raw additional configuration. Each item will be printed on a separate line.
+
+- Data Type: *alsa-configuration* [[#index-alsa_002dconfiguration][¶]] :: Data type representing the configuration for =alsa-service=.
+
+  - =default-pcm= (default: #f) :: The configuration to use for the default =pcm=.
+
+  - =default-ctl= (default: #f) :: The configuration to use for the default =ctl=.
+
+  - =options= (default: '()) (type: list-of-strings) :: Additional configuration strings to append to the =/etc/asound.conf= file.
+
+Individual users who want to override the system configuration of ALSA can do it with the =~/.asoundrc= file:
+
+#+begin_example
+# In guix, we have to specify the absolute path for plugins.
+pcm_type.jack {
+  lib "/home/alice/.guix-profile/lib/alsa-lib/libasound_module_pcm_jack.so"
+}
+
+# Routing ALSA to jack:
+# <http://jackaudio.org/faq/routing_alsa.html>.
+pcm.rawjack {
+  type jack
+  playback_ports {
+    0 system:playback_1
+    1 system:playback_2
+  }
+
+  capture_ports {
+    0 system:capture_1
+    1 system:capture_2
+  }
+}
+
+pcm.!default {
+  type plug
+  slave {
+    pcm "rawjack"
+  }
+}
+#+end_example
+
+See [[https://www.alsa-project.org/main/index.php/Asoundrc]] for the details.
+
+Services can likewise extend alsa-service-type to add options and configure the default PCM and CTL. One service, which transparently extends alsa-service-type to make use of the [[https://www.pulseaudio.org/][PulseAudio]] sound server, is the pulseaudio-service-type, shown below.
+
+- Variable: *pulseaudio-service-type* [[#index-pulseaudio_002dservice_002dtype][¶]] :: This is the type for the [[https://www.pulseaudio.org/][PulseAudio]] sound server. It exists to allow system overrides of the default settings via =pulseaudio-configuration=, see below.
+
+  #+begin_quote
+  *Warning:* This service overrides per-user configuration files. If you want PulseAudio to honor configuration files in =~/.config/pulse=, you have to unset the environment variables =PULSE_CONFIG= and =PULSE_CLIENTCONFIG= in your =~/.bash_profile=.
+
+  #+end_quote
+
+  #+begin_quote
+  *Warning:* This service on its own does not ensure, that the =pulseaudio= package exists on your machine. It merely adds configuration files for it, as detailed below. In the (admittedly unlikely) case, that you find yourself without a =pulseaudio= package, consider enabling it through the =alsa-service-type= above.
+
+  #+end_quote
+
+- Data Type: *pulseaudio-configuration* [[#index-pulseaudio_002dconfiguration][¶]] :: Data type representing the configuration for =pulseaudio-service=.
+
+  - =client-conf= (default: ='()=) :: List of settings to set in =client.conf=. Accepts a list of strings or symbol-value pairs. A string will be inserted as-is with a newline added. A pair will be formatted as “key = value”, again with a newline added.
+
+  - =daemon-conf= (default: ='((flat-volumes . no))=) :: List of settings to set in =daemon.conf=, formatted just like =client-conf=.
+
+  - =script-file= (default: =(file-append pulseaudio "/etc/pulse/default.pa")=) :: Script file to use as =default.pa=. In case the =extra-script-files= field below is used, an =.include= directive pointing to =/etc/pulse/default.pa.d= is appended to the provided script.
+
+  - =extra-script-files= (default: ='()=) :: A list of file-like objects defining extra PulseAudio scripts to run at the initialization of the =pulseaudio= daemon, after the main =script-file=. The scripts are deployed to the =/etc/pulse/default.pa.d= directory; they should have the ‘=.pa=' file name extension. For a reference of the available commands, refer to =man pulse-cli-syntax=.
+
+  - =system-script-file= (default: =(file-append pulseaudio "/etc/pulse/system.pa")=) :: Script file to use as =system.pa=.
+
+  - =alsa-lib= :: The alsa-lib package to use for defining the “pulse” pcm_type and ctl_type.
+
+  The example below sets the default PulseAudio card profile, the default sink and the default source to use for a old SoundBlaster Audigy sound card:
+
+  #+begin_src lisp
+  (pulseaudio-configuration
+   (extra-script-files
+    (list (plain-file "audigy.pa"
+                      (string-append "\
+  set-card-profile alsa_card.pci-0000_01_01.0 \
+    output:analog-surround-40+input:analog-mono
+  set-default-source alsa_input.pci-0000_01_01.0.analog-mono
+  set-default-sink alsa_output.pci-0000_01_01.0.analog-surround-40\n")))))
+  #+end_src
+
+  Note that =pulseaudio-service-type= is part of =%desktop-services=; if your operating system declaration was derived from one of the desktop templates, you'll want to adjust the above example to modify the existing =pulseaudio-service-type= via =modify-services= (see [[id:guix--Service-Reference][=modify-services=]]), instead of defining a new one.
+
+- Variable: *ladspa-service-type* [[#index-ladspa_002dservice_002dtype][¶]] :: This service sets the =LADSPA_PATH= variable, so that programs, which respect it, e.g. PulseAudio, can load LADSPA plugins.
+
+  The following example will setup the service to enable modules from the =swh-plugins= package:
+
+  #+begin_src lisp
+  (service ladspa-service-type
+           (ladspa-configuration (plugins (list swh-plugins))))
+  #+end_src
+
+  See [[http://plugin.org.uk/ladspa-swh/docs/ladspa-swh.html]] for the details.
+
+**** ALSA Volume Persistence Service [[#ALSA-Volume-Persistence-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ALSA-Volume-Persistence-Service
+:CLASS: subsubheading
+:END:
+ALSA requires a custom service to persist volume levels across reboots.
+
+- Variable: *alsa-persistence-service-type* [[#index-alsa_002dpersistence_002dservice_002dtype][¶]] :: The =alsa-persistence-service-type= service reads =/var/lib/alsa/asound.state= on boot and writes updated values on shutdown.
+
+  This service is only required when using ALSA directly, it is not required when using PipeWire or PulseAudio. The service can be enabled as follows:
+
+  #+begin_src lisp
+  (service alsa-persistence-service-type)
+  #+end_src
+
+**** Speaker Safety Daemon System Service [[#Speaker-Safety-Daemon-System-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Speaker-Safety-Daemon-System-Service
+:CLASS: subsubheading
+:END:
+[[https://github.com/AsahiLinux/speakersafetyd][Speaker Safety Daemon]] is a user-space daemon that implements an analogue of the Texas Instruments Smart Amp speaker protection model. It can be used to protect the speakers on Apple Silicon devices.
+
+- Variable: *speakersafetyd-service-type* [[#index-speakersafetyd_002dservice_002dtype][¶]] :: This is the type for the =speakersafetyd= system service, whose value is a =speakersafetyd-configuration= record.
+
+  #+begin_src lisp
+  (service speakersafetyd-service-type)
+  #+end_src
+
+  See below for details about =speakersafetyd-configuration=.
+
+- Data Type: *speakersafetyd-configuration* [[#index-speakersafetyd_002dconfiguration][¶]] :: Available =speakersafetyd-configuration= fields are:
+
+  - =blackbox-directory= (default: ="/var/lib/speakersafetyd/blackbox"=) (type: string) :: The directory to which blackbox files are written when the speakers are getting too hot. The blackbox files contain audio and debug information which the developers of =speakersafetyd= might ask for when reporting bugs.
+
+  - =configuration-directory= (type: file-like) :: The base directory as a G-expression (see [[id:guix--G_002dExpressions][G-Expressions]]) that contains the configuration files of the speaker models.
+
+  - =group= (default: ="speakersafetyd"=) (type: string) :: The group to run the Speaker Safety Daemon as.
+
+  - =log-file= (default: ="/var/log/speakersafetyd.log"=) (type: string) :: The file name to the Speaker Safety Daemon log file.
+
+  - =maximum-gain-reduction= (default: =7=) (type: integer) :: Maximum gain reduction before panicking, useful for debugging.
+
+  - =speakersafetyd= (default: =speakersafetyd=) (type: file-like) :: The Speaker Safety Daemon package to use.
+
+  - =user= (default: ="speakersafetyd"=) (type: string) :: The user to run the Speaker Safety Daemon as.
+
+--------------
+
+Next: [[id:guix--File-Search-Services][File Search Services]], Previous: [[id:guix--Desktop-Services][Desktop Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

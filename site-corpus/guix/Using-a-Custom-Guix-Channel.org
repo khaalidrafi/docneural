@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID: guix--Using-a-Custom-Guix-Channel
+:END:
+#+filetags: :guix:
+#+title: Using a Custom Guix Channel
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Using-a-Custom-Guix-Channel>>
+Next: [[id:guix--Replicating-Guix][Replicating Guix]], Previous: [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 6.2 Using a Custom Guix Channel [[#Using-a-Custom-Guix-Channel-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-a-Custom-Guix-Channel-1
+:CLASS: section
+:END:
+The channel called =guix= specifies where Guix itself---its command-line tools as well as its package collection---should be downloaded. For instance, suppose you want to update from another copy of the Guix repository at =example.org=, and specifically the =super-hacks= branch, you can write in =~/.config/guix/channels.scm= this specification:
+
+#+begin_src lisp
+;; Tell 'guix pull' to use another repo.
+(list (channel
+        (name 'guix)
+        (url "https://example.org/another-guix.git")
+        (branch "super-hacks")))
+#+end_src
+
+From there on, =guix pull= will fetch code from the =super-hacks= branch of the repository at =example.org=. The authentication concern is addressed below (see [[id:guix--Channel-Authentication][Channel Authentication]]).
+
+Note that you can specify a local directory on the =url= field above if the channel that you intend to use resides on a local file system. However, in this case =guix= checks said directory for ownership before any further processing. This means that if the user is not the directory owner, but wants to use it as their default, they will then need to set it as a safe directory in their global git configuration file. Otherwise, =guix= will refuse to even read it. Supposing your system-wide local directory is at =/src/guix.git=, you would then create a git configuration file at =~/.gitconfig= with the following contents:
+
+#+begin_example
+[safe]
+        directory = /src/guix.git
+#+end_example
+
+This also applies to the root user unless when called with =sudo= by the directory owner.
+
+--------------
+
+Next: [[id:guix--Replicating-Guix][Replicating Guix]], Previous: [[id:guix--Specifying-Additional-Channels][Specifying Additional Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

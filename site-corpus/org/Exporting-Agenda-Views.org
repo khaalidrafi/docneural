@@ -1,0 +1,134 @@
+:PROPERTIES:
+:ID: org--Exporting-Agenda-Views
+:END:
+#+filetags: :org:
+#+title: Exporting Agenda Views (The Org Manual)
+
+Next:
+
+<<Exporting-Agenda-Views>>
+Next: [[id:org--Agenda-Column-View][Using Column View in the Agenda]], Previous: [[id:org--Custom-Agenda-Views][Custom Agenda Views]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 11.7 Exporting Agenda Views [[#Exporting-Agenda-Views-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Exporting-Agenda-Views-1
+:CLASS: section
+:END:
+If you are away from your computer, it can be very useful to have a printed version of some agenda views to carry around. Org mode can export custom agenda views as plain text, HTML[[#FOOT105][^{105}]], Postscript, PDF[[#FOOT106][^{106}]], and iCalendar files. If you want to do this only occasionally, use the following command:
+
+-  <<index-C_002dx-C_002dw>>C-x C-w (=org-agenda-write=) [[#index-C_002dx-C_002dw][¶]] :: 
+
+  Write the agenda view to a file.
+
+If you need to export certain agenda views frequently, you can associate any custom agenda command with a list of output file names[[#FOOT107][^{107}]]. Here is an example that first defines custom commands for the agenda and the global TODO list, together with a number of files to which to export them. Then we define two block agenda commands and specify file names for them as well. File names can be relative to the current working directory, or absolute.
+
+#+begin_src lisp-preformatted
+(setq org-agenda-custom-commands
+      '(("X" agenda "" nil ("agenda.html" "agenda.ps"))
+        ("Y" alltodo "" nil ("todo.html" "todo.txt" "todo.ps"))
+        ("h" "Agenda and Home-related tasks"
+         ((agenda "")
+          (tags-todo "home")
+          (tags "garden"))
+         nil
+         ("~/views/home.html"))
+        ("o" "Agenda and Office-related tasks"
+         ((agenda)
+          (tags-todo "work")
+          (tags "office"))
+         nil
+         ("~/views/office.ps" "~/calendars/office.ics"))))
+#+end_src
+
+The extension of the file name determines the type of export. If it is ‘=.html=', Org mode uses the htmlize package to convert the buffer to HTML and save it to this file name. If the extension is ‘=.ps=', =ps-print-buffer-with-faces= is used to produce Postscript output. If the extension is ‘=.ics=', iCalendar export is run export over all files that were used to construct the agenda, and limit the export to entries listed in the agenda. Any other extension produces a plain ASCII file.
+
+The export files are /not/ created when you use one of those commands interactively because this might use too much overhead. Instead, there is a special command to produce /all/ specified files in one step:
+
+-  <<index-e-_0028Agenda-dispatcher_0029>>e (=org-store-agenda-views=) [[#index-e-_0028Agenda-dispatcher_0029][¶]] :: Export all agenda views that have export file names associated with them.
+
+You can use the options section of the custom agenda commands to also set options for the export commands. For example:
+
+#+begin_src lisp-preformatted
+(setq org-agenda-custom-commands
+      '(("X" agenda ""
+         ((ps-number-of-columns 2)
+          (ps-landscape-mode t)
+          (org-agenda-prefix-format " [ ] ")
+          (org-agenda-with-colors nil)
+          (org-agenda-remove-tags t))
+         ("theagenda.ps"))))
+#+end_src
+
+This command sets two options for the Postscript exporter, to make it print in two columns in landscape format---the resulting page can be cut in two and then used in a paper agenda. The remaining settings modify the agenda prefix to omit category and scheduling information, and instead include a checkbox to check off items. We also remove the tags to make the lines compact, and we do not want to use colors for the black-and-white printer. Settings specified in =org-agenda-exporter-settings= also apply, e.g.,
+
+#+begin_src lisp-preformatted
+(setq org-agenda-exporter-settings
+      '((ps-number-of-columns 2)
+        (ps-landscape-mode t)
+        (org-agenda-add-entry-text-maxlines 5)
+        (htmlize-output-type 'css)))
+#+end_src
+
+but the settings in =org-agenda-custom-commands= take precedence.
+
+From the command line you may also use:
+
+#+begin_example
+emacs -eval (org-batch-store-agenda-views) -kill
+#+end_example
+
+or, if you need to modify some parameters[[#FOOT108][^{108}]]
+
+#+begin_example
+emacs -eval '(org-batch-store-agenda-views                      \
+              org-agenda-span (quote month)                     \
+              org-agenda-start-day "2007-11-01"                 \
+              org-agenda-include-diary nil                      \
+              org-agenda-files (quote ("~/org/project.org")))'  \
+      -kill
+#+end_example
+
+which creates the agenda views restricted to the file ‘=~/org/project.org=', without diary entries and with a 30-day extent.
+
+You can also extract agenda information in a way that allows further processing by other programs. See [[id:org--Extracting-Agenda-Information][Extracting Agenda Information]], for more information.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF105][(105)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+For HTML you need to install Hrvoje Nikšić's ‘=htmlize.el=' as an Emacs package from [[https://elpa.nongnu.org/][NonGNU ELPA]] or from [[https://github.com/hniksic/emacs-htmlize][Hrvoje Nikšić's repository]].
+
+***** [[#DOCF106][(106)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+To create PDF output, the Ghostscript ps2pdf utility must be installed on the system. Selecting a PDF file also creates the postscript file.
+
+***** [[#DOCF107][(107)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+If you want to store standard views like the weekly agenda or the global TODO list as well, you need to define custom commands for them in order to be able to specify file names.
+
+***** [[#DOCF108][(108)]]
+:PROPERTIES:
+:CUSTOM_ID: section-3
+:CLASS: footnote-body-heading
+:END:
+Quoting depends on the system you use, please check the FAQ for examples.
+
+--------------
+
+Next: [[id:org--Agenda-Column-View][Using Column View in the Agenda]], Previous: [[id:org--Custom-Agenda-Views][Custom Agenda Views]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--ODT-specific-export-settings
+:END:
+#+filetags: :org:
+#+title: ODT specific export settings (The Org Manual)
+
+Next:
+
+<<ODT-specific-export-settings>>
+Next: [[id:org--Extending-ODT-export][Extending ODT export]], Previous: [[id:org--ODT-export-commands][ODT export commands]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.3 ODT specific export settings [[#ODT-specific-export-settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: ODT-specific-export-settings-1
+:CLASS: subsection
+:END:
+The ODT export backend has several additional keywords for customizing ODT output. Setting these keywords works similar to the general options (see [[id:org--Export-Settings][Export Settings]]).
+
+- <<index-DESCRIPTION_002c-keyword-3>>‘=DESCRIPTION=' [[#index-DESCRIPTION_002c-keyword-3][¶]] :: This is the document's description, which the ODT export backend inserts as document metadata. For long descriptions, use multiple lines, prefixed with ‘=DESCRIPTION='.
+
+- <<index-KEYWORDS_002c-keyword-3>>‘=KEYWORDS=' [[#index-KEYWORDS_002c-keyword-3][¶]] :: The keywords for the document. The ODT export backend inserts the description along with author name, keywords, and related file metadata as metadata in the output file. Use multiple ‘=KEYWORDS=' if necessary.
+
+-  <<index-ODT_005fSTYLES_005fFILE_002c-keyword>>‘=ODT_STYLES_FILE=' [[#index-ODT_005fSTYLES_005fFILE_002c-keyword][¶]] :: The ODT export backend uses the =org-odt-styles-file= by default. See [[id:org--Applying-custom-styles][Applying custom styles]] for details.
+
+- <<index-SUBTITLE_002c-keyword-4>>‘=SUBTITLE=' [[#index-SUBTITLE_002c-keyword-4][¶]] :: The document subtitle.
+
+--------------
+
+Next: [[id:org--Extending-ODT-export][Extending ODT export]], Previous: [[id:org--ODT-export-commands][ODT export commands]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

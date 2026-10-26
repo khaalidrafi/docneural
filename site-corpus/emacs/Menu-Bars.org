@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Menu-Bars
+:END:
+#+filetags: :emacs:
+#+title: Menu Bars
+
+Next: [[id:emacs--Tool-Bars][Tool Bars]]   Previous: [[id:emacs--Drag-and-Drop][Drag and Drop]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
+
+<<Menu-Bars>>
+*** 23.15 Menu Bars [[#Menu-Bars-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Menu-Bars-1
+:CLASS: section
+:END:
+You can toggle the use of menu bars with M-x menu-bar-mode. With no argument, this command toggles Menu Bar mode, a global minor mode. With an argument, the command turns Menu Bar mode on if the argument is positive, off if the argument is not positive. To control the use of menu bars at startup, customize the variable =menu-bar-mode=.
+
+Expert users often turn off the menu bar, especially on text terminals, where this makes one additional line available for text. If the menu bar is off, you can still pop up a menu of its contents with C-mouse-3 on a display which supports pop-up menus. Or you can enable =context-menu-mode= and customize the variable =context-menu-functions= to pop up a context menu with mouse-3. See [[id:emacs--Menu-Mouse-Clicks][Mouse Clicks for Menus]].
+
+See [[id:emacs--Menu-Bar][The Menu Bar]], for information on how to invoke commands with the menu bar. See [[id:emacs--X-Resources][X Options and Resources]], for how to customize the menu bar menus' visual appearance.
+
+--------------

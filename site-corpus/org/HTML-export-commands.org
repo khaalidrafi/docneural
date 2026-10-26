@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: org--HTML-export-commands
+:END:
+#+filetags: :org:
+#+title: HTML export commands (The Org Manual)
+
+Next:
+
+<<HTML-export-commands>>
+Next: [[id:org--HTML-specific-export-settings][HTML specific export settings]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.1 HTML export commands [[#HTML-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: HTML-export-commands-1
+:CLASS: subsection
+:END:
+-  <<index-C_002dc-C_002de-h-h>>C-c C-e h h (=org-html-export-to-html=) [[#index-C_002dc-C_002de-h-h][¶]] :: Export as HTML file with a ‘=.html=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.html=', overwriting without warning. C-c C-e h o exports to HTML and opens it in a web browser.
+
+-  <<index-C_002dc-C_002de-h-H>>C-c C-e h H (=org-html-export-as-html=) [[#index-C_002dc-C_002de-h-H][¶]] :: Exports to a temporary buffer. Does not create a file.

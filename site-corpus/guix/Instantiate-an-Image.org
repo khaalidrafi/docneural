@@ -1,0 +1,173 @@
+:PROPERTIES:
+:ID: guix--Instantiate-an-Image
+:END:
+#+filetags: :guix:
+#+title: Instantiate an Image
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Instantiate-an-Image>>
+Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 16.2 Instantiate an Image [[#Instantiate-an-Image-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Instantiate-an-Image-1
+:CLASS: section
+:END:
+Let's say you would like to create an MBR image with three distinct partitions:
+
+- The ESP (EFI System Partition), a partition of 40 MiB at offset 1024 KiB with a vfat file system.
+- an ext4 partition of 50 MiB data file, and labeled “data”.
+- an ext4 bootable partition containing the =%simple-os= operating-system.
+
+You would then write the following image definition in a =my-image.scm= file for instance.
+
+#+begin_src lisp
+(use-modules (gnu)
+             (gnu image)
+             (gnu tests)
+             (gnu system image)
+             (guix gexp))
+
+(define MiB (expt 2 20))
+
+(image
+ (format 'disk-image)
+ (operating-system %simple-os)
+ (partitions
+  (list
+   (partition
+    (size (* 40 MiB))
+    (offset (* 1024 1024))
+    (label "GNU-ESP")
+    (file-system "vfat")
+    (flags '(esp))
+    (initializer (gexp initialize-efi-partition)))
+   (partition
+    (size (* 50 MiB))
+    (label "DATA")
+    (file-system "ext4")
+    (initializer #~(lambda* (root . rest)
+                     (mkdir root)
+                     (call-with-output-file
+                         (string-append root "/data")
+                       (lambda (port)
+                         (format port "my-data"))))))
+   (partition
+    (size 'guess)
+    (label root-label)
+    (file-system "ext4")
+    (flags '(boot))
+    (initializer (gexp initialize-root-partition))))))
+#+end_src
+
+Note that the first and third partitions use generic initializers procedures, initialize-efi-partition and initialize-root-partition respectively. The initialize-efi-partition installs a GRUB EFI loader that is loading the GRUB bootloader located in the root partition. The initialize-root-partition instantiates a complete system as defined by the =%simple-os= operating-system.
+
+You can now run:
+
+#+begin_example
+guix system image my-image.scm
+#+end_example
+
+to instantiate the =image= definition. That produces a disk image which has the expected structure:
+
+#+begin_example
+$ parted $(guix system image my-image.scm) print
+...
+Model:  (file)
+Disk /gnu/store/yhylv1bp5b2ypb97pd3bbhz6jk5nbhxw-disk-image: 1714MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  43.0MB  41.9MB  primary  fat16        esp
+ 2      43.0MB  95.4MB  52.4MB  primary  ext4
+ 3      95.4MB  1714MB  1619MB  primary  ext4         boot
+#+end_example
+
+The size of the =boot= partition has been inferred to =1619MB= so that it is large enough to host the =%simple-os= operating-system.
+
+You can also use existing =image= record definitions and inherit from them to simplify the =image= definition. The =(gnu system image)= module provides the following =image= definition variables.
+
+- Variable: *mbr-disk-image* [[#index-mbr_002ddisk_002dimage][¶]] :: An MBR disk-image composed of a single ROOT partition. The ROOT partition starts at a 1 MiB offset so that the bootloader can install itself in the post-MBR gap.
+
+- Variable: *mbr-hybrid-disk-image* [[#index-mbr_002dhybrid_002ddisk_002dimage][¶]] :: An MBR disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. The ESP partition starts at a 1 MiB offset so that a BIOS compatible bootloader can install itself in the post-MBR gap. The image can be used by =x86_64= and =i686= machines supporting only legacy BIOS booting. The ESP partition ensures that it can also be used by newer machines relying on UEFI booting, hence the /hybrid/ denomination.
+
+- Variable: *efi-disk-image* [[#index-efi_002ddisk_002dimage][¶]] :: A GPT disk-image composed of two partitions: a 64 bits ESP partition and a ROOT boot partition. This image can be used on most =x86_64= and =i686= machines, supporting BIOS or UEFI booting.
+
+- Variable: *efi32-disk-image* [[#index-efi32_002ddisk_002dimage][¶]] :: Same as =efi-disk-image= but with a 32 bits EFI partition.
+
+- Variable: *iso9660-image* [[#index-iso9660_002dimage][¶]] :: An ISO-9660 image composed of a single bootable partition. This image can also be used on most =x86_64= and =i686= machines.
+
+- Variable: *docker-image* [[#index-docker_002dimage][¶]] :: A Docker image that can be used to spawn a Docker container.
+
+Using the =efi-disk-image= we can simplify our previous =image= declaration this way:
+
+#+begin_src lisp
+(use-modules (gnu)
+             (gnu image)
+             (gnu tests)
+             (gnu system image)
+             (guix gexp)
+             (ice-9 match))
+
+(define MiB (expt 2 20))
+
+(define data
+  (partition
+   (size (* 50 MiB))
+   (label "DATA")
+   (file-system "ext4")
+   (initializer #~(lambda* (root . rest)
+                    (mkdir root)
+                    (call-with-output-file
+                        (string-append root "/data")
+                      (lambda (port)
+                        (format port "my-data")))))))
+
+(image
+ (inherit efi-disk-image)
+ (operating-system %simple-os)
+ (partitions
+  (match (image-partitions efi-disk-image)
+    ((esp root)
+     (list esp data root)))))
+#+end_src
+
+This will give the exact same =image= instantiation but the =image= declaration is simpler.
+
+--------------
+
+Next: [[id:guix--image_002dtype-Reference][image-type Reference]], Previous: [[id:guix--image-Reference][=image= Reference]], Up: [[id:guix--System-Images][Creating System Images]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

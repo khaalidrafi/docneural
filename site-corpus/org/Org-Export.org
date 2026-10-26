@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID: org--Org-Export
+:END:
+#+filetags: :org:
+#+title: Org Export (The Org Manual)
+
+Next:
+
+<<Org-Export>>
+Next: [[id:org--Texinfo-Export][Texinfo Export]], Previous: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.13 Org Export [[#Org-Export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-Export-1
+:CLASS: section
+:END:
+/org/ export backend creates a normalized version of the Org document in current buffer. The exporter evaluates Babel code (see [[id:org--Evaluating-Code-Blocks][Evaluating Code Blocks]]) and removes content specific to other backends.
+
+**** Org export commands [[#Org-export-commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-export-commands-1
+:CLASS: subheading
+:END:
+-  <<index-C_002dc-C_002de-O-o>>C-c C-e O o (=org-org-export-to-org=) [[#index-C_002dc-C_002de-O-o][¶]] :: Export as an Org file with a ‘=.org=' extension. For ‘=myfile.org=', Org exports to ‘=myfile.org.org=', overwriting without warning.
+
+- <<index-C_002dc-C_002de-O-v>>C-c C-e O v (~~) [[#index-C_002dc-C_002de-O-v][¶]] :: Export to an Org file, then open it.

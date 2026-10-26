@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Capture-and-Attachments
+:END:
+#+filetags: :org:
+#+title: Capture and Attachments (The Org Manual)
+
+Next:
+
+<<Capture-and-Attachments>>
+Next: [[id:org--Agenda-Views][Agenda Views]], Previous: [[id:org--Refiling-and-Archiving][Refiling and Archiving]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 10 Capture and Attachments [[#Capture-and-Attachments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Capture-and-Attachments-1
+:CLASS: chapter
+:END:
+An important part of any organization system is the ability to quickly capture new ideas and tasks, and to associate reference material with them. Org does this using a process called /capture/. It also can store files related to a task (/attachments/) in a special directory. Finally, it can parse RSS feeds for information. To learn how to let external programs (for example a web browser) trigger Org to capture material, see [[id:org--Protocols][Protocols for External Access]].
+
+- [[id:org--Capture][Capture]]
+- [[id:org--Attachments][Attachments]]
+- [[id:org--RSS-Feeds][RSS Feeds]]

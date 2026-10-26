@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID: org--Property-Searches
+:END:
+#+filetags: :org:
+#+title: Property Searches (The Org Manual)
+
+Next:
+
+<<Property-Searches>>
+Next: [[id:org--Property-Inheritance][Property Inheritance]], Previous: [[id:org--Special-Properties][Special Properties]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 7.3 Property Searches [[#Property-Searches-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Property-Searches-1
+:CLASS: section
+:END:
+To create sparse trees and special lists with selection based on properties, the same commands are used as for tag searches (see [[id:org--Tag-Searches][Tag Searches]]).
+
+-  <<index-C_002dc-_002f-m-1>>C-c / m or C-c \ (=org-match-sparse-tree=) [[#index-C_002dc-_002f-m-1][¶]] :: Create a sparse tree with all matching entries. With a C-u prefix argument, ignore headlines that are not a TODO line.
+
+-  <<index-m-_0028Agenda-dispatcher_0029-1>>M-x org-agenda m (=org-tags-view=) [[#index-m-_0028Agenda-dispatcher_0029-1][¶]] :: Create a global list of tag/property matches from all agenda files.
+
+- <<index-M-_0028Agenda-dispatcher_0029-1>>M-x org-agenda M (=org-tags-view=) [[#index-M-_0028Agenda-dispatcher_0029-1][¶]] :: Create a global list of tag matches from all agenda files, but check only TODO items.
+
+The syntax for the search string is described in [[id:org--Matching-tags-and-properties][Matching tags and properties]].
+
+There is also a special command for creating sparse trees based on a single property:
+
+- <<index-C_002dc-_002f-p>>C-c / p [[#index-C_002dc-_002f-p][¶]] :: Create a sparse tree based on the value of a property. This first prompts for the name of a property, and then for a value. A sparse tree is created with all entries that define this property with the given value. If you enclose the value in curly braces, it is interpreted as a regular expression and matched against the property values (see [[id:org--Regular-Expressions][Regular Expressions]]).
+
+--------------
+
+Next: [[id:org--Property-Inheritance][Property Inheritance]], Previous: [[id:org--Special-Properties][Special Properties]], Up: [[id:org--Properties-and-Columns][Properties and Columns]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

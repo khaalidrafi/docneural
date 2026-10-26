@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Rmail
+:END:
+#+filetags: :emacs:
+#+title: Rmail
+
+Next: [[id:emacs--Gnus][Email and Usenet News with Gnus]]   Previous: [[id:emacs--Sending-Mail][Sending Mail]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Rmail>>
+** 35 Reading Mail with Rmail [[#Reading-Mail-with-Rmail][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Reading-Mail-with-Rmail
+:CLASS: chapter
+:END:
+Rmail is an Emacs subsystem for reading and disposing of mail that you receive. Rmail stores mail messages in files called Rmail files. Reading the messages in an Rmail file is done in a special major mode, Rmail mode, which redefines most letters to run commands for managing mail.
+
+Emacs also comes with a much more sophisticated and flexible subsystem for reading mail, called Gnus. Gnus is a very large package, and is therefore described in its own manual, see [[../gnus_html/index.html#Top][The Gnus Newsreader]].
+
+--------------

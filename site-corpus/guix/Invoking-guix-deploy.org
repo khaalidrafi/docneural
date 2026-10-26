@@ -1,0 +1,270 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-deploy
+:END:
+#+filetags: :guix:
+#+title: Invoking guix deploy
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-deploy>>
+Next: [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], Previous: [[id:guix--Invoking-guix-system][Invoking =guix system=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.17 Invoking =guix deploy= [[#Invoking-guix-deploy-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-deploy-1
+:CLASS: section
+:END:
+We've already seen =operating-system= declarations used to manage a machine's configuration locally. Suppose you need to configure multiple machines, though---perhaps you're managing a service on the web that's comprised of several servers. =guix deploy= enables you to use those same =operating-system= declarations to manage multiple remote hosts at once as a logical “deployment”.
+
+#+begin_quote
+*Note:* The functionality described in this section is still under development and is subject to change. Get in touch with us on [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]]!
+
+#+end_quote
+
+#+begin_example
+guix deploy file
+#+end_example
+
+Such an invocation will deploy the machines that the code within =file= evaluates to. As an example, =file= might contain a definition like this:
+
+#+begin_src lisp
+;; This is a Guix deployment of a "bare bones" setup, with
+;; no X11 display server, to a machine with an SSH daemon
+;; listening on localhost:2222. A configuration such as this
+;; may be appropriate for virtual machine with ports
+;; forwarded to the host's loopback interface.
+
+(use-service-modules networking ssh)
+(use-package-modules bootloaders)
+
+(define %system
+  (operating-system
+   (host-name "gnu-deployed")
+   (timezone "Etc/UTC")
+   (bootloader (bootloader-configuration
+                (bootloader grub-bootloader)
+                (targets '("/dev/vda"))
+                (terminal-outputs '(console))))
+   (file-systems (cons (file-system
+                        (mount-point "/")
+                        (device "/dev/vda1")
+                        (type "ext4"))
+                       %base-file-systems))
+   (services
+    (append (list (service dhcpcd-service-type)
+                  (service openssh-service-type
+                           (openssh-configuration
+                            (permit-root-login #t)
+                            (allow-empty-passwords? #t))))
+            %base-services))))
+
+(list (machine
+       (operating-system %system)
+       (environment managed-host-environment-type)
+       (configuration (machine-ssh-configuration
+                       (host-name "localhost")
+                       (system "x86_64-linux")
+                       (user "alice")
+                       (identity "./id_rsa")
+                       (port 2222)))))
+#+end_src
+
+The file should evaluate to a list of =machine= objects. This example, upon being deployed, will create a new generation on the remote system realizing the =operating-system= declaration =%system=. =environment= and =configuration= specify how the machine should be provisioned---that is, how the computing resources should be created and managed. The above example does not create any resources, as a ='managed-host= is a machine that is already running the Guix system and available over the network. This is a particularly simple case; a more complex deployment may involve, for example, starting virtual machines through a Virtual Private Server (VPS) provider. In such a case, a different =environment= type would be used.
+
+Do note that you first need to generate a key pair on the coordinator machine to allow the daemon to export signed archives of files from the store (see [[id:guix--Invoking-guix-archive][Invoking =guix archive=]]), though this step is automatic on Guix System:
+
+#+begin_example
+# guix archive --generate-key
+#+end_example
+
+Each target machine must authorize the key of the master machine so that it accepts store items it receives from the coordinator:
+
+#+begin_example
+# guix archive --authorize < coordinator-public-key.txt
+#+end_example
+
+=user=, in this example, specifies the name of the user account to log in as to perform the deployment. Its default value is =root=, but root login over SSH may be forbidden in some cases. To work around this, =guix deploy= can log in as an unprivileged user and employ =sudo= to escalate privileges. This will only work if =sudo= is currently installed on the remote and can be invoked non-interactively as =user=. That is, the line in =sudoers= granting =user= the ability to use =sudo= must contain the =NOPASSWD= tag. This can be accomplished with the following operating system configuration snippet:
+
+#+begin_src lisp
+(use-modules ...
+             (gnu system))               ;for %sudoers-specification
+
+(define %user "username")
+
+(operating-system
+  ...
+  (sudoers-file
+     (plain-file "sudoers"
+                 (string-append (plain-file-content %sudoers-specification)
+                                (format #f "~a ALL = NOPASSWD: ALL~%"
+                                        %user)))))
+#+end_src
+
+For more information regarding the format of the =sudoers= file, consult =man sudoers=.
+
+Once you've deployed a system on a set of machines, you may find it useful to run a command on all of them. The =--execute= or =-x= option lets you do that; the example below runs =uname -a= on all the machines listed in the deployment file:
+
+#+begin_example
+guix deploy file -x -- uname -a
+#+end_example
+
+One thing you may often need to do after deployment is restart specific services on all the machines, which you can do like so:
+
+#+begin_example
+guix deploy file -x -- herd restart service
+#+end_example
+
+The =guix deploy -x= command returns zero if and only if the command succeeded on all the machines.
+
+You may also wish to roll back configurations on machines to a previous generation. You can do that using the =--roll-back= or =-r= option like so:
+
+#+begin_example
+guix deploy --roll-back file
+#+end_example
+
+Below are the data types you need to know about when writing a deployment file.
+
+- Data Type: *machine* [[#index-machine][¶]] :: This is the data type representing a single machine in a heterogeneous Guix deployment.
+
+  - =operating-system= :: The object of the operating system configuration to deploy.
+
+  - =environment= :: An =environment-type= describing how the machine should be provisioned.
+
+  - =configuration= (default: =#f=) :: An object describing the configuration for the machine's =environment=. If the =environment= has a default configuration, =#f= may be used. If =#f= is used for an environment with no default configuration, however, an error will be thrown.
+
+- Data Type: *machine-ssh-configuration* [[#index-machine_002dssh_002dconfiguration][¶]] :: This is the data type representing the SSH client parameters for a machine with an =environment= of =managed-host-environment-type=.
+
+  - =host-name=\\
+    =build-locally?= (default: =#t=) :: If false, system derivations will be built on the machine being deployed to. As a bonus, when false, one does not need the target machine to have the key of the deployment machine among its authorized keys and thus the =authorize?= field below can remain =#f=.
+
+  - =system= :: The system type describing the architecture of the machine being deployed to---e.g., ="x86_64-linux"=.
+
+  - =authorize?= (default: =#t=) :: If true, the coordinator's signing key will be added to the remote's ACL keyring (see [[id:guix--Invoking-guix-archive::#archive_002dauthorization][authorizing imports]]).
+
+  - =port= (default: =22=)\\
+    =user= (default: ="root"=)\\
+    =identity= (default: =#f=) :: If specified, the path to the SSH private key to use to authenticate with the remote host.
+
+  - =host-key= (default: =#f=) :: This should be the SSH host key of the machine, which looks like this:
+
+    #+begin_example
+    ssh-ed25519 AAAAC3Nz... root@example.org
+#+end_example
+
+    When =host-key= is =#f=, the server is authenticated against the =~/.ssh/known_hosts= file, just like the OpenSSH =ssh= client does.
+
+  - =allow-downgrades?= (default: =#f=) :: Whether to allow potential downgrades.
+
+    Like =guix system reconfigure=, =guix deploy= compares the channel commits currently deployed on the remote host (as returned by =guix system describe=) to those currently in use (as returned by =guix describe=) to determine whether commits currently in use are descendants of those deployed. When this is not the case and =allow-downgrades?= is false, it raises an error. This ensures you do not accidentally downgrade remote machines.
+
+  - =safety-checks?= (default: =#t=) :: Whether to perform “safety checks” before deployment. This includes verifying that devices and file systems referred to in the operating system configuration actually exist on the target machine, and making sure that Linux modules required to access storage devices at boot time are listed in the =initrd-modules= field of the operating system.
+
+    These safety checks ensure that you do not inadvertently deploy a system that would fail to boot. Be careful before turning them off!
+
+- Data Type: *digital-ocean-configuration* [[#index-digital_002docean_002dconfiguration][¶]] :: This is the data type describing the Droplet that should be created for a machine with an =environment= of =digital-ocean-environment-type=.
+
+  - =ssh-key= :: The path to the SSH private key to use to authenticate with the remote host. In the future, this field may not exist.
+
+  - =tags= :: A list of string “tags” that uniquely identify the machine. Must be given such that no two machines in the deployment have the same set of tags.
+
+  - =region= :: A Digital Ocean region slug, such as ="nyc3"=.
+
+  - =size= :: A Digital Ocean size slug, such as ="s-1vcpu-1gb"=
+
+  - =enable-ipv6?= :: Whether or not the droplet should be created with IPv6 networking.
+
+- Data Type: *hetzner-configuration* [[#index-hetzner_002dconfiguration][¶]] :: This is the data type describing the server that should be created for a machine with an =environment= of =hetzner-environment-type=. It allows you to configure deployment to a VPS (virtual private server) hosted by [[https://www.hetzner.com][Hetzner]].
+
+  - =allow-downgrades?= (default: =#f=) :: Whether to allow potential downgrades.
+
+  - =authorize?= (default: =#t=) :: If true, the public signing key ="/etc/guix/signing-key.pub"= of the machine that invokes =guix deploy= will be added to the operating system ACL keyring of the target machine.
+
+  - =build-locally?= (default: =#t=) :: If true, system derivations will be built on the machine that invokes =guix deploy=, otherwise derivations are build on the target machine. Set this to =#f= if the machine you are deploying from has a different architecture than the target machine and you can't build derivations for the target architecture by other means, like offloading (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]) or emulation (see [[id:guix--Virtualization-Services::#transparent_002demulation_002dqemu][Transparent Emulation with QEMU]]).
+
+  - =delete?= (default: =#t=) :: If true, the server will be deleted when an error happens in the provisioning phase. If false, the server will be kept in order to debug any issues.
+
+  - =ipv4= (default: =#t=)\\
+    =ipv6= (default: =#t=) :: When false, no public IP address is attached. Specify the name of an existing primary ip to attach it to the machine. Other values would create a new address automatically.
+
+  - =labels= (default: ='()=) :: A user defined alist of key/value pairs attached to the SSH key and the server on the Hetzner API. Keys and values must be strings, e.g. ='(("environment" . "development"))=. For more information, see [[https://docs.hetzner.cloud/#labels][Labels]].
+
+  - =location= (default: ="fsn1"=) :: The name of a [[https://docs.hetzner.com/cloud/general/locations][location]] to create the server in. For example, ="fsn1"= corresponds to the Hetzner site in Falkenstein, Germany, while ="sin"= corresponds to its site in Singapore.
+
+  - =server-type= (default: ="cx42"=) :: The name of the [[https://docs.hetzner.com/cloud/servers/overview#server-types][server type]] this virtual server should be created with. For example, ="cx42"= corresponds to a x86_64 server that has 8 VCPUs, 16 GB of memory and 160 GB of storage, while ="cax31"= to the AArch64 equivalent. Other server types and their current prices can be found [[https://www.hetzner.com/cloud/#pricing][here]]. The ="cpx11"= server type is currently not supported, since its rescue system is too small to bootstrap a Guix system from.
+
+  - =ssh-key= (default: =#f=) :: If specified, the file name of the SSH private key to use to authenticate with the remote host. If left unspecified, a temporary SSH key is used during the early provisioning of the machine, after which the authentication with the final machine is handled by your SSH client or agent. It's a good idea to have your public SSH key authorized declaratively in the =operating-system= specification provided, via the =authorized-keys= field of the =openssh-configuration= record. To be able to run ‘=guix deploy=' after the initial provisioning is done, an SSH connection to the root account or a password-less sudo configuration is needed (see [[#guix_002ddeploy_002dvia_002dsudo][Invoking guix deploy]]). For the later, you must also explicitly specify the =user= field, which otherwise defaults to ="root"=.
+
+  - =ssh-public-key= (default: extracted from =ssh-key=) :: If specified, either a public key as returned by =string->public-key= or the path to the SSH public key to use to authenticate with the remote host.
+
+  - =user= (default: ="root"=) :: The user to use for SSH authentication for the ‘=guix deploy=' command once the initial provisioning is complete.
+
+  When deploying a machine for the first time, the following steps are taken to provision a server for the machine on the [[https://www.hetzner.com/cloud][Hetzner Cloud]] service:
+
+  - Create the SSH key of the machine on the Hetzner API.
+  - Create a server for the machine on the Hetzner API.
+  - Format the root partition of the disk using the file system of the machine's operating system. Supported file systems are btrfs and ext4.
+  - Install a minimal Guix operating system on the server using the [[https://docs.hetzner.com/cloud/servers/getting-started/rescue-system][rescue mode]]. This minimal system is used to install the machine's operating system, after rebooting.
+  - Reboot the server and apply the machine's operating system on the server.
+
+  Once the server has been provisioned and SSH is available, deployment continues by delegating it to the =managed-host-environment-type=.
+
+  Depending on their type, x86_64 or AArch64 servers on the Hetzner Cloud service can be provisioned using BIOS or UEFI boot mode. The =(gnu machine hetzner)= module exports the =make-hetzner-os= procedure, which takes the server type string as an argument (e.g. ="cx23"=) and returns a base =operating-system= definition compatible with it.
+
+  The following example shows the definition of two machines that are deployed on the Hetzner Cloud service. The first one for an ARM server type that has 16 shared vCPUs and 32 GB of RAM, the second for an x86_64 server type that has 16 shared vCPUs and 32 GB of RAM.
+
+  #+begin_src lisp
+  (use-modules (gnu machine)
+               (gnu machine hetzner))
+
+  (list (let ((server-type "cax41"))
+          (machine
+            (operating-system (make-hetzner-os server-type))
+            (environment hetzner-environment-type)
+            (configuration (hetzner-configuration
+                             (server-type server-type)
+                             (ssh-key "/home/charlie/.ssh/id_rsa")))))
+        (let ((server-type "cpx51"))
+          (machine
+            (operating-system (make-hetzner-os server-type))
+            (environment hetzner-environment-type)
+            (configuration (hetzner-configuration
+                             (server-type server-type)
+                             (ssh-public-key "/home/charlie/.ssh/id_rsa.pub"))))))
+  #+end_src
+
+  Passing this file to =guix deploy= with the environment variable =GUIX_HETZNER_API_TOKEN= set to a valid Hetzner [[https://docs.hetzner.com/cloud/api/getting-started/generating-api-token][API key]] should provision two machines for you.
+
+--------------
+
+Next: [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]], Previous: [[id:guix--Invoking-guix-system][Invoking =guix system=]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

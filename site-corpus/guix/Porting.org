@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID: guix--Porting
+:END:
+#+filetags: :guix:
+#+title: Porting
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Porting>>
+Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 21 Porting to a New Platform [[#Porting-to-a-New-Platform][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Porting-to-a-New-Platform
+:CLASS: chapter
+:END:
+As discussed above, the GNU distribution is self-contained, and self-containment is achieved by relying on pre-built “bootstrap binaries” (see [[id:guix--Bootstrapping][Bootstrapping]]). These binaries are specific to an operating system kernel, CPU architecture, and application binary interface (ABI). Thus, to port the distribution to a platform that is not yet supported, one must build those bootstrap binaries, and update the =(gnu packages bootstrap)= module to use them on that platform.
+
+Fortunately, Guix can /cross compile/ those bootstrap binaries. When everything goes well, and assuming the GNU tool chain supports the target platform, this can be as simple as running a command like this one:
+
+#+begin_example
+guix build --target=armv5tel-linux-gnueabi bootstrap-tarballs
+#+end_example
+
+For this to work, it is first required to register a new platform as defined in the =(guix platform)= module. A platform is making the connection between a GNU triplet (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf), the equivalent =system= in Nix notation, the name of the =glibc-dynamic-linker=, and the corresponding Linux architecture name if applicable (see [[id:guix--Platforms][Platforms]]).
+
+Once the bootstrap tarball are built, the =(gnu packages bootstrap)= module needs to be updated to refer to these binaries on the target platform. That is, the hashes and URLs of the bootstrap tarballs for the new platform must be added alongside those of the currently supported platforms. The bootstrap Guile tarball is treated specially: it is expected to be available locally, and =gnu/local.mk= has rules to download it for the supported architectures; a rule for the new platform must be added as well.
+
+In practice, there may be some complications. First, it may be that the extended GNU triplet that specifies an ABI (like the =eabi= suffix above) is not recognized by all the GNU tools. Typically, glibc recognizes some of these, whereas GCC uses an extra =--with-abi= configure flag (see =gcc.scm= for examples of how to handle this). Second, some of the required packages could fail to build for that platform. Lastly, the generated binaries could be broken for some reason.
+
+--------------
+
+Next: [[id:guix--Contributing][Contributing]], Previous: [[id:guix--Bootstrapping][Bootstrapping]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

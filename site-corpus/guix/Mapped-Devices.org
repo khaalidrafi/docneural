@@ -1,0 +1,186 @@
+:PROPERTIES:
+:ID: guix--Mapped-Devices
+:END:
+#+filetags: :guix:
+#+title: Mapped Devices
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Mapped-Devices>>
+Next: [[id:guix--Swap-Space][Swap Space]], Previous: [[id:guix--File-Systems][File Systems]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.5 Mapped Devices [[#Mapped-Devices-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mapped-Devices-1
+:CLASS: section
+:END:
+The Linux kernel has a notion of /device mapping/: a block device, such as a hard disk partition, can be /mapped/ into another device, usually in =/dev/mapper/=, with additional processing over the data that flows through it[[#FOOT30][^{30}]]. A typical example is encryption device mapping: all writes to the mapped device are encrypted, and all reads are deciphered, transparently. Guix extends this notion by considering any device or set of devices that are /transformed/ in some way to create a new device; for instance, RAID devices are obtained by /assembling/ several other devices, such as hard disks or partitions, into a new one that behaves as one partition.
+
+Mapped devices are declared using the =mapped-device= form, defined as follows.
+
+- Data Type: *mapped-device* [[#index-mapped_002ddevice][¶]] :: Objects of this type represent device mappings that will be made when the system boots up.
+
+  - =source= :: This is either a string specifying the name of the block device to be mapped, such as ="/dev/sda3"=, or a list of such strings when several devices need to be assembled for creating a new one. In case of LVM this is a string specifying name of the volume group to be mapped.
+
+  - =target= :: This string specifies the name of the resulting mapped device. For kernel mappers such as encrypted devices of type =luks-device-mapping=, specifying ="my-partition"= leads to the creation of the ="/dev/mapper/my-partition"= device. For RAID devices of type =raid-device-mapping=, the full device name such as ="/dev/md0"= needs to be given. LVM logical volumes of type =lvm-device-mapping= need to be specified as ="VGNAME-LVNAME"=.
+
+  - =targets= :: This list of strings specifies names of the resulting mapped devices in case there are several. The format is identical to =target=.
+
+  - =type= :: This must be a =mapped-device-kind= object, which specifies how =source= is mapped to =target=.
+
+  - =arguments= :: This is a list of arguments specific to =type= that are passed to its =open=, =close=, and =check= procedures.
+
+    As an example, =luks-device-mapping= supports keyword arguments---see below for details.
+
+- Variable: *luks-device-mapping* [[#index-luks_002ddevice_002dmapping][¶]] :: This defines LUKS block device encryption using the =cryptsetup= command from the package with the same name. It relies on the =dm-crypt= Linux kernel module.
+
+  The following options may be passed /via/ the =arguments= field of a mapped device:
+
+  - =#:key-file= :: If =file= is provided, unlocking is first attempted using that key file. This has an advantage of not requiring a password entry, so it can be used (for example) to unlock RAID arrays automatically on boot. If key file unlock fails, password unlock is attempted as well. Key file is not stored in the store and needs to be available at the given location at the time of the unlock attempt.
+
+    #+begin_src lisp
+    ;; Following definition would be equivalent to running:
+    ;;   cryptsetup open --key-file /crypto.key /dev/sdb1 data
+    (mapped-device
+     (source "/dev/sdb1")
+     (target "data")
+     (type luks-device-mapping)
+     (arguments '(#:key-file "/crypto.key")))
+    #+end_src
+
+  - =#:allow-discards?= :: =allow-discards?= allows the use of discard (TRIM) requests for the underlying device. This is useful for solid state drives. However, this option can have a negative security impact because it can make file system level operations visible on the physical device. For more information, refer to the description of the =--allow-discards= option in the =cryptsetup-open(8)= man page.
+
+  - =#:extra-options= :: List of additional command-line options for the =cryptsetup open= command. See the =cryptsetup-open(8)= man page for a list of supported options.
+
+    For example, here is how you could specify the =--perf-no_read_workqueue= and =--perf-no_write_workqueue= options, along with =--allow-discards=:
+
+    #+begin_src lisp
+    (mapped-device
+      (source "/dev/sdb1")
+      (target "data")
+      (type luks-device-mapping)
+      (arguments '(#:allow-discards? #t
+                   #:extra-options
+                   ("--perf-no_read_workqueue"
+                    "--perf-no_write_workqueue"))))
+    #+end_src
+
+  The following example specifies a mapping from =/dev/sda3= to =/dev/mapper/home= using LUKS---the [[https://gitlab.com/cryptsetup/cryptsetup][Linux Unified Key Setup]], a standard mechanism for disk encryption. The =/dev/mapper/home= device can then be used as the =device= of a =file-system= declaration (see [[id:guix--File-Systems][File Systems]]).
+
+  #+begin_src lisp
+  (mapped-device
+    (source "/dev/sda3")
+    (target "home")
+    (type luks-device-mapping))
+  #+end_src
+
+  Alternatively, to become independent of device numbering, one may obtain the LUKS UUID (/unique identifier/) of the source device by a command like:
+
+  #+begin_example
+  cryptsetup luksUUID /dev/sda3
+#+end_example
+
+  and use it as follows:
+
+  #+begin_src lisp
+  (mapped-device
+    (source (uuid "cb67fc72-0d54-4c88-9d4b-b225f30b0f44"))
+    (target "home")
+    (type luks-device-mapping))
+  #+end_src
+
+  It is also desirable to encrypt swap space, since swap space may contain sensitive data. One way to accomplish that is to use a swap file in a file system on a device mapped via LUKS encryption. In this way, the swap file is encrypted because the entire device is encrypted. See [[id:guix--Swap-Space][Swap Space]], or See [[id:guix--Preparing-for-Installation][Disk Partitioning]], for an example.
+
+  When using GRUB as the bootloader, the LUKS password is only requested once: GRUB passes the master key to the initial RAM disk automatically. See [[id:guix--Bootloader-Configuration::#grub_002dluks_002droot_002ddevice_002dkey][Automatic LUKS Master Key Passing]], for details.
+
+- Variable: *raid-device-mapping* [[#index-raid_002ddevice_002dmapping][¶]] :: 
+
+  This defines a RAID device, which is assembled using the =mdadm= command from the package with the same name. It requires a Linux kernel module for the appropriate RAID level to be loaded, such as =raid1= for RAID-1 (mirroring), =raid456= for RAID-4, RAID-5 or RAID-6, or =raid10= for RAID-10 (see [[id:guix--Initial-RAM-Disk][Initial RAM Disk]]).
+
+  For example, RAID-1 (mirroring) support can be added with:
+
+  #+begin_src lisp
+  (initrd-modules
+   (cons* "raid1"
+          (base-initrd-modules
+           (operating-system-kernel this-operating-system))))
+  #+end_src
+
+  A RAID device formed of the partitions =/dev/sda1= and =/dev/sdb1= may be declared as follows:
+
+  #+begin_src lisp
+  (mapped-device
+    (source (list "/dev/sda1" "/dev/sdb1"))
+    (target "/dev/md0")
+    (type raid-device-mapping))
+  #+end_src
+
+  The =/dev/md0= device can then be used as the =device= of a =file-system= declaration (see [[id:guix--File-Systems][File Systems]]). Note that the RAID level need not be given; it is chosen during the initial creation and formatting of the RAID device and is determined automatically later, assuming the correct Linux modules have been loaded.
+
+  Not having the right kernel modules loaded might result in an error message like this at boot:
+
+  #+begin_example
+  mdadm: failed to RUN_ARRAY /dev/md0: Invalid argument
+#+end_example
+
+- Variable: *lvm-device-mapping* [[#index-lvm_002ddevice_002dmapping][¶]] :: This defines one or more logical volumes for the Linux [[https://www.sourceware.org/lvm2/][Logical Volume Manager (LVM)]]. The volume group is activated by the =vgchange= command from the =lvm2= package.
+
+  LVM logical volumes “alpha” and “beta” from volume group “vg0” can be declared as follows:
+
+  #+begin_src lisp
+  (mapped-device
+    (source "vg0")
+    (targets (list "vg0-alpha" "vg0-beta"))
+    (type lvm-device-mapping))
+  #+end_src
+
+  Devices =/dev/mapper/vg0-alpha= and =/dev/mapper/vg0-beta= can then be used as the =device= of a =file-system= declaration (see [[id:guix--File-Systems][File Systems]]).
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF30][(30)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Note that the GNU Hurd makes no difference between the concept of a “mapped device” and that of a file system: both boil down to /translating/ input/output operations made on a file to operations on its backing store. Thus, the Hurd implements mapped devices, like file systems, using the generic /translator/ mechanism (see [[https://www.gnu.org/software/hurd/doc/#Translators][Translators]] in The GNU Hurd Reference Manual).
+
+--------------
+
+Next: [[id:guix--Swap-Space][Swap Space]], Previous: [[id:guix--File-Systems][File Systems]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

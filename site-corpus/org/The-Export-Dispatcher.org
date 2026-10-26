@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--The-Export-Dispatcher
+:END:
+#+filetags: :org:
+#+title: The Export Dispatcher (The Org Manual)
+
+Next:
+
+<<The-Export-Dispatcher>>
+Next: [[id:org--Export-Settings][Export Settings]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.1 The Export Dispatcher [[#The-Export-Dispatcher-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: The-Export-Dispatcher-1
+:CLASS: section
+:END:
+The export dispatcher is the main interface for Org's exports. A hierarchical menu presents the currently configured export formats. Options are shown as easy toggle switches on the same screen.
+
+Org also has a minimal prompt interface for the export dispatcher. When the variable =org-export-dispatch-use-expert-ui= is set to a non-=nil= value, Org prompts in the minibuffer. To switch back to the hierarchical menu, press ?.
+
+-  <<index-C_002dc-C_002de>>C-c C-e (=org-export-dispatch=) [[#index-C_002dc-C_002de][¶]] :: Invokes the export dispatcher interface. The options show default settings. The C-u prefix argument preserves options from the previous export, including any subtree selections.
+
+Org exports the entire buffer by default. If the Org buffer has an active region, then Org exports just that region.
+
+Within the dispatcher interface, the following key combinations can further alter what is exported, and how.
+
+- <<index-C_002dc-C_002de-C_002da>>C-a [[#index-C_002dc-C_002de-C_002da][¶]] :: Toggle asynchronous export. Asynchronous export uses an external Emacs process with a specially configured initialization file to complete the exporting process in the background, without tying-up Emacs. This is particularly useful when exporting long documents.
+
+  Output from an asynchronous export is saved on the /export stack/. To view this stack, call the export dispatcher with a double C-u prefix argument. If already in the export dispatcher menu, & displays the stack.
+
+  You can make asynchronous export the default by setting =org-export-in-background=.
+
+  You can set the initialization file used by the background process by setting =org-export-async-init-file=.
+
+- <<index-C_002dc-C_002de-C_002db>>C-b [[#index-C_002dc-C_002de-C_002db][¶]] :: Toggle body-only export. Useful for excluding headers and footers in the export. Affects only those backend formats that have sections like ‘=<head>...</head>=' in HTML.
+
+  To make body-only export the default, customize the variable =org-export-body-only=.
+
+- <<index-C_002dc-C_002de-C_002df>>C-f [[#index-C_002dc-C_002de-C_002df][¶]] :: Toggle force-publishing export. Publish functions normally only publish changed files (see [[id:org--Triggering-Publication][Triggering Publication]]). Forced publishing causes files to be published even if their timestamps do not indicate the file has been changed.
+
+  To make forced publishing the default, customize the variable =org-export-force-publishing=. (This is similar to =org-publish-use-timestamps-flag=, but only affects the export dispatcher.)
+
+- <<index-C_002dc-C_002de-C_002ds>>C-s [[#index-C_002dc-C_002de-C_002ds][¶]] :: Toggle subtree export. When turned on, Org exports only the subtree starting from point position at the time the export dispatcher was invoked. Org uses the top heading of this subtree as the document's title. If point is not on a heading, Org uses the nearest enclosing header. If point is in the document preamble, Org signals an error and aborts export.
+
+  To make subtree export the default, customize the variable =org-export-initial-scope=.
+
+- <<index-C_002dc-C_002de-C_002dv-1>>C-v [[#index-C_002dc-C_002de-C_002dv-1][¶]] :: Toggle visible-only export. This is useful for exporting only certain parts of an Org document by adjusting the visibility of particular headings. See also [[id:org--Sparse-Trees][Sparse Trees]].
+
+  To make visible-only export the default, customize the variable =org-export-visible-only=.
+
+--------------
+
+Next: [[id:org--Export-Settings][Export Settings]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

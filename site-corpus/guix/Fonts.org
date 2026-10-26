@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID: guix--Fonts
+:END:
+#+filetags: :guix:
+#+title: Fonts
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Fonts>>
+Previous: [[id:guix--Elm-Packages][Elm Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.15 Fonts [[#Fonts-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Fonts-1
+:CLASS: subsection
+:END:
+For fonts that are in general not installed by a user for typesetting purposes, or that are distributed as part of a larger software package, we rely on the general packaging rules for software; for instance, this applies to the fonts delivered as part of the X.Org system or fonts that are part of TeX Live.
+
+To make it easier for a user to search for fonts, names for other packages containing only fonts are constructed as follows, independently of the upstream package name.
+
+The name of a package containing only one font family starts with =font-=; it is followed by the foundry name and a dash =-= if the foundry is known, and the font family name, in which spaces are replaced by dashes (and as usual, all upper case letters are transformed to lower case). For example, the Gentium font family by SIL is packaged under the name =font-sil-gentium=.
+
+For a package containing several font families, the name of the collection is used in the place of the font family name. For instance, the Liberation fonts consist of three families, Liberation Sans, Liberation Serif and Liberation Mono. These could be packaged separately under the names =font-liberation-sans= and so on; but as they are distributed together under a common name, we prefer to package them together as =font-liberation=.
+
+In the case where several formats of the same font family or font collection are packaged separately, a short form of the format, prepended by a dash, is added to the package name. We use =-ttf= for TrueType fonts, =-otf= for OpenType fonts and =-type1= for PostScript Type 1 fonts.
+
+--------------
+
+Previous: [[id:guix--Elm-Packages][Elm Packages]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID: emacs--Other-Mailbox-Formats
+:END:
+#+filetags: :emacs:
+#+title: Other Mailbox Formats
+
+Next:   Previous: [[id:emacs--Remote-Mailboxes][Retrieving Mail from Remote Mailboxes]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
+
+<<Other-Mailbox-Formats>>
+*** 35.20 Retrieving Mail from Local Mailboxes in Various Formats [[#Retrieving-Mail-from-Local-Mailboxes-in-Various-Formats][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Retrieving-Mail-from-Local-Mailboxes-in-Various-Formats
+:CLASS: section
+:END:
+If your incoming mail is stored on a local machine in a format other than Unix mailbox, you will need the Mailutils =movemail= to retrieve it. See [[id:emacs--Movemail][=movemail= program]], for the detailed description of =movemail= versions. For example, to access mail from an inbox in =maildir= format located in =/var/spool/mail/in=, you would include the following in the Rmail inbox list:
+
+#+begin_example
+maildir:///var/spool/mail/in
+#+end_example
+
+--------------

@@ -1,0 +1,1104 @@
+:PROPERTIES:
+:ID: guix--Web-Services
+:END:
+#+filetags: :guix:
+#+title: Web Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Web-Services>>
+Next: [[id:guix--High-Availability-Services][High Availability Services]], Previous: [[id:guix--LDAP-Services][LDAP Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.21 Web Services [[#Web-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Web-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services web)= module provides the Apache HTTP Server, the nginx web server, and also a fastcgi wrapper daemon.
+
+**** Apache HTTP Server [[#Apache-HTTP-Server][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Apache-HTTP-Server
+:CLASS: subsubheading
+:END:
+- Variable: *httpd-service-type* [[#index-httpd_002dservice_002dtype][¶]] :: Service type for the [[https://httpd.apache.org/][Apache HTTP]] server (/httpd/). The value for this service type is a =httpd-configuration= record.
+
+  A simple example configuration is given below.
+
+  #+begin_src lisp
+  (service httpd-service-type
+           (httpd-configuration
+             (config
+               (httpd-config-file
+                 (server-name "www.example.com")
+                 (document-root "/srv/http/www.example.com")))))
+  #+end_src
+
+  Other services can also extend the =httpd-service-type= to add to the configuration.
+
+  #+begin_src lisp
+  (simple-service 'www.example.com-server httpd-service-type
+                  (list
+                    (httpd-virtualhost
+                      "*:80"
+                      (list (string-join '("ServerName www.example.com"
+                                           "DocumentRoot /srv/http/www.example.com")
+                                         "\n")))))
+  #+end_src
+
+The details for the =httpd-configuration=, =httpd-module=, =httpd-config-file= and =httpd-virtualhost= record types are given below.
+
+- Data Type: *httpd-configuration* [[#index-httpd_002dconfiguration][¶]] :: This data type represents the configuration for the httpd service.
+
+  - =package= (default: =httpd=) :: The httpd package to use.
+
+  - =pid-file= (default: ="/var/run/httpd"=) :: The pid file used by the shepherd-service.
+
+  - =config= (default: =(httpd-config-file)=) :: The configuration file to use with the httpd service. The default value is a =httpd-config-file= record, but this can also be a different G-expression that generates a file, for example a =plain-file=. A file outside of the store can also be specified through a string.
+
+- Data Type: *httpd-module* [[#index-httpd_002dmodule][¶]] :: This data type represents a module for the httpd service.
+
+  - =name= :: The name of the module.
+
+  - =file= :: The file for the module. This can be relative to the httpd package being used, the absolute location of a file, or a G-expression for a file within the store, for example =(file-append mod-wsgi "/modules/mod_wsgi.so")=.
+
+- Variable: *%default-httpd-modules* [[#index-_0025default_002dhttpd_002dmodules][¶]] :: A default list of =httpd-module= objects.
+
+- Data Type: *httpd-config-file* [[#index-httpd_002dconfig_002dfile][¶]] :: This data type represents a configuration file for the httpd service.
+
+  - =modules= (default: =%default-httpd-modules=) :: The modules to load. Additional modules can be added here, or loaded by additional configuration.
+
+    For example, in order to handle requests for PHP files, you can use Apache's =mod_proxy_fcgi= module along with =php-fpm-service-type=:
+
+    #+begin_src lisp
+    (service httpd-service-type
+             (httpd-configuration
+              (config
+               (httpd-config-file
+                (modules (cons*
+                          (httpd-module
+                           (name "proxy_module")
+                           (file "modules/mod_proxy.so"))
+                          (httpd-module
+                           (name "proxy_fcgi_module")
+                           (file "modules/mod_proxy_fcgi.so"))
+                          %default-httpd-modules))
+                (extra-config (list "\
+    <FilesMatch \\.php$>
+        SetHandler \"proxy:unix:/var/run/php-fpm.sock|fcgi://localhost/\"
+    </FilesMatch>"))))))
+    (service php-fpm-service-type
+             (php-fpm-configuration
+              (socket "/var/run/php-fpm.sock")
+              (socket-group "httpd")))
+    #+end_src
+
+  - =server-root= (default: =httpd=) :: The =ServerRoot= in the configuration file, defaults to the httpd package. Directives including =Include= and =LoadModule= are taken as relative to the server root.
+
+  - =server-name= (default: =#f=) :: The =ServerName= in the configuration file, used to specify the request scheme, hostname and port that the server uses to identify itself.
+
+    This doesn't need to be set in the server config, and can be specified in virtual hosts. The default is =#f= to not specify a =ServerName=.
+
+  - =document-root= (default: ="/srv/http"=) :: The =DocumentRoot= from which files will be served.
+
+  - =listen= (default: ='("80")=) :: The list of values for the =Listen= directives in the config file. The value should be a list of strings, when each string can specify the port number to listen on, and optionally the IP address and protocol to use.
+
+  - =pid-file= (default: ="/var/run/httpd"=) :: The =PidFile= to use. This should match the =pid-file= set in the =httpd-configuration= so that the Shepherd service is configured correctly.
+
+  - =error-log= (default: ="/var/log/httpd/error_log"=) :: The =ErrorLog= to which the server will log errors.
+
+  - =user= (default: ="httpd"=) :: The =User= which the server will answer requests as.
+
+  - =group= (default: ="httpd"=) :: The =Group= which the server will answer requests as.
+
+  - =extra-config= (default: =(list "TypesConfig etc/httpd/mime.types")=) :: A flat list of strings and G-expressions which will be added to the end of the configuration file.
+
+    Any values which the service is extended with will be appended to this list.
+
+- Data Type: *httpd-virtualhost* [[#index-httpd_002dvirtualhost][¶]] :: This data type represents a virtualhost configuration block for the httpd service.
+
+  These should be added to the extra-config for the httpd-service.
+
+  #+begin_src lisp
+  (simple-service 'www.example.com-server httpd-service-type
+                  (list
+                    (httpd-virtualhost
+                      "*:80"
+                      (list (string-join '("ServerName www.example.com"
+                                            "DocumentRoot /srv/http/www.example.com")
+                                         "\n")))))
+  #+end_src
+
+  - =addresses-and-ports= :: The addresses and ports for the =VirtualHost= directive.
+
+  - =contents= :: The contents of the =VirtualHost= directive, this should be a list of strings and G-expressions.
+
+**** NGINX [[#NGINX-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: NGINX-1
+:CLASS: subsubheading
+:END:
+- Variable: *nginx-service-type* [[#index-nginx_002dservice_002dtype][¶]] :: Service type for the [[https://nginx.org/][NGinx]] web server. The value for this service type is a =<nginx-configuration>= record.
+
+  A simple example configuration is given below.
+
+  #+begin_src lisp
+  (service nginx-service-type
+           (nginx-configuration
+             (server-blocks
+               (list (nginx-server-configuration
+                       (server-name '("www.example.com"))
+                       (root "/srv/http/www.example.com"))))))
+  #+end_src
+
+  In addition to adding server blocks to the service configuration directly, this service can be extended by other services to add server blocks, as in this example:
+
+  #+begin_src lisp
+  (simple-service 'my-extra-server nginx-service-type
+                  (list (nginx-server-configuration
+                          (root "/srv/http/extra-website")
+                          (try-files (list "$uri" "$uri/index.html")))))
+  #+end_src
+
+At startup, =nginx= has not yet read its configuration file, so it uses a default file to log error messages. If it fails to load its configuration file, that is where error messages are logged. After the configuration file is loaded, the default error log file changes as per configuration. In our case, startup error messages can be found in =/var/run/nginx/logs/error.log=, and after configuration in =/var/log/nginx/error.log=. The second location can be changed with the =log-directory= configuration option.
+
+- Data Type: *nginx-configuration* [[#index-nginx_002dconfiguration][¶]] :: This data type represents the configuration for NGinx. Some configuration can be done through this and the other provided record types, or alternatively, a config file can be provided.
+
+  - =nginx= (default: =nginx=) :: The nginx package to use.
+
+  - =shepherd-requirement= (default: ='()=) :: This is a list of symbols naming Shepherd services the nginx service will depend on.
+
+    This is useful if you would like =nginx= to be started after a back-end web server or a logging service such as Anonip has been started.
+
+  - =log-directory= (default: ="/var/log/nginx"=) :: The directory to which NGinx will write log files.
+
+  - =log-format= (default: ='combined=) (type: symbol) :: Logging format for the access log. Nginx defaults to the httpd-like format named ='combined=. Other formats can be defined using =log-formats=.
+
+  - =log-formats= (default: ='()=) :: A list of additional /log formats/ to define, the elements should be of type =<nginx-log-format-configuration>=.
+
+  - =log-level= (default: ='error=) (type: symbol) :: Logging level for the error log, which can be any of the following values: ='debug=, ='info=, ='notice=, ='warn=, ='error=, ='crit=, ='alert=, or ='emerg=.
+
+  - =run-directory= (default: ="/var/run/nginx"=) :: The directory in which NGinx will create a pid file, and write temporary files.
+
+  - =server-blocks= (default: ='()=) :: A list of /server blocks/ to create in the generated configuration file, the elements should be of type =<nginx-server-configuration>=.
+
+    The following example would setup NGinx to serve =www.example.com= from the =/srv/http/www.example.com= directory, without using HTTPS.
+
+    #+begin_src lisp
+    (service nginx-service-type
+             (nginx-configuration
+               (server-blocks
+                 (list (nginx-server-configuration
+                         (server-name '("www.example.com"))
+                         (root "/srv/http/www.example.com"))))))
+    #+end_src
+
+  - =upstream-blocks= (default: ='()=) :: A list of /upstream blocks/ to create in the generated configuration file, the elements should be of type =<nginx-upstream-configuration>=.
+
+    Configuring upstreams through the =upstream-blocks= can be useful when combined with =locations= in the =<nginx-server-configuration>= records. The following example creates a server configuration with one location configuration, that will proxy requests to a upstream configuration, which will handle requests with two servers.
+
+    #+begin_src lisp
+    (service
+      nginx-service-type
+      (nginx-configuration
+        (server-blocks
+          (list (nginx-server-configuration
+                  (server-name '("www.example.com"))
+                  (root "/srv/http/www.example.com")
+                  (locations
+                    (list
+                      (nginx-location-configuration
+                      (uri "/path1")
+                      (body '("proxy_pass http://server-proxy;"))))))))
+        (upstream-blocks
+          (list (nginx-upstream-configuration
+                  (name "server-proxy")
+                  (servers (list "server1.example.com"
+                                 "server2.example.com")))))))
+    #+end_src
+
+  - =file= (default: =#f=) :: If a configuration =file= is provided, this will be used, rather than generating a configuration file from the provided =log-directory=, =run-directory=, =server-blocks= and =upstream-blocks=. For proper operation, these arguments should match what is in =file= to ensure that the directories are created when the service is activated.
+
+    This can be useful if you have an existing configuration file, or it's not possible to do what is required through the other parts of the nginx-configuration record.
+
+  - =server-names-hash-bucket-size= (default: =#f=) :: Bucket size for the server names hash tables, defaults to =#f= to use the size of the processors cache line.
+
+  - =server-names-hash-bucket-max-size= (default: =#f=) :: Maximum bucket size for the server names hash tables.
+
+  - =stream= (default: =#f=) :: =<nginx-stream-configuration>= object describing stream server directives.
+
+  - =modules= (default: ='()=) :: List of nginx dynamic modules to load. This should be a list of file names of loadable modules, as in this example:
+
+    #+begin_src lisp
+    (modules
+     (list
+      (file-append nginx-accept-language-module "\
+    /etc/nginx/modules/ngx_http_accept_language_module.so")
+      (file-append nginx-lua-module "\
+    /etc/nginx/modules/ngx_http_lua_module.so")))
+    #+end_src
+
+  - =lua-package-path= (default: ='()=) :: List of nginx lua packages to load. This should be a list of package names of loadable lua modules, as in this example:
+
+    #+begin_src lisp
+    (lua-package-path (list lua-resty-core
+                            lua-resty-lrucache
+                            lua-resty-signal
+                            lua-tablepool
+                            lua-resty-shell))
+    #+end_src
+
+  - =lua-package-cpath= (default: ='()=) :: List of nginx lua C packages to load. This should be a list of package names of loadable lua C modules, as in this example:
+
+    #+begin_src lisp
+    (lua-package-cpath (list lua-resty-signal))
+    #+end_src
+
+  - =global-directives= (default: ='((events . ()))=) :: Association list of global directives for the top level of the nginx configuration. Values may themselves be association lists.
+
+    #+begin_src lisp
+    (global-directives
+     `((worker_processes . 16)
+       (pcre_jit . on)
+       (events . ((worker_connections . 1024)))))
+    #+end_src
+
+  - =extra-content= (default: =""=) :: Additional content to be appended to the =http= block. Can either be a value that can be lowered into a string or a list of such values. In the former case, it is inserted directly. In the latter, it is prefixed with indentation and suffixed with a newline. Nested lists are flattened into one line.
+
+    #+begin_src lisp
+    (extra-content "include /etc/nginx/custom-config.conf;")
+    (extra-content `("include /etc/nginx/custom-config.conf;"
+                     ("include " ,%custom-config.conf ";")))
+    #+end_src
+
+- Data Type: *nginx-log-format-configuration* [[#index-nginx_002dlog_002dformat_002dconfiguration][¶]] :: Data type representing the configuration of a custom Nginx log format. This type has the following parameters:
+
+  - =name= (type: symbol) :: The name of the log format as a symbol.
+
+  - =escape= (default: ='default=) (type: symbol) :: The mode used to escape values of variables in the format. The supported values are:
+
+    - ='default=, to escape all characters outside of the ASCII printable range.
+    - ='json=, to escape all characters invalid in JSON strings.
+    - ='none=, to disable escaping.
+
+  - =format= (type: string) :: The format as accepted by the =log_format= directive.
+
+- Data Type: *nginx-server-configuration* [[#index-nginx_002dserver_002dconfiguration][¶]] :: Data type representing the configuration of an nginx server block. This type has the following parameters:
+
+  - =listen= (default: ='("80" "443 ssl")=) :: Each =listen= directive sets the address and port for IP, or the path for a UNIX-domain socket on which the server will accept requests. Both address and port, or only address or only port can be specified. An address may also be a hostname, for example:
+
+    #+begin_src lisp
+    '("127.0.0.1:8000" "127.0.0.1" "8000" "*:8000" "localhost:8000")
+    #+end_src
+
+  - =server-name= (default: =(list 'default)=) :: A list of server names this server represents. ='default= represents the default server for connections matching no other server.
+
+  - =root= (default: ="/srv/http"=) :: Root of the website nginx will serve.
+
+  - =locations= (default: ='()=) :: A list of /nginx-location-configuration/ or /nginx-named-location-configuration/ records to use within this server block.
+
+  - =index= (default: =(list "index.html")=) :: Index files to look for when clients ask for a directory. If it cannot be found, Nginx will send the list of files in the directory.
+
+  - =try-files= (default: ='()=) :: A list of files whose existence is checked in the specified order. =nginx= will use the first file it finds to process the request.
+
+  - =ssl-certificate= (default: =#f=) :: Where to find the certificate for secure connections. Set it to =#f= if you don't have a certificate or you don't want to use HTTPS.
+
+  - =ssl-certificate-key= (default: =#f=) :: Where to find the private key for secure connections. Set it to =#f= if you don't have a key or you don't want to use HTTPS.
+
+  - =server-tokens?= (default: =#f=) :: Whether the server should add its configuration to response.
+
+  - =raw-content= (default: ='()=) :: A list of strings or file-like objects to be appended to the server block. Each item is prefixed with indentation and suffixed with a new line. Nested lists are flattened.
+
+- Data Type: *nginx-upstream-configuration* [[#index-nginx_002dupstream_002dconfiguration][¶]] :: Data type representing the configuration of an nginx =upstream= block. This type has the following parameters:
+
+  - =name= :: Name for this group of servers.
+
+  - =servers= :: Specify the addresses of the servers in the group. The address can be specified as a IP address (e.g. ‘=127.0.0.1='), domain name (e.g. ‘=backend1.example.com=') or a path to a UNIX socket using the prefix ‘=unix:='. For addresses using an IP address or domain name, the default port is 80, and a different port can be specified explicitly.
+
+  - =extra-content= :: Additional content to be appended to the upstream block. Can be a string or file-like object or list of thereof. In case of list, each item is prefixed with indentation and suffixed with a new line. Nested lists are flattened.
+
+    #+begin_src lisp
+    (extra-content "include /etc/nginx/custom-config.conf;")
+    (extra-content `("include /etc/nginx/custom-config.conf;"
+                     ("include " ,%custom-config.conf ";")))
+    #+end_src
+
+- Data Type: *nginx-location-configuration* [[#index-nginx_002dlocation_002dconfiguration][¶]] :: Data type representing the configuration of an nginx =location= block. This type has the following parameters:
+
+  - =uri= :: URI which this location block matches.
+
+  - =body= :: Body of the location block, specified as a list of strings or file-like objects. Each item is prefixed with indentation and suffixed with a new line. Nested lists are flattened.
+
+    For example, to pass requests to a upstream server group defined using an =nginx-upstream-configuration= block, the following directive would be specified in the body ‘=(list "proxy_pass http://upstream-name;")='.
+
+- Data Type: *nginx-named-location-configuration* [[#index-nginx_002dnamed_002dlocation_002dconfiguration][¶]] :: Data type representing the configuration of an nginx named location block. Named location blocks are used for request redirection, and not used for regular request processing. This type has the following parameters:
+
+  - =name= :: Name to identify this location block.
+
+  - =body= :: See [[#nginx_002dlocation_002dconfiguration-body][nginx-location-configuration body]], as the body for named location blocks can be used in a similar way to the =nginx-location-configuration body=. One restriction is that the body of a named location block cannot contain location blocks.
+
+- Data Type: *nginx-stream-configuration* [[#index-nginx_002dstream_002dconfiguration][¶]] :: Data type representing the configuration file context in which stream directives are specified. This type has the following parameters:
+
+  - =upstream-blocks= (default: ='()=) :: A list of upstream blocks to create in the generated configuration file, the elements should be of type =<nginx-upstream-configuration>=.
+
+  - =server-blocks= (default: ='()=) :: A list of server blocks to create in the generated configuration file, the elements should be of type =<nginx-server-configuration>=.
+
+  - =extra-content= (default: ='()=) :: Additional content to be appended to the =stream= block. Can either be a value that can be lowered into a string or a list of such values. In the former case, it is inserted directly. In the latter, it is prefixed with indentation and suffixed with a newline. Nested lists are flattened into one line.
+
+**** gunicorn [[#gunicorn][¶]]
+:PROPERTIES:
+:CUSTOM_ID: gunicorn
+:CLASS: subsubheading
+:END:
+- Variable: *gunicorn-service-type* [[#index-gunicorn_002dservice_002dtype][¶]] :: Service type for the [[https://gunicorn.org/][gunicorn]] Python Web Server Gateway Interface (WSGI) HTTP server. The value for this service type is a =<gunicorn-configuration>= record. A simple example follows where gunicorn is used in combination with a web server, Nginx, configured as a reverse proxy.
+
+  #+begin_src lisp
+  (define %socket "unix:/var/run/gunicorn/werkzeug/socket")
+  (define %body (format #f "proxy_pass http://~a;" %socket))
+
+  (operating-system
+    ;; ...
+    (services
+      ;; ...
+      (service gunicorn-service-type
+               (gunicorn-configuration
+                (apps
+                 (list (gunicorn-app
+                        (name "werkzeug")
+                        (package python-werkzeug)
+                        (wsgi-app-module "werkzeug.testapp:test_app")
+                        (sockets `(,%socket))
+                        (user "user")
+                        (group "users"))))))
+      (service nginx-service-type
+               (nginx-configuration
+                (server-blocks
+                 (list (nginx-server-configuration
+                        (server-name '("localhost"))
+                        (listen '("127.0.0.1:80"))
+                        (locations
+                         (list (nginx-location-configuration
+                                (uri "/")
+                                (body `(,%body))))))))))))
+  #+end_src
+
+In practice, it is likely one might want to use =gunicorn-service-type= by extending it from within a Python service that requires gunicorn.
+
+- Data Type: *gunicorn-configuration* [[#index-gunicorn_002dconfiguration][¶]] :: This data type represents the configuration for gunicorn.
+
+  - =gunicorn= (default: =gunicorn=) :: The gunicorn package to use.
+
+  - =apps= (default: ='()=) :: This is a list of gunicorn apps.
+
+- Data Type: *gunicorn-app* [[#index-gunicorn_002dapp][¶]] :: This data type represents the configuration for a gunicorn application.
+
+  - =name= (type: string) :: The name of the gunicorn application.
+
+  - =package= (type: symbol) :: The Python package associated to the gunicorn app.
+
+  - =wsgi-app-module= (type: string) :: The Python module that should be invoked by gunicorn.
+
+  - =user= (type: string) :: Launch the app as this user (it must be an existing user).
+
+  - =group= (type: string) :: Launch the app as this group (it must be an existing group).
+
+  - =sockets= (default: ='("unix:/var/run/gunicorn/APP-NAME/socket")=) (type: list-of-strings) :: A list of sockets (as path strings) which gunicorn will be listening on. This list must contain at least one socket.
+
+  - =control-socket= (default: #f) (type: string) :: If set, creates a gunicorn control-socket at the given path. Note that, the control socket should refer to a path listed in =mappings=.
+
+  - =socket-user= (default: =user=) (type: string) :: Owner of the directory containing the socket (must be an existing user).
+
+  - =socket-group= (default: =group=) (type: string) :: Group owner of the directory containing the socket (must be an existing group).
+
+  - =socket-mode= (default: =#o750=) (type: integer) :: File mode to use for the directory containing the socket.
+
+  - =workers= (default: =1=) (type: integer) :: The number of workers for the gunicorn app.
+
+  - =extra-cli-arguments= (default: ='()=) (type: list-of-strings) :: A list of extra arguments to be passed to gunicorn.
+
+  - =environment-variables= (default: ='()=) (type: list) :: An association list of environment variables that will be visible to the gunicorn app, as per this example:
+
+    #+begin_src lisp
+    (gunicorn-app (name "example")
+                  ...
+                  (environment-variables '(("foo" . "bar"))))
+    #+end_src
+
+  - =timeout= (default: =30=) (type: integer) :: Workers silent for more than this many seconds are killed and restarted.
+
+  - =mappings= (default: ='()=) (type: list) :: Volumes that will be visible to the gunicorn app, as a list of source-target pairs.
+
+**** Varnish Cache [[#Varnish-Cache][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Varnish-Cache
+:CLASS: subsubheading
+:END:
+Varnish is a fast cache server that sits in between web applications and end users. It proxies requests from clients and caches the accessed URLs such that multiple requests for the same resource only creates one request to the back-end.
+
+- Variable: *varnish-service-type* [[#index-varnish_002dservice_002dtype][¶]] :: Service type for the Varnish daemon.
+
+- Data Type: *varnish-configuration* [[#index-varnish_002dconfiguration][¶]] :: Data type representing the =varnish= service configuration. This type has the following parameters:
+
+  - =package= (default: =varnish=) :: The Varnish package to use.
+
+  - =name= (default: ="default"=) :: A name for this Varnish instance. Varnish will create a directory in =/var/varnish/= with this name and keep temporary files there. If the name starts with a forward slash, it is interpreted as an absolute directory name.
+
+    Pass the =-n= argument to other Varnish programs to connect to the named instance, e.g. =varnishncsa -n default=.
+
+  - =backend= (default: ="localhost:8080"=) :: The backend to use. This option has no effect if =vcl= is set.
+
+  - =vcl= (default: #f) :: The /VCL/ (Varnish Configuration Language) program to run. If this is =#f=, Varnish will proxy =backend= using the default configuration. Otherwise this must be a file-like object with valid VCL syntax.
+
+    For example, to mirror [[https://www.gnu.org][www.gnu.org]] with VCL you can do something along these lines:
+
+    #+begin_src lisp
+    (define %gnu-mirror
+      (plain-file "gnu.vcl"
+                  "vcl 4.1;
+    backend gnu { .host = \"www.gnu.org\"; }"))
+
+    (operating-system
+      ;; ...
+      (services (cons (service varnish-service-type
+                               (varnish-configuration
+                                (listen '(":80"))
+                                (vcl %gnu-mirror)))
+                      %base-services)))
+    #+end_src
+
+    The configuration of an already running Varnish instance can be inspected and changed using the =varnishadm= program.
+
+    Consult the [[https://varnish-cache.org/docs/][Varnish User Guide]] and [[https://book.varnish-software.com/4.0/][Varnish Book]] for comprehensive documentation on Varnish and its configuration language.
+
+  - =listen= (default: ='("localhost:80")=) :: List of addresses Varnish will listen on.
+
+  - =storage= (default: ='("malloc,128m")=) :: List of storage backends that will be available in VCL.
+
+  - =parameters= (default: ='()=) :: List of run-time parameters in the form ='(("parameter" . "value"))=.
+
+  - =extra-options= (default: ='()=) :: Additional arguments to pass to the =varnishd= process.
+
+**** Whoogle Search [[#Whoogle-Search][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Whoogle-Search
+:CLASS: subheading
+:END:
+[[https://github.com/benbusby/whoogle-search][Whoogle Search]] is a self-hosted, ad-free, privacy-respecting meta search engine that collects and displays Google search results. By default, you can configure it by adding this line to the =services= field of your operating system declaration:
+
+#+begin_src lisp
+(service whoogle-service-type)
+#+end_src
+
+As a result, Whoogle Search runs as local Web server, which you can access by opening ‘=http://localhost:5000=' in your browser. The configuration reference is given below.
+
+- Variable: *whoogle-service-type* [[#index-whoogle_002dservice_002dtype][¶]] :: Service type for Whoogle Search. Its value must be a =whoogle-configuration= record---see below.
+
+- Data Type: *whoogle-configuration* [[#index-whoogle_002dconfiguration][¶]] :: Data type representing Whoogle Search service configuration.
+
+  - =package= (default: =whoogle-search=) :: The Whoogle Search package to use.
+
+  - =host= (default: ="127.0.0.1"=) :: The host address to run Whoogle on.
+
+  - =port= (default: =5000=) :: The port where Whoogle will be exposed.
+
+  - =environment-variables= (default: ='()=) :: A list of strings with the environment variables to configure Whoogle. You can consult [[https://github.com/benbusby/whoogle-search/blob/main/whoogle.template.env][its environment variables template]] for the list of available options.
+
+**** go-webdav [[#go_002dwebdav][¶]]
+:PROPERTIES:
+:CUSTOM_ID: go_002dwebdav
+:CLASS: subsubheading
+:END:
+[[https://github.com/emersion/go-webdav][go-webdav]] is a server for the [[https://www.rfc-editor.org/rfc/rfc4918][WebDAV]] protocol.
+
+- Variable: *go-webdav-service-type* [[#index-go_002dwebdav_002dservice_002dtype][¶]] :: This is the service type for go-webdav. Since go-webdav does not have a configuration file, its value must be a list of command-line arguments that should be passed to the =webdav-server= command. For example, the following configuration will serve all files in ="/srv/http/"= via port 8080 on 127.0.0.1:
+
+  #+begin_src lisp
+  (service go-webdav-service-type
+           '("-addr" "127.0.0.1:8080" "/srv/http/"))
+  #+end_src
+
+**** Patchwork [[#Patchwork][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Patchwork
+:CLASS: subsubheading
+:END:
+Patchwork is a patch tracking system. It can collect patches sent to a mailing list, and display them in a web interface.
+
+- Variable: *patchwork-service-type* [[#index-patchwork_002dservice_002dtype][¶]] :: Service type for Patchwork.
+
+The following example is an example of a minimal service for Patchwork, for the =patchwork.example.com= domain.
+
+#+begin_src lisp
+(service patchwork-service-type
+         (patchwork-configuration
+          (domain "patchwork.example.com")
+          (settings-module
+           (patchwork-settings-module
+            (allowed-hosts (list domain))
+            (default-from-email "patchwork@patchwork.example.com")))
+          (getmail-retriever-config
+           (getmail-retriever-configuration
+            (type "SimpleIMAPSSLRetriever")
+            (server "imap.example.com")
+            (port 993)
+            (username "patchwork")
+            (password-command
+             (list (file-append coreutils "/bin/cat")
+                   "/etc/getmail-patchwork-imap-password"))
+            (extra-parameters
+            '((mailboxes . ("Patches"))))))))
+#+end_src
+
+There are three records for configuring the Patchwork service. The =<patchwork-configuration>= relates to the configuration for Patchwork within the HTTPD service.
+
+The =settings-module= field within the =<patchwork-configuration>= record can be populated with the =<patchwork-settings-module>= record, which describes a settings module that is generated within the Guix store.
+
+For the =database-configuration= field within the =<patchwork-settings-module>=, the =<patchwork-database-configuration>= must be used.
+
+- Data Type: *patchwork-configuration* [[#index-patchwork_002dconfiguration][¶]] :: Data type representing the Patchwork service configuration. This type has the following parameters:
+
+  - =patchwork= (default: =patchwork=) :: The Patchwork package to use.
+
+  - =domain= :: The domain to use for Patchwork, this is used in the HTTPD service virtual host.
+
+  - =settings-module= :: The settings module to use for Patchwork. As a Django application, Patchwork is configured with a Python module containing the settings. This can either be an instance of the =<patchwork-settings-module>= record, any other record that represents the settings in the store, or a directory outside of the store.
+
+  - =static-path= (default: ="/static/"=) :: The path under which the HTTPD service should serve the static files.
+
+  - =getmail-retriever-config= :: The getmail-retriever-configuration record value to use with Patchwork. Getmail will be configured with this value, the messages will be delivered to Patchwork.
+
+- Data Type: *patchwork-settings-module* [[#index-patchwork_002dsettings_002dmodule][¶]] :: Data type representing a settings module for Patchwork. Some of these settings relate directly to Patchwork, but others relate to Django, the web framework used by Patchwork, or the Django Rest Framework library. This type has the following parameters:
+
+  - =database-configuration= (default: =(patchwork-database-configuration)=) :: The database connection settings used for Patchwork. See the =<patchwork-database-configuration>= record type for more information.
+
+  - =secret-key-file= (default: ="/etc/patchwork/django-secret-key"=) :: Patchwork, as a Django web application uses a secret key for cryptographically signing values. This file should contain a unique unpredictable value.
+
+    If this file does not exist, it will be created and populated with a random value by the patchwork-setup shepherd service.
+
+    This setting relates to Django.
+
+  - =allowed-hosts= :: A list of valid hosts for this Patchwork service. This should at least include the domain specified in the =<patchwork-configuration>= record.
+
+    This is a Django setting.
+
+  - =default-from-email= :: The email address from which Patchwork should send email by default.
+
+    This is a Patchwork setting.
+
+  - =static-url= (default: =#f=) :: The URL to use when serving static assets. It can be part of a URL, or a full URL, but must end in a =/=.
+
+    If the default value is used, the =static-path= value from the =<patchwork-configuration>= record will be used.
+
+    This is a Django setting.
+
+  - =admins= (default: ='()=) :: Email addresses to send the details of errors that occur. Each value should be a list containing two elements, the name and then the email address.
+
+    This is a Django setting.
+
+  - =debug?= (default: =#f=) :: Whether to run Patchwork in debug mode. If set to =#t=, detailed error messages will be shown.
+
+    This is a Django setting.
+
+  - =enable-rest-api?= (default: =#t=) :: Whether to enable the Patchwork REST API.
+
+    This is a Patchwork setting.
+
+  - =enable-xmlrpc?= (default: =#t=) :: Whether to enable the XML RPC API.
+
+    This is a Patchwork setting.
+
+  - =force-https-links?= (default: =#t=) :: Whether to use HTTPS links on Patchwork pages.
+
+    This is a Patchwork setting.
+
+  - =extra-settings= (default: =""=) :: Extra code to place at the end of the Patchwork settings module.
+
+- Data Type: *patchwork-database-configuration* [[#index-patchwork_002ddatabase_002dconfiguration][¶]] :: Data type representing the database configuration for Patchwork.
+
+  - =engine= (default: ="django.db.backends.postgresql_psycopg2"=) :: The database engine to use.
+
+  - =name= (default: ="patchwork"=) :: The name of the database to use.
+
+  - =user= (default: ="httpd"=) :: The user to connect to the database as.
+
+  - =password= (default: =""=) :: The password to use when connecting to the database.
+
+  - =host= (default: =""=) :: The host to make the database connection to.
+
+  - =port= (default: =""=) :: The port on which to connect to the database.
+
+**** sogogi [[#sogogi][¶]]
+:PROPERTIES:
+:CUSTOM_ID: sogogi
+:CLASS: subsubheading
+:END:
+[[https://codeberg.org/emersion/sogogi][sogogi]] is a server for the [[https://www.rfc-editor.org/rfc/rfc4918][WebDAV]] protocol.
+
+- Variable: *sogogi-service-type* [[#index-sogogi_002dservice_002dtype][¶]] :: This is the service type for sogogi. Its value must be a =sogogi-configuration= object as in this example:
+
+  #+begin_src lisp
+  (service sogogi-service-type
+           (sogogi-configuration
+             (listen ":8080")
+             (location
+               (list
+                 (sogogi-location
+                   (path "/")
+                   (dir "/srv/http/")
+                   (grant '("all ro")))))))
+  #+end_src
+
+- Data Type: *sogogi-configuration* [[#index-sogogi_002dconfiguration][¶]] :: Available =sogogi-configuration= fields are:
+
+  - =listen= (default: ="localhost:8080"=) (type: string) :: Listening address.
+
+  - =location= (default: =()=) (type: list-of-sogogi-location) :: Local directories to expose via a HTTP path
+
+  - =user= (default: =()=) (type: list-of-sogogi-user) :: Users with access to the location.
+
+- Data Type: *sogogi-location* [[#index-sogogi_002dlocation][¶]] :: Available =sogogi-location= fields are:
+
+  - =path= (type: string) :: HTTP path at which the directory will be exposed.
+
+  - =dir= (type: string) :: Path to local directory to serve.
+
+  - =grant= (type: maybe-list-of-strings) :: Grant remote users access to the directory.
+
+- Data Type: *sogogi-user* [[#index-sogogi_002duser][¶]] :: Available =sogogi-user= fields are:
+
+  - =name= (type: maybe-string) :: Name of the user.
+
+  - =password= (type: maybe-string) :: Password of the user.
+
+**** Mumi [[#Mumi][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Mumi
+:CLASS: subsubheading
+:END:
+[[https://codeberg.org/guix/mumi][Mumi]] is a Web interface to the Debbugs bug tracker, by default for [[https://bugs.gnu.org][the GNU instance]]. Mumi is a Web server, but it also fetches and indexes mail retrieved from Debbugs.
+
+- Variable: *mumi-service-type* [[#index-mumi_002dservice_002dtype][¶]] :: This is the service type for Mumi.
+
+- Data Type: *mumi-configuration* [[#index-mumi_002dconfiguration][¶]] :: Data type representing the Mumi service configuration. This type has the following fields:
+
+  - =mumi= (default: =mumi=) :: The Mumi package to use.
+
+  - =data-directory= (default: ="/var/mumi/data"=) :: Data directory to store Debbugs data from upstream Debbugs instance.
+
+  - =rsync-remote= :: Remote rsync path from which to download Debbugs data.
+
+  - =rsync-flags= (default: ='()=) :: Additional flags to pass to =rsync=.
+
+  - =rsync-and-index-event= (default: =#~(calendar-event #:minutes '#$(iota 12 0 5))=) :: Shepherd calendar event to run the rsync and indexing timer at. By default, this is once every 5 minutes. The timer job is not run if an earlier instance of it is still running.
+
+  - =mailer?= (default: =#true=) :: Whether to enable or disable the mailer component.
+
+  - =sender= :: The email address used as the sender for comments.
+
+  - =smtp= :: A URI to configure the SMTP settings for Mailutils. This could be something like =sendmail:///path/to/bin/msmtp= or any other URI supported by Mailutils. See [[https://www.gnu.org/software/mailutils/manual/html_node/SMTP-Mailboxes.html#SMTP-Mailboxes][SMTP Mailboxes]] in GNU Mailutils.
+
+  - =packages= :: List of =<mumi-package-configuration>= objects representing packages configured on Mumi.
+
+- Data Type: *mumi-package-configuration* [[#index-mumi_002dpackage_002dconfiguration][¶]] :: Data type representing the configuration of a package on Mumi. This type has the following fields:
+
+  - =name= :: Name of the package.
+
+  - =display-name= :: Display name used for this package in the web interface.
+
+  - =debbugs-packages= :: List of Debbugs packages this package refers to.
+
+  - =bug-email-address= :: Email address to send bug reports to.
+
+  - =patch-email-address= :: Email address to send patches to, if that is different from =bug-email-address=.
+
+  - =file-tags= :: Association list mapping tags to filename regular expressions. Keys are tag names, and values are lists of regular expressions. For each entry of the association list, the tag is applied if a filename referred to in a patch matches any of the regular expressions.
+
+**** FastCGI [[#FastCGI][¶]]
+:PROPERTIES:
+:CUSTOM_ID: FastCGI
+:CLASS: subsubheading
+:END:
+FastCGI is an interface between the front-end and the back-end of a web service. It is a somewhat legacy facility; new web services should generally just talk HTTP between the front-end and the back-end. However there are a number of back-end services such as PHP or the optimized HTTP Git repository access that use FastCGI, so we have support for it in Guix.
+
+To use FastCGI, you configure the front-end web server (e.g., nginx) to dispatch some subset of its requests to the fastcgi backend, which listens on a local TCP or UNIX socket. There is an intermediary =fcgiwrap= program that sits between the actual backend process and the web server. The front-end indicates which backend program to run, passing that information to the =fcgiwrap= process.
+
+- Variable: *fcgiwrap-service-type* [[#index-fcgiwrap_002dservice_002dtype][¶]] :: A service type for the =fcgiwrap= FastCGI proxy.
+
+- Data Type: *fcgiwrap-configuration* [[#index-fcgiwrap_002dconfiguration][¶]] :: Data type representing the configuration of the =fcgiwrap= service. This type has the following parameters:
+
+  - =package= (default: =fcgiwrap=) :: The fcgiwrap package to use.
+
+  - =socket= (default: =tcp:127.0.0.1:9000=) :: The socket on which the =fcgiwrap= process should listen, as a string. Valid =socket= values include =unix:==/path/to/unix/socket=, =tcp:==dot.ted.qu.ad==:==port= and =tcp6:[==ipv6_addr==]:port=.
+
+  - =user= (default: =fcgiwrap=)\\
+    =group= (default: =fcgiwrap=) :: The user and group names, as strings, under which to run the =fcgiwrap= process. The =fastcgi= service will ensure that if the user asks for the specific user or group names =fcgiwrap= that the corresponding user and/or group is present on the system.
+
+    It is possible to configure a FastCGI-backed web service to pass HTTP authentication information from the front-end to the back-end, and to allow =fcgiwrap= to run the back-end process as a corresponding local user. To enable this capability on the back-end, run =fcgiwrap= as the =root= user and group. Note that this capability also has to be configured on the front-end as well.
+
+**** PHP-FPM [[#PHP_002dFPM-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: PHP_002dFPM-1
+:CLASS: subsubheading
+:END:
+PHP-FPM (FastCGI Process Manager) is an alternative PHP FastCGI implementation with some additional features useful for sites of any size.
+
+These features include:
+
+- Adaptive process spawning
+- Basic statistics (similar to Apache's mod_status)
+- Advanced process management with graceful stop/start
+- Ability to start workers with different uid/gid/chroot/environment and different php.ini (replaces safe_mode)
+- Stdout & stderr logging
+- Emergency restart in case of accidental opcode cache destruction
+- Accelerated upload support
+- Support for a "slowlog"
+- Enhancements to FastCGI, such as fastcgi_finish_request() - a special function to finish request & flush all data while continuing to do something time-consuming (video converting, stats processing, etc.)
+
+... and much more.
+
+- Variable: *php-fpm-service-type* [[#index-php_002dfpm_002dservice_002dtype][¶]] :: A Service type for =php-fpm=.
+
+Data Type: *php-fpm-configuration* [[#index-php_002dfpm_002dconfiguration][¶]]
+Data Type for php-fpm service configuration.
+
+=php= (default: =php=)
+The php package to use.
+
+=socket= (default: =(string-append "/var/run/php" (version-major (package-version php)) "-fpm.sock")=)
+The address on which to accept FastCGI requests. Valid syntaxes are:
+
+- ="ip.add.re.ss:port"= :: Listen on a TCP socket to a specific address on a specific port.
+
+- ="port"= :: Listen on a TCP socket to all addresses on a specific port.
+
+- ="/path/to/unix/socket"= :: Listen on a unix socket.
+
+=user= (default: =php-fpm=)
+User who will own the php worker processes.
+
+=group= (default: =php-fpm=)
+Group of the worker processes.
+
+=socket-user= (default: =php-fpm=)
+User who can speak to the php-fpm socket.
+
+=socket-group= (default: =nginx=)
+Group that can speak to the php-fpm socket.
+
+=pid-file= (default: =(string-append "/var/run/php" (version-major (package-version php)) "-fpm.pid")=)
+The process id of the php-fpm process is written to this file once the service has started.
+
+=log-file= (default: =(string-append "/var/log/php" (version-major (package-version php)) "-fpm.log")=)
+Log for the php-fpm master process.
+
+=process-manager= (default: =(php-fpm-dynamic-process-manager-configuration)=)
+Detailed settings for the php-fpm process manager. Must be one of:
+
+=<php-fpm-dynamic-process-manager-configuration>=
+=<php-fpm-static-process-manager-configuration>=
+=<php-fpm-on-demand-process-manager-configuration>=
+=display-errors= (default =#f=)
+Determines whether php errors and warning should be sent to clients and displayed in their browsers. This is useful for local php development, but a security risk for public sites, as error messages can reveal passwords and personal data.
+
+=timezone= (default =#f=)
+Specifies =php_admin_value[date.timezone]= parameter.
+
+=workers-logfile= (default =(string-append "/var/log/php" (version-major (package-version php)) "-fpm.www.log")=)
+This file will log the =stderr= outputs of php worker processes. Can be set to =#f= to disable logging.
+
+=file= (default =#f=)
+An optional override of the whole configuration. You can use the =mixed-text-file= function or an absolute filepath for it.
+
+=php-ini-file= (default =#f=)
+An optional override of the default php settings. It may be any “file-like” object (see [[id:guix--G_002dExpressions][file-like objects]]). You can use the =mixed-text-file= function or an absolute filepath for it.
+
+For local development it is useful to set a higher timeout and memory limit for spawned php processes. This be accomplished with the following operating system configuration snippet:
+
+#+begin_src lisp
+(define %local-php-ini
+  (plain-file "php.ini"
+              "memory_limit = 2G
+max_execution_time = 1800"))
+
+(operating-system
+  ;; ...
+  (services (cons (service php-fpm-service-type
+                           (php-fpm-configuration
+                            (php-ini-file %local-php-ini)))
+                  %base-services)))
+#+end_src
+
+Consult the [[https://www.php.net/manual/en/ini.core.php][core php.ini directives]] for comprehensive documentation on the acceptable =php.ini= directives.
+
+- Data type: *php-fpm-dynamic-process-manager-configuration* [[#index-php_002dfpm_002ddynamic_002dprocess_002dmanager_002dconfiguration][¶]] :: Data Type for the =dynamic= php-fpm process manager. With the =dynamic= process manager, spare worker processes are kept around based on its configured limits.
+
+  - =max-children= (default: =5=) :: Maximum of worker processes.
+
+  - =start-servers= (default: =2=) :: How many worker processes should be started on start-up.
+
+  - =min-spare-servers= (default: =1=) :: How many spare worker processes should be kept around at minimum.
+
+  - =max-spare-servers= (default: =3=) :: How many spare worker processes should be kept around at maximum.
+
+- Data type: *php-fpm-static-process-manager-configuration* [[#index-php_002dfpm_002dstatic_002dprocess_002dmanager_002dconfiguration][¶]] :: Data Type for the =static= php-fpm process manager. With the =static= process manager, an unchanging number of worker processes are created.
+
+  - =max-children= (default: =5=) :: Maximum of worker processes.
+
+- Data type: *php-fpm-on-demand-process-manager-configuration* [[#index-php_002dfpm_002don_002ddemand_002dprocess_002dmanager_002dconfiguration][¶]] :: Data Type for the =on-demand= php-fpm process manager. With the =on-demand= process manager, worker processes are only created as requests arrive.
+
+  - =max-children= (default: =5=) :: Maximum of worker processes.
+
+  - =process-idle-timeout= (default: =10=) :: The time in seconds after which a process with no requests is killed.
+
+- Procedure: *nginx-php-location* =[#:nginx-package nginx] [socket (string-append "/var/run/php" (version-major (package-version php)) "-fpm.sock")]= [[#index-nginx_002dphp_002dlocation][¶]] :: A helper function to quickly add php to an =nginx-server-configuration=.
+
+A simple services setup for nginx with php can look like this:
+
+#+begin_src lisp
+(services (cons* (service dhcpcd-service-type)
+                 (service php-fpm-service-type)
+                 (service nginx-service-type
+                          (nginx-server-configuration
+                           (server-name '("example.com"))
+                           (root "/srv/http/")
+                           (locations
+                            (list (nginx-php-location)))
+                           (listen '("80"))
+                           (ssl-certificate #f)
+                           (ssl-certificate-key #f)))
+                 %base-services))
+#+end_src
+
+The cat avatar generator is a simple service to demonstrate the use of php-fpm in =Nginx=. It is used to generate cat avatar from a seed, for instance the hash of a user's email address.
+
+- Procedure: *cat-avatar-generator-service* =[#:cache-dir "/var/cache/cat-avatar-generator/"] [#:package cat-avatar-generator] [#:configuration (nginx-server-configuration)]= [[#index-cat_002davatar_002dgenerator_002dservice][¶]] :: Returns an nginx-server-configuration that inherits =configuration=. It extends the nginx configuration to add a server block that serves =package=, a version of cat-avatar-generator. During execution, cat-avatar-generator will be able to use =cache-dir= as its cache directory, which must end with a slash, be created manually, and be writable by php-fpm.
+
+A simple setup for cat-avatar-generator can look like this:
+
+#+begin_src lisp
+(services (cons* (cat-avatar-generator-service
+                  #:configuration
+                  (nginx-server-configuration
+                    (server-name '("example.com"))))
+                 ...
+                 %base-services))
+#+end_src
+
+**** Hpcguix-web [[#Hpcguix_002dweb][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Hpcguix_002dweb
+:CLASS: subsubheading
+:END:
+The [[https://github.com/UMCUGenetics/hpcguix-web/][hpcguix-web]] program is a customizable web interface to browse Guix packages, initially designed for users of high-performance computing (HPC) clusters.
+
+- Variable: *hpcguix-web-service-type* [[#index-hpcguix_002dweb_002dservice_002dtype][¶]] :: The service type for =hpcguix-web=.
+
+- Data Type: *hpcguix-web-configuration* [[#index-hpcguix_002dweb_002dconfiguration][¶]] :: Data type for the hpcguix-web service configuration.
+
+  - =specs= (default: =#f=) :: Either =#f= or a gexp (see [[id:guix--G_002dExpressions][G-Expressions]]) specifying the hpcguix-web service configuration as an =hpcguix-web-configuration= record. The main fields of that record type are:
+
+    - =title-prefix= (default: ="hpcguix | "=) :: The page title prefix.
+
+    - =guix-command= (default: ="guix"=) :: The =guix= command to use in examples that appear on HTML pages.
+
+    - =package-filter-proc= (default: =(const #t)=) :: A procedure specifying how to filter packages that are displayed.
+
+    - =package-page-extension-proc= (default: =(const '())=) :: Extension package for =hpcguix-web=.
+
+    - =menu= (default: ='()=) :: Additional entry in page =menu=.
+
+    - =channels= (default: =%default-channels=) :: List of channels from which the package list is built (see [[id:guix--Channels][Channels]]).
+
+    - =package-list-expiration= (default: =(* 12 3600)=) :: The expiration time, in seconds, after which the package list is rebuilt from the latest instances of the given channels.
+
+    See the hpcguix-web repository for a [[https://github.com/UMCUGenetics/hpcguix-web/blob/master/hpcweb-configuration.scm][complete example]].
+
+  - =package= (default: =hpcguix-web=) :: The hpcguix-web package to use.
+
+  - =address= (default: ="127.0.0.1"=) :: The IP address to listen to.
+
+  - =port= (default: =5000=) :: The port number to listen to.
+
+A typical hpcguix-web service declaration looks like this:
+
+#+begin_src lisp
+(service hpcguix-web-service-type
+         (hpcguix-web-configuration
+          (specs
+           #~(hpcweb-configuration
+              (title-prefix "Guix-HPC - ")
+              (menu '(("/about" "ABOUT")))))))
+#+end_src
+
+#+begin_quote
+*Note:* The hpcguix-web service periodically updates the package list it publishes by pulling channels from Git. To that end, it needs to access X.509 certificates so that it can authenticate Git servers when communicating over HTTPS, and it assumes that =/etc/ssl/certs= contains those certificates.
+
+A certificate package, =nss-certs=, is provided by default as part of =%base-packages=. [[id:guix--X_002e509-Certificates][X.509 Certificates]], for more information on X.509 certificates.
+
+#+end_quote
+
+**** gmnisrv [[#gmnisrv][¶]]
+:PROPERTIES:
+:CUSTOM_ID: gmnisrv
+:CLASS: subsubheading
+:END:
+The [[https://git.sr.ht/~sircmpwn/gmnisrv][gmnisrv]] program is a simple [[https://gemini.circumlunar.space/][Gemini]] protocol server.
+
+- Variable: *gmnisrv-service-type* [[#index-gmnisrv_002dservice_002dtype][¶]] :: This is the type of the gmnisrv service, whose value should be a =gmnisrv-configuration= object, as in this example:
+
+  #+begin_src lisp
+  (service gmnisrv-service-type
+           (gmnisrv-configuration
+             (config-file (local-file "./my-gmnisrv.ini"))))
+  #+end_src
+
+- Data Type: *gmnisrv-configuration* [[#index-gmnisrv_002dconfiguration][¶]] :: Data type representing the configuration of gmnisrv.
+
+  - =package= (default: =gmnisrv=) :: Package object of the gmnisrv server.
+
+  - =config-file= (default: =%default-gmnisrv-config-file=) :: File-like object of the gmnisrv configuration file to use. The default configuration listens on port 1965 and serves files from =/srv/gemini=. Certificates are stored in =/var/lib/gemini/certs=. For more information, run =man gmnisrv= and =man gmnisrv.ini=.
+
+**** Agate [[#Agate][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Agate
+:CLASS: subsubheading
+:END:
+The [[gemini://qwertqwefsday.eu/agate.gmi][Agate]] ([[https://github.com/mbrubeck/agate][GitHub page over HTTPS]]) program is a simple [[https://gemini.circumlunar.space/][Gemini]] protocol server written in Rust.
+
+- Variable: *agate-service-type* [[#index-agate_002dservice_002dtype][¶]] :: This is the type of the agate service, whose value should be an =agate-service-type= object, as in this example:
+
+  #+begin_src lisp
+  (service agate-service-type
+       (agate-configuration
+         (content "/srv/gemini")
+         (certificates "/srv/gemini-certs")))
+  #+end_src
+
+  The example above represents the minimal tweaking necessary to get Agate up and running. Specifying the path to the certificate and key directory is always necessary, as the Gemini protocol requires TLS by default.
+
+  If the specified =certificates= path is writable by Agate, and contains no valid pre-generated key and certificate, Agate will try to generate them on the first start. In this case you should pass at least one hostname using the =hostnames= option. If the specified directory is read-only, key and certificate should be pre-generated by the user.
+
+  To obtain a certificate and a key in DER format, you could, for example, use OpenSSL, running commands similar to the following example:
+
+  #+begin_example
+  openssl genpkey -out key.der -outform DER -algorithm RSA \
+      -pkeyopt rsa_keygen_bits:4096
+  openssl req -x509 -key key.der -outform DER -days 3650 -out cert.der \
+      -subj "/CN=example.com"
+#+end_example
+
+  Of course, you'll have to replace /example.com/ with your own domain name, and then point the Agate configuration towards the path of the directory with the generated key and certificate using the =certificates= option.
+
+- Data Type: *agate-configuration* [[#index-agate_002dconfiguration][¶]] :: Data type representing the configuration of Agate.
+
+  - =package= (default: =agate=) :: The package object of the Agate server.
+
+  - =content= (default: ="/srv/gemini"=) :: The directory from which Agate will serve files.
+
+  - =certificates= (default: ="/srv/gemini-certs"=) :: Root of the certificate directory. Must be filled in with a value from the user.
+
+  - =addresses= (default: ='("[::]:1965" "0.0.0.0:1965")=) :: A list of the addresses to listen on.
+
+  - =hostnames= (default: ='()=) :: Virtual hosts for the Gemini server. If multiple values are specified, corresponding directory names should be present in the =content= directory. Optional.
+
+  - =languages= (default: =#f=) :: RFC 4646 language code(s) for text/gemini documents. Optional.
+
+  - =only-tls13?= (default: =#f=) :: Set to =#t= to disable support for TLSv1.2.
+
+  - =serve-secret?= (default: =#f=) :: Set to =#t= to serve secret files (files/directories starting with a dot).
+
+  - =central-configuration?= (default: =#f=) :: Set to =#t= to look for the .meta configuration file in the =content= root directory and will ignore =.meta= files in other directories
+
+  - =ed25519?= (default: =#f=) :: Set to =#t= to generate keys using the Ed25519 signature algorithm instead of the default ECDSA.
+
+  - =skip-port-check?= (default: =#f=) :: Set to =#t= to skip URL port check even when a =hostname= is specified.
+
+  - =log-ip?= (default: =#t=) :: Whether or not to output IP addresses when logging.
+
+  - =user= (default: ="agate"=) :: Owner of the =agate= process.
+
+  - =group= (default: ="agate"=) :: Owner's group of the =agate= process.
+
+  - =log-file= (default: ="/var/log/agate.log"=) :: The file which should store the logging output of Agate.
+
+**** Miniflux [[#Miniflux][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Miniflux
+:CLASS: subsubheading
+:END:
+The [[https://miniflux.app/][Miniflux]] is a minimalist RSS feed reader with a web interface.
+
+Depending on the configuration, an initial administrator user can be pre-created on startup. To enable this, =create-admin?= should be set to =#t=, and both =admin-username-file= and =admin-password-file= should point to files containing the username and password, respectively. However, it is recommended to manually change the password to a secure one via the web UI after the initial service startup.
+
+- Variable: *miniflux-service-type* [[#index-miniflux_002dservice_002dtype][¶]] :: This is the type of the Miniflux service. Its value must be a =miniflux-configuration= record as in this example:
+
+  #+begin_src lisp
+  (service miniflux-service-type
+           (miniflux-configuration
+            (listen-address "0.0.0.0:8080")
+            (base-url "http://my-news-source.test")
+            (create-administrator-account? #t)
+            (administrator-account-name "/var/miniflux/initial-admin-username")
+            (administrator-account-password "/var/miniflux/initial-admin-password")))
+  #+end_src
+
+  The details of the =miniflux-configuration= record type are given below.
+
+- Data Type: *miniflux-configuration* [[#index-miniflux_002dconfiguration][¶]] :: Available =miniflux-configuration= fields are:
+
+  - =listen-address= (default: ="127.0.0.1:8080"=) (type: string) :: Address to listen on. Use absolute path like ="/var/run/miniflux/miniflux.sock"= for a Unix socket.
+
+  - =base-url= (default: ="http://127.0.0.1/"=) (type: string) :: Base URL to generate HTML links and base path for cookies.
+
+  - =create-administrator-account?= (default: =#f=) (type: boolean) :: Create an initial administrator account.
+
+  - =administrator-account-name= (type: maybe-string-or-file-path) :: Initial administrator account name as a string or an absolute path to a file with an account name inside.
+
+  - =administrator-account-password= (type: maybe-string-or-file-path) :: Initial administrator account password as a string or an absolute path to a file with a password inside.
+
+  - =run-migrations?= (default: =#t=) (type: boolean) :: Run database migrations during application startup.
+
+  - =database-url= (default: ="host=/var/run/postgresql"=) (type: string) :: PostgreSQL connection string.
+
+  - =user= (default: ="miniflux"=) (type: string) :: User name for Postgresql and system account.
+
+  - =group= (default: ="miniflux"=) (type: string) :: Group for the system account.
+
+  - =log-file= (default: ="/var/log/miniflux.log"=) (type: string) :: Path to the log file.
+
+  - =extra-settings= (type: maybe-list) :: Extra configuration parameters as a list of strings.
+
+--------------
+
+Next: [[id:guix--High-Availability-Services][High Availability Services]], Previous: [[id:guix--LDAP-Services][LDAP Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

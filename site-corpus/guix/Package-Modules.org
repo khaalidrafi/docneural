@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: guix--Package-Modules
+:END:
+#+filetags: :guix:
+#+title: Package Modules
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Package-Modules>>
+Next: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 8.1 Package Modules [[#Package-Modules-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Package-Modules-1
+:CLASS: section
+:END:
+From a programming viewpoint, the package definitions of the GNU distribution are provided by Guile modules in the =(gnu packages …)= name space[[#FOOT18][^{18}]] (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Modules.html#Modules][Guile modules]] in GNU Guile Reference Manual). For instance, the =(gnu packages emacs)= module exports a variable named =emacs=, which is bound to a =<package>= object (see [[id:guix--Defining-Packages][Defining Packages]]).
+
+The =(gnu packages …)= module name space is automatically scanned for packages by the command-line tools. For instance, when running =guix install emacs=, all the =(gnu packages …)= modules are scanned until one that exports a package object whose name is =emacs= is found. This package search facility is implemented in the =(gnu packages)= module.
+
+Users can store package definitions in modules with different names---e.g., =(my-packages emacs)=[[#FOOT19][^{19}]]. There are two ways to make these package definitions visible to the user interfaces:
+
+1. By adding the directory containing your package modules to the search path with the =-L= flag of =guix package= and other commands (see [[id:guix--Common-Build-Options][Common Build Options]]), or by setting the =GUIX_PACKAGE_PATH= environment variable described below.
+2. By defining a /channel/ and configuring =guix pull= so that it pulls from it. A channel is essentially a Git repository containing package modules. See [[id:guix--Channels][Channels]], for more information on how to define and use channels.
+
+=GUIX_PACKAGE_PATH= works similarly to other search path variables:
+
+- Environment Variable: *GUIX_PACKAGE_PATH* [[#index-GUIX_005fPACKAGE_005fPATH][¶]] :: This is a colon-separated list of directories to search for additional package modules. Directories listed in this variable take precedence over the own modules of the distribution.
+
+The distribution is fully /bootstrapped/ and /self-contained/: each package is built based solely on other packages in the distribution. The root of this dependency graph is a small set of /bootstrap binaries/, provided by the =(gnu packages bootstrap)= module. For more information on bootstrapping, see [[id:guix--Bootstrapping][Bootstrapping]].
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF18][(18)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Note that packages under the =(gnu packages …)= module name space are not necessarily “GNU packages”. This module naming scheme follows the usual Guile module naming convention: =gnu= means that these modules are distributed as part of the GNU system, and =packages= identifies modules that define packages.
+
+***** [[#DOCF19][(19)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+Note that the file name and module name must match. For instance, the =(my-packages emacs)= module must be stored in a =my-packages/emacs.scm= file relative to the load path specified with =--load-path= or =GUIX_PACKAGE_PATH=. See [[https://doc.guix.gnu.org/guile/latest/en/html_node/Modules-and-the-File-System.html#Modules-and-the-File-System][Modules and the File System]] in GNU Guile Reference Manual, for details.
+
+--------------
+
+Next: [[id:guix--Defining-Packages][Defining Packages]], Up: [[id:guix--Programming-Interface][Programming Interface]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

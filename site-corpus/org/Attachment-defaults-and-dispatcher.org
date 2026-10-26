@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID: org--Attachment-defaults-and-dispatcher
+:END:
+#+filetags: :org:
+#+title: Attachment defaults and dispatcher (The Org Manual)
+
+Next:
+
+<<Attachment-defaults-and-dispatcher>>
+Next: [[id:org--Attachment-options][Attachment options]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.2.1 Attachment defaults and dispatcher [[#Attachment-defaults-and-dispatcher-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Attachment-defaults-and-dispatcher-1
+:CLASS: subsection
+:END:
+By default, Org attach uses ‘=ID=' properties when adding attachments to headings. This makes working with attachments fully automated. There is no decision needed for folder-name or location. ‘=ID='-based directories are by default located in the ‘=data/=' directory, which lives in the same directory where your Org file lives[[#FOOT91][^{91}]].
+
+When attachments are made using =org-attach= a default tag ‘=ATTACH=' is added to the node that gets the attachments.
+
+For more control over the setup, see [[id:org--Attachment-options][Attachment options]].
+
+The following commands deal with attachments:
+
+-  <<index-C_002dc-C_002da>>C-c C-a (=org-attach=) [[#index-C_002dc-C_002da][¶]] :: The dispatcher for commands related to the attachment system. After these keys, a list of commands is displayed, and you must press an additional key to select a command:
+
+  -  <<index-C_002dc-C_002da-a>>a (=org-attach-attach=) [[#index-C_002dc-C_002da-a][¶]] :: Select a file and move it into the task's attachment directory. The file is copied, moved, or linked, depending on =org-attach-method=. Note that hard links are not supported on all systems.
+
+  -  <<index-C_002dc-C_002da-c>>c/m/l [[#index-C_002dc-C_002da-c][¶]] :: Attach a file using the copy/move/link method. Note that hard links are not supported on all systems.
+
+  -  <<index-C_002dc-C_002da-b>>b (=org-attach-buffer=) [[#index-C_002dc-C_002da-b][¶]] :: Select a buffer and save it as a file in the task's attachment directory.
+
+  -  <<index-C_002dc-C_002da-n>>n (=org-attach-new=) [[#index-C_002dc-C_002da-n][¶]] :: Create a new attachment as an Emacs buffer.
+
+  -  <<index-C_002dc-C_002da-z>>z (=org-attach-sync=) [[#index-C_002dc-C_002da-z][¶]] :: Synchronize the current task with its attachment directory, in case you added attachments yourself.
+
+  -  <<index-C_002dc-C_002da-o>>o (=org-attach-open=) [[#index-C_002dc-C_002da-o][¶]] :: Open current task's attachment. If there is more than one, prompt for a file name first. Opening follows the rules set by =org-file-apps=. For more details, see the information on following hyperlinks (see [[id:org--Handling-Links][Handling Links]]).
+
+  -  <<index-C_002dc-C_002da-O>>O (=org-attach-open-in-emacs=) [[#index-C_002dc-C_002da-O][¶]] :: Also open the attachment, but force opening the file in Emacs.
+
+  -  <<index-C_002dc-C_002da-f>>f (=org-attach-reveal=) [[#index-C_002dc-C_002da-f][¶]] :: Open the current task's attachment directory.
+
+  -  <<index-C_002dc-C_002da-F>>F (=org-attach-reveal-in-emacs=) [[#index-C_002dc-C_002da-F][¶]] :: Also open the directory, but force using Dired in Emacs.
+
+  - <<index-C_002dc-C_002da-d>>d (=org-attach-delete-one=) [[#index-C_002dc-C_002da-d][¶]] :: Select and delete a single attachment.
+
+  - <<index-C_002dc-C_002da-D>>D (=org-attach-delete-all=) [[#index-C_002dc-C_002da-D][¶]] :: Delete all of a task's attachments. A safer way is to open the directory in Dired and delete from there.
+
+  -  <<index-C_002dc-C_002da-s>>s (=org-attach-set-directory=) [[#index-C_002dc-C_002da-s][¶]] :: Set a specific directory as the entry's attachment directory. This works by putting the directory path into the ‘=DIR=' property.
+
+  -  <<index-C_002dc-C_002da-S>>S (=org-attach-unset-directory=) [[#index-C_002dc-C_002da-S][¶]] :: Remove the attachment directory. This command removes the ‘=DIR=' property and asks the user to either move content inside that folder, if an ‘=ID=' property is set, delete the content, or to leave the attachment directory as is but no longer attached to the heading.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF91][(91)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+If you move entries or Org files from one directory to another, you may want to configure =org-attach-id-dir= to contain an absolute path.
+
+--------------
+
+Next: [[id:org--Attachment-options][Attachment options]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

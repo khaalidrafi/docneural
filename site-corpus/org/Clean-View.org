@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID: org--Clean-View
+:END:
+#+filetags: :org:
+#+title: Clean View (The Org Manual)
+
+Next:
+
+<<Clean-View>>
+Next: [[id:org--Execute-commands-in-the-active-region][Execute commands in the active region]], Previous: [[id:org--Speed-Keys][Speed Keys]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.4 A Cleaner Outline View [[#A-Cleaner-Outline-View][¶]]
+:PROPERTIES:
+:CUSTOM_ID: A-Cleaner-Outline-View
+:CLASS: section
+:END:
+Org's outline, with its stars and lack of indents, can look cluttered in short documents. For /book-like/ long documents, the effect is not as noticeable. Org provides an alternate stars and indentation scheme, as shown on the right in the following table. It displays only one star and indents text to line up with the heading:
+
+#+begin_example
+* Top level headline             |    * Top level headline
+** Second level                  |      * Second level
+*** Third level                  |        * Third level
+some text                        |          some text
+*** Third level                  |        * Third level
+more text                        |          more text
+* Another top level headline     |    * Another top level headline
+#+end_src
+
+Org can achieve this in two ways, (1) by just displaying the buffer in this way without changing it, or (2) by actually indenting every line in the desired amount with hard spaces and hiding leading stars.
+
+- [[id:org--Org-Indent-Mode][Org Indent Mode]]
+- [[id:org--Hard-indentation][Hard indentation]]
+
+--------------
+
+Next: [[id:org--Execute-commands-in-the-active-region][Execute commands in the active region]], Previous: [[id:org--Speed-Keys][Speed Keys]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

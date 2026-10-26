@@ -1,0 +1,108 @@
+:PROPERTIES:
+:ID: guix--GNU-Distribution
+:END:
+#+filetags: :guix:
+#+title: GNU Distribution
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<GNU-Distribution>>
+Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 1.2 GNU Distribution [[#GNU-Distribution-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: GNU-Distribution-1
+:CLASS: section
+:END:
+Guix comes with a distribution of the GNU system consisting entirely of free software[[#FOOT3][^{3}]]. The distribution can be installed on its own (see [[id:guix--System-Installation][System Installation]]), but it is also possible to install Guix as a package manager on top of an installed GNU/Linux system (see [[id:guix--Installation][Installation]]). When we need to distinguish between the two, we refer to the standalone distribution as Guix System.
+
+The distribution provides core GNU packages such as GNU libc, GCC, and Binutils, as well as many GNU and non-GNU applications. The complete list of available packages can be browsed [[https://www.gnu.org/software/guix/packages][on-line]] or by running =guix package= (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]):
+
+#+begin_example
+guix package --list-available
+#+end_example
+
+Our goal is to provide a practical 100% free software distribution of Linux-based and other variants of GNU, with a focus on the promotion and tight integration of GNU components, and an emphasis on programs and tools that help users exert that freedom.
+
+Packages are currently available on the following platforms:
+
+- =x86_64-linux= :: Intel/AMD =x86_64= architecture, Linux-Libre kernel.
+
+- =i686-linux= :: Intel 32-bit architecture (IA32), Linux-Libre kernel.
+
+- =armhf-linux= :: ARMv7-A architecture with hard float, Thumb-2 and NEON, using the EABI hard-float application binary interface (ABI), and Linux-Libre kernel.
+
+- =aarch64-linux= :: little-endian 64-bit ARMv8-A processors, Linux-Libre kernel.
+
+- =i586-gnu= :: [[https://hurd.gnu.org][GNU/Hurd]] on the Intel 32-bit architecture (IA32).
+
+  This configuration is experimental and under development. The easiest way for you to give it a try is by setting up an instance of =hurd-vm-service-type= on your GNU/Linux machine (see [[id:guix--Virtualization-Services::#transparent_002demulation_002dqemu][=hurd-vm-service-type=]]). See [[id:guix--Contributing][Contributing]], on how to help!
+
+- =x86_64-gnu= :: [[https://hurd.gnu.org][GNU/Hurd]] on the =x86_64= Intel/AMD 64-bit architecture.
+
+  This configuration is even more experimental and under heavy upstream development.
+
+- =mips64el-linux (unsupported)= :: little-endian 64-bit MIPS processors, specifically the Loongson series, n32 ABI, and Linux-Libre kernel. This configuration is no longer fully supported; in particular, there is no ongoing work to ensure that this architecture still works. Should someone decide they wish to revive this architecture then the code is still available.
+
+- =powerpc-linux (unsupported)= :: big-endian 32-bit PowerPC processors, specifically the PowerPC G4 with AltiVec support, and Linux-Libre kernel. This configuration is not fully supported and there is no ongoing work to ensure this architecture works.
+
+- =powerpc64le-linux= :: little-endian 64-bit Power ISA processors, Linux-Libre kernel. This includes POWER9 systems such as the [[https://www.fsf.org/news/talos-ii-mainboard-and-talos-ii-lite-mainboard-now-fsf-certified-to-respect-your-freedom][RYF Talos II mainboard]]. This platform is available as a "technology preview": although it is supported, substitutes are not yet available from the build farm (see [[id:guix--Substitutes][Substitutes]]), and some packages may fail to build (see [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]). That said, the Guix community is actively working on improving this support, and now is a great time to try it and get involved!
+
+- =riscv64-linux= :: little-endian 64-bit RISC-V processors, specifically RV64GC, and Linux-Libre kernel. This platform is available as a "technology preview": although it is supported, substitutes are not yet available from the build farm (see [[id:guix--Substitutes][Substitutes]]), and some packages may fail to build (see [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]). That said, the Guix community is actively working on improving this support, and now is a great time to try it and get involved!
+
+With Guix System, you /declare/ all aspects of the operating system configuration and Guix takes care of instantiating the configuration in a transactional, reproducible, and stateless fashion (see [[id:guix--System-Configuration][System Configuration]]). Guix System uses the Linux-libre kernel, the Shepherd initialization system (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual), the well-known GNU utilities and tool chain, as well as the graphical environment or system services of your choice.
+
+Guix System is available on all the above platforms except =mips64el-linux=, =powerpc-linux=, =powerpc64le-linux= and =riscv64-linux=.
+
+For information on porting to other architectures or kernels, see [[id:guix--Porting][Porting to a New Platform]].
+
+Building this distribution is a cooperative effort, and you are invited to join! See [[id:guix--Contributing][Contributing]], for information about how you can help.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF3][(3)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The term “free” here refers to the [[https://www.gnu.org/philosophy/free-sw.html][freedom provided to users of that software]].
+
+--------------
+
+Previous: [[id:guix--Managing-Software-the-Guix-Way][Managing Software the Guix Way]], Up: [[id:guix--Introduction][Introduction]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

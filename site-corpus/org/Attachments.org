@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID: org--Attachments
+:END:
+#+filetags: :org:
+#+title: Attachments (The Org Manual)
+
+Next:
+
+<<Attachments>>
+Next: [[id:org--RSS-Feeds][RSS Feeds]], Previous: [[id:org--Capture][Capture]], Up: [[id:org--Capture-and-Attachments][Capture and Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 10.2 Attachments [[#Attachments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Attachments-1
+:CLASS: section
+:END:
+It is often useful to associate reference material with a heading or subtree. Small chunks of plain text can simply be stored in the subtree of a project. Hyperlinks (see [[id:org--Hyperlinks][Hyperlinks]]) can establish associations with files that live elsewhere on a local, or even remote, computer, like emails or source code files belonging to a project.
+
+Another method is /attachments/, which are files located in a directory belonging to heading/subtree. Org uses directories named either by the ‘=ID=' property of a heading or by a ‘=DIR=' property.
+
+- [[id:org--Attachment-defaults-and-dispatcher][Attachment defaults and dispatcher]]
+- [[id:org--Attachment-options][Attachment options]]
+- [[id:org--Attachment-links][Attachment links]]
+- [[id:org--Automatic-version_002dcontrol-with-Git][Automatic version-control with Git]]
+- [[id:org--Attach-from-Dired][Attach from Dired]]

@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID: org--Sample-Configuration
+:END:
+#+filetags: :org:
+#+title: Sample Configuration (The Org Manual)
+
+Next:
+
+<<Sample-Configuration>>
+Next: [[id:org--Triggering-Publication][Triggering Publication]], Previous: [[id:org--Uploading-Files][Uploading Files]], Up: [[id:org--Publishing][Publishing]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 14.3 Sample Configuration [[#Sample-Configuration-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Sample-Configuration-1
+:CLASS: section
+:END:
+Below we provide two example configurations. The first one is a simple project publishing only a set of Org files. The second example is more complex, with a multi-component project.
+
+- [[id:org--Simple-example][Example: simple publishing configuration]]
+- [[id:org--Complex-example][Example: complex publishing configuration]]

@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID: org--Setting-up-the-staging-area
+:END:
+#+filetags: :org:
+#+title: Setting up the staging area (The Org Manual)
+
+Next:
+
+<<Setting-up-the-staging-area>>
+Next: [[id:org--Pushing-to-the-mobile-application][Pushing to the mobile application]], Up: [[id:org--Org-Mobile][Org Mobile]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 17.18.1 Setting up the staging area [[#Setting-up-the-staging-area-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Setting-up-the-staging-area-1
+:CLASS: subsection
+:END:
+The mobile application needs access to a file directory on a server[[#FOOT167][^{167}]] to interact with Emacs. Pass its location through the =org-mobile-directory= variable. If you can mount that directory locally just set the variable to point to that directory:
+
+#+begin_src lisp-preformatted
+(setq org-mobile-directory "~/orgmobile/")
+#+end_src
+
+Alternatively, by using TRAMP (see [[https://www.gnu.org/software/emacs/manual/html_node/tramp/index.html#Top][TRAMP User Manual]]), =org-mobile-directory= may point to a remote directory accessible through, for example, SSH, SCP, or DAVS:
+
+#+begin_src lisp-preformatted
+(setq org-mobile-directory "/davs:user@remote.host:/org/webdav/")
+#+end_src
+
+With a public server, consider encrypting the files. Org also requires OpenSSL installed on the local computer. To turn on encryption, set the same password in the mobile application and in Emacs. Set the password in the variable =org-mobile-use-encryption=[[#FOOT168][^{168}]]. Note that even after the mobile application encrypts the file contents, the file name remains visible on the file systems of the local computer, the server, and the mobile device.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF167][(167)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+For a server to host files, consider using a WebDAV server, such as [[https://nextcloud.com][Nextcloud]]. Additional help is at this [[https://orgmode.org/worg/org-faq.html#mobileorg_webdav][FAQ entry]].
+
+***** [[#DOCF168][(168)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+If Emacs is configured for safe storing of passwords, then configure the variable =org-mobile-encryption-password=; please read the docstring of that variable.
+
+--------------
+
+Next: [[id:org--Pushing-to-the-mobile-application][Pushing to the mobile application]], Up: [[id:org--Org-Mobile][Org Mobile]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

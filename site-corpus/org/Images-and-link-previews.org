@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: org--Images-and-link-previews
+:END:
+#+filetags: :org:
+#+title: Images and link previews (The Org Manual)
+
+Next:
+
+<<Images-and-link-previews>>
+Next: [[id:org--Captions][Captions]], Previous: [[id:org--Literal-Examples][Literal Examples]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.7 Images and link previews [[#Images-and-link-previews-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Images-and-link-previews-1
+:CLASS: section
+:END:
+Org mode can display previews of hyperlinks (see [[id:org--Hyperlinks][Hyperlinks]]) inside Org buffers. By default, only image links[[#FOOT123][^{123}]] can be previewed inline, where the images are displayed in place of the link path.
+
+You can customize the previews as described in [[id:org--Adding-Hyperlink-preview][Adding Hyperlink preview]]. Link previews do not have to display images -- any kind of display decoration (see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Overlay-Properties.html#Overlay-Properties][(elisp)Overlay Properties]]) can be used.
+
+You can preview the supported link types in the whole buffer, in the current section, active region or at point with the following commands:
+
+-  <<index-C_002dc-C_002dx-C_002dv>>C-c C-x C-v (=org-link-preview=) [[#index-C_002dc-C_002dx-C_002dv][¶]] :: Create inline previews for external links in the active region, if any; the link at point, if there is such; or in the current section otherwise. With a prefix argument, clear link previews at point or in the current entry. With a double prefix argument, preview all links in the buffer. With triple prefix argument, hide previews for all links in the buffer.
+
+  By default, only links without descriptions are previewed. You can force displaying previews for all supported links (including links with descriptions) using a numeric argument of =1=. This will toggle all previews in the active region, the link at point or the current section. A numeric prefix argument of =11= will toggle previews in the whole buffer instead.
+
+  Org mode can display link previews automatically when opening buffers. Either customize =org-startup-with-link-previews= or use the ‘=#+STARTUP: linkpreviews=' keyword to enable previews for that specific buffer when opening it. ‘=#+STARTUP: nolinkpreviews=' will disable previews on startup in the buffer.
+
+-  <<index-C_002dc-C_002dx-C_002dM_002dv>>C-c C-x C-M-v (=org-link-preview-refresh=) [[#index-C_002dc-C_002dx-C_002dM_002dv][¶]] :: Assure inline display of external link previews in the whole buffer and refresh them.
+
+- <<index-org_002dlink_002dpreview_002dregion>>M-x org-link-preview-region [[#index-org_002dlink_002dpreview_002dregion][¶]] :: Create inline previews for external links in the active region, or the buffer. With a prefix argument, also preview links with a text description part.
+
+- <<index-org_002dlink_002dpreview_002dclear>>M-x org-link-preview-clear [[#index-org_002dlink_002dpreview_002dclear][¶]] :: Clear external link previews in the active region, or the buffer.
+
+Link previews can also be displayed when cycling the folding state. When the custom option =org-cycle-link-previews-display= is set, supported link types under the subtree (including images) will be displayed automatically.
+
+- [[id:org--Images][Images]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF123][(123)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Image links are ‘=file:=' and ‘=attachment:=' links to existing image files; Emacs can only display the linked images listed in =image-types= variable
+
+--------------
+
+Next: [[id:org--Captions][Captions]], Previous: [[id:org--Literal-Examples][Literal Examples]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

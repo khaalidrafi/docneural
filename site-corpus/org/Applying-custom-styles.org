@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: org--Applying-custom-styles
+:END:
+#+filetags: :org:
+#+title: Applying custom styles (The Org Manual)
+
+Next:
+
+<<Applying-custom-styles>>
+Next: [[id:org--Links-in-ODT-export][Links in ODT export]], Previous: [[id:org--Extending-ODT-export][Extending ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.12.5 Applying custom styles [[#Applying-custom-styles-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Applying-custom-styles-1
+:CLASS: subsection
+:END:
+The ODT export backend comes with many OpenDocument styles (see [[id:org--Advanced-topics-in-ODT-export::#Working-with-OpenDocument-style-files][Working with OpenDocument style files]]). To expand or further customize these built-in style sheets, either edit the style sheets directly or generate them using an application such as LibreOffice. The example here shows creating a style using LibreOffice.
+
+**** Applying custom styles: the easy way [[#Applying-custom-styles_003a-the-easy-way][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Applying-custom-styles_003a-the-easy-way
+:CLASS: subsubheading
+:END:
+1. Create a sample ‘=example.org=' file with settings as shown below, and export it to ODT format.
+
+   #+begin_example
+   #+OPTIONS: H:10 num:t
+#+end_example
+
+2. Open the above ‘=example.odt=' using LibreOffice. Use the /Stylist/ to locate the target styles, which typically have the “Org” prefix. Open one, modify, and save as either OpenDocument Text (ODT) or OpenDocument Template (OTT) file.
+
+3.  Customize the variable =org-odt-styles-file= and point it to the newly created file. For additional configuration options, see [[id:org--Advanced-topics-in-ODT-export::#x_002doverriding_002dfactory_002dstyles][Overriding factory styles]].
+
+   To apply an ODT style to a particular file, use the ‘=ODT_STYLES_FILE=' keyword as shown in the example below:
+
+   #+begin_example
+   #+ODT_STYLES_FILE: "/path/to/example.ott"
+#+end_example
+
+   or
+
+   #+begin_example
+   #+ODT_STYLES_FILE: ("/path/to/file.ott" ("styles.xml" "image/hdr.png"))
+#+end_example
+
+**** Using third-party styles and templates [[#Using-third_002dparty-styles-and-templates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Using-third_002dparty-styles-and-templates-1
+:CLASS: subsubheading
+:END:
+The ODT export backend relies on many templates and style names. Using third-party styles and templates can lead to mismatches. Templates derived from built-in ODT templates and styles seem to have fewer problems.
+
+--------------
+
+Next: [[id:org--Links-in-ODT-export][Links in ODT export]], Previous: [[id:org--Extending-ODT-export][Extending ODT export]], Up: [[id:org--OpenDocument-Text-Export][OpenDocument Text Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

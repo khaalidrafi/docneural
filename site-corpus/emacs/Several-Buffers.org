@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID: emacs--Several-Buffers
+:END:
+#+filetags: :emacs:
+#+title: Several Buffers
+
+Next: [[id:emacs--Indirect-Buffers][Indirect Buffers]]   Previous: [[id:emacs--Kill-Buffer][Killing Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
+
+<<Several-Buffers>>
+*** 21.5 Operating on Several Buffers [[#Operating-on-Several-Buffers][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Operating-on-Several-Buffers
+:CLASS: section
+:END:
+- M-x buffer-menu :: Begin editing a buffer listing all Emacs buffers.
+
+- M-x buffer-menu-other-window :: Similar, but do it in another window.
+
+The /Buffer Menu/ opened by C-x C-b (see [[id:emacs--List-Buffers][Listing Existing Buffers]]) does not merely list buffers. It also allows you to perform various operations on buffers, through an interface similar to Dired (see [[id:emacs--Dired][Dired, the Directory Editor]]). You can save buffers, kill them (here called /deleting/ them, for consistency with Dired), or display them.
+
+To use the Buffer Menu, type C-x C-b and switch to the window displaying the =*Buffer List*= buffer. You can also type M-x buffer-menu to open the Buffer Menu in the selected window. Alternatively, the command M-x buffer-menu-other-window opens the Buffer Menu in another window, and selects that window.
+
+The Buffer Menu is a read-only buffer, and can be changed only through the special commands described in this section. The usual cursor motion commands can be used in this buffer. The following commands apply to the buffer described on the current line:
+
+-  <<index-Buffer_002dmenu_002ddelete>>d [[#index-Buffer_002dmenu_002ddelete][¶]] :: Flag the buffer for deletion (killing), then move point to the next line (=Buffer-menu-delete=). The deletion flag is indicated by the character ‘=D=' on the line, before the buffer name. The deletion occurs only when you type the x command (see below).
+
+-  <<index-Buffer_002dmenu_002ddelete_002dbackwards>>C-d [[#index-Buffer_002dmenu_002ddelete_002dbackwards][¶]] :: Like d, but move point up instead of down (=Buffer-menu-delete-backwards=).
+
+-  <<index-Buffer_002dmenu_002dsave>>s [[#index-Buffer_002dmenu_002dsave][¶]] :: Flag the buffer for saving (=Buffer-menu-save=). The save flag is indicated by the character ‘=S=' on the line, before the buffer name. The saving occurs only when you type x. You may request both saving and deletion for the same buffer.
+
+-  <<index-Buffer_002dmenu_002dexecute>>x [[#index-Buffer_002dmenu_002dexecute][¶]] :: Perform all flagged deletions and saves (=Buffer-menu-execute=).
+
+-  <<index-Buffer_002dmenu_002dunmark>>u [[#index-Buffer_002dmenu_002dunmark][¶]] :: Remove all flags from the current line, and move down (=Buffer-menu-unmark=). With a prefix argument, moves up after removing the flags.
+
+-  <<index-Buffer_002dmenu_002dbackup_002dunmark>>DEL [[#index-Buffer_002dmenu_002dbackup_002dunmark][¶]] :: Move to the previous line and remove all flags on that line (=Buffer-menu-backup-unmark=).
+
+-  <<index-Buffer_002dmenu_002dunmark_002dall_002dbuffers>>M-DEL [[#index-Buffer_002dmenu_002dunmark_002dall_002dbuffers][¶]] :: Remove a particular flag from all lines (=Buffer-menu-unmark-all-buffers=). This asks for a single character, and unmarks buffers marked with that character; typing RET removes all marks.
+
+-  <<index-Buffer_002dmenu_002dunmark_002dall>>U [[#index-Buffer_002dmenu_002dunmark_002dall][¶]] :: Remove all flags from all the lines (=Buffer-menu-unmark-all=).
+
+The commands for removing flags, d and C-d, accept a numeric argument as a repeat count.
+
+The following commands operate immediately on the buffer listed on the current line. They also accept a numeric argument as a repeat count.
+
+-  <<index-Buffer_002dmenu_002dnot_002dmodified>>~ [[#index-Buffer_002dmenu_002dnot_002dmodified][¶]] :: Mark the buffer as unmodified (=Buffer-menu-not-modified=). See [[id:emacs--Saving::#Save-Commands][Commands for Saving Files]].
+
+-  <<index-Buffer_002dmenu_002dtoggle_002dread_002donly>>% [[#index-Buffer_002dmenu_002dtoggle_002dread_002donly][¶]] :: Toggle the buffer's read-only status (=Buffer-menu-toggle-read-only=). See [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]].
+
+-  <<index-Buffer_002dmenu_002dvisit_002dtags_002dtable>>t [[#index-Buffer_002dmenu_002dvisit_002dtags_002dtable][¶]] :: Visit the buffer as a tags table (=Buffer-menu-visit-tags-table=). See [[id:emacs--Xref::#Select-Tags-Table][Selecting a Tags Table]].
+
+The following commands are used to select another buffer or buffers:
+
+-  <<index-quit_002dwindow-1>>q [[#index-quit_002dwindow-1][¶]] :: Quit the Buffer Menu (=quit-window=). The most recent formerly visible buffer is displayed in its place.
+
+-  <<index-Buffer_002dmenu_002dthis_002dwindow>>RET [[#index-Buffer_002dmenu_002dthis_002dwindow][¶]]\\
+  f :: Select this line's buffer, replacing the =*Buffer List*= buffer in its window (=Buffer-menu-this-window=).
+
+-  <<index-Buffer_002dmenu_002dother_002dwindow>>o [[#index-Buffer_002dmenu_002dother_002dwindow][¶]] :: Select this line's buffer in another window, as if by C-x 4 b, leaving =*Buffer List*= visible (=Buffer-menu-other-window=).
+
+-  <<index-Buffer_002dmenu_002dswitch_002dother_002dwindow>>C-o [[#index-Buffer_002dmenu_002dswitch_002dother_002dwindow][¶]] :: Display this line's buffer in another window, without selecting it (=Buffer-menu-switch-other-window=).
+
+-  <<index-Buffer_002dmenu_002d1_002dwindow>>1 [[#index-Buffer_002dmenu_002d1_002dwindow][¶]] :: Select this line's buffer in a full-frame window (=Buffer-menu-1-window=).
+
+-  <<index-Buffer_002dmenu_002d2_002dwindow>>2 [[#index-Buffer_002dmenu_002d2_002dwindow][¶]] :: Set up two windows on the current frame, with this line's buffer selected in one, and a previously current buffer (aside from =*Buffer List*=) in the other (=Buffer-menu-2-window=).
+
+-  <<index-Buffer_002dmenu_002dbury>>b [[#index-Buffer_002dmenu_002dbury][¶]] :: Bury this line's buffer (=Buffer-menu-bury=) (i.e., move it to the end of the buffer list).
+
+-  <<index-Buffer_002dmenu_002dmark>>m [[#index-Buffer_002dmenu_002dmark][¶]] :: Mark this line's buffer to be displayed in another window if you exit with the v command (=Buffer-menu-mark=). The display flag is indicated by the character ‘=>=' at the beginning of the line. (A single buffer may not have both deletion and display flags.)
+
+-  <<index-Buffer_002dmenu_002dselect>>v [[#index-Buffer_002dmenu_002dselect][¶]] :: Select this line's buffer, and also display in other windows any buffers flagged with the m command (=Buffer-menu-select=). If you have not flagged any buffers, this command is equivalent to 1.
+
+The following commands affect the entire buffer list:
+
+-  <<index-tabulated_002dlist_002dsort>>S [[#index-tabulated_002dlist_002dsort][¶]] :: Sort the Buffer Menu entries according to their values in the column at point. With a numeric prefix argument =n=, sort according to the =n=-th column (=tabulated-list-sort=).
+
+-  <<index-_007d-_0028Buffer-Menu_0029>>} [[#index-_007d-_0028Buffer-Menu_0029][¶]] :: Widen the current column width by =n= (the prefix numeric argument) characters.
+
+-  <<index-_007b-_0028Buffer-Menu_0029>>{ [[#index-_007b-_0028Buffer-Menu_0029][¶]] :: Narrow the current column width by =n= (the prefix numeric argument) characters.
+
+-  <<index-Buffer_002dmenu_002dtoggle_002dfiles_002donly>>T [[#index-Buffer_002dmenu_002dtoggle_002dfiles_002donly][¶]] :: Delete, or reinsert, lines for non-file buffers (=Buffer-menu-toggle-files-only=). This command toggles the inclusion of such buffers in the buffer list.
+
+-  <<index-Buffer_002dmenu_002dtoggle_002dinternal>>I [[#index-Buffer_002dmenu_002dtoggle_002dinternal][¶]] :: Toggle display of internal buffers, those whose names begin with a space.
+
+Normally, the buffer =*Buffer List*= is not updated automatically when buffers are created and killed; its contents are just text. If you have created, deleted or renamed buffers, the way to update =*Buffer List*= to show what you have done is to type g (=revert-buffer=). You can make this happen regularly every =auto-revert-interval= seconds if you enable Auto Revert mode in this buffer, as long as it is not marked modified. Global Auto Revert mode applies to the =*Buffer List*= buffer only if =global-auto-revert-non-file-buffers= is non-=nil=. See [[id:emacs--Auto-Revert::#Auto-Reverting-the-Buffer-Menu][global-auto-revert-non-file-buffers]], for details.
+
+--------------

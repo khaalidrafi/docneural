@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: emacs--Lossage
+:END:
+#+filetags: :emacs:
+#+title: Lossage
+
+Next: [[id:emacs--Bugs][Reporting Bugs]]   Previous: [[id:emacs--Quitting][Quitting and Aborting]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<Lossage>>
+** 53 Dealing with Emacs Trouble [[#Dealing-with-Emacs-Trouble][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Dealing-with-Emacs-Trouble
+:CLASS: chapter section-level-set-chapter
+:END:
+This section describes how to recognize and deal with situations in which Emacs does not work as you expect, such as keyboard code mixups, garbled displays, running out of memory, and crashes and hangs.
+
+See [[id:emacs--Bugs][Reporting Bugs]], for what to do when you think you have found a bug in Emacs.
+
+--------------

@@ -1,0 +1,283 @@
+:PROPERTIES:
+:ID: guix--Shepherd-Services
+:END:
+#+filetags: :guix:
+#+title: Shepherd Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Shepherd-Services>>
+Next: [[id:guix--Complex-Configurations][Complex Configurations]], Previous: [[id:guix--Service-Reference][Service Reference]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.19.4 Shepherd Services [[#Shepherd-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Shepherd-Services-1
+:CLASS: subsection
+:END:
+The =(gnu services shepherd)= module provides a way to define services managed by the GNU Shepherd, which is the initialization system---the first process that is started when the system boots, also known as PID 1 (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Introduction.html#Introduction][Introduction]] in The GNU Shepherd Manual).
+
+Services in the Shepherd can depend on each other. For instance, the SSH daemon may need to be started after the syslog daemon has been started, which in turn can only happen once all the file systems have been mounted. The simple operating system defined earlier (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]) results in a service graph like this:
+
+You can actually generate such a graph for any operating system definition using the =guix system shepherd-graph= command (see [[id:guix--Invoking-guix-system::#system_002dshepherd_002dgraph][=guix system shepherd-graph=]]).
+
+The =%shepherd-root-service= is a service object representing PID 1, of type =shepherd-root-service-type=; it can be extended by passing it lists of =<shepherd-service>= objects.
+
+- Data Type: *shepherd-service* [[#index-shepherd_002dservice][¶]] :: The data type representing a service managed by the Shepherd.
+
+  - =provision= :: This is a list of symbols denoting what the service provides.
+
+    These are the names that may be passed to =herd start=, =herd status=, and similar commands (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Invoking-herd.html#Invoking-herd][Invoking herd]] in The GNU Shepherd Manual). See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Defining-Services.html#Defining-Services][Defining Services]] in The GNU Shepherd Manual, for details.
+
+  - =requirement= (default: ='()=) :: List of symbols denoting the Shepherd services this one depends on.
+
+    With very few exceptions, services that start a daemon must depend at least on the =user-processes= service; this ensures that these daemons are started after all the file systems have been mounted and that, during shutdown, they are stopped before attempting to terminate remaining user processes.
+
+    Similarly, services that do make mounts during their startup or operation, should have =user-file-systems= as a requirement. =user-processes= does depend on =user-file-systems= as well. So direct requirement only on =user-processes= is sufficient.
+
+  - <<index-one_002dshot-services_002c-for-the-Shepherd>>=one-shot?= (default: =#f=) [[#index-one_002dshot-services_002c-for-the-Shepherd][¶]] :: Whether this service is /one-shot/. One-shot services stop immediately after their =start= action has completed. See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Defining-Services.html#Defining-Services][Defining Services]] in The GNU Shepherd Manual, for more info.
+
+  - =respawn?= (default: =#t=) :: Whether to restart the service when it stops, for instance when the underlying process dies.
+
+  - =respawn-limit= (default: =#f=) :: Set a limit on how many times and how frequently a service may be restarted by Shepherd before it is disabled. See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Defining-Services.html#Defining-Services][Defining Services]] in The GNU Shepherd Manual, for details.
+
+  - =respawn-delay= (default: =#f=) :: When true, this is the delay in seconds before restarting a failed service.
+
+  - =start= (default: =#~(const #t)=)\\
+    =stop= (default: =#~(const #f)=) :: The =start= and =stop= fields refer to the Shepherd's facilities to start and stop processes (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][Service De- and Constructors]] in The GNU Shepherd Manual). They are given as G-expressions that get expanded in the Shepherd configuration file (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+  - <<index-actions_002c-of-Shepherd-services>>=actions= (default: ='()=) [[#index-actions_002c-of-Shepherd-services][¶]] :: This is a list of =shepherd-action= objects (see below) defining /actions/ supported by the service, in addition to the standard =start= and =stop= actions. Actions listed here become available as =herd= sub-commands:
+
+    #+begin_example
+    herd action service [arguments...]
+#+end_example
+
+  - =free-form= (default: =#f=) :: When set, this field replaces the =start=, =stop=, and =actions= fields. It is meant to be used when the service definition comes from some other source, typically the service collection provided by the Shepherd proper (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-Collection.html#Service-Collection][Service Collection]] in The GNU Shepherd Manual).
+
+    For example, the snippet below defines a service for the Shepherd's built-in REPL (read-eval-print loop) service (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/REPL-Service.html#REPL-Service][REPL Service]] in The GNU Shepherd Manual):
+
+    #+begin_src lisp
+    (shepherd-service
+      (provision '(repl))
+      (modules '((shepherd service repl)))
+      (free-form #~(repl-service)))
+    #+end_src
+
+    In this case, the service object is returned by the =repl-service= procedure of the Shepherd, so all the =free-form= G-expression does is call that procedure. Note that the =provision= field must be consistent with the actual service provision.
+
+  - =auto-start?= (default: =#t=) :: Whether this service should be started automatically by the Shepherd. If it is =#f= the service has to be started manually with =herd start=.
+
+  - =documentation= :: A documentation string, as shown when running:
+
+    #+begin_example
+    herd doc service-name
+#+end_example
+
+    where =service-name= is one of the symbols in =provision= (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Invoking-herd.html#Invoking-herd][Invoking herd]] in The GNU Shepherd Manual).
+
+  - =modules= (default: =%default-modules=) :: This is the list of modules that must be in scope when =start= and =stop= are evaluated.
+
+The example below defines a Shepherd service that spawns =syslogd=, the system logger from the GNU Networking Utilities (see [[https://doc.guix.gnu.org/inetutils/latest/en/html_node/syslogd-invocation.html#syslogd-invocation][=syslogd=]] in GNU Inetutils):
+
+#+begin_example
+(let ((config (plain-file "syslogd.conf" "...")))
+  (shepherd-service
+    (documentation "Run the syslog daemon (syslogd).")
+    (provision '(syslogd))
+    (requirement '(user-processes))
+    (start #~(make-forkexec-constructor
+               (list #$(file-append inetutils "/libexec/syslogd")
+                     "--rcfile" #$config)
+               #:pid-file "/var/run/syslog.pid"))
+    (stop #~(make-kill-destructor))))
+#+end_example
+
+Key elements in this example are the =start= and =stop= fields: they are /staged/ code snippets that use the =make-forkexec-constructor= procedure provided by the Shepherd and its dual, =make-kill-destructor= (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][Service De- and Constructors]] in The GNU Shepherd Manual). The =start= field will have =shepherd= spawn =syslogd= with the given option; note that we pass =config= after =--rcfile=, which is a configuration file declared above (contents of this file are omitted). Likewise, the =stop= field tells how this service is to be stopped; in this case, it is stopped by making the =kill= system call on its PID. Code staging is achieved using G-expressions: =#~= stages code, while =#$= “escapes” back to host code (see [[id:guix--G_002dExpressions][G-Expressions]]).
+
+- Data Type: *shepherd-action* [[#index-shepherd_002daction][¶]] :: This is the data type that defines additional actions implemented by a Shepherd service (see above).
+
+  - =name= :: Symbol naming the action.
+
+  - =documentation= :: This is a documentation string for the action. It can be viewed by running:
+
+    #+begin_example
+    herd doc service action action
+#+end_example
+
+  - =procedure= :: This should be a gexp that evaluates to a procedure of at least one argument, which is the “running value” of the service (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Slots-of-services.html#Slots-of-services][Slots of services]] in The GNU Shepherd Manual).
+
+  The following example defines an action called =say-hello= that kindly greets the user:
+
+  #+begin_src lisp
+  (shepherd-action
+    (name 'say-hello)
+    (documentation "Say hi!")
+    (procedure #~(lambda (running . args)
+                   (format #t "Hello, friend! arguments: ~s\n"
+                           args)
+                   #t)))
+  #+end_src
+
+  Assuming this action is added to the =example= service, then you can do:
+
+  #+begin_example
+  # herd say-hello example
+  Hello, friend! arguments: ()
+  # herd say-hello example a b c
+  Hello, friend! arguments: ("a" "b" "c")
+#+end_example
+
+  This, as you can see, is a fairly sophisticated way to say hello. See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Defining-Services.html#Defining-Services][Defining Services]] in The GNU Shepherd Manual, for more info on actions.
+
+- Procedure: *shepherd-configuration-action* [[#index-shepherd_002dconfiguration_002daction][¶]] :: Return a =configuration= action to display =file=, which should be the name of the service's configuration file.
+
+  It can be useful to equip services with that action. For example, the service for the Tor anonymous router (see [[id:guix--Networking-Services][=tor-service-type=]]) is defined roughly like this:
+
+  #+begin_src lisp
+  (let ((torrc (plain-file "torrc" ...)))
+    (shepherd-service
+      (provision '(tor))
+      (requirement '(user-processes loopback syslogd))
+
+      (start #~(make-forkexec-constructor
+                (list #$(file-append tor "/bin/tor") "-f" #$torrc)
+                #:user "tor" #:group "tor"))
+      (stop #~(make-kill-destructor))
+      (actions (list (shepherd-configuration-action torrc)))
+      (documentation "Run the Tor anonymous network overlay.")))
+  #+end_src
+
+  Thanks to this action, administrators can inspect the configuration file passed to =tor= with this shell command:
+
+  #+begin_example
+  cat $(herd configuration tor)
+#+end_example
+
+  This can come in as a handy debugging tool!
+
+- Procedure: *shepherd-signal-action* =name signal [#:documentation ‘Send signal ==signal== to the running service‘] [#:message ‘Service has been asked to perform ==name==‘]= [[#index-shepherd_002dsignal_002daction][¶]] :: Return a shepherd action with =name= to send =signal= to the running process. The optional =documentation= and =message= can be used to customize the documentation and output message.
+
+  Many daemons perform special actions after receiving a specific signal.
+
+  For example the =syslogd= logger will reread its configuration file after receiving =SIGHUP=.
+
+  After adding
+
+  #+begin_src lisp
+  (shepherd-signal-action 'reload SIGHUP)
+  #+end_src
+
+  the =reload= action will be available and can be used with
+
+  #+begin_example
+  herd reload syslogd
+#+end_example
+
+- Variable: *shepherd-root-service-type* [[#index-shepherd_002droot_002dservice_002dtype][¶]] :: The service type for the Shepherd “root service”---i.e., PID 1.
+
+  This is the service type that extensions target when they want to create shepherd services (see [[id:guix--Service-Types-and-Services][Service Types and Services]], for an example). Each extension must pass a list of =<shepherd-service>=. Its value must be a =shepherd-configuration=, as described below.
+
+- Data Type: *shepherd-configuration* [[#index-shepherd_002dconfiguration][¶]] :: This data type represents the Shepherd's configuration.
+
+  - =shepherd= (default: =shepherd=) :: The Shepherd package to use.
+
+  - =services= (default: ='()=) :: A list of =<shepherd-service>= to start. You should probably use the service extension mechanism instead (see [[#Shepherd-Services][Shepherd Services]]).
+
+  - =check?= (default: =#t=) :: Whether to check the entire configuration with =shepherd --dry-run= (supported since the Shepherd 1.1 series).
+
+    When true, an invalid configuration---e.g., with unbound variables, wrong argument types, or similar errors---leads to build error when the system is instantiated, making it impossible to end up with a system with obvious Shepherd configuration errors.
+
+The following example specifies the Shepherd package for the operating system:
+
+#+begin_src lisp
+(operating-system
+  ;; ...
+  (services (append (list openssh-service-type))
+            ;; ...
+            %desktop-services)
+  ;; ...
+  ;; Use own Shepherd package.
+  (essential-services
+   (modify-services (operating-system-default-essential-services
+                     this-operating-system)
+     (shepherd-root-service-type config => (shepherd-configuration
+                                            (inherit config)
+                                            (shepherd my-shepherd))))))
+#+end_src
+
+- Variable: *shepherd-transient-service-type* [[#index-shepherd_002dtransient_002dservice_002dtype][¶]] :: This service type represents the Shepherd's =transient= service, which lets you spawn commands in the background and interact with them as regular Shepherd services; it is similar to =systemd-run=.
+
+  For example, the command below spawns =rsync= in the background, in an environment where the =SSH_AUTH_SOCK= environment variable has the given value:
+
+  #+begin_example
+  herd spawn transient -E SSH_AUTH_SOCK=$SSH_AUTH_SOCK -- \
+    rsync -e ssh -vur . backup.example.org:
+#+end_example
+
+  See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Transient-Service-Maker.html#Transient-Service-Maker][Transient Service Maker]] in The GNU Shepherd Manual, for more info on the =transient= service.
+
+- Variable: *shepherd-timer-service-type* [[#index-shepherd_002dtimer_002dservice_002dtype][¶]] :: This is the service type representing the Shepherd's =timer= service, which lets you schedule the execution of commands, similar to the venerable =at= command. Here is an example:
+
+  #+begin_example
+  herd schedule timer at 07:00 -- mpg123 Music/alarm.mp3
+#+end_example
+
+  See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timer-Service.html#Timer-Service][Timer Service]] in The GNU Shepherd Manual, for more info on the =timer= service.
+
+- Variable: *shepherd-system-log-service-type* [[#index-shepherd_002dsystem_002dlog_002dservice_002dtype][¶]] :: This service implements a /system log/, reading messages applications send to =/dev/log= and writing them to files or terminals according to user-defined rules. It provides functionality traditionally implemented by =syslogd= programs.
+
+  The value of services of this type must be a =system-log-configuration= record, as described below.
+
+  This service is part of =%base-services= (see [[id:guix--Base-Services][Base Services]]).
+
+- Data Type: *system-log-configuration* [[#index-system_002dlog_002dconfiguration][¶]] :: Available =system-log-configuration= fields are:
+
+  - =provision= (default: =(system-log syslogd)=) (type: list-of-symbols) :: The name(s) of the system log service.
+
+  - =requirement= (default: =(root-file-system)=) (type: list-of-symbols) :: Dependencies of the system log service.
+
+  - =kernel-log-file= (type: gexp-or-string-or-false) :: File from which kernel messages are read, =/dev/kmsg= by default.
+
+  - =message-destination= (default: =#f=) (type: gexp-or-false) :: This gexp must evaluate to a procedure that, when passed a log message, returns the list of files to write it to; =#f= is equivalent to using =(default-message-destination-procedure)=. See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/System-Log-Service.html#System-Log-Service][System Log Service]] in The GNU Shepherd Manual, for information on how to write that procedure.
+
+  - =date-format= (type: gexp-or-string) :: String or string-valued gexp specifying how to format timestamps in log files. It must be a valid string for =strftime= (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Time.html#Time][Time]] in GNU Guile Reference Manual), including delimiting space---e.g., ="%c "= for a format identical to that of traditional syslogd implementations.
+
+  - =history-size= (type: gexp-or-integer) :: Number of logging messages kept in memory for the purposes of making them available to =herd status system-log=.
+
+  - =max-silent-time= (type: gexp-or-integer-or-false) :: Time after which a mark is written to log files if nothing was logged during that time frame. When set to =#f=, this feature is disabled.
+
+- Variable: *%shepherd-root-service* [[#index-_0025shepherd_002droot_002dservice][¶]] :: This service represents PID 1.
+
+--------------
+
+Next: [[id:guix--Complex-Configurations][Complex Configurations]], Previous: [[id:guix--Service-Reference][Service Reference]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

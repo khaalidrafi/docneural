@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID: org--Custom-Agenda-Views
+:END:
+#+filetags: :org:
+#+title: Custom Agenda Views (The Org Manual)
+
+Next:
+
+<<Custom-Agenda-Views>>
+Next: [[id:org--Exporting-Agenda-Views][Exporting Agenda Views]], Previous: [[id:org--Agenda-Commands][Commands in the Agenda Buffer]], Up: [[id:org--Agenda-Views][Agenda Views]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 11.6 Custom Agenda Views [[#Custom-Agenda-Views-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Custom-Agenda-Views-1
+:CLASS: section
+:END:
+Custom agenda commands serve two purposes: to store and quickly access frequently used TODO and tags searches, and to create special composite agenda buffers. Custom agenda commands are accessible through the dispatcher (see [[id:org--Agenda-Dispatcher][The Agenda Dispatcher]]), just like the default commands.
+
+- [[id:org--Storing-searches][Storing searches]]
+- [[id:org--Block-agenda][Block agenda]]
+- [[id:org--Setting-options][Setting options for custom commands]]

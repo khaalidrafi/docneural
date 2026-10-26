@@ -1,0 +1,89 @@
+:PROPERTIES:
+:ID: guix--Invoking-guix-download
+:END:
+#+filetags: :guix:
+#+title: Invoking guix download
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Invoking-guix-download>>
+Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 9.3 Invoking =guix download= [[#Invoking-guix-download-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Invoking-guix-download-1
+:CLASS: section
+:END:
+When writing a package definition, developers typically need to download a source tarball, compute its SHA256 hash, and write that hash in the package definition (see [[id:guix--Defining-Packages][Defining Packages]]). The =guix download= tool helps with this task: it downloads a file from the given URI, adds it to the store, and prints both its file name in the store and its SHA256 hash.
+
+The fact that the downloaded file is added to the store saves bandwidth: when the developer eventually tries to build the newly defined package with =guix build=, the source tarball will not have to be downloaded again because it is already in the store. It is also a convenient way to temporarily stash files, which may be deleted eventually (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]).
+
+The =guix download= command supports the same URIs as used in package definitions. In particular, it supports =mirror://= URIs. =https= URIs (HTTP over TLS) are supported /provided/ the Guile bindings for GnuTLS are available in the user's environment; when they are not available, an error is raised. See [[http://gnutls.org/manual/gnutls-guile/Guile-Preparations.html#Guile-Preparations][how to install the GnuTLS bindings for Guile]] in GnuTLS-Guile, for more information.
+
+=guix download= verifies HTTPS server certificates by loading the certificates of X.509 authorities from the directory pointed to by the =SSL_CERT_DIR= environment variable (see [[id:guix--X_002e509-Certificates][X.509 Certificates]]), unless =--no-check-certificate= is used.
+
+Alternatively, =guix download= can also retrieve a Git repository, possibly a specific commit, tag, or branch.
+
+The following options are available:
+
+- =--hash===algorithm=\\
+  =-H ==algorithm= :: Compute a hash using the specified =algorithm=. See [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], for more information.
+
+- =--format===fmt=\\
+  =-f ==fmt= :: Write the hash in the format specified by =fmt=. For more information on the valid values for =fmt=, see [[id:guix--Invoking-guix-hash][Invoking =guix hash=]].
+
+- =--no-check-certificate= :: Do not validate the X.509 certificates of HTTPS servers.
+
+  When using this option, you have /absolutely no guarantee/ that you are communicating with the authentic server responsible for the given URL, which makes you vulnerable to “man-in-the-middle” attacks.
+
+- =--output===file=\\
+  =-o ==file= :: Save the downloaded file to =file= instead of adding it to the store.
+
+- =--git=\\
+  =-g= :: Checkout the Git repository at the latest commit on the default branch.
+
+- =--commit===commit-or-tag= :: Checkout the Git repository at =commit-or-tag=.
+
+  =commit-or-tag= can be either a tag or a commit defined in the Git repository.
+
+- =--branch===branch= :: Checkout the Git repository at =branch=.
+
+  The repository will be checked out at the latest commit of =branch=, which must be a valid branch of the Git repository.
+
+- =--recursive=\\
+  =-r= :: Recursively clone the Git repository.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-hash][Invoking =guix hash=]], Previous: [[id:guix--Invoking-guix-edit][Invoking =guix edit=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

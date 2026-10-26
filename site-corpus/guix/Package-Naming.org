@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID: guix--Package-Naming
+:END:
+#+filetags: :guix:
+#+title: Package Naming
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Package-Naming>>
+Next: [[id:guix--Version-Numbers][Version Numbers]], Previous: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.7.3 Package Naming [[#Package-Naming-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Package-Naming-1
+:CLASS: subsection
+:END:
+A package actually has two names associated with it. First, there is the name of the /Scheme variable/, the one following =define-public=. By this name, the package can be made known in the Scheme code, for instance as input to another package. Second, there is the string in the =name= field of a package definition. This name is used by package management commands such as =guix package= and =guix build=.
+
+Both are usually the same and correspond to the lowercase conversion of the project name chosen upstream, with underscores replaced with hyphens. For instance, GNUnet is available as =gnunet=, and SDL_net as =sdl-net=.
+
+A noteworthy exception to this rule is when the project name is only a single character, or if an older maintained project with the same name already exists---regardless of whether it has already been packaged for Guix. Use common sense to make such names unambiguous and meaningful. For example, Guix's package for the shell called “s” upstream is =s-shell= and /not/ =s=. Feel free to ask your fellow hackers for inspiration.
+
+We do not add =lib= prefixes for library packages, unless these are already part of the official project name. But see [[id:guix--Python-Modules][Python Modules]] and [[id:guix--Perl-Modules][Perl Modules]] for special rules concerning modules for the Python and Perl languages.
+
+Font package names are handled differently, see [[id:guix--Fonts][Fonts]].
+
+--------------
+
+Next: [[id:guix--Version-Numbers][Version Numbers]], Previous: [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

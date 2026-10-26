@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID: guix--Installation
+:END:
+#+filetags: :guix:
+#+title: Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Installation>>
+Next: [[id:guix--System-Installation][System Installation]], Previous: [[id:guix--Introduction][Introduction]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 2 Installation [[#Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Installation-1
+:CLASS: chapter
+:END:
+You can install the package management tool Guix on top of an existing GNU/Linux or GNU/Hurd system[[#FOOT4][^{4}]], referred to as a /foreign distro/. If, instead, you want to install the complete, standalone GNU system distribution, /Guix System/, see [[id:guix--System-Installation][System Installation]]. This section is concerned only with the installation of Guix on a foreign distro.
+
+#+begin_quote
+*Important:* This section only applies to systems without Guix. Following it for existing Guix installations will overwrite important system files.
+
+#+end_quote
+
+When installed on a foreign distro, GNU Guix complements the available tools without interference. Its data lives exclusively in two directories, usually =/gnu/store= and =/var/guix=; other files on your system, such as =/etc=, are left untouched.
+
+Once installed, Guix can be updated by running =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]).
+
+- [[id:guix--Binary-Installation][Binary Installation]]
+- [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]
+- [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]
+- [[id:guix--Application-Setup][Application Setup]]
+- [[id:guix--Upgrading-Guix][Upgrading Guix]]
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF4][(4)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Hurd support is currently limited.
+
+--------------
+
+Next: [[id:guix--System-Installation][System Installation]], Previous: [[id:guix--Introduction][Introduction]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

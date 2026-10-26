@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID: guix--Coding
+:END:
+#+filetags: :guix:
+#+title: Coding
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Coding>>
+Next: [[id:guix--System-Administration][System Administration]], Up: [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.20.1 Coding [[#Coding-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Coding-1
+:CLASS: subsection
+:END:
+The project runs many Guix-specific services; this is all lovely Scheme code but it tends to receive less attention than Guix itself:
+
+- [[https://git.cbaines.net/guix/bffe][Build Farm Front End]]
+- [[https://codeberg.org/guix/cuirass/][Cuirass]]
+- [[https://codeberg.org/guix/maintenance/src/branch/master/hydra/goggles.scm][Goggles]] (IRC logger)
+- [[https://codeberg.org/guix/build-coordinator][Guix Build Coordinator]]
+- [[https://codeberg.org/guix/data-service][Guix Data Service]]
+- [[https://codeberg.org/luis-felipe/guix-packages-website][Guix Packages Website]]
+- [[https://codeberg.org/guix/mumi][mumi]]
+- [[https://codeberg.org/guix/nar-herder][Nar Herder]]
+- [[https://codeberg.org/guix/qa-frontpage][QA Frontpage]]
+
+There is no time constraint on this coding activity: any improvement is welcome, whenever it comes. Most of these code bases are relatively small, which should make it easier to get started.
+
+Prerequisites: Familiarity with Guile, HTTP, and databases.
+
+If you wish to get started, check out the README of the project of your choice and get in touch with guix-devel and the primary developer(s) of the tool as per =git shortlog -s | sort -k1 -n=.

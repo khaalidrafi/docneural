@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID: org--Source-blocks-in-LaTeX-export
+:END:
+#+filetags: :org:
+#+title: Source blocks in LaTeX export (The Org Manual)
+
+Next:
+
+<<Source-blocks-in-LaTeX-export>>
+Next: [[id:org--Example-blocks-in-LaTeX-export][Example blocks in LaTeX export]], Previous: [[id:org--Plain-lists-in-LaTeX-export][Plain lists in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.10.8 Source blocks in LaTeX export [[#Source-blocks-in-LaTeX-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Source-blocks-in-LaTeX-export-1
+:CLASS: subsection
+:END:
+LaTeX export backend provides multiple ways to render src blocks in LaTeX, according to the value of =org-latex-src-block-backend=. The default value ‘=verbatim=' renders the src code verbatim, without any extra styling. Alternative values allow more colorful styling, but require additional LaTeX (‘=listings=', ‘=minted='), system (‘=minted='), or Emacs (‘=engraved=') packages. See the =org-latex-src-block-backend= docstring for more details.
+
+The LaTeX export backend can make source code blocks into floating objects through the attributes ‘=:float=' and ‘=:options='. For ‘=:float=':
+
+- ‘=t=' :: Makes a source block float; by default floats any source block with a caption.
+
+- ‘=multicolumn=' :: Spans the source block across multiple columns of a page.
+
+- ‘=nil=' :: Avoids a ‘=:float=' even if using a caption; useful for source code blocks that may not fit on a page.
+
+#+begin_example
+#+ATTR_LATEX: :float nil
+#+BEGIN_SRC emacs-lisp
+  Lisp code that may not fit in a single page.
+#+END_SRC
+#+end_example
+
+The LaTeX export backend passes string values in ‘=:options=' to LaTeX packages for customization of that specific source block. In the example below, the ‘=:options=' are set for Engraved or Minted. Minted is a source code highlighting LaTeX package with many configurable options[[#FOOT144][^{144}]]. Both Minted and Engraved are built on [[https://www.ctan.org/pkg/fvextra][fvextra]], and so support many of the same options.
+
+#+begin_example
+#+ATTR_LATEX: :options mathescape
+#+BEGIN_SRC emacs-lisp
+  (defun Fib (n) ; $n_i = n_{i-2} + n_{i-1}$
+    (if (< n 2) n (+ (Fib (- n 1)) (Fib (- n 2)))))
+#+END_SRC
+#+end_example
+
+To apply similar configuration options for all source blocks in a file, use the =org-latex-listings-options=, =org-latex-engraved-options=, and =org-latex-minted-options= variables.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF144][(144)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Minted uses an external Python package for code highlighting, which requires the flag ‘=-shell-escape=' to be added to =org-latex-pdf-process=.
+
+--------------
+
+Next: [[id:org--Example-blocks-in-LaTeX-export][Example blocks in LaTeX export]], Previous: [[id:org--Plain-lists-in-LaTeX-export][Plain lists in LaTeX export]], Up: [[id:org--LaTeX-Export][LaTeX Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

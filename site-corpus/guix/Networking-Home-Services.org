@@ -1,0 +1,77 @@
+:PROPERTIES:
+:ID: guix--Networking-Home-Services
+:END:
+#+filetags: :guix:
+#+title: Networking Home Services
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Networking-Home-Services>>
+Next: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Previous: [[id:guix--Sway-window-manager][Sway window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 13.4.20 Networking Home Services [[#Networking-Home-Services-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Networking-Home-Services-1
+:CLASS: subsection
+:END:
+This section lists services somewhat networking-related that you may use with Guix Home.
+
+**** Syncthing Service [[#Syncthing-Service][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Syncthing-Service
+:CLASS: subheading
+:END:
+The =(gnu home services syncthing)= module provides a service to set up the [[file:Syncthing][https://syncthing.net]] continuous file backup service.
+
+- Variable: *home-syncthing-service-type* [[#index-home_002dsyncthing_002dservice_002dtype][¶]] :: This is the service type for the =syncthing= daemon; it is the Home counterpart of the =syncthing-service-type= system service (see [[id:guix--Networking-Services][=syncthing-service-type=]]). The value for this service type is a =syncthing-configuration=.
+
+  Here is how you would set it up with the default configuration:
+
+  #+begin_src lisp
+  (service home-syncthing-service-type)
+  #+end_src
+
+  For a custom configuration, wrap you =syncthing-configuration= in =for-home=, as in this example:
+
+  #+begin_src lisp
+  (service home-syncthing-service-type
+           (for-home
+            (syncthing-configuration (logflags 5))))
+  #+end_src
+
+  For details about =syncthing-configuration=, check out the documentation of the system service (see [[id:guix--Networking-Services][=syncthing-service-type=]]).
+
+--------------
+
+Next: [[id:guix--Secrets-Home-Services][Secrets Home Services]], Previous: [[id:guix--Sway-window-manager][Sway window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

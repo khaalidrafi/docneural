@@ -1,0 +1,232 @@
+:PROPERTIES:
+:ID: guix--operating_002dsystem-Reference
+:END:
+#+filetags: :guix:
+#+title: operating-system Reference
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<operating_002dsystem-Reference>>
+Next: [[id:guix--File-Systems][File Systems]], Previous: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.3 =operating-system= Reference [[#operating_002dsystem-Reference-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: operating_002dsystem-Reference-1
+:CLASS: section
+:END:
+This section summarizes all the options available in =operating-system= declarations (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]).
+
+- Data Type: *operating-system* [[#index-operating_002dsystem-1][¶]] :: This is the data type representing an operating system configuration. By that, we mean all the global system configuration, not per-user configuration (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]).
+
+  - =kernel= (default: =linux-libre=) :: The package object of the operating system kernel to use[[#FOOT27][^{27}]].
+
+  - <<index-hurd>>=hurd= (default: =#f=) [[#index-hurd][¶]] :: The package object of the Hurd to be started by the kernel. When this field is set, produce a GNU/Hurd operating system. In that case, =kernel= must also be set to the =gnumach= package---the microkernel the Hurd runs on.
+
+    #+begin_quote
+    *Warning:* This feature is experimental and only supported for disk images.
+
+    #+end_quote
+
+  - =kernel-loadable-modules= (default: '()) :: A list of objects (usually packages) to collect loadable kernel modules from--e.g. =(list ddcci-driver-linux)=.
+
+  - =kernel-arguments= (default: =%default-kernel-arguments=) :: List of strings or gexps representing additional arguments to pass on the command-line of the kernel---e.g., =("console=ttyS0")=.
+
+  - =bootloader= :: The system bootloader configuration object. See [[id:guix--Bootloader-Configuration][Bootloader Configuration]].
+
+  - =label= :: This is the label (a string) as it appears in the bootloader's menu entry. The default label includes the kernel name and version.
+
+  - =keyboard-layout= (default: =#f=) :: This field specifies the keyboard layout to use in the console. It can be either =#f=, in which case the default keyboard layout is used (usually US English), or a =<keyboard-layout>= record. See [[id:guix--Keyboard-Layout][Keyboard Layout]], for more information.
+
+    This keyboard layout is in effect as soon as the kernel has booted. For instance, it is the keyboard layout in effect when you type a passphrase if your root file system is on a =luks-device-mapping= mapped device (see [[id:guix--Mapped-Devices][Mapped Devices]]).
+
+    #+begin_quote
+    *Note:* This does /not/ specify the keyboard layout used by the bootloader, nor that used by the graphical display server. See [[id:guix--Bootloader-Configuration][Bootloader Configuration]], for information on how to specify the bootloader's keyboard layout. See [[id:guix--X-Window][X Window]], for information on how to specify the keyboard layout used by the X Window System.
+
+    #+end_quote
+
+  -  <<index-initrd>>=initrd-modules= (default: =(base-initrd-modules (operating-system-kernel this-operating-system))=) [[#index-initrd][¶]] :: The list of Linux kernel modules that need to be available in the initial RAM disk. See [[id:guix--Initial-RAM-Disk][Initial RAM Disk]].
+
+  - =initrd= (default: =base-initrd=) :: A procedure that returns an initial RAM disk for the Linux kernel. This field is provided to support low-level customization and should rarely be needed for casual use. See [[id:guix--Initial-RAM-Disk][Initial RAM Disk]].
+
+  - <<index-firmware>>=firmware= (default: =%base-firmware=) [[#index-firmware][¶]] :: List of firmware packages loadable by the operating system kernel.
+
+    The default includes firmware needed for Atheros- and Broadcom-based WiFi devices (Linux-libre modules =ath9k= and =b43-open=, respectively). See [[id:guix--Hardware-Considerations][Hardware Considerations]], for more info on supported hardware.
+
+  - =host-name= :: The host name.
+
+  - =mapped-devices= (default: ='()=) :: A list of mapped devices. See [[id:guix--Mapped-Devices][Mapped Devices]].
+
+  - =file-systems= :: A list of file systems. See [[id:guix--File-Systems][File Systems]].
+
+  - <<index-swap-devices>>=swap-devices= (default: ='()=) [[#index-swap-devices][¶]] :: A list of swap spaces. See [[id:guix--Swap-Space][Swap Space]].
+
+  - =users= (default: =%base-user-accounts=)\\
+    =groups= (default: =%base-groups=) :: List of user accounts and groups. See [[id:guix--User-Accounts][User Accounts]].
+
+    If the =users= list lacks a user account with UID 0, a “root” account with UID 0 is automatically added.
+
+  - =skeletons= (default: =(default-skeletons)=) :: A list of target file name/file-like object tuples (see [[id:guix--G_002dExpressions][file-like objects]]). These are the skeleton files that will be added to the home directory of newly-created user accounts.
+
+    For instance, a valid value may look like this:
+
+    #+begin_src lisp
+    `((".bashrc" ,(plain-file "bashrc" "echo Hello\n"))
+      (".guile" ,(plain-file "guile"
+                             "(use-modules (ice-9 readline))
+                              (activate-readline)")))
+    #+end_src
+
+  - =issue= (default: =%default-issue=) :: A string denoting the contents of the =/etc/issue= file, which is displayed when users log in on a text console.
+
+  - =packages= (default: =%base-packages=) :: A list of packages to be installed in the global profile, which is accessible at =/run/current-system/profile=. Each element is either a package variable or a package/output tuple. Here's a simple example of both:
+
+    #+begin_src lisp
+    (cons* git                     ; the default "out" output
+           (list git "send-email") ; another output of git
+           %base-packages)         ; the default set
+    #+end_src
+
+    The default set includes core utilities and it is good practice to install non-core utilities in user profiles (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]).
+
+  - =timezone= (default: ="Etc/UTC"=) :: A timezone identifying string---e.g., ="Europe/Paris"=.
+
+    You can run the =tzselect= command to find out which timezone string corresponds to your region. Choosing an invalid timezone name causes =guix system= to fail.
+
+  - =locale= (default: ="en_US.utf8"=) :: The name of the default locale (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Locale-Names.html#Locale-Names][Locale Names]] in The GNU C Library Reference Manual). See [[id:guix--Locales][Locales]], for more information.
+
+  - =locale-definitions= (default: =%default-locale-definitions=) :: The list of locale definitions to be compiled and that may be used at run time. See [[id:guix--Locales][Locales]].
+
+  - =locale-libcs= (default: =(list ==glibc==)=) :: The list of GNU libc packages whose locale data and tools are used to build the locale definitions. See [[id:guix--Locales][Locales]], for compatibility considerations that justify this option.
+
+  - =name-service-switch= (default: =%default-nss=) :: Configuration of the libc name service switch (NSS)---a =<name-service-switch>= object. See [[id:guix--Name-Service-Switch][Name Service Switch]], for details.
+
+  - =services= (default: =%base-services=) :: A list of service objects denoting system services. See [[id:guix--Services][Services]].
+
+  - <<index-essential-services>>=essential-services= (default: ...) [[#index-essential-services][¶]] :: The list of “essential services”---i.e., things like instances of =system-service-type= (see [[id:guix--Service-Reference][Service Reference]]) and =host-name-service-type=, which are derived from the operating system definition itself. As a user you should /never/ need to touch this field.
+
+  -  <<index-PAM>>=pam-services= (default: =(base-pam-services)=) [[#index-PAM][¶]] :: Linux /pluggable authentication module/ (PAM) services.
+
+  - =privileged-programs= (default: =%default-privileged-programs=) :: List of =<privileged-program>=. See [[id:guix--Privileged-Programs][Privileged Programs]], for more information.
+
+  - <<index-sudoers-file>>=sudoers-file= (default: =%sudoers-specification=) [[#index-sudoers-file][¶]] :: The contents of the =/etc/sudoers= file as a file-like object (see [[id:guix--G_002dExpressions][=local-file= and =plain-file=]]).
+
+    This file specifies which users can use the =sudo= command, what they are allowed to do, and what privileges they may gain. The default is that only =root= and members of the =wheel= group may use =sudo=.
+
+  -  <<index-transformation_002c-of-operating-systems>>=transformation= (default: =identity=) [[#index-transformation_002c-of-operating-systems][¶]] :: A one-argument procedure that, when passed a file-like object, returns another file-like object (see [[id:guix--G_002dExpressions][G-Expressions]], for more on file-like objects).
+
+    This procedure is called for every file-like object---including but not limited to packages---that appears while lowering the operating system to a derivation, be it as part of a service definition, in an activation snippet, in the system profile, or anything else. It is thus in a key position to customize what goes in your operating system.
+
+    For example, here is how you would replace the =coreutils= package by its minimal variant:
+
+    #+begin_src lisp
+    (use-modules (gnu packages base))  ;for 'coreutils'
+
+    (operating-system
+      ;; ...
+      (transformation (lambda (p)
+                        (if (eq? p coreutils)
+                            coreutils-minimal
+                            p))))
+    #+end_src
+
+    Note that this simple transformation does not propagate to package dependencies, nor does it change variants of =coreutils= that may appear in the operating system.
+
+    To address this, you can resort to the more generic /package transformation procedures/---see [[id:guix--Package-Transformation-Options][Package Transformation Options]]. For example, here is how you would replace any =openssl= package with another version thereof in the entire dependency graph of every package that appears on the system:
+
+    #+begin_src lisp
+    (use-modules (guix transformations)
+                 (guix combinators)  ;for 'assuming'
+                 (gnu packages tls))
+
+
+    (operating-system
+      ;; ...
+      (transformation
+        ;; The procedure returned by 'package-input-rewriting/spec'
+        ;; expects a package, so call it only under the assumption
+        ;; that it is given a package; otherwise the file-like
+        ;; object is returned as is.
+        (given package?
+               (package-input-rewriting/spec
+                 `(("openssl" . ,openssl-3.5))))))
+    #+end_src
+
+    Likewise, here is how you would tune every package in the system for the =x86-64-v4= micro-architecture group:
+
+    #+begin_src lisp
+    (use-modules (guix transformations))
+
+    (operating-system
+      ;; ...
+      (transformation
+        (options->transformation '((tune . "x86-64-v4"))
+                                 ;; Don't warn about non-tunable
+                                 ;; packages.
+                                 #:warn? #f)))
+    #+end_src
+
+    Note that, when an operating system embeds another operating sytem configuration---e.g., /via/ =virtual-build-machine-service-type= or =hurd-vm-service-type=---, the embedded operating system has its own =transformation= field, unaffected by the containing one.
+
+- Macro: *this-operating-system* [[#index-this_002doperating_002dsystem][¶]] :: When used in the /lexical scope/ of an operating system field definition, this identifier resolves to the operating system being defined.
+
+  The example below shows how to refer to the operating system being defined in the definition of the =label= field:
+
+  #+begin_src lisp
+  (use-modules (gnu) (guix))
+
+  (operating-system
+    ;; ...
+    (label (package-full-name
+            (operating-system-kernel this-operating-system))))
+  #+end_src
+
+  It is an error to refer to =this-operating-system= outside an operating system definition.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF27][(27)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+Currently only the Linux-libre kernel is fully supported. Using GNU mach with the GNU Hurd is experimental and only available when building a virtual machine disk image.
+
+--------------
+
+Next: [[id:guix--File-Systems][File Systems]], Previous: [[id:guix--Using-the-Configuration-System][Using the Configuration System]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

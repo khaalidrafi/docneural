@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID: emacs--User-Input
+:END:
+#+filetags: :emacs:
+#+title: User Input
+
+Next: [[id:emacs--Keys][Keys]]   Previous: [[id:emacs--Screen][The Organization of the Screen]]   Up: [[id:emacs--index][The Emacs Editor]]
+
+<<User-Input>>
+** 2 Kinds of User Input [[#Kinds-of-User-Input][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Kinds-of-User-Input
+:CLASS: chapter section-level-set-chapter
+:END:
+GNU Emacs is primarily designed for use with the keyboard. While it is possible to use the mouse to issue editing commands through the menu bar and tool bar, that is usually not as efficient as using the keyboard.
+
+Keyboard input into Emacs is based on a heavily-extended version of ASCII. Simple characters, like ‘=a=', ‘=B=', ‘=3=', ‘===', and the space character (denoted as SPC), are entered by typing the corresponding key. /Control characters/, such as RET, TAB, DEL, ESC, F1, Home, and LEFT, are also entered this way, as are certain characters found on non-English keyboards (see [[id:emacs--International][International Character Set Support]]).
+
+Emacs also recognizes control characters that are entered using /modifier keys/. Two commonly-used modifier keys are Control (usually labeled Ctrl), and Meta (usually labeled Alt)[[#FOOT3][^{3}]]. For example, Control-a is entered by holding down the Ctrl key while pressing a; we will refer to this as C-a for short. Similarly, Meta-a, or M-a for short, is entered by holding down the Alt key and pressing a. Modifier keys can also be applied to non-alphanumerical characters, e.g., C-F1 or M-LEFT.
+
+You can also type Meta characters using two-character sequences starting with ESC. Thus, you can enter M-a by typing ESC a. You can enter C-M-a (holding down both Ctrl and Alt, then pressing a) by typing ESC C-a. Unlike Meta, ESC is entered as a separate character. You don't hold down ESC while typing the next character; instead, press ESC and release it, then enter the next character. This feature is useful on certain text terminals where the Meta key does not function reliably.
+
+Emacs supports 3 additional modifier keys, see [[id:emacs--Key-Bindings::#Modifier-Keys][Modifier Keys]].
+
+Emacs has extensive support for using mouse buttons, mouse wheels and other pointing devices like touchpads and touch screens. See [[id:emacs--Mouse-Input][Mouse Input]], for details.
+
+On graphical displays, the window manager might block some keyboard inputs, including M-TAB, M-SPC, C-M-d and C-M-l. If you have this problem, you can either customize your window manager to not block those keys, or rebind the affected Emacs commands (see [[id:emacs--Customization][Customization]]).
+
+Simple characters and control characters, as well as certain non-keyboard inputs such as mouse clicks, are collectively referred to as /input events/. For details about how Emacs internally handles input events, see [[../elisp_html/Input-Events.html#Input-Events][Input Events]] in The Emacs Lisp Reference Manual.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF3][(3)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+We refer to Alt as Meta for historical reasons.
+
+--------------

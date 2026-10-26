@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--Capture-templates
+:END:
+#+filetags: :org:
+#+title: Capture templates (The Org Manual)
+
+Next:
+
+<<Capture-templates>>
+Previous: [[id:org--Using-capture][Using capture]], Up: [[id:org--Capture][Capture]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.1.3 Capture templates [[#Capture-templates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Capture-templates-1
+:CLASS: subsection
+:END:
+You can use templates for different types of capture items, and for different target locations. The easiest way to create such templates is through the customize interface.
+
+-  <<index-C-_0028Capture-menu>>C [[#index-C-_0028Capture-menu][¶]] :: Customize the variable =org-capture-templates=.
+
+Before we give the formal description of template definitions, let's look at an example. Say you would like to use one template to create general TODO entries, and you want to put these entries under the heading ‘=Tasks=' in your file ‘=~/org/gtd.org='. Also, a date tree in the file ‘=journal.org=' should capture journal entries. A possible configuration would look like:
+
+#+begin_src lisp-preformatted
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")))
+#+end_src
+
+If you then press t from the capture menu, Org will prepare the template for you like this:
+
+#+begin_example
+* TODO
+  [[file:LINK TO WHERE YOU INITIATED CAPTURE]]
+#+end_src
+
+During expansion of the template, ‘=%a=' has been replaced by a link to the location from where you called the capture command. This can be extremely useful for deriving tasks from emails, for example. You fill in the task definition, press C-c C-c and Org returns you to the same place where you started the capture process.
+
+To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
+
+#+begin_src lisp-preformatted
+(define-key global-map (kbd "C-c x")
+  (lambda () (interactive) (org-capture nil "x")))
+#+end_src
+
+- [[id:org--Template-elements][Template elements]]
+- [[id:org--Template-expansion][Template expansion]]
+- [[id:org--Templates-in-contexts][Templates in contexts]]
+
+--------------
+
+Previous: [[id:org--Using-capture][Using capture]], Up: [[id:org--Capture][Capture]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

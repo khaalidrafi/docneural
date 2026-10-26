@@ -1,0 +1,167 @@
+:PROPERTIES:
+:ID: emacs--TeX-Mode
+:END:
+#+filetags: :emacs:
+#+title: TeX Mode
+
+Next: [[id:emacs--HTML-Mode][SGML and HTML Modes]]   Previous: [[id:emacs--Org-Mode#Org-Mode][Org Mode]]   Up: [[id:emacs--Text][Commands for Human Languages]]
+
+<<TeX-Mode>>
+*** 27.11 TeX Mode [[#TeX-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TeX-Mode-1
+:CLASS: section
+:END:
+TeX is a powerful text formatter written by Donald Knuth; like GNU Emacs, it is free software. The TeX format has several variants, including LaTeX, a simplified input format for TeX; DocTeX, a special file format in which the LaTeX sources are written, combining sources with documentation; and SliTeX, an obsolete special form of LaTeX[[#FOOT13][^{13}]].
+
+Emacs provides a TeX major mode for each of these variants: Plain TeX mode, LaTeX mode, DocTeX mode, and SliTeX mode. Emacs selects the appropriate mode by looking at the contents of the buffer. (This is done by invoking the =tex-mode= command, which is normally called automatically when you visit a TeX-like file. See [[id:emacs--Choosing-Modes][Choosing File Modes]].) If the contents are insufficient to determine this, Emacs chooses the mode specified by the variable =tex-default-mode=; its default value is =latex-mode=. If Emacs does not guess right, you can select the correct variant of TeX mode using the commands =plain-tex-mode=, =latex-mode=, =slitex-mode=, or =doctex-mode=.
+
+The following sections document the features of TeX mode and its variants. There are several other TeX-related Emacs packages, which are not documented in this manual:
+
+- BibTeX mode is a major mode for BibTeX files, which are commonly used for keeping bibliographic references for LaTeX documents. For more information, see the documentation string for the command =bibtex-mode=.
+- The RefTeX package provides a minor mode which can be used with LaTeX mode to manage bibliographic references. For more information, see the RefTeX Info manual, which is distributed with Emacs.
+- The AUCTeX package provides more advanced features for editing TeX and its related formats, including the ability to preview TeX equations within Emacs buffers. Unlike BibTeX mode and the RefTeX package, AUCTeX is not distributed with Emacs by default. It can be downloaded via the Package Menu (see [[id:emacs--Packages][Emacs Lisp Packages]]); once installed, see the AUCTeX manual, which is included with the package.
+
+--------------
+
+<<TeX-Editing>>
+**** 27.11.1 TeX Editing Commands [[#TeX-Editing-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TeX-Editing-Commands
+:CLASS: subsection
+:END:
+- " :: Insert, according to context, either ‘=``=' or ‘="=' or ‘=''=' (=tex-insert-quote=).
+
+- C-j :: Insert a paragraph break (two newlines) and check the previous paragraph for unbalanced braces or dollar signs (=tex-terminate-paragraph=).
+
+- M-x tex-validate-region :: Check each paragraph in the region for unbalanced braces or dollar signs.
+
+- C-c { :: Insert ‘={}=' and position point between them (=tex-insert-braces=).
+
+- C-c } :: Move forward past the next unmatched close brace (=up-list=).
+
+In TeX, the character ‘="=' is not normally used; instead, quotations begin with ‘=``=' and end with ‘=''='. TeX mode therefore binds the " key to the =tex-insert-quote= command. This inserts ‘=``=' after whitespace or an open brace, ‘="=' after a backslash, and ‘=''=' after any other character.
+
+As a special exception, if you type " when the text before point is either ‘=``=' or ‘=''=', Emacs replaces that preceding text with a single ‘="=' character. You can therefore type "" to insert ‘="=', should you ever need to do so. (You can also use C-q " to insert this character.)
+
+In TeX mode, ‘=$=' has a special syntax code which attempts to understand the way TeX math mode delimiters match. When you insert a ‘=$=' that is meant to exit math mode, the position of the matching ‘=$=' that entered math mode is displayed for a second. This is the same feature that displays the open brace that matches a close brace that is inserted. However, there is no way to tell whether a ‘=$=' enters math mode or leaves it; so when you insert a ‘=$=' that enters math mode, the previous ‘=$=' position is shown as if it were a match, even though they are actually unrelated.
+
+TeX uses braces as delimiters that must match. Some users prefer to keep braces balanced at all times, rather than inserting them singly. Use C-c { (=tex-insert-braces=) to insert a pair of braces. It leaves point between the two braces so you can insert the text that belongs inside. Afterward, use the command C-c } (=up-list=) to move forward past the close brace. You can also invoke C-c { after marking some text: then the command encloses the marked text in braces.
+
+There are two commands for checking the matching of braces. C-j (=tex-terminate-paragraph=) checks the paragraph before point, and inserts two newlines to start a new paragraph. It outputs a message in the echo area if any mismatch is found. M-x tex-validate-region checks a region, paragraph by paragraph. The errors are listed in an =*Occur*= buffer; you can use the usual Occur mode commands in that buffer, such as C-c C-c, to visit a particular mismatch (see [[id:emacs--Other-Repeating-Search][Other Search-and-Loop Commands]]).
+
+Note that Emacs commands count square brackets and parentheses in TeX mode, not just braces. This is not strictly correct for the purpose of checking TeX syntax. However, parentheses and square brackets are likely to be used in text as matching delimiters, and it is useful for the various motion commands and automatic match display to work with them.
+
+--------------
+
+<<LaTeX-Editing>>
+**** 27.11.2 LaTeX Editing Commands [[#LaTeX-Editing-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: LaTeX-Editing-Commands
+:CLASS: subsection
+:END:
+LaTeX mode provides a few extra features not applicable to plain TeX:
+
+- C-c C-o :: Insert ‘=\begin=' and ‘=\end=' for LaTeX block and position point on a line between them (=latex-insert-block=).
+
+- C-c C-e :: Close the innermost LaTeX block not yet closed (=latex-close-block=).
+
+In LaTeX input, ‘=\begin=' and ‘=\end=' tags are used to group blocks of text. To insert a block, type C-c C-o (=latex-insert-block=). This prompts for a block type, and inserts the appropriate matching ‘=\begin=' and ‘=\end=' tags, leaving a blank line between the two and moving point there.
+
+When entering the block type argument to C-c C-o, you can use the usual completion commands (see [[id:emacs--Completion::#Completion][Completion]]). The default completion list contains the standard LaTeX block types. If you want additional block types for completion, customize the list variable =latex-block-names=.
+
+In LaTeX input, ‘=\begin=' and ‘=\end=' tags must balance. You can use C-c C-e (=latex-close-block=) to insert an ‘=\end=' tag which matches the last unmatched ‘=\begin='. It also indents the ‘=\end=' to match the corresponding ‘=\begin=', and inserts a newline after the ‘=\end=' tag if point is at the beginning of a line. The minor mode =latex-electric-env-pair-mode= automatically inserts an ‘=\end=' or ‘=\begin=' tag for you when you type the corresponding one.
+
+--------------
+
+<<TeX-Print>>
+**** 27.11.3 TeX Printing Commands [[#TeX-Printing-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TeX-Printing-Commands
+:CLASS: subsection
+:END:
+You can invoke TeX as a subprocess of Emacs, supplying either the entire contents of the buffer or just part of it (e.g., one chapter of a larger document).
+
+- C-c C-b :: Invoke TeX on the entire current buffer (=tex-buffer=).
+
+- C-c C-r :: Invoke TeX on the current region, together with the buffer's header (=tex-region=).
+
+- C-c C-f :: Invoke TeX on the current file (=tex-file=).
+
+- C-c C-v :: Preview the output from the last C-c C-b, C-c C-r, or C-c C-f command (=tex-view=).
+
+- C-c C-p :: Print the output from the last C-c C-b, C-c C-r, or C-c C-f command (=tex-print=).
+
+- C-c TAB :: Invoke BibTeX on the current file (=tex-bibtex-file=).
+
+- C-c C-l :: Recenter the window showing output from TeX so that the last line can be seen (=tex-recenter-output-buffer=).
+
+- C-c C-k :: Kill the TeX subprocess (=tex-kill-job=).
+
+- C-c C-c :: Invoke some other compilation command on the entire current buffer (=tex-compile=).
+
+To pass the current buffer through TeX, type C-c C-b (=tex-buffer=). The formatted output goes in a temporary file, normally a =.dvi= file. Afterwards, you can type C-c C-v (=tex-view=) to launch an external program, such as =xdvi=, to view this output file. You can also type C-c C-p (=tex-print=) to print a hardcopy of the output file.
+
+By default, C-c C-b runs TeX in the current directory. The output of TeX is also created in this directory. To run TeX in a different directory, change the variable =tex-directory= to the desired directory. If your environment variable =TEXINPUTS= contains relative names, or if your files contain ‘=\input=' commands with relative file names, then =tex-directory= /must/ be ="."= or you will get the wrong results. Otherwise, it is safe to specify some other directory, such as ="/tmp"=.
+
+The buffer's TeX variant determines what shell command C-c C-b actually runs. In Plain TeX mode, it is specified by the variable =tex-run-command=, which defaults to ="tex"=. In LaTeX mode, it is specified by =latex-run-command=, which defaults to ="latex"=. The shell command that C-c C-v runs to view the =.dvi= output is determined by the variable =tex-dvi-view-command=, regardless of the TeX variant. The shell command that C-c C-p runs to print the output is determined by the variable =tex-dvi-print-command=. The variable =tex-print-file-extension= can be set to the required file extension for viewing and printing TeX-compiled files. For example, you can set it to =.pdf=, and update =tex-dvi-view-command= and =tex-dvi-print-command= accordingly, as well as =latex-run-command= or =tex-run-command=.
+
+Normally, Emacs automatically appends the output file name to the shell command strings described in the preceding paragraph. For example, if =tex-dvi-view-command= is ="xdvi"=, C-c C-v runs =xdvi ==output-file-name=. In some cases, however, the file name needs to be embedded in the command, e.g., if you need to provide the file name as an argument to one command whose output is piped to another. You can specify where to put the file name with ‘=*=' in the command string. For example,
+
+#+begin_example
+(setq tex-dvi-print-command "dvips -f * | lpr")
+#+end_example
+
+The terminal output from TeX, including any error messages, appears in a buffer called =*tex-shell*=. If TeX gets an error, you can switch to this buffer and feed it input (this works as in Shell mode; see [[id:emacs--Interactive-Shell][Interactive Subshell]]). Without switching to this buffer you can scroll it so that its last line is visible by typing C-c C-l.
+
+Type C-c C-k (=tex-kill-job=) to kill the TeX process if you see that its output is no longer useful. Using C-c C-b or C-c C-r also kills any TeX process still running.
+
+You can also pass an arbitrary region through TeX by typing C-c C-r (=tex-region=). This is tricky, however, because most files of TeX input contain commands at the beginning to set parameters and define macros, without which no later part of the file will format correctly. To solve this problem, C-c C-r allows you to designate a part of the file as containing essential commands; it is included before the specified region as part of the input to TeX. The designated part of the file is called the /header/.
+
+To indicate the bounds of the header in Plain TeX mode, you insert two special strings in the file. Insert ‘=%**start of header=' before the header, and ‘=%**end of header=' after it. Each string must appear entirely on one line, but there may be other text on the line before or after. The lines containing the two strings are included in the header. If ‘=%**start of header=' does not appear within the first 100 lines of the buffer, C-c C-r assumes that there is no header.
+
+In LaTeX mode, the header begins with ‘=\documentclass=' or ‘=\documentstyle=' and ends with ‘=\begin{document}='. These are commands that LaTeX requires you to use in any case, so nothing special needs to be done to identify the header.
+
+The commands (=tex-buffer=) and (=tex-region=) do all of their work in a temporary directory, and do not have available any of the auxiliary files needed by TeX for cross-references; these commands are generally not suitable for running the final copy in which all of the cross-references need to be correct.
+
+When you want the auxiliary files for cross-references, use C-c C-f (=tex-file=) which runs TeX on the current buffer's file, in that file's directory. Before running TeX, it offers to save any modified buffers. Generally, you need to use (=tex-file=) twice to get the cross-references right.
+
+The value of the variable =tex-start-options= specifies options for the TeX run.
+
+The value of the variable =tex-start-commands= specifies TeX commands for starting TeX. The default value causes TeX to run in nonstop mode. To run TeX interactively, set the variable to =""=.
+
+Large TeX documents are often split into several files---one main file, plus subfiles. Running TeX on a subfile typically does not work; you have to run it on the main file. In order to make =tex-file= useful when you are editing a subfile, you can set the variable =tex-main-file= to the name of the main file. Then =tex-file= runs TeX on that file.
+
+The most convenient way to use =tex-main-file= is to specify it in a local variable list in each of the subfiles. See [[id:emacs--Variables::#File-Variables][Local Variables in Files]].
+
+For LaTeX files, you can use BibTeX to process the auxiliary file for the current buffer's file. BibTeX looks up bibliographic citations in a data base and prepares the cited references for the bibliography section. The command C-c TAB (=tex-bibtex-file=) runs the shell command (=tex-bibtex-command=) to produce a ‘=.bbl=' file for the current buffer's file. Generally, you need to do C-c C-f (=tex-file=) once to generate the ‘=.aux=' file, then do C-c TAB (=tex-bibtex-file=), and then repeat C-c C-f (=tex-file=) twice more to get the cross-references correct.
+
+To invoke some other compilation program on the current TeX buffer, type C-c C-c (=tex-compile=). This command knows how to pass arguments to many common programs, including =pdflatex=, =yap=, =xdvi=, and =dvips=. You can select your desired compilation program using the standard completion keys (see [[id:emacs--Completion::#Completion][Completion]]).
+
+--------------
+
+<<TeX-Misc>>
+**** 27.11.4 TeX Mode Miscellany [[#TeX-Mode-Miscellany][¶]]
+:PROPERTIES:
+:CUSTOM_ID: TeX-Mode-Miscellany
+:CLASS: subsection
+:END:
+Entering any variant of TeX mode runs the hooks =text-mode-hook= and =tex-mode-hook=. Then it runs either =plain-tex-mode-hook=, =doctex-mode-hook=, =latex-mode-hook=, or =slitex-mode-hook=, whichever is appropriate. Starting the TeX shell runs the hook =tex-shell-hook=. See [[id:emacs--Variables::#Hooks][Hooks]].
+
+The commands M-x iso-iso2tex, M-x iso-tex2iso, M-x iso-iso2gtex and M-x iso-gtex2iso can be used to convert between Latin-1 encoded files and TeX-encoded equivalents.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF13][(13)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+It has been replaced by the ‘=slides=' document class, which comes with LaTeX.
+
+--------------

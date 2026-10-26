@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID: org--Comment-Lines
+:END:
+#+filetags: :org:
+#+title: Comment Lines (The Org Manual)
+
+Next:
+
+<<Comment-Lines>>
+Next: [[id:org--ASCII_002fLatin_002d1_002fUTF_002d8-export][ASCII/Latin-1/UTF-8 export]], Previous: [[id:org--Macro-Replacement][Macro Replacement]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.6 Comment Lines [[#Comment-Lines-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Comment-Lines-1
+:CLASS: section
+:END:
+Lines starting with zero or more whitespace characters followed by one ‘=#=' and a whitespace are treated as comments and, as such, are not exported.
+
+Likewise, comment blocks ‘=#+BEGIN_COMMENT=' ... ‘=#+END_COMMENT=' are not exported. [[#FOOT135][^{135}]]
+
+Finally, a ‘=COMMENT=' keyword at the beginning of an entry, but after any other keyword or priority cookie, comments out the entire subtree. In this case, the subtree is not exported and no code block within it is executed or tangled[[#FOOT136][^{136}]]. The command below helps to change the comment status of a headline.
+
+-  <<index-C_002dc-_003b>>C-c ; (=org-toggle-comment=) [[#index-C_002dc-_003b][¶]] :: Toggle the ‘=COMMENT=' keyword at the beginning of an entry.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF135][(135)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Just like in [[id:org--Literal-Examples][Literal Examples]], you need to escape leading ‘=*=' with ‘=,=' to avoid interpreting them as headings.
+
+***** [[#DOCF136][(136)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+For less restrictive export limitations, consider using a select tag (see [[id:org--Export-Settings][Export Settings]]) instead.

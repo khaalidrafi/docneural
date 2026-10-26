@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: org--Org-Mobile
+:END:
+#+filetags: :org:
+#+title: Org Mobile (The Org Manual)
+
+Next:
+
+<<Org-Mobile>>
+Next: [[id:org--Drag-and-Drop-_0026-yank_002dmedia][Drag and Drop & =yank-media=]], Previous: [[id:org--Org-Crypt][Org Crypt]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 17.18 Org Mobile [[#Org-Mobile-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Org-Mobile-1
+:CLASS: section
+:END:
+Org Mobile is a protocol for synchronizing Org files between Emacs and other applications, e.g., on mobile devices. It enables offline-views and capture support for an Org mode system that is rooted on a “real” computer. The external application can also record changes to existing entries.
+
+This appendix describes Org's support for agenda view formats compatible with Org Mobile. It also describes synchronizing changes, such as to notes, between the mobile application and the computer.
+
+To change tags and TODO states in the mobile application, first customize the variables =org-todo-keywords=, =org-tag-alist= and =org-tag-persistent-alist=. These should cover all the important tags and TODO keywords, even if Org files use only some of them. Though the mobile application is expected to support in-buffer settings, it is required to understand TODO states /sets/ (see [[id:org--Per_002dfile-keywords][Setting up keywords for individual files]]) and /mutually exclusive/ tags (see [[id:org--Setting-Tags][Setting Tags]]) only for those set in these variables.
+
+- [[id:org--Setting-up-the-staging-area][Setting up the staging area]]
+- [[id:org--Pushing-to-the-mobile-application][Pushing to the mobile application]]
+- [[id:org--Pulling-from-the-mobile-application][Pulling from the mobile application]]
+
+--------------
+
+Next: [[id:org--Drag-and-Drop-_0026-yank_002dmedia][Drag and Drop & =yank-media=]], Previous: [[id:org--Org-Crypt][Org Crypt]], Up: [[id:org--Miscellaneous][Miscellaneous]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

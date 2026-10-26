@@ -1,0 +1,82 @@
+:PROPERTIES:
+:ID: org--Citations
+:END:
+#+filetags: :org:
+#+title: Citations (The Org Manual)
+
+Next:
+
+<<Citations>>
+Next: [[id:org--Citation-export-processors][Citation export processors]], Up: [[id:org--Citation-handling][Citation handling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 15.1 Citations [[#Citations-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Citations-1
+:CLASS: section
+:END:
+Before adding citations, first set one-or-more bibliographies, either globally with =org-cite-global-bibliography=, or locally using one or more “bibliography” keywords.
+
+#+begin_example
+#+bibliography: SomeFile.bib
+#+bibliography: /some/other/file.json
+#+bibliography: "/some/file/with spaces/in its name.bib"
+#+end_example
+
+Org mode uses all the local and global bibliographies combined to search for citation keys.
+
+One can then insert and edit citations using =org-cite-insert=, called with C-c C-x @.
+
+A /citation/ requires one or more citation /key(s)/, elements identifying a reference in the bibliography.
+
+- Each citation is surrounded by brackets and uses the ‘=cite=' type.
+
+- Each key starts with the character ‘=@='.
+
+  #+begin_example
+  [cite:@key]
+#+end_example
+
+- Each key can be qualified by a /prefix/ (e.g. “see ”) and/or a /suffix/ (e.g. “p. 123”), giving information useful or necessary for the comprehension of the citation but not included in the reference.
+
+  #+begin_example
+  [cite:see @key p. 123]
+#+end_example
+
+- A single citation can cite more than one reference ; the keys are separated by semicolons ; the formatting of such citation groups is specified by the style.
+
+  #+begin_example
+  [cite:@key1;@key2;@key3]
+#+end_example
+
+- One can also specify a stylistic variation for the citations by inserting a ‘=/=' and a style name between the ‘=cite=' keyword and the colon; this usually makes sense only for the author-year styles.
+
+  #+begin_example
+  [cite/style:common prefix ;prefix @key suffix; ... ; common suffix]
+#+end_example
+
+  When ‘=style=' is not specified, one of the two default styles are used
+
+  - either the default style specified in the ‘=CITE_EXPORT=' keyword (see [[id:org--Citation-export-processors][Citation export processors]])
+
+    #+begin_example
+    #+cite_export: basic numeric noauthor/bare
+    [cite:@key] is the same as [cite/noauthor/bare:@key]
+#+end_example
+
+  - or, if ‘=CITE_EXPORT=' is not set, using the default ‘=nil=' style
+
+    #+begin_example
+    [cite:@key] is the same as [cite/nil:@key]
+#+end_example
+
+The only mandatory elements are:
+
+- The ‘=cite=' keyword and the colon.
+- The ‘=@=' character immediately preceding each key.
+- The brackets surrounding the citation(s) (group).
+
+--------------
+
+Next: [[id:org--Citation-export-processors][Citation export processors]], Up: [[id:org--Citation-handling][Citation handling]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

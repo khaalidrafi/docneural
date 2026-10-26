@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID: org--Attach-from-Dired
+:END:
+#+filetags: :org:
+#+title: Attach from Dired (The Org Manual)
+
+Next:
+
+<<Attach-from-Dired>>
+Previous: [[id:org--Automatic-version_002dcontrol-with-Git][Automatic version-control with Git]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 10.2.5 Attach from Dired [[#Attach-from-Dired-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Attach-from-Dired-1
+:CLASS: subsection
+:END:
+It is possible to attach files to a subtree from a Dired buffer. To use this feature, have one window in Dired mode containing the file(s) to be attached and another window with point in the subtree that shall get the attachments. In the Dired window, with point on a file, M-x org-attach-dired-to-subtree attaches the file to the subtree using the attachment method set by variable =org-attach-method=. When files are marked in the Dired window then all marked files get attached.
+
+Add the following lines to the Emacs init file to have C-c C-x a attach files in Dired buffers.
+
+#+begin_src lisp-preformatted
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (define-key dired-mode-map
+              (kbd "C-c C-x a")
+              #'org-attach-dired-to-subtree)))
+#+end_src
+
+The following code shows how to bind the previous command with a specific attachment method.
+
+#+begin_src lisp-preformatted
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (define-key dired-mode-map (kbd "C-c C-x c")
+              (lambda ()
+                (interactive)
+                (let ((org-attach-method 'cp))
+                  (call-interactively #'org-attach-dired-to-subtree))))))
+#+end_src
+
+--------------
+
+Previous: [[id:org--Automatic-version_002dcontrol-with-Git][Automatic version-control with Git]], Up: [[id:org--Attachments][Attachments]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

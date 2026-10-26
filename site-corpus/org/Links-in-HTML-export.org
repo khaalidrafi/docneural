@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID: org--Links-in-HTML-export
+:END:
+#+filetags: :org:
+#+title: Links in HTML export (The Org Manual)
+
+Next:
+
+<<Links-in-HTML-export>>
+Next: [[id:org--Tables-in-HTML-export][Tables in HTML export]], Previous: [[id:org--Headlines-in-HTML-export][Headlines in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 13.9.8 Links in HTML export [[#Links-in-HTML-export-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Links-in-HTML-export-1
+:CLASS: subsection
+:END:
+The HTML export backend transforms Org's internal links (see [[id:org--Internal-Links][Internal Links]]) to equivalent HTML links in the output. The backend similarly handles Org's automatic links created by radio targets (see [[id:org--Radio-Targets][Radio Targets]]) similarly. For Org links to external files, the backend transforms the links to /relative/ paths.
+
+For Org links to other ‘=.org=' files, the backend automatically changes the file extension to ‘=.html=' and makes file paths relative. If the ‘=.org=' files have an equivalent ‘=.html=' version at the same location, then the converted links should work without any further manual intervention. However, to disable this automatic path translation, set =org-html-link-org-files-as-html= to =nil=. When disabled, the HTML export backend substitutes the ID-based links in the HTML output. For more about linking files when publishing to a directory, see [[id:org--Publishing-links][Publishing links]].
+
+Org files can also have special directives to the HTML export backend. For example, by using ‘=#+ATTR_HTML=' lines to specify new format attributes to =<a>= or =<img>= tags. This example shows changing the link's title and style:
+
+#+begin_example
+#+ATTR_HTML: :title The Org mode website :style color:red;
+[[https://orgmode.org]]
+#+end_example
+
+--------------
+
+Next: [[id:org--Tables-in-HTML-export][Tables in HTML export]], Previous: [[id:org--Headlines-in-HTML-export][Headlines in HTML export]], Up: [[id:org--HTML-Export][HTML Export]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

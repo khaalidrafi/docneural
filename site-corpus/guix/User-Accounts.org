@@ -1,0 +1,177 @@
+:PROPERTIES:
+:ID: guix--User-Accounts
+:END:
+#+filetags: :guix:
+#+title: User Accounts
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<User-Accounts>>
+Next: [[id:guix--Keyboard-Layout][Keyboard Layout]], Previous: [[id:guix--Swap-Space][Swap Space]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 11.7 User Accounts [[#User-Accounts-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: User-Accounts-1
+:CLASS: section
+:END:
+User accounts and groups are entirely managed through the =operating-system= declaration. They are specified with the =user-account= and =user-group= forms:
+
+#+begin_src lisp
+(user-account
+  (name "alice")
+  (group "users")
+  (supplementary-groups '("wheel"   ;allow use of sudo, etc.
+                          "audio"   ;sound card
+                          "video"   ;video devices such as webcams
+                          "cdrom")) ;the good ol' CD-ROM
+  (comment "Bob's sister"))
+#+end_src
+
+Here's a user account that uses a different shell and a custom home directory (the default would be ="/home/bob"=):
+
+#+begin_src lisp
+(user-account
+  (name "bob")
+  (group "users")
+  (comment "Alice's bro")
+  (shell (file-append zsh "/bin/zsh"))
+  (home-directory "/home/robert"))
+#+end_src
+
+When booting or upon completion of =guix system reconfigure=, the system ensures that only the user accounts and groups specified in the =operating-system= declaration exist, and with the specified properties. Thus, account or group creations or modifications made by directly invoking commands such as =useradd= are lost upon reconfiguration or reboot. This ensures that the system remains exactly as declared.
+
+- Data Type: *user-account* [[#index-user_002daccount][¶]] :: Objects of this type represent user accounts. The following members may be specified:
+
+  - =name= :: The name of the user account.
+
+  - <<index-groups>>=group= [[#index-groups][¶]] :: This is the name (a string) or identifier (a number) of the user group this account belongs to.
+
+  - =supplementary-groups= (default: ='()=) :: Optionally, this can be defined as a list of group names that this account belongs to.
+
+  - =uid= (default: =#f=) :: This is the user ID for this account (a number), or =#f=. In the latter case, a number is automatically chosen by the system when the account is created.
+
+  - =comment= (default: =""=) :: A comment about the account, such as the account owner's full name.
+
+    Note that, for non-system accounts, users are free to change their real name as it appears in =/etc/passwd= using the =chfn= command. When they do, their choice prevails over the system administrator's choice; reconfiguring does /not/ change their name.
+
+  - =home-directory= :: This is the name of the home directory for the account.
+
+  - =create-home-directory?= (default: =#t=) :: Indicates whether the home directory of this account should be created if it does not exist yet.
+
+  - =shell= (default: Bash) :: This is a G-expression denoting the file name of a program to be used as the shell (see [[id:guix--G_002dExpressions][G-Expressions]]). For example, you would refer to the Bash executable like this:
+
+    #+begin_src lisp
+    (file-append bash "/bin/bash")
+    #+end_src
+
+    ... and to the Zsh executable like that:
+
+    #+begin_src lisp
+    (file-append zsh "/bin/zsh")
+    #+end_src
+
+  - =system?= (default: =#f=) :: This Boolean value indicates whether the account is a “system” account. System accounts are sometimes treated specially; for instance, graphical login managers do not list them.
+
+  -  <<index-password_002c-for-user-accounts>>=password= (default: =#f=) [[#index-password_002c-for-user-accounts][¶]] :: You would normally leave this field to =#f=[[#FOOT31][^{31}]], initialize user passwords as =root= with the =passwd= command, and then let users change it with =passwd=. Passwords set with =passwd= are of course preserved across reboot and reconfiguration.
+
+    If you /do/ want to set an initial password for an account, then this field must contain the encrypted password[[#FOOT32][^{32}]], as a string. You can use the =crypt= procedure for this purpose:
+
+    #+begin_src lisp
+    (user-account
+      (name "charlie")
+      (group "users")
+
+      ;; Specify a SHA-512-hashed initial password; the
+      ;; second argument is an arbitrary string of your
+      ;; choosing used as the salt.
+      (password (crypt "InitialPassword!" "$6$abc")))
+    #+end_src
+
+    #+begin_quote
+    *Note:* The hash of this initial password will be available in a file in =/gnu/store=, readable by all the users, so this method must be used with care.
+
+    #+end_quote
+
+    See [[https://doc.guix.gnu.org/libc/latest/en/html_node/Passphrase-Storage.html#Passphrase-Storage][Passphrase Storage]] in The GNU C Library Reference Manual, for more information on password encryption, and [[https://doc.guix.gnu.org/guile/latest/en/html_node/Encryption.html#Encryption][Encryption]] in GNU Guile Reference Manual, for information on Guile's =crypt= procedure.
+
+User group declarations are even simpler:
+
+#+begin_src lisp
+(user-group (name "students"))
+#+end_src
+
+- Data Type: *user-group* [[#index-user_002dgroup][¶]] :: This type is for, well, user groups. There are just a few fields:
+
+  - =name= :: The name of the group.
+
+  - =id= (default: =#f=) :: The group identifier (a number). If =#f=, a new number is automatically allocated when the group is created.
+
+  - =system?= (default: =#f=) :: This Boolean value indicates whether the group is a “system” group. System groups have low numerical IDs.
+
+  - =password= (default: =#f=) :: What, user groups can have a password? Well, apparently yes. Unless =#f=, this field specifies the password of the group.
+
+For convenience, a variable lists all the basic user groups one may expect:
+
+- Variable: *%base-groups* [[#index-_0025base_002dgroups][¶]] :: This is the list of basic user groups that users and/or packages expect to be present on the system. This includes groups such as “root”, “wheel”, and “users”, as well as groups used to control access to specific devices such as “audio”, “disk”, and “cdrom”.
+
+- Variable: *%base-user-accounts* [[#index-_0025base_002duser_002daccounts][¶]] :: This is the list of basic system accounts that programs may expect to find on a GNU/Linux system, such as the “nobody” account.
+
+  Note that the “root” account is not included here. It is a special-case and is automatically added whether or not it is specified.
+
+The Linux kernel also implements /subordinate user and group IDs/, or “subids”, which are used to map the ID of a user and group to several IDs inside separate name spaces---inside “containers”. See [[id:guix--Miscellaneous-Services::#subordinate_002duser_002dgroup_002dids][the subordinate user and group ID service]], for information on how to configure it.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF31][(31)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+A =#f= value creates a locked password, per the ‘=shadow(5)=' man page.
+
+***** [[#DOCF32][(32)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+An exception to this is if you want to set an empty password; in this case, the password value should be a plain empty string, as in ‘=(password "")='
+
+--------------
+
+Next: [[id:guix--Keyboard-Layout][Keyboard Layout]], Previous: [[id:guix--Swap-Space][Swap Space]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

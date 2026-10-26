@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID: org--Tags
+:END:
+#+filetags: :org:
+#+title: Tags (The Org Manual)
+
+Next:
+
+<<Tags>>
+Next: [[id:org--Properties-and-Columns][Properties and Columns]], Previous: [[id:org--TODO-Items][TODO Items]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 6 Tags [[#Tags-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Tags-1
+:CLASS: chapter
+:END:
+An excellent way to implement labels and contexts for cross-correlating information is to assign /tags/ to headlines. Org mode has extensive support for tags.
+
+Every headline can contain a list of tags; they occur at the end of the headline. Tags are normal words containing letters, numbers, ‘=_=', ‘=@=', ‘=#=', and ‘=%='. Tags must be preceded and followed by a single colon, e.g., ‘=:work:='. Several tags can be specified, as in ‘=:work:urgent:='. Tags by default are in bold face with the same color as the headline. You may specify special faces for specific tags using the variable =org-tag-faces=, in much the same way as you can for TODO keywords (see [[id:org--Faces-for-TODO-keywords][Faces for TODO keywords]]).
+
+- [[id:org--Tag-Inheritance][Tag Inheritance]]
+- [[id:org--Setting-Tags][Setting Tags]]
+- [[id:org--Tag-Hierarchy][Tag Hierarchy]]
+- [[id:org--Tag-Searches][Tag Searches]]
+
+--------------
+
+Next: [[id:org--Properties-and-Columns][Properties and Columns]], Previous: [[id:org--TODO-Items][TODO Items]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

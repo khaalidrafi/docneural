@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID: org--Special-Symbols
+:END:
+#+filetags: :org:
+#+title: Special Symbols (The Org Manual)
+
+Next:
+
+<<Special-Symbols>>
+Next: [[id:org--Embedded-LaTeX][Embedded LaTeX]], Previous: [[id:org--Subscripts-and-Superscripts][Subscripts and Superscripts]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.4 Special Symbols [[#Special-Symbols-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Special-Symbols-1
+:CLASS: section
+:END:
+You can use LaTeX-like syntax to insert special symbols---named entities---like ‘=\alpha=' to indicate the Greek letter, or ‘=\to=' to indicate an arrow. Completion for these symbols is available, just type ‘=\=' and maybe a few letters, and press M-TAB to see possible completions. If you need such a symbol inside a word, terminate it with a pair of curly brackets. For example
+
+#+begin_example
+Pro tip: Given a circle \Gamma of diameter d, the length of its
+circumference is \pi{}d.
+#+end_example
+
+A large number of entities is provided, with names taken from both HTML and LaTeX; you can comfortably browse the complete list from a dedicated buffer using the command =org-entities-help=. It is also possible to provide your own special symbols in the variable =org-entities-user=.
+
+During export, these symbols are transformed into the native format of the exporter backend. Strings like ‘=\alpha=' are exported as ‘=&alpha;=' in the HTML output, and as ‘=\(\alpha\)=' in the LaTeX output. Similarly, ‘=\nbsp=' becomes ‘=&nbsp;=' in HTML and ‘=~=' in LaTeX.
+
+If you would like to see entities displayed as UTF-8 characters, use the following command[[#FOOT111][^{111}]]:
+
+-  <<index-C_002dc-C_002dx-_005c-1>>C-c C-x \ (=org-toggle-pretty-entities=) [[#index-C_002dc-C_002dx-_005c-1][¶]] :: Toggle display of entities as UTF-8 characters. This does not change the buffer content which remains plain ASCII, but it overlays the UTF-8 character for display purposes only.
+
+In addition to regular entities defined above, Org exports in a special way[[#FOOT112][^{112}]] the following commonly used character combinations: ‘=\-=' is treated as a shy hyphen, ‘=--=' and ‘=---=' are converted into dashes, and ‘=...=' becomes a compact set of dots.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF111][(111)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+You can turn this on by default by setting the variable =org-pretty-entities=, or on a per-file basis with the ‘=STARTUP=' option ‘=entitiespretty='.
+
+***** [[#DOCF112][(112)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+This behavior can be disabled with ‘=-=' export setting (see [[id:org--Export-Settings][Export Settings]]).
+
+--------------
+
+Next: [[id:org--Embedded-LaTeX][Embedded LaTeX]], Previous: [[id:org--Subscripts-and-Superscripts][Subscripts and Superscripts]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

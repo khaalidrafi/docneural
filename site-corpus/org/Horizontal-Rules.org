@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID: org--Horizontal-Rules
+:END:
+#+filetags: :org:
+#+title: Horizontal Rules (The Org Manual)
+
+Next:
+
+<<Horizontal-Rules>>
+Next: [[id:org--Creating-Footnotes][Creating Footnotes]], Previous: [[id:org--Captions][Captions]], Up: [[id:org--Markup-for-Rich-Contents][Markup for Rich Contents]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 12.9 Horizontal Rules [[#Horizontal-Rules-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Horizontal-Rules-1
+:CLASS: section
+:END:
+A line consisting of only dashes, and at least 5 of them, is exported as a horizontal line.

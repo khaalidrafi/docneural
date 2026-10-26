@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID: guix--Features
+:END:
+#+filetags: :guix:
+#+title: Features
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Features>>
+Next: [[id:guix--Invoking-guix-package][Invoking =guix package=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 5.1 Features [[#Features-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Features-1
+:CLASS: section
+:END:
+Here we assume you've already made your first steps with Guix (see [[id:guix--Getting-Started][Getting Started]]) and would like to get an overview about what's going on under the hood.
+
+When using Guix, each package ends up in the /package store/, in its own directory---something that resembles =/gnu/store/xxx-package-1.2=, where =xxx= is a base32 string.
+
+Instead of referring to these directories, users have their own /profile/, which points to the packages that they actually want to use. These profiles are stored within each user's home directory, at =$HOME/.guix-profile=.
+
+For example, =alice= installs GCC 4.7.2. As a result, =/home/alice/.guix-profile/bin/gcc= points to =/gnu/store/…-gcc-4.7.2/bin/gcc=. Now, on the same machine, =bob= had already installed GCC 4.8.0. The profile of =bob= simply continues to point to =/gnu/store/…-gcc-4.8.0/bin/gcc=---i.e., both versions of GCC coexist on the same system without any interference.
+
+The =guix package= command is the central tool to manage packages (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). It operates on the per-user profiles, and can be used /with normal user privileges/.
+
+The command provides the obvious install, remove, and upgrade operations. Each invocation is actually a /transaction/: either the specified operation succeeds, or nothing happens. Thus, if the =guix package= process is terminated during the transaction, or if a power outage occurs during the transaction, then the user's profile remains in its previous state, and remains usable.
+
+In addition, any package transaction may be /rolled back/. So, if, for example, an upgrade installs a new version of a package that turns out to have a serious bug, users may roll back to the previous instance of their profile, which was known to work well. Similarly, the global system configuration on Guix is subject to transactional upgrades and roll-back (see [[id:guix--Getting-Started-with-the-System][Getting Started]]).
+
+All packages in the package store may be /garbage-collected/. Guix can determine which packages are still referenced by user profiles, and remove those that are provably no longer referenced (see [[id:guix--Invoking-guix-gc][Invoking =guix gc=]]). Users may also explicitly remove old generations of their profile so that the packages they refer to can be collected.
+
+Guix takes a /purely functional/ approach to package management, as described in the introduction (see [[id:guix--Introduction][Introduction]]). Each =/gnu/store= package directory name contains a hash of all the inputs that were used to build that package---compiler, libraries, build scripts, etc. This direct correspondence allows users to make sure a given package installation matches the current state of their distribution. It also helps maximize /build reproducibility/: thanks to the isolated build environments that are used, a given build is likely to yield bit-identical files when performed on different machines (see [[id:guix--Invoking-guix_002ddaemon][container]]).
+
+This foundation allows Guix to support /transparent binary/source deployment/. When a pre-built binary for a =/gnu/store= item is available from an external source---a /substitute/, Guix just downloads it and unpacks it; otherwise, it builds the package from source, locally (see [[id:guix--Substitutes][Substitutes]]). Because build results are usually bit-for-bit reproducible, users do not have to trust servers that provide substitutes: they can force a local build and /challenge/ providers (see [[id:guix--Invoking-guix-challenge][Invoking =guix challenge=]]).
+
+Control over the build environment is a feature that is also useful for developers. The =guix shell= command allows developers of a package to quickly set up the right development environment for their package, without having to manually install the dependencies of the package into their profile (see [[id:guix--Invoking-guix-shell][Invoking =guix shell=]]).
+
+All of Guix and its package definitions is version-controlled, and =guix pull= allows you to “travel in time” on the history of Guix itself (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]). This makes it possible to replicate a Guix instance on a different machine or at a later point in time, which in turn allows you to /replicate complete software environments/, while retaining precise /provenance tracking/ of the software.
+
+--------------
+
+Next: [[id:guix--Invoking-guix-package][Invoking =guix package=]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

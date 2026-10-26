@@ -1,0 +1,125 @@
+:PROPERTIES:
+:ID: guix--Unattended-Upgrades
+:END:
+#+filetags: :guix:
+#+title: Unattended Upgrades
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Unattended-Upgrades>>
+Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 11.10.7 Unattended Upgrades [[#Unattended-Upgrades-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Unattended-Upgrades-1
+:CLASS: subsection
+:END:
+The =(gnu services admin)= module provides a service to perform /unattended upgrades/: periodically, the system automatically reconfigures itself from the latest Guix. Guix System has several properties that make unattended upgrades safe:
+
+- upgrades are transactional (either the upgrade succeeds or it fails, but you cannot end up with an “in-between” system state);
+- the upgrade log is kept---you can view it with =guix system list-generations=---and you can roll back to any previous generation, should the upgraded system fail to behave as intended;
+- channel code is authenticated so you know you can only run genuine code (see [[id:guix--Channels][Channels]]);
+- =guix system reconfigure= prevents downgrades, which makes it immune to /downgrade attacks/.
+
+To set up unattended upgrades, add an instance of =unattended-upgrade-service-type= like the one below to the list of your operating system services:
+
+#+begin_src lisp
+(service unattended-upgrade-service-type)
+#+end_src
+
+The defaults above set up weekly upgrades: every Sunday at midnight. You do not need to provide the operating system configuration file: it uses =/run/current-system/configuration.scm=, which ensures it always uses your latest configuration---see [[id:guix--Service-Reference::#provenance_002dservice_002dtype][provenance-service-type]], for more information about this file.
+
+There are several things that can be configured, in particular the periodicity and services (daemons) to be restarted upon completion. When the upgrade is successful, the service takes care of deleting system generations older that some threshold, as per =guix system delete-generations=. See the reference below for details.
+
+To ensure that upgrades are actually happening, you can run =guix system describe=. To investigate upgrade failures, visit the unattended upgrade log file (see below).
+
+- Variable: *unattended-upgrade-service-type* [[#index-unattended_002dupgrade_002dservice_002dtype][¶]] :: This is the service type for unattended upgrades. It sets up a Shepherd Timer (see [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]) that runs =guix system reconfigure= from the latest version of the specified channels.
+
+  Its value must be a =unattended-upgrade-configuration= record (see below).
+
+- Data Type: *unattended-upgrade-configuration* [[#index-unattended_002dupgrade_002dconfiguration][¶]] :: This data type represents the configuration of the unattended upgrade service. The following fields are available:
+
+  - =schedule= (default: ="30 01 * * 0"=) :: This is the schedule of upgrades, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+
+  - =channels= (default: =#~%default-channels=) :: This gexp specifies the channels to use for the upgrade (see [[id:guix--Channels][Channels]]). By default, the tip of the official =guix= channel is used.
+
+  - =operating-system-file= (default: ="/run/current-system/configuration.scm"=) :: This field specifies the operating system configuration file to use. The default is to reuse the config file of the current configuration.
+
+    There are cases, though, where referring to =/run/current-system/configuration.scm= is not enough, for instance because that file refers to extra files (SSH public keys, extra configuration files, etc.) /via/ =local-file= and similar constructs. For those cases, we recommend something along these lines:
+
+    #+begin_src lisp
+    (unattended-upgrade-configuration
+      (operating-system-file
+        (file-append (local-file "." "config-dir" #:recursive? #t)
+                     "/config.scm")))
+    #+end_src
+
+    The effect here is to import all of the current directory into the store, and to refer to =config.scm= within that directory. Therefore, uses of =local-file= within =config.scm= will work as expected. See [[id:guix--G_002dExpressions][G-Expressions]], for information about =local-file= and =file-append=.
+
+  - =operating-system-expression= (default: =#f=) :: This field specifies an expression that evaluates to the operating system to use for the upgrade. If no value is provided the =operating-system-file= field value is used.
+
+    #+begin_src lisp
+    (unattended-upgrade-configuration
+      (operating-system-expression
+        #~(@ (guix system install) installation-os)))
+    #+end_src
+
+  - =reboot?= (default: =#f=) :: This field specifies whether the system should reboot after completing an unattended upgrade.
+
+    When =reboot?= is =#t=, services are not restarted before rebooting. This means that the value for =services-to-restart= is ignored. The updated services will be started after the system reboots.
+
+  - =services-to-restart= (default: ='(unattended-upgrade)=) :: This field specifies the Shepherd services to restart when the upgrade completes.
+
+    Those services are restarted right away upon completion, as with =herd restart=, which ensures that the latest version is running---remember that by default =guix system reconfigure= only restarts services that are not currently running, which is conservative: it minimizes disruption but leaves outdated services running.
+
+    Use =herd status= to find out candidates for restarting. See [[id:guix--Services][Services]], for general information about services. Common services to restart would include =ntpd= and =ssh-daemon=.
+
+    By default, the =unattended-upgrade= service is restarted. This ensures that the latest version of the unattended upgrade job will be used next time.
+
+  - =system-expiration= (default: =(* 3 30 24 3600)=) :: This is the expiration time in seconds for system generations. System generations older that this amount of time are deleted with =guix system delete-generations= when an upgrade completes.
+
+    #+begin_quote
+    *Note:* The unattended upgrade service does not run the garbage collector. You will probably want to set up your own mcron job to run =guix gc= periodically.
+
+    #+end_quote
+
+  - =maximum-duration= (default: =3600=) :: Maximum duration in seconds for the upgrade; past that time, the upgrade aborts.
+
+    This is primarily useful to ensure the upgrade does not end up rebuilding or re-downloading “the world”.
+
+  - =log-file= (default: ="/var/log/unattended-upgrade.log"=) :: File where unattended upgrades are logged.
+
+--------------
+
+Next: [[id:guix--X-Window][X Window]], Previous: [[id:guix--Networking-Services][Networking Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

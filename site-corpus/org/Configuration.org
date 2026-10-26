@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID: org--Configuration
+:END:
+#+filetags: :org:
+#+title: Configuration (The Org Manual)
+
+Next:
+
+<<Configuration>>
+Next: [[id:org--Uploading-Files][Uploading Files]], Up: [[id:org--Publishing][Publishing]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 14.1 Configuration [[#Configuration-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Configuration-1
+:CLASS: section
+:END:
+Publishing needs significant configuration to specify files, destination and many other properties of a project.
+
+- [[id:org--Project-alist][The variable =org-publish-project-alist=]]
+- [[id:org--Sources-and-destinations][Sources and destinations for files]]
+- [[id:org--Selecting-files][Selecting files]]
+- [[id:org--Publishing-action][Publishing action]]
+- [[id:org--Publishing-options][Options for the exporters]]
+- [[id:org--Publishing-links][Publishing links]]
+- [[id:org--Site-map][Generating a sitemap]]
+- [[id:org--Generating-an-index][Generating an index]]

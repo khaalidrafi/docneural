@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID: guix--System-Installation
+:END:
+#+filetags: :guix:
+#+title: System Installation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<System-Installation>>
+Next: [[id:guix--Getting-Started][Getting Started]], Previous: [[id:guix--Installation][Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+** 3 System Installation [[#System-Installation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: System-Installation-1
+:CLASS: chapter
+:END:
+This section explains how to install Guix System on a machine. Guix, as a package manager, can also be installed on top of a running GNU/Linux system, see [[id:guix--Installation][Installation]].
+
+- [[id:guix--Limitations][Limitations]]
+- [[id:guix--Hardware-Considerations][Hardware Considerations]]
+- [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]]
+- [[id:guix--Preparing-for-Installation][Preparing for Installation]]
+- [[id:guix--Guided-Graphical-Installation][Guided Graphical Installation]]
+- [[id:guix--Manual-Installation][Manual Installation]]
+- [[id:guix--After-System-Installation][After System Installation]]
+- [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]]
+- [[id:guix--Building-the-Installation-Image][Building the Installation Image]]
+- [[id:guix--Building-the-Installation-Image::#Building-the-Installation-Image-for-ARM-Boards][Building the Installation Image for ARM Boards]]

@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: org--Previewing-LaTeX-fragments
+:END:
+#+filetags: :org:
+#+title: Previewing LaTeX fragments (The Org Manual)
+
+Next:
+
+<<Previewing-LaTeX-fragments>>
+Next: [[id:org--CDLaTeX-mode][Using CDLaTeX to enter math]], Previous: [[id:org--LaTeX-fragments][LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 12.5.2 Previewing LaTeX fragments [[#Previewing-LaTeX-fragments-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Previewing-LaTeX-fragments-1
+:CLASS: subsection
+:END:
+If you have a working LaTeX installation and ‘=dvipng=', ‘=dvisvgm=' or ‘=convert=' installed[[#FOOT115][^{115}]], LaTeX fragments can be processed to produce images of the typeset expressions to be used for inclusion while exporting to HTML (see [[id:org--LaTeX-fragments][LaTeX fragments]]), or for inline previewing within Org mode.
+
+You can customize the variables =org-format-latex-options= and =org-format-latex-header= to influence some aspects of the preview. In particular, the =:scale= (and for HTML export, =:html-scale=) property of the former can be used to adjust the size of the preview images.
+
+-  <<index-C_002dc-C_002dx-C_002dl>>C-c C-x C-l (=org-latex-preview=) [[#index-C_002dc-C_002dx-C_002dl][¶]] :: Produce a preview image of the LaTeX fragment at point and overlay it over the source code. If there is no fragment at point, process all fragments in the current entry---between two headlines.
+
+  When called with a single prefix argument, clear all images in the current entry. Two prefix arguments produce a preview image for all fragments in the buffer, while three of them clear all the images in that buffer.
+
+You can turn on the previewing of all LaTeX fragments in a file with
+
+#+begin_example
+#+STARTUP: latexpreview
+#+end_example
+
+To disable it, simply use
+
+#+begin_example
+#+STARTUP: nolatexpreview
+#+end_example
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF115][(115)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+These are respectively available at [[https://sourceforge.net/projects/dvipng/]], [[http://dvisvgm.bplaced.net/]] and from the ImageMagick suite. Choose the converter by setting the variable =org-preview-latex-default-process= accordingly.
+
+--------------
+
+Next: [[id:org--CDLaTeX-mode][Using CDLaTeX to enter math]], Previous: [[id:org--LaTeX-fragments][LaTeX fragments]], Up: [[id:org--Embedded-LaTeX][Embedded LaTeX]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

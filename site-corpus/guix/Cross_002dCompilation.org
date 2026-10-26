@@ -1,0 +1,91 @@
+:PROPERTIES:
+:ID: guix--Cross_002dCompilation
+:END:
+#+filetags: :guix:
+#+title: Cross-Compilation
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Cross_002dCompilation>>
+Next: [[id:guix--Native-Builds][Native Builds]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 10.1 Cross-Compilation [[#Cross_002dCompilation-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Cross_002dCompilation-1
+:CLASS: section
+:END:
+The commands supporting cross-compilation are proposing the =--list-targets= and =--target= options.
+
+The =--list-targets= option lists all the supported targets that can be passed as an argument to =--target=.
+
+#+begin_example
+$ guix build --list-targets
+The available targets are:
+
+   - aarch64-linux-gnu
+   - arm-linux-gnueabihf
+   - avr
+   - i586-pc-gnu
+   - i686-linux-gnu
+   - i686-w64-mingw32
+   - loongarch64-linux-gnu
+   - mips64el-linux-gnu
+   - or1k-elf
+   - powerpc-linux-gnu
+   - powerpc64le-linux-gnu
+   - riscv64-linux-gnu
+   - x86_64-linux-gnu
+   - x86_64-linux-gnux32
+   - x86_64-w64-mingw32
+   - xtensa-ath9k-elf
+#+end_example
+
+Targets are specified as GNU triplets (see [[https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Target-Triplets.html#Specifying-Target-Triplets][GNU configuration triplets]] in Autoconf).
+
+Those triplets are passed to GCC and the other underlying compilers possibly involved when building a package, a system image or any other GNU Guix output.
+
+#+begin_example
+$ guix build --target=aarch64-linux-gnu hello
+/gnu/store/9926by9qrxa91ijkhw9ndgwp4bn24g9h-hello-2.12
+
+$ file /gnu/store/9926by9qrxa91ijkhw9ndgwp4bn24g9h-hello-2.12/bin/hello
+/gnu/store/9926by9qrxa91ijkhw9ndgwp4bn24g9h-hello-2.12/bin/hello: ELF
+64-bit LSB executable, ARM aarch64 ...
+#+end_example
+
+The major benefit of cross-compilation is that there are no performance penalty compared to emulation using QEMU. There are however higher risks that some packages fail to cross-compile because fewer users are using this mechanism extensively.
+
+--------------
+
+Next: [[id:guix--Native-Builds][Native Builds]], Up: [[id:guix--Foreign-Architectures][Foreign Architectures]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

@@ -1,0 +1,155 @@
+:PROPERTIES:
+:ID: org--Export-Settings
+:END:
+#+filetags: :org:
+#+title: Export Settings (The Org Manual)
+
+Next:
+
+<<Export-Settings>>
+Next: [[id:org--Table-of-Contents][Table of Contents]], Previous: [[id:org--The-Export-Dispatcher][The Export Dispatcher]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+*** 13.2 Export Settings [[#Export-Settings-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Export-Settings-1
+:CLASS: section
+:END:
+Export options can be set: globally with variables; for an individual file by making variables buffer-local with in-buffer settings (see [[id:org--In_002dbuffer-Settings][Summary of In-Buffer Settings]]); by setting individual keywords or specifying them in compact form with the ‘=OPTIONS=' keyword; or for a tree by setting properties (see [[id:org--Properties-and-Columns][Properties and Columns]]). Options set at a specific level override options set at a more general level.
+
+In-buffer settings may appear anywhere in the file, either directly or indirectly through a file included using ‘=#+SETUPFILE: filename or URL=' syntax. Option keyword sets tailored to a particular backend can be inserted from the export dispatcher (see [[id:org--The-Export-Dispatcher][The Export Dispatcher]]) using the ‘=Insert template=' command by pressing #. To insert keywords individually, a good way to make sure the keyword is correct is to type ‘=#+=' and then to use M-TAB[[#FOOT128][^{128}]] for completion.
+
+The export keywords available for every backend, and their equivalent global variables, include:
+
+-  <<index-AUTHOR_002c-keyword>>‘=AUTHOR=' [[#index-AUTHOR_002c-keyword][¶]] :: The document author (=user-full-name=).
+
+-  <<index-CREATOR_002c-keyword>>‘=CREATOR=' [[#index-CREATOR_002c-keyword][¶]] :: Entity responsible for output generation (=org-export-creator-string=).
+
+-  <<index-DATE_002c-keyword>>‘=DATE=' [[#index-DATE_002c-keyword][¶]] :: A date or a timestamp[[#FOOT129][^{129}]].
+
+-  <<index-EMAIL_002c-keyword>>‘=EMAIL=' [[#index-EMAIL_002c-keyword][¶]] :: The email address (=user-mail-address=).
+
+-  <<index-LANGUAGE_002c-keyword>>‘=LANGUAGE=' [[#index-LANGUAGE_002c-keyword][¶]] :: Language to use for translating certain strings (=org-export-default-language=). With ‘=#+LANGUAGE: fr=', for example, Org translates ‘=Table of contents=' to the French ‘=Table des matières='[[#FOOT130][^{130}]].
+
+-  <<index-SELECT_005fTAGS_002c-keyword>>‘=SELECT_TAGS=' [[#index-SELECT_005fTAGS_002c-keyword][¶]] :: List of tags that will, if present, be selected for export. The default value is =org-export-select-tags= ‘=("export")='. When a tree is tagged with ‘=export=', Org selects that tree and its subtrees for export, ignoring all the other sections that do not possess the ‘=export=' tag.
+
+  When selectively exporting files with ‘=export=' tags set, Org does not export any text that appears before the first headline.
+
+  Note that a file without the ‘=export=' tags will export all its sections.
+
+  To select non-default tags for export, customize =org-export-select-tags= (globally) or add ‘=#+SELECT_TAGS: tag1 tag2=' to the document.
+
+-  <<index-EXCLUDE_005fTAGS_002c-keyword>>‘=EXCLUDE_TAGS=' [[#index-EXCLUDE_005fTAGS_002c-keyword][¶]] :: List of tags that will be excluded from export. The default value is =org-export-exclude-tags= ‘=("noexport")='. When a tree is tagged with ‘=noexport=', Org excludes that tree and its subtrees from export.
+
+  Entries tagged with ‘=noexport=' are unconditionally excluded from the export, even if they have an ‘=export=' tag. Even if a subtree is not exported, Org executes any code blocks contained there.
+
+  To select non-default tags for the exclusion, customize =org-export-exclude-tags= (globally) or add ‘=#+EXCLUDE_TAGS: tag1 tag2=' to the document.
+
+-  <<index-TITLE_002c-keyword>>‘=TITLE=' [[#index-TITLE_002c-keyword][¶]] :: Org displays this title. For long titles, use multiple ‘=#+TITLE=' lines.
+
+- <<index-EXPORT_005fFILE_005fNAME_002c-keyword>>‘=EXPORT_FILE_NAME=' [[#index-EXPORT_005fFILE_005fNAME_002c-keyword][¶]] :: The name of the output file to be generated. Otherwise, Org generates the file name based on the buffer name and the extension based on the backend format.
+
+The ‘=OPTIONS=' keyword is a compact form. To configure multiple options, use several ‘=OPTIONS=' lines. ‘=OPTIONS=' recognizes the following arguments.
+
+- <<index-org_002dexport_002dwith_002dsmart_002dquotes>>='= [[#index-org_002dexport_002dwith_002dsmart_002dquotes][¶]] :: Toggle smart quotes (=org-export-with-smart-quotes=). Depending on the language used, when activated, Org treats pairs of double quotes as primary quotes, pairs of single quotes as secondary quotes, and single quote marks as apostrophes.
+
+- <<index-org_002dexport_002dwith_002demphasize>>=*= [[#index-org_002dexport_002dwith_002demphasize][¶]] :: Toggle emphasized text (=org-export-with-emphasize=).
+
+- <<index-org_002dexport_002dwith_002dspecial_002dstrings>>=-= [[#index-org_002dexport_002dwith_002dspecial_002dstrings][¶]] :: Toggle conversion of special strings (=org-export-with-special-strings=).
+
+- <<index-org_002dexport_002dwith_002dfixed_002dwidth>>=:= [[#index-org_002dexport_002dwith_002dfixed_002dwidth][¶]] :: Toggle fixed-width sections (=org-export-with-fixed-width=).
+
+- <<index-org_002dexport_002dwith_002dtimestamps>>=<= [[#index-org_002dexport_002dwith_002dtimestamps][¶]] :: Toggle inclusion of time/date active/inactive stamps (=org-export-with-timestamps=).
+
+- <<index-org_002dexport_002dpreserve_002dbreaks>>=\n= [[#index-org_002dexport_002dpreserve_002dbreaks][¶]] :: Toggles whether to preserve line breaks (=org-export-preserve-breaks=).
+
+- <<index-org_002dexport_002dwith_002dsub_002dsuperscripts-1>>=^= [[#index-org_002dexport_002dwith_002dsub_002dsuperscripts-1][¶]] :: Toggle TeX-like syntax for sub- and superscripts. If you write ‘=^:{}=', ‘=a_{b}=' is interpreted, but the simple ‘=a_b=' is left as it is (=org-export-with-sub-superscripts=).
+
+- <<index-org_002dexport_002dwith_002darchived_002dtrees-1>>=arch= [[#index-org_002dexport_002dwith_002darchived_002dtrees-1][¶]] :: Configure how archived trees are exported. When set to =headline=, the export process skips the contents and processes only the headlines (=org-export-with-archived-trees=).
+
+- <<index-org_002dexport_002dwith_002dauthor>>=author= [[#index-org_002dexport_002dwith_002dauthor][¶]] :: Toggle inclusion of author name into exported file (=org-export-with-author=).
+
+- <<index-org_002dexport_002dexpand_002dlinks>>=expand-links= [[#index-org_002dexport_002dexpand_002dlinks][¶]] :: Toggle expansion of environment variables in file paths (=org-export-expand-links=).
+
+- <<index-org_002dexport_002dwith_002dbroken_002dlinks>>=broken-links= [[#index-org_002dexport_002dwith_002dbroken_002dlinks][¶]] :: Toggles if Org should continue exporting upon finding a broken internal link. When set to =mark=, Org clearly marks the problem link in the output (=org-export-with-broken-links=).
+
+- <<index-org_002dexport_002dwith_002dclocks>>=c= [[#index-org_002dexport_002dwith_002dclocks][¶]] :: Toggle inclusion of ‘=CLOCK=' keywords (=org-export-with-clocks=).
+
+- <<index-org_002dexport_002dwith_002dcreator>>=creator= [[#index-org_002dexport_002dwith_002dcreator][¶]] :: Toggle inclusion of creator information in the exported file (=org-export-with-creator=).
+
+- <<index-org_002dexport_002dwith_002ddrawers>>=d= [[#index-org_002dexport_002dwith_002ddrawers][¶]] :: Toggles inclusion of drawers, or list of drawers to include, or list of drawers to exclude (=org-export-with-drawers=).
+
+- <<index-org_002dexport_002dwith_002ddate>>=date= [[#index-org_002dexport_002dwith_002ddate][¶]] :: Toggle inclusion of a date into exported file (=org-export-with-date=).
+
+- <<index-org_002dexport_002dwith_002dentities>>=e= [[#index-org_002dexport_002dwith_002dentities][¶]] :: Toggle inclusion of entities (=org-export-with-entities=).
+
+- <<index-org_002dexport_002dwith_002demail>>=email= [[#index-org_002dexport_002dwith_002demail][¶]] :: Toggle inclusion of the author's e-mail into exported file (=org-export-with-email=).
+
+- <<index-org_002dexport_002dwith_002dfootnotes>>=f= [[#index-org_002dexport_002dwith_002dfootnotes][¶]] :: Toggle the inclusion of footnotes (=org-export-with-footnotes=).
+
+- <<index-org_002dexport_002dheadline_002dlevels>>=H= [[#index-org_002dexport_002dheadline_002dlevels][¶]] :: Set the last headline level for export as a headline (=org-export-headline-levels=). For descendants of that level, headlines are treated differently. In most backends, they become list items.
+
+- <<index-org_002dexport_002dwith_002dinlinetasks>>=inline= [[#index-org_002dexport_002dwith_002dinlinetasks][¶]] :: Toggle inclusion of inlinetasks (=org-export-with-inlinetasks=).
+
+-  <<index-org_002dexport_002dwith_002dsection_002dnumbers>>=num= [[#index-org_002dexport_002dwith_002dsection_002dnumbers][¶]] :: Toggle section-numbers (=org-export-with-section-numbers=). When set to number N, Org numbers only those headlines at level N or above. Set ‘=UNNUMBERED=' property to non-=nil= to disable numbering of heading and subheadings entirely. Moreover, when the value is ‘=notoc=' the headline, and all its children, do not appear in the table of contents either (see [[id:org--Table-of-Contents][Table of Contents]]).
+
+- <<index-org_002dexport_002dwith_002dplanning>>=p= [[#index-org_002dexport_002dwith_002dplanning][¶]] :: Toggle export of planning information (=org-export-with-planning=). “Planning information” comes from lines located right after the headline and contain any combination of these cookies: ‘=SCHEDULED=', ‘=DEADLINE=', or ‘=CLOSED='.
+
+- <<index-org_002dexport_002dwith_002dpriority>>=pri= [[#index-org_002dexport_002dwith_002dpriority][¶]] :: Toggle inclusion of priority cookies (=org-export-with-priority=).
+
+- <<index-org_002dexport_002dwith_002dproperties>>=prop= [[#index-org_002dexport_002dwith_002dproperties][¶]] :: Toggle inclusion of property drawers, or list the properties to include (=org-export-with-properties=).
+
+- <<index-org_002dexport_002dwith_002dstatistics_002dcookies>>=stat= [[#index-org_002dexport_002dwith_002dstatistics_002dcookies][¶]] :: Toggle inclusion of statistics cookies (=org-export-with-statistics-cookies=).
+
+- <<index-org_002dexport_002dwith_002dtags>>=tags= [[#index-org_002dexport_002dwith_002dtags][¶]] :: Toggle inclusion of tags, may also be =not-in-toc= (=org-export-with-tags=).
+
+- <<index-org_002dexport_002dwith_002dtasks>>=tasks= [[#index-org_002dexport_002dwith_002dtasks][¶]] :: Toggle inclusion of tasks (TODO items); or =nil= to remove all tasks; or =todo= to remove done tasks; or list the keywords to keep (=org-export-with-tasks=).
+
+- <<index-org_002dexport_002dwith_002dlatex-1>>=tex= [[#index-org_002dexport_002dwith_002dlatex-1][¶]] :: =nil= does not export; =t= exports; =verbatim= keeps everything in verbatim (=org-export-with-latex=).
+
+-  <<index-org_002dexport_002dtime_002dstamp_002dfile>>=timestamp= [[#index-org_002dexport_002dtime_002dstamp_002dfile][¶]] :: Toggle inclusion of the creation time in the exported file (=org-export-timestamp-file=).
+
+- <<index-org_002dexport_002dwith_002dtitle>>=title= [[#index-org_002dexport_002dwith_002dtitle][¶]] :: Toggle inclusion of title (=org-export-with-title=).
+
+- <<index-org_002dexport_002dwith_002dtoc>>=toc= [[#index-org_002dexport_002dwith_002dtoc][¶]] :: Toggle inclusion of the table of contents, or set the level limit (=org-export-with-toc=).
+
+- <<index-org_002dexport_002dwith_002dtodo_002dkeywords>>=todo= [[#index-org_002dexport_002dwith_002dtodo_002dkeywords][¶]] :: Toggle inclusion of TODO keywords into exported text (=org-export-with-todo-keywords=).
+
+- <<index-org_002dexport_002dwith_002dtables>>=|= [[#index-org_002dexport_002dwith_002dtables][¶]] :: Toggle inclusion of tables (=org-export-with-tables=).
+
+When exporting subtrees, special node properties can override the above keywords. These properties have an ‘=EXPORT_=' prefix. For example, ‘=DATE=' becomes, ‘=EXPORT_DATE=' when used for a specific subtree. Except for ‘=SETUPFILE=', all other keywords listed above have an ‘=EXPORT_=' equivalent.
+
+If =org-export-allow-bind-keywords= is non-=nil=, Emacs variables can become buffer-local during export by using the ‘=BIND=' keyword. Its syntax is ‘=#+BIND: variable value='. This is particularly useful for in-buffer settings that cannot be changed using keywords.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF128][(128)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Many desktops intercept M-TAB to switch windows. Use C-M-i or ESC TAB instead.
+
+***** [[#DOCF129][(129)]]
+:PROPERTIES:
+:CUSTOM_ID: section-1
+:CLASS: footnote-body-heading
+:END:
+The variable =org-export-date-timestamp-format= defines how this timestamp is exported.
+
+***** [[#DOCF130][(130)]]
+:PROPERTIES:
+:CUSTOM_ID: section-2
+:CLASS: footnote-body-heading
+:END:
+For export to LaTeX format---or LaTeX-related formats such as Beamer---, the ‘=org-latex-package-alist=' variable needs further configuration. See [[id:org--LaTeX-specific-export-settings][LaTeX specific export settings]].
+
+--------------
+
+Next: [[id:org--Table-of-Contents][Table of Contents]], Previous: [[id:org--The-Export-Dispatcher][The Export Dispatcher]], Up: [[id:org--Exporting][Exporting]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

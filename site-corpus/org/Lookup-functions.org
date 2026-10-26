@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID: org--Lookup-functions
+:END:
+#+filetags: :org:
+#+title: Lookup functions (The Org Manual)
+
+Next:
+
+<<Lookup-functions>>
+Next: [[id:org--Editing-and-debugging-formulas][Editing and debugging formulas]], Previous: [[id:org--Column-formulas][Column formulas]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+**** 3.5.7 Lookup functions [[#Lookup-functions-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Lookup-functions-1
+:CLASS: subsection
+:END:
+Org has three predefined Emacs Lisp functions for lookups in tables.
+
+- <<index-org_002dlookup_002dfirst>>‘=(org-lookup-first VAL S-LIST R-LIST &optional PREDICATE)=' [[#index-org_002dlookup_002dfirst][¶]] :: Searches for the first element =S= in list =S-LIST= for which
+
+  #+begin_src lisp-preformatted
+  (PREDICATE VAL S)
+  #+end_src
+
+  is non-=nil=; returns the value from the corresponding position in list =R-LIST=. The default =PREDICATE= is =equal=. Note that the parameters =VAL= and =S= are passed to =PREDICATE= in the same order as the corresponding parameters are in the call to =org-lookup-first=, where =VAL= precedes =S-LIST=. If =R-LIST= is =nil=, the matching element =S= of =S-LIST= is returned.
+
+- <<index-org_002dlookup_002dlast>>‘=(org-lookup-last VAL S-LIST R-LIST &optional PREDICATE)=' [[#index-org_002dlookup_002dlast][¶]] :: Similar to =org-lookup-first= above, but searches for the /last/ element for which =PREDICATE= is non-=nil=.
+
+- <<index-org_002dlookup_002dall>>‘=(org-lookup-all VAL S-LIST R-LIST &optional PREDICATE)=' [[#index-org_002dlookup_002dall][¶]] :: Similar to =org-lookup-first=, but searches for /all/ elements for which =PREDICATE= is non-=nil=, and returns /all/ corresponding values. This function cannot be used by itself in a formula, because it returns a list of values. However, powerful lookups can be built when this function is combined with other Emacs Lisp functions.
+
+If the ranges used in these functions contain empty fields, the ‘=E=' mode for the formula should usually be specified: otherwise empty fields are not included in =S-LIST= and/or =R-LIST= which can, for example, result in an incorrect mapping from an element of =S-LIST= to the corresponding element of =R-LIST=.
+
+These three functions can be used to implement associative arrays, count matching cells, rank results, group data, etc. For practical examples see [[https://orgmode.org/worg/org-tutorials/org-lookups.html][this tutorial on Worg]].
+
+--------------
+
+Next: [[id:org--Editing-and-debugging-formulas][Editing and debugging formulas]], Previous: [[id:org--Column-formulas][Column formulas]], Up: [[id:org--The-Spreadsheet][The Spreadsheet]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

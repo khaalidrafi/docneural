@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID: emacs--EWW
+:END:
+#+filetags: :emacs:
+#+title: EWW
+
+Next: [[id:emacs--Embedded-WebKit-Widgets][Embedded WebKit Widgets]]   Up: [[id:emacs--Hyperlinking][Hyperlinking and Web Navigation Features]]
+
+<<EWW>>
+*** 48.1 Web Browsing with EWW [[#Web-Browsing-with-EWW][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Web-Browsing-with-EWW
+:CLASS: section subsection-level-set-section
+:END:
+/EWW/, the Emacs Web Wowser, is a web browser package for Emacs. It allows browsing URLs within an Emacs buffer. The command M-x eww will open a URL or search the web. You can open a file using the command M-x eww-open-file. You can use EWW as the web browser for =browse-url=, see [[id:emacs--Browse_002dURL][Following URLs]]. For full details, see [[../eww_html/index.html#Top][EWW]] in The Emacs Web Wowser Manual.
+
+--------------

@@ -1,0 +1,109 @@
+:PROPERTIES:
+:ID: guix--Chrooting-into-an-existing-system
+:END:
+#+filetags: :guix:
+#+title: Chrooting into an existing system
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Chrooting-into-an-existing-system>>
+Up: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 12.1 Chrooting into an existing system [[#Chrooting-into-an-existing-system-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Chrooting-into-an-existing-system-1
+:CLASS: section
+:END:
+This section details how to /chroot/ to an already installed Guix System with the aim of reconfiguring it, for example to fix a broken GRUB installation. The process is similar to how it would be done on other GNU/Linux systems, but there are some Guix System particularities such as the daemon and profiles that make it worthy of explaining here.
+
+1. Obtain a bootable image of Guix System. It is recommended the latest development snapshot so the kernel and the tools used are at least as as new as those of your installed system; it can be retrieved from the [[https://ci.guix.gnu.org/search/latest/ISO-9660?query=spec:images+status:success+system:x86_64-linux+image.iso][https://ci.guix.gnu.org]] URL. Follow the see [[id:guix--USB-Stick-and-DVD-Installation][USB Stick and DVD Installation]] section for copying it to a bootable media.
+
+2. Boot the image, and proceed with the graphical text-based installer until your network is configured. Alternatively, you could configure the network manually by following the [[id:guix--Keyboard-Layout-and-Networking-and-Partitioning::#manual_002dinstallation_002dnetworking][manual-installation-networking]] section. If you get the error ‘=RTNETLINK answers: Operation not possible due to RF-kill=', try ‘=rfkill list=' followed by ‘=rfkill unblock 0=', where ‘=0=' is your device identifier (ID).
+
+3. Switch to a virtual console (tty) if you haven't already by pressing simultaneously the Control + Alt + F4 keys. Mount your file system at =/mnt=. Assuming your root partition is =/dev/sda2=, you would do:
+
+   #+begin_example
+   mount /dev/sda2 /mnt
+#+end_example
+
+4. Mount special block devices and Linux-specific directories:
+
+   #+begin_example
+   mount --rbind /proc /mnt/proc
+   mount --rbind /sys /mnt/sys
+   mount --rbind /dev /mnt/dev
+#+end_example
+
+   A quick way to check if your system booted with EFI support is to check if =/sys/firmware/efi= exists. If your system is EFI-based, you must also mount the ESP partition. Assuming it is =/dev/sda1=, you can do so with:
+
+   #+begin_example
+   mount /dev/sda1 /mnt/boot/efi
+#+end_example
+
+5. Enter your system via chroot:
+
+   #+begin_example
+   chroot /mnt /bin/sh
+#+end_example
+
+6. Source the system profile as well as your =user= profile to setup the environment, where =user= is the user name used for the Guix System you are attempting to repair:
+
+   #+begin_example
+   source /var/guix/profiles/system/profile/etc/profile
+   source /home/user/.guix-profile/etc/profile
+#+end_example
+
+   To ensure you are working with the Guix revision you normally would as your normal user, also source your current Guix profile:
+
+   #+begin_example
+   source /home/user/.config/guix/current/etc/profile
+#+end_example
+
+7. Start a minimal =guix-daemon= in the background:
+
+   #+begin_example
+   guix-daemon --build-users-group=guixbuild --disable-chroot &
+#+end_example
+
+8. Edit your Guix System configuration if needed, then reconfigure with:
+
+   #+begin_example
+   guix system reconfigure your-config.scm
+#+end_example
+
+9. Finally, you should be good to reboot the system to test your fix.
+
+--------------
+
+Up: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

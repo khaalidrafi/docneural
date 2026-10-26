@@ -1,0 +1,90 @@
+:PROPERTIES:
+:ID: guix--Packaging-Guidelines
+:END:
+#+filetags: :guix:
+#+title: Packaging Guidelines
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Packaging-Guidelines>>
+Next: [[id:guix--Coding-Style][Coding Style]], Previous: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+*** 22.7 Packaging Guidelines [[#Packaging-Guidelines-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Packaging-Guidelines-1
+:CLASS: section
+:END:
+The GNU distribution is nascent and may well lack some of your favorite packages. This section describes how you can help make the distribution grow.
+
+Free software packages are usually distributed in the form of /source code tarballs/---typically =tar.gz= files that contain all the source files. Adding a package to the distribution means essentially two things: adding a /recipe/ that describes how to build the package, including a list of other packages required to build it, and adding /package metadata/ along with that recipe, such as a description and licensing information.
+
+In Guix all this information is embodied in /package definitions/. Package definitions provide a high-level view of the package. They are written using the syntax of the Scheme programming language; in fact, for each package we define a variable bound to the package definition, and export that variable from a module (see [[id:guix--Package-Modules][Package Modules]]). However, in-depth Scheme knowledge is /not/ a prerequisite for creating packages. For more information on package definitions, see [[id:guix--Defining-Packages][Defining Packages]].
+
+Once a package definition is in place, stored in a file in the Guix source tree, it can be tested using the =guix build= command (see [[id:guix--Invoking-guix-build][Invoking =guix build=]]). For example, assuming the new package is called =gnew=, you may run this command from the Guix build tree (see [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]]):
+
+#+begin_example
+./pre-inst-env guix build gnew --keep-failed
+#+end_example
+
+Using =--keep-failed= makes it easier to debug build failures since it provides access to the failed build tree. Another useful command-line option when debugging is =--log-file=, to access the build log.
+
+If the package is unknown to the =guix= command, it may be that the source file contains a syntax error, or lacks a =define-public= clause to export the package variable. To figure it out, you may load the module from Guile to get more information about the actual error:
+
+#+begin_example
+./pre-inst-env guile -c '(use-modules (gnu packages gnew))'
+#+end_example
+
+Once your package builds correctly, please send us a patch (see [[id:guix--Submitting-Patches][Submitting Patches]]). Well, if you need help, we will be happy to help you too. Once the patch is committed in the Guix repository, the new package automatically gets built on the supported platforms by [[https://bordeaux.guix.gnu.org][our continuous integration system]].
+
+Users can obtain the new package definition simply by running =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]). When =bordeaux.guix.gnu.org= is done building the package, installing the package automatically downloads binaries from there (see [[id:guix--Substitutes][Substitutes]]). The only place where human intervention is needed is to review and apply the patch.
+
+- [[id:guix--Software-Freedom][Software Freedom]]
+- [[id:guix--Extracting-Bundled-Dependencies][Extracting Bundled Dependencies]]
+- [[id:guix--Package-Naming][Package Naming]]
+- [[id:guix--Version-Numbers][Version Numbers]]
+- [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]]
+- [[id:guix--Snippets-versus-Phases][Snippets versus Phases]]
+- [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]]
+- [[id:guix--Bulk-Updates][Bulk Updates]]
+- [[id:guix--Emacs-Packages][Emacs Packages]]
+- [[id:guix--Python-Modules][Python Modules]]
+- [[id:guix--Perl-Modules][Perl Modules]]
+- [[id:guix--Java-Packages][Java Packages]]
+- [[id:guix--Rust-Crates][Rust Crates]]
+- [[id:guix--Elm-Packages][Elm Packages]]
+- [[id:guix--Fonts][Fonts]]
+
+--------------
+
+Next: [[id:guix--Coding-Style][Coding Style]], Previous: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

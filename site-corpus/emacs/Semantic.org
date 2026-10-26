@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID: emacs--Semantic
+:END:
+#+filetags: :emacs:
+#+title: Semantic
+
+Next: [[id:emacs--Misc-for-Programs][Other Features Useful for Editing Programs]]   Previous: [[id:emacs--MixedCase-Words][MixedCase Words]]   Up: [[id:emacs--Programs][Editing Programs]]
+
+<<Semantic>>
+*** 28.10 Semantic [[#Semantic-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Semantic-1
+:CLASS: section
+:END:
+Semantic is a package that provides language-aware editing commands based on =source code parsers=. This section provides a brief description of Semantic; for full details, see [[../semantic_html/index.html#Top][Semantic]] in Semantic.
+
+Most of the language-aware features in Emacs, such as Font Lock mode (see [[id:emacs--Font-Lock::#Font-Lock][Font Lock mode]]), rely on rules of thumb[[#FOOT17][^{17}]] that usually give good results but are never completely exact. In contrast, the parsers used by Semantic have an exact understanding of programming language syntax. This allows Semantic to provide search, navigation, and completion commands that are powerful and precise.
+
+To begin using Semantic, type M-x semantic-mode or click on the menu item named ‘=Source Code Parsers (Semantic)=' in the ‘=Tools=' menu. This enables Semantic mode, a global minor mode.
+
+When Semantic mode is enabled, Emacs automatically attempts to parse each file you visit. Currently, Semantic understands C, C++, HTML, Java, Javascript, Make, Python, Scheme, SRecode, and Texinfo. Within each parsed buffer, the following commands are available:
+
+- <<index-C_002dc-_002c-j>>C-c , j [[#index-C_002dc-_002c-j][¶]] :: Prompt for the name of a function defined in the current file, and move point there (=semantic-complete-jump-local=).
+
+- <<index-C_002dc-_002c-J>>C-c , J [[#index-C_002dc-_002c-J][¶]] :: Prompt for the name of a function defined in any file Emacs has parsed, and move point there (=semantic-complete-jump=).
+
+- <<index-C_002dc-_002c-SPC>>C-c , SPC [[#index-C_002dc-_002c-SPC][¶]] :: Display a list of possible completions for the symbol at point (=semantic-complete-analyze-inline=). This also activates a set of special key bindings for choosing a completion: RET accepts the current completion, M-n and M-p cycle through possible completions, TAB completes as far as possible and then cycles, and C-g or any other key aborts completion.
+
+- <<index-C_002dc-_002c-l>>C-c , l [[#index-C_002dc-_002c-l][¶]] :: Display a list of the possible completions of the symbol at point, in another window (=semantic-analyze-possible-completions=).
+
+In addition to the above commands, the Semantic package provides a variety of other ways to make use of parser information. For instance, you can use it to display a list of completions when Emacs is idle. See [[../semantic_html/index.html#Top][Semantic]] in Semantic, for details.
+
+--------------
+
+**** Footnotes
+:PROPERTIES:
+:CUSTOM_ID: footnotes
+:CLASS: footnotes-heading
+:END:
+***** [[#DOCF17][(17)]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:CLASS: footnote-body-heading
+:END:
+Regular expressions and syntax tables.
+
+--------------

@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID: guix--Cuirass-Build-Notifications
+:END:
+#+filetags: :guix:
+#+title: Cuirass Build Notifications
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Cuirass-Build-Notifications>>
+Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+--------------
+
+**** 22.11.3 Cuirass Build Notifications [[#Cuirass-Build-Notifications-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Cuirass-Build-Notifications-1
+:CLASS: subsection
+:END:
+Cuirass includes RSS (Really Simple Syndication) feeds as one of its features (see [[https://doc.guix.gnu.org/cuirass/latest/en/html_node/Notifications.html#Notifications][(cuirass)Notifications]]). Since [[https://ci.guix.gnu.org/][Berlin]] runs an instance of Cuirass, this feature can be used to keep track of recently broken or fixed packages caused by changes pushed to the Guix git repository. Any RSS client can be used. A good one, included with Emacs, is See [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Gnus.html#Gnus][(gnus)Gnus]]. To register the feed, copy its URL, then from the main Gnus buffer, ‘=*Group*=', do the following:
+
+#+begin_example
+G R https://ci.guix.gnu.org/events/rss/?specification=master RET
+Guix CI - master RET Build events for specification master. RET
+#+end_example
+
+Then, back at the ‘=*Group*=' buffer, press s to save the newly added RSS group. As for any other Gnus group, you can update its content by pressing the g key. You should now receive notifications that read like:
+
+#+begin_example
+ . [ ?: Cuirass ] Build tree-sitter-meson.aarch64-linux on master is fixed.
+ . [ ?: Cuirass ] Build rust-pbkdf2.aarch64-linux on master is fixed.
+ . [ ?: Cuirass ] Build rust-pbkdf2.x86_64-linux on master is fixed.
+#+end_example
+
+where each RSS entry contains a link to the Cuirass build details page of the associated build.
+
+--------------
+
+Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

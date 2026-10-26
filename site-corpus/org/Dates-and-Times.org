@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID: org--Dates-and-Times
+:END:
+#+filetags: :org:
+#+title: Dates and Times (The Org Manual)
+
+Next:
+
+<<Dates-and-Times>>
+Next: [[id:org--Refiling-and-Archiving][Refiling and Archiving]], Previous: [[id:org--Properties-and-Columns][Properties and Columns]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]
+
+--------------
+
+** 8 Dates and Times [[#Dates-and-Times-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Dates-and-Times-1
+:CLASS: chapter
+:END:
+To assist project planning, TODO items can be labeled with a date and/or a time. The specially formatted string carrying the date and time information is called a /timestamp/ in Org mode. This may be a little confusing because timestamp is often used as indicating when something was created or last changed. However, in Org mode this term is used in a much wider sense.
+
+Timestamps can be used to plan appointments, schedule tasks, set deadlines, track time, and more. The following sections describe the timestamp format and tooling that Org mode provides for common use cases dealing with time and time intervals.
+
+- [[id:org--Timestamps][Timestamps]]
+- [[id:org--Creating-Timestamps][Creating Timestamps]]
+- [[id:org--Deadlines-and-Scheduling][Deadlines and Scheduling]]
+- [[id:org--Clocking-Work-Time][Clocking Work Time]]
+- [[id:org--Effort-Estimates][Effort Estimates]]
+- [[id:org--Timers][Taking Notes with a Relative Timer]]
+
+--------------
+
+Next: [[id:org--Refiling-and-Archiving][Refiling and Archiving]], Previous: [[id:org--Properties-and-Columns][Properties and Columns]], Up: [[id:org--index][The Org Manual]]   [[[id:org--index::#SEC_Contents][Contents]]][[[id:org--Variable-Index][Index]]]

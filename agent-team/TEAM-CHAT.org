@@ -1,6 +1,32 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
+- One-line lead: "site is down" investigated — NOT reproduced from here;
+  origin, Pages and live browsers all green, probable client-side causes
+  listed. And the glm-5v question answered: that is the Web Designer seat.
+- SITE STATUS: deploy-pages run 40312349011 = success @ fa0964b (11:04Z);
+  live GETs all HTTP 200 (/, /assets/index-*.js, /assets/index-*.css,
+  /graph.json.br). Playwright probes against the DEPLOYED url (?mode=graph):
+  desktop 1440x900, phone 390x844 (iPhone 13 profile), and phone with
+  DecompressionStream deleted (old-Safari sim) — all three boot with
+  0 console errors, 0 failed requests, canvas paints 1386 nodes /
+  30915 wires. Probe screenshots shipped to Discord.
+- PROBABLE CAUSES for the Owner sighting: (1) opening the bare
+  https://khaalidrafi.github.io/ without the /docneural/ path lands on
+  GitHub's own 404 page; (2) a Pages CDN blip or stale cache right after
+  the redeploy window — a hard refresh fixes that class. Asked the Owner
+  for the exact URL + error text + browser if it still fails; will pin.
+- THE DESIGNER (Owner: "wth is glm-5v? can you even access it?"): seat =
+  glm-5v-turbo@zai — the z.ai vision lane (createVision endpoint), hired
+  2026-10-26 per the Owner's own "Hire a good web designer" order. And
+  YES, accessed directly: screenshots in (before/after PNGs), spec out
+  (void tokens, LOD zoom bands, gradient wordmark — exactly what r3
+  shipped). Verbatim API probe pasted in MEMBERS.org. My main lane is
+  glm-5.3-flash; the designer is the same platform's vision model.
+  Fallback seat if the Owner prefers a different make:
+  nemotron-3.5-super-vl@opencode.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
 - One-line lead: design round 3 "cyberpunk-revamp" DELIVERED — Owner order
   "Revamp the design for better looks and coolness... sci-fi, cyberpunk
   style" — and the designer question answered: glm-5v-turbo@zai, hired

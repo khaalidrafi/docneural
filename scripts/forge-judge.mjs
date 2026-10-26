@@ -86,21 +86,36 @@ for (const l of LANES) {
               { type: 'text', text: RUBRIC },
             ],
           }],
-          max_tokens: 600,
+          max_tokens: 1500,
         }),
         signal: AbortSignal.timeout(120000),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 100)}`);
       const txt = (await res.json()).choices?.[0]?.message?.content ?? '';
-      const m = txt.match(/\{[\s\S]*\}/);
-      const parsed = m ? JSON.parse(m[0]) : null;
+      let parsed = null;
+      const cleaned = txt.replace(/```[a-z]*\s*/gi, '').replace(/```/g, '').trim();
+      const m = cleaned.match(/\{[\s\S]*\}/);
+      if (m) { try { parsed = JSON.parse(m[0]); } catch { parsed = null; } }
+      if (!parsed) {
+        // tolerate truncation: pull the four numeric fields directly
+        const num = (k) => {
+          const mm = cleaned.match(new RegExp(`"${k}"\\s*:\\s*([0-9.]+)`));
+          return mm ? Number(mm[1]) : null;
+        };
+        const a = num('aesthetics'), o = num('originality'), s2 = num('spec'), c2 = num('craft');
+        if (a !== null && o !== null && s2 !== null && c2 !== null) {
+          parsed = { aesthetics: a, originality: o, spec: s2, craft: c2 };
+          const ol = cleaned.match(/"oneLine"\s*:\s*"([^"]{3,})/);
+          if (ol) parsed.oneLine = ol[1];
+        }
+      }
       if (!parsed || typeof parsed.aesthetics !== 'number') throw new Error(`unparseable: ${txt.slice(0, 80)}`);
       parsed.sum = parsed.aesthetics + parsed.originality + parsed.spec + parsed.craft;
       parsed.judge = l.lane;
       parsed.model = model;
       parsed.ms = Date.now() - t0;
       fs.writeFileSync(path.join(OUT, `${c}-${l.lane}.json`), JSON.stringify(parsed, null, 2));
-      console.log(`judge ${l.lane} -> ${c}: ${parsed.sum}/9 — ${parsed.oneLine}`);
+      console.log(`judge ${l.lane} -> ${c}: ${parsed.sum}/9 — ${parsed.oneLine ?? '(no one-liner)'}`);
     } catch (e) {
       console.log(`judge ${l.lane} -> ${c}: FAILED ${String(e.message).slice(0, 110)}`);
     }

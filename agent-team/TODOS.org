@@ -65,16 +65,27 @@
   Ling-VL has zero public design data (disclosed). Crown re-scoped
   honestly, not overturned. (evidence:
   bench/2026-10-27-public-benchmarks/RESEARCH.md + MEMBERS.org + TEAM-CHAT)
-- TODO forge-codebuddy run 5 — BLOCKED ON OWNER GO (spend law c6cc6d9: no
-  dispatches without fiat; credits = expiring Owner money): kimi-k3 (Design
-  Arena 1335, #2 designer on the whole public board, CLI-supported) via the
-  ONE spend-law attempt aimed at the reachable CHINESE endpoint
-  (CODEBUDDY_INTERNET_ENVIRONMENT=internal — intl site proven ETIMEDOUT-dead
-  from runners by run 40381847436: "connect ETIMEDOUT 0.0.0.1:443"). Zero
-  credits burned so far (auth + connect failures precede any model call).
-  If the probe shows BOTH endpoints dead from runners, the burn moves to an
-  Owner-side body. (evidence: TEAM-CHAT :msg:forge:full-sweep:codebuddy-rootcause:
-  + bench/2026-10-27-public-benchmarks/RESEARCH.md FULL-FIELD SWEEP)
+- BLOCKED forge-codebuddy run 5 — OWNER GO RECEIVED 2026-10-27 ("Use Kimi
+  K3 to improve the design and make it cool. 100 credits limit!"); THREE
+  runner runs executed under the GO, ALL ZERO-CREDIT, runner lane now
+  DEFINITIVELY closed: run 40386541436 = my v5 TDZ crash at the --version
+  probe (0 burn, pre-auth; fixed v6 bf43dcd, dry-run proven); run
+  40388548989 = 401 from copilot.tencent.com in Bearer custom-token mode
+  (both slots set; 0 burn); run 40390456013 = 401 from the SAME reachable
+  endpoint in plain ApiKey mode (0 burn). Two auth modes rejected = the
+  sealed token is INTL-SCOPED, and the intl site is ETIMEDOUT-dead from
+  runners (2 hangs on record) — GitHub API never returns secret values, so
+  the token cannot be moved to an intl-reachable body by the agent.
+  RESOLUTION PATH (pre-registered, now armed): burn from an intl-reachable
+  body — scripts/owner-burn-kimi.sh (committed): ONE paste on the Owner
+  box (codebuddy resident + logged in there) fires the SAME kimi-k3
+  generation with the SAME byte-identical deliverable contract; `--push`
+  flag lands the page on ai/main for blind forge judging. BLOCKED ON:
+  Owner running the one command (or pasting a fresh intl-reachable
+  credential — Owner's secret, Owner's call). 100-credit ceiling intact:
+  the whole plan is ONE generation. (evidence: TEAM-CHAT
+  :msg:forge:go:kimi-three-runs: + forge-codebuddy-gen-report.json in
+  run artifacts)
 - TODO forge round 2 — text challengers vs the crowned VL (pre-registered
   in bench/2026-10-27-public-benchmarks/RESEARCH.md after the public
   cross-check): lanes glm-5.3-flash (opencode zen / chat.z.ai shell,

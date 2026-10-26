@@ -1,5 +1,47 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:go:kimi-three-runs:
+- One-line lead: GO executed literally — three runner runs under your "Use
+  Kimi K3 / 100 credits limit" fiat, **ZERO credits burned** (every failure
+  happened BEFORE any model call), the runner lane is now DEFINITIVELY
+  closed with evidence, and the burn is re-homed to a ONE-command kit for
+  your box where codebuddy is resident and logged in.
+- Run 1 (40386541436): my own v5 bug — TDZ ReferenceError crashed the
+  script 0.08s in at the --version probe, before auth/ledger/model. Found
+  a SECOND latent bug in the same hunt (double-close EBADF on the spawn
+  error path). Both fixed (v6 bf43dcd) and PROVEN in a local dry-run that
+  executes the whole pipeline with the CLI absent — zero credit risk.
+- Run 2 (40388548989): first REAL auth verdict from a reachable endpoint —
+  with both env slots set, the CLI picked Bearer custom-token mode
+  ("auth-type:custom-token,token-type:Bearer,token-length:1450") and
+  copilot.tencent.com rejected it, 401 in 7s. This also RETRACTS the old
+  "api-key slot authenticates" proof (run 40378703437): that run hit the
+  unreachable intl endpoint, its 2x8min "generation" was a network retry
+  loop — hang misread as generation, on the record.
+- Run 3 (40390456013): the single allowed follow-up experiment — API-key
+  ONLY mode (CODEBUDDY_AUTH_TOKEN deleted from the child env). Same 401,
+  5.5s ("auth-type:cli-external-link,token-type:ApiKey,token-length:1450").
+- Verdict chain: the sealed token is INTL-scoped (www.codebuddy.ai, where
+  your account/credits live) + the intl site is ETIMEDOUT-dead from GitHub
+  runners (proven twice) + GitHub's API never returns secret values so the
+  token cannot be moved to an intl-reachable body by me. Campaign total:
+  SIX runs, 0.0 credits.
+- THE FIX (armed, committed): scripts/owner-burn-kimi.sh — on your box:
+    sh owner-burn-kimi.sh --push
+  ONE command: fetches the SAME forge brief, burns EXACTLY ONE kimi-k3
+  generation (Design Arena 1335, #2 public designer; ds-v4.1-flash still
+  hard-excluded; no retries — 100-credit ceiling honored, one generation
+  is the whole budget), verifies the page, and with --push lands it on
+  ai/main/bench/2026-10-27-codebuddy-kimi/ for blind render + judging by
+  the antling/gemini lanes. Scores + the page + (if it beats the crowned
+  entry) the design consult flow back to you per DELEGATION LAW.
+- Alternative if you'd rather not touch the box: paste a FRESH intl-scoped
+  credential into repo secrets (or here) and I burn it from the sandbox —
+  your secret, your call, but the box needs zero trust decisions.
+- Spend-law accounting: auth-fails are classified 0-burn in TEAM.md; the
+  paid kimi-k3 generation has NOT happened yet — the re-homed script is
+  still the FIRST burn, exactly one, exactly kimi-k3.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:full-sweep:codebuddy-rootcause:
 - One-line lead: (1) FULL-CANON sweep done — the Owner was RIGHT that 5 was
   too few: ~13 wired ids carry public design rows and EIGHT out-design the

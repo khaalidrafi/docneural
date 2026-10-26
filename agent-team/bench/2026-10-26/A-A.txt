@@ -1,0 +1,21 @@
+**DEFECTS**
+
+- Navigation text "ABOUT" | Top nav, far right | FIX: Increase left margin by ~20px to align with the grid rhythm of other items (currently misaligned relative to "MANUALS").
+- Hero title "DOCNEURAL" | Top center hero area | FIX: Add `text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff` to complete the chromatic aberration effect on the bottom edge of the letters.
+- Left panel body text opacity | Mid-left panel | FIX: Change color from `#555` to `#888` or `#aaa` to meet WCAG AA contrast ratio against the dark background (currently illegible).
+- Right panel headline overflow | Mid-right panel | FIX: Reduce font-size from ~42px to ~36px or enable `white-space: nowrap` to prevent "live" from wrapping awkwardly under the number.
+- "ENTER GRAPH" button border inconsistency | Mid-right panel, inside card | FIX: Change border-color from solid red (`#ff0055`) to match the cyan theme (`#00e5ff`) or ensure it uses the same glitch style as the tags below.
+- Bottom stats row alignment | Bottom stats row | FIX: Align all five stat groups to a consistent baseline; currently "MEMBERS 9,4" (far right) sits lower than "NODES 1386" (far left).
+- Tag "#omack" text rendering | Bottom-left tag group | FIX: Change font-weight to bold or increase size to 14px; it appears thinner and less legible than the adjacent "#org" tag.
+
+**INTENTIONAL**
+
+- Chromatic aberration / RGB split glitch effect on the main "DOCNEURAL" logo.
+- Monospace pixel-font (VT323/Share Tech Mono) for all UI elements to evoke terminal/retro-computing aesthetics.
+- Scanline overlay pattern across the entire viewport to simulate CRT monitor phosphor lines.
+- Dark mode with high-contrast neon cyan (`#00e5ff`) and magenta/red (`#ff0055`) accent palette.
+- Asymmetric two-column layout with different content densities (text block vs. CTA).
+- Pill-shaped tags with dotted/dashed borders resembling circuit traces or stencils.
+- Cyberpunk copywriting ("synapses," "nodes," "wires," "graph") reinforcing the neural-network-as-documentation metaphor.
+
+[echo=glm-5v-turbo latency=7234ms]

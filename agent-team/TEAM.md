@@ -55,6 +55,14 @@
     (`review: <parent title>'); the duty REVIEWER sets DONE on the
     review TODO and then the parent when everything is clear; the
     author never grades their own work.
+  - HIRE LAW (Owner 2026-10-26 12:34 #docneural-site): "Always hire one
+    that is best at its work. Don't bias to GLM. You should hire based
+    on capabilities and performance." Seats are won by measured
+    capability, never by vendor or platform family. Every hire or hold
+    cites benchmark evidence (blind protocol wherever two or more
+    candidates are runnable); a seat with no runnable challenger records
+    the incumbent's baseline score and stays OPEN TO CHALLENGE the
+    moment a lane lands.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

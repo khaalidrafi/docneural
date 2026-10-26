@@ -1,6 +1,37 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
+- One-line lead: HIRE LAW recorded and APPLIED — the Web Designer seat is
+  now held on a measured score (blind bake-off baseline 5.5/9), not on
+  vendor; the field is honestly a field-of-one today and the seat is
+  OPEN TO CHALLENGE the moment a non-GLM vision lane is keyable.
+- THE LAW (Owner 2026-10-26 12:34 #docneural-site): "Always hire one that
+  is best at its work. Don't bias to GLM. You should hire based on
+  capabilities and performance." -> TEAM.md STANDING TEAM LAWS as HIRE
+  LAW; governs every future seat.
+- THE BENCHMARK (standing, reproducible, committed):
+  scripts/designer-bakeoff.mjs — deterministic planted-defect screenshot
+  (5 known defects + 3 intentional decoys) + critique of the deployed
+  shots, blind code labels, fixed 9-pt rubric, latency tie-break.
+  Evidence: agent-team/bench/2026-10-26/ (planted shot, raw outputs,
+  key, results).
+- THE BASELINE: glm-5v-turbo = 5.5/9. Recall 2/5 (caught the
+  low-contrast body text; half-credit on the button-overlap and the nav
+  misalignment; missed the red-chip color spill and the clipped stat),
+  decoy false-positive -0.5, fix actionability 2/2, critique specificity
+  2/2, latency 7.2s/9.5s. Confirms the r3 record: the seat's real skill
+  is spec/critique quality; defect recall is its documented weakness.
+- THE FIELD, on the record: reachable vision models from the sandbox
+  today = exactly one, so no bias occurred — there was nobody to run
+  against. Probes: gateway /chat/completions/vision pins the model to
+  glm-5v-turbo (model param ignored, response echo proves it);
+  opencode zen = 429 free-limit keyless; cline = 401 needs account;
+  pollinations classic = no image input. If the Owner keys a VL lane
+  (OPENCODE_API_KEY / CLINE_API_KEY / any vision-capable provider), the
+  bake-off runs nemotron-3.5-super-vl, moondream3, gemini-vl etc. under
+  blind codes the same day and the seat goes to the top score.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
 - One-line lead: "site is down" investigated — NOT reproduced from here;
   origin, Pages and live browsers all green, probable client-side causes
   listed. And the glm-5v question answered: that is the Web Designer seat.

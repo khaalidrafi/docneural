@@ -112,6 +112,19 @@
      signature effects; review consult #2 verdict on the implemented build:
      home PASS, desktop graph PASS, phone FIX (label size) — fix landed
      (12.5px phone labels) same day.
+   - HIRE-LAW BENCHMARK (2026-10-26, standing harness
+     scripts/designer-bakeoff.mjs): planted-defect shot (5 known defects
+     + 3 intentional decoys) + deployed-shot critique, blind codes,
+     fixed 9-pt rubric, latency tie-break. Incumbent baseline =
+     5.5/9 — recall 2/5 (caught the low-contrast body text; half-credit
+     on the overlap + nav misalignment; missed the red-chip color spill
+     and the clipped stat), decoy FP -0.5, actionability 2/2, critique
+     specificity 2/2, latency 7.2s/9.5s. Field of one ON RECORD: the
+     gateway pins /chat/completions/vision to glm-5v-turbo (model param
+     ignored — echo-proved), zen 429 keyless, cline 401, pollinations
+     no-image. Seat HELD ON SCORE, not vendor; OPEN TO CHALLENGE the
+     moment an OWNER-KEYS VL lane (OPENCODE_API_KEY / CLINE_API_KEY)
+     lands.
    - fallback chain: nemotron-3.5-super-vl-free@opencode (the free VL lane,
      already seated as intern) -> gmi/nemotron-3.5-super-vl@unwired.
 

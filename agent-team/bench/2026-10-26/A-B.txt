@@ -1,0 +1,25 @@
+**1. Graph Node Label Collision & Readability**
+*   **WHAT:** Fix overlapping text labels and poor contrast on the Synapses graph (Image 1).
+*   **WHERE:** The central node cluster in `#synapse-canvas`.
+*   **TREATMENT:**
+    *   **Background:** Add a semi-transparent dark halo behind text to ensure legibility over dense clusters. Use `rgba(10, 14, 23, 0.85)` with `padding: 2px 6px` and `border-radius: 4px`.
+    *   **Font:** Reduce size to `10px` (from ~12-13px), set `font-family: 'JetBrains Mono', monospace`, and increase `letter-spacing` to `0.5px`.
+    *   **Color:** Set base label color to `#94a3b8` (Slate 400). On hover/active state, shift to `#38bdf8` (Sky 400) and scale the node circle to `1.2x`.
+
+**2. Home Page Visual Hierarchy & Contrast**
+*   **WHAT:** Increase contrast of body copy and de-clutter the "This Corpus" data block (Image 2).
+*   **WHERE:** Main content area below the "DOCNEURAL" title.
+*   **TREATMENT:**
+    *   **Body Text:** Change from current mid-grey to `#e2e8f0` (Slate 200) for readability. Increase `line-height` to `1.7`.
+    *   **Data Block Border:** Replace thin grey border with a glowing accent. Use `1px solid #0ea5e9` (Sky 500) with `box-shadow: 0 0 15px rgba(14, 165, 233, 0.15)` inset.
+    *   **Labels/Values:** Make labels (`SOURCES`, `PAGES`) `#64748b` (Slate 500) at `11px`. Make values (`1347`, `30915`) `#f8fafc` (Slate 50) at `18px` bold. Highlight the "30915 FIRING" synapse count in `#facc15` (Yellow 400).
+
+**3. Navigation Bar & Status Indicator Polish**
+*   **WHAT:** Define active tab state and fix status indicator ambiguity (Both Images).
+*   **WHERE:** Top header bar (`<header>`).
+*   **TREATMENT:**
+    *   **Active Tab ([SYNAPSES] / [DOCS]):** Instead of just outline, fill with `rgba(249, 115, 22, 0.15)` (Orange 500 at 15% opacity) and set text/border to `#f97316` (Orange 500). Inactive tabs should be `#475569` (Slate 600).
+    *   **Status Light:** The green dot next to "1386 NODES". Change from flat green to radial gradient: `background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a);` with `box-shadow: 0 0 8px rgba(74, 222, 128, 0.6)`.
+    *   **Height:** Fix bar height to `48px` with `padding: 0 24px`.
+
+[echo=glm-5v-turbo latency=9508ms]

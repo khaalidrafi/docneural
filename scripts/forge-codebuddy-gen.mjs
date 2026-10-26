@@ -59,10 +59,19 @@ try {
 // CODEBUDDY_INTERNET_ENVIRONMENT must match the token's platform variant
 // (default/international vs 'internal' China). Try documented combos; a
 // failed auth burns NO credits, so probing is free.
+// The sealed secret (named CODEBUDDY_AUTH_TOKEN in repo settings) is mapped
+// into BOTH documented slots: CODEBUDDY_API_KEY ("in non-interactive mode
+// (-p) this key is ALWAYS used" — product/1316/84430) and CODEBUDDY_AUTH_TOKEN
+// (platform token). Run 40378051072 proved the CLI exits 0 even on auth
+// failure — exit code and success CANNOT be trusted; only a valid
+// index.html counts, and every env variant is tried until one produces it.
+const TOKEN = process.env.CODEBUDDY_AUTH_TOKEN || process.env.CODEBUDDY_API_KEY || '';
 const ENV_MATRIX = [
-  { label: 'intl-default', extra: {} },
-  { label: 'internal-china', extra: { CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
+  { label: 'api-key-slot', extra: { CODEBUDDY_API_KEY: TOKEN } },
+  { label: 'auth-token-slot', extra: { CODEBUDDY_AUTH_TOKEN: TOKEN } },
+  { label: 'auth-token+internal-china', extra: { CODEBUDDY_AUTH_TOKEN: TOKEN, CODEBUDDY_INTERNET_ENVIRONMENT: 'internal' } },
 ];
+const AUTH_FAIL = /Authentication required|use \/login|login required|not authenticated|unauthorized|invalid.*(token|api.?key)/i;
 
 const report = [];
 for (const model of models) {
@@ -71,38 +80,36 @@ for (const model of models) {
   fs.mkdirSync(dir, { recursive: true });
   const t0 = Date.now();
   let out = '', err = '', ok = false, how = 'none';
-
-  // Strategy order: documented CODEBUDDY_MODEL env pin (per env variant).
-  // NO bare-default attempt: an unverified default model could burn the
-  // Owner's credits on the WRONG model (deepseek-v4.1-flash is excluded by
-  // fiat) — if the pin fails, we record FAIL, we do not guess.
-  for (const envv of ENV_MATRIX) {
-    for (const attempt of [
-      { args: ['-p', prompt, '-y'], how: `CODEBUDDY_MODEL=${model} [${envv.label}]`, extra: { CODEBUDDY_MODEL: model } },
-    ]) {
-      try {
-        out = execFileSync('codebuddy', attempt.args, {
-          encoding: 'utf8', timeout: 540000, cwd: dir, maxBuffer: 64 * 1024 * 1024,
-          env: { ...process.env, ...envv.extra, ...attempt.extra },
-        });
-        ok = true; how = attempt.how;
-        break;
-      } catch (e) {
-        err = `${String(e.message).slice(0, 200)} | stdout tail: ${String(e.stdout || '').slice(-400)}`;
-        console.log(`codebuddy ${model} [${attempt.how}] FAILED: ${String(e.stdout || e.message).slice(-200).replace(/\n/g, ' | ')}`);
-      }
-    }
-    if (ok) break;
-  }
-
-  // Locate the HTML: written index.html, else first fenced block in stdout.
   const htmlPath = path.join(dir, 'index.html');
-  if (ok && !fs.existsSync(htmlPath)) {
-    const m = out.match(/```(?:html)?\s*([\s\S]*?)```/);
-    if (m && /<html|<!DOCTYPE/i.test(m[1])) {
-      fs.writeFileSync(htmlPath, m[1]);
-      how += ' +html-from-stdout';
+
+  // EVERY env variant is tried until one yields a valid page. NO bare-default
+  // attempt: an unverified default model could burn credits on the WRONG
+  // model (deepseek-v4.1-flash is excluded by fiat) — model pinned both via
+  // the documented `--model` flag (confirmed by CLI 2.177.0 --help) and
+  // CODEBUDDY_MODEL env.
+  for (const envv of ENV_MATRIX) {
+    if (fs.existsSync(htmlPath)) fs.rmSync(htmlPath);
+    let combined = '';
+    try {
+      out = execFileSync('codebuddy', ['-p', prompt, '-y', '--model', model], {
+        encoding: 'utf8', timeout: 480000, cwd: dir, maxBuffer: 64 * 1024 * 1024,
+        env: { ...process.env, ...envv.extra, CODEBUDDY_MODEL: model },
+      });
+      combined = String(out);
+    } catch (e) {
+      combined = `${e.stdout || ''}\n${e.stderr || ''}`;
+      err = `${String(e.message).slice(0, 200)}`;
     }
+    // success = a real file on disk; else try the fenced block in stdout
+    if (!fs.existsSync(htmlPath)) {
+      const m = combined.match(/```(?:html)?\s*([\s\S]*?)```/);
+      if (m && /<html|<!DOCTYPE/i.test(m[1])) fs.writeFileSync(htmlPath, m[1]);
+    }
+    const valid = fs.existsSync(htmlPath) && (() => { const h = fs.readFileSync(htmlPath, 'utf8'); return h.length >= 400 && /<html|<!DOCTYPE/i.test(h); })();
+    if (valid) { ok = true; how = envv.label + ' (--model ' + model + ')'; break; }
+    const tail = combined.replace(/\s+/g, ' ').slice(-260);
+    console.log(`codebuddy ${model} [${envv.label}] no valid page${AUTH_FAIL.test(combined) ? ' (AUTH REJECTED)' : ''}: ${tail}`);
+    err += ` [${envv.label}] ${tail}`;
   }
 
   let status = 'FAIL';
@@ -110,7 +117,7 @@ for (const model of models) {
     const h = fs.readFileSync(htmlPath, 'utf8');
     status = (h.length >= 400 && /<html|<!DOCTYPE/i.test(h)) ? `OK ${h.length}B` : `NOT HTML (${h.length}B)`;
   }
-  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, ms: Date.now() - t0, status, err: err.slice(0, 600) }, null, 2));
+  fs.writeFileSync(path.join(dir, 'GEN.json'), JSON.stringify({ model, how, ms: Date.now() - t0, status, err: err.slice(0, 900) }, null, 2));
   report.push({ model, dirName, status, how, ms: Date.now() - t0 });
   console.log(`codebuddy ${model}: ${status} via ${how} (${Date.now() - t0}ms)`);
 }

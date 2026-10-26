@@ -63,6 +63,13 @@
     candidates are runnable); a seat with no runnable challenger records
     the incumbent's baseline score and stays OPEN TO CHALLENGE the
     moment a lane lands.
+  - DELEGATION LAW (Owner 2026-10-26 15:55 #docneural-site): "Delegate
+    design work to that which can do it best, and vision is upon me,
+    I'll review." Craft work (design and every seat's domain) goes to
+    the TOP-SCORING capable seat under the HIRE LAW benchmark — and the
+    OWNER holds the final vision gate: shipped visual work is not done
+    until the Owner's own review passes; his FIX list outranks every
+    internal verdict and enters the next designer consult unedited.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

@@ -76,7 +76,8 @@
     cohere/north-mini-code:free, nvidia/nemotron-3-super-120b-a12b:free),
     2 cline API-route @opencode (cline/poolside-laguna-s-2.1:free,
     cline/nemotron-3.5-lightning:free — api.cline.bot gateway provider
-    block, self-activating when CLINE_API_KEY is sealed). Two-legs
+    block, LIVE since CLINE_API_KEY sealed 2026-10-26, burn-tested
+    cost=0 before sealing). Two-legs
     reasoning + evidence per hire: MEMBERS.org INTERN POOL.
 
 * CONVENTIONS

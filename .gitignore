@@ -30,3 +30,6 @@ verify-*.png
 /docneural-ui/
 /synapt/
 /org-roam-lite-ui/
+
+# GitHub Pages corpus derived from repo docs (scripts/gh-corpus-prep.py)
+/.gh-corpus/

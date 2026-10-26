@@ -57,6 +57,10 @@
 (require 'ox-html)
 (require 'json)
 (require 'url-util) ; url-hexify-string is not autoloaded in batch
+;; CI runs emacs 29 (ubuntu 24.04 apt), where string-empty-p and
+;; string-remove-prefix still live in subr-x; emacs 30 promoted them to
+;; subr.el, so this require is a no-op there but keeps both green.
+(require 'subr-x)
 
 (defun docneural--slug (file)
   "Node slug for node FILE: \"MANUAL--basename\".

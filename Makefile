@@ -30,6 +30,10 @@ NODE ?= node
 CORPUS ?= ~/docs
 DOC ?= org emacs guix
 OUT ?= .export
+# Extra vite build flags, e.g. BASE_FLAG=--base=/docneural/ for the GitHub
+# Pages project site (App.svelte derives the store base from BASE_URL, so
+# the same bundle also works root-mounted with the default '').
+BASE_FLAG ?=
 # Where `make verify` points its browser. Dev server by default; use
 # URL=http://127.0.0.1:4173/ against `make serve` (built dist/).
 URL ?= http://127.0.0.1:5173/
@@ -88,7 +92,7 @@ build:
 	# check. Fail here, at the make line, with the fix in the message.
 	@test -f $(OUT)/graph.json || { echo "build: $(OUT)/graph.json missing — run 'make export' (export + slim) first"; exit 1; }
 	@test -f $(OUT)/graph.json.br -o -f $(OUT)/graph.json.gz || { echo "build: no $(OUT)/graph.json.{br,gz} — run 'make slim' (the transport pass) first"; exit 1; }
-	npm run build
+	npm run build -- $(BASE_FLAG)
 	# The self-hosted latin subsets are redistributed in dist/assets/, so the
 	# SIL OFL texts that accompany them travel with the bundle (Vite only
 	# emits the .woff2 files a stylesheet references — never the licenses).

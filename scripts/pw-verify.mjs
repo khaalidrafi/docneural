@@ -421,7 +421,7 @@ async function main() {
     return { accent: g('--dn-accent'), bg: g('--dn-bg'), palette: g('--dn-graph-palette') }
   })
   check('light theme swaps to ink hues',
-    light.accent.toLowerCase() === '#00668d' && light.bg.toLowerCase() === '#eef2f7'
+    light.accent.toLowerCase() === '#00688f' && light.bg.toLowerCase() === '#f4f7fb'
     && !/00e5ff/.test(light.palette), JSON.stringify(light))
   await page.screenshot({ path: `${OUT}/03-graph-light.png` })
 
@@ -491,10 +491,16 @@ async function main() {
     .sort((a, b) => inCount.get(b.id) - inCount.get(a.id))
   let ctxNode = null, ctxKeys = 0
   for (const n of hot.slice(0, 12)) {
-    const res = await fetch(`${BASE}ctx/${n.id}.json`)
-    if (!res.ok) continue
-    const map = await res.json()
-    if (Object.keys(map).length > 0) { ctxNode = n; ctxKeys = Object.keys(map).length; break }
+    try {
+      const res = await fetch(`${BASE}ctx/${n.id}.json`)
+      if (!res.ok) continue
+      const map = await res.json()
+      if (Object.keys(map).length > 0) { ctxNode = n; ctxKeys = Object.keys(map).length; break }
+    } catch {
+      // A fixture gap (partial corpus): a probe that lands on the SPA's
+      // index.html instead of JSON is a MISS, not a crash.
+      continue
+    }
   }
   if (ctxNode) {
     const before = reqs.length

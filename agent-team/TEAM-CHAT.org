@@ -1,5 +1,58 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:
+- One-line lead: design round 3 "cyberpunk-revamp" DELIVERED — Owner order
+  "Revamp the design for better looks and coolness... sci-fi, cyberpunk
+  style" — and the designer question answered: glm-5v-turbo@zai, hired
+  2026-10-26 as Web Designer (PROVISIONAL, canon row proposed to the DoE).
+- THE DESIGNER: the seat SEES — screenshots in, spec out, on the z.ai vision
+  lane (createVision endpoint, model id glm-5v-turbo verbatim from the API
+  response). Probe pasted: test image (cyan #00E5FF field, black rectangle)
+  -> "The image features a **cyan** (or bright blue) background with a
+  centered, vertical **black rectangle**." Hire evidence + fallback chain in
+  MEMBERS.org; the seat re-points to nemotron-3.5-super-vl-free@opencode if
+  the DoE rejects the row.
+- DESIGNER RECORD THIS ROUND: consult #1 (BEFORE shots: home + the cyan
+  overdraw blob) produced the implementation spec — void-black token sheet
+  (#030608 bg / #00f0ff / #ff3366 / #39ff14 acid / #bd00ff violet), the
+  wordmark gradient cyan->violet->pink with chromatic aberration, HUD
+  brackets, gradient borders, vignette, contrast table, and the LOD zoom-band
+  plan that kills the blob. Consult #2 (AFTER shots): home PASS, desktop
+  graph PASS, phone FIX -> phone labels 12.5px, landed same day.
+- WHAT SHIPPED (docneural-ui ai/task/fe-cyberpunk-revamp -> ai/main 289e146,
+  rebased on signal-design 0d569a3, conflicts resolved keeping both passes):
+  (1) LOD painter in neuronEngine.ts — three zoom bands (corpus <0.45 /
+  backbone / detail), cold wires HIDDEN at corpus zoom, hub-only labels
+  (deg>=60), halo rings off in band 0, composed with the SIGNAL ego-fade and
+  traffic widths; the 30915-wire cyan burn-out is dead on desktop AND phone.
+  (2) Void tokens + acid/violet signals + wordmark gradient recipe
+  (--dn-wordmark) in docneural-ui.css. (3) Home hero: gradient wordmark +
+  acid kicker + three-bloom halo; stats panel bracketed. (4) Header brand
+  gradient + acid LED. Rebased cleanly on signal-design: kept their aurora
+  (my scan-sweep dropped — body::before conflict, aurora wins), their
+  seg-thumb, their light theme, their no-auto-lite (my threshold-narrowing
+  version dropped, theirs is cleaner).
+- VERIFICATION: vitest 65/65 + svelte-check 0/0 on the merged tree; build
+  clean; pw-verify editorial gate on a local fixture (3 corpus pages +
+  graph.json + ctx JSONs pulled from the live site): 20+ PASS including
+  light-theme tokens, painted neurons (158819 lit px), reader hue parity x3
+  (org #ff7a45 / emacs #56c8ff / guix #ffdf3f). pw-verify repaired: 14
+  stale .sy-org selectors -> .dn-org, light-theme hexes updated to the
+  signal-design canon (#00688f/#f4f7fb), ctx probe gained a 404/HTML guard
+  (partial-corpus fixtures crashed it). Honest local-fixture fails, both
+  pre-existing/known: LinkPeek hover-intent grace (recorded :OWN: Owner-box
+  item) + scope-chip wait (needs the full corpus). Screenshots before/after
+  shipped to Discord.
+- PHONE: the Owner's "can't see the graph from phone" was the burn-out blob
+  at fit ~0.15 — 390px of canvas under 31k additive wires. After LOD the
+  phone graph is a legible starfield with hub names (screenshot). Auto-lite
+  was already deleted by signal-design (lite is explicit-only), so every
+  phone gets the canvas.
+- NOT DONE THIS ROUND (on the record): nothing — Owner's three asks (revamp,
+  designer identity, coolness) all delivered; org-import corpus conversion
+  was already on the record (4346a07) and the git.khalidrafi.tech clone
+  attempt is superseded by it (org-import HEAD 237a2d1, corpus 1386/30915).
+
 #+LAW: LETTER LAW (Owner 2026-10-26 #hq): any message a team addresses to
 #+LAW: another team or a client must follow agent-team/COMMS-FORMAT.org —
 #+LAW: CANONICAL copy lives in khaalidrafi/agent-team.el (no local

@@ -1,6 +1,16 @@
 #+TITLE: STATE.org — cross-session state (Owner pastes back at session start)
 
 * DONE
+- DESIGN ROUND 3 "cyberpunk-revamp" 2026-10-26 (docneural-ui ai/main 289e146):
+  Owner rejected the signal-design look ("isn't much good... sci-fi,
+  cyberpunk style") and asked who the designer is. WEB DESIGNER seat hired —
+  glm-5v-turbo@zai vision lane (PROVISIONAL, canon row proposed; probe pasted
+  in TEAM-CHAT). Designer spec -> implementation -> designer review -> fix
+  loop; LOD zoom bands kill the 30915-wire cyan burn-out (desktop + phone);
+  void-black tokens + acid/violet signals + gradient wordmark. Gates: vitest
+  65/65, svelte-check 0/0, build clean, pw-verify 20+ PASS on a live-pulled
+  fixture (gate itself repaired: .sy-org -> .dn-org x14, light hexes to
+  signal-design canon, ctx probe 404 guard).
 - CI chain live on ai/main: test -> probe -> turn -> finalize all green (run 40113619526, 2026-10-24).
 - Team layer (re)generated per FILE TARGETS: agent-team/TODOS.org + TEAM.md landed, STATE.org reconciled, MEMBERS.org additive touches (teamify commit on ai/main).
 - CANDIDATES.org: docneural copy REMOVED by the Owner (R-2-64, a10ef3f) — rank source is now canonical khaalidrafi/agent-team.el @6a5653e (632 lines, sha256 25e40995…, PURGE: only real models remain).

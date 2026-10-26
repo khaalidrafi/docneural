@@ -87,6 +87,34 @@
      risk) -> zai/glm-4.5-flash@unwired (no data -> intern-grade until
      measured)
 
+** Web Designer — glm-5v-turbo@zai (PROVISIONAL seat — canon row PROPOSED to the
+   DoE; ADD-FREEZE binds: the row below is a proposal with evidence, activation
+   under the Owner's standing hire order "Hire a good web designer if you don't
+   excel in it compared with other candidates" 2026-10-26)
+   - :last-dispatch: 2026-10-26 (cyberpunk-revamp round 3 — design brief +
+     after-review, both on the vision lane)
+   - body note: served by the z.ai sandbox's built-in SDK vision endpoint
+     (zai.chat.completions.createVision, model id glm-5v-turbo — verbatim from
+     the API response). The zai lane is an OWNER-KEYS lane (ZAI_API_KEY
+     sealed); the sandbox SDK is the same platform family as the EM seat
+     (glm-5.3-flash@chat.z.ai). NOT yet a CANDIDATES.org row — proposal filed
+     in TEAM-CHAT.org the same day; seat stands PROVISIONAL until the DoE
+     rules.
+   - board scope: design direction + critique loops on anything visual. It
+     SEES: screenshots in, structured spec out — the first seat that can
+     actually look at the product it designs for.
+   - why hired: Owner asked "Who's your designer, btw?" after two design
+     rounds he rejected. Probe evidence (2026-10-26): vision test image
+     (160x90, cyan #00E5FF field, black rectangle) -> "The image features a
+     **cyan** (or bright blue) background with a centered, vertical **black
+     rectangle**" — correct on both counts. Round-3 record: designer brief
+     consult #1 produced the token sheet + LOD zoom-band spec + 6 CSS-only
+     signature effects; review consult #2 verdict on the implemented build:
+     home PASS, desktop graph PASS, phone FIX (label size) — fix landed
+     (12.5px phone labels) same day.
+   - fallback chain: nemotron-3.5-super-vl-free@opencode (the free VL lane,
+     already seated as intern) -> gmi/nemotron-3.5-super-vl@unwired.
+
 ** QA Engineer — groq/qwen3.8-27b@opencode (OWNER-KEYS GROQ_API_KEY) + machine gate
    - body note (2026-10-26 notation fix): goose is BENCHED for this
      brain — Groq's chat template rejects the `developer` role Goose
@@ -165,6 +193,13 @@
 - intern-6/7 — nvidia/nemotron-3-ultra-550b-a55b:free@cline + thinkingmachines/inkling-small:free@cline: hired 2026-10-26 (same Owner order; cline catalog probe 472 ids / 18 FREE, api.cline.bot/api/v1/models; CLINE_AUTH_JSON OAuth = key-on-file; gemma ids SKIPPED per values filter; no m3.1 on the FREE list — BURN-LAW clean)
 - hire round 3 — +15 interns 2026-10-26 (Owner order "we have a lot of candidates and we MUST make the most out of it. Feel free to hire more quality candidates. Hire more from opencode AND Cline has two free routes, API and its OWN CLI"): 6 zen built-in free @opencode (beam-free, nemotron-3.5-lightning-free, nemotron-3.5-super-vl-free, jev-1.13-free, mimo-v2.6-flash-free, flint-40b-free — OPENCODE_API_KEY lane) · 7 cline CLI-route @cline (laguna-s-2.1, xing4.0-29b-a4b, dots-3-note-preview, inkling, nemotron-3.5-lightning, north-mini-code, nemotron-3-super-120b-a12b — :free ids verbatim from api.cline.bot, CLINE_AUTH_JSON OAuth) · 2 cline API-route @opencode (cline/poolside-laguna-s-2.1:free, cline/nemotron-3.5-lightning:free — {env:CLINE_API_KEY}, self-activating on seal). 8 skips recorded with reasons (TEAM-CHAT :hire-report:). SAME-DAY CORRECTION: the first zen probe note said "9 free incl. big-pickle" — WRONG, the catalog ships no pricing fields and big-pickle has no -free suffix; 8 free is correct (canonical "8 Zen -free ids" row was right). Harness lane wiring fixed in the same commit: turn container now receives GROQ_API_KEY + OPENCODE_API_KEY + CLINE_API_KEY + CLINE_AUTH_JSON (QA groq lane + FE zen lane were wired in opencode.json but DEAD in CI — latent defect from hire round 2); cline@3.0.73 CLI baked into the image (@cline bodies real); zen + cline probe rows added to the seat-liveness job
 - hire round 4 — +5 interns 2026-10-26 (Owner order "Fixed. Continue working. Hire more." after the DoE resolved complaint issue #2 by fixing all four CANDIDATES.org gaps in canon r270/r271): deepseek-v4.1-flash-free@opencode (zen; AA 45.1 highest-in-batch, OWNER FILTER intern/API-probe only — zen free roster complete 8/8) + 4 cline CLI-route @cline (recursive/flint-v1.0:free — no-data rule; nvidia/nemotron-3.5-super-vl:free — the free vision lane; nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free — intern-class at most; google/gemma-4-31b-it:free — intern-class only per canon values note) — cline FREE roster 13/18. The canon fix UPGRADED three round-3 skip verdicts to intern-eligible (ds-flash, nano-omni, gemma: accountable-seat bans only); four skips STAND per canon (content-safety classifier, lfm-2.5 local-toy, openrouter/free unrankable, laguna-xs "S covers the purpose") + gemma-26b (smaller twin hired). Catalogs re-probed live same day: zen 85 ids/8 free, cline 472 ids/18 FREE — stable
+
+- web-designer — glm-5v-turbo@zai (z.ai sandbox vision lane): hired 2026-10-26
+  PROVISIONAL (Owner order "Hire a good web designer..." + direct question
+  "Who's your designer, btw?"); vision probe pasted (cyan field + black
+  rectangle identified correctly); delivered the round-3 design spec + the
+  after-review; canon row PROPOSED to the DoE — seat re-points to
+  nemotron-3.5-super-vl@opencode if the proposal is rejected
 
 * HR REVIEW (KEEP/WATCH/PROBE/RELEASE at every pause window)
 | date | member | segments | gate-first-try | verdict |

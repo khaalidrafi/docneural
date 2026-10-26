@@ -7,6 +7,9 @@
 Next: [[id:emacs--Shell][Running Shell Commands from Emacs]]   Previous: [[id:emacs--Network-Security][Network Security]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Document-View>>
+
+--------------
+
 ** 39 Document Viewing [[#Document-Viewing][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Document-Viewing
@@ -23,6 +26,11 @@ You can explicitly enable DocView mode with the command M-x doc-view-mode. You c
 When DocView mode starts, it displays a welcome screen and begins formatting the file, page by page. It displays the first page once that has been formatted.
 
 To kill the DocView buffer, type k (=doc-view-kill-proc-and-buffer=). To bury it, type q (=quit-window=).
+
+- [[id:emacs--DocView-Navigation][DocView Navigation]]
+- [[id:emacs--DocView-Searching][DocView Searching]]
+- [[id:emacs--DocView-Slicing][DocView Slicing]]
+- [[id:emacs--DocView-Conversion][DocView Conversion]]
 
 --------------
 

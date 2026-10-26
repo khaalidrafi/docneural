@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Home-Configuration>>
-Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 13 Home Configuration [[#Home-Configuration-1][¶]]
+<<Home-Configuration-1>>
+** 13 Home Configuration
 :PROPERTIES:
-:CUSTOM_ID: Home-Configuration-1
+:CUSTOM_ID: home-configuration
 :CLASS: chapter
 :END:
+<<index-home-configuration>>
 Guix supports declarative configuration of /home environments/ by utilizing the configuration mechanism described in the previous chapter (see [[id:guix--Defining-Services][Defining Services]]), but for user's dotfiles and packages. It works both on Guix System and foreign distros and allows users to declare all the packages and services that should be installed and configured for the user. Once a user has written a file containing a =home-environment= record, such a configuration can be /instantiated/ by an unprivileged user with the =guix home= command (see [[id:guix--Invoking-guix-home][Invoking =guix home=]]).
 
 The user's home environment usually consists of three basic parts: software, configuration, and state. Software in mainstream distros are usually installed system-wide, but with GNU Guix most software packages can be installed on a per-user basis without needing root privileges, and are thus considered part of the user's /home environment/. Packages on their own are not very useful in many cases, because often they require some additional configuration, usually config files that reside in =XDG_CONFIG_HOME= (=~/.config= by default) or other directories. Everything else can be considered state, like media files, application databases, and logs.
@@ -58,10 +61,9 @@ Using Guix for managing home environments provides a number of advantages:
 
 - [[id:guix--Declaring-the-Home-Environment][Declaring the Home Environment]]
 - [[id:guix--Configuring-the-Shell][Configuring the Shell]]
-- [[id:guix--home_002denvironment-Reference][=home-environment= Reference]]
 - [[id:guix--Home-Services][Home Services]]
 - [[id:guix--Invoking-guix-home][Invoking =guix home=]]
 
 --------------
 
-Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Documentation][Documentation]], Previous: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

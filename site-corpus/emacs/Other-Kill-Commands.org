@@ -4,6 +4,39 @@
 #+filetags: :emacs:
 #+title: Other Kill Commands
 
-Next:
+Next: [[id:emacs--Kill-Options][Options for Killing]]   Previous: [[id:emacs--Killing-by-Lines][Killing by Lines]]   Up: [[id:emacs--Deletion-and-Killing][Deletion and Killing]]
 
-The node you are looking for is at [[id:emacs--Deletion-and-Killing::#Other-Kill-Commands][Other Kill Commands]].
+<<Other-Kill-Commands>>
+
+--------------
+
+**** 14.1.3 Other Kill Commands [[#Other-Kill-Commands-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Other-Kill-Commands-1
+:CLASS: subsection
+:END:
+- C-w :: Kill the region (=kill-region=).
+
+- M-w :: Copy the region into the kill ring (=kill-ring-save=).
+
+- M-d :: Kill the next word (=kill-word=). See [[id:emacs--Words][Words]].
+
+- M-DEL :: Kill one word backwards (=backward-kill-word=).
+
+- C-x DEL :: Kill back to beginning of sentence (=backward-kill-sentence=). See [[id:emacs--Sentences][Sentences]].
+
+- M-k :: Kill to the end of the sentence (=kill-sentence=).
+
+- C-M-k :: Kill the following balanced expression (=kill-sexp=). See [[id:emacs--Expressions][Expressions with Balanced Parentheses]].
+
+- M-z =char= :: Kill through the next occurrence of =char= (=zap-to-char=).
+
+- M-x zap-up-to-char =char= :: Kill up to, but not including, the next occurrence of =char=.
+
+One of the commonly-used kill commands is C-w (=kill-region=), which kills the text in the region (see [[id:emacs--Mark][The Mark and the Region]]). Similarly, M-w (=kill-ring-save=) copies the text in the region into the kill ring without removing it from the buffer. If the mark is inactive when you type C-w or M-w, the command acts on the text between point and where you last set the mark (see [[id:emacs--Using-Region][Operating on the Region]]).
+
+Emacs also provides commands to kill specific syntactic units: words, with M-DEL and M-d (see [[id:emacs--Words][Words]]); balanced expressions, with C-M-k (see [[id:emacs--Expressions][Expressions with Balanced Parentheses]]); and sentences, with C-x DEL and M-k (see [[id:emacs--Sentences][Sentences]]).
+
+The command M-z (=zap-to-char=) combines killing with searching: it reads a character and kills from point up to (and including) the next occurrence of that character in the buffer. A numeric argument acts as a repeat count; a negative argument means to search backward and kill text before point. A history of previously used characters is maintained and can be accessed via the M-p/M-n keystrokes. This is mainly useful if the character to be used has to be entered via a complicated input method. A similar command =zap-up-to-char= kills from point up to, but not including the next occurrence of a character, with numeric argument acting as a repeat count.
+
+--------------

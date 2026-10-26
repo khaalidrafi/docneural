@@ -7,6 +7,9 @@
 Next: [[id:emacs--Windows][Multiple Windows]]   Previous: [[id:emacs--Files][File Handling]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Buffers>>
+
+--------------
+
 ** 21 Using Multiple Buffers [[#Using-Multiple-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Using-Multiple-Buffers
@@ -22,8 +25,16 @@ At any time, one and only one buffer is /selected/; we call it the /current buff
 
 A buffer's /contents/ consist of a series of characters, each of which optionally carries a set of text properties (see [[id:emacs--International-Chars][Text properties]]) that can specify more information about that character.
 
-Aside from its textual contents, each buffer records several pieces of information, such as what file it is visiting (if any), whether it is modified, and what major mode and minor modes are in effect (see [[id:emacs--Modes][Major and Minor Modes]]). These are stored in /buffer-local variables/---variables that can have a different value in each buffer. See [[id:emacs--Variables::#Locals][Local Variables]].
+Aside from its textual contents, each buffer records several pieces of information, such as what file it is visiting (if any), whether it is modified, and what major mode and minor modes are in effect (see [[id:emacs--Modes][Major and Minor Modes]]). These are stored in /buffer-local variables/---variables that can have a different value in each buffer. See [[id:emacs--Locals][Local Variables]].
 
 A buffer's size cannot be larger than some maximum, which is defined by the largest buffer position representable by /Emacs integers/. This is because Emacs tracks buffer positions using that data type. For typical 64-bit machines, this maximum buffer size is /2^{61} - 2/ bytes, or about 2 EiB. For typical 32-bit machines, the maximum is usually /2^{29} - 2/ bytes, or about 512 MiB. Buffer sizes are also limited by the amount of memory in the system.
+
+- [[id:emacs--Select-Buffer][Creating and Selecting Buffers]]
+- [[id:emacs--List-Buffers][Listing Existing Buffers]]
+- [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]]
+- [[id:emacs--Kill-Buffer][Killing Buffers]]
+- [[id:emacs--Several-Buffers][Operating on Several Buffers]]
+- [[id:emacs--Indirect-Buffers][Indirect Buffers]]
+- [[id:emacs--Buffer-Convenience][Convenience Features and Customization of Buffer Handling]]
 
 --------------

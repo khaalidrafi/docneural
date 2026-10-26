@@ -36,32 +36,70 @@ Next:
 [[../..][]]
 
 <<The-Perfect-Setup>>
-Next: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Alternative-Setups][Alternative Setups]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.5 The Perfect Setup [[#The-Perfect-Setup-1][¶]]
+<<The-Perfect-Setup-1>>
+*** 22.5 The Perfect Setup
 :PROPERTIES:
-:CUSTOM_ID: The-Perfect-Setup-1
+:CUSTOM_ID: the-perfect-setup
 :CLASS: section
 :END:
-All configuration and development in Guix is done in the Scheme language. Like all languages of the Lisp family, Scheme has a simple syntax. The perfect setup is one where the editor you choose makes working with that syntax seamless and pleasant; for that it must absolutely support a few things for Scheme:
+The Perfect Setup to hack on Guix is basically the perfect setup used for Guile hacking (see [[https://www.gnu.org/software/guile/manual/html_node/Using-Guile-in-Emacs.html#Using-Guile-in-Emacs][Using Guile in Emacs]] in Guile Reference Manual). First, you need more than an editor, you need [[https://www.gnu.org/software/emacs][Emacs]], empowered by the wonderful [[https://nongnu.org/geiser/][Geiser]]. To set that up, run:
 
-- automatic indentation, such that hitting the “Enter” key (or RET) places cursor “at the right place” on the next line;
-- “parentheses matching”, allowing you to jump from a closing parenthesis to the corresponding opening parenthesis and vice-versa;
-- syntax highlighting, so that keywords are visually distinguishable.
+#+begin_example
+guix install emacs guile emacs-geiser emacs-geiser-guile
+#+end_example
 
-The following optional features can make your life easier:
+Geiser allows for interactive and incremental development from within Emacs: code compilation and evaluation from within buffers, access to on-line documentation (docstrings), context-sensitive completion, M-. to jump to an object definition, a REPL to try out your code, and more (see [[http://geiser.nongnu.org/Introduction.html#Introduction][Introduction]] in Geiser User Manual). If you allow Emacs to load the =.dir-locals.el= file at the root of the project checkout, it will cause Geiser to automatically add the local Guix sources to the Guile load path.
 
-- structural editing of Scheme syntax;
-- Guile integration so you can easily evaluate code, jump to procedure definitions, view documentation, and so on.
+To actually edit the code, Emacs already has a neat Scheme mode. But in addition to that, you must not miss [[https://www.emacswiki.org/emacs/ParEdit][Paredit]]. It provides facilities to directly operate on the syntax tree, such as raising an s-expression or wrapping it, swallowing or rejecting the following s-expression, etc.
 
-The following sections look at editor setups that are known to work well. Do share your setup for these and other editors for inclusion in this manual! See [[id:guix--Submitting-Patches][Submitting Patches]].
+<<index-code-snippets>> <<index-templates>> <<index-reducing-boilerplate>>
+We also provide templates for common git commit messages and package definitions in the =etc/snippets= directory. These templates can be used to expand short trigger strings to interactive text snippets. If you use [[https://joaotavora.github.io/yasnippet/][YASnippet]], you may want to add the =etc/snippets/yas= snippets directory to the =yas-snippet-dirs= variable. If you use [[https://github.com/minad/tempel/][Tempel]], you may want to add the =etc/snippets/tempel/*= path to the =tempel-path= variable in Emacs.
 
-- [[id:guix--Emacs][Emacs]]
-- [[id:guix--Guile-Studio][Guile Studio]]
-- [[id:guix--Vim-and-NeoVim][Vim and NeoVim]]
+#+begin_src lisp
+;; Assuming the Guix checkout is in ~/src/guix.
+;; Yasnippet configuration
+(with-eval-after-load 'yasnippet
+  (add-to-list 'yas-snippet-dirs "~/src/guix/etc/snippets/yas"))
+;; Tempel configuration
+(with-eval-after-load 'tempel
+   ;; Ensure tempel-path is a list -- it may also be a string.
+   (unless (listp 'tempel-path)
+     (setq tempel-path (list tempel-path)))
+   (add-to-list 'tempel-path "~/src/guix/etc/snippets/tempel/*"))
+#+end_src
+
+The commit message snippets depend on [[https://magit.vc/][Magit]] to display staged files. When editing a commit message type =add= followed by TAB to insert a commit message template for adding a package; type =update= followed by TAB to insert a template for updating a package; type =https= followed by TAB to insert a template for changing the home page URI of a package to HTTPS.
+
+The main snippet for =scheme-mode= is triggered by typing =package...= followed by TAB. This snippet also inserts the trigger string =origin...=, which can be expanded further. The =origin= snippet in turn may insert other trigger strings ending on =...=, which also can be expanded further.
+
+<<index-insert-or-update-copyright>> <<index-M_002dx-guix_002dcopyright>> <<index-M_002dx-copyright_002dupdate>>
+We additionally provide insertion and automatic update of a copyright in =etc/copyright.el=. You may want to set your full name, mail, and load a file.
+
+#+begin_src lisp
+(setq user-full-name "Alice Doe")
+(setq user-mail-address "alice@mail.org")
+;; Assuming the Guix checkout is in ~/src/guix.
+(load-file "~/src/guix/etc/copyright.el")
+#+end_src
+
+To insert a copyright at the current line invoke =M-x guix-copyright=.
+
+To update a copyright you need to specify a =copyright-names-regexp=.
+
+#+begin_src lisp
+(setq copyright-names-regexp
+      (format "%s <%s>" user-full-name user-mail-address))
+#+end_src
+
+You can check if your copyright is up to date by evaluating =M-x copyright-update=. If you want to do it automatically after each buffer save then add =(add-hook 'after-save-hook 'copyright-update)= in Emacs.
+
+- [[id:guix--Viewing-Bugs-within-Emacs][Viewing Bugs within Emacs]]
 
 --------------
 
-Next: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Alternative-Setups][Alternative Setups]], Previous: [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

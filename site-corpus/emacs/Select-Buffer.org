@@ -7,6 +7,9 @@
 Next: [[id:emacs--List-Buffers][Listing Existing Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
 
 <<Select-Buffer>>
+
+--------------
+
 *** 21.1 Creating and Selecting Buffers [[#Creating-and-Selecting-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Creating-and-Selecting-Buffers
@@ -27,7 +30,7 @@ Next: [[id:emacs--List-Buffers][Listing Existing Buffers]]   Up: [[id:emacs--Buf
 
 The C-x b (=switch-to-buffer=) command reads a buffer name using the minibuffer. Then it makes that buffer current, and displays it in the currently-selected window. An empty input specifies the buffer that was current most recently among those not now displayed in any window.
 
-While entering the buffer name, you can use the usual completion and history commands (see [[id:emacs--Minibuffer][The Minibuffer]]). Note that C-x b, and related commands, use /permissive completion with confirmation/ for minibuffer completion: if you type RET when the minibuffer text names a nonexistent buffer, Emacs prints ‘=[Confirm]=' and you must type a second RET to submit that buffer name. See [[id:emacs--Completion::#Completion-Exit][Completion Exit]], for details. For other completion options and features, see [[id:emacs--Completion::#Completion-Options][Completion Options]].
+While entering the buffer name, you can use the usual completion and history commands (see [[id:emacs--Minibuffer][The Minibuffer]]). Note that C-x b, and related commands, use /permissive completion with confirmation/ for minibuffer completion: if you type RET when the minibuffer text names a nonexistent buffer, Emacs prints ‘=[Confirm]=' and you must type a second RET to submit that buffer name. See [[id:emacs--Completion-Exit][Completion Exit]], for details. For other completion options and features, see [[id:emacs--Completion-Options][Completion Options]].
 
 If you specify a buffer that does not exist, C-x b creates a new, empty buffer that is not visiting any file, and selects it for editing. The default value of the variable =major-mode= determines the new buffer's major mode; the default value is Fundamental mode. See [[id:emacs--Major-Modes][Major Modes]]. One reason to create a new buffer is to use it for making temporary notes. If you try to save it, Emacs asks for the file name to use, and the buffer's major mode is re-established taking that file name into account (see [[id:emacs--Choosing-Modes][Choosing File Modes]]).
 
@@ -37,7 +40,7 @@ To select a buffer in a window other than the current one (see [[id:emacs--Windo
 
 Similarly, C-x 5 b (=switch-to-buffer-other-frame=) prompts for a buffer name, displays that buffer in another frame (see [[id:emacs--Frames][Frames and Graphical Displays]]), and selects that frame. If the buffer is already being shown in a window on another frame, Emacs selects that window and frame instead of creating a new frame.
 
-See [[id:emacs--Displaying-Buffers::#Displaying-Buffers][Displaying a Buffer in a Window]], for how the C-x 4 b and C-x 5 b commands get the window and/or frame to display in.
+See [[id:emacs--Displaying-Buffers][Displaying a Buffer in a Window]], for how the C-x 4 b and C-x 5 b commands get the window and/or frame to display in.
 
 In addition, C-x C-f, and any other command for visiting a file, can also be used to switch to an existing file-visiting buffer. See [[id:emacs--Visiting][Visiting Files]].
 

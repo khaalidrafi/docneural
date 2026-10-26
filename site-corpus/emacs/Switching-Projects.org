@@ -4,6 +4,19 @@
 #+filetags: :emacs:
 #+title: Switching Projects
 
-Next:
+Next: [[id:emacs--Managing-Projects][Managing the Project List File]]   Previous: [[id:emacs--Project-Buffer-Commands][Project Commands That Operate on Buffers]]   Up: [[id:emacs--Projects][Working with Projects]]
 
-The node you are looking for is at [[id:emacs--Projects::#Switching-Projects][Switching Projects]].
+<<Switching-Projects>>
+
+--------------
+
+**** 30.2.3 Switching Projects [[#Switching-Projects-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Switching-Projects-1
+:CLASS: subsection
+:END:
+- C-x p p :: Run an Emacs command for another project (=project-switch-project=).
+
+Commands that operate on project files (see [[id:emacs--Project-File-Commands][Project Commands That Operate on Files]]) will conveniently prompt you for a project directory when no project is current. When you are inside some project, but you want to operate on a different project, use the C-x p p command (=project-switch-project=). This command prompts you to choose a directory among known project roots, and then displays the menu of available commands to operate on the project you choose. The variable =project-switch-commands= controls which commands are available in the menu, and which key invokes each command.
+
+The variable =project-list-file= names the file in which Emacs records the list of known projects. It defaults to the file =projects= in =user-emacs-directory= (see [[id:emacs--Find-Init][How Emacs Finds Your Init File]]).

@@ -36,20 +36,24 @@ Next:
 [[../..][]]
 
 <<Linux-Services>>
-Next: [[id:guix--Hurd-Services][Hurd Services]], Previous: [[id:guix--Guix-Services][Guix Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Hurd-Services][Hurd Services]], Previous: [[id:guix--Guix-Services][Guix Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.38 Linux Services [[#Linux-Services-1][¶]]
+<<Linux-Services-1>>
+**** 11.10.36 Linux Services
 :PROPERTIES:
-:CUSTOM_ID: Linux-Services-1
+:CUSTOM_ID: linux-services
 :CLASS: subsection
 :END:
-**** VFS Mapping Service [[#VFS-Mapping-Service][¶]]
+<<VFS-Mapping-Service>>
+**** VFS Mapping Service
 :PROPERTIES:
-:CUSTOM_ID: VFS-Mapping-Service
+:CUSTOM_ID: vfs-mapping-service
 :CLASS: subsubheading
 :END:
+<<index-VFS-mapping>> <<index-Virtual-File-System-mapping>> <<index-bind-mounts_002c-service>> <<index-overlay-mounts_002c-service>>
 The VFS (Virtual File System) Mapping service allows you to bind a file name under a different name in the global namespace. For example, this is used by the Shared Cache Service (see [[id:guix--Guix-Services][Guix Services]]) to bind the ‘=root=' user's cache over another user's cache. Another use case may be to expose game data from the store over your home directory, and apply modifications there.
 
 The service has three /policies/ to choose from with respect to access rights on the bound over path:
@@ -64,7 +68,7 @@ Here is an example configuration that exposes the default data directory of =tux
 
 #+begin_src lisp
 (operating-system
-  ;; ...
+  ;; …
   (services
    (cons*
     (service vfs-mapping-service-type
@@ -83,7 +87,7 @@ The service can also be extended by providing a list of =vfs-mapping=, allowing 
 
 #+begin_src lisp
 (operating-system
-  ;; ...
+  ;; …
   (services
    (cons*
     (simple-service 'bob-too-wants-to-hack-on-tuxpaint
@@ -99,11 +103,11 @@ The service can also be extended by providing a list of =vfs-mapping=, allowing 
 
 The =source= file name must exist for the service to start. The =destination= directory will be created if it does not exist.
 
-- Variable: *vfs-mapping-service-type* [[#index-vfs_002dmapping_002dservice_002dtype][¶]] :: Service type for binding a directory in multiple places on the file system.
+- Variable: vfs-mapping-service-type  :: Service type for binding a directory in multiple places on the file system.
 
   The access rights are either the same in source and destination (='bind=), or writes are translated back to the source as if made by the source's owner (='translate=), or kept in an overlay directory near the destination (='overlay=). The service's value must be a =vfs-mapping-configuration= object.
 
-- Data Type: *vfs-mapping-configuration* [[#index-vfs_002dmapping_002dconfiguration][¶]] :: Data type representing the configuration of the vfs-mapping service.
+- Data Type: vfs-mapping-configuration  :: Data type representing the configuration of the vfs-mapping service.
 
   - =bindfs= (default: =#~(string-append #$bindfs "/bin/bindfs")=) :: The =bindfs= command to use for mounting.
 
@@ -113,7 +117,7 @@ The =source= file name must exist for the service to start. The =destination= di
 
   - =bindings= (default: ='()=) :: A list of =vfs-mapping= records.
 
-- Data Type: *vfs-mapping* [[#index-vfs_002dmapping][¶]] :: Data type representing the configuration for a single shared directory.
+- Data Type: vfs-mapping  :: Data type representing the configuration for a single shared directory.
 
   - =source= :: The source file name to be shared.
 
@@ -129,63 +133,21 @@ The =source= file name must exist for the service to start. The =destination= di
 
   - =requirement= (default: ='(file-systems user-homes)=) :: The list of services that Shepherd ought to provision before trying to mount.
 
-**** btrfs-scrub Service [[#btrfs_002dscrub-Service][¶]]
+<<index-oom>> <<index-out-of-memory-killer>> <<index-earlyoom>> <<index-early-out-of-memory-daemon>> <<Early-OOM-Service>>
+**** Early OOM Service
 :PROPERTIES:
-:CUSTOM_ID: btrfs_002dscrub-Service
-:CLASS: subsubheading
-:END:
-
-#+begin_quote
-*Information:* Scrub is a validation pass over all filesystem data and metadata that detects data checksum errors, basic super block errors, basic metadata block header errors, and disk read errors.
-
-Scrub is done on a per-device base, if a device is specified to =btrfs scrub start=, then only that device will be scrubbed. Although btrfs will also try to read other device to find a good copy, if the mirror on that specified device failed to be read or pass verification.
-
-If a path of btrfs is specified to =btrfs scrub start=, btrfs will scrub all devices in parallel.
-
-On filesystems that use replicated block group profiles (e.g. RAID1), read-write scrub will also automatically repair any damage by copying verified good data from one of the other replicas.
-
-Such automatic repair is also carried out when reading metadata or data from a read-write mounted filesystem.
-
-#+end_quote
-
-- Variable: *btrfs-scrub-service-type* [[#index-btrfs_002dscrub_002dservice_002dtype][¶]] :: Type for a service that periodically runs =btrfs-scrub= on a certain device, whose value must be an =<btrfs-scrub-configuration>= object. The service can be instantiated in its default configuration with:
-
-  #+begin_src lisp
-  ;; This will scrub the root (/) filesystem.
-  (service btrfs-scrub-service-type)
-
-  ;; This will scrub the /gnu/store filesystem (assuming it's a
-  ;; different filesystem from /).
-
-  (service btrfs-scrub-service-type
-    (btrfs-scrub-configuration
-      (to-scrub "/gnu/store")))
-  #+end_src
-
-- Data Type: *btrfs-scrub-configuration* [[#index-btrfs_002dscrub_002dconfiguration][¶]] :: Available =btrfs-scrub-configuration= fields are:
-
-  - =package= (default: =btrfs-progs=) (type: file-like) :: The package providing the =btrfs= command.
-
-  - =schedule= (default: ="0 0 1-7 * 0"=) (type: Shepherd calendar event) :: Schedule for launching =btrfs-scrub=, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual). By default this is set to run the 1st Sunday of the month, at 00:00.
-
-  - =to-scrub= (default: ="/"=) (type: maybe-string) :: Device to scrub. It will scrub the root (=/=) if not given.
-
-  - =extra-arguments= (type: maybe-list-of-strings) :: Extra options to append to =btrfs scrub start= (run ‘=man btrfs-scrub.8=' for more information). Keep in mind that, by definition, this service uses the =-B= flag (do not background and print scrub statistics when finished).
-
-**** Early OOM Service [[#Early-OOM-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Early-OOM-Service
+:CUSTOM_ID: early-oom-service
 :CLASS: subsubheading
 :END:
 [[https://github.com/rfjakob/earlyoom][Early OOM]], also known as Earlyoom, is a minimalist out of memory (OOM) daemon that runs in user space and provides a more responsive and configurable alternative to the in-kernel OOM killer. It is useful to prevent the system from becoming unresponsive when it runs out of memory.
 
-- Variable: *earlyoom-service-type* [[#index-earlyoom_002dservice_002dtype][¶]] :: The service type for running =earlyoom=, the Early OOM daemon. Its value must be a =earlyoom-configuration= object, described below. The service can be instantiated in its default configuration with:
+- Variable: earlyoom-service-type  :: The service type for running =earlyoom=, the Early OOM daemon. Its value must be a =earlyoom-configuration= object, described below. The service can be instantiated in its default configuration with:
 
   #+begin_src lisp
   (service earlyoom-service-type)
   #+end_src
 
-- Data Type: *earlyoom-configuration* [[#index-earlyoom_002dconfiguration][¶]] :: This is the configuration record for the =earlyoom-service-type=.
+- Data Type: earlyoom-configuration  :: This is the configuration record for the =earlyoom-service-type=.
 
   - =earlyoom= (default: =earlyoom=) :: The Earlyoom package to use.
 
@@ -205,11 +167,13 @@ Such automatic repair is also carried out when reading metadata or data from a r
 
   - =send-notification-command= (default: =#f=) :: This can be used to provide a custom command used for sending notifications.
 
-**** fstrim Service [[#fstrim-Service][¶]]
+<<fstrim-Service>>
+**** fstrim Service
 :PROPERTIES:
-:CUSTOM_ID: fstrim-Service
+:CUSTOM_ID: fstrim-service
 :CLASS: subsubheading
 :END:
+<<index-fstrim-service>> <<index-solid-state-drives_002c-periodic-trim>> <<index-solid-state-drives_002c-trim>>
 The command =fstrim= can be used to discard (or /trim/) unused blocks on a mounted file system.
 
 #+begin_quote
@@ -217,17 +181,17 @@ The command =fstrim= can be used to discard (or /trim/) unused blocks on a mount
 
 #+end_quote
 
-- Variable: *fstrim-service-type* [[#index-fstrim_002dservice_002dtype][¶]] :: Type for a service that periodically runs =fstrim=, whose value must be an =<fstrim-configuration>= object. The service can be instantiated in its default configuration with:
+- Variable: fstrim-service-type  :: Type for a service that periodically runs =fstrim=, whose value must be an =<fstrim-configuration>= object. The service can be instantiated in its default configuration with:
 
   #+begin_src lisp
   (service fstrim-service-type)
   #+end_src
 
-- Data Type: *fstrim-configuration* [[#index-fstrim_002dconfiguration][¶]] :: Available =fstrim-configuration= fields are:
+- Data Type: fstrim-configuration  :: Available =fstrim-configuration= fields are:
 
   - =package= (default: =util-linux=) (type: file-like) :: The package providing the =fstrim= command.
 
-  - =schedule= (default: ="0 0 * * 0"=) (type: Shepherd calendar event) :: Schedule for launching =fstrim=, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual). By default this is set to run weekly on Sunday at 00:00.
+  - =schedule= (default: ="0 0 * * 0"=) (type: Shepherd calendar event) :: Schedule for launching =fstrim=, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual). By default this is set to run weekly on Sunday at 00:00.
 
   - =listed-in= (default: ='("/etc/fstab" "/proc/self/mountinfo")=) (type: maybe-list-of-strings) :: List of files in fstab or kernel mountinfo format. All missing or empty files are silently ignored. The evaluation of the list /stops/ after the first non-empty file. File systems with =X-fstrim.notrim= mount option in fstab are skipped.
 
@@ -237,14 +201,15 @@ The command =fstrim= can be used to discard (or /trim/) unused blocks on a mount
 
   - =extra-arguments= (type: maybe-list-of-strings) :: Extra options to append to =fstrim= (run ‘=man fstrim=' for more information).
 
-**** Kernel Module Loader Service [[#Kernel-Module-Loader-Service][¶]]
+<<index-modprobe>> <<index-kernel-module-loader>> <<Kernel-Module-Loader-Service>>
+**** Kernel Module Loader Service
 :PROPERTIES:
-:CUSTOM_ID: Kernel-Module-Loader-Service
+:CUSTOM_ID: kernel-module-loader-service
 :CLASS: subsubheading
 :END:
 The kernel module loader service allows one to load loadable kernel modules at boot. This is especially useful for modules that don't autoload and need to be manually loaded, as is the case with =ddcci=.
 
-- Variable: *kernel-module-loader-service-type* [[#index-kernel_002dmodule_002dloader_002dservice_002dtype][¶]] :: The service type for loading loadable kernel modules at boot with =modprobe=. Its value must be a list of strings representing module names. For example loading the drivers provided by =ddcci-driver-linux=, in debugging mode by passing some module parameters, can be done as follow:
+- Variable: kernel-module-loader-service-type  :: The service type for loading loadable kernel modules at boot with =modprobe=. Its value must be a list of strings representing module names. For example loading the drivers provided by =ddcci-driver-linux=, in debugging mode by passing some module parameters, can be done as follow:
 
   #+begin_src lisp
   (use-modules (gnu) (gnu services))
@@ -266,11 +231,13 @@ The kernel module loader service allows one to load loadable kernel modules at b
     (kernel-loadable-modules (list ddcci-driver-linux)))
   #+end_src
 
-**** Cachefilesd Service [[#Cachefilesd-Service][¶]]
+<<Cachefilesd-Service>>
+**** Cachefilesd Service
 :PROPERTIES:
-:CUSTOM_ID: Cachefilesd-Service
+:CUSTOM_ID: cachefilesd-service
 :CLASS: subsubheading
 :END:
+<<index-cachefilesd>> <<index-fscache_002c-file-system-caching-_0028Linux_0029>>
 The Cachefilesd service starts a daemon that caches network file system data locally. It is especially useful for NFS and AFS shares, where it reduces latencies for repeated access when reading files.
 
 The daemon can be configured as follows:
@@ -281,9 +248,9 @@ The daemon can be configured as follows:
            (cache-directory "/var/cache/fscache")))
 #+end_src
 
-- Variable: *cachefilesd-service-type* [[#index-cachefilesd_002dservice_002dtype][¶]] :: The service type for starting =cachefilesd=. The value for this service type is a =cachefilesd-configuration=, whose only required field is =cache-directory=.
+- Variable: cachefilesd-service-type  :: The service type for starting =cachefilesd=. The value for this service type is a =cachefilesd-configuration=, whose only required field is =cache-directory=.
 
-- Data Type: *cachefilesd-configuration* [[#index-cachefilesd_002dconfiguration][¶]] :: Available =cachefilesd-configuration= fields are:
+- Data Type: cachefilesd-configuration  :: Available =cachefilesd-configuration= fields are:
 
   - =cachefilesd= (default: =cachefilesd=) (type: file-like) :: The cachefilesd package to use.
 
@@ -321,9 +288,10 @@ The daemon can be configured as follows:
 
   - =trace-internal-checkpoints-in-kernel-module?= (default: =#f=) (type: boolean) :: Trace internal checkpoints in the kernel module (for debugging).
 
-**** Rasdaemon Service [[#Rasdaemon-Service][¶]]
+<<index-rasdaemon>> <<index-Platform-Reliability_002c-Availability-and-Serviceability-daemon>> <<Rasdaemon-Service>>
+**** Rasdaemon Service
 :PROPERTIES:
-:CUSTOM_ID: Rasdaemon-Service
+:CUSTOM_ID: rasdaemon-service
 :CLASS: subsubheading
 :END:
 The Rasdaemon service provides a daemon which monitors platform RAS (Reliability, Availability, and Serviceability) reports from Linux kernel trace events, logging them to syslogd.
@@ -355,7 +323,7 @@ By monitoring the number of occurrences of error detections, it is possible to i
 
 For detailed information about the types of error events gathered and how to make sense of them, see the kernel administrator's guide at [[https://www.kernel.org/doc/html/latest/admin-guide/ras.html]].
 
-- Variable: *rasdaemon-service-type* [[#index-rasdaemon_002dservice_002dtype][¶]] :: Service type for the =rasdaemon= service. It accepts a =rasdaemon-configuration= object. Instantiating like
+- Variable: rasdaemon-service-type  :: Service type for the =rasdaemon= service. It accepts a =rasdaemon-configuration= object. Instantiating like
 
   #+begin_src lisp
   (service rasdaemon-service-type)
@@ -363,126 +331,21 @@ For detailed information about the types of error events gathered and how to mak
 
   will load with a default configuration, which monitors all events and logs to syslogd.
 
-- Data Type: *rasdaemon-configuration* [[#index-rasdaemon_002dconfiguration][¶]] :: The data type representing the configuration of =rasdaemon=.
+- Data Type: rasdaemon-configuration  :: The data type representing the configuration of =rasdaemon=.
 
   - =record?= (default: =#f=) :: A boolean indicating whether to record the events in an SQLite database. This provides a more structured access to the information contained in the log file. The database location is hard-coded to =/var/lib/rasdaemon/ras-mc_event.db=.
 
-**** TuneD Service [[#TuneD-Service][¶]]
+<<index-zram>> <<index-compressed-swap>> <<index-Compressed-RAM_002dbased-block-devices>> <<Zram-Device-Service>>
+**** Zram Device Service
 :PROPERTIES:
-:CUSTOM_ID: TuneD-Service
-:CLASS: subsubheading
-:END:
-[[https://tuned-project.org][TuneD]] is a system tuning service for Linux. It monitors connected devices using the udev device manager and tunes system settings according to a selected profile.
-
-It can be integrated with desktop environments like GNOME and KDE: it replaces =power-profiles-daemon= by implementing the same D-Bus API that they already use.
-
-The following is an example configuration that could be suitable for a laptop:
-
-#+begin_src lisp
-(service tuned-service-type
-         (tuned-configuration
-          (power-profiles-daemon-support? #t)
-          (ppd-settings
-           (tuned-ppd-settings
-            ;; Customize default profiles to use laptop specific ones.
-            (profiles
-             '(("power-saver" . "laptop-ac-powersave")
-               ("balanced" . "balanced")
-               ("performance" . "throughput-performance")))
-            (battery
-             ;; Customize battery profiles to use laptop specific ones.
-             '(("power-saver" . "laptop-battery-powersave")
-               ("balanced" . "balanced-battery")))))))
-#+end_src
-
-For more information, refer to =tuned-main.conf(5)=.
-
-- Variable: *tuned-service-type* [[#index-tuned_002dservice_002dtype][¶]] :: This service spawns and configure the TuneD daemon. The service's value is a =tuned-configuration= record.
-
-  - Data Type: *tuned-configuration* [[#index-tuned_002dconfiguration][¶]] :: Available =tuned-configuration= fields are:
-
-    - =tuned= (default: =tuned=) (type: package) :: The TuneD package.
-
-    - =auto-start?= (default: =#t=) (type: boolean) :: Whether this service should be started automatically by the Shepherd. If it is =#f= the service has to be started manually with =herd start=.
-
-    - =power-profiles-daemon-support?= (default: =#f=) (type: boolean) :: Whether the power-profiles-daemon emulation layer should be enabled.
-
-    - =profiles= (default: ='()=) (type: list-of-tuned-plugins) :: User provided profiles for TuneD. Each element of the list is supposed to be a list where the first element is the name of the directory where plugin files will be placed under =/etc/tuned/profiles= and the second a file like object containing the plugin files:
-
-      #+begin_src lisp
-      (list (list "plugin-name" (plain-file "plugin.conf" "content"))
-            (list "other-plugin"
-                  (file-union "plugin-data"
-                              (list
-                               (list "other-plugin.conf"
-                                     (plain-file "other-plugin.conf" "content"))
-                               (list "other-plugin.scm"
-                                     (program-file "other-plugin.scm"
-                                                   #~(display "content")))))))
-      #+end_src
-
-    - =settings= (type: tuned-settings) :: Configuration for TuneD.
-
-    - =ppd-settings= (type: tuned-ppd-settings) :: Configuration for the =power-profiles-daemon= compatibility layer of TuneD.
-
-    - =recommend.conf= (type: file-like) :: File like object containing the recommended profile configuration. Defaults to =%default-tuned-configuration-recommend.conf=.
-
-  - Data Type: *tuned-settings* [[#index-tuned_002dsettings][¶]] :: Available =tuned-settings= fields are:
-
-    - =daemon?= (default: =#t=) (type: boolean) :: Whether to use daemon. Without daemon TuneD just applies tuning.
-
-    - =dynamic-tuning?= (default: =#f=) (type: boolean) :: Dynamically tune devices, if disabled only static tuning will be used.
-
-    - =default-instance-priority= (default: =0=) (type: integer) :: Default priority assigned to instances.
-
-    - =recommend-command?= (default: =#t=) (type: boolean) :: Recommend functionality, if disabled =recommend= command will be not available in CLI, daemon will not parse =recommend.conf= but will return one hardcoded profile (by default =balanced=).
-
-    - =sleep-interval= (default: =1=) (type: integer) :: How long to sleep before checking for events (in seconds), higher number means lower overhead but longer response time.
-
-    - =update-interval= (default: =10=) (type: integer) :: Update interval for dynamic tunings (in seconds). It must be a multiple of the =sleep-interval=.
-
-    - =profile-dirs= (type: list-of-profile-dirs) :: List of strings or gexps representing directories to search for profiles. In case of collisions in profile names, the latter directory takes precedence.
-
-    - =extra-content= (type: text-config) :: A list of file-like objects that are appended to the configuration file.
-
-  - Data Type: *tuned-ppd-settings* [[#index-tuned_002dppd_002dsettings][¶]] :: Available =tuned-ppd-settings= fields are:
-
-    - =default= (default: ="balanced"=) (type: string) :: Default PPD profile.
-
-    - =battery-detection?= (default: =#t=) (type: boolean) :: Whether to enable battery detection.
-
-    - =sysfs-acpi-monitor?= (default: =#t=) (type: boolean) :: Whether to react to changes of ACPI platform profile done via function keys (e.g., Fn-L). This is marked upstream as an experimental feature.
-
-    - =profiles= (type: mixed-list) :: Map of PPD profiles states to TuneD profiles. It's supposed to be a list of pairs, pair members are supposed to be string. It defaults to =%default-tuned-ppd-settings-profiles=:
-
-      #+begin_src lisp
-      '(("power-saver" . "powersave")
-        ("balanced" .  "balanced")
-        ("performance" . "throughput-performance"))
-      #+end_src
-
-      Elements can be pairs or strings. Pair members can be either strings, gexps or file like objects. Strings are directly passed to the serializer. This can be an escape hatch in case the underlying syntax of the output file changes slightly and the Scheme API is not adequated in time. This way there is always a way to work around Scheme records.
-
-    - =battery= (type: mixed-list) :: Map of PPD battery states to TuneD profiles. It's supposed to be a list of pairs, pair members are supposed to be string. It defaults to =%default-tuned-ppd-settings-battery=:
-
-      #+begin_src lisp
-      '(("balanced" . "balanced-battery"))
-      #+end_src
-
-      Elements can be pairs or strings. Pair members can be either strings, gexps or file like objects. Strings are directly passed to the serializer. This can be an escape hatch in case the underlying syntax of the output file changes slightly and the Scheme API is not adequated in time. This way there is always a way to work around Scheme records.
-
-    - =extra-content= (type: text-config) :: A list of file-like objects that are appended to the configuration file.
-
-**** Zram Device Service [[#Zram-Device-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Zram-Device-Service
+:CUSTOM_ID: zram-device-service
 :CLASS: subsubheading
 :END:
 The Zram device service provides a compressed swap device in system memory. The Linux Kernel documentation has more information about [[https://www.kernel.org/doc/html/latest/admin-guide/blockdev/zram.html][zram]] devices.
 
-- Variable: *zram-device-service-type* [[#index-zram_002ddevice_002dservice_002dtype][¶]] :: This service creates the zram block device, formats it as swap and enables it as a swap device. The service's value is a =zram-device-configuration= record.
+- Variable: zram-device-service-type  :: This service creates the zram block device, formats it as swap and enables it as a swap device. The service's value is a =zram-device-configuration= record.
 
-  - Data Type: *zram-device-configuration* [[#index-zram_002ddevice_002dconfiguration][¶]] :: This is the data type representing the configuration for the zram-device service.
+  - Data Type: zram-device-configuration  :: This is the data type representing the configuration for the zram-device service.
 
     - =size= (default ="1G"=) :: This is the amount of space you wish to provide for the zram device. It accepts a string and can be a number of bytes or use a suffix, eg.: ="512M"= or =1024000=.
 
@@ -492,17 +355,6 @@ The Zram device service provides a compressed swap device in system memory. The 
 
     - =priority= (default =#f=) :: This is the priority of the swap device created from the zram device. See [[id:guix--Swap-Space][Swap Space]] for a description of swap priorities. You might want to set a specific priority for the zram device, otherwise it could end up not being used much for the reasons described there.
 
-**** fwupd Service [[#fwupd-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: fwupd-Service
-:CLASS: subsubheading
-:END:
-- Variable: *fwupd-service-type* [[#index-fwupd_002dservice_002dtype][¶]] :: This service allows users of supported hardware to update their firmware. The service's value is a =fwupd-configuration= record.
-
-  - Data Type: *fwupd-configuration* [[#index-fwupd_002dconfiguration][¶]] :: This is the data type representing the configuration for the fwupd service.
-
-    - =fwupd= (default =fwupd=) :: The fwupd package that will be installed in the system profile.
-
 --------------
 
-Next: [[id:guix--Hurd-Services][Hurd Services]], Previous: [[id:guix--Guix-Services][Guix Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Hurd-Services][Hurd Services]], Previous: [[id:guix--Guix-Services][Guix Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

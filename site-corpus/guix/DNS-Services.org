@@ -36,20 +36,24 @@ Next:
 [[../..][]]
 
 <<DNS-Services>>
-Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.24 DNS Services [[#DNS-Services-1][¶]]
+<<DNS-Services-1>>
+**** 11.10.23 DNS Services
 :PROPERTIES:
-:CUSTOM_ID: DNS-Services-1
+:CUSTOM_ID: dns-services
 :CLASS: subsection
 :END:
+<<index-DNS-_0028domain-name-system_0029>> <<index-domain-name-system-_0028DNS_0029>>
 The =(gnu services dns)= module provides services related to the /domain name system/ (DNS). It provides a server service for hosting an /authoritative/ DNS server for multiple zones, slave or master. This service uses [[https://www.knot-dns.cz/][Knot DNS]]. And also a caching and forwarding DNS server for the LAN, which uses [[http://www.thekelleys.org.uk/dnsmasq/doc.html][dnsmasq]].
 
-**** Knot Service [[#Knot-Service][¶]]
+<<Knot-Service>>
+**** Knot Service
 :PROPERTIES:
-:CUSTOM_ID: Knot-Service
+:CUSTOM_ID: knot-service
 :CLASS: subsubheading
 :END:
 An example configuration of an authoritative server for two zones, one master and one slave, is:
@@ -89,13 +93,13 @@ An example configuration of an authoritative server for two zones, one master an
                    %base-services)))
 #+end_src
 
-- Variable: *knot-service-type* [[#index-knot_002dservice_002dtype][¶]] :: This is the type for the Knot DNS server.
+- Variable: knot-service-type  :: This is the type for the Knot DNS server.
 
   Knot DNS is an authoritative DNS server, meaning that it can serve multiple zones, that is to say domain names you would buy from a registrar. This server is not a resolver, meaning that it can only resolve names for which it is authoritative. This server can be configured to serve zones as a master server or a slave server as a per-zone basis. Slave zones will get their data from masters, and will serve it as an authoritative server. From the point of view of a resolver, there is no difference between master and slave.
 
   The following data types are used to configure the Knot DNS server:
 
-- Data Type: *knot-key-configuration* [[#index-knot_002dkey_002dconfiguration][¶]] :: Data type representing a key. This type has the following parameters:
+- Data Type: knot-key-configuration  :: Data type representing a key. This type has the following parameters:
 
   - =id= (default: =""=) :: An identifier for other configuration fields to refer to this key. IDs must be unique and must not be empty.
 
@@ -103,7 +107,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =secret= (default: =""=) :: The secret key itself.
 
-- Data Type: *knot-acl-configuration* [[#index-knot_002dacl_002dconfiguration][¶]] :: Data type representing an Access Control List (ACL) configuration. This type has the following parameters:
+- Data Type: knot-acl-configuration  :: Data type representing an Access Control List (ACL) configuration. This type has the following parameters:
 
   - =id= (default: =""=) :: An identifier for other configuration fields to refer to this key. IDs must be unique and must not be empty.
 
@@ -115,7 +119,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =deny?= (default: =#f=) :: When true, the ACL defines restrictions. Listed actions are forbidden. When false, listed actions are allowed.
 
-- Data Type: *zone-entry* [[#index-zone_002dentry][¶]] :: Data type representing a record entry in a zone file. This type has the following parameters:
+- Data Type: zone-entry  :: Data type representing a record entry in a zone file. This type has the following parameters:
 
   - =name= (default: ="@"=) :: The name of the record. ="@"= refers to the origin of the zone. Names are relative to the origin of the zone. For example, in the =example.org= zone, ="ns.example.org"= actually refers to =ns.example.org.example.org=. Names ending with a dot are absolute, which means that ="ns.example.org."= refers to =ns.example.org=.
 
@@ -127,7 +131,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =data= (default: =""=) :: The data contained in the record. For instance an IP address associated with an A record, or a domain name associated with an NS record. Remember that domain names are relative to the origin unless they end with a dot.
 
-- Data Type: *zone-file* [[#index-zone_002dfile][¶]] :: Data type representing the content of a zone file. This type has the following parameters:
+- Data Type: zone-file  :: Data type representing the content of a zone file. This type has the following parameters:
 
   - =entries= (default: ='()=) :: The list of entries. The SOA record is taken care of, so you don't need to put it in the list of entries. This list should probably contain an entry for your primary authoritative DNS server. Other than using a list of entries directly, you can use =define-zone-entries= to define a object containing the list of entries more easily, that you can later pass to the =entries= field of the =zone-file=.
 
@@ -147,7 +151,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =nx= (default: =3600=) :: Default TTL of inexistent records. This delay is usually short because you want your new domains to reach everyone quickly.
 
-- Data Type: *knot-remote-configuration* [[#index-knot_002dremote_002dconfiguration][¶]] :: Data type representing a remote configuration. This type has the following parameters:
+- Data Type: knot-remote-configuration  :: Data type representing a remote configuration. This type has the following parameters:
 
   - =id= (default: =""=) :: An identifier for other configuration fields to refer to this remote. IDs must be unique and must not be empty.
 
@@ -157,7 +161,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =key= (default: =#f=) :: A reference to a key, that is a string containing the identifier of a key defined in a =knot-key-configuration= field.
 
-- Data Type: *knot-keystore-configuration* [[#index-knot_002dkeystore_002dconfiguration][¶]] :: Data type representing a keystore to hold dnssec keys. This type has the following parameters:
+- Data Type: knot-keystore-configuration  :: Data type representing a keystore to hold dnssec keys. This type has the following parameters:
 
   - =id= (default: =""=) :: The id of the keystore. It must not be empty.
 
@@ -165,7 +169,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =config= (default: ="/var/lib/knot/keys/keys"=) :: The configuration string of the backend. An example for the PKCS#11 is: ="pkcs11:token=knot;pin-value=1234 /gnu/store/.../lib/pkcs11/libsofthsm2.so"=. For the pem backend, the string represents a path in the file system.
 
-- Data Type: *knot-policy-configuration* [[#index-knot_002dpolicy_002dconfiguration][¶]] :: Data type representing a dnssec policy. Knot DNS is able to automatically sign your zones. It can either generate and manage your keys automatically or use keys that you generate.
+- Data Type: knot-policy-configuration  :: Data type representing a dnssec policy. Knot DNS is able to automatically sign your zones. It can either generate and manage your keys automatically or use keys that you generate.
 
   Dnssec is usually implemented using two keys: a Key Signing Key (KSK) that is used to sign the second, and a Zone Signing Key (ZSK) that is used to sign the zone. In order to be trusted, the KSK needs to be present in the parent zone (usually a top-level domain). If your registrar supports dnssec, you will have to send them your KSK's hash so they can add a DS record in their zone. This is not automated and need to be done each time you change your KSK.
 
@@ -205,7 +209,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =nsec3-salt-lifetime= (default: =(* 30 24 3600)=) :: The validity period of newly issued salt field.
 
-- Data Type: *knot-zone-configuration* [[#index-knot_002dzone_002dconfiguration][¶]] :: Data type representing a zone served by Knot. This type has the following parameters:
+- Data Type: knot-zone-configuration  :: Data type representing a zone served by Knot. This type has the following parameters:
 
   - =domain= (default: =""=) :: The domain served by this configuration. It must not be empty.
 
@@ -245,13 +249,15 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =serial-policy= (default: ='increment=) :: A policy between ='increment= and ='unixtime=.
 
-- Data Type: *knot-configuration* [[#index-knot_002dconfiguration][¶]] :: Data type representing the Knot configuration. This type has the following parameters:
+- Data Type: knot-configuration  :: Data type representing the Knot configuration. This type has the following parameters:
 
   - =knot= (default: =knot=) :: The Knot package.
 
   - =run-directory= (default: ="/var/run/knot"=) :: The run directory. This directory will be used for pid file and sockets.
 
   - =includes= (default: ='()=) :: A list of strings or file-like objects denoting other files that must be included at the top of the configuration file.
+
+    <<index-secrets_002c-Knot-service>>
 
     This can be used to manage secrets out-of-band. For example, secret keys may be stored in an out-of-band file not managed by Guix, and thus not visible in =/gnu/store=---e.g., you could store secret key configuration in =/etc/knot/secrets.conf= and add this file to the =includes= list.
 
@@ -260,7 +266,7 @@ An example configuration of an authoritative server for two zones, one master an
     #+begin_example
     keymgr -t mysecret > /etc/knot/secrets.conf
     chmod 600 /etc/knot/secrets.conf
-#+end_example
+    #+end_example
 
     Also note that the generated key will be named =mysecret=, so it is the name that needs to be used in the =key= field of the =knot-acl-configuration= record and in other places that need to refer to that key.
 
@@ -280,12 +286,13 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =zones= (default: ='()=) :: The list of knot-zone-configuration used by this configuration.
 
-**** Knot Resolver Service [[#Knot-Resolver-Service][¶]]
+<<Knot-Resolver-Service>>
+**** Knot Resolver Service
 :PROPERTIES:
-:CUSTOM_ID: Knot-Resolver-Service
+:CUSTOM_ID: knot-resolver-service
 :CLASS: subsubheading
 :END:
-- Variable: *knot-resolver-service-type* [[#index-knot_002dresolver_002dservice_002dtype][¶]] :: This is the type of the knot resolver service, whose value should be a =knot-resolver-configuration= object as in this example:
+- Variable: knot-resolver-service-type  :: This is the type of the knot resolver service, whose value should be a =knot-resolver-configuration= object as in this example:
 
   #+begin_src lisp
   (service knot-resolver-service-type
@@ -300,7 +307,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   For more information, refer its [[https://knot-resolver.readthedocs.io/en/stable/config-overview.html][manual]].
 
-- Data Type: *knot-resolver-configuration* [[#index-knot_002dresolver_002dconfiguration][¶]] :: Data type representing the configuration of knot-resolver.
+- Data Type: knot-resolver-configuration  :: Data type representing the configuration of knot-resolver.
 
   - =package= (default: =knot-resolver=) :: Package object of the knot DNS resolver.
 
@@ -308,12 +315,13 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =garbage-collection-interval= (default: 1000) :: Number of milliseconds for =kres-cache-gc= to periodically trim the cache.
 
-**** Dnsmasq Service [[#Dnsmasq-Service][¶]]
+<<Dnsmasq-Service>>
+**** Dnsmasq Service
 :PROPERTIES:
-:CUSTOM_ID: Dnsmasq-Service
+:CUSTOM_ID: dnsmasq-service
 :CLASS: subsubheading
 :END:
-- Variable: *dnsmasq-service-type* [[#index-dnsmasq_002dservice_002dtype][¶]] :: This is the type of the dnsmasq service, whose value should be a =dnsmasq-configuration= object as in this example:
+- Variable: dnsmasq-service-type  :: This is the type of the dnsmasq service, whose value should be a =dnsmasq-configuration= object as in this example:
 
   #+begin_src lisp
   (service dnsmasq-service-type
@@ -321,21 +329,6 @@ An example configuration of an authoritative server for two zones, one master an
              (no-resolv? #t)
              (servers '("192.168.1.1"))))
   #+end_src
-
-  The following example shows a slightly more complex configuration that defines an authoritative DNS server on a given subdomain.
-
-  #+begin_src lisp
-  (service dnsmasq-service-type
-           (dnsmasq-configuration
-             (listen-addresses '("10.1.1.1"))
-             (no-resolv? #t)
-             (no-hosts? #t)
-             (authoritative-servers '("vpn.example.com")) ;self
-             (authoritative-zones '("vpn.example.com"))
-             (host-records '("some-service.vpn.example.com,10.1.1.1"))))
-  #+end_src
-
-  For more examples, refer to ‘=man 8 dnsmasq.='
 
   =dnsmasq-service-type= provides two actions:
 
@@ -356,7 +349,7 @@ An example configuration of an authoritative server for two zones, one master an
 
     #+begin_example
     herd reload dnsmasq
-#+end_example
+    #+end_example
 
   - =stats= :: When =dnsmasq= receives a =SIGUSR1= signal, it writes statistics to the system log including:
 
@@ -369,9 +362,9 @@ An example configuration of an authoritative server for two zones, one master an
 
     #+begin_example
     herd stats dnsmasq
-#+end_example
+    #+end_example
 
-- Data Type: *dnsmasq-configuration* [[#index-dnsmasq_002dconfiguration][¶]] :: Data type representing the configuration of dnsmasq.
+- Data Type: dnsmasq-configuration  :: Data type representing the configuration of dnsmasq.
 
   - =package= (default: =dnsmasq=) :: Package object of the dnsmasq server.
 
@@ -390,25 +383,13 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =listen-addresses= (default: ='()=) :: Listen on the given IP addresses.
 
-  - =ipv4?= (default: =#t=) :: Whether to include A records in answers.
-
-  - =ipv6?= (default: =#t=) :: Whether to include AAAA records in answers.
-
   - =resolv-file= (default: ="/etc/resolv.conf"=) :: The file to read the IP address of the upstream nameservers from.
 
   - =no-resolv?= (default: =#f=) :: When true, don't read =resolv-file=.
 
-  - =authoritative-servers= (default: ='()=) :: A list of strings corresponding to valid =--auth-server= values, such as a domain name. This is useful to make =dnsmasq= authoritative for a given domain name or interface.
-
-  - =authoritative-zones= (default: ='()=) :: A list of strings corresponding to valid =--auth-zone= values, such as a domain name. This is useful to make =dnsmasq= authoritative for a given domain name. Note that this must be used in conjunction with the =authoritative-servers= option.
-
-  - =host-records= (default: ='()=) :: A list of strings corresponding to valid =--host-record= values, for example ='("some-service.example.com,10.1.1.1")=.
-
   - =forward-private-reverse-lookup?= (default: =#t=) :: When false, all reverse lookups for private IP ranges are answered with "no such domain" rather than being forwarded upstream.
 
   - =query-servers-in-order?= (default: =#f=) :: When true, dnsmasq queries the servers in the same order as they appear in =servers=.
-
-  - =locals= (default: ='()=) :: Specify domain name /patterns/ which should be treated as local, that is, for which there should be no delegation to upstream servers. Provided pattern values should be of the form ='("/vpn.example.com/")=.
 
   - =servers= (default: ='()=) :: Specify IP address of upstream servers directly.
 
@@ -468,12 +449,13 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =extra-options= (default: ='()=) :: This option provides an “escape hatch” for the user to provide arbitrary command-line arguments to =dnsmasq= as a list of strings.
 
-**** Unbound Service [[#Unbound-Service][¶]]
+<<Unbound-Service>>
+**** Unbound Service
 :PROPERTIES:
-:CUSTOM_ID: Unbound-Service
+:CUSTOM_ID: unbound-service
 :CLASS: subsubheading
 :END:
-- Variable: *unbound-service-type* [[#index-unbound_002dservice_002dtype][¶]] :: This is the type of the service to run [[https://www.unbound.net][Unbound]], a validating, recursive, and caching DNS resolver. Its value must be a =unbound-configuration= object as in this example:
+- Variable: unbound-service-type  :: This is the type of the service to run [[https://www.unbound.net][Unbound]], a validating, recursive, and caching DNS resolver. Its value must be a =unbound-configuration= object as in this example:
 
   #+begin_src lisp
   (service unbound-service-type
@@ -487,7 +469,7 @@ An example configuration of an authoritative server for two zones, one master an
                (forward-tls-upstream #t))))))
   #+end_src
 
-- Data Type: *unbound-configuration* [[#index-unbound_002dconfiguration][¶]] :: Available =unbound-configuration= fields are:
+- Data Type: unbound-configuration  :: Available =unbound-configuration= fields are:
 
   - =server= (type: unbound-server) :: General options for the Unbound server.
 
@@ -497,7 +479,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =extra-content= (type: maybe-string) :: Raw content to add to the configuration file.
 
-- Data Type: *unbound-server* [[#index-unbound_002dserver][¶]] :: Available =unbound-server= fields are:
+- Data Type: unbound-server  :: Available =unbound-server= fields are:
 
   - =interface= (type: maybe-list-of-strings) :: Interfaces listened on for queries from clients.
 
@@ -509,7 +491,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
 
-- Data Type: *unbound-remote* [[#index-unbound_002dremote][¶]] :: Available =unbound-remote= fields are:
+- Data Type: unbound-remote  :: Available =unbound-remote= fields are:
 
   - =control-enable= (type: maybe-boolean) :: Enable remote control.
 
@@ -517,7 +499,7 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
 
-- Data Type: *unbound-zone* [[#index-unbound_002dzone][¶]] :: Available =unbound-zone= fields are:
+- Data Type: unbound-zone  :: Available =unbound-zone= fields are:
 
   - =name= (type: string) :: Zone name.
 
@@ -527,51 +509,6 @@ An example configuration of an authoritative server for two zones, one master an
 
   - =extra-options= (default: =()=) (type: alist) :: An association list of options to append.
 
-**** ddclient Service [[#ddclient-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: ddclient-Service
-:CLASS: subsubheading
-:END:
-- Variable: *ddclient-service-type* [[#index-ddclient_002dservice_002dtype][¶]] :: This is the type of the service that runs [[https://github.com/ddclient/ddclient][ddclient]], a daemon that keeps the entries of a /dynamic DNS/ account up to date with the machine's current IP address. Its value must be a =ddclient-configuration= object, as in this example:
-
-  #+begin_src lisp
-  (service ddclient-service-type
-           (ddclient-configuration
-            (interval 600)))
-  #+end_src
-
-  The daemon runs as the unprivileged =ddclient= user and logs to =/var/log/ddclient.log=.
-
-You must provide a ddclient configuration file, the default configuration expects this to be at =/etc/ddclient/ddclient.conf=. A minimal configuration file looks like this; see =ddclient --help= for the list of supported protocols:
-
-#+begin_example
-# General config
-daemon=300
-
-# Router
-usev4=webv4,webv4=ipify-ipv4
-
-# Protocol
-protocol=dyndns2
-login=myUsername
-password=myPassword
-myhost.dyndns.org
-#+end_example
-
-Note that the =daemon=, =foreground=, =file=, =cache=, and =pid= directives of that file are overridden by the command line the service builds; use the fields below instead.
-
-- Data Type: *ddclient-configuration* [[#index-ddclient_002dconfiguration][¶]] :: Available =ddclient-configuration= fields are:
-
-  - =package= (default: =ddclient=) (type: file-like) :: The ddclient package to use.
-
-  - =config-file= (default: ="/etc/ddclient/ddclient.conf"=) (type: string-or-file-like) :: Configuration file for =ddclient=. Because it holds the credentials of your dynamic DNS (Domain Name System) provider, it is /not/ generated by Guix: it must be created by hand, should be outside the store, and be readable by the =ddclient= user.
-
-  - =interval= (default: =300=) (type: integer) :: Number of seconds to wait between two update checks.
-
-  - =cache-file= (default: ="/var/cache/ddclient/ddclient.cache"=) (type: string) :: File where =ddclient= records the addresses it last sent. Its parent directory is created at activation time.
-
-  - =extra-options= (default: =()=) (type: list-of-strings) :: Extra command-line options passed to =ddclient=.
-
 --------------
 
-Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--VNC-Services][VNC Services]], Previous: [[id:guix--Certificate-Services][Certificate Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

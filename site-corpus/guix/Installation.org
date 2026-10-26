@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Installation>>
-Next: [[id:guix--System-Installation][System Installation]], Previous: [[id:guix--Introduction][Introduction]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--System-Installation][System Installation]], Previous: [[id:guix--Introduction][Introduction]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 2 Installation [[#Installation-1][¶]]
+<<Installation-1>>
+** 2 Installation
 :PROPERTIES:
-:CUSTOM_ID: Installation-1
+:CUSTOM_ID: installation
 :CLASS: chapter
 :END:
+<<index-installing-Guix>> <<index-foreign-distro>> <<index-Guix-System-2>>
 You can install the package management tool Guix on top of an existing GNU/Linux or GNU/Hurd system[[#FOOT4][^{4}]], referred to as a /foreign distro/. If, instead, you want to install the complete, standalone GNU system distribution, /Guix System/, see [[id:guix--System-Installation][System Installation]]. This section is concerned only with the installation of Guix on a foreign distro.
 
 #+begin_quote
@@ -52,6 +55,7 @@ You can install the package management tool Guix on top of an existing GNU/Linux
 
 #+end_quote
 
+<<index-directories-related-to-foreign-distro>>
 When installed on a foreign distro, GNU Guix complements the available tools without interference. Its data lives exclusively in two directories, usually =/gnu/store= and =/var/guix=; other files on your system, such as =/etc=, are left untouched.
 
 Once installed, Guix can be updated by running =guix pull= (see [[id:guix--Invoking-guix-pull][Invoking =guix pull=]]).
@@ -72,10 +76,5 @@ Once installed, Guix can be updated by running =guix pull= (see [[id:guix--Invok
 ***** [[#DOCF4][(4)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 Hurd support is currently limited.
-
---------------
-
-Next: [[id:guix--System-Installation][System Installation]], Previous: [[id:guix--Introduction][Introduction]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

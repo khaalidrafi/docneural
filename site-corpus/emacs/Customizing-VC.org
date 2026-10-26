@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: Customizing VC
 
-Next:
+Next:   Previous: [[id:emacs--Miscellaneous-VC][Miscellaneous Commands and Features of VC]]   Up: [[id:emacs--Version-Control][Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Customizing-VC][Customizing VC]].
+<<Customizing-VC>>
+
+--------------
+
+**** 30.1.13 Customizing VC [[#Customizing-VC-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-VC-1
+:CLASS: subsection
+:END:
+The variable =vc-handled-backends= determines which version control systems VC should handle. The default value is =(RCS CVS SVN SCCS SRC Bzr Git Hg)=, so it contains all the version systems that are currently supported. If you want VC to ignore one or more of these systems, exclude its name from the list. To disable VC entirely, set this variable to =nil=.
+
+The order of systems in the list is significant: when you visit a file registered in more than one system, VC uses the system that comes first in =vc-handled-backends= by default. The order is also significant when you register a file for the first time (see [[id:emacs--Registering][Registering a File for Version Control]]).
+
+- [[id:emacs--General-VC-Options][General Options]]
+- [[id:emacs--RCS-and-SCCS][Options for RCS and SCCS]]
+- [[id:emacs--CVS-Options][Options specific for CVS]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Writing-Channel-News>>
-Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.13 Writing Channel News [[#Writing-Channel-News-1][¶]]
+<<Writing-Channel-News-1>>
+*** 6.12 Writing Channel News
 :PROPERTIES:
-:CUSTOM_ID: Writing-Channel-News-1
+:CUSTOM_ID: writing-channel-news
 :CLASS: section
 :END:
+<<index-news_002c-for-channels>>
 Channel authors may occasionally want to communicate to their users information about important changes in the channel. You'd send them all an email, but that's not convenient.
 
 Instead, channels can provide a /news file/; when the channel users run =guix pull=, that news file is automatically read and =guix pull --news= can display the announcements that correspond to the new commits that have been pulled, if any.
@@ -89,4 +92,4 @@ To sum up, yes, you could use your channel as a blog. But beware, this is /not q
 
 --------------
 
-Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Primary-URL][Primary URL]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

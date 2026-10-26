@@ -7,6 +7,9 @@
 Next: [[id:emacs--Indirect-Buffers][Indirect Buffers]]   Previous: [[id:emacs--Kill-Buffer][Killing Buffers]]   Up: [[id:emacs--Buffers][Using Multiple Buffers]]
 
 <<Several-Buffers>>
+
+--------------
+
 *** 21.5 Operating on Several Buffers [[#Operating-on-Several-Buffers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Operating-on-Several-Buffers
@@ -42,11 +45,11 @@ The commands for removing flags, d and C-d, accept a numeric argument as a repea
 
 The following commands operate immediately on the buffer listed on the current line. They also accept a numeric argument as a repeat count.
 
--  <<index-Buffer_002dmenu_002dnot_002dmodified>>~ [[#index-Buffer_002dmenu_002dnot_002dmodified][¶]] :: Mark the buffer as unmodified (=Buffer-menu-not-modified=). See [[id:emacs--Saving::#Save-Commands][Commands for Saving Files]].
+-  <<index-Buffer_002dmenu_002dnot_002dmodified>>~ [[#index-Buffer_002dmenu_002dnot_002dmodified][¶]] :: Mark the buffer as unmodified (=Buffer-menu-not-modified=). See [[id:emacs--Save-Commands][Commands for Saving Files]].
 
 -  <<index-Buffer_002dmenu_002dtoggle_002dread_002donly>>% [[#index-Buffer_002dmenu_002dtoggle_002dread_002donly][¶]] :: Toggle the buffer's read-only status (=Buffer-menu-toggle-read-only=). See [[id:emacs--Misc-Buffer][Miscellaneous Buffer Operations]].
 
--  <<index-Buffer_002dmenu_002dvisit_002dtags_002dtable>>t [[#index-Buffer_002dmenu_002dvisit_002dtags_002dtable][¶]] :: Visit the buffer as a tags table (=Buffer-menu-visit-tags-table=). See [[id:emacs--Xref::#Select-Tags-Table][Selecting a Tags Table]].
+-  <<index-Buffer_002dmenu_002dvisit_002dtags_002dtable>>t [[#index-Buffer_002dmenu_002dvisit_002dtags_002dtable][¶]] :: Visit the buffer as a tags table (=Buffer-menu-visit-tags-table=). See [[id:emacs--Select-Tags-Table][Selecting a Tags Table]].
 
 The following commands are used to select another buffer or buffers:
 
@@ -81,6 +84,6 @@ The following commands affect the entire buffer list:
 
 -  <<index-Buffer_002dmenu_002dtoggle_002dinternal>>I [[#index-Buffer_002dmenu_002dtoggle_002dinternal][¶]] :: Toggle display of internal buffers, those whose names begin with a space.
 
-Normally, the buffer =*Buffer List*= is not updated automatically when buffers are created and killed; its contents are just text. If you have created, deleted or renamed buffers, the way to update =*Buffer List*= to show what you have done is to type g (=revert-buffer=). You can make this happen regularly every =auto-revert-interval= seconds if you enable Auto Revert mode in this buffer, as long as it is not marked modified. Global Auto Revert mode applies to the =*Buffer List*= buffer only if =global-auto-revert-non-file-buffers= is non-=nil=. See [[id:emacs--Auto-Revert::#Auto-Reverting-the-Buffer-Menu][global-auto-revert-non-file-buffers]], for details.
+Normally, the buffer =*Buffer List*= is not updated automatically when buffers are created and killed; its contents are just text. If you have created, deleted or renamed buffers, the way to update =*Buffer List*= to show what you have done is to type g (=revert-buffer=). You can make this happen regularly every =auto-revert-interval= seconds if you enable Auto Revert mode in this buffer, as long as it is not marked modified. Global Auto Revert mode applies to the =*Buffer List*= buffer only if =global-auto-revert-non-file-buffers= is non-=nil=. See [[id:emacs--Auto-Reverting-the-Buffer-Menu][global-auto-revert-non-file-buffers]], for details.
 
 --------------

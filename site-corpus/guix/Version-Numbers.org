@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Version-Numbers>>
-Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.4 Version Numbers [[#Version-Numbers-1][¶]]
+<<Version-Numbers-1>>
+**** 22.8.3 Version Numbers
 :PROPERTIES:
-:CUSTOM_ID: Version-Numbers-1
+:CUSTOM_ID: version-numbers
 :CLASS: subsection
 :END:
+<<index-package-version>>
 We usually package only the latest version of a given free software project. But sometimes, for instance for incompatible library versions, two (or more) versions of the same package are needed. These require different Scheme variable names. We use the name as defined in [[id:guix--Package-Naming][Package Naming]] for the most recent version; previous versions use the same name, suffixed by =-= and the smallest prefix of the version number that may distinguish the two versions.
 
 The name inside the package definition is the same for all versions of a package and does not contain any version number.
@@ -74,6 +77,7 @@ If we also wanted GTK+ 3.8.2, this would be packaged as
     ...))
 #+end_src
 
+<<index-version-number_002c-for-VCS-snapshots>>
 Occasionally, we package snapshots of upstream's version control system (VCS) instead of formal releases. This should remain exceptional, because it is up to upstream developers to clarify what the stable release is. Yet, it is sometimes necessary. So, what should we put in the =version= field?
 
 Clearly, we need to make the commit identifier of the VCS snapshot visible in the version string, but we also need to make sure that the version string is monotonically increasing so that =guix package --upgrade= can determine which version is newer. Since commit identifiers, notably with Git, are not monotonically increasing, we add a revision number that we increase each time we upgrade to a newer snapshot. The resulting version string looks like this:
@@ -101,21 +105,21 @@ It is a good idea to strip commit identifiers in the =version= field to, say, 7 
                 (uri (git-reference
                       (url "git://example.org/my-package.git")
                       (commit commit)))
-                (sha256 (base32 "1mbikn..."))
+                (sha256 (base32 "1mbikn…"))
                 (file-name (git-file-name name version))))
-      ;; ...
+      ;; …
       )))
 #+end_src
 
-- Procedure: *git-version* =VERSION== ==REVISION== ==COMMIT= [[#index-git_002dversion][¶]] :: Return the version string for packages using =git-fetch=.
+- Procedure: git-version =VERSION= =REVISION= =COMMIT= :: Return the version string for packages using =git-fetch=.
 
   #+begin_src lisp
   (git-version "0.2.3" "0" "93818c936ee7e2f1ba1b315578bde363a7d43d05")
   ⇒ "0.2.3-0.93818c9"
   #+end_src
 
-- Procedure: *hg-version* =VERSION== ==REVISION== ==CHANGESET= [[#index-hg_002dversion][¶]] :: Return the version string for packages using =hg-fetch=. It works in the same way as =git-version=.
+- Procedure: hg-version =VERSION= =REVISION= =CHANGESET= :: Return the version string for packages using =hg-fetch=. It works in the same way as =git-version=.
 
 --------------
 
-Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Previous: [[id:guix--Package-Naming][Package Naming]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

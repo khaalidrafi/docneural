@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Daemon-Offload-Setup>>
-Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 2.2.2 Using the Offload Facility [[#Using-the-Offload-Facility][¶]]
+<<Using-the-Offload-Facility>>
+**** 2.2.2 Using the Offload Facility
 :PROPERTIES:
-:CUSTOM_ID: Using-the-Offload-Facility
+:CUSTOM_ID: using-the-offload-facility
 :CLASS: subsection
 :END:
+<<index-offloading>> <<index-build-hook>>
 When desired, the build daemon can /offload/ derivation builds to other machines running Guix, using the =offload= /build hook/[[#FOOT7][^{7}]]. When that feature is enabled, a list of user-specified build machines is read from =/etc/guix/machines.scm=; every time a build is requested, for instance via =guix build=, the daemon attempts to offload it to one of the machines that satisfy the constraints of the derivation, in particular its system types---e.g., =x86_64-linux=. A single machine can have multiple system types, either because its architecture natively supports it, via emulation (see [[id:guix--Virtualization-Services::#transparent_002demulation_002dqemu][Transparent Emulation with QEMU]]), or both. Missing prerequisites for the build are copied over SSH to the target machine, which then proceeds with the build; upon success the output(s) of the build are copied back to the initial machine. The offload facility comes with a basic scheduler that attempts to select the best machine. The best machine is chosen among the available machines based on criteria such as:
 
 1. The availability of a build slot. A build machine can have as many build slots (connections) as the value of the =parallel-builds= field of its =build-machine= object.
@@ -58,14 +61,14 @@ The =/etc/guix/machines.scm= file typically looks like this:
 (list (build-machine
         (name "eightysix.example.org")
         (systems (list "x86_64-linux" "i686-linux"))
-        (host-key "ssh-ed25519 AAAAC3Nza...")
+        (host-key "ssh-ed25519 AAAAC3Nza…")
         (user "bob")
         (speed 2.))     ;incredibly fast!
 
       (build-machine
         (name "armeight.example.org")
         (systems (list "aarch64-linux"))
-        (host-key "ssh-rsa AAAAB3Nza...")
+        (host-key "ssh-rsa AAAAB3Nza…")
         (user "alice")
 
         ;; Remember 'guix offload' is spawned by
@@ -75,9 +78,9 @@ The =/etc/guix/machines.scm= file typically looks like this:
 
 In the example above we specify a list of two build machines, one for the =x86_64= and =i686= architectures and one for the =aarch64= architecture.
 
-In fact, this file is---not surprisingly!---a Scheme file that is evaluated when the =offload= hook is started. Its return value must be a list of =build-machine= objects. While this example shows a fixed list of build machines, one could imagine, say, using DNS-SD to return a list of potential build machines discovered in the local network (see [[https://doc.guix.gnu.org/guile-avahi/latest/en/html_node/Introduction.html#Introduction][Guile-Avahi]] in Using Avahi in Guile Scheme Programs). The =build-machine= data type is detailed below.
+In fact, this file is---not surprisingly!---a Scheme file that is evaluated when the =offload= hook is started. Its return value must be a list of =build-machine= objects. While this example shows a fixed list of build machines, one could imagine, say, using DNS-SD to return a list of potential build machines discovered in the local network (see [[http://nongnu.org/guile-avahi/doc/guile-avahi.html#Introduction][Guile-Avahi]] in Using Avahi in Guile Scheme Programs). The =build-machine= data type is detailed below.
 
-- Data Type: *build-machine* [[#index-build_002dmachine][¶]] :: This data type represents build machines to which the daemon may offload builds. The important fields are:
+- Data Type: build-machine  :: This data type represents build machines to which the daemon may offload builds. The important fields are:
 
   - =name= :: The host name of the remote machine.
 
@@ -88,8 +91,8 @@ In fact, this file is---not surprisingly!---a Scheme file that is evaluated when
   - =host-key= :: This must be the machine's SSH /public host key/ in OpenSSH format. This is used to authenticate the machine when we connect to it. It is a long string that looks like this:
 
     #+begin_example
-    ssh-ed25519 AAAAC3NzaC...mde+UhL hint@example.org
-#+end_example
+    ssh-ed25519 AAAAC3NzaC…mde+UhL hint@example.org
+    #+end_example
 
     If the machine is running the OpenSSH daemon, =sshd=, the host key can be found in a file such as =/etc/ssh/ssh_host_ed25519_key.pub=.
 
@@ -148,6 +151,7 @@ Likewise, the master machine must authorize the key of each build machine.
 
 All the fuss with keys is here to express pairwise mutual trust relations between the master and the build machines. Concretely, when the master receives files from a build machine (and /vice versa/), its build daemon can make sure they are genuine, have not been tampered with, and that they are signed by an authorized key.
 
+<<index-offload-test>>
 To test whether your setup is operational, run this command on the master node:
 
 #+begin_example
@@ -168,6 +172,7 @@ Last, you can test the subset of the machines whose name matches a regular expre
 # guix offload test machines.scm '\.gnu\.org$'
 #+end_example
 
+<<index-offload-status>>
 To display the current load of all build hosts, run this command on the main node:
 
 #+begin_example
@@ -184,10 +189,9 @@ To display the current load of all build hosts, run this command on the main nod
 ***** [[#DOCF7][(7)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 This feature is available only when [[https://github.com/artyom-poptsov/guile-ssh][Guile-SSH]] is present.
 
 --------------
 
-Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--SELinux-Support][SELinux Support]], Previous: [[id:guix--Build-Environment-Setup][Build Environment Setup]], Up: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

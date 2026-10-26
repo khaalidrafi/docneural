@@ -7,6 +7,9 @@
 Next: [[id:emacs--User-Input][Kinds of User Input]]   Previous: [[id:emacs--Intro][Introduction]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Screen>>
+
+--------------
+
 ** 1 The Organization of the Screen [[#The-Organization-of-the-Screen][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Organization-of-the-Screen
@@ -23,5 +26,10 @@ An Emacs window is where the /buffer/---the text or other graphics you are editi
 When you start Emacs, there is normally only one window in the frame. However, you can subdivide this window horizontally or vertically to create multiple windows, each of which can independently display a buffer (see [[id:emacs--Windows][Multiple Windows]]).
 
 At any time, one window is the /selected window/. On a graphical display, the selected window shows a more prominent cursor (usually solid and blinking); other windows show a less prominent cursor (usually a hollow box). On a text terminal, there is only one cursor, which is shown in the selected window. The buffer displayed in the selected window is called the /current buffer/, and it is where editing happens. Most Emacs commands implicitly apply to the current buffer; the text displayed in unselected windows is mostly visible for reference. If you use multiple frames on a graphical display, selecting a particular frame selects a window in that frame.
+
+- [[id:emacs--Point][Point]]
+- [[id:emacs--Echo-Area][The Echo Area]]
+- [[id:emacs--Mode-Line][The Mode Line]]
+- [[id:emacs--Menu-Bar][The Menu Bar]]
 
 --------------

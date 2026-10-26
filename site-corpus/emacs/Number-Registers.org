@@ -7,6 +7,9 @@
 Next: [[id:emacs--File-and-Buffer-Registers][Keeping File and Buffer Names in Registers]]   Previous: [[id:emacs--Configuration-Registers][Saving Window and Frame Configurations in Registers]]   Up: [[id:emacs--Registers][Registers]]
 
 <<Number-Registers>>
+
+--------------
+
 *** 15.5 Keeping Numbers in Registers [[#Keeping-Numbers-in-Registers][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Keeping-Numbers-in-Registers
@@ -21,5 +24,3 @@ There are commands to store a number in a register, to insert the number in the 
 - C-x r i =r= :: Insert the number from register =r= into the buffer.
 
 C-x r i is the same command used to insert any other sort of register contents into the buffer. C-x r + with no numeric argument increments the register value by 1; C-x r n with no numeric argument stores zero in the register.
-
---------------

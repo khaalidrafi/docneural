@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Btrfs-file-system>>
-Up: [[id:guix--File-Systems][File Systems]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Up: [[id:guix--File-Systems][File Systems]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.4.1 Btrfs file system [[#Btrfs-file-system-1][¶]]
+<<Btrfs-file-system-1>>
+**** 11.4.1 Btrfs file system
 :PROPERTIES:
-:CUSTOM_ID: Btrfs-file-system-1
+:CUSTOM_ID: btrfs-file-system
 :CLASS: subsection
 :END:
 The Btrfs has special features, such as subvolumes, that merit being explained in more details. The following section attempts to cover basic as well as complex uses of a Btrfs file system with the Guix System.
@@ -116,4 +118,4 @@ compress-force=zstd,space_cache=v2"))
 
 --------------
 
-Up: [[id:guix--File-Systems][File Systems]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Up: [[id:guix--File-Systems][File Systems]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

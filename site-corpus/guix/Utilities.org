@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Utilities>>
-Next: [[id:guix--Foreign-Architectures][Foreign Architectures]], Previous: [[id:guix--Programming-Interface][Programming Interface]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Foreign-Architectures][Foreign Architectures]], Previous: [[id:guix--Programming-Interface][Programming Interface]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 9 Utilities [[#Utilities-1][¶]]
+<<Utilities-1>>
+** 9 Utilities
 :PROPERTIES:
-:CUSTOM_ID: Utilities-1
+:CUSTOM_ID: utilities
 :CLASS: chapter
 :END:
 This section describes Guix command-line utilities. Some of them are primarily targeted at developers and users who write new package definitions, while others are more generally useful. They complement the Scheme programming interface of Guix in a convenient way.
@@ -63,4 +65,3 @@ This section describes Guix command-line utilities. Some of them are primarily t
 - [[id:guix--Invoking-guix-container][Invoking =guix container=]]
 - [[id:guix--Invoking-guix-weather][Invoking =guix weather=]]
 - [[id:guix--Invoking-guix-processes][Invoking =guix processes=]]
-- [[id:guix--Extending-Guix][Extending Guix]]

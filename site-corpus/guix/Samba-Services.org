@@ -36,25 +36,29 @@ Next:
 [[../..][]]
 
 <<Samba-Services>>
-Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.29 Samba Services [[#Samba-Services-1][¶]]
+<<Samba-Services-1>>
+**** 11.10.27 Samba Services
 :PROPERTIES:
-:CUSTOM_ID: Samba-Services-1
+:CUSTOM_ID: samba-services
 :CLASS: subsection
 :END:
+<<index-Samba>> <<index-SMB>>
 The =(gnu services samba)= module provides service definitions for Samba as well as additional helper services. Currently it provides the following services.
 
-**** Samba [[#Samba][¶]]
+<<Samba>>
+**** Samba
 :PROPERTIES:
-:CUSTOM_ID: Samba
+:CUSTOM_ID: samba
 :CLASS: subsubheading
 :END:
 [[https://www.samba.org][Samba]] provides network shares for folders and printers using the SMB/CIFS protocol commonly used on Windows. It can also act as an Active Directory Domain Controller (AD DC) for other hosts in an heterougenious network with different types of Computer systems.
 
-- Variable: *samba-service-type* [[#index-samba_002dservice_002dtype][¶]] :: The service type to enable the samba services =samba=, =nmbd=, =smbd= and =winbindd=. By default this service type does not run any of the Samba daemons; they must be enabled individually.
+- Variable: samba-service-type  :: The service type to enable the samba services =samba=, =nmbd=, =smbd= and =winbindd=. By default this service type does not run any of the Samba daemons; they must be enabled individually.
 
   Below is a basic example that configures a simple, anonymous (unauthenticated) Samba file share exposing the =/public= directory.
 
@@ -84,7 +88,7 @@ The =(gnu services samba)= module provides service definitions for Samba as well
   guest only = yes\n"))))
   #+end_src
 
-- Data Type: *samba-service-configuration* [[#index-samba_002dservice_002dconfiguration][¶]] :: Configuration record for the Samba suite.
+- Data Type: samba-service-configuration  :: Configuration record for the Samba suite.
 
   - =package= (default: =samba=) :: The samba package to use.
 
@@ -98,16 +102,17 @@ The =(gnu services samba)= module provides service definitions for Samba as well
 
   - =enable-winbindd?= (default: =#f=) :: Enable the =winbindd= daemon.
 
-**** Web Service Discovery Daemon [[#Web-Service-Discovery-Daemon][¶]]
+<<index-wsdd_002c-Web-service-discovery-daemon>> <<Web-Service-Discovery-Daemon>>
+**** Web Service Discovery Daemon
 :PROPERTIES:
-:CUSTOM_ID: Web-Service-Discovery-Daemon
+:CUSTOM_ID: web-service-discovery-daemon
 :CLASS: subsubheading
 :END:
 The WSDD (Web Service Discovery daemon) implements the [[http://docs.oasis-open.org/ws-dd/discovery/1.1/os/wsdd-discovery-1.1-spec-os.html][Web Services Dynamic Discovery]] protocol that enables host discovery over Multicast DNS, similar to what Avahi does. It is a drop-in replacement for SMB hosts that have had SMBv1 disabled for security reasons.
 
-- Variable: *wsdd-service-type* [[#index-wsdd_002dservice_002dtype][¶]] :: Service type for the WSD host daemon. The value for this service type is a =wsdd-configuration= record. The details for the =wsdd-configuration= record type are given below.
+- Variable: wsdd-service-type  :: Service type for the WSD host daemon. The value for this service type is a =wsdd-configuration= record. The details for the =wsdd-configuration= record type are given below.
 
-- Data Type: *wsdd-configuration* [[#index-wsdd_002dconfiguration][¶]] :: This data type represents the configuration for the wsdd service.
+- Data Type: wsdd-configuration  :: This data type represents the configuration for the wsdd service.
 
   - =package= (default: =wsdd=) :: The wsdd package to use.
 
@@ -133,4 +138,4 @@ The WSDD (Web Service Discovery daemon) implements the [[http://docs.oasis-open.
 
 --------------
 
-Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Continuous-Integration][Continuous Integration]], Previous: [[id:guix--Network-File-System][Network File System]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

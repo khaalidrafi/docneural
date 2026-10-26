@@ -7,6 +7,9 @@
 Next: [[id:emacs--DocView-Searching][DocView Searching]]   Up: [[id:emacs--Document-View][Document Viewing]]
 
 <<DocView-Navigation>>
+
+--------------
+
 *** 39.1 DocView Navigation [[#DocView-Navigation-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: DocView-Navigation-1
@@ -24,6 +27,6 @@ To go to the first page, type M-< (=doc-view-first-page=); to go to the last one
 
 You can enlarge or shrink the document with + (=doc-view-enlarge=) and - (=doc-view-shrink=). By default, these commands just rescale the already-rendered image. If you instead want the image to be re-rendered at the new size, set =doc-view-scale-internally= to =nil=. To specify the default size for DocView, customize the variable =doc-view-resolution=.
 
-When the =mutool= program is available, DocView will use it to generate entries for an outline menu, making it accessible via the =imenu= facility (see [[id:emacs--Defuns::#Imenu][Imenu]]). To disable this functionality even when =mutool= can be found on your system, customize the variable =doc-view-imenu-enabled= to the =nil= value. You can further customize how =imenu= items are formatted and displayed using the variables =doc-view-imenu-format= and =doc-view-imenu-flatten=.
+When the =mutool= program is available, DocView will use it to generate entries for an outline menu, making it accessible via the =imenu= facility (see [[id:emacs--Imenu][Imenu]]). To disable this functionality even when =mutool= can be found on your system, customize the variable =doc-view-imenu-enabled= to the =nil= value. You can further customize how =imenu= items are formatted and displayed using the variables =doc-view-imenu-format= and =doc-view-imenu-flatten=.
 
 --------------

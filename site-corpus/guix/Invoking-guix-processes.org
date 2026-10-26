@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-processes>>
-Next: [[id:guix--Extending-Guix][Extending Guix]], Previous: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.16 Invoking =guix processes= [[#Invoking-guix-processes-1][¶]]
+<<Invoking-guix-processes-1>>
+*** 9.16 Invoking =guix processes=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-processes-1
+:CUSTOM_ID: invoking-guix-processes
 :CLASS: section
 :END:
+<<index-guix-processes>>
 The =guix processes= command can be useful to developers and system administrators, especially on multi-user machines and on build farms: it lists the current sessions (connections to the daemon), as well as information about the processes involved[[#FOOT26][^{26}]]. Here's an example of the information it returns:
 
 #+begin_example
@@ -55,14 +58,14 @@ ClientCommand: guix shell python
 
 SessionPID: 19402
 ClientPID: 19367
-ClientCommand: guix publish -u guix-publish -p 3000 -C 9 ...
+ClientCommand: guix publish -u guix-publish -p 3000 -C 9 …
 
 SessionPID: 19444
 ClientPID: 19419
-ClientCommand: cuirass --cache-directory /var/cache/cuirass ...
-LockHeld: /gnu/store/...-perl-ipc-cmd-0.96.lock
-LockHeld: /gnu/store/...-python-six-bootstrap-1.11.0.lock
-LockHeld: /gnu/store/...-libjpeg-turbo-2.0.0.lock
+ClientCommand: cuirass --cache-directory /var/cache/cuirass …
+LockHeld: /gnu/store/…-perl-ipc-cmd-0.96.lock
+LockHeld: /gnu/store/…-python-six-bootstrap-1.11.0.lock
+LockHeld: /gnu/store/…-libjpeg-turbo-2.0.0.lock
 ChildPID: 20495
 ChildCommand: guix offload x86_64-linux 7200 1 28800
 ChildPID: 27733
@@ -75,13 +78,13 @@ In this example we see that =guix-daemon= has three clients: =guix shell=, =guix
 
 The =LockHeld= fields show which store items are currently locked by this session, which corresponds to store items being built or substituted (the =LockHeld= field is not displayed when =guix processes= is not running as root). Last, by looking at the =ChildPID= and =ChildCommand= fields, we understand that these three builds are being offloaded (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]).
 
-The output is in Recutils format so we can use the handy =recsel= command to select sessions of interest (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual). As an example, the command shows the command line and PID of the client that triggered the build of a Perl package:
+The output is in Recutils format so we can use the handy =recsel= command to select sessions of interest (see [[https://www.gnu.org/software/recutils/manual/html_node/Selection-Expressions.html#Selection-Expressions][Selection Expressions]] in GNU recutils manual). As an example, the command shows the command line and PID of the client that triggered the build of a Perl package:
 
 #+begin_example
 $ sudo guix processes | \
     recsel -p ClientPID,ClientCommand -e 'LockHeld ~ "perl"'
 ClientPID: 19419
-ClientCommand: cuirass --cache-directory /var/cache/cuirass ...
+ClientCommand: cuirass --cache-directory /var/cache/cuirass …
 #+end_example
 
 Additional options are listed below.
@@ -91,7 +94,7 @@ Additional options are listed below.
 
   - =recutils= :: The default option. It outputs a set of Session recutils records that include each =ChildProcess= as a field.
 
-  - =normalized= :: Normalize the output records into record sets (see [[https://doc.guix.gnu.org/recutils/latest/en/html_node/Record-Sets.html#Record-Sets][Record Sets]] in GNU recutils manual). Normalizing into record sets allows joins across record types. The example below lists the PID of each =ChildProcess= and the associated PID for =Session= that spawned the =ChildProcess= where the =Session= was started using =guix build=.
+  - =normalized= :: Normalize the output records into record sets (see [[https://www.gnu.org/software/recutils/manual/html_node/Record-Sets.html#Record-Sets][Record Sets]] in GNU recutils manual). Normalizing into record sets allows joins across record types. The example below lists the PID of each =ChildProcess= and the associated PID for =Session= that spawned the =ChildProcess= where the =Session= was started using =guix build=.
 
     #+begin_example
     $ guix processes --format=normalized | \
@@ -108,7 +111,7 @@ Additional options are listed below.
 
     PID: 4646
     Session_PID: 4278
-#+end_example
+    #+end_example
 
 --------------
 
@@ -120,10 +123,9 @@ Additional options are listed below.
 ***** [[#DOCF26][(26)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 Remote sessions, when =guix-daemon= is started with =--listen= specifying a TCP endpoint, are /not/ listed.
 
 --------------
 
-Next: [[id:guix--Extending-Guix][Extending Guix]], Previous: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--Invoking-guix-weather][Invoking =guix weather=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Echo-Area][The Echo Area]]   Up: [[id:emacs--Screen][The Organization of the Screen]]
 
 <<Point>>
+
+--------------
+
 *** 1.1 Point [[#Point-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Point-1
@@ -33,5 +36,3 @@ See [[id:emacs--Cursor-Display][Displaying the Cursor]], for options that contro
 :CLASS: footnote-body-heading
 :END:
 The term “point” comes from the character ‘=.=', which was the command in TECO (the language in which the original Emacs was written) for accessing the editing position.
-
---------------

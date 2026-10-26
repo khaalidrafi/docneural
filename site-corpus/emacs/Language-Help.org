@@ -7,6 +7,9 @@
 Next: [[id:emacs--Misc-Help][Other Help Commands]]   Previous: [[id:emacs--Package-Keywords][Keyword Search for Packages]]   Up: [[id:emacs--Help][Help]]
 
 <<Language-Help>>
+
+--------------
+
 *** 12.7 Help for International Language Support [[#Help-for-International-Language-Support][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Help-for-International-Language-Support
@@ -19,5 +22,3 @@ The command C-h h (=view-hello-file=) displays the file =etc/HELLO=, which demon
 The command C-h I (=describe-input-method=) describes an input method---either a specified input method, or by default the input method currently in use. See [[id:emacs--Input-Methods][Input Methods]].
 
 The command C-h C (=describe-coding-system=) describes coding systems---either a specified coding system, or the ones currently in use. See [[id:emacs--Coding-Systems][Coding Systems]].
-
---------------

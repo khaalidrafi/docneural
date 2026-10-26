@@ -36,25 +36,29 @@ Next:
 [[../..][]]
 
 <<Using-the-Configuration-System>>
-Next: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Previous: [[id:guix--Getting-Started-with-the-System][Getting Started]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Previous: [[id:guix--Getting-Started-with-the-System][Getting Started]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.2 Using the Configuration System [[#Using-the-Configuration-System-1][¶]]
+<<Using-the-Configuration-System-1>>
+*** 11.2 Using the Configuration System
 :PROPERTIES:
-:CUSTOM_ID: Using-the-Configuration-System-1
+:CUSTOM_ID: using-the-configuration-system
 :CLASS: section
 :END:
 The previous section showed the overall workflow you would follow when administering a Guix System machine (see [[id:guix--Getting-Started-with-the-System][Getting Started]]). Let's now see in more detail what goes into the system configuration file.
 
 The operating system is configured by providing an =operating-system= declaration in a file that can then be passed to the =guix system= command (see [[id:guix--Invoking-guix-system][Invoking =guix system=]]), as we've seen before. A simple setup, with the default Linux-Libre kernel, initial RAM disk, and a couple of system services added to those provided by default looks like this:
 
+<<index-operating_002dsystem>>
+
 #+begin_src lisp
 ;; -*- mode: scheme; -*-
 ;; This is an operating system configuration template
 ;; for a "bare bones" setup, with no X11 display server.
 
-(use-modules (gnu) (guix transformations))
+(use-modules (gnu))
 (use-service-modules networking ssh)
 (use-package-modules screen ssh)
 
@@ -97,11 +101,6 @@ The operating system is configured by providing an =operating-system= declaratio
   ;; Globally-installed packages.
   (packages (cons screen %base-packages))
 
-  ;; Optionally, transform every package referred to by this operating system
-  ;; by its Skylake-optimized variant, where applicable.
-  (transformation (options->transformation '((tune . "skylake"))
-                                           #:warn? #f))
-
   ;; Add services to the baseline: a DHCP client and an SSH
   ;; server.  You may wish to add an NTP service here.
   (services (append (list (service dhcpcd-service-type)
@@ -123,8 +122,6 @@ Below we discuss the meaning of some of the most important fields.
 guix style -f config.scm
 #+end_example
 
-See [[id:guix--The-Perfect-Setup][The Perfect Setup]], on how to set up your editor for Scheme hacking.
-
 The Cookbook has a short section to get started with the Scheme programming language that explains the fundamentals, which you will find helpful when hacking your configuration. See [[https://guix.gnu.org/cookbook/en/html_node/A-Scheme-Crash-Course.html#A-Scheme-Crash-Course][A Scheme Crash Course]] in GNU Guix Cookbook.
 
 #+end_quote
@@ -137,11 +134,12 @@ The Cookbook has a short section to get started with the Scheme programming lang
 - [[#The-Programming-Interface][The Programming Interface]]
 
 <<Bootloader>>
-**** Bootloader [[#Bootloader][¶]]
+**** Bootloader
 :PROPERTIES:
 :CUSTOM_ID: bootloader
 :CLASS: unnumberedsubsec
 :END:
+<<index-legacy-boot_002c-on-Intel-machines>> <<index-BIOS-boot_002c-on-Intel-machines>> <<index-UEFI-boot>> <<index-EFI-boot>>
 The =bootloader= field describes the method that will be used to boot your system. Machines based on Intel processors can boot in “legacy” BIOS mode, as in the example above. However, more recent machines rely instead on the /Unified Extensible Firmware Interface/ (UEFI) to boot. In that case, the =bootloader= field should contain something along these lines:
 
 #+begin_src lisp
@@ -153,11 +151,12 @@ The =bootloader= field describes the method that will be used to boot your syste
 See [[id:guix--Bootloader-Configuration][Bootloader Configuration]], for more information on the available configuration options.
 
 <<Globally_002dVisible-Packages>>
-**** Globally-Visible Packages [[#Globally_002dVisible-Packages][¶]]
+**** Globally-Visible Packages
 :PROPERTIES:
 :CUSTOM_ID: globally-visible-packages
 :CLASS: unnumberedsubsec
 :END:
+<<index-_0025base_002dpackages>>
 The =packages= field lists packages that will be globally visible on the system, for all user accounts---i.e., in every user's =PATH= environment variable---in addition to the per-user profiles (see [[id:guix--Invoking-guix-package][Invoking =guix package=]]). The =%base-packages= variable provides all the tools one would expect for basic user and administrator tasks---including the GNU Core Utilities, the GNU Networking Utilities, the =mg= lightweight text editor, =find=, =grep=, etc. The example above adds GNU Screen to those, taken from the =(gnu packages screen)= module (see [[id:guix--Package-Modules][Package Modules]]). The =(list package output)= syntax can be used to add a specific output of a package:
 
 #+begin_src lisp
@@ -170,6 +169,7 @@ The =packages= field lists packages that will be globally visible on the system,
                   %base-packages)))
 #+end_src
 
+<<index-specification_002d_003epackage>>
 Referring to packages by variable name, like =isc-bind= above, has the advantage of being unambiguous; it also allows typos and such to be diagnosed right away as “unbound variables”. The downside is that one needs to know which module defines which package, and to augment the =use-package-modules= line accordingly. To avoid that, one can use the =specification->package= procedure of the =(gnu packages)= module, which returns the best package for a given name or name and version:
 
 #+begin_src lisp
@@ -182,6 +182,7 @@ Referring to packages by variable name, like =isc-bind= above, has the advantage
                     %base-packages)))
 #+end_src
 
+<<index-specifications_002d_003epackages>>
 When a package has more than one output it can be a challenge to refer to a specific output instead of just to the standard =out= output. For these situations one can use the =specifications->packages= procedure from the =(gnu packages)= module. For example:
 
 #+begin_src lisp
@@ -195,15 +196,18 @@ When a package has more than one output it can be a challenge to refer to a spec
 #+end_src
 
 <<System-Services>>
-**** System Services [[#System-Services][¶]]
+**** System Services
 :PROPERTIES:
 :CUSTOM_ID: system-services
 :CLASS: unnumberedsubsec
 :END:
+<<index-services>> <<index-_0025base_002dservices>>
 The =services= field lists /system services/ to be made available when the system starts (see [[id:guix--Services][Services]]). The =operating-system= declaration above specifies that, in addition to the basic services, we want the OpenSSH secure shell daemon listening on port 2222 (see [[id:guix--Networking-Services][=openssh-service-type=]]). Under the hood, =openssh-service-type= arranges so that =sshd= is started with the right command-line options, possibly with supporting configuration files generated as needed (see [[id:guix--Defining-Services][Defining Services]]).
 
+<<index-customization_002c-of-services>> <<index-modify_002dservices>>
 Occasionally, instead of using the base services as is, you will want to customize them. To do this, use =modify-services= (see [[id:guix--Service-Reference][=modify-services=]]) to modify the list.
 
+<<auto_002dlogin-to-TTY>>
 For example, suppose you want to modify =guix-daemon= and Mingetty (the console log-in) in the =%base-services= list (see [[id:guix--Base-Services][=%base-services=]]). To do that, you can write the following in your operating system declaration:
 
 #+begin_src lisp
@@ -224,12 +228,13 @@ For example, suppose you want to modify =guix-daemon= and Mingetty (the console 
                             (auto-login "guest")))))
 
 (operating-system
-  ;; ...
+  ;; …
   (services %my-services))
 #+end_src
 
 This changes the configuration---i.e., the service parameters---of the =guix-service-type= instance, and that of all the =mingetty-service-type= instances in the =%base-services= list (see [[https://guix.gnu.org/cookbook/en/html_node/Auto_002dLogin-to-a-Specific-TTY.html#Auto_002dLogin-to-a-Specific-TTY][see the cookbook for how to auto-login one user to a specific TTY]] in GNU Guix Cookbook)). Observe how this is accomplished: first, we arrange for the original configuration to be bound to the identifier =config= in the =body=, and then we write the =body= so that it evaluates to the desired configuration. In particular, notice how we use =inherit= to create a new configuration which has the same values as the old configuration, but with a few modifications.
 
+<<index-encrypted-disk-1>>
 The configuration for a typical “desktop” usage, with an encrypted root partition, a swap file on the root partition, the X11 display server, GNOME and Xfce (users can choose which of these desktop environments to use at the log-in screen by pressing F1), network management, power management, and more, would look like this:
 
 #+begin_src lisp
@@ -401,7 +406,7 @@ This example refers to the =/boot/efi= file system by its UUID, =1234-ABCD=. Rep
 
 See [[id:guix--Desktop-Services][Desktop Services]], for the exact list of services provided by =%desktop-services=.
 
-Again, =%desktop-services= is just a list of service objects. If you want to remove services from there, you can do so using the procedures for list filtering (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/SRFI_002d1-Filtering-and-Partitioning.html#SRFI_002d1-Filtering-and-Partitioning][SRFI-1 Filtering and Partitioning]] in GNU Guile Reference Manual). For instance, the following expression returns a list that contains all the services in =%desktop-services= minus the Avahi service:
+Again, =%desktop-services= is just a list of service objects. If you want to remove services from there, you can do so using the procedures for list filtering (see [[https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Filtering-and-Partitioning.html#SRFI_002d1-Filtering-and-Partitioning][SRFI-1 Filtering and Partitioning]] in GNU Guile Reference Manual). For instance, the following expression returns a list that contains all the services in =%desktop-services= minus the Avahi service:
 
 #+begin_src lisp
 (remove (lambda (service)
@@ -417,13 +422,15 @@ Alternatively, the =modify-services= macro can be used:
 #+end_src
 
 <<Inspecting-Services>>
-**** Inspecting Services [[#Inspecting-Services][¶]]
+**** Inspecting Services
 :PROPERTIES:
 :CUSTOM_ID: inspecting-services
 :CLASS: unnumberedsubsec
 :END:
+<<index-troubleshooting_002c-for-system-services>> <<index-inspecting-system-services>> <<index-system-services_002c-inspecting>>
 As you work on your system configuration, you might wonder why some system service doesn't show up or why the system is not as you expected. There are several ways to inspect and troubleshoot problems.
 
+<<index-dependency-graph_002c-of-Shepherd-services>>
 First, you can inspect the dependency graph of Shepherd services like so:
 
 #+begin_example
@@ -433,6 +440,7 @@ guix system shepherd-graph /etc/config.scm | \
 
 This lets you visualize the Shepherd services as defined in =/etc/config.scm=. Each box is a service as would be shown by =sudo herd status= on the running system, and each arrow denotes a dependency (in the sense that if service =A= depends on =B=, then =B= must be started before =A=).
 
+<<index-extension-graph_002c-of-services>>
 Not all “services” are Shepherd services though, since Guix System uses a broader definition of the term (see [[id:guix--Services][Services]]). To visualize system services and their relations at a higher level, run:
 
 #+begin_example
@@ -450,30 +458,31 @@ scheme@(guix-user)> ,use (gnu)
 scheme@(guix-user)> (define os (load "config.scm"))
 scheme@(guix-user)> ,pp (map service-kind (operating-system-services os))
 $1 = (#<service-type localed cabba93>
-      ...)
+      …)
 #+end_example
 
 See [[id:guix--Service-Reference][Service Reference]], to learn about the Scheme interface to manipulate and inspect services.
 
 <<Instantiating-the-System>>
-**** Instantiating the System [[#Instantiating-the-System][¶]]
+**** Instantiating the System
 :PROPERTIES:
 :CUSTOM_ID: instantiating-the-system
 :CLASS: unnumberedsubsec
 :END:
+<<index-system-instantiation-1>> <<index-reconfiguring-the-system-1>>
 Assuming the =operating-system= declaration is stored in the =config.scm= file, the =sudo guix system reconfigure config.scm= command instantiates that configuration, and makes it the default boot entry. See [[id:guix--Getting-Started-with-the-System][Getting Started]], for an overview.
 
 The normal way to change the system configuration is by updating this file and re-running =guix system reconfigure=. One should never have to touch files in =/etc= or to run commands that modify the system state such as =useradd= or =grub-install=. In fact, you must avoid that since that would not only void your warranty but also prevent you from rolling back to previous versions of your system, should you ever need to.
 
 <<The-Programming-Interface>>
-**** The Programming Interface [[#The-Programming-Interface][¶]]
+**** The Programming Interface
 :PROPERTIES:
 :CUSTOM_ID: the-programming-interface
 :CLASS: unnumberedsubsec
 :END:
 At the Scheme level, the bulk of an =operating-system= declaration is instantiated with the following monadic procedure (see [[id:guix--The-Store-Monad][The Store Monad]]):
 
-- Monadic Procedure: *operating-system-derivation* =os= [[#index-operating_002dsystem_002dderivation][¶]] :: Return a derivation that builds =os=, an =operating-system= object (see [[id:guix--Derivations][Derivations]]).
+- Monadic Procedure: operating-system-derivation os :: Return a derivation that builds =os=, an =operating-system= object (see [[id:guix--Derivations][Derivations]]).
 
   The output of the derivation is a single directory that refers to all the packages, configuration files, and other supporting files needed to instantiate =os=.
 
@@ -481,4 +490,4 @@ This procedure is provided by the =(gnu system)= module. Along with =(gnu servic
 
 --------------
 
-Next: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Previous: [[id:guix--Getting-Started-with-the-System][Getting Started]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]], Previous: [[id:guix--Getting-Started-with-the-System][Getting Started]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

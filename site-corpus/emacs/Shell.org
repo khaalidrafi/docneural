@@ -7,6 +7,9 @@
 Next: [[id:emacs--Emacs-Server][Using Emacs as a Server]]   Previous: [[id:emacs--Document-View][Document Viewing]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Shell>>
+
+--------------
+
 ** 40 Running Shell Commands from Emacs [[#Running-Shell-Commands-from-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Running-Shell-Commands-from-Emacs
@@ -24,8 +27,20 @@ Emacs has commands for passing single command lines to shell subprocesses, and f
 
 - M-x term :: Run a subshell with input and output through an Emacs buffer. You can then give commands interactively. Full terminal emulation is available.
 
-Whenever you specify a relative file name for an executable program (either in the =cmd= argument to one of the above commands, or in other contexts), Emacs searches for the program in the directories specified by the variable =exec-path=. The value of this variable must be a list of directories; the default value is initialized from the environment variable =PATH= when Emacs is started (see [[id:emacs--Environment::#General-Variables][General Variables]]).
+Whenever you specify a relative file name for an executable program (either in the =cmd= argument to one of the above commands, or in other contexts), Emacs searches for the program in the directories specified by the variable =exec-path=. The value of this variable must be a list of directories; the default value is initialized from the environment variable =PATH= when Emacs is started (see [[id:emacs--General-Variables][General Variables]]).
 
 M-x eshell invokes a shell implemented entirely in Emacs. It is documented in its own manual. See [[../eshell_html/index.html#Top][Eshell]] in Eshell: The Emacs Shell.
+
+- [[id:emacs--Single-Shell][Single Shell Commands]]
+- [[id:emacs--Interactive-Shell][Interactive Subshell]]
+- [[id:emacs--Shell-Mode][Shell Mode]]
+- [[id:emacs--Shell-Prompts][Shell Prompts]]
+- [[id:emacs--Shell-History][Shell Command History]]
+- [[id:emacs--Directory-Tracking][Directory Tracking]]
+- [[id:emacs--Shell-Options][Shell Mode Options]]
+- [[id:emacs--Terminal-emulator][Emacs Terminal Emulator]]
+- [[id:emacs--Term-Mode][Term Mode]]
+- [[id:emacs--Remote-Host][Remote Host Shell]]
+- [[id:emacs--Serial-Terminal][Serial Terminal]]
 
 --------------

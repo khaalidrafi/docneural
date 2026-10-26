@@ -4,6 +4,27 @@
 #+filetags: :emacs:
 #+title: Outline Motion
 
-Next:
+Next: [[id:emacs--Outline-Visibility][Outline Visibility Commands]]   Previous: [[id:emacs--Outline-Format][Format of Outlines]]   Up: [[id:emacs--Outline-Mode][Outline Mode]]
 
-The node you are looking for is at [[id:emacs--Outline-Mode::#Outline-Motion][Outline Motion]].
+<<Outline-Motion>>
+
+--------------
+
+**** 27.9.3 Outline Motion Commands [[#Outline-Motion-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Outline-Motion-Commands
+:CLASS: subsection
+:END:
+Outline mode provides special motion commands that move backward and forward to heading lines.
+
+-  <<index-outline_002dnext_002dvisible_002dheading>>C-c C-n [[#index-outline_002dnext_002dvisible_002dheading][¶]] :: Move point to the next visible heading line (=outline-next-visible-heading=).
+
+-  <<index-outline_002dprevious_002dvisible_002dheading>>C-c C-p [[#index-outline_002dprevious_002dvisible_002dheading][¶]] :: Move point to the previous visible heading line (=outline-previous-visible-heading=).
+
+-  <<index-outline_002dforward_002dsame_002dlevel>>C-c C-f [[#index-outline_002dforward_002dsame_002dlevel][¶]] :: Move point to the next visible heading line at the same level as the one point is on (=outline-forward-same-level=).
+
+-  <<index-outline_002dbackward_002dsame_002dlevel>>C-c C-b [[#index-outline_002dbackward_002dsame_002dlevel][¶]] :: Move point to the previous visible heading line at the same level (=outline-backward-same-level=).
+
+-  <<index-outline_002dup_002dheading>>C-c C-u [[#index-outline_002dup_002dheading][¶]] :: Move point up to a lower-level (more inclusive) visible heading line (=outline-up-heading=).
+
+All of the above commands accept numeric arguments as repeat counts. For example, C-c C-f, when given an argument, moves forward that many visible heading lines on the same level, and C-c C-u with an argument moves out of that many nested levels.

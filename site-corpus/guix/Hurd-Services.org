@@ -36,35 +36,33 @@ Next:
 [[../..][]]
 
 <<Hurd-Services>>
-Next: [[id:guix--Miscellaneous-Services][Miscellaneous Services]], Previous: [[id:guix--Linux-Services][Linux Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Miscellaneous-Services][Miscellaneous Services]], Previous: [[id:guix--Linux-Services][Linux Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.39 Hurd Services [[#Hurd-Services-1][¶]]
+<<Hurd-Services-1>>
+**** 11.10.37 Hurd Services
 :PROPERTIES:
-:CUSTOM_ID: Hurd-Services-1
+:CUSTOM_ID: hurd-services
 :CLASS: subsection
 :END:
-- Variable: *hurd-console-service-type* [[#index-hurd_002dconsole_002dservice_002dtype][¶]] :: This service starts the fancy =VGA= console client on the Hurd.
+- Variable: hurd-console-service-type  :: This service starts the fancy =VGA= console client on the Hurd.
 
   The service's value is a =hurd-console-configuration= record.
 
-- Data Type: *hurd-console-configuration* [[#index-hurd_002dconsole_002dconfiguration][¶]] :: This is the data type representing the configuration for the hurd-console-service.
+- Data Type: hurd-console-configuration  :: This is the data type representing the configuration for the hurd-console-service.
 
   - =hurd= (default: =hurd=) :: The Hurd package to use.
 
-- Variable: *hurd-getty-service-type* [[#index-hurd_002dgetty_002dservice_002dtype][¶]] :: This service starts a tty using the Hurd =getty= program.
+- Variable: hurd-getty-service-type  :: This service starts a tty using the Hurd =getty= program.
 
   The service's value is a =hurd-getty-configuration= record.
 
-- Data Type: *hurd-getty-configuration* [[#index-hurd_002dgetty_002dconfiguration][¶]] :: This is the data type representing the configuration for the hurd-getty-service.
+- Data Type: hurd-getty-configuration  :: This is the data type representing the configuration for the hurd-getty-service.
 
   - =hurd= (default: =hurd=) :: The Hurd package to use.
 
   - =tty= :: The name of the console this Getty runs on---e.g., ="tty1"=.
 
   - =baud-rate= (default: =38400=) :: An integer specifying the baud rate of the tty.
-
---------------
-
-Next: [[id:guix--Miscellaneous-Services][Miscellaneous Services]], Previous: [[id:guix--Linux-Services][Linux Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

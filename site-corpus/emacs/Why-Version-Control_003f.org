@@ -4,6 +4,19 @@
 #+filetags: :emacs:
 #+title: Why Version Control?
 
-Next:
+Next: [[id:emacs--Version-Control-Systems][Supported Version Control Systems]]   Up: [[id:emacs--Introduction-to-VC][Introduction to Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#Why-Version-Control_003f][Why Version Control?]].
+<<Why-Version-Control_003f>>
+
+--------------
+
+**** 30.1.1.1 Understanding the Problems it Addresses [[#Understanding-the-Problems-it-Addresses][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Understanding-the-Problems-it-Addresses
+:CLASS: subsubsection
+:END:
+Version control systems provide you with three important capabilities:
+
+- /Reversibility/: the ability to back up to a previous state if you discover that some modification you did was a mistake or a bad idea.
+- /Concurrency/: the ability to have many people modifying the same collection of files knowing that conflicting modifications can be detected and resolved.
+- /History/: the ability to attach historical data to your data, such as explanatory comments about the intention behind each change. Even for a programmer working solo, change histories are an important aid to memory; for a multi-person project, they are a vitally important form of communication among developers.

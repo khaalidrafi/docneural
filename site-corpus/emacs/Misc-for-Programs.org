@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Misc for Programs
 
-Next: [[id:emacs--C-Modes#C-Modes][C and Related Modes]]   Previous: [[id:emacs--Semantic][Semantic]]   Up: [[id:emacs--Programs][Editing Programs]]
+Next: [[id:emacs--C-Modes][C and Related Modes]]   Previous: [[id:emacs--Semantic][Semantic]]   Up: [[id:emacs--Programs][Editing Programs]]
 
 <<Misc-for-Programs>>
+
+--------------
+
 *** 28.11 Other Features Useful for Editing Programs [[#Other-Features-Useful-for-Editing-Programs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Other-Features-Useful-for-Editing-Programs
@@ -20,7 +23,7 @@ Superword mode is a buffer-local minor mode that causes editing and motion comma
 
 Electric Layout mode (M-x electric-layout-mode) is a global minor mode that automatically inserts newlines when you type certain characters; for example, ‘={=', ‘=}=' and ‘=;=' in Javascript mode.
 
-Apart from Hideshow mode (see [[id:emacs--Hideshow][Hideshow minor mode]]), another way to selectively display parts of a program is to use the selective display feature (see [[id:emacs--Selective-Display][Selective Display]]). Programming modes often also support Outline minor mode (see [[id:emacs--Outline-Mode::#Outline-Mode][Outline Mode]]), which can be used with the Foldout package (see [[id:emacs--Outline-Mode::#Foldout][Folding Editing]]).
+Apart from Hideshow mode (see [[id:emacs--Hideshow][Hideshow minor mode]]), another way to selectively display parts of a program is to use the selective display feature (see [[id:emacs--Selective-Display][Selective Display]]). Programming modes often also support Outline minor mode (see [[id:emacs--Outline-Mode][Outline Mode]]), which can be used with the Foldout package (see [[id:emacs--Foldout][Folding Editing]]).
 
 Prettify Symbols mode is a buffer-local minor mode that replaces certain strings with more attractive versions for display purposes. For example, in Emacs Lisp mode, it replaces the string ‘=lambda=' with the Greek lambda character ‘=λ='. In a TeX buffer, it will replace ‘=\alpha=' ... ‘=\omega=' and other math macros with their Unicode characters. You may wish to use this in non-programming modes as well. You can customize the mode by adding more entries to =prettify-symbols-alist=. More elaborate customization is available via customizing =prettify-symbols-compose-predicate= if its default value =prettify-symbols-default-compose-p= is not appropriate. There is also a global version, =global-prettify-symbols-mode=, which enables the mode in all buffers that support it.
 

@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Service-Types-and-Services>>
-Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.19.2 Service Types and Services [[#Service-Types-and-Services-1][¶]]
+<<Service-Types-and-Services-1>>
+**** 11.19.2 Service Types and Services
 :PROPERTIES:
-:CUSTOM_ID: Service-Types-and-Services-1
+:CUSTOM_ID: service-types-and-services
 :CLASS: subsection
 :END:
 A /service type/ is a node in the DAG described above. Let us start with a simple example, the service type for the Guix build daemon (see [[id:guix--Invoking-guix_002ddaemon][Invoking =guix-daemon=]]):
@@ -64,7 +66,7 @@ It defines three things:
 
 2. A list of /service extensions/, where each extension designates the target service type and a procedure that, given the parameters of the service, returns a list of objects to extend the service of that type.
 
-   Every service type has at least one service extension. The only exceptions are the /system service type/ and the /home service type/, which are the ultimate services for Guix System and Guix Home, respectively.
+   Every service type has at least one service extension. The only exception is the /boot service type/, which is the ultimate service.
 
 3. Optionally, a default value for instances of this type.
 
@@ -128,4 +130,4 @@ Still here? The next section provides a reference of the programming interface f
 
 --------------
 
-Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Service-Reference][Service Reference]], Previous: [[id:guix--Service-Composition][Service Composition]], Up: [[id:guix--Defining-Services][Defining Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

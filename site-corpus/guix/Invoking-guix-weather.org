@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-weather>>
-Next: [[id:guix--Invoking-guix-processes][Invoking =guix processes=]], Previous: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-processes][Invoking =guix processes=]], Previous: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.15 Invoking =guix weather= [[#Invoking-guix-weather-1][¶]]
+<<Invoking-guix-weather-1>>
+*** 9.15 Invoking =guix weather=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-weather-1
+:CUSTOM_ID: invoking-guix-weather
 :CLASS: section
 :END:
+<<index-guix-weather>>
 Occasionally you're grumpy because substitutes are lacking and you end up building packages by yourself (see [[id:guix--Substitutes][Substitutes]]). The =guix weather= command reports on substitute availability on the specified servers so you can have an idea of whether you'll be grumpy today. It can sometimes be useful info as a user, but it is primarily useful to people running =guix publish= (see [[id:guix--Invoking-guix-publish][Invoking =guix publish=]]). Sometimes substitutes /are/ available but they are not authorized on your system; =guix weather= reports it so you can authorize them if you want (see [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]]).
 
+<<index-statistics_002c-for-substitutes>> <<index-availability-of-substitutes>> <<index-substitute-availability>> <<index-weather_002c-substitute-availability>>
 Here's a sample run:
 
 #+begin_example
@@ -72,6 +76,7 @@ https://guix.example.org
       aarch64-linux: 6.41 builds per hour
 #+end_example
 
+<<index-continuous-integration_002c-statistics>>
 As you can see, it reports the fraction of all the packages for which substitutes are available on the server---regardless of whether substitutes are enabled, and regardless of whether this server's signing key is authorized. It also reports the size of the compressed archives (“nars”) provided by the server, the size the corresponding store items occupy in the store (assuming deduplication is turned off), and the server's throughput. The second part gives continuous integration (CI) statistics, if the server supports it. In addition, using the =--coverage= option, =guix weather= can list “important” package substitutes missing on the server (see below).
 
 To achieve that, =guix weather= queries over HTTP(S) meta-data (/narinfos/) for all the relevant store items. Like =guix challenge=, it ignores signatures on those substitutes, which is innocuous since the command only gathers statistics and cannot install those substitutes.
@@ -79,7 +84,7 @@ To achieve that, =guix weather= queries over HTTP(S) meta-data (/narinfos/) for 
 The general syntax is:
 
 #+begin_example
-guix weather options... [packages...]
+guix weather options… [packages…]
 #+end_example
 
 When =packages= is omitted, =guix weather= checks the availability of substitutes for /all/ the packages, or for those specified with =--manifest=; otherwise it only considers the specified packages. It is also possible to query specific system types with =--system=. =guix weather= exits with a non-zero code when the fraction of available substitutes is below 100%.
@@ -102,7 +107,7 @@ The available options are listed below.
 
   #+begin_example
   guix weather -e '(@@ (gnu packages rust) rust-bootstrap)'
-#+end_example
+  #+end_example
 
   This option can be repeated.
 
@@ -116,13 +121,13 @@ The available options are listed below.
   updating substitutes from 'https://bordeaux.guix.gnu.org https://ci.guix.gnu.org'... 100.0%
   https://bordeaux.guix.gnu.org https://ci.guix.gnu.org
     64.7% substitutes available (6,047 out of 9,343)
-  ...
+  …
   2502 packages are missing from 'https://bordeaux.guix.gnu.org https://ci.guix.gnu.org' for 'x86_64-linux', among which:
-      58  kcoreaddons@5.49.0      /gnu/store/...-kcoreaddons-5.49.0
-      46  qgpgme@1.11.1           /gnu/store/...-qgpgme-1.11.1
-      37  perl-http-cookiejar@0.008  /gnu/store/...-perl-http-cookiejar-0.008
-      ...
-#+end_example
+      58  kcoreaddons@5.49.0      /gnu/store/…-kcoreaddons-5.49.0
+      46  qgpgme@1.11.1           /gnu/store/…-qgpgme-1.11.1
+      37  perl-http-cookiejar@0.008  /gnu/store/…-perl-http-cookiejar-0.008
+      …
+  #+end_example
 
   What this example shows is that =kcoreaddons= and presumably the 58 packages that depend on it have no substitutes at =bordeaux.guix.gnu.org=; likewise for =qgpgme= and the 46 packages that depend on it.
 
@@ -132,4 +137,4 @@ The available options are listed below.
 
 --------------
 
-Next: [[id:guix--Invoking-guix-processes][Invoking =guix processes=]], Previous: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-processes][Invoking =guix processes=]], Previous: [[id:guix--Invoking-guix-container][Invoking =guix container=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

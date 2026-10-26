@@ -1,0 +1,75 @@
+#+title: site-corpus — the REAL manuals, converted by org-import
+
+This directory IS the site's content: the GNU Emacs 30.1, Org 9.x and Guix
+1.5.0 manuals, converted to the docneural corpus contract.  1386 nodes,
+30915 wires across three sources (=#emacs =, =#org =, =#guix = tags).
+
+Conversion is the Owner's own =org-import= package — published at
+https://git.khalidrafi.tech/org-pandoc-import (package name =org-import=,
+formerly =org-pandoc-import=) — running headless against makeinfo's
+node-split HTML.  The corpus is committed so the Pages build needs no
+network, no pandoc and no emacs.
+
+* Shape (what the exporter contract needs)
+
+Per page (scripts/docneural-export.el reads these):
+
+- =:ID: MANUAL--PageName= drawer → node id
+- =#+title= / =#+filetags= → label + source color group
+- a =Next: [[id:..]]= nav paragraph → Up/Next/Prev chainback (one line;
+  the exporter's structural filter keeps it out of citations)
+- =[[id:PAGE::#anchor]]= links → the graph wires
+- =:CUSTOM_ID:= properties → the anchors the wires point at
+
+* Regeneration
+
+1. Sources (node-split HTML, one directory per manual):
+
+   #+begin_src sh
+   # Org + Guix: crawl the published manuals to closure
+   python3 scripts/crawl-manual.py https://orgmode.org/manual/index.html ~/manuals/org 8
+   python3 scripts/crawl-manual.py https://guix.gnu.org/manual/1.5.0/en/html_node/index.html ~/manuals/guix 8
+   # Emacs 30.1: no gnu.org access from the build sandbox — build makeinfo's
+   # node-split locally from the upstream tarball
+   curl -O https://mirrors.kernel.org/gnu/emacs/emacs-30.1.tar.xz
+   tar xf emacs-30.1.tar.xz --strip-components=1 emacs-30.1/doc/emacs
+   sed 's/@VERSION@/30.1/;s/@YEAR@/2025/' doc/emacs/emacsver.texi.in > doc/emacs/emacsver.texi
+   makeinfo --html --no-validate doc/emacs/emacs.texi -o ~/manuals/emacs
+   #+end_src
+
+2. Convert with org-import (clones the package, then one batch emacs per
+   manual drives =org-import-bulk= — concurrent pandoc children):
+
+   #+begin_src sh
+   git clone https://git.khalidrafi.tech/org-pandoc-import.git ~/org-pandoc-import
+   python3 scripts/manuals-corpus.py ~/manuals/org  org  site-corpus
+   python3 scripts/manuals-corpus.py ~/manuals/emacs emacs site-corpus
+   python3 scripts/manuals-corpus.py ~/manuals/guix guix site-corpus
+   #+end_src
+
+   Environment (defaults fit this machine): =ORG_IMPORT_DIR= (the package
+   checkout), =ELPA_DEPS_DIR= (dash / s / plz), =EMACS_BIN= (the portable
+   emacs wrapper).  The driver adds =--wrap=none= so cross-reference links
+   never wrap, and clears the global =_*.lua= filters — =_simple-headers=
+   melts header ids into fuzzy =[[*headline]]= links, which would orphan
+   the machine anchors the corpus graph is built on; the Owner's own
+   makeinfo corpus keeps its anchors too.
+
+   Known upstream edge: a root-level =index.html= degenerates to a hidden
+   =.org= under org-import's URL-mirror naming; manuals-corpus.py restores
+   it to =index.org=.
+
+3. Export + rebuild:
+
+   #+begin_src sh
+   make export CORPUS=site-corpus DOC="org emacs guix" OUT=.export
+   make build BASE_FLAG=--base=/docneural/
+   #+end_src
+
+* History
+
+- 2026-10 (gh-pages pass): corpus rebuilt through =org-import=.  Org's
+  319 pages came out byte-identical to the previous raw-pandoc build;
+  emacs differs only where today's pandoc renders makeinfo menus/hrules
+  the vendored 2025 binary did not; guix picked up the upstream manual's
+  own edits (Debbugs chapters in, restructured pages out).

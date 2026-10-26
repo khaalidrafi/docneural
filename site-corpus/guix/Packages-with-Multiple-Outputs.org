@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Packages-with-Multiple-Outputs>>
-Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 5.4 Packages with Multiple Outputs [[#Packages-with-Multiple-Outputs-1][¶]]
+<<Packages-with-Multiple-Outputs-1>>
+*** 5.4 Packages with Multiple Outputs
 :PROPERTIES:
-:CUSTOM_ID: Packages-with-Multiple-Outputs-1
+:CUSTOM_ID: packages-with-multiple-outputs
 :CLASS: section
 :END:
+<<index-multiple_002doutput-packages>> <<index-package-outputs>> <<index-outputs>>
 Often, packages defined in Guix have a single /output/---i.e., the source package leads to exactly one directory in the store. When running =guix install glibc=, one installs the default output of the GNU libc package; the default output is called =out=, but its name can be omitted as shown in this command. In this particular case, the default output of =glibc= contains all the C header files, shared libraries, static libraries, Info documentation, and other supporting files.
 
 Sometimes it is more appropriate to separate the various types of files produced from a single source package into separate outputs. For instance, the GLib C library (used by GTK+ and related packages) installs more than 20 MiB of reference documentation as HTML pages. To save space for users who do not need it, the documentation goes to a separate output, called =doc=. To install the main GLib output, which contains everything but the documentation, one would run:
@@ -53,6 +56,7 @@ Sometimes it is more appropriate to separate the various types of files produced
 guix install glib
 #+end_example
 
+<<index-documentation>>
 The command to install its documentation is:
 
 #+begin_example
@@ -78,4 +82,4 @@ There are several such multiple-output packages in the GNU distribution. Other c
 
 --------------
 
-Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-locate][Invoking =guix locate=]], Previous: [[id:guix--Substitutes][Substitutes]], Up: [[id:guix--Package-Management][Package Management]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

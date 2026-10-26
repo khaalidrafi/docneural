@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Niri-window-manager>>
-Next: [[id:guix--Sway-window-manager][Sway window manager]], Previous: [[id:guix--mpv-Media-Player][mpv Media Player]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Sway-window-manager][Sway window manager]], Previous: [[id:guix--mpv-Media-Player][mpv Media Player]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.18 Niri window manager [[#Niri-window-manager-1][¶]]
+<<Niri-window-manager-1>>
+**** 13.3.17 Niri window manager
 :PROPERTIES:
-:CUSTOM_ID: Niri-window-manager-1
+:CUSTOM_ID: niri-window-manager
 :CLASS: subsection
 :END:
+<<index-niri_002c-Home-Service>> <<index-niri_002c-configuration>> <<index-Wayland-compositor>> <<index-scrollable-tiling-window-manager>>
 The =(gnu home services niri)= module provides the =home-niri-service-type= service, which installs and configures [[https://github.com/YaLTeR/niri][Niri]], a scrollable tiling Wayland compositor. Niri combines traditional tiling window management with smooth scrolling between workspaces.
 
 This service starts Niri as a user-level desktop session with proper environment variables configured for Wayland compatibility, including =XDG_CURRENT_DESKTOP=, =XDG_SESSION_DESKTOP=, and =DESKTOP_SESSION=.

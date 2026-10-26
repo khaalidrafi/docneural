@@ -7,6 +7,9 @@
 Next: [[id:emacs--Basic][Basic Editing Commands]]   Previous: [[id:emacs--Entering-Emacs][Entering Emacs]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Exiting>>
+
+--------------
+
 ** 8 Exiting Emacs [[#Exiting-Emacs][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Exiting-Emacs
@@ -32,6 +35,6 @@ To kill Emacs without being prompted about saving, type M-x kill-emacs.
 
 C-z runs the command =suspend-frame=. On a graphical display, this command /minimizes/ (or /iconifies/) the selected Emacs frame, hiding it in a way that lets you bring it back later (exactly how this hiding occurs depends on the window system). On a text terminal, the C-z command /suspends/ Emacs, stopping the program temporarily and returning control to the parent process (usually a shell); in most shells, you can resume Emacs after suspending it with the shell command =%emacs=.
 
-Text terminals usually listen for certain special characters whose meaning is to kill or suspend the program you are running. *This terminal feature is turned off while you are in Emacs.* The meanings of C-z and C-x C-c as keys in Emacs were inspired by the use of C-z and C-c on several operating systems as the characters for stopping or killing a program, but that is their only relationship with the operating system. You can customize these keys to run any commands of your choice (see [[id:emacs--Key-Bindings::#Keymaps][Keymaps]]).
+Text terminals usually listen for certain special characters whose meaning is to kill or suspend the program you are running. *This terminal feature is turned off while you are in Emacs.* The meanings of C-z and C-x C-c as keys in Emacs were inspired by the use of C-z and C-c on several operating systems as the characters for stopping or killing a program, but that is their only relationship with the operating system. You can customize these keys to run any commands of your choice (see [[id:emacs--Keymaps][Keymaps]]).
 
 --------------

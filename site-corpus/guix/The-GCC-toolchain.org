@@ -36,21 +36,20 @@ Next:
 [[../..][]]
 
 <<The-GCC-toolchain>>
-Next: [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], Previous: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], Previous: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 7.4 The GCC toolchain [[#The-GCC-toolchain-1][¶]]
+<<The-GCC-toolchain-1>>
+*** 7.4 The GCC toolchain
 :PROPERTIES:
-:CUSTOM_ID: The-GCC-toolchain-1
+:CUSTOM_ID: the-gcc-toolchain
 :CLASS: section
 :END:
+<<index-GCC>> <<index-ld_002dwrapper>> <<index-linker-wrapper>> <<index-toolchain_002c-for-C-development>> <<index-toolchain_002c-for-Fortran-development>>
 If you need a complete toolchain for compiling and linking C or C++ source code, use the =gcc-toolchain= package. This package provides a complete GCC toolchain for C/C++ development, including GCC itself, the GNU C Library (headers and binaries, plus debugging symbols in the =debug= output), Binutils, and a linker wrapper.
 
 The wrapper's purpose is to inspect the =-L= and =-l= switches passed to the linker, add corresponding =-rpath= arguments, and invoke the actual linker with this new set of arguments. You can instruct the wrapper to refuse to link against libraries not in the store by setting the =GUIX_LD_WRAPPER_ALLOW_IMPURITIES= environment variable to =no=.
 
 The package =gfortran-toolchain= provides a complete GCC toolchain for Fortran development. For other languages, please use ‘=guix search gcc toolchain=' (see [[id:guix--Invoking-guix-package::#guix_002dsearch][Invoking guix package]]).
-
---------------
-
-Next: [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]], Previous: [[id:guix--Invoking-guix-pack][Invoking =guix pack=]], Up: [[id:guix--Development][Development]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

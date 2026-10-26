@@ -7,6 +7,9 @@
 Next: [[id:emacs--Screen][The Organization of the Screen]]   Previous: [[id:emacs--Distrib][Distribution]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Intro>>
+
+--------------
+
 ** Introduction [[#Introduction][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Introduction
@@ -18,7 +21,7 @@ We call Emacs /advanced/ because it can do much more than simple insertion and d
 
 /Self-documenting/ means that at any time you can use special commands, known as /help commands/, to find out what your options are, or to find out what any command does, or to find all the commands that pertain to a given topic. See [[id:emacs--Help][Help]].
 
-/Customizable/ means that you can easily alter the behavior of Emacs commands in simple ways. For instance, if you use a programming language in which comments start with ‘=<**=' and end with ‘=**>=', you can tell the Emacs comment manipulation commands to use those strings (see [[id:emacs--Comments::#Comments][Manipulating Comments]]). To take another example, you can rebind the basic cursor motion commands (up, down, left and right) to any keys on the keyboard that you find comfortable. See [[id:emacs--Customization][Customization]].
+/Customizable/ means that you can easily alter the behavior of Emacs commands in simple ways. For instance, if you use a programming language in which comments start with ‘=<**=' and end with ‘=**>=', you can tell the Emacs comment manipulation commands to use those strings (see [[id:emacs--Comments][Manipulating Comments]]). To take another example, you can rebind the basic cursor motion commands (up, down, left and right) to any keys on the keyboard that you find comfortable. See [[id:emacs--Customization][Customization]].
 
 /Extensible/ means that you can go beyond simple customization and create entirely new commands. New commands are simply programs written in the Lisp language, which are run by Emacs's own Lisp interpreter. Existing commands can even be redefined in the middle of an editing session, without having to restart Emacs. Most of the editing commands in Emacs are written in Lisp; the few exceptions could have been written in Lisp but use C instead for efficiency. Writing an extension is programming, but non-programmers can use it afterwards. See [[../eintr_html/index.html#Top][Preface]] in An Introduction to Programming in Emacs Lisp, if you want to learn Emacs Lisp programming.
 

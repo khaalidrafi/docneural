@@ -7,6 +7,9 @@
 Next: [[id:emacs--Frame-Commands][Frame Commands]]   Previous: [[id:emacs--Mode-Line-Mouse][Mode Line Mouse Commands]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Creating-Frames>>
+
+--------------
+
 *** 23.6 Creating Frames [[#Creating-Frames-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Creating-Frames-1
@@ -28,7 +31,7 @@ The various C-x 5 commands differ in how they find or create the buffer to selec
 
 - C-x 5 m :: Start composing a mail message in another frame. This runs =compose-mail-other-frame=. It is the other-frame variant of C-x m. See [[id:emacs--Sending-Mail][Sending Mail]].
 
-- C-x 5 . :: Find the definition of an identifier in another frame. This runs =xref-find-definitions-other-frame=, the multiple-frame variant of M-.. See [[id:emacs--Xref::#Xref][Find Identifier References]].
+- C-x 5 . :: Find the definition of an identifier in another frame. This runs =xref-find-definitions-other-frame=, the multiple-frame variant of M-.. See [[id:emacs--Xref][Find Identifier References]].
 
 -  <<index-C_002dx-5-r>>C-x 5 r =filename= RET [[#index-C_002dx-5-r][¶]] :: Visit file =filename= read-only, and select its buffer in another frame. This runs =find-file-read-only-other-frame=. See [[id:emacs--Visiting][Visiting Files]].
 

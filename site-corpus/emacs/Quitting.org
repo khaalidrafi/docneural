@@ -7,6 +7,9 @@
 Next: [[id:emacs--Lossage][Dealing with Emacs Trouble]]   Previous: [[id:emacs--Customization][Customization]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Quitting>>
+
+--------------
+
 ** 52 Quitting and Aborting [[#Quitting-and-Aborting][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Quitting-and-Aborting
@@ -27,11 +30,11 @@ Next: [[id:emacs--Lossage][Dealing with Emacs Trouble]]   Previous: [[id:emacs--
 
 There are two ways of canceling a command before it has finished: /quitting/ with C-g, and /aborting/ with C-] or M-x top-level. Quitting cancels a partially typed command, or one which is still running. Aborting exits a recursive editing level and cancels the command that invoked the recursive edit (see [[id:emacs--Recursive-Edit][Recursive Editing Levels]]).
 
-Quitting with C-g is the way to get rid of a partially typed command, or a numeric argument that you don't want. Furthermore, if you are in the middle of a command that is running, C-g stops the command in a relatively safe way. For example, if you quit out of a kill command that is taking a long time, either your text will /all/ still be in the buffer, or it will /all/ be in the kill ring, or maybe both. If the region is active, C-g deactivates the mark, unless Transient Mark mode is off (see [[id:emacs--Disabled-Transient-Mark][Disabling Transient Mark Mode]]). If you are in the middle of an incremental search, C-g behaves specially; it may take two successive C-g characters to get out of a search. See [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]], for details.
+Quitting with C-g is the way to get rid of a partially typed command, or a numeric argument that you don't want. Furthermore, if you are in the middle of a command that is running, C-g stops the command in a relatively safe way. For example, if you quit out of a kill command that is taking a long time, either your text will /all/ still be in the buffer, or it will /all/ be in the kill ring, or maybe both. If the region is active, C-g deactivates the mark, unless Transient Mark mode is off (see [[id:emacs--Disabled-Transient-Mark][Disabling Transient Mark Mode]]). If you are in the middle of an incremental search, C-g behaves specially; it may take two successive C-g characters to get out of a search. See [[id:emacs--Incremental-Search][Incremental Search]], for details.
 
 If you type C-g in a minibuffer, this quits the command that opened that minibuffer, closing it. If that minibuffer is not the most recently opened one (which can happen when =minibuffer-follows-selected-frame= is =nil= (see [[id:emacs--Basic-Minibuffer][Using the Minibuffer]])), C-g also closes the more recently opened ones, quitting their associated commands, after asking you for confirmation.
 
-On MS-DOS, the character C-Break serves as a quit character like C-g. The reason is that it is not feasible, on MS-DOS, to recognize C-g while a command is running, between interactions with the user. By contrast, it /is/ feasible to recognize C-Break at all times. See [[id:emacs--MS_002dDOS::#MS_002dDOS-Keyboard][Keyboard Usage on MS-DOS]].
+On MS-DOS, the character C-Break serves as a quit character like C-g. The reason is that it is not feasible, on MS-DOS, to recognize C-g while a command is running, between interactions with the user. By contrast, it /is/ feasible to recognize C-Break at all times. See [[id:emacs--MS_002dDOS-Keyboard][Keyboard Usage on MS-DOS]].
 
 C-g works by setting the variable =quit-flag= to =t= the instant C-g is typed; Emacs Lisp checks this variable frequently, and quits if it is non-=nil=. C-g is only actually executed as a command if you type it while Emacs is waiting for input. In that case, the command it runs is =keyboard-quit=.
 

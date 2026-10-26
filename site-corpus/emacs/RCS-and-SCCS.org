@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: RCS and SCCS
 
-Next:
+Next: [[id:emacs--CVS-Options][Options specific for CVS]]   Previous: [[id:emacs--General-VC-Options][General Options]]   Up: [[id:emacs--Customizing-VC][Customizing VC]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#RCS-and-SCCS][RCS and SCCS]].
+<<RCS-and-SCCS>>
+
+--------------
+
+**** 30.1.13.2 Options for RCS and SCCS [[#Options-for-RCS-and-SCCS][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Options-for-RCS-and-SCCS
+:CLASS: subsubsection
+:END:
+By default, RCS uses locking to coordinate the activities of several users, but there is a mode called /non-strict locking/ in which you can check-in changes without locking the file first. Use ‘=rcs -U=' to switch to non-strict locking for a particular file, see the =rcs= manual page for details.
+
+When deducing the version control state of an RCS file, VC first looks for an RCS version header string in the file (see [[id:emacs--Version-Headers][Inserting Version Control Headers]]). If there is no header string, VC normally looks at the file permissions of the work file; this is fast. But there might be situations when the file permissions cannot be trusted. In this case the master file has to be consulted, which is rather expensive. Also the master file can only tell you /if/ there's any lock on the file, but not whether your work file really contains that locked version.
+
+You can tell VC not to use version headers to determine the file status by setting =vc-consult-headers= to =nil=. VC then always uses the file permissions (if it is supposed to trust them), or else checks the master file.
+
+VC determines the version control state of files under SCCS much as with RCS. It does not consider SCCS version headers, though. Thus, the variable =vc-consult-headers= does not affect SCCS use.

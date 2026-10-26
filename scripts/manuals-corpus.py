@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """manuals-corpus.py — texinfo html_node trees -> docneural corpus dirs.
 
-Reproduces the shape of the Owner's ~/docs corpus (built by org-docs +
-org-import from the same makeinfo split-HTML) with a self-contained
-pipeline, because the org-import package was never pushed to GitHub.
+Builds the Owner's ~/docs corpus shape from makeinfo node-split HTML,
+converting bodies with the Owner's own `org-import' package (published at
+git.khalidrafi.tech/org-pandoc-import — package name `org-import', formerly
+org-pandoc-import), the same converter the corpus contract names.
 
 Per page the exporter contract (scripts/docneural-export.el) needs:
   - :ID: drawer          -> node id ("MANUAL--PageName")
@@ -13,20 +14,34 @@ Per page the exporter contract (scripts/docneural-export.el) needs:
                             "^Next: [[" drops it from citations)
   - [[id:PAGE::#anchor]] -> semantic cross-references (graph edges)
 
-Bodies are converted by pandoc (html -> org), then post-processed here:
-links to sibling pages become id: links, images and off-corpus artifacts
-are stripped, pandoc's escaped-macro noise is left for the exporter's
-own macro stub.
+Bodies are converted by org-import (its html backend, bulk mode, one batch
+emacs per manual), then post-processed here: links to sibling pages become
+id: links, pandoc's escaped-macro noise is left for the exporter's own
+macro stub, mismatched #+begin/end pairs are repaired and executable
+keyword lines the manuals teach as literal text are escaped.
+
+Environment:
+  ORG_IMPORT_DIR  checkout of the org-import package
+                  (default /home/z/my-project/org-pandoc-import)
+  ELPA_DEPS_DIR   dir with dash-*/ s-*/ plz-* ELPA folders
+  EMACS_BIN       emacs launcher (default the portable-emacs wrapper)
 
 Usage: manuals-corpus.py <html-dir> <doc-name> <out-corpus-dir>
 """
+import os
 import re
 import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
 
-PANDOC = "/home/z/my-project/emacs-root/usr/bin/pandoc"
+ORG_IMPORT_DIR = Path(os.environ.get(
+    "ORG_IMPORT_DIR", "/home/z/my-project/org-pandoc-import"))
+ELPA_DEPS_DIR = Path(os.environ.get(
+    "ELPA_DEPS_DIR",
+    "/home/z/my-project/emacs-root/usr/share/emacs/site-lisp/elpa-src"))
+EMACS_BIN = os.environ.get("EMACS_BIN", "/home/z/my-project/scripts/emacs.sh")
+TMP_ROOT = Path(os.environ.get("DOCNEURAL_TMP", ".manuals-tmp"))
 
 NAV_PANEL_RE = re.compile(
     r'<div class="nav-panel">.*?</div>|<table class="header".*?</table>|<table class="footer".*?</table>',
@@ -86,11 +101,28 @@ def body_of(html: str) -> str:
     return html
 
 
-def pandoc_org(html: str) -> str:
-    r = subprocess.run(
-        [PANDOC, "-f", "html", "-t", "org", "--wrap=none"],
-        input=html.encode(), capture_output=True)
-    return r.stdout.decode("utf-8", errors="replace")
+def org_import_bulk(src_dir: Path, out_dir: Path) -> None:
+    """Convert every .html under SRC_DIR with the Owner's org-import package.
+
+    One batch emacs drives `org-import-bulk' (concurrent pandoc children);
+    the sentinel line in org-import-convert.el tells a clean finish from a
+    silent death.  No pandoc fallback: the corpus contract names org-import.
+    """
+    if not ORG_IMPORT_DIR.exists():
+        sys.exit(f"org-import not found at {ORG_IMPORT_DIR}\n"
+                 "  clone it: git clone https://git.khalidrafi.tech/org-pandoc-import.git")
+    elpa_dirs: list[str] = []
+    for pattern in ("dash-*", "s-*", "plz-*"):
+        elpa_dirs.extend(str(p) for p in sorted(ELPA_DEPS_DIR.glob(pattern)))
+    script = Path(__file__).parent / "org-import-convert.el"
+    cmd = ([EMACS_BIN, "--batch", "-L", str(ORG_IMPORT_DIR)]
+           + sum((["-L", d] for d in elpa_dirs), [])
+           + ["-l", str(script), "--eval",
+              f'(org-import-convert-batch "{src_dir}" "{out_dir}" "html")'])
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if "ORG-IMPORT-BULK-DONE" not in (r.stdout + r.stderr):
+        sys.exit(f"org-import bulk conversion failed ({src_dir}):\n"
+                 f"stdout:\n{r.stdout[-2000:]}\nstderr:\n{r.stderr[-2000:]}")
 
 
 DANGEROUS_KW_RE = re.compile(r"^\s*#\+(include|setupfile|bind|header|options|cite_export|print_bibliography|call|results|plot)\b", re.I)
@@ -150,20 +182,18 @@ def rewrite_links(org: str, pages: set, doc: str) -> str:
                .replace("#+begin_src indentedblock-preformatted", "#+begin_example")
 
 
-def assemble(html: str, pages: set, doc: str, page: str) -> str | None:
+def assemble(html: str, body: str, pages: set, doc: str, page: str) -> str | None:
     title = page_title(html)
-    # nav row: first nav-panel wins (it repeats at the bottom)
-    navs = {}
-    m = NAV_PANEL_RE.search(html)
-    if m:
-        for key, href, desc in NAV_ROW_RE.findall(m.group(0)):
-            navs.setdefault(key, (Path(href).name.replace(".html", ""), clean_title(re.sub(r"<[^>]+>", "", desc))))
-    body = pandoc_org(body_of(html))
     if not body.strip():
         return None
     body = rewrite_links(body, pages, doc)
     body = escape_keywords(body)
     node_id = f"{doc}--{page}"
+    navs = {}
+    m = NAV_PANEL_RE.search(html)
+    if m:
+        for key, href, desc in NAV_ROW_RE.findall(m.group(0)):
+            navs.setdefault(key, (Path(href).name.replace(".html", ""), clean_title(re.sub(r"<[^>]+>", "", desc))))
     nav_bits = []
     nxt = navs.get("Next")
     # the line ALWAYS opens with "Next: " so the exporter's structural
@@ -180,18 +210,38 @@ def assemble(html: str, pages: set, doc: str, page: str) -> str | None:
 
 
 def main():
-    src, doc, out = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3])
+    src = Path(sys.argv[1]).resolve()
+    doc, out = sys.argv[2], Path(sys.argv[3])
     htmls = sorted(src.glob("*.html"))
     pages = {p.stem for p in htmls}
+    # Stage the nav-stripped HTML, let org-import convert the whole directory
+    # in one batch emacs, then read the .org bodies back.
+    staging = TMP_ROOT / "src" / doc
+    converted = TMP_ROOT / "org" / doc
+    staging.mkdir(parents=True, exist_ok=True)
+    converted.mkdir(parents=True, exist_ok=True)
     (out / doc).mkdir(parents=True, exist_ok=True)
+    for p in htmls:
+        (staging / f"{p.stem}.html").write_text(
+            body_of(p.read_text(encoding="utf-8", errors="replace")),
+            encoding="utf-8")
+    org_import_bulk(staging, converted)
+    # org-import-bulk mirrors paths under OUT-DIR; its URL-mirror special case
+    # names `subdir/index.html' after the containing directory, and a root-level
+    # index.html degenerates to a hidden ".org" (file-name-directory always
+    # carries the trailing slash the equality check lacks).  Restore the name.
+    stray = converted / ".org"
+    if stray.exists():
+        stray.rename(converted / "index.org")
     n_ok = n_skip = 0
     for p in htmls:
-        html = p.read_text(encoding="utf-8", errors="replace")
-        org = assemble(html, pages, doc, p.stem)
-        if org is None:
+        org_file = converted / f"{p.stem}.org"
+        body = org_file.read_text(encoding="utf-8", errors="replace") if org_file.exists() else ""
+        page = assemble(p.read_text(encoding="utf-8", errors="replace"), body, pages, doc, p.stem)
+        if page is None:
             n_skip += 1
             continue
-        (out / doc / f"{p.stem}.org").write_text(org, encoding="utf-8")
+        (out / doc / f"{p.stem}.org").write_text(page, encoding="utf-8")
         n_ok += 1
     print(f"{doc}: {n_ok} nodes ({n_skip} empty skipped) -> {out}/{doc}")
 

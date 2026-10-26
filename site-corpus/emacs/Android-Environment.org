@@ -7,6 +7,9 @@
 Next: [[id:emacs--Android-Windowing][The Android Window System]]   Previous: [[id:emacs--Android-Document-Providers][Accessing Files from Other Programs on Android]]   Up: [[id:emacs--Android][Emacs and Android]]
 
 <<Android-Environment>>
+
+--------------
+
 *** H.5 Running Emacs under Android [[#Running-Emacs-under-Android][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Running-Emacs-under-Android
@@ -59,7 +62,7 @@ $ adb shell "settings put global settings_enable_monitor_phantom_procs false"
 
 The “Languages & Input” preferences which apply to the operating system do not influence the C locale set for programs, but are taken into account by Emacs during startup: a locale name is generated from the selected language and regional variant and a language environment (see [[id:emacs--Language-Environments][Language Environments]]) is selected on that basis, which does not overwrite =LANG= or other locale-related environment variables. The coding system for language environments set in this fashion is =utf-8-unix= without exception.
 
-Instead, the =LANG= environment variable (see [[id:emacs--Environment::#General-Variables][General Variables]]) is set to =en_US.utf8= when Emacs starts on Android 5.0 or newer, which induces subprocesses linked against the Android C library to print output sensibly. Earlier versions of Android do not implement locales at all, and on that account, the variable is set to =C=.
+Instead, the =LANG= environment variable (see [[id:emacs--General-Variables][General Variables]]) is set to =en_US.utf8= when Emacs starts on Android 5.0 or newer, which induces subprocesses linked against the Android C library to print output sensibly. Earlier versions of Android do not implement locales at all, and on that account, the variable is set to =C=.
 
 Application processes are treated as disposable entities by the system. When all Emacs frames move to the background, Emacs might be terminated by the system at any time, for the purpose of saving system resources.
 

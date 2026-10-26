@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Guile-Studio>>
-Next: [[id:guix--Vim-and-NeoVim][Vim and NeoVim]], Previous: [[id:guix--Emacs][Emacs]], Up: [[id:guix--The-Perfect-Setup][The Perfect Setup]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Vim-and-NeoVim][Vim and NeoVim]], Up: [[id:guix--Alternative-Setups][Alternative Setups]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.5.2 Guile Studio [[#Guile-Studio-1][¶]]
+<<Guile-Studio-1>>
+**** 22.6.1 Guile Studio
 :PROPERTIES:
-:CUSTOM_ID: Guile-Studio-1
+:CUSTOM_ID: guile-studio
 :CLASS: subsection
 :END:
 Guile Studio is a pre-configured Emacs with mostly everything you need to start hacking in Guile. If you are not familiar with Emacs it makes the transition easier for you.

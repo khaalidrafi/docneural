@@ -7,13 +7,21 @@
 Next: [[id:emacs--Registers][Registers]]   Previous: [[id:emacs--Mark][The Mark and the Region]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Killing>>
+
+--------------
+
 ** 14 Killing and Moving Text [[#Killing-and-Moving-Text][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Killing-and-Moving-Text
 :CLASS: chapter
 :END:
-In Emacs, /killing/ means erasing text and copying it into the /kill ring/. /Yanking/ means bringing text from the kill ring back into the buffer. (Some applications use the terms “cutting” and “pasting” for similar operations.) The kill ring is so-named because it can be visualized as a set of blocks of text arranged in a ring, which you can access in cyclic order. See [[id:emacs--Yanking::#Kill-Ring][The Kill Ring]].
+In Emacs, /killing/ means erasing text and copying it into the /kill ring/. /Yanking/ means bringing text from the kill ring back into the buffer. (Some applications use the terms “cutting” and “pasting” for similar operations.) The kill ring is so-named because it can be visualized as a set of blocks of text arranged in a ring, which you can access in cyclic order. See [[id:emacs--Kill-Ring][The Kill Ring]].
 
 Killing and yanking are the most common way to move or copy text within Emacs. It is very versatile, because there are commands for killing many different types of syntactic units.
 
---------------
+- [[id:emacs--Deletion-and-Killing][Deletion and Killing]]
+- [[id:emacs--Yanking][Yanking]]
+- [[id:emacs--Cut-and-Paste][“Cut and Paste” Operations on Graphical Displays]]
+- [[id:emacs--Accumulating-Text][Accumulating Text]]
+- [[id:emacs--Rectangles][Rectangles]]
+- [[id:emacs--CUA-Bindings][CUA Bindings]]

@@ -36,27 +36,30 @@ Next:
 [[../..][]]
 
 <<Building-from-Git>>
-Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.2 Building from Git [[#Building-from-Git-1][¶]]
+<<Building-from-Git-1>>
+*** 22.2 Building from Git
 :PROPERTIES:
-:CUSTOM_ID: Building-from-Git-1
+:CUSTOM_ID: building-from-git
 :CLASS: section
 :END:
-If you want to hack Guix itself, it is recommended to use the latest version from the Git repository[[#FOOT44][^{44}]]:
+If you want to hack Guix itself, it is recommended to use the latest version from the Git repository:
 
 #+begin_example
 git clone https://git.guix.gnu.org/guix.git
 cd guix
 #+end_example
 
+<<index-authentication_002c-of-a-Guix-checkout>>
 How do you ensure that you obtained a genuine copy of the repository? To do that, run =guix git authenticate=, passing it the commit and OpenPGP fingerprint of the /channel introduction/ (see [[id:guix--Invoking-guix-git-authenticate][Invoking =guix git authenticate=]]):
 
 #+begin_example
-guix git authenticate -k origin/keyring \
-   9edb3f66fd807b096b48283debdcddccfea34bad \
+git fetch origin keyring:keyring
+guix git authenticate 9edb3f66fd807b096b48283debdcddccfea34bad \
   "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"
 #+end_example
 
@@ -67,15 +70,19 @@ As you can see, there is a chicken-and-egg problem: you first need to have Guix 
 The easiest way to set up a development environment for Guix is, of course, by using Guix! The following command starts a new shell where all the dependencies and appropriate environment variables are set up to hack on Guix:
 
 #+begin_example
-guix shell -D guix --pure
+guix shell -D guix -CPW
 #+end_example
 
 or even, from within a Git worktree for Guix:
 
 #+begin_example
 echo $(pwd) >> ~/.config/guix/shell-authorized-directories
-guix shell --pure
+guix shell -CPW
 #+end_example
+
+If =-C= (short for =--container=) is not supported on your system, try =--pure= instead of =-CPW=. See [[id:guix--Invoking-guix-shell][Invoking =guix shell=]], for more information on that command.
+
+Most of the test suite runs without an internet connection. The =-N= (short for =--network=) can be added to the =guix shell= command to run the tests that require internet access.
 
 If you are unable to use Guix when building Guix from a checkout, the following are the required packages in addition to those mentioned in the installation instructions (see [[id:guix--Requirements][Requirements]]).
 
@@ -89,7 +96,7 @@ If you are unable to use Guix when building Guix from a checkout, the following 
 On Guix, other development tools, like =strace=, can be included by giving them as extra arguments to =guix shell=:
 
 #+begin_example
-guix shell --pure -D guix strace
+guix shell -D guix -CPW strace
 #+end_example
 
 From there you can generate the build system infrastructure using Autoconf and Automake:
@@ -112,6 +119,7 @@ export ACLOCAL_PATH=/usr/share/aclocal
 
 See [[https://www.gnu.org/software/automake/manual/html_node/Macro-Search-Path.html#Macro-Search-Path][Macro Search Path]] in The GNU Automake Manual, for more information.
 
+<<index-state-directory>> <<index-localstatedir>> <<index-system-configuration-directory>> <<index-sysconfdir>>
 Then, run:
 
 #+begin_example
@@ -120,22 +128,24 @@ Then, run:
 
 Optionally, =--localstatedir= and =--sysconfdir= can also be provided as arguments. By default, =localstatedir= is =/var= (see [[id:guix--The-Store][The Store]], for information about this) and =sysconfdir= is =/etc=. Note that you will probably not run =make install= at the end (you don't have to) but it's still important to pass the right =localstatedir= and =sysconfdir= values, which get recorded in the =(guix config)= Guile module.
 
-Finally, you can build Guix and, if you feel so inclined, run the tests (depending on how you setup your environment, some tests might fail, see [[id:guix--Running-the-Test-Suite][Running the Test Suite]]):
+Finally, you can build Guix and, if you feel so inclined, run the tests (see [[id:guix--Running-the-Test-Suite][Running the Test Suite]]):
 
 #+begin_example
 make
 make check
 #+end_example
 
+If anything fails, take a look at installation instructions (see [[id:guix--Installation][Installation]]) or send a message to the [[mailto:guix-devel@gnu.org][mailing list]].
+
 From there on, you can authenticate all the commits included in your checkout by running:
 
 #+begin_example
-guix git authenticate -k origin/keyring \
+guix git authenticate \
   9edb3f66fd807b096b48283debdcddccfea34bad \
   "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"
 #+end_example
 
-The first run takes a couple of minutes, but subsequent runs are faster. On subsequent runs, you can run the command without any arguments since the /introduction/ (the commit ID and OpenPGP fingerprints above) will have been recorded[[#FOOT45][^{45}]]:
+The first run takes a couple of minutes, but subsequent runs are faster. On subsequent runs, you can run the command without any arguments since the /introduction/ (the commit ID and OpenPGP fingerprints above) will have been recorded[[#FOOT43][^{43}]]:
 
 #+begin_example
 guix git authenticate
@@ -175,20 +185,12 @@ Should =make= fail with an Automake error message after updating, you need to re
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF44][(44)]]
+***** [[#DOCF43][(43)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
-:END:
-Guix uses =master= as the default branch name. A proposal in 2025 to change the default branch name to =main= did not reach consensus. See [[https://codeberg.org/guix/guix-consensus-documents/src/branch/main/003-rename-default-branch.md][Guix Consensus Document 003]].
-
-***** [[#DOCF45][(45)]]
-:PROPERTIES:
-:CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 This requires a recent version of Guix, from May 2024 or more recent.
 
 --------------
 
-Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Running-the-Test-Suite][Running the Test Suite]], Previous: [[id:guix--Requirements][Requirements]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

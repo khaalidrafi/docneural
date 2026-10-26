@@ -7,6 +7,9 @@
 Next: [[id:emacs--Word-and-Line-Mouse][Mouse Commands for Words and Lines]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Mouse-Commands>>
+
+--------------
+
 *** 23.1 Mouse Commands for Editing [[#Mouse-Commands-for-Editing][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Mouse-Commands-for-Editing
@@ -26,7 +29,7 @@ The most basic mouse command is =mouse-set-point=, which is invoked by clicking 
 
 Normally, if the frame you clicked in was not the selected frame, it is made the selected frame, in addition to selecting the window and setting the cursor. On the X Window System, you can change this by setting the variable =x-mouse-click-focus-ignore-position= to =t=. In that case, the initial click on an unselected frame just selects the frame, without doing anything else; clicking again selects the window and sets the cursor position.
 
-Holding down mouse-1 and dragging the mouse over a stretch of text activates the region around that text (=mouse-set-region=), placing the mark where you started holding down the mouse button, and point where you release it (see [[id:emacs--Mark][The Mark and the Region]]). In addition, the text in the region becomes the primary selection (see [[id:emacs--Cut-and-Paste::#Primary-Selection][Cut and Paste with Other Window Applications]]).
+Holding down mouse-1 and dragging the mouse over a stretch of text activates the region around that text (=mouse-set-region=), placing the mark where you started holding down the mouse button, and point where you release it (see [[id:emacs--Mark][The Mark and the Region]]). In addition, the text in the region becomes the primary selection (see [[id:emacs--Primary-Selection][Cut and Paste with Other Window Applications]]).
 
 If you change the variable =mouse-drag-copy-region= to a non-=nil= value, dragging the mouse over a stretch of text also adds the text to the kill ring. The default is =nil=.
 
@@ -36,7 +39,7 @@ If you move the mouse off the top or bottom of the window while dragging, the wi
 
 If you enable the option =mouse-drag-mode-line-buffer= and dragging files is supported by the window system, then dragging the mouse on the buffer name portion of the mode line will drag that buffer's file to another program or frame.
 
-Clicking with the middle mouse button, mouse-2, moves point to the position where you clicked and inserts the contents of the primary selection (=mouse-yank-primary=). See [[id:emacs--Cut-and-Paste::#Primary-Selection][Cut and Paste with Other Window Applications]]. This behavior is consistent with other X applications. Alternatively, you can rebind mouse-2 to =mouse-yank-at-click=, which performs a yank at the position you click.
+Clicking with the middle mouse button, mouse-2, moves point to the position where you clicked and inserts the contents of the primary selection (=mouse-yank-primary=). See [[id:emacs--Primary-Selection][Cut and Paste with Other Window Applications]]. This behavior is consistent with other X applications. Alternatively, you can rebind mouse-2 to =mouse-yank-at-click=, which performs a yank at the position you click.
 
 If you change the variable =mouse-yank-at-point= to a non-=nil= value, mouse-2 does not move point; it inserts the text at point, regardless of where you clicked or even which of the frame's windows you clicked on. This variable affects both =mouse-yank-primary= and =mouse-yank-at-click=.
 

@@ -36,16 +36,21 @@ Next:
 [[../..][]]
 
 <<Specifying-Additional-Channels>>
-Next: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.1 Specifying Additional Channels [[#Specifying-Additional-Channels-1][¶]]
+<<Specifying-Additional-Channels-1>>
+*** 6.1 Specifying Additional Channels
 :PROPERTIES:
-:CUSTOM_ID: Specifying-Additional-Channels-1
+:CUSTOM_ID: specifying-additional-channels
 :CLASS: section
 :END:
+<<index-extending-the-package-collection-_0028channels_0029>> <<index-variant-packages-_0028channels_0029>>
 You can specify /additional channels/ to pull from. To use a channel, write =~/.config/guix/channels.scm= to instruct =guix pull= to pull from it /in addition/ to the default Guix channel(s):
+
+<<index-_0025default_002dchannels>>
 
 #+begin_src lisp
 ;; Add variant packages to those Guix provides.
@@ -55,7 +60,7 @@ You can specify /additional channels/ to pull from. To use a channel, write =~/.
       %default-channels)
 #+end_src
 
-Note that the snippet above is (as always!) Scheme code; we use =cons= to add a channel the list of channels that the variable =%default-channels= is bound to (see [[https://doc.guix.gnu.org/guile/latest/en/html_node/Pairs.html#Pairs][=cons= and lists]] in GNU Guile Reference Manual). With this file in place, =guix pull= builds not only Guix but also the package modules from your own repository. The result in =~/.config/guix/current= is the union of Guix with your own package modules:
+Note that the snippet above is (as always!) Scheme code; we use =cons= to add a channel the list of channels that the variable =%default-channels= is bound to (see [[https://www.gnu.org/software/guile/manual/html_node/Pairs.html#Pairs][=cons= and lists]] in GNU Guile Reference Manual). With this file in place, =guix pull= builds not only Guix but also the package modules from your own repository. The result in =~/.config/guix/current= is the union of Guix with your own package modules:
 
 #+begin_example
 $ guix describe
@@ -71,7 +76,3 @@ Generation 19   Aug 27 2018 16:20:48
 #+end_example
 
 The output of =guix describe= above shows that we're now running Generation 19 and that it includes both Guix and packages from the =variant-packages= channel (see [[id:guix--Invoking-guix-describe][Invoking =guix describe=]]).
-
---------------
-
-Next: [[id:guix--Using-a-Custom-Guix-Channel][Using a Custom Guix Channel]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

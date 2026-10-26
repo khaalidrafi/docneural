@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Sway-window-manager>>
-Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.19 Sway window manager [[#Sway-window-manager-1][¶]]
+<<Sway-window-manager-1>>
+**** 13.3.18 Sway window manager
 :PROPERTIES:
-:CUSTOM_ID: Sway-window-manager-1
+:CUSTOM_ID: sway-window-manager
 :CLASS: subsection
 :END:
+<<index-sway_002c-Home-Service>> <<index-sway_002c-configuration>>
 The =(gnu home services sway)= module provides =home-sway-service-type=, a home service to configure the [[https://github.com/swaywm/sway][Sway window manager for Wayland]] in a declarative way.
 
 Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
@@ -75,9 +78,9 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
 #+end_quote
 
-- Procedure: *sway-configuration->file* =config= [[#index-sway_002dconfiguration_002d_003efile][¶]] :: This procedure takes one argument =config=, which must be a =sway-configuration= record (defined below), and returns a file-like object representing the serialized configuration.
+- Procedure: sway-configuration->file config :: This procedure takes one argument =config=, which must be a =sway-configuration= record (defined below), and returns a file-like object representing the serialized configuration.
 
-- Variable: *home-sway-service-type* [[#index-home_002dsway_002dservice_002dtype][¶]] :: This is a home service type to set up Sway. It takes care of:
+- Variable: home-sway-service-type  :: This is a home service type to set up Sway. It takes care of:
 
   - providing a =~/.config/sway/config= file,
   - adding Sway-related packages to your profile.
@@ -89,9 +92,9 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   #+end_quote
 
-- Variable: *%empty-sway-configuration* [[#index-_0025empty_002dsway_002dconfiguration][¶]] :: The variable =%empty-sway-configuration= contains an empty =sway-configuration= record. This value can help users write simple service extensions.
+- Variable: %empty-sway-configuration  :: The variable =%empty-sway-configuration= contains an empty =sway-configuration= record. This value can help users write simple service extensions.
 
-- Data Type: *sway-configuration* [[#index-sway_002dconfiguration][¶]] :: This configuration record describes the Sway configuration (see sway(5)). Available fields are:
+- Data Type: sway-configuration  :: This configuration record describes the Sway configuration (see sway(5)). Available fields are:
 
   - =variables= (default: =%sway-default-variables=) :: The value of this field is an association list in which keys are symbols and values are either strings, G-expressions or file-like objects (see [[id:guix--G_002dExpressions][G-Expressions]]).
 
@@ -150,7 +153,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   - =extra-content= (default: ='()=) :: Lines to add to the configuration file. The value of this field is a list of strings or G-expressions.
 
-- Data Type: *sway-input* [[#index-sway_002dinput][¶]] :: =sway-input= records describe input blocks (see sway-input(5)). For example, the following snippet makes all keyboards use a French layout, in which capslock has been remapped to ctrl:
+- Data Type: sway-input  :: =sway-input= records describe input blocks (see sway-input(5)). For example, the following snippet makes all keyboards use a French layout, in which capslock has been remapped to ctrl:
 
   #+begin_src lisp
   (sway-input (identifier "type:keyboard")
@@ -177,7 +180,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   - =extra-content= (default: ='()=) :: Lines to add to the input block. The value of this field must a list whose elements are either strings or G-expressions.
 
-- Data Type: *sway-output* [[#index-sway_002doutput][¶]] :: =sway-output= records describe Sway outputs (see sway-output(5)). Available fields are:
+- Data Type: sway-output  :: =sway-output= records describe Sway outputs (see sway-output(5)). Available fields are:
 
   - =identifier= (default: ='*=) :: Identifier of the monitor. The field accepts symbols and strings. If the =identifier= is a symbol, it is inserted as is; if it is a string, it will be quoted in the configuration file.
 
@@ -199,7 +202,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
     - a file-like object,
 
-    - a pair. The first argument of this pair must be a string, a G-expression or a file-like object. The second element describes how the wallpaper will be displayed. It must be a symbol among =stretch=, =fill=, =fit=, =center=, =tile= and =solid_color=.
+    - a pair. The first argument of this pair must be a string, a G-expression or a file-like object. The second element describes how the wallpaper will be displayed. It must be a symbol among =stretch=, =fill=, =fit=, =center= and =tile=.
 
       If the second element is not specified (/i.e./ when the value is not a pair), the =fill= mode will be used.
 
@@ -210,13 +213,13 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   - =extra-content= (default: ='()=) :: List defining additional lines to add to the output configuration block. Elements of the list must be either strings or G-expressions.
 
-- Data Type: *sway-border-color* [[#index-sway_002dborder_002dcolor][¶]] :: - =border= :: Color of the border.
+- Data Type: sway-border-color  :: - =border= :: Color of the border.
 
   - =background= :: Color of the background.
 
   - =text= :: Color of the text.
 
-- Data Type: *sway-color* [[#index-sway_002dcolor][¶]] :: - =background= (optional string) :: Background color of the bar.
+- Data Type: sway-color  :: - =background= (optional string) :: Background color of the bar.
 
   - =statusline= (optional string) :: Text color of the status line.
 
@@ -234,7 +237,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   - =binding-mode= (optional =sway-border-color=) :: Color scheme for the binding mode indicator.
 
-- Data Type: *sway-bar* [[#index-sway_002dbar][¶]] :: Describes the Sway bar (see sway-bar(5)).
+- Data Type: sway-bar  :: Describes the Sway bar (see sway-bar(5)).
 
   - =identifier= (default: ='bar0=) :: Identifier of the bar. The value must be a symbol.
 
@@ -282,7 +285,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
     The module =(gnu home services sway)= exports constants =%ev-code-mouse-left=, =%ev-code-mouse-right= and =%ev-code-mouse-scroll-click= whose values are integers corresponding to left, right and scroll click respectively. For example, with =(mouse-bindings `((,%ev-code-mouse-left . "exec $term")))=, left clicks in the status bar open the terminal (assuming that the variable =$term= is bound to a terminal).
 
-- Data Type: *sway-mode* [[#index-sway_002dmode][¶]] :: Describes a Sway mode (see sway(5)). For example, the following snippet defines the resize mode of the default Sway configuration:
+- Data Type: sway-mode  :: Describes a Sway mode (see sway(5)). For example, the following snippet defines the resize mode of the default Sway configuration:
 
   #+begin_example
   (sway-mode
@@ -298,7 +301,7 @@ The procedure =sway-configuration->file= defined below can be used to provide th
       (Up     . "resize shrink height 10px")
       (Return . "mode \"default\"")
       (Escape . "mode \"default\""))))
-#+end_example
+  #+end_example
 
   - =mode-name= (default: ="default"=) :: Name of the mode. This field accepts strings.
 
@@ -306,22 +309,6 @@ The procedure =sway-configuration->file= defined below can be used to provide th
 
   - =mouse-bindings= (default: ='()=) :: Ditto, but keys are mouse events (integers). Constants =%ev-code-mouse-*= described above can be used as helpers to define mouse bindings.
 
-The =home-jellyfin-mpv-shim-service-type= in the =(gnu home services media)= module runs a cast client for the [[https://jellyfin.org/][Jellyfin]] media system.
-
-To enable, add this to your home services:
-
-#+begin_src lisp
-(service home-jellyfin-mpv-shim-service-type)
-#+end_src
-
-The service starts only if =jellyfin-mpv-shim= has been configured with a remote server and credentials. This must be done manually, by launching =jellyfin-mpv-shim=. After configuring the server, the service will start automatically when you log in.
-
-- Variable: *home-jellyfin-mpv-shim-service-type* [[#index-home_002djellyfin_002dmpv_002dshim_002dservice_002dtype][¶]] :: Type of the service which launches Jellyfin MPV Shim.
-
-- Data Type: *home-jellyfin-mpv-shim-configuration* [[#index-home_002djellyfin_002dmpv_002dshim_002dconfiguration][¶]] :: Available =home-jellyfin-mpv-shim-configuration= fields are:
-
-  - =package= (default: =jellyfin-mpv-shim=) (type: package) :: The Jellyfin MPV Shim package to use.
-
 --------------
 
-Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Networking-Home-Services][Networking Home Services]], Previous: [[id:guix--Niri-window-manager][Niri window manager]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

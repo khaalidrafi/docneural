@@ -36,16 +36,21 @@ Next:
 [[../..][]]
 
 <<Cuirass-Build-Notifications>>
-Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--Debbugs-Usertags][Debbugs Usertags]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.11.3 Cuirass Build Notifications [[#Cuirass-Build-Notifications-1][¶]]
+<<Cuirass-Build-Notifications-1>>
+**** 22.11.5 Cuirass Build Notifications
 :PROPERTIES:
-:CUSTOM_ID: Cuirass-Build-Notifications-1
+:CUSTOM_ID: cuirass-build-notifications
 :CLASS: subsection
 :END:
-Cuirass includes RSS (Really Simple Syndication) feeds as one of its features (see [[https://doc.guix.gnu.org/cuirass/latest/en/html_node/Notifications.html#Notifications][(cuirass)Notifications]]). Since [[https://ci.guix.gnu.org/][Berlin]] runs an instance of Cuirass, this feature can be used to keep track of recently broken or fixed packages caused by changes pushed to the Guix git repository. Any RSS client can be used. A good one, included with Emacs, is See [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Gnus.html#Gnus][(gnus)Gnus]]. To register the feed, copy its URL, then from the main Gnus buffer, ‘=*Group*=', do the following:
+<<index-build-event-notifications_002c-RSS-feed>> <<index-notifications_002c-build-events>>
+Cuirass includes RSS (Really Simple Syndication) feeds as one of its features (see [[https://www.gnu.org/software/guix/cuirass/manual/html_node/Notifications.html#Notifications][(cuirass)Notifications]]). Since [[https://ci.guix.gnu.org/][Berlin]] runs an instance of Cuirass, this feature can be used to keep track of recently broken or fixed packages caused by changes pushed to the Guix git repository. Any RSS client can be used. A good one, included with Emacs, is See [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Gnus.html#Gnus][(gnus)Gnus]]. To register the feed, copy its URL, then from the main Gnus buffer, ‘=*Group*=', do the following:
+
+<<index-Gnus_002c-configuration-to-read-CI-RSS-feeds>> <<index-RSS-feeds_002c-Gnus-configuration>>
 
 #+begin_example
 G R https://ci.guix.gnu.org/events/rss/?specification=master RET
@@ -61,7 +66,3 @@ Then, back at the ‘=*Group*=' buffer, press s to save the newly added RSS grou
 #+end_example
 
 where each RSS entry contains a link to the Cuirass build details page of the associated build.
-
---------------
-
-Previous: [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]], Up: [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

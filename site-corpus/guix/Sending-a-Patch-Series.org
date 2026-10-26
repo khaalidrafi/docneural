@@ -1,0 +1,174 @@
+:PROPERTIES:
+:ID: guix--Sending-a-Patch-Series
+:END:
+#+filetags: :guix:
+#+title: Sending a Patch Series
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Sending-a-Patch-Series>>
+
+Previous: [[id:guix--Configuring-Git][Configuring Git]], Up: [[id:guix--Submitting-Patches][Submitting Patches]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
+
+--------------
+
+<<Sending-a-Patch-Series-1>>
+**** 22.10.2 Sending a Patch Series
+:PROPERTIES:
+:CUSTOM_ID: sending-a-patch-series
+:CLASS: subsection
+:END:
+<<index-patch-series>> <<index-git-send_002demail-1>> <<index-git-format_002dpatch-1>>
+
+#+begin_quote
+*Warning:* This section is about contributing code by sending patches by email. This option is supported until December 31st, 2025, but we recommend getting familiar with the /pull request/ workflow, which will become the norm after that date. See [[id:guix--Submitting-Patches][Submitting Patches]], for more info.
+
+#+end_quote
+
+- [[#Single-Patches-1][Single Patches]]
+- [[#Notifying-Teams-1][Notifying Teams]]
+- [[#Multiple-Patches-1][Multiple Patches]]
+
+<<Single-Patches-1>>
+**** Single Patches
+:PROPERTIES:
+:CUSTOM_ID: single-patches
+:CLASS: unnumberedsubsubsec
+:END:
+<<Single-Patches>>
+The =git send-email= command is the best way to send both single patches and patch series (see [[#Multiple-Patches][Multiple Patches]]) to the Guix mailing list. Sending patches as email attachments may make them difficult to review in some mail clients, and =git diff= does not store commit metadata.
+
+#+begin_quote
+*Note:* The =git send-email= command is provided by the =send-email= output of the =git= package, i.e. =git:send-email=.
+
+#+end_quote
+
+The following command will create a patch email from the latest commit, open it in your =EDITOR= or =VISUAL= for editing, and send it to the Guix mailing list to be reviewed and merged. Assuming you have already configured Git according to See [[id:guix--Configuring-Git][Configuring Git]], you can simply use:
+
+#+begin_example
+$ git send-email --annotate -1
+#+end_example
+
+#+begin_quote
+*Tip:* To add a prefix to the subject of your patch, you may use the =--subject-prefix= option. The Guix project uses this to specify that the patch is intended for a branch or repository other than the =master= branch of [[https://codeberg.org/guix/guix.git]].
+
+#+begin_example
+git send-email --annotate --subject-prefix='PATCH core-updates' -1
+#+end_example
+
+#+end_quote
+
+The patch email contains a three-dash separator line after the commit message. You may “annotate” the patch with explanatory text by adding it under this line. If you do not wish to annotate the email, you may drop the =--annotate= option.
+
+If you need to send a revised patch, don't resend it like this or send a “fix” patch to be applied on top of the last one; instead, use =git commit --amend= or [[https://git-rebase.io][=git rebase=]] to modify the commit, and use the [[mailto:ISSUE_NUMBER@debbugs.gnu.org][=ISSUE_NUMBER=@debbugs.gnu.org]] address and the =-v= flag with =git send-email=.
+
+#+begin_example
+$ git commit --amend
+$ git send-email --annotate -vREVISION \
+      --to=ISSUE_NUMBER@debbugs.gnu.org -1
+#+end_example
+
+#+begin_quote
+*Note:* Due to an apparent bug in =git send-email=, =-v ==REVISION= (with the space) will not work; you /must/ use =-v==REVISION=.
+
+#+end_quote
+
+You can find out =ISSUE_NUMBER= either by searching on the mumi interface at [[https://issues.guix.gnu.org]] for the name of your patch or reading the acknowledgement email sent automatically by Debbugs in reply to incoming bugs and patches, which contains the bug number.
+
+<<Notifying-Teams-1>>
+**** Notifying Teams
+:PROPERTIES:
+:CUSTOM_ID: notifying-teams
+:CLASS: unnumberedsubsubsec
+:END:
+<<Notifying-Teams>><<index-teams>>
+If your git checkout has been correctly configured (see [[id:guix--Configuring-Git][Configuring Git]]), the =git send-email= command will automatically notify the appropriate team members, based on the scope of your changes. This relies on the =etc/teams.scm= script, which can also be invoked manually if you do not use the preferred =git send-email= command to submit patches. To list the available actions of the script, you can invoke it via the =etc/teams.scm help= command. For more information regarding teams, see [[id:guix--Teams][Teams]].
+
+#+begin_quote
+*Note:* On foreign distros, you might have to use =./pre-inst-env git send-email= for =etc/teams.scm= to work.
+
+#+end_quote
+
+<<Multiple-Patches-1>>
+**** Multiple Patches
+:PROPERTIES:
+:CUSTOM_ID: multiple-patches
+:CLASS: unnumberedsubsubsec
+:END:
+<<Multiple-Patches>><<index-cover-letter>>
+While =git send-email= alone will suffice for a single patch, an unfortunate flaw in Debbugs means you need to be more careful when sending multiple patches: if you send them all to the [[mailto:guix-patches@gnu.org][guix-patches@gnu.org]] address, a new issue will be created for each patch!
+
+When sending a series of patches, it's best to send a Git “cover letter” first, to give reviewers an overview of the patch series. We can create a directory called =outgoing= containing both our patch series and a cover letter called =0000-cover-letter.patch= with =git format-patch=.
+
+#+begin_example
+$ git format-patch -NUMBER_COMMITS -o outgoing \
+      --cover-letter
+#+end_example
+
+#+begin_quote
+*Note:* =git format-patch= accepts a wide range of [[https://git-scm.com/docs/gitrevisions][revision range]] specifiers. For example, if you are working in a branch, you could select all commits in your branch starting at =master=.
+
+#+begin_example
+$ git format-patch master..MY_BRANCH -o outgoing \
+      --cover-letter
+#+end_example
+
+#+end_quote
+
+We can now send /just/ the cover letter to the [[mailto:guix-patches@gnu.org][guix-patches@gnu.org]] address, which will create an issue that we can send the rest of the patches to.
+
+#+begin_example
+$ git send-email outgoing/0000-cover-letter.patch --annotate
+$ rm outgoing/0000-cover-letter.patch # we don't want to resend it!
+#+end_example
+
+Ensure you edit the email to add an appropriate subject line and blurb before sending it. Note the automatically generated shortlog and diffstat below the blurb.
+
+Once the Debbugs mailer has replied to your cover letter email, you can send the actual patches to the newly-created issue address.
+
+#+begin_example
+$ git send-email outgoing/*.patch --to=ISSUE_NUMBER@debbugs.gnu.org
+$ rm -rf outgoing # we don't need these anymore
+#+end_example
+
+Thankfully, this =git format-patch= dance is not necessary to send an amended patch series, since an issue already exists for the patchset.
+
+#+begin_example
+$ git send-email -NUMBER_COMMITS -vREVISION \
+      --to=ISSUE_NUMBER@debbugs.gnu.org
+#+end_example
+
+If need be, you may use =--cover-letter --annotate= to send another cover letter, e.g. for explaining what's changed since the last revision, and why these changes are necessary.
+
+--------------
+
+Previous: [[id:guix--Configuring-Git][Configuring Git]], Up: [[id:guix--Submitting-Patches][Submitting Patches]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,13 +36,16 @@ Next:
 [[../..][]]
 
 <<Perl-Modules>>
-Next: [[id:guix--Java-Packages][Java Packages]], Previous: [[id:guix--Python-Modules][Python Modules]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Java-Packages][Java Packages]], Previous: [[id:guix--Python-Modules][Python Modules]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.11 Perl Modules [[#Perl-Modules-1][¶]]
+<<Perl-Modules-1>>
+**** 22.8.10 Perl Modules
 :PROPERTIES:
-:CUSTOM_ID: Perl-Modules-1
+:CUSTOM_ID: perl-modules
 :CLASS: subsection
 :END:
+<<index-perl>>
 Perl programs standing for themselves are named as any other package, using the lowercase upstream name. For Perl packages containing a single class, we use the lowercase class name, replace all occurrences of =::= by dashes and prepend the prefix =perl-=. So the class =XML::Parser= becomes =perl-xml-parser=. Modules containing several classes keep their lowercase upstream name and are also prepended by =perl-=. Such modules tend to have the word =perl= somewhere in their name, which gets dropped in favor of the prefix. For instance, =libwww-perl= becomes =perl-libwww=.

@@ -36,34 +36,24 @@ Next:
 [[../..][]]
 
 <<Version-Control-Services>>
-Next: [[id:guix--Game-Services][Game Services]], Previous: [[id:guix--Virtualization-Services][Virtualization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Game-Services][Game Services]], Previous: [[id:guix--Virtualization-Services][Virtualization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.34 Version Control Services [[#Version-Control-Services-1][¶]]
+<<Version-Control-Services-1>>
+**** 11.10.32 Version Control Services
 :PROPERTIES:
-:CUSTOM_ID: Version-Control-Services-1
+:CUSTOM_ID: version-control-services
 :CLASS: subsection
 :END:
-The =(gnu services version-control)= module provides services to allow remote access to local Git and Fossil repositories. For Git, the following services are available.
+The =(gnu services version-control)= module provides a service to allow remote access to local Git repositories. There are three options: the =git-daemon-service-type=, which provides access to repositories via the =git://= unsecured TCP-based protocol, extending the =nginx= web server to proxy some requests to =git-http-backend=, or providing a web interface with =cgit-service-type=.
 
-- The [[#git_002ddaemon_002dservice_002dtype][Git daemon service]] provides access via the unsecured TCP-based =git://= protocol.
-- The =nginx= web server can proxy some requests to [[#git_002dhttp_002dbackend][Git Smart HTTP backend]].
-- The [[#cgit_002dservice_002dtype][cgit service]] also implements Git Smart HTTP protocol, in addition to a web interface.
-- The [[#gitolite_002dservice_002dtype][Gitolite service]] offers access through SSH. The [[#gitile_002dservice_002dtype][Gitile service]] can be used along side it to provide a web interface.
+- Variable: git-daemon-service-type  :: Type for a service that runs =git daemon=, a simple TCP server to expose repositories over the Git protocol for anonymous access.
 
-Fossil repositories are served along with a web interface by the [[#fossil_002dservice_002dtype][Fossil service]].
+  The value for this service type is a =<git-daemon-configuration>= record, by default it allows read-only access to exported[[#FOOT35][^{35}]] repositories under =/srv/git=.
 
-**** Git Daemon Service [[#Git-Daemon-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Git-Daemon-Service
-:CLASS: subsubheading
-:END:
-- Variable: *git-daemon-service-type* [[#index-git_002ddaemon_002dservice_002dtype][¶]] :: Type for a service that runs =git daemon=, a simple TCP server to expose repositories over the Git protocol for anonymous access.
-
-  The value for this service type is a =<git-daemon-configuration>= record, by default it allows read-only access to exported[[#FOOT37][^{37}]] repositories under =/srv/git=.
-
-- Data Type: *git-daemon-configuration* [[#index-git_002ddaemon_002dconfiguration][¶]] :: Data type representing the configuration for =git-daemon-service-type=.
+- Data Type: git-daemon-configuration  :: Data type representing the configuration for =git-daemon-service-type=.
 
   - =package= (default: =git=) :: Package object of the Git distributed version control system.
 
@@ -79,20 +69,13 @@ Fossil repositories are served along with a web interface by the [[#fossil_002ds
 
   - =whitelist= (default: ='()=) :: If not empty, only allow access to this list of directories.
 
-  - =extra-options= (default: ='()=) :: Extra options that will be passed to =git daemon=.[[#FOOT38][^{38}]]
+  - =extra-options= (default: ='()=) :: Extra options that will be passed to =git daemon=.[[#FOOT36][^{36}]]
 
-The =git://= protocol lacks authentication. When you pull from a repository fetched via =git://=, you don't know whether the data you receive was modified or is even coming from the specified host, and your connection is subject to eavesdropping.
-
-**** Git HTTP Backend [[#Git-HTTP-Backend][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Git-HTTP-Backend
-:CLASS: subsubheading
-:END:
-It's better to use an authenticated and encrypted transport, such as =https=. Although Git allows you to serve repositories using unsophisticated file-based web servers, there is a faster protocol implemented by the =git-http-backend= program. This program is the back-end of a proper Git web service. It is designed to sit behind a FastCGI proxy. See [[id:guix--Web-Services][Web Services]], for more on running the necessary =fcgiwrap= daemon.
+The =git://= protocol lacks authentication. When you pull from a repository fetched via =git://=, you don't know whether the data you receive was modified or is even coming from the specified host, and your connection is subject to eavesdropping. It's better to use an authenticated and encrypted transport, such as =https=. Although Git allows you to serve repositories using unsophisticated file-based web servers, there is a faster protocol implemented by the =git-http-backend= program. This program is the back-end of a proper Git web service. It is designed to sit behind a FastCGI proxy. See [[id:guix--Web-Services][Web Services]], for more on running the necessary =fcgiwrap= daemon.
 
 Guix has a separate configuration data type for serving Git repositories over HTTP.
 
-- Data Type: *git-http-configuration* [[#index-git_002dhttp_002dconfiguration][¶]] :: Data type representing the configuration for a future =git-http-service-type=; can currently be used to configure Nginx through =git-http-nginx-location-configuration=.
+- Data Type: git-http-configuration  :: Data type representing the configuration for a future =git-http-service-type=; can currently be used to configure Nginx through =git-http-nginx-location-configuration=.
 
   - =package= (default: =git=) :: Package object of the Git distributed version control system.
 
@@ -106,7 +89,7 @@ Guix has a separate configuration data type for serving Git repositories over HT
 
 There is no =git-http-service-type=, currently; instead you can create an =nginx-location-configuration= from a =git-http-configuration= and then add that location to a web server.
 
-- Procedure: *git-http-nginx-location-configuration* =[config=(git-http-configuration)]= [[#index-git_002dhttp_002dnginx_002dlocation_002dconfiguration][¶]] :: Compute an =nginx-location-configuration= that corresponds to the given Git http configuration. An example nginx service definition to serve the default =/srv/git= over HTTPS might be:
+- Procedure: git-http-nginx-location-configuration [config=(git-http-configuration)] :: Compute an =nginx-location-configuration= that corresponds to the given Git http configuration. An example nginx service definition to serve the default =/srv/git= over HTTPS might be:
 
   #+begin_src lisp
   (service nginx-service-type
@@ -128,11 +111,13 @@ There is no =git-http-service-type=, currently; instead you can create an =nginx
 
   This example assumes that you are using Let's Encrypt to get your TLS certificate. See [[id:guix--Certificate-Services][Certificate Services]]. The default =certbot= service will redirect all HTTP traffic on =git.my-host.org= to HTTPS. You will also need to add an =fcgiwrap= proxy to your system services. See [[id:guix--Web-Services][Web Services]].
 
-**** Cgit Service [[#Cgit-Service][¶]]
+<<Cgit-Service>>
+**** Cgit Service
 :PROPERTIES:
-:CUSTOM_ID: Cgit-Service
+:CUSTOM_ID: cgit-service
 :CLASS: subsubheading
 :END:
+<<index-Cgit-service>> <<index-Git_002c-web-interface>>
 [[https://git.zx2c4.com/cgit/][Cgit]] is a web frontend for Git repositories written in C.
 
 The following example will configure the service with default values. By default, Cgit can be accessed on port 80 (=http://localhost:80=).
@@ -145,465 +130,465 @@ The =file-object= type designates either a file-like object (see [[id:guix--G_00
 
 Available =cgit-configuration= fields are:
 
-- =cgit-configuration= parameter: =package= *package* [[#index-package-2][¶]] :: The CGIT package.
+- =cgit-configuration= parameter: /package/ *package* [[#index-package-2][¶]] :: The CGIT package.
 
-- =cgit-configuration= parameter: =nginx-server-configuration-list= *nginx* [[#index-nginx][¶]] :: NGINX configuration.
+- =cgit-configuration= parameter: /nginx-server-configuration-list/ *nginx* [[#index-nginx][¶]] :: NGINX configuration.
 
-- =cgit-configuration= parameter: =file-object= *about-filter* [[#index-about_002dfilter][¶]] :: Specifies a command which will be invoked to format the content of about pages (both top-level and for each repository).
-
-  Defaults to ‘=""='.
-
-- =cgit-configuration= parameter: =string= *agefile* [[#index-agefile][¶]] :: Specifies a path, relative to each repository path, which can be used to specify the date and time of the youngest commit in the repository.
+- =cgit-configuration= parameter: /file-object/ *about-filter* [[#index-about_002dfilter][¶]] :: Specifies a command which will be invoked to format the content of about pages (both top-level and for each repository).
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =file-object= *auth-filter* [[#index-auth_002dfilter][¶]] :: Specifies a command that will be invoked for authenticating repository access.
+- =cgit-configuration= parameter: /string/ *agefile* [[#index-agefile][¶]] :: Specifies a path, relative to each repository path, which can be used to specify the date and time of the youngest commit in the repository.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *branch-sort* [[#index-branch_002dsort][¶]] :: Flag which, when set to ‘=age=', enables date ordering in the branch ref list, and when set ‘=name=' enables ordering by branch name.
+- =cgit-configuration= parameter: /file-object/ *auth-filter* [[#index-auth_002dfilter][¶]] :: Specifies a command that will be invoked for authenticating repository access.
+
+  Defaults to ‘=""='.
+
+- =cgit-configuration= parameter: /string/ *branch-sort* [[#index-branch_002dsort][¶]] :: Flag which, when set to ‘=age=', enables date ordering in the branch ref list, and when set ‘=name=' enables ordering by branch name.
 
   Defaults to ‘="name"='.
 
-- =cgit-configuration= parameter: =string= *cache-root* [[#index-cache_002droot][¶]] :: Path used to store the cgit cache entries.
+- =cgit-configuration= parameter: /string/ *cache-root* [[#index-cache_002droot][¶]] :: Path used to store the cgit cache entries.
 
   Defaults to ‘="/var/cache/cgit"='.
 
-- =cgit-configuration= parameter: =integer= *cache-static-ttl* [[#index-cache_002dstatic_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of repository pages accessed with a fixed SHA1.
+- =cgit-configuration= parameter: /integer/ *cache-static-ttl* [[#index-cache_002dstatic_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of repository pages accessed with a fixed SHA1.
 
   Defaults to ‘=-1='.
 
-- =cgit-configuration= parameter: =integer= *cache-dynamic-ttl* [[#index-cache_002ddynamic_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of repository pages accessed without a fixed SHA1.
+- =cgit-configuration= parameter: /integer/ *cache-dynamic-ttl* [[#index-cache_002ddynamic_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of repository pages accessed without a fixed SHA1.
 
   Defaults to ‘=5='.
 
-- =cgit-configuration= parameter: =integer= *cache-repo-ttl* [[#index-cache_002drepo_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository summary page.
+- =cgit-configuration= parameter: /integer/ *cache-repo-ttl* [[#index-cache_002drepo_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository summary page.
 
   Defaults to ‘=5='.
 
-- =cgit-configuration= parameter: =integer= *cache-root-ttl* [[#index-cache_002droot_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository index page.
+- =cgit-configuration= parameter: /integer/ *cache-root-ttl* [[#index-cache_002droot_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository index page.
 
   Defaults to ‘=5='.
 
-- =cgit-configuration= parameter: =integer= *cache-scanrc-ttl* [[#index-cache_002dscanrc_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the result of scanning a path for Git repositories.
+- =cgit-configuration= parameter: /integer/ *cache-scanrc-ttl* [[#index-cache_002dscanrc_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the result of scanning a path for Git repositories.
 
   Defaults to ‘=15='.
 
-- =cgit-configuration= parameter: =integer= *cache-about-ttl* [[#index-cache_002dabout_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository about page.
+- =cgit-configuration= parameter: /integer/ *cache-about-ttl* [[#index-cache_002dabout_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of the repository about page.
 
   Defaults to ‘=15='.
 
-- =cgit-configuration= parameter: =integer= *cache-snapshot-ttl* [[#index-cache_002dsnapshot_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of snapshots.
+- =cgit-configuration= parameter: /integer/ *cache-snapshot-ttl* [[#index-cache_002dsnapshot_002dttl][¶]] :: Number which specifies the time-to-live, in minutes, for the cached version of snapshots.
 
   Defaults to ‘=5='.
 
-- =cgit-configuration= parameter: =integer= *cache-size* [[#index-cache_002dsize][¶]] :: The maximum number of entries in the cgit cache. When set to ‘=0=', caching is disabled.
+- =cgit-configuration= parameter: /integer/ *cache-size* [[#index-cache_002dsize][¶]] :: The maximum number of entries in the cgit cache. When set to ‘=0=', caching is disabled.
 
   Defaults to ‘=0='.
 
-- =cgit-configuration= parameter: =boolean= *case-sensitive-sort?* [[#index-case_002dsensitive_002dsort_003f][¶]] :: Sort items in the repo list case sensitively.
+- =cgit-configuration= parameter: /boolean/ *case-sensitive-sort?* [[#index-case_002dsensitive_002dsort_003f][¶]] :: Sort items in the repo list case sensitively.
 
   Defaults to ‘=#t='.
 
-- =cgit-configuration= parameter: =list= *clone-prefix* [[#index-clone_002dprefix][¶]] :: List of common prefixes which, when combined with a repository URL, generates valid clone URLs for the repository.
+- =cgit-configuration= parameter: /list/ *clone-prefix* [[#index-clone_002dprefix][¶]] :: List of common prefixes which, when combined with a repository URL, generates valid clone URLs for the repository.
 
   Defaults to ‘='()='.
 
-- =cgit-configuration= parameter: =list= *clone-url* [[#index-clone_002durl][¶]] :: List of =clone-url= templates.
+- =cgit-configuration= parameter: /list/ *clone-url* [[#index-clone_002durl][¶]] :: List of =clone-url= templates.
 
   Defaults to ‘='()='.
 
-- =cgit-configuration= parameter: =file-object= *commit-filter* [[#index-commit_002dfilter][¶]] :: Command which will be invoked to format commit messages.
+- =cgit-configuration= parameter: /file-object/ *commit-filter* [[#index-commit_002dfilter][¶]] :: Command which will be invoked to format commit messages.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *commit-sort* [[#index-commit_002dsort][¶]] :: Flag which, when set to ‘=date=', enables strict date ordering in the commit log, and when set to ‘=topo=' enables strict topological ordering.
+- =cgit-configuration= parameter: /string/ *commit-sort* [[#index-commit_002dsort][¶]] :: Flag which, when set to ‘=date=', enables strict date ordering in the commit log, and when set to ‘=topo=' enables strict topological ordering.
 
   Defaults to ‘="git log"='.
 
-- =cgit-configuration= parameter: =file-object= *css* [[#index-css][¶]] :: URL which specifies the css document to include in all cgit pages.
+- =cgit-configuration= parameter: /file-object/ *css* [[#index-css][¶]] :: URL which specifies the css document to include in all cgit pages.
 
   Defaults to ‘="/share/cgit/cgit.css"='.
 
-- =cgit-configuration= parameter: =file-object= *email-filter* [[#index-email_002dfilter][¶]] :: Specifies a command which will be invoked to format names and email address of committers, authors, and taggers, as represented in various places throughout the cgit interface.
+- =cgit-configuration= parameter: /file-object/ *email-filter* [[#index-email_002dfilter][¶]] :: Specifies a command which will be invoked to format names and email address of committers, authors, and taggers, as represented in various places throughout the cgit interface.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =boolean= *embedded?* [[#index-embedded_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate a HTML fragment suitable for embedding in other HTML pages.
+- =cgit-configuration= parameter: /boolean/ *embedded?* [[#index-embedded_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate a HTML fragment suitable for embedding in other HTML pages.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-commit-graph?* [[#index-enable_002dcommit_002dgraph_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print an ASCII-art commit history graph to the left of the commit messages in the repository log page.
+- =cgit-configuration= parameter: /boolean/ *enable-commit-graph?* [[#index-enable_002dcommit_002dgraph_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print an ASCII-art commit history graph to the left of the commit messages in the repository log page.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-filter-overrides?* [[#index-enable_002dfilter_002doverrides_003f][¶]] :: Flag which, when set to ‘=#t=', allows all filter settings to be overridden in repository-specific cgitrc files.
+- =cgit-configuration= parameter: /boolean/ *enable-filter-overrides?* [[#index-enable_002dfilter_002doverrides_003f][¶]] :: Flag which, when set to ‘=#t=', allows all filter settings to be overridden in repository-specific cgitrc files.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-follow-links?* [[#index-enable_002dfollow_002dlinks_003f][¶]] :: Flag which, when set to ‘=#t=', allows users to follow a file in the log view.
+- =cgit-configuration= parameter: /boolean/ *enable-follow-links?* [[#index-enable_002dfollow_002dlinks_003f][¶]] :: Flag which, when set to ‘=#t=', allows users to follow a file in the log view.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-http-clone?* [[#index-enable_002dhttp_002dclone_003f][¶]] :: If set to ‘=#t=', cgit will act as an dumb HTTP endpoint for Git clones.
+- =cgit-configuration= parameter: /boolean/ *enable-http-clone?* [[#index-enable_002dhttp_002dclone_003f][¶]] :: If set to ‘=#t=', cgit will act as an dumb HTTP endpoint for Git clones.
 
   Defaults to ‘=#t='.
 
-- =cgit-configuration= parameter: =boolean= *enable-index-links?* [[#index-enable_002dindex_002dlinks_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate extra links "summary", "commit", "tree" for each repo in the repository index.
+- =cgit-configuration= parameter: /boolean/ *enable-index-links?* [[#index-enable_002dindex_002dlinks_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate extra links "summary", "commit", "tree" for each repo in the repository index.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-index-owner?* [[#index-enable_002dindex_002downer_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit display the owner of each repo in the repository index.
+- =cgit-configuration= parameter: /boolean/ *enable-index-owner?* [[#index-enable_002dindex_002downer_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit display the owner of each repo in the repository index.
 
   Defaults to ‘=#t='.
 
-- =cgit-configuration= parameter: =boolean= *enable-log-filecount?* [[#index-enable_002dlog_002dfilecount_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print the number of modified files for each commit on the repository log page.
+- =cgit-configuration= parameter: /boolean/ *enable-log-filecount?* [[#index-enable_002dlog_002dfilecount_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print the number of modified files for each commit on the repository log page.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-log-linecount?* [[#index-enable_002dlog_002dlinecount_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print the number of added and removed lines for each commit on the repository log page.
+- =cgit-configuration= parameter: /boolean/ *enable-log-linecount?* [[#index-enable_002dlog_002dlinecount_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit print the number of added and removed lines for each commit on the repository log page.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-remote-branches?* [[#index-enable_002dremote_002dbranches_003f][¶]] :: Flag which, when set to =#t=, will make cgit display remote branches in the summary and refs views.
+- =cgit-configuration= parameter: /boolean/ *enable-remote-branches?* [[#index-enable_002dremote_002dbranches_003f][¶]] :: Flag which, when set to =#t=, will make cgit display remote branches in the summary and refs views.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-subject-links?* [[#index-enable_002dsubject_002dlinks_003f][¶]] :: Flag which, when set to =1=, will make cgit use the subject of the parent commit as link text when generating links to parent commits in commit view.
+- =cgit-configuration= parameter: /boolean/ *enable-subject-links?* [[#index-enable_002dsubject_002dlinks_003f][¶]] :: Flag which, when set to =1=, will make cgit use the subject of the parent commit as link text when generating links to parent commits in commit view.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-html-serving?* [[#index-enable_002dhtml_002dserving_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit use the subject of the parent commit as link text when generating links to parent commits in commit view.
+- =cgit-configuration= parameter: /boolean/ *enable-html-serving?* [[#index-enable_002dhtml_002dserving_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit use the subject of the parent commit as link text when generating links to parent commits in commit view.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *enable-tree-linenumbers?* [[#index-enable_002dtree_002dlinenumbers_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate linenumber links for plaintext blobs printed in the tree view.
+- =cgit-configuration= parameter: /boolean/ *enable-tree-linenumbers?* [[#index-enable_002dtree_002dlinenumbers_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit generate linenumber links for plaintext blobs printed in the tree view.
 
   Defaults to ‘=#t='.
 
-- =cgit-configuration= parameter: =boolean= *enable-git-config?* [[#index-enable_002dgit_002dconfig_003f][¶]] :: Flag which, when set to ‘=#f=', will allow cgit to use Git config to set any repo specific settings.
+- =cgit-configuration= parameter: /boolean/ *enable-git-config?* [[#index-enable_002dgit_002dconfig_003f][¶]] :: Flag which, when set to ‘=#f=', will allow cgit to use Git config to set any repo specific settings.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =file-object= *favicon* [[#index-favicon][¶]] :: URL used as link to a shortcut icon for cgit.
+- =cgit-configuration= parameter: /file-object/ *favicon* [[#index-favicon][¶]] :: URL used as link to a shortcut icon for cgit.
 
   Defaults to ‘="/favicon.ico"='.
 
-- =cgit-configuration= parameter: =string= *footer* [[#index-footer][¶]] :: The content of the file specified with this option will be included verbatim at the bottom of all pages (i.e. it replaces the standard "generated by..." message).
+- =cgit-configuration= parameter: /string/ *footer* [[#index-footer][¶]] :: The content of the file specified with this option will be included verbatim at the bottom of all pages (i.e. it replaces the standard "generated by..." message).
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *head-include* [[#index-head_002dinclude][¶]] :: The content of the file specified with this option will be included verbatim in the HTML HEAD section on all pages.
+- =cgit-configuration= parameter: /string/ *head-include* [[#index-head_002dinclude][¶]] :: The content of the file specified with this option will be included verbatim in the HTML HEAD section on all pages.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *header* [[#index-header][¶]] :: The content of the file specified with this option will be included verbatim at the top of all pages.
+- =cgit-configuration= parameter: /string/ *header* [[#index-header][¶]] :: The content of the file specified with this option will be included verbatim at the top of all pages.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =file-object= *include* [[#index-include][¶]] :: Name of a configfile to include before the rest of the current config- file is parsed.
+- =cgit-configuration= parameter: /file-object/ *include* [[#index-include][¶]] :: Name of a configfile to include before the rest of the current config- file is parsed.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *index-header* [[#index-index_002dheader][¶]] :: The content of the file specified with this option will be included verbatim above the repository index.
+- =cgit-configuration= parameter: /string/ *index-header* [[#index-index_002dheader][¶]] :: The content of the file specified with this option will be included verbatim above the repository index.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *index-info* [[#index-index_002dinfo][¶]] :: The content of the file specified with this option will be included verbatim below the heading on the repository index page.
+- =cgit-configuration= parameter: /string/ *index-info* [[#index-index_002dinfo][¶]] :: The content of the file specified with this option will be included verbatim below the heading on the repository index page.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =boolean= *local-time?* [[#index-local_002dtime_003f][¶]] :: Flag which, if set to ‘=#t=', makes cgit print commit and tag times in the servers timezone.
+- =cgit-configuration= parameter: /boolean/ *local-time?* [[#index-local_002dtime_003f][¶]] :: Flag which, if set to ‘=#t=', makes cgit print commit and tag times in the servers timezone.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =file-object= *logo* [[#index-logo][¶]] :: URL which specifies the source of an image which will be used as a logo on all cgit pages.
+- =cgit-configuration= parameter: /file-object/ *logo* [[#index-logo][¶]] :: URL which specifies the source of an image which will be used as a logo on all cgit pages.
 
   Defaults to ‘="/share/cgit/cgit.png"='.
 
-- =cgit-configuration= parameter: =string= *logo-link* [[#index-logo_002dlink][¶]] :: URL loaded when clicking on the cgit logo image.
+- =cgit-configuration= parameter: /string/ *logo-link* [[#index-logo_002dlink][¶]] :: URL loaded when clicking on the cgit logo image.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =file-object= *owner-filter* [[#index-owner_002dfilter][¶]] :: Command which will be invoked to format the Owner column of the main page.
+- =cgit-configuration= parameter: /file-object/ *owner-filter* [[#index-owner_002dfilter][¶]] :: Command which will be invoked to format the Owner column of the main page.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =integer= *max-atom-items* [[#index-max_002datom_002ditems][¶]] :: Number of items to display in atom feeds view.
+- =cgit-configuration= parameter: /integer/ *max-atom-items* [[#index-max_002datom_002ditems][¶]] :: Number of items to display in atom feeds view.
 
   Defaults to ‘=10='.
 
-- =cgit-configuration= parameter: =integer= *max-commit-count* [[#index-max_002dcommit_002dcount][¶]] :: Number of entries to list per page in "log" view.
+- =cgit-configuration= parameter: /integer/ *max-commit-count* [[#index-max_002dcommit_002dcount][¶]] :: Number of entries to list per page in "log" view.
 
   Defaults to ‘=50='.
 
-- =cgit-configuration= parameter: =integer= *max-message-length* [[#index-max_002dmessage_002dlength][¶]] :: Number of commit message characters to display in "log" view.
+- =cgit-configuration= parameter: /integer/ *max-message-length* [[#index-max_002dmessage_002dlength][¶]] :: Number of commit message characters to display in "log" view.
 
   Defaults to ‘=80='.
 
-- =cgit-configuration= parameter: =integer= *max-repo-count* [[#index-max_002drepo_002dcount][¶]] :: Specifies the number of entries to list per page on the repository index page.
+- =cgit-configuration= parameter: /integer/ *max-repo-count* [[#index-max_002drepo_002dcount][¶]] :: Specifies the number of entries to list per page on the repository index page.
 
   Defaults to ‘=50='.
 
-- =cgit-configuration= parameter: =integer= *max-repodesc-length* [[#index-max_002drepodesc_002dlength][¶]] :: Specifies the maximum number of repo description characters to display on the repository index page.
+- =cgit-configuration= parameter: /integer/ *max-repodesc-length* [[#index-max_002drepodesc_002dlength][¶]] :: Specifies the maximum number of repo description characters to display on the repository index page.
 
   Defaults to ‘=80='.
 
-- =cgit-configuration= parameter: =integer= *max-blob-size* [[#index-max_002dblob_002dsize][¶]] :: Specifies the maximum size of a blob to display HTML for in KBytes.
+- =cgit-configuration= parameter: /integer/ *max-blob-size* [[#index-max_002dblob_002dsize][¶]] :: Specifies the maximum size of a blob to display HTML for in KBytes.
 
   Defaults to ‘=0='.
 
-- =cgit-configuration= parameter: =string= *max-stats* [[#index-max_002dstats][¶]] :: Maximum statistics period. Valid values are ‘=week=',‘=month=', ‘=quarter=' and ‘=year='.
+- =cgit-configuration= parameter: /string/ *max-stats* [[#index-max_002dstats][¶]] :: Maximum statistics period. Valid values are ‘=week=',‘=month=', ‘=quarter=' and ‘=year='.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =mimetype-alist= *mimetype* [[#index-mimetype][¶]] :: Mimetype for the specified filename extension.
+- =cgit-configuration= parameter: /mimetype-alist/ *mimetype* [[#index-mimetype][¶]] :: Mimetype for the specified filename extension.
 
   Defaults to ‘='((gif "image/gif") (html "text/html") (jpg "image/jpeg") (jpeg "image/jpeg") (pdf "application/pdf") (png "image/png") (svg "image/svg+xml"))='.
 
-- =cgit-configuration= parameter: =file-object= *mimetype-file* [[#index-mimetype_002dfile][¶]] :: Specifies the file to use for automatic mimetype lookup.
+- =cgit-configuration= parameter: /file-object/ *mimetype-file* [[#index-mimetype_002dfile][¶]] :: Specifies the file to use for automatic mimetype lookup.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *module-link* [[#index-module_002dlink][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule is printed in a directory listing.
+- =cgit-configuration= parameter: /string/ *module-link* [[#index-module_002dlink][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule is printed in a directory listing.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =boolean= *nocache?* [[#index-nocache_003f][¶]] :: If set to the value ‘=#t=' caching will be disabled.
+- =cgit-configuration= parameter: /boolean/ *nocache?* [[#index-nocache_003f][¶]] :: If set to the value ‘=#t=' caching will be disabled.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *noplainemail?* [[#index-noplainemail_003f][¶]] :: If set to ‘=#t=' showing full author email addresses will be disabled.
+- =cgit-configuration= parameter: /boolean/ *noplainemail?* [[#index-noplainemail_003f][¶]] :: If set to ‘=#t=' showing full author email addresses will be disabled.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =boolean= *noheader?* [[#index-noheader_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit omit the standard header on all pages.
+- =cgit-configuration= parameter: /boolean/ *noheader?* [[#index-noheader_003f][¶]] :: Flag which, when set to ‘=#t=', will make cgit omit the standard header on all pages.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =project-list= *project-list* [[#index-project_002dlist][¶]] :: A list of subdirectories inside of =repository-directory=, relative to it, that should loaded as Git repositories. An empty list means that all subdirectories will be loaded.
+- =cgit-configuration= parameter: /project-list/ *project-list* [[#index-project_002dlist][¶]] :: A list of subdirectories inside of =repository-directory=, relative to it, that should loaded as Git repositories. An empty list means that all subdirectories will be loaded.
 
   Defaults to ‘='()='.
 
-- =cgit-configuration= parameter: =file-object= *readme* [[#index-readme][¶]] :: Text which will be used as default =repository-cgit-configuration= =readme=.
+- =cgit-configuration= parameter: /file-object/ *readme* [[#index-readme][¶]] :: Text which will be used as default =repository-cgit-configuration= =readme=.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =boolean= *remove-suffix?* [[#index-remove_002dsuffix_003f][¶]] :: If set to =#t= and =repository-directory= is enabled, if any repositories are found with a suffix of =.git=, this suffix will be removed for the URL and name.
+- =cgit-configuration= parameter: /boolean/ *remove-suffix?* [[#index-remove_002dsuffix_003f][¶]] :: If set to =#t= and =repository-directory= is enabled, if any repositories are found with a suffix of =.git=, this suffix will be removed for the URL and name.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =integer= *renamelimit* [[#index-renamelimit][¶]] :: Maximum number of files to consider when detecting renames.
+- =cgit-configuration= parameter: /integer/ *renamelimit* [[#index-renamelimit][¶]] :: Maximum number of files to consider when detecting renames.
 
   Defaults to ‘=-1='.
 
-- =cgit-configuration= parameter: =string= *repository-sort* [[#index-repository_002dsort][¶]] :: The way in which repositories in each section are sorted.
+- =cgit-configuration= parameter: /string/ *repository-sort* [[#index-repository_002dsort][¶]] :: The way in which repositories in each section are sorted.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =robots-list= *robots* [[#index-robots][¶]] :: Text used as content for the =robots= meta-tag.
+- =cgit-configuration= parameter: /robots-list/ *robots* [[#index-robots][¶]] :: Text used as content for the =robots= meta-tag.
 
   Defaults to ‘='("noindex" "nofollow")='.
 
-- =cgit-configuration= parameter: =string= *root-desc* [[#index-root_002ddesc][¶]] :: Text printed below the heading on the repository index page.
+- =cgit-configuration= parameter: /string/ *root-desc* [[#index-root_002ddesc][¶]] :: Text printed below the heading on the repository index page.
 
   Defaults to ‘="a fast webinterface for the git dscm"='.
 
-- =cgit-configuration= parameter: =string= *root-readme* [[#index-root_002dreadme][¶]] :: The content of the file specified with this option will be included verbatim below the “about” link on the repository index page.
+- =cgit-configuration= parameter: /string/ *root-readme* [[#index-root_002dreadme][¶]] :: The content of the file specified with this option will be included verbatim below the “about” link on the repository index page.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *root-title* [[#index-root_002dtitle][¶]] :: Text printed as heading on the repository index page.
+- =cgit-configuration= parameter: /string/ *root-title* [[#index-root_002dtitle][¶]] :: Text printed as heading on the repository index page.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =boolean= *scan-hidden-path* [[#index-scan_002dhidden_002dpath][¶]] :: If set to ‘=#t=' and repository-directory is enabled, repository-directory will recurse into directories whose name starts with a period. Otherwise, repository-directory will stay away from such directories, considered as “hidden”. Note that this does not apply to the =.git= directory in non-bare repos.
+- =cgit-configuration= parameter: /boolean/ *scan-hidden-path* [[#index-scan_002dhidden_002dpath][¶]] :: If set to ‘=#t=' and repository-directory is enabled, repository-directory will recurse into directories whose name starts with a period. Otherwise, repository-directory will stay away from such directories, considered as “hidden”. Note that this does not apply to the =.git= directory in non-bare repos.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =list= *snapshots* [[#index-snapshots][¶]] :: Text which specifies the default set of snapshot formats that cgit generates links for.
+- =cgit-configuration= parameter: /list/ *snapshots* [[#index-snapshots][¶]] :: Text which specifies the default set of snapshot formats that cgit generates links for.
 
   Defaults to ‘='()='.
 
-- =cgit-configuration= parameter: =repository-directory= *repository-directory* [[#index-repository_002ddirectory][¶]] :: Name of the directory to scan for repositories (represents =scan-path=).
+- =cgit-configuration= parameter: /repository-directory/ *repository-directory* [[#index-repository_002ddirectory][¶]] :: Name of the directory to scan for repositories (represents =scan-path=).
 
   Defaults to ‘="/srv/git"='.
 
-- =cgit-configuration= parameter: =string= *section* [[#index-section][¶]] :: The name of the current repository section - all repositories defined after this option will inherit the current section name.
+- =cgit-configuration= parameter: /string/ *section* [[#index-section][¶]] :: The name of the current repository section - all repositories defined after this option will inherit the current section name.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *section-sort* [[#index-section_002dsort][¶]] :: Flag which, when set to ‘=1=', will sort the sections on the repository listing by name.
+- =cgit-configuration= parameter: /string/ *section-sort* [[#index-section_002dsort][¶]] :: Flag which, when set to ‘=1=', will sort the sections on the repository listing by name.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =integer= *section-from-path* [[#index-section_002dfrom_002dpath][¶]] :: A number which, if defined prior to repository-directory, specifies how many path elements from each repo path to use as a default section name.
+- =cgit-configuration= parameter: /integer/ *section-from-path* [[#index-section_002dfrom_002dpath][¶]] :: A number which, if defined prior to repository-directory, specifies how many path elements from each repo path to use as a default section name.
 
   Defaults to ‘=0='.
 
-- =cgit-configuration= parameter: =boolean= *side-by-side-diffs?* [[#index-side_002dby_002dside_002ddiffs_003f][¶]] :: If set to ‘=#t=' shows side-by-side diffs instead of unidiffs per default.
+- =cgit-configuration= parameter: /boolean/ *side-by-side-diffs?* [[#index-side_002dby_002dside_002ddiffs_003f][¶]] :: If set to ‘=#t=' shows side-by-side diffs instead of unidiffs per default.
 
   Defaults to ‘=#f='.
 
-- =cgit-configuration= parameter: =file-object= *source-filter* [[#index-source_002dfilter][¶]] :: Specifies a command which will be invoked to format plaintext blobs in the tree view.
+- =cgit-configuration= parameter: /file-object/ *source-filter* [[#index-source_002dfilter][¶]] :: Specifies a command which will be invoked to format plaintext blobs in the tree view.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =integer= *summary-branches* [[#index-summary_002dbranches][¶]] :: Specifies the number of branches to display in the repository “summary” view.
+- =cgit-configuration= parameter: /integer/ *summary-branches* [[#index-summary_002dbranches][¶]] :: Specifies the number of branches to display in the repository “summary” view.
 
   Defaults to ‘=10='.
 
-- =cgit-configuration= parameter: =integer= *summary-log* [[#index-summary_002dlog][¶]] :: Specifies the number of log entries to display in the repository “summary” view.
+- =cgit-configuration= parameter: /integer/ *summary-log* [[#index-summary_002dlog][¶]] :: Specifies the number of log entries to display in the repository “summary” view.
 
   Defaults to ‘=10='.
 
-- =cgit-configuration= parameter: =integer= *summary-tags* [[#index-summary_002dtags][¶]] :: Specifies the number of tags to display in the repository “summary” view.
+- =cgit-configuration= parameter: /integer/ *summary-tags* [[#index-summary_002dtags][¶]] :: Specifies the number of tags to display in the repository “summary” view.
 
   Defaults to ‘=10='.
 
-- =cgit-configuration= parameter: =string= *strict-export* [[#index-strict_002dexport][¶]] :: Filename which, if specified, needs to be present within the repository for cgit to allow access to that repository.
+- =cgit-configuration= parameter: /string/ *strict-export* [[#index-strict_002dexport][¶]] :: Filename which, if specified, needs to be present within the repository for cgit to allow access to that repository.
 
   Defaults to ‘=""='.
 
-- =cgit-configuration= parameter: =string= *virtual-root* [[#index-virtual_002droot][¶]] :: URL which, if specified, will be used as root for all cgit links.
+- =cgit-configuration= parameter: /string/ *virtual-root* [[#index-virtual_002droot][¶]] :: URL which, if specified, will be used as root for all cgit links.
 
   Defaults to ‘="/"='.
 
-- =cgit-configuration= parameter: =repository-cgit-configuration-list= *repositories* [[#index-repositories][¶]] :: A list of =repository-cgit-configuration= records.
+- =cgit-configuration= parameter: /repository-cgit-configuration-list/ *repositories* [[#index-repositories][¶]] :: A list of =repository-cgit-configuration= records.
 
   Defaults to ‘='()='.
 
   Available =repository-cgit-configuration= fields are:
 
-  - =repository-cgit-configuration= parameter: =repo-list= *snapshots* [[#index-snapshots-1][¶]] :: A mask of snapshot formats for this repo that cgit generates links for, restricted by the global =snapshots= setting.
+  - =repository-cgit-configuration= parameter: /repo-list/ *snapshots* [[#index-snapshots-1][¶]] :: A mask of snapshot formats for this repo that cgit generates links for, restricted by the global =snapshots= setting.
 
     Defaults to ‘='()='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *source-filter* [[#index-source_002dfilter-1][¶]] :: Override the default =source-filter=.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *source-filter* [[#index-source_002dfilter-1][¶]] :: Override the default =source-filter=.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *url* [[#index-url][¶]] :: The relative URL used to access the repository.
+  - =repository-cgit-configuration= parameter: /repo-string/ *url* [[#index-url][¶]] :: The relative URL used to access the repository.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *about-filter* [[#index-about_002dfilter-1][¶]] :: Override the default =about-filter=.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *about-filter* [[#index-about_002dfilter-1][¶]] :: Override the default =about-filter=.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *branch-sort* [[#index-branch_002dsort-1][¶]] :: Flag which, when set to ‘=age=', enables date ordering in the branch ref list, and when set to ‘=name=' enables ordering by branch name.
+  - =repository-cgit-configuration= parameter: /repo-string/ *branch-sort* [[#index-branch_002dsort-1][¶]] :: Flag which, when set to ‘=age=', enables date ordering in the branch ref list, and when set to ‘=name=' enables ordering by branch name.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-list= *clone-url* [[#index-clone_002durl-1][¶]] :: A list of URLs which can be used to clone repo.
+  - =repository-cgit-configuration= parameter: /repo-list/ *clone-url* [[#index-clone_002durl-1][¶]] :: A list of URLs which can be used to clone repo.
 
     Defaults to ‘='()='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *commit-filter* [[#index-commit_002dfilter-1][¶]] :: Override the default =commit-filter=.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *commit-filter* [[#index-commit_002dfilter-1][¶]] :: Override the default =commit-filter=.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *commit-sort* [[#index-commit_002dsort-1][¶]] :: Flag which, when set to ‘=date=', enables strict date ordering in the commit log, and when set to ‘=topo=' enables strict topological ordering.
+  - =repository-cgit-configuration= parameter: /repo-string/ *commit-sort* [[#index-commit_002dsort-1][¶]] :: Flag which, when set to ‘=date=', enables strict date ordering in the commit log, and when set to ‘=topo=' enables strict topological ordering.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *defbranch* [[#index-defbranch][¶]] :: The name of the default branch for this repository. If no such branch exists in the repository, the first branch name (when sorted) is used as default instead. By default branch pointed to by HEAD, or “master” if there is no suitable HEAD.
+  - =repository-cgit-configuration= parameter: /repo-string/ *defbranch* [[#index-defbranch][¶]] :: The name of the default branch for this repository. If no such branch exists in the repository, the first branch name (when sorted) is used as default instead. By default branch pointed to by HEAD, or “master” if there is no suitable HEAD.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *desc* [[#index-desc][¶]] :: The value to show as repository description.
+  - =repository-cgit-configuration= parameter: /repo-string/ *desc* [[#index-desc][¶]] :: The value to show as repository description.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *homepage* [[#index-homepage][¶]] :: The value to show as repository homepage.
+  - =repository-cgit-configuration= parameter: /repo-string/ *homepage* [[#index-homepage][¶]] :: The value to show as repository homepage.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *email-filter* [[#index-email_002dfilter-1][¶]] :: Override the default =email-filter=.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *email-filter* [[#index-email_002dfilter-1][¶]] :: Override the default =email-filter=.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-commit-graph?* [[#index-enable_002dcommit_002dgraph_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-commit-graph?=.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-commit-graph?* [[#index-enable_002dcommit_002dgraph_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-commit-graph?=.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-log-filecount?* [[#index-enable_002dlog_002dfilecount_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-log-filecount?=.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-log-filecount?* [[#index-enable_002dlog_002dfilecount_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-log-filecount?=.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-log-linecount?* [[#index-enable_002dlog_002dlinecount_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-log-linecount?=.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-log-linecount?* [[#index-enable_002dlog_002dlinecount_003f-1][¶]] :: A flag which can be used to disable the global setting =enable-log-linecount?=.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-remote-branches?* [[#index-enable_002dremote_002dbranches_003f-1][¶]] :: Flag which, when set to =#t=, will make cgit display remote branches in the summary and refs views.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-remote-branches?* [[#index-enable_002dremote_002dbranches_003f-1][¶]] :: Flag which, when set to =#t=, will make cgit display remote branches in the summary and refs views.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-subject-links?* [[#index-enable_002dsubject_002dlinks_003f-1][¶]] :: A flag which can be used to override the global setting =enable-subject-links?=.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-subject-links?* [[#index-enable_002dsubject_002dlinks_003f-1][¶]] :: A flag which can be used to override the global setting =enable-subject-links?=.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =maybe-repo-boolean= *enable-html-serving?* [[#index-enable_002dhtml_002dserving_003f-1][¶]] :: A flag which can be used to override the global setting =enable-html-serving?=.
+  - =repository-cgit-configuration= parameter: /maybe-repo-boolean/ *enable-html-serving?* [[#index-enable_002dhtml_002dserving_003f-1][¶]] :: A flag which can be used to override the global setting =enable-html-serving?=.
 
     Defaults to ‘=disabled='.
 
-  - =repository-cgit-configuration= parameter: =repo-boolean= *hide?* [[#index-hide_003f][¶]] :: Flag which, when set to =#t=, hides the repository from the repository index.
+  - =repository-cgit-configuration= parameter: /repo-boolean/ *hide?* [[#index-hide_003f][¶]] :: Flag which, when set to =#t=, hides the repository from the repository index.
 
     Defaults to ‘=#f='.
 
-  - =repository-cgit-configuration= parameter: =repo-boolean= *ignore?* [[#index-ignore_003f][¶]] :: Flag which, when set to ‘=#t=', ignores the repository.
+  - =repository-cgit-configuration= parameter: /repo-boolean/ *ignore?* [[#index-ignore_003f][¶]] :: Flag which, when set to ‘=#t=', ignores the repository.
 
     Defaults to ‘=#f='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *logo* [[#index-logo-1][¶]] :: URL which specifies the source of an image which will be used as a logo on this repo's pages.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *logo* [[#index-logo-1][¶]] :: URL which specifies the source of an image which will be used as a logo on this repo's pages.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *logo-link* [[#index-logo_002dlink-1][¶]] :: URL loaded when clicking on the cgit logo image.
+  - =repository-cgit-configuration= parameter: /repo-string/ *logo-link* [[#index-logo_002dlink-1][¶]] :: URL loaded when clicking on the cgit logo image.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-file-object= *owner-filter* [[#index-owner_002dfilter-1][¶]] :: Override the default =owner-filter=.
+  - =repository-cgit-configuration= parameter: /repo-file-object/ *owner-filter* [[#index-owner_002dfilter-1][¶]] :: Override the default =owner-filter=.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *module-link* [[#index-module_002dlink-1][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule is printed in a directory listing. The arguments for the formatstring are the path and SHA1 of the submodule commit.
+  - =repository-cgit-configuration= parameter: /repo-string/ *module-link* [[#index-module_002dlink-1][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule is printed in a directory listing. The arguments for the formatstring are the path and SHA1 of the submodule commit.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =module-link-path= *module-link-path* [[#index-module_002dlink_002dpath][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule with the specified subdirectory path is printed in a directory listing.
+  - =repository-cgit-configuration= parameter: /module-link-path/ *module-link-path* [[#index-module_002dlink_002dpath][¶]] :: Text which will be used as the formatstring for a hyperlink when a submodule with the specified subdirectory path is printed in a directory listing.
 
     Defaults to ‘='()='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *max-stats* [[#index-max_002dstats-1][¶]] :: Override the default maximum statistics period.
+  - =repository-cgit-configuration= parameter: /repo-string/ *max-stats* [[#index-max_002dstats-1][¶]] :: Override the default maximum statistics period.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *name* [[#index-name-6][¶]] :: The value to show as repository name.
+  - =repository-cgit-configuration= parameter: /repo-string/ *name* [[#index-name-6][¶]] :: The value to show as repository name.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *owner* [[#index-owner][¶]] :: A value used to identify the owner of the repository.
+  - =repository-cgit-configuration= parameter: /repo-string/ *owner* [[#index-owner][¶]] :: A value used to identify the owner of the repository.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *path* [[#index-path-4][¶]] :: An absolute path to the repository directory.
+  - =repository-cgit-configuration= parameter: /repo-string/ *path* [[#index-path-4][¶]] :: An absolute path to the repository directory.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *readme* [[#index-readme-1][¶]] :: A path (relative to repo) which specifies a file to include verbatim as the “About” page for this repo.
+  - =repository-cgit-configuration= parameter: /repo-string/ *readme* [[#index-readme-1][¶]] :: A path (relative to repo) which specifies a file to include verbatim as the “About” page for this repo.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-string= *section* [[#index-section-1][¶]] :: The name of the current repository section - all repositories defined after this option will inherit the current section name.
+  - =repository-cgit-configuration= parameter: /repo-string/ *section* [[#index-section-1][¶]] :: The name of the current repository section - all repositories defined after this option will inherit the current section name.
 
     Defaults to ‘=""='.
 
-  - =repository-cgit-configuration= parameter: =repo-list= *extra-options* [[#index-extra_002doptions][¶]] :: Extra options will be appended to cgitrc file.
+  - =repository-cgit-configuration= parameter: /repo-list/ *extra-options* [[#index-extra_002doptions][¶]] :: Extra options will be appended to cgitrc file.
 
     Defaults to ‘='()='.
 
-- =cgit-configuration= parameter: =list= *extra-options* [[#index-extra_002doptions-1][¶]] :: Extra options will be appended to cgitrc file.
+- =cgit-configuration= parameter: /list/ *extra-options* [[#index-extra_002doptions-1][¶]] :: Extra options will be appended to cgitrc file.
 
   Defaults to ‘='()='.
 
@@ -611,9 +596,9 @@ However, it could be that you just want to get a =cgitrc= up and running. In tha
 
 Available =opaque-cgit-configuration= fields are:
 
-- =opaque-cgit-configuration= parameter: =package= *cgit* [[#index-cgit][¶]] :: The cgit package.
+- =opaque-cgit-configuration= parameter: /package/ *cgit* [[#index-cgit][¶]] :: The cgit package.
 
-- =opaque-cgit-configuration= parameter: =string= *string* [[#index-string-1][¶]] :: The contents of the =cgitrc=, as a string.
+- =opaque-cgit-configuration= parameter: /string/ *string* [[#index-string-1][¶]] :: The contents of the =cgitrc=, as a string.
 
 For example, if your =cgitrc= is just the empty string, you could instantiate a cgit service like this:
 
@@ -623,11 +608,13 @@ For example, if your =cgitrc= is just the empty string, you could instantiate a 
           (cgitrc "")))
 #+end_src
 
-**** Gitolite Service [[#Gitolite-Service][¶]]
+<<Gitolite-Service>>
+**** Gitolite Service
 :PROPERTIES:
-:CUSTOM_ID: Gitolite-Service
+:CUSTOM_ID: gitolite-service
 :CLASS: subsubheading
 :END:
+<<index-Gitolite-service>> <<index-Git_002c-hosting>>
 [[https://gitolite.com/gitolite/][Gitolite]] is a tool for hosting Git repositories on a central server.
 
 Gitolite can handle multiple repositories and users, and supports flexible configuration of the permissions for the users on the repositories.
@@ -650,7 +637,7 @@ git clone git@example.com:gitolite-admin
 
 When the Gitolite service is activated, the provided =admin-pubkey= will be inserted in to the =keydir= directory in the gitolite-admin repository. If this results in a change in the repository, it will be committed using the message “gitolite setup by GNU Guix”.
 
-- Data Type: *gitolite-configuration* [[#index-gitolite_002dconfiguration][¶]] :: Data type representing the configuration for =gitolite-service-type=.
+- Data Type: gitolite-configuration  :: Data type representing the configuration for =gitolite-service-type=.
 
   - =package= (default: =gitolite=) :: Gitolite package to use. There are optional Gitolite dependencies that are not included in the default package, such as Redis and git-annex. These features can be made available by using the =make-gitolite= procedure in the =(gnu packages version-control=) module to produce a variant of Gitolite with the desired additional dependencies.
 
@@ -661,7 +648,7 @@ When the Gitolite service is activated, the provided =admin-pubkey= will be inse
                  (gnu packages haskell-apps)
                  (gnu packages version-control))
     (make-gitolite (list redis git-annex))
-#+end_example
+    #+end_example
 
   - =user= (default: ="git"=) :: User to use for Gitolite. This will be user that you use when accessing Gitolite over SSH.
 
@@ -685,7 +672,7 @@ When the Gitolite service is activated, the provided =admin-pubkey= will be inse
 
   - =admin-name= (default: =#f=) :: Usually the key name is derived by taking a base name of the =admin-pubkey=. The resulting file name is the name of the gitolite user. You can use this field to override the automatic name.
 
-- Data Type: *gitolite-rc-file* [[#index-gitolite_002drc_002dfile][¶]] :: Data type representing the Gitolite RC file.
+- Data Type: gitolite-rc-file  :: Data type representing the Gitolite RC file.
 
   - =umask= (default: =#o0077=) :: This controls the permissions Gitolite sets on the repositories and their contents.
 
@@ -713,7 +700,7 @@ When the Gitolite service is activated, the provided =admin-pubkey= will be inse
 
   - =extra-content= (default: =""=) :: Extra content to add verbatim into the =%RC= hash.
 
-- Data Type: *gitolite-git-configuration* [[#index-gitolite_002dgit_002dconfiguration][¶]] :: Data type representing the git configuration file for gitolite.
+- Data Type: gitolite-git-configuration  :: Data type representing the git configuration file for gitolite.
 
   - =name= (default: ="GNU GNU"=) :: User name used for commits (e.g. during setting up the admin repository).
 
@@ -725,11 +712,13 @@ When the Gitolite service is activated, the provided =admin-pubkey= will be inse
 
   - =extra-content= (default: =""=) :: Extra content to add verbatim into the git configuration file.
 
-**** Gitile Service [[#Gitile-Service][¶]]
+<<Gitile-Service>>
+**** Gitile Service
 :PROPERTIES:
-:CUSTOM_ID: Gitile-Service
+:CUSTOM_ID: gitile-service
 :CLASS: subsubheading
 :END:
+<<index-Gitile-service>> <<index-Git_002c-forge>>
 [[https://git.lepiller.eu/gitile][Gitile]] is a Git forge for viewing public git repository contents from a web browser.
 
 Gitile works best in collaboration with Gitolite, and will serve the public repositories from Gitolite by default. The service should listen only on a local port, and a webserver should be configured to serve static resources. The gitile service provides an easy way to extend the Nginx service for that purpose (see [[id:guix--Web-Services::#NGINX][NGINX]]).
@@ -792,7 +781,7 @@ Do not forget to commit and push these changes once you are satisfied. You may n
                 (unsafe-patt "^$")))))
 #+end_src
 
-- Data Type: *gitile-configuration* [[#index-gitile_002dconfiguration][¶]] :: Data type representing the configuration for =gitile-service-type=.
+- Data Type: gitile-configuration  :: Data type representing the configuration for =gitile-service-type=.
 
   - =package= (default: =gitile=) :: Gitile package to use.
 
@@ -818,96 +807,6 @@ Do not forget to commit and push these changes once you are satisfied. You may n
 
     You can use this block to add more custom URLs to your domain, such as a =/git/= URL for anonymous clones, or serving any other files you would like to serve.
 
-**** Fossil Service [[#Fossil-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Fossil-Service
-:CLASS: subsubheading
-:END:
-[[https://fossil-scm.org][Fossil]] is a distributed software configuration management system. In addition to version control like Git, Fossil also supports bug tracking, wiki, forum, chat, etc., all accessible via its built-in web interface.
-
-Fossil is highly reliable thanks to its robust file format based on SQLite with atomic transactions. Its server is CPU, memory and bandwidth efficient enough run comfortably on a cheap VPS or single board computer, and be accessed over suboptimal connections.
-
-The following example will configure Fossil to listen on a unix socket behind a reverse proxy and serve repositories from a custom location.
-
-#+begin_src lisp
-(service fossil-service-type
-         (fossil-configuration
-          (repository "/srv/museum")
-          (list-repositories? #t)
-          (base-url "https://museum.example")
-          (compress? #f)
-          (https? #t)
-          (socket-file "/var/run/fossil.sock")))
-#+end_src
-
-- Data Type: *fossil-configuration* [[#index-fossil_002dconfiguration][¶]] :: Available =fossil-configuration= fields are:
-
-  - =package= (default: =fossil=) (type: package) :: The Fossil package to use.
-
-  - =user= (default: ="fossil"=) (type: string) :: The user running the Fossil server.
-
-  - =group= (default: ="fossil"=) (type: string) :: The user group running the Fossil server.
-
-  - =log-file= (default: ="/var/log/fossil.log"=) (type: string) :: The path to the server's log.
-
-  - =repository= (default: ="/var/lib/fossil"=) (type: string) :: The name of the Fossil repository to be served, or a directory containing one or more repositories with names ending in =.fossil=. In the latter case, a prefix of the URL pathname is used to search the directory for an appropriate repository. Files not matching the pattern =*.fossil*= will be served as static content. Invoke =fossil server --help= for more information.
-
-  - =acme?= (default: =#f=) (type: boolean) :: Deliver files from the =.well-known= subdirectory.
-
-  - =base-url= (type: maybe-string) :: The URL used as the base (useful for reverse proxies)
-
-  - =chroot= (type: maybe-string) :: The directory to use for chroot instead of =repository=.
-
-  - =ckout-alias= (type: maybe-string) :: The =name= for =/doc/==name==/...= to be treated as =/doc/ckout/...=.
-
-  - =compress?= (default: =#t=) (type: boolean) :: Compress HTTP response.
-
-  - =create?= (default: =#f=) (type: boolean) :: Create a new =repository= if it does not already exist.
-
-  - =error-log-file= (type: maybe-string) :: The path for HTTP error log.
-
-  - =ext-root= (type: maybe-string) :: The document root for the /ext extension mechanism.
-
-  - =files= (type: maybe-list-of-strings) :: The glob patterns for static files.
-
-  - =from= (type: maybe-string) :: The path to be used as the diff baseline for the /ckout page.
-
-  - =jail?= (default: =#t=) (type: boolean) :: Whether to enter the chroot jail after dropping root privileges.
-
-  - =js-mode= (type: maybe-fossil-js-mode) :: How JavaScript is delivered with pages, either ='inline= at the end of the HTML file, as ='separate= HTTP requests, or one single HTTP request for all JavaScript ='bundled= together. Depending on the needs of any given page, ='inline= and ='bundled= modes might result in a single amalgamated script or several, but both approaches result in fewer HTTP requests than the ='separate= mode.
-
-  - =https?= (default: =#f=) (type: boolean) :: Indicate that the requests are coming through a reverse proxy that has already translated HTTPS into HTTP.
-
-  - =ip= (type: maybe-string) :: The IP for the server to listen on.
-
-  - =local-authentication?= (default: =#f=) (type: boolean) :: Enable automatic login for requests from localhost.
-
-  - =localhost?= (default: =#f=) (type: boolean) :: Listen on =127.0.0.1= only.
-
-  - =main-menu= (type: maybe-string) :: The file whose contents is to override the repository's =mainmenu= setting.
-
-  - =max-latency= (type: maybe-number) :: The maximum latency in seconds for a single HTTP request.
-
-  - =port= (default: =8080=) (type: port-number) :: The port number for the server to listen on.
-
-  - =list-repositories?= (default: =#f=) (type: boolean) :: If =repository= is dir, URL =/= lists repos.
-
-  - =redirect-to-https?= (default: =#t=) (type: boolean) :: If set to =#f=, do not force redirects to HTTPS regardless of the repository setting =redirect-to-https=.
-
-  - =scgi?= (default: =#f=) (type: boolean) :: Accept SCGI rather than HTTP.
-
-  - =skin= (type: maybe-string) :: The skin label to use, overriding repository settings.
-
-  - =socket-file= (type: maybe-string) :: The unix-domain socket to use instead of TCP/IP.
-
-  - =socket-mode= (default: =0o640=) (type: mode-number) :: The file permissions to set for the unix socket.
-
-  - =th-trace?= (default: =#f=) (type: boolean) :: Trace TH1 execution (for debugging purposes).
-
-  - =tls-certificate= (type: maybe-string) :: The certicate file (=fullchain.pem=) with which to enable TLS (HTTPS) encryption.
-
-  - =tls-private-key= (type: maybe-string) :: The file storing the TLS private key.
-
 --------------
 
 **** Footnotes
@@ -915,20 +814,18 @@ The following example will configure Fossil to listen on a unix socket behind a 
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF37][(37)]]
+***** [[#DOCF35][(35)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 By creating the magic file =git-daemon-export-ok= in the repository directory.
 
-***** [[#DOCF38][(38)]]
+***** [[#DOCF36][(36)]]
 :PROPERTIES:
 :CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 Run =man git-daemon= for more information.
 
 --------------
 
-Next: [[id:guix--Game-Services][Game Services]], Previous: [[id:guix--Virtualization-Services][Virtualization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Game-Services][Game Services]], Previous: [[id:guix--Virtualization-Services][Virtualization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

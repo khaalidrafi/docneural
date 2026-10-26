@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Guided-Graphical-Installation>>
-Next: [[id:guix--Manual-Installation][Manual Installation]], Previous: [[id:guix--Preparing-for-Installation][Preparing for Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Manual-Installation][Manual Installation]], Previous: [[id:guix--Preparing-for-Installation][Preparing for Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 3.5 Guided Graphical Installation [[#Guided-Graphical-Installation-1][¶]]
+<<Guided-Graphical-Installation-1>>
+*** 3.5 Guided Graphical Installation
 :PROPERTIES:
-:CUSTOM_ID: Guided-Graphical-Installation-1
+:CUSTOM_ID: guided-graphical-installation
 :CLASS: section
 :END:
 The graphical installer is a text-based user interface. It will guide you, with dialog boxes, through the steps needed to install GNU Guix System.
@@ -54,7 +56,3 @@ Later steps allow you to partition your hard disk, as shown in the image below, 
 Note that, at any time, the installer allows you to exit the current installation step and resume at a previous step, as show in the image below.
 
 Once you're done, the installer produces an operating system configuration and displays it (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]). At that point you can hit “OK” and installation will proceed. On success, you can reboot into the new system and enjoy. See [[id:guix--After-System-Installation][After System Installation]], for what's next!
-
---------------
-
-Next: [[id:guix--Manual-Installation][Manual Installation]], Previous: [[id:guix--Preparing-for-Installation][Preparing for Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

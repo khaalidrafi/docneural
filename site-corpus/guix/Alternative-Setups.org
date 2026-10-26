@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID: guix--Alternative-Setups
+:END:
+#+filetags: :guix:
+#+title: Alternative Setups
+
+Next:
+
+* [[file:..][]]
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+- VersionVersion
+
+  <<navbar-submenu>>
+
+  - [[/manual/1.5.0/en/html_node][1.5.0]]
+  - [[/manual/devel/en/html_node][development]]
+  - [[../guix.html][single page]]
+  - [[../guix.pdf][PDF]]
+
+- 
+
+  <<navbar-submenu>>
+
+  - [[../../de/html_node][Deutsch]]
+  - [[../../en/html_node][English]]
+  - [[../../es/html_node][Español]]
+  - [[../../fr/html_node][Français]]
+  - [[../../it/html_node][Italiano]]
+  - [[../../pt-br/html_node][Português]]
+  - [[../../ru/html_node][русский]]
+  - [[../../zh-cn/html_node][中文; 汉语; 华语]]
+  - [[https://translate.codeberg.org/projects/guix/documentation-manual/][⊕]]
+
+[[../..][]]
+
+<<Alternative-Setups>>
+
+Next: [[id:guix--Source-Tree-Structure][Source Tree Structure]], Previous: [[id:guix--The-Perfect-Setup][The Perfect Setup]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
+
+--------------
+
+<<Alternative-Setups-1>>
+*** 22.6 Alternative Setups
+:PROPERTIES:
+:CUSTOM_ID: alternative-setups
+:CLASS: section
+:END:
+Alternative setups than Emacs may let you work on Guix with a similar development experience and they might work better with the tools you currently use or help you make the transition to Emacs.
+
+The options listed below only provide the alternatives to the Emacs based setup, which is the most widely used in the Guix community. If you want to really understand how the perfect setup for Guix development is supposed to work, we encourage you to read the section before this regardless of the editor you choose to use.
+
+- [[id:guix--Guile-Studio][Guile Studio]]
+- [[id:guix--Vim-and-NeoVim][Vim and NeoVim]]

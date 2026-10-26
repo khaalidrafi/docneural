@@ -7,6 +7,9 @@
 Next: [[id:emacs--Frame-Parameters][Frame Parameters]]   Previous: [[id:emacs--Speedbar][Speedbar Frames]]   Up: [[id:emacs--Frames][Frames and Graphical Displays]]
 
 <<Multiple-Displays>>
+
+--------------
+
 *** 23.10 Multiple Displays [[#Multiple-Displays-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Multiple-Displays-1
@@ -23,5 +26,3 @@ When you open frames on different X servers, Emacs makes a separate input stream
 On multi-monitor displays it is possible to use the command =make-frame-on-monitor=:
 
 - M-x make-frame-on-monitor RET =monitor= RET :: Create a new frame on monitor =monitor= whose screen area is a part of the current display.
-
---------------

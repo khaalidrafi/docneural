@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Text Scale
 
-Next: [[id:emacs--Font-Lock#Font-Lock][Font Lock mode]]   Previous: [[id:emacs--Icons][Icons]]   Up: [[id:emacs--Display][Controlling the Display]]
+Next: [[id:emacs--Font-Lock][Font Lock mode]]   Previous: [[id:emacs--Icons][Icons]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Text-Scale>>
+
+--------------
+
 *** 16.12 Text Scale [[#Text-Scale-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Text-Scale-1
@@ -22,7 +25,7 @@ Similarly, scrolling the mouse wheel with the Ctrl modifier pressed, when the mo
 
 The final key of these commands may be repeated without the leading C-x and without the modifiers. For instance, C-x C-= C-= C-= and C-x C-= = = increase the face height by three steps. Each step scales the text height by a factor of 1.2; to change this factor, customize the variable =text-scale-mode-step=. A numeric argument of 0 to the =text-scale-adjust= command restores the default height, the same as typing C-x C-0.
 
-Similarly, to change the sizes of the fonts globally, type C-x C-M-+, C-x C-M-=, C-x C-M-- or C-x C-M-0, or scroll the mouse wheel with both the Ctrl and Meta modifiers pressed. To enable frame resizing when the font size is changed globally, customize the variable =global-text-scale-adjust-resizes-frames= (see [[id:emacs--Easy-Customization::#Easy-Customization][Easy Customization Interface]]).
+Similarly, to change the sizes of the fonts globally, type C-x C-M-+, C-x C-M-=, C-x C-M-- or C-x C-M-0, or scroll the mouse wheel with both the Ctrl and Meta modifiers pressed. To enable frame resizing when the font size is changed globally, customize the variable =global-text-scale-adjust-resizes-frames= (see [[id:emacs--Easy-Customization][Easy Customization Interface]]).
 
 The commands =text-scale-increase= and =text-scale-decrease= increase or decrease the size of the font in the current buffer, just like C-x C-+ and C-x C-- respectively. You may find it convenient to bind to these commands, rather than =text-scale-adjust=.
 

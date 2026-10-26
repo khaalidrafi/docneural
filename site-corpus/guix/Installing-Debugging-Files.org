@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Installing-Debugging-Files>>
-Next: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Previous: [[id:guix--System-Images][Creating System Images]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Using-TeX-and-LaTeX][Using TeX and LaTeX]], Previous: [[id:guix--System-Images][Creating System Images]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 17 Installing Debugging Files [[#Installing-Debugging-Files-1][¶]]
+<<Installing-Debugging-Files-1>>
+** 17 Installing Debugging Files
 :PROPERTIES:
-:CUSTOM_ID: Installing-Debugging-Files-1
+:CUSTOM_ID: installing-debugging-files
 :CLASS: chapter
 :END:
+<<index-debugging-files>>
 Program binaries, as produced by the GCC compilers for instance, are typically written in the ELF format, with a section containing /debugging information/. Debugging information is what allows the debugger, GDB, to map binary code to source code; it is required to debug a compiled program in good conditions.
 
 This chapter explains how to use separate debug info when packages provide it, and how to rebuild packages with debug info when it's missing.

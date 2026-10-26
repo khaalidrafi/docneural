@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Common-Build-Options>>
-Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 9.1.1 Common Build Options [[#Common-Build-Options-1][¶]]
+<<Common-Build-Options-1>>
+**** 9.1.1 Common Build Options
 :PROPERTIES:
-:CUSTOM_ID: Common-Build-Options-1
+:CUSTOM_ID: common-build-options
 :CLASS: subsection
 :END:
 A number of options that control the build process are common to =guix build= and other commands that can spawn builds, such as =guix package= or =guix archive=. These are the following:
@@ -65,9 +67,11 @@ A number of options that control the build process are common to =guix build= an
 - =--dry-run=\\
   =-n= :: Do not build the derivations.
 
+  <<fallback_002doption>>
+
 - =--fallback= :: When substituting a pre-built binary fails, fall back to building packages locally (see [[id:guix--Substitution-Failure][Substitution Failure]]).
 
-- =--substitute-urls===urls= :: 
+- =--substitute-urls===urls= :: <<client_002dsubstitute_002durls>>
 
   Consider =urls= the whitespace-separated list of substitute source URLs, overriding the default list of URLs of =guix-daemon= (see [[id:guix--Invoking-guix_002ddaemon::#daemon_002dsubstitute_002durls][=guix-daemon= URLs]]).
 
@@ -95,7 +99,9 @@ A number of options that control the build process are common to =guix build= an
 
   By default, the daemon's setting is honored (see [[id:guix--Invoking-guix_002ddaemon][=--timeout=]]).
 
--  <<index-verbosity_002c-of-the-command_002dline-tools>>=-v ==level= [[#index-verbosity_002c-of-the-command_002dline-tools][¶]]\\
+  <<index-verbosity_002c-of-the-command_002dline-tools>> <<index-build-logs_002c-verbosity>>
+
+- =-v ==level=\\
   =--verbosity===level= :: Use the given verbosity =level=, an integer. Choosing 0 means that no output is produced, 1 is for quiet output; 2 is similar to 1 but it additionally displays download URLs; 3 shows all the build log output on standard error.
 
 - =--cores===n=\\
@@ -110,14 +116,14 @@ Behind the scenes, =guix build= is essentially an interface to the =package-deri
 
 In addition to options explicitly passed on the command line, =guix build= and other =guix= commands that support building honor the =GUIX_BUILD_OPTIONS= environment variable.
 
-- Environment Variable: *GUIX_BUILD_OPTIONS* [[#index-GUIX_005fBUILD_005fOPTIONS][¶]] :: Users can define this variable to a list of command line options that will automatically be used by =guix build= and other =guix= commands that can perform builds, as in the example below:
+- Environment Variable: GUIX_BUILD_OPTIONS  :: Users can define this variable to a list of command line options that will automatically be used by =guix build= and other =guix= commands that can perform builds, as in the example below:
 
   #+begin_example
   $ export GUIX_BUILD_OPTIONS="--no-substitutes -c 2 -L /foo/bar"
-#+end_example
+  #+end_example
 
   These options are parsed independently, and the result is appended to the parsed command-line options.
 
 --------------
 
-Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Package-Transformation-Options][Package Transformation Options]], Up: [[id:guix--Invoking-guix-build][Invoking =guix build=]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

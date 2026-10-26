@@ -2,10 +2,11 @@
 #
 # Triggered by every push to ai/main plus workflow_dispatch. The corpus is
 # site-corpus/ — the REAL manuals (Emacs 30.1 via makeinfo, the published
-# Org and Guix node-split HTML), converted to the corpus contract by
-# scripts/manuals-corpus.py and committed, so the build needs no network
-# and no pandoc: 1392 nodes / 30400 wires across 3 sources. Regeneration
-# steps: site-corpus/README.org.
+# Org and Guix node-split HTML), converted by the Owner's org-import
+# package (git.khalidrafi.tech/org-pandoc-import) through
+# scripts/manuals-corpus.py, and committed, so the build needs no network,
+# no pandoc and no emacs: 1386 nodes / 30915 wires across 3 sources.
+# Regeneration steps: site-corpus/README.org.
 #
 # Concurrency: group "pages" — only the latest build matters for a static
 # site, so superseded runs cancel instead of racing to deploy.

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Code-Alignment][Code Alignment]]   Previous: [[id:emacs--Just-Spaces][Tabs vs. Spaces]]   Up: [[id:emacs--Indentation][Indentation]]
 
 <<Indent-Convenience>>
+
+--------------
+
 *** 26.4 Convenience Features for Indentation [[#Convenience-Features-for-Indentation][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Convenience-Features-for-Indentation
@@ -17,5 +20,3 @@ The variable =tab-always-indent= tweaks the behavior of the TAB (=indent-for-tab
 If =tab-always-indent= is =complete=, whether to expand or indent can be further customized via the =tab-first-completion= variable. For instance, if that variable is =eol=, only complete if point is at the end of a line. See [[../elisp_html/Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent][Mode-Specific Indent]] in The Emacs Lisp Reference Manual, for further details.
 
 Electric Indent mode is a global minor mode that automatically indents the line after every RET you type. This mode is enabled by default. To toggle this minor mode, type M-x electric-indent-mode. To toggle the mode in a single buffer, use M-x electric-indent-local-mode.
-
---------------

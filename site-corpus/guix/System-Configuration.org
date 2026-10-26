@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<System-Configuration>>
-Next: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Previous: [[id:guix--Foreign-Architectures][Foreign Architectures]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Previous: [[id:guix--Foreign-Architectures][Foreign Architectures]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 11 System Configuration [[#System-Configuration-1][¶]]
+<<System-Configuration-1>>
+** 11 System Configuration
 :PROPERTIES:
-:CUSTOM_ID: System-Configuration-1
+:CUSTOM_ID: system-configuration
 :CLASS: chapter
 :END:
+<<index-system-configuration>>
 Guix System supports a consistent whole-system configuration mechanism. By that we mean that all aspects of the global system configuration---such as the available system services, timezone and locale settings, user accounts---are declared in a single place. Such a /system configuration/ can be /instantiated/---i.e., effected.
 
 One of the advantages of putting all the system configuration under the control of Guix is that it supports transactional system upgrades, and makes it possible to roll back to a previous system instantiation, should something go wrong with the new one (see [[id:guix--Features][Features]]). Another advantage is that it makes it easy to replicate the exact same configuration across different machines, or at different points in time, without having to resort to additional administration tools layered on top of the own tools of the system.
@@ -70,7 +73,3 @@ This section describes this mechanism. First we focus on the system administrato
 - [[id:guix--Invoking-guix-deploy][Invoking =guix deploy=]]
 - [[id:guix--Running-Guix-in-a-VM][Running Guix in a Virtual Machine]]
 - [[id:guix--Defining-Services][Defining Services]]
-
---------------
-
-Next: [[id:guix--System-Troubleshooting-Tips][System Troubleshooting Tips]], Previous: [[id:guix--Foreign-Architectures][Foreign Architectures]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

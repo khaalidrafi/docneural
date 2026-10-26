@@ -36,13 +36,16 @@ Next:
 [[../..][]]
 
 <<Snippets-versus-Phases>>
-Next: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Previous: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Cyclic-Module-Dependencies][Cyclic Module Dependencies]], Previous: [[id:guix--Synopses-and-Descriptions][Synopses and Descriptions]], Up: [[id:guix--Packaging-Guidelines][Packaging Guidelines]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 22.7.6 Snippets versus Phases [[#Snippets-versus-Phases-1][¶]]
+<<Snippets-versus-Phases-1>>
+**** 22.8.5 Snippets versus Phases
 :PROPERTIES:
-:CUSTOM_ID: Snippets-versus-Phases-1
+:CUSTOM_ID: snippets-versus-phases
 :CLASS: subsection
 :END:
+<<index-snippets_002c-when-to-use>>
 The boundary between using an origin snippet versus a build phase to modify the sources of a package can be elusive. Origin snippets are typically used to remove unwanted files such as bundled libraries, nonfree sources, or to apply simple substitutions. The source derived from an origin should produce a source that can be used to build the package on any system that the upstream package supports (i.e., act as the corresponding source). In particular, origin snippets must not embed store items in the sources; such patching should rather be done using build phases. Refer to the =origin= record documentation for more information (see [[id:guix--origin-Reference][=origin= Reference]]).

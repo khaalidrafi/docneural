@@ -4,6 +4,33 @@
 #+filetags: :emacs:
 #+title: Specified Dates
 
-Next:
+Next:   Previous: [[id:emacs--Move-to-Beginning-or-End][Beginning or End of Week, Month or Year]]   Up: [[id:emacs--Calendar-Motion][Movement in the Calendar]]
 
-The node you are looking for is at [[id:emacs--Calendar-Motion::#Specified-Dates][Specified Dates]].
+<<Specified-Dates>>
+
+--------------
+
+**** 33.1.3 Specified Dates [[#Specified-Dates-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Specified-Dates-1
+:CLASS: subsection
+:END:
+Calendar mode provides commands for moving to a particular date specified in various ways.
+
+- g d :: Move point to specified date (=calendar-goto-date=).
+
+- g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
+
+- g w :: Move point to specified week of year (=calendar-iso-goto-week=).
+
+- o :: Center calendar around specified month (=calendar-other-month=).
+
+- . :: Move point to today's date (=calendar-goto-today=).
+
+g d (=calendar-goto-date=) prompts for a year, a month, and a day of the month, and then moves to that date. Because the calendar includes all dates from the beginning of the current era, you must type the year in its entirety; that is, type ‘=2010=', not ‘=10='.
+
+g D (=calendar-goto-day-of-year=) prompts for a year and day number, and moves to that date. Negative day numbers count backward from the end of the year. g w (=calendar-iso-goto-week=) prompts for a year and week number, and moves to that week.
+
+o (=calendar-other-month=) prompts for a month and year, then centers the three-month calendar around that month.
+
+You can return to today's date with . (=calendar-goto-today=).

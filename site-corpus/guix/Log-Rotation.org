@@ -36,16 +36,19 @@ Next:
 [[../..][]]
 
 <<Log-Rotation>>
-Next: [[id:guix--Networking-Setup][Networking Setup]], Previous: [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Networking-Setup][Networking Setup]], Previous: [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.3 Log Rotation [[#Log-Rotation-1][¶]]
+<<Log-Rotation-1>>
+**** 11.10.3 Log Rotation
 :PROPERTIES:
-:CUSTOM_ID: Log-Rotation-1
+:CUSTOM_ID: log-rotation
 :CLASS: subsection
 :END:
-Log files such as those found in =/var/log= tend to grow endlessly, so it's a good idea to /rotate/ them once in a while---i.e., archive their contents in separate files, possibly compressed. The =(gnu services admin)= module provides an interface to the log rotation service provided by the Shepherd (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Log-Rotation-Service.html#Log-Rotation-Service][Log Rotation Service]] in The GNU Shepherd Manual).
+<<index-log-rotation>> <<index-logging>>
+Log files such as those found in =/var/log= tend to grow endlessly, so it's a good idea to /rotate/ them once in a while---i.e., archive their contents in separate files, possibly compressed. The =(gnu services admin)= module provides an interface to the log rotation service provided by the Shepherd (see [[https://www.gnu.org/software/shepherd/manual/html_node/Log-Rotation-Service.html#Log-Rotation-Service][Log Rotation Service]] in The GNU Shepherd Manual).
 
 This log rotation service is made available through =log-rotation-service-type=, which takes a =log-rotation-configuration= record as its value. By default, this provides =log-rotation=, a Shepherd “timed service” that runs periodically---once a week by default. It automatically knows about the log files produced by Shepherd services and can be taught about external log files. You can inspect the service and see when it's going to run the usual way:
 
@@ -53,7 +56,7 @@ This log rotation service is made available through =log-rotation-service-type=,
 $ sudo herd status log-rotation
 Status of log-rotation:
   It is running since Mon 09 Dec 2024 03:27:47 PM CET (2 days ago).
-  ...
+  …
 
 Upcoming timer alarms:
   Sun 15 Dec 2024 10:00:00 PM CET (in 4 days)
@@ -65,15 +68,16 @@ You can also list files subject to rotation with =herd files log-rotation= and t
 
 This service is part of =%base-services=, and thus enabled by default, with the default settings.
 
-- Variable: *log-rotation-service-type* [[#index-log_002drotation_002dservice_002dtype][¶]] :: This is the type of the log rotation service. Its associated value must be a =log-rotation-configuration= record, as discussed below.
+- Variable: log-rotation-service-type  :: This is the type of the log rotation service. Its associated value must be a =log-rotation-configuration= record, as discussed below.
 
-- Data Type: *log-rotation-configuration* [[#index-log_002drotation_002dconfiguration][¶]] :: Available =log-rotation-configuration= fields are:
+<<log_002drotation_002dconfiguration>>
+- Data Type: log-rotation-configuration  :: Available =log-rotation-configuration= fields are:
 
   - =provision= (default: =(log-rotation)=) (type: list-of-symbols) :: The name(s) of the log rotation Shepherd service.
 
   - =requirement= (default: =(user-processes)=) (type: list-of-symbols) :: Dependencies of the log rotation Shepherd service.
 
-  - =calendar-event= (type: gexp) :: Gexp containing the /calendar event/ when log rotation occurs. See [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual, for more information on calendar events.
+  - =calendar-event= (type: gexp) :: Gexp containing the /calendar event/ when log rotation occurs. See [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual, for more information on calendar events.
 
   - =external-log-files= (default: =()=) (type: list-of-strings) :: List of file names, external log files that should also be rotated.
 
@@ -94,19 +98,20 @@ Some log files just need to be deleted periodically once they are old, without a
 
 That ensures build logs do not accumulate endlessly.
 
-- Variable: *log-cleanup-service-type* [[#index-log_002dcleanup_002dservice_002dtype][¶]] :: This is the type of the service to delete old logs. Its value must be a =log-cleanup-configuration= record as described below.
+- Variable: log-cleanup-service-type  :: This is the type of the service to delete old logs. Its value must be a =log-cleanup-configuration= record as described below.
 
-- Data Type: *log-cleanup-configuration* [[#index-log_002dcleanup_002dconfiguration][¶]] :: Data type representing the log cleanup configuration
+- Data Type: log-cleanup-configuration  :: Data type representing the log cleanup configuration
 
   - =directory= :: Name of the directory containing log files.
 
   - =expiry= (default: =(* 6 30 24 3600)=) :: Age in seconds after which a file is subject to deletion (six months by default).
 
-  - =schedule= (default: ="30 12 01,08,15,22 * *"=) :: Schedule of the log cleanup job written either as a string in traditional cron syntax or as a gexp representing a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+  - =schedule= (default: ="30 12 01,08,15,22 * *"=) :: Schedule of the log cleanup job written either as a string in traditional cron syntax or as a gexp representing a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
 
-**** Anonip Service [[#Anonip-Service][¶]]
+<<index-logging_002c-anonymization>> <<Anonip-Service>>
+**** Anonip Service
 :PROPERTIES:
-:CUSTOM_ID: Anonip-Service
+:CUSTOM_ID: anonip-service
 :CLASS: subheading
 :END:
 Anonip is a privacy filter that removes IP address from web server logs. This service creates a FIFO and filters any written lines with anonip before writing the filtered log to a target file.
@@ -122,7 +127,7 @@ The following example sets up the FIFO =/var/run/anonip/https.access.log= and wr
 
 Configure your web server to write its logs to the FIFO at =/var/run/anonip/https.access.log= and collect the anonymized log file at =/var/web-logs/https.access.log=.
 
-- Data Type: *anonip-configuration* [[#index-anonip_002dconfiguration][¶]] :: This data type represents the configuration of anonip. It has the following parameters:
+- Data Type: anonip-configuration  :: This data type represents the configuration of anonip. It has the following parameters:
 
   - =anonip= (default: =anonip=) :: The anonip package to use.
 
@@ -152,4 +157,4 @@ Configure your web server to write its logs to the FIFO at =/var/run/anonip/http
 
 --------------
 
-Next: [[id:guix--Networking-Setup][Networking Setup]], Previous: [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Networking-Setup][Networking Setup]], Previous: [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -4,6 +4,28 @@
 #+filetags: :emacs:
 #+title: VC Directory Mode
 
-Next:
+Next: [[id:emacs--Branches][Version Control Branches]]   Previous: [[id:emacs--VC-Ignore][Ignore Version Control Files]]   Up: [[id:emacs--Version-Control][Version Control]]
 
-The node you are looking for is at [[id:emacs--Version-Control::#VC-Directory-Mode][VC Directory Mode]].
+<<VC-Directory-Mode>>
+
+--------------
+
+**** 30.1.10 VC Directory Mode [[#VC-Directory-Mode-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: VC-Directory-Mode-1
+:CLASS: subsection
+:END:
+The /VC Directory buffer/ is a specialized buffer for viewing the version control statuses of the files in a directory tree, and performing version control operations on those files. In particular, it is used to specify multi-file VC filesets for commands like C-x v v to act on (see [[id:emacs--VC-Directory-Commands][VC Directory Commands]]).
+
+To use the VC Directory buffer, type C-x v d (=vc-dir=). This reads a directory's name using the minibuffer, and switches to a VC Directory buffer for that directory. By default, the buffer is named =*vc-dir*=. Its contents are described in [[id:emacs--VC-Directory-Buffer][The VC Directory Buffer]].
+
+The =vc-dir= command automatically detects the version control system to be used in the specified directory. In the event that more than one system is being used in the directory, you should invoke the command with a prefix argument, C-u C-x v d; this prompts for the version control system which the VC Directory buffer should use.
+
+In addition to the VC Directory buffer, Emacs has a similar facility called PCL-CVS which is specialized for CVS. See [[../pcl-cvs_html/index.html#Top][About PCL-CVS]] in PCL-CVS---The Emacs Front-End to CVS.
+
+You can also invoke VC commands from Dired buffers (see [[id:emacs--Dired][Dired, the Directory Editor]]). In that case, any VC command you invoke considers the marked files as the current fileset (see [[id:emacs--Basic-VC-Editing][Basic Editing under Version Control]]), defaulting to the file on the current line if no files are marked.
+
+- [[id:emacs--VC-Directory-Buffer][The VC Directory Buffer]]
+- [[id:emacs--VC-Directory-Commands][VC Directory Commands]]
+
+--------------

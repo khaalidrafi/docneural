@@ -7,6 +7,9 @@
 Next: [[id:emacs--M_002dx][Running Commands by Name]]   Previous: [[id:emacs--Basic][Basic Editing Commands]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Minibuffer>>
+
+--------------
+
 ** 10 The Minibuffer [[#The-Minibuffer][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Minibuffer
@@ -14,4 +17,11 @@ Next: [[id:emacs--M_002dx][Running Commands by Name]]   Previous: [[id:emacs--Ba
 :END:
 The /minibuffer/ is where Emacs commands read complicated arguments, such as file names, buffer names, Emacs command names, or Lisp expressions. We call it the “minibuffer” because it's a special-purpose buffer with a small amount of screen space. You can use the usual Emacs editing commands in the minibuffer to edit the argument text.
 
---------------
+- [[id:emacs--Basic-Minibuffer][Using the Minibuffer]]
+- [[id:emacs--Minibuffer-File][Minibuffers for File Names]]
+- [[id:emacs--Minibuffer-Edit][Editing in the Minibuffer]]
+- [[id:emacs--Completion][Completion]]
+- [[id:emacs--Minibuffer-History][Minibuffer History]]
+- [[id:emacs--Repetition][Repeating Minibuffer Commands]]
+- [[id:emacs--Passwords][Entering passwords]]
+- [[id:emacs--Yes-or-No-Prompts][Yes or No Prompts]]

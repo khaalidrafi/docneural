@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Media-Home-Services>>
-Next: [[id:guix--mpv-Media-Player][mpv Media Player]], Previous: [[id:guix--Messaging-Home-Services][Messaging Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--mpv-Media-Player][mpv Media Player]], Previous: [[id:guix--Messaging-Home-Services][Messaging Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.16 Media Home Services [[#Media-Home-Services-1][¶]]
+<<Media-Home-Services-1>>
+**** 13.3.15 Media Home Services
 :PROPERTIES:
-:CUSTOM_ID: Media-Home-Services-1
+:CUSTOM_ID: media-home-services
 :CLASS: subsection
 :END:
+<<index-kodi>>
 The [[https://kodi.tv][Kodi media center]] can be run as a daemon on a media server. With the =(gnu home services kodi)= service, you can configure Kodi to run upon login.
 
 Here is an example of a service and its configuration that you could add to the =services= field of your =home-environment=:
@@ -55,14 +58,10 @@ Here is an example of a service and its configuration that you could add to the 
    (extra-options '("--settings="<settings-file>"))))
 #+end_src
 
-- Variable: *home-kodi-service-type* [[#index-home_002dkodi_002dservice_002dtype][¶]] :: This is the type of the Kodi home service, whose value is a =home-kodi-configuration= object.
+- Variable: home-kodi-service-type  :: This is the type of the Kodi home service, whose value is a =home-kodi-configuration= object.
 
-- Data Type: *home-kodi-configuration* [[#index-home_002dkodi_002dconfiguration][¶]] :: Available =home-kodi-configuration= fields are:
+- Data Type: home-kodi-configuration  :: Available =home-kodi-configuration= fields are:
 
   - =kodi= (default: =kodi=) (type: file-like) :: The Kodi package to use.
 
   - =extra-options= (default: ='()=) :: Extra options will be passed to =kodi=, please run =man kodi= for more information.
-
---------------
-
-Next: [[id:guix--mpv-Media-Player][mpv Media Player]], Previous: [[id:guix--Messaging-Home-Services][Messaging Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

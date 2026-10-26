@@ -4,6 +4,29 @@
 #+filetags: :emacs:
 #+title: ForIndent Commands
 
-Next:
+Next: [[id:emacs--ForIndent-Cont][Continuation Lines]]   Up: [[id:emacs--Fortran-Indent][Fortran Indentation]]
 
-The node you are looking for is at [[id:emacs--Fortran::#ForIndent-Commands][ForIndent Commands]].
+<<ForIndent-Commands>>
+
+--------------
+
+**** 28.14.2.1 Fortran Indentation and Filling Commands [[#Fortran-Indentation-and-Filling-Commands][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Fortran-Indentation-and-Filling-Commands
+:CLASS: subsubsection
+:END:
+- C-M-j :: Break the current line at point and set up a continuation line (=fortran-split-line=).
+
+- M-^ :: Join this line to the previous line (=fortran-join-line=).
+
+- C-M-q :: Indent all the lines of the subprogram that point is in (=fortran-indent-subprogram=).
+
+- M-q :: Fill a comment block or statement (using =fortran-fill-paragraph= or =fortran-fill-statement=).
+
+The key C-M-q runs =fortran-indent-subprogram=, a command to reindent all the lines of the Fortran subprogram (function or subroutine) containing point.
+
+The key C-M-j runs =fortran-split-line=, which splits a line in the appropriate fashion for Fortran. In a non-comment line, the second half becomes a continuation line and is indented accordingly. In a comment line, both halves become separate comment lines.
+
+M-^ or C-c C-d run the command =fortran-join-line=, which joins a continuation line back to the previous line, roughly as the inverse of =fortran-split-line=. The point must be on a continuation line when this command is invoked.
+
+M-q in Fortran mode fills the comment block or statement that point is in. This removes any excess statement continuations.

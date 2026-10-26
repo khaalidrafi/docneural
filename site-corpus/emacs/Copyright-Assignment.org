@@ -7,6 +7,9 @@
 Next:   Previous: [[id:emacs--Coding-Standards][Coding Standards]]   Up: [[id:emacs--Contributing][Contributing to Emacs Development]]
 
 <<Copyright-Assignment>>
+
+--------------
+
 *** 55.2 Copyright Assignment [[#Copyright-Assignment-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Copyright-Assignment-1
@@ -23,5 +26,3 @@ Copyright assignment is a simple process. Residents of many countries can do it 
 A copyright disclaimer is also a possibility, but we prefer an assignment. Note that the disclaimer, like an assignment, involves you sending signed paperwork to the FSF (simply saying “this is in the public domain” is not enough). Also, a disclaimer cannot be applied to future work, it has to be repeated each time you want to send something new.
 
 We can accept small changes (roughly, fewer than 15 lines) without an assignment. This is a cumulative limit (e.g., three separate 5 line patches) over all your contributions.
-
---------------

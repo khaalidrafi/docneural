@@ -7,6 +7,9 @@
 Next: [[id:emacs--Frames][Frames and Graphical Displays]]   Previous: [[id:emacs--Buffers][Using Multiple Buffers]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Windows>>
+
+--------------
+
 ** 22 Multiple Windows [[#Multiple-Windows][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Multiple-Windows
@@ -14,4 +17,12 @@ Next: [[id:emacs--Frames][Frames and Graphical Displays]]   Previous: [[id:emacs
 :END:
 Emacs can split a frame into two or many windows. Multiple windows can display parts of different buffers, or different parts of one buffer. Multiple frames always imply multiple windows, because each frame has its own set of windows. Each window belongs to one and only one frame.
 
---------------
+- [[id:emacs--Basic-Window][Concepts of Emacs Windows]]
+- [[id:emacs--Split-Window][Splitting Windows]]
+- [[id:emacs--Other-Window][Using Other Windows]]
+- [[id:emacs--Pop-Up-Window][Displaying in Another Window]]
+- [[id:emacs--Change-Window][Deleting and Resizing Windows]]
+- [[id:emacs--Displaying-Buffers][Displaying a Buffer in a Window]]
+- [[id:emacs--Window-Convenience][Convenience Features for Window Handling]]
+- [[id:emacs--Tab-Line][Window Tab Line]]
+- [[id:emacs--Window-Tool-Bar][Window Tool Bar]]

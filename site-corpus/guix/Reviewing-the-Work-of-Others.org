@@ -36,17 +36,20 @@ Next:
 [[../..][]]
 
 <<Reviewing-the-Work-of-Others>>
-Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.15 Reviewing the Work of Others [[#Reviewing-the-Work-of-Others-1][¶]]
+<<Reviewing-the-Work-of-Others-1>>
+*** 22.15 Reviewing the Work of Others
 :PROPERTIES:
-:CUSTOM_ID: Reviewing-the-Work-of-Others-1
+:CUSTOM_ID: reviewing-the-work-of-others
 :CLASS: section
 :END:
 Perhaps the biggest action you can do to help GNU Guix grow as a project is to review the work contributed by others. You do not need to be a committer to do so; applying, reading the source, building, linting and running other people's series and sharing your comments about your experience will give some confidence to committers. You must ensure the check list found in the [[id:guix--Submitting-Patches][Submitting Patches]] section has been correctly followed. A reviewed patch series should give the best chances for the proposed change to be merged faster, so if a change you would like to see merged hasn't yet been reviewed, this is the most appropriate thing to do! If you would like to review changes in a specific area and to receive notifications for incoming patches relevant to that domain, consider joining the relevant team(s) (see [[id:guix--Teams][Teams]]).
 
+<<index-reviewing_002c-guidelines>>
 Review comments should be unambiguous; be as clear and explicit as you can about what you think should be changed, ensuring the author can take action on it. Please try to keep the following guidelines in mind during review:
 
 1. /Be clear and explicit about changes you are suggesting/, ensuring the author can take action on it. In particular, it is a good idea to explicitly ask for new revisions when you want it.
@@ -57,12 +60,13 @@ Review comments should be unambiguous; be as clear and explicit as you can about
 
 When you deem the proposed change adequate and ready for inclusion in Guix, you can explicitly say so for pull requests on Codeberg, for example by selecting “Approve changes” in the “Finish review” dialog of the web interface.
 
+<<index-LGTM_002c-Looks-Good-To-Me>> <<index-review-tags>> <<index-Reviewed_002dby_002c-git-trailer>>
 The following well understood/codified ‘=Reviewed-by: Your Name <your-email@example.com>=' [[#FOOT53][^{53}]] line should be used to sign off as a reviewer, meaning you have reviewed the change and that it looks good to you:
 
 - If the /whole/ series (containing multiple commits) looks good to you, reply with ‘=Reviewed-by: Your Name <your-email@example.com>=' to the cover page if it has one, or to the last patch of the series otherwise, adding another ‘=(for the whole series)=' comment on the line below to explicit this fact.
 - If you instead want to mark a /single commit/ as reviewed (but not the whole series), simply reply with ‘=Reviewed-by: Your Name <your-email@example.com>=' to that commit message.
 
-If you are not a committer, you can help others find a /series/ you have reviewed more easily by adding a =reviewed-looks-good= usertag for the =guix= user.
+If you are not a committer, you can help others find a /series/ you have reviewed more easily by adding a =reviewed-looks-good= usertag for the =guix= user (see [[id:guix--Debbugs-Usertags][Debbugs Usertags]]).
 
 --------------
 
@@ -74,17 +78,15 @@ If you are not a committer, you can help others find a /series/ you have reviewe
 ***** [[#DOCF52][(52)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 The tendency to discuss minute details at length is often referred to as “bikeshedding”, where much time is spent discussing each one's preference for the color of the shed at the expense of progress made on the project to keep bikes dry.
 
 ***** [[#DOCF53][(53)]]
 :PROPERTIES:
 :CUSTOM_ID: section-2
-:CLASS: footnote-body-heading
 :END:
 The ‘=Reviewed-by=' Git trailer is used by other projects such as Linux, and is understood by third-party tools such as the ‘=b4 am=' sub-command, which is able to retrieve the complete submission email thread from a public-inbox instance and add the Git trailers found in replies to the commit patches.
 
 --------------
 
-Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Updating-the-Guix-Package][Updating the Guix Package]], Previous: [[id:guix--Commit-Access][Commit Access]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

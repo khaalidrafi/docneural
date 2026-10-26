@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<mpv-Media-Player>>
-Next: [[id:guix--Niri-window-manager][Niri window manager]], Previous: [[id:guix--Media-Home-Services][Media Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Niri-window-manager][Niri window manager]], Previous: [[id:guix--Media-Home-Services][Media Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.17 mpv Media Player [[#mpv-Media-Player-1][¶]]
+<<mpv-Media-Player-1>>
+**** 13.3.16 mpv Media Player
 :PROPERTIES:
-:CUSTOM_ID: mpv-Media-Player-1
+:CUSTOM_ID: mpv-media-player
 :CLASS: subsection
 :END:
+<<index-mpv_002c-Home-Service>> <<index-mpv_002c-configuration>>
 Configuring the [[https://mpv.io/][mpv media player]] can be somewhat daunting task, due to the sheer amount of options available, especially if one wants to be able to inherit the configuration in their code. The =home-mpv-service-type= is provided to help with that problem. When the service is added to your home environment, file based on the passed configuration is generated and placed into the correct location.
 
 Due to the bug #74748, it does not use Guix Records to represent the configuration, but uses keyword arguments to achieve similar result. Example follows:
@@ -57,9 +60,9 @@ Due to the bug #74748, it does not use Guix Records to represent the configurati
                     #:alang '("jpn" "eng"))))
 #+end_src
 
-- Variable: *home-mpv-service-type* [[#index-home_002dmpv_002dservice_002dtype][¶]] :: This is the type of the mpv home service, whose value is a =home-mpv-configuration= object.
+- Variable: home-mpv-service-type  :: This is the type of the mpv home service, whose value is a =home-mpv-configuration= object.
 
-- Procedure: *make-home-mpv-configuration* [[#index-make_002dhome_002dmpv_002dconfiguration][¶]] :: Return a new instance of =home-mpv-configuration=. Available keyword arguments are:
+- Procedure: make-home-mpv-configuration  :: Return a new instance of =home-mpv-configuration=. Available keyword arguments are:
 
   - =inherit= (default: =#t=) :: Inherit fields from an another instance.
 
@@ -75,7 +78,7 @@ Due to the bug #74748, it does not use Guix Records to represent the configurati
 
   - =extra-config= (default: =#f=) :: Additional content to include in the configuration file. It is placed at the end of the file.
 
-- Procedure: *make-mpv-profile-configuration* [[#index-make_002dmpv_002dprofile_002dconfiguration][¶]] :: Return a new instance of =mpv-profile-configuration=. As above, it also supports the =#:inherit= argument. Additionally it supports keyword arguments named after the options of =mpv=. Hence =--fullscreen= (or =fullscreen= in the configuration file) becomes =#:fullscreen?=.
+- Procedure: make-mpv-profile-configuration  :: Return a new instance of =mpv-profile-configuration=. As above, it also supports the =#:inherit= argument. Additionally it supports keyword arguments named after the options of =mpv=. Hence =--fullscreen= (or =fullscreen= in the configuration file) becomes =#:fullscreen?=.
 
   Few options are using their aliases instead. =audio= instead of =aid=, =video= instead of =vid=, =sub= instead of =sid=, =screenshot-directory= instead of =screenshot-dir= and =watch-later-directory= instead of =watch-later-dir=.
 
@@ -103,4 +106,4 @@ Due to the bug #74748, it does not use Guix Records to represent the configurati
 
 --------------
 
-Next: [[id:guix--Niri-window-manager][Niri window manager]], Previous: [[id:guix--Media-Home-Services][Media Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Niri-window-manager][Niri window manager]], Previous: [[id:guix--Media-Home-Services][Media Home Services]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

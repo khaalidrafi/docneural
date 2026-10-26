@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<Getting-Started>>
-Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 4 Getting Started [[#Getting-Started-1][¶]]
+<<Getting-Started-1>>
+** 4 Getting Started
 :PROPERTIES:
-:CUSTOM_ID: Getting-Started-1
+:CUSTOM_ID: getting-started
 :CLASS: chapter
 :END:
 Presumably, you've reached this section because either you have installed Guix on top of another distribution (see [[id:guix--Installation][Installation]]), or you've installed the standalone Guix System (see [[id:guix--System-Installation][System Installation]]). It's time for you to get started using Guix and this section aims to help you do that and give you a feel of what it's like.
@@ -59,6 +61,7 @@ This command shows you a number of matching /packages/, each time showing the pa
 guix install emacs
 #+end_example
 
+<<index-profile>>
 You've installed your first package, congrats! The package is now visible in your default /profile/, =$HOME/.guix-profile=---a profile is a directory containing installed packages. In the process, you've probably noticed that Guix downloaded pre-built binaries; or, if you explicitly chose to /not/ use pre-built binaries, then probably Guix is still building software (see [[id:guix--Substitutes][Substitutes]], for more info).
 
 Unless you're using Guix System, the =guix install= command must have printed this hint:
@@ -165,4 +168,4 @@ We hope you will enjoy Guix as much as the community enjoys building it!
 
 --------------
 
-Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Package-Management][Package Management]], Previous: [[id:guix--System-Installation][System Installation]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

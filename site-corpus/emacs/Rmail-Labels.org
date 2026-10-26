@@ -7,6 +7,9 @@
 Next: [[id:emacs--Rmail-Attributes][Rmail Attributes]]   Previous: [[id:emacs--Rmail-Output][Copying Messages Out to Files]]   Up: [[id:emacs--Rmail][Reading Mail with Rmail]]
 
 <<Rmail-Labels>>
+
+--------------
+
 *** 35.8 Labels [[#Labels][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Labels
@@ -31,7 +34,7 @@ Once you have given messages labels to classify them as you wish, there are thre
 
 C-M-n =labels= RET (=rmail-next-labeled-message=) moves to the next message that has one of the labels =labels=. The argument =labels= specifies one or more label names, separated by commas. C-M-p (=rmail-previous-labeled-message=) is similar, but moves backwards to previous messages. A numeric argument to either command serves as a repeat count.
 
-The command C-M-l =labels= RET (=rmail-summary-by-labels=) displays a summary containing only the messages that have at least one of a specified set of labels. The argument =labels= is one or more label names, separated by commas. See [[id:emacs--Rmail-Summary::#Rmail-Summary][Summaries]], for information on summaries.
+The command C-M-l =labels= RET (=rmail-summary-by-labels=) displays a summary containing only the messages that have at least one of a specified set of labels. The argument =labels= is one or more label names, separated by commas. See [[id:emacs--Rmail-Summary][Summaries]], for information on summaries.
 
 If the =labels= argument to C-M-n, C-M-p or C-M-l is empty, it means to use the last set of labels specified for any of these commands.
 

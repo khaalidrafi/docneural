@@ -36,18 +36,42 @@ Next:
 [[../..][]]
 
 <<Networking-Services>>
-Next: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Previous: [[id:guix--Authorization-Services][Authorization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Previous: [[id:guix--Networking-Setup][Networking Setup]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.6 Networking Services [[#Networking-Services-1][¶]]
+<<Networking-Services-1>>
+**** 11.10.5 Networking Services
 :PROPERTIES:
-:CUSTOM_ID: Networking-Services-1
+:CUSTOM_ID: networking-services
 :CLASS: subsection
 :END:
-The =(gnu services networking)= module discussed in the previous section provides services for more advanced setups: filtering packets with iptables or nftables, running a WiFi access point with =hostapd=, running the =inetd= “superdaemon”, and more. This section describes those.
+The =(gnu services networking)= module discussed in the previous section provides services for more advanced setups: providing a DHCP service for others to use, filtering packets with iptables or nftables, running a WiFi access point with =hostapd=, running the =inetd= “superdaemon”, and more. This section describes those.
 
-- Variable: *hostapd-service-type* [[#index-hostapd_002dservice_002dtype][¶]] :: This is the service type to run the [[https://w1.fi/hostapd/][hostapd]] daemon to set up WiFi (IEEE 802.11) access points and authentication servers. Its associated value must be a =hostapd-configuration= as shown below:
+- Variable: dhcpd-service-type  :: This type defines a service that runs a DHCP daemon. To create a service of this type, you must supply a =<dhcpd-configuration>=. For example:
+
+  #+begin_src lisp
+  (service dhcpd-service-type
+           (dhcpd-configuration
+            (config-file (local-file "my-dhcpd.conf"))
+            (interfaces '("enp0s25"))))
+  #+end_src
+
+- Data Type: dhcpd-configuration  :: - =package= (default: =isc-dhcp=) :: The package that provides the DHCP daemon. This package is expected to provide the daemon at =sbin/dhcpd= relative to its output directory. The default package is the [[https://www.isc.org/dhcp/][ISC's DHCP server]].
+
+  - =config-file= (default: =#f=) :: The configuration file to use. This is required. It will be passed to =dhcpd= via its =-cf= option. This may be any “file-like” object (see [[id:guix--G_002dExpressions][file-like objects]]). See =man dhcpd.conf= for details on the configuration file syntax.
+
+  - =version= (default: ="4"=) :: The DHCP version to use. The ISC DHCP server supports the values “4”, “6”, and “4o6”. These correspond to the =dhcpd= program options =-4=, =-6=, and =-4o6=. See =man dhcpd= for details.
+
+  - =run-directory= (default: ="/run/dhcpd"=) :: The run directory to use. At service activation time, this directory will be created if it does not exist.
+
+  - =pid-file= (default: ="/run/dhcpd/dhcpd.pid"=) :: The PID file to use. This corresponds to the =-pf= option of =dhcpd=. See =man dhcpd= for details.
+
+  - =interfaces= (default: ='()=) :: The names of the network interfaces on which dhcpd should listen for broadcasts. If this list is not empty, then its elements (which must be strings) will be appended to the =dhcpd= invocation when starting the daemon. It may not be necessary to explicitly specify any interfaces here; see =man dhcpd= for details.
+
+<<index-hostapd-service_002c-for-Wi_002dFi-access-points>> <<index-Wi_002dFi-access-points_002c-hostapd-service>>
+- Variable: hostapd-service-type  :: This is the service type to run the [[https://w1.fi/hostapd/][hostapd]] daemon to set up WiFi (IEEE 802.11) access points and authentication servers. Its associated value must be a =hostapd-configuration= as shown below:
 
   #+begin_src lisp
   ;; Use wlan1 to run the access point for "My Network".
@@ -58,7 +82,7 @@ The =(gnu services networking)= module discussed in the previous section provide
             (channel 12)))
   #+end_src
 
-- Data Type: *hostapd-configuration* [[#index-hostapd_002dconfiguration][¶]] :: This data type represents the configuration of the hostapd service, with the following fields:
+- Data Type: hostapd-configuration  :: This data type represents the configuration of the hostapd service, with the following fields:
 
   - =package= (default: =hostapd=) :: The hostapd package to use.
 
@@ -74,11 +98,12 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =extra-settings= (default: =""=) :: Extra settings to append as-is to the hostapd configuration file. See [[https://w1.fi/cgit/hostap/plain/hostapd/hostapd.conf]] for the configuration file reference.
 
-- Variable: *simulated-wifi-service-type* [[#index-simulated_002dwifi_002dservice_002dtype][¶]] :: This is the type of a service to simulate WiFi networking, which can be useful in virtual machines for testing purposes. The service loads the Linux kernel [[https://www.kernel.org/doc/html/latest/networking/mac80211_hwsim/mac80211_hwsim.html][=mac80211_hwsim= module]] and starts hostapd to create a pseudo WiFi network that can be seen on =wlan0=, by default.
+- Variable: simulated-wifi-service-type  :: This is the type of a service to simulate WiFi networking, which can be useful in virtual machines for testing purposes. The service loads the Linux kernel [[https://www.kernel.org/doc/html/latest/networking/mac80211_hwsim/mac80211_hwsim.html][=mac80211_hwsim= module]] and starts hostapd to create a pseudo WiFi network that can be seen on =wlan0=, by default.
 
   The service's value is a =hostapd-configuration= record.
 
-- Variable: *iptables-service-type* [[#index-iptables_002dservice_002dtype][¶]] :: This is the service type to set up an iptables configuration. iptables is a packet filtering framework supported by the Linux kernel. This service supports configuring iptables for both IPv4 and IPv6. A simple example configuration rejecting all incoming connections except those to the ssh port 22 is shown below.
+<<index-iptables>>
+- Variable: iptables-service-type  :: This is the service type to set up an iptables configuration. iptables is a packet filtering framework supported by the Linux kernel. This service supports configuring iptables for both IPv4 and IPv6. A simple example configuration rejecting all incoming connections except those to the ssh port 22 is shown below.
 
   #+begin_src lisp
   (service iptables-service-type
@@ -103,7 +128,7 @@ The =(gnu services networking)= module discussed in the previous section provide
   "))))
   #+end_src
 
-- Data Type: *iptables-configuration* [[#index-iptables_002dconfiguration][¶]] :: The data type representing the configuration of iptables.
+- Data Type: iptables-configuration  :: The data type representing the configuration of iptables.
 
   - =iptables= (default: =iptables=) :: The iptables package that provides =iptables-restore= and =ip6tables-restore=.
 
@@ -111,13 +136,14 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =ipv6-rules= (default: =%iptables-accept-all-rules=) :: The ip6tables rules to use. It will be passed to =ip6tables-restore=. This may be any “file-like” object (see [[id:guix--G_002dExpressions][file-like objects]]).
 
-- Variable: *nftables-service-type* [[#index-nftables_002dservice_002dtype][¶]] :: This is the service type to set up a nftables configuration. nftables is a netfilter project that aims to replace the iptables, ip6tables, arptables and ebtables framework. It provides a new packet filtering framework, a new user-space utility =nft=, and a compatibility layer for iptables. This service comes with a default ruleset, =%default-nftables-ruleset=, that rejects all incoming connections except those to the SSH port 22 (TCP). To use it, simply write:
+<<index-nftables>> <<index-firewall_002c-nftables>>
+- Variable: nftables-service-type  :: This is the service type to set up a nftables configuration. nftables is a netfilter project that aims to replace the iptables, ip6tables, arptables and ebtables framework. It provides a new packet filtering framework, a new user-space utility =nft=, and a compatibility layer for iptables. This service comes with a default ruleset, =%default-nftables-ruleset=, that rejects all incoming connections except those to the SSH port 22 (TCP). To use it, simply write:
 
   #+begin_src lisp
   (service nftables-service-type)
   #+end_src
 
-- Data Type: *nftables-configuration* [[#index-nftables_002dconfiguration][¶]] :: Available =nftables-configuration= fields are:
+- Data Type: nftables-configuration  :: Available =nftables-configuration= fields are:
 
   - =package= (default: =nftables=) (type: file-like) :: The =nftables= package to use.
 
@@ -125,11 +151,12 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =ruleset= (type: file-like) :: A file-like object containing the complete nftables ruleset. The default ruleset rejects all incoming connections except those to TCP port 22, with connections from the loopback interface are allowed.
 
-- Variable: *ntp-service-type* [[#index-ntp_002dservice_002dtype][¶]] :: This is the type of the service running the [[https://www.ntp.org][Network Time Protocol (NTP)]] daemon, =ntpd=. The daemon will keep the system clock synchronized with that of the specified NTP servers.
+<<index-NTP-_0028Network-Time-Protocol_0029_002c-service>> <<index-ntpd_002c-service-for-the-Network-Time-Protocol-daemon>> <<index-real-time-clock>>
+- Variable: ntp-service-type  :: This is the type of the service running the [[https://www.ntp.org][Network Time Protocol (NTP)]] daemon, =ntpd=. The daemon will keep the system clock synchronized with that of the specified NTP servers.
 
   The value of this service is an =ntpd-configuration= object, as described below.
 
-- Data Type: *ntp-configuration* [[#index-ntp_002dconfiguration][¶]] :: This is the data type for the NTP service configuration.
+- Data Type: ntp-configuration  :: This is the data type for the NTP service configuration.
 
   - =servers= (default: =%ntp-servers=) :: This is the list of servers (=<ntp-server>= records) with which =ntpd= will be synchronized. See the =ntp-server= data type definition below.
 
@@ -137,9 +164,9 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =ntp= (default: =ntp=) :: The NTP package to use.
 
-- Variable: *%ntp-servers* [[#index-_0025ntp_002dservers][¶]] :: List of host names used as the default NTP servers. These are servers of the [[https://www.ntppool.org/en/][NTP Pool Project]].
+- Variable: %ntp-servers  :: List of host names used as the default NTP servers. These are servers of the [[https://www.ntppool.org/en/][NTP Pool Project]].
 
-- Data Type: *ntp-server* [[#index-ntp_002dserver][¶]] :: The data type representing the configuration of a NTP server.
+- Data Type: ntp-server  :: The data type representing the configuration of a NTP server.
 
   - =type= (default: ='server=) :: The type of the NTP server, given as a symbol. One of ='pool=, ='server=, ='peer=, ='broadcast= or ='manycastclient=.
 
@@ -152,9 +179,10 @@ The =(gnu services networking)= module discussed in the previous section provide
      (type 'server)
      (address "some.ntp.server.org")
      (options `(iburst (version 3) (maxpoll 16) prefer))))
-#+end_example
+    #+end_example
 
-- Variable: *openntpd-service-type* [[#index-openntpd_002dservice_002dtype][¶]] :: Run the =ntpd=, the Network Time Protocol (NTP) daemon, as implemented by [[http://www.openntpd.org][OpenNTPD]]. The daemon will keep the system clock synchronized with that of the given servers.
+<<index-OpenNTPD>>
+- Variable: openntpd-service-type  :: Run the =ntpd=, the Network Time Protocol (NTP) daemon, as implemented by [[http://www.openntpd.org][OpenNTPD]]. The daemon will keep the system clock synchronized with that of the given servers.
 
   #+begin_src lisp
   (service
@@ -166,9 +194,9 @@ The =(gnu services networking)= module discussed in the previous section provide
     (constraints-from '("https://www.google.com/"))))
   #+end_src
 
-- Variable: *%openntpd-servers* [[#index-_0025openntpd_002dservers][¶]] :: This variable is a list of the server addresses defined in =%ntp-servers=.
+- Variable: %openntpd-servers  :: This variable is a list of the server addresses defined in =%ntp-servers=.
 
-- Data Type: *openntpd-configuration* [[#index-openntpd_002dconfiguration][¶]] :: - =openntpd= (default: =openntpd=) :: The openntpd package to use.
+- Data Type: openntpd-configuration  :: - =openntpd= (default: =openntpd=) :: The openntpd package to use.
 
   - =listen-on= (default: ='("127.0.0.1" "::1")=) :: A list of local IP addresses or hostnames the ntpd daemon should listen on.
 
@@ -184,7 +212,8 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =constraints-from= (default: ='()=) :: As with constraint from, specify a list of URLs, IP addresses or hostnames of HTTPS servers to provide a constraint. Should the hostname resolve to multiple IP addresses, =ntpd= will calculate a median constraint from all of them.
 
-- Variable: *inetd-service-type* [[#index-inetd_002dservice_002dtype][¶]] :: This service runs the =inetd= (see [[https://doc.guix.gnu.org/inetutils/latest/en/html_node/inetd-invocation.html#inetd-invocation][inetd invocation]] in GNU Inetutils) daemon. =inetd= listens for connections on internet sockets, and lazily starts the specified server program when a connection is made on one of these sockets.
+<<index-inetd>>
+- Variable: inetd-service-type  :: This service runs the =inetd= (see [[https://www.gnu.org/software/inetutils/manual/html_node/inetd-invocation.html#inetd-invocation][inetd invocation]] in GNU Inetutils) daemon. =inetd= listens for connections on internet sockets, and lazily starts the specified server program when a connection is made on one of these sockets.
 
   The value of this service is an =inetd-configuration= object. The following example configures the =inetd= daemon to provide the built-in =echo= service, as well as an smtp service which forwards smtp traffic over ssh to a server =smtp-server= behind a gateway =hostname=:
 
@@ -214,15 +243,15 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   See below for more details about =inetd-configuration=.
 
-- Data Type: *inetd-configuration* [[#index-inetd_002dconfiguration][¶]] :: Data type representing the configuration of =inetd=.
+- Data Type: inetd-configuration  :: Data type representing the configuration of =inetd=.
 
   - =program= (default: =(file-append inetutils "/libexec/inetd")=) :: The =inetd= executable to use.
 
   - =entries= (default: ='()=) :: A list of =inetd= service entries. Each entry should be created by the =inetd-entry= constructor.
 
-- Data Type: *inetd-entry* [[#index-inetd_002dentry][¶]] :: Data type representing an entry in the =inetd= configuration. Each entry corresponds to a socket where =inetd= will listen for requests.
+- Data Type: inetd-entry  :: Data type representing an entry in the =inetd= configuration. Each entry corresponds to a socket where =inetd= will listen for requests.
 
-  - =node= (default: =#f=) :: Optional string, a comma-separated list of local addresses =inetd= should use when listening for this service. See [[https://doc.guix.gnu.org/inetutils/latest/en/html_node/Configuration-file.html#Configuration-file][Configuration file]] in GNU Inetutils for a complete description of all options.
+  - =node= (default: =#f=) :: Optional string, a comma-separated list of local addresses =inetd= should use when listening for this service. See [[https://www.gnu.org/software/inetutils/manual/html_node/Configuration-file.html#Configuration-file][Configuration file]] in GNU Inetutils for a complete description of all options.
 
   - =name= :: A string, the name must correspond to an entry in =/etc/services=.
 
@@ -238,9 +267,10 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =arguments= (default: ='()=) :: A list strings or file-like objects, which are the server program's arguments, starting with the zeroth argument, i.e. the name of the program itself. For =inetd='s internal services, this entry must be ='()= or ='("internal")=.
 
-  See [[https://doc.guix.gnu.org/inetutils/latest/en/html_node/Configuration-file.html#Configuration-file][Configuration file]] in GNU Inetutils for a more detailed discussion of each configuration field.
+  See [[https://www.gnu.org/software/inetutils/manual/html_node/Configuration-file.html#Configuration-file][Configuration file]] in GNU Inetutils for a more detailed discussion of each configuration field.
 
-- Variable: *opendht-service-type* [[#index-opendht_002dservice_002dtype][¶]] :: This is the type of the service running a [[https://opendht.net][OpenDHT]] node, =dhtnode=. The daemon can be used to host your own proxy service to the distributed hash table (DHT), for example to connect to with Jami, among other applications.
+<<index-opendht_002c-distributed-hash-table-network-service>> <<index-dhtproxy_002c-for-use-with-jami>>
+- Variable: opendht-service-type  :: This is the type of the service running a [[https://opendht.net][OpenDHT]] node, =dhtnode=. The daemon can be used to host your own proxy service to the distributed hash table (DHT), for example to connect to with Jami, among other applications.
 
   #+begin_quote
   *Important:* When using the OpenDHT proxy server, the IP addresses it “sees” from the clients should be addresses reachable from other peers. In practice this means that a publicly reachable address is best suited for a proxy server, outside of your private network. For example, hosting the proxy server on a IPv4 private local network and exposing it via port forwarding could work for external peers, but peers local to the proxy would have their private addresses shared with the external peers, leading to connectivity problems.
@@ -249,7 +279,7 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   The value of this service is a =opendht-configuration= object, as described below.
 
-- Data Type: *opendht-configuration* [[#index-opendht_002dconfiguration][¶]] :: Available =opendht-configuration= fields are:
+- Data Type: opendht-configuration  :: Available =opendht-configuration= fields are:
 
   - =opendht= (default: =opendht=) (type: file-like) :: The =opendht= package to use.
 
@@ -267,7 +297,10 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =proxy-server-port-tls= (type: maybe-number) :: Spawn a proxy server listening to TLS connections on the specified port.
 
-- Variable: *tor-service-type* [[#index-tor_002dservice_002dtype][¶]] :: Type for a service that runs the [[https://torproject.org][Tor]] anonymous networking daemon. The service is configured using a =<tor-configuration>= record. By default, the Tor daemon runs as the =tor= unprivileged user, which is a member of the =tor= group.
+<<index-Tor>>
+- Variable: tor-service-type  :: Type for a service that runs the [[https://torproject.org][Tor]] anonymous networking daemon. The service is configured using a =<tor-configuration>= record. By default, the Tor daemon runs as the =tor= unprivileged user, which is a member of the =tor= group.
+
+  <<index-onion-services_002c-for-Tor>>
 
   Services of this type can be extended by other services to specify /onion services/ (in addition to those already specified in =tor-configuration=) as in this example:
 
@@ -278,7 +311,7 @@ The =(gnu services networking)= module discussed in the previous section provide
                           (mapping '((80 "127.0.0.1:8080"))))))
   #+end_src
 
-- Data Type: *tor-configuration* [[#index-tor_002dconfiguration][¶]] :: - =tor= (default: =tor=) :: The package that provides the Tor daemon. This package is expected to provide the daemon at =bin/tor= relative to its output directory. The default package is the [[https://www.torproject.org][Tor Project's]] implementation.
+- Data Type: tor-configuration  :: - =tor= (default: =tor=) :: The package that provides the Tor daemon. This package is expected to provide the daemon at =bin/tor= relative to its output directory. The default package is the [[https://www.torproject.org][Tor Project's]] implementation.
 
   - =config-file= (default: =(plain-file "empty" "")=) :: The configuration file to use. It will be appended to a default configuration file, and the final configuration file will be passed to =tor= via its =-f= option. This may be any “file-like” object (see [[id:guix--G_002dExpressions][file-like objects]]). See =man tor= for details on the configuration file syntax.
 
@@ -294,7 +327,8 @@ The =(gnu services networking)= module discussed in the previous section provide
 
   - =auto-start?= (default: =#t=) :: Whether or not to start the Tor daemon on boot.
 
-- Data Type: *tor-onion-service-configuration* [[#index-tor_002donion_002dservice_002dconfiguration][¶]] :: Data Type representing a Tor /Onion Service/ configuration. See [[https://community.torproject.org/onion-services/][the Tor project's documentation]] for more information. Available =tor-onion-service-configuration= fields are:
+<<index-onion-service_002c-tor>>
+- Data Type: tor-onion-service-configuration  :: Data Type representing a Tor /Onion Service/ configuration. See [[https://community.torproject.org/onion-services/][the Tor project's documentation]] for more information. Available =tor-onion-service-configuration= fields are:
 
   - =name= (type: string) :: Name for this Onion Service. This creates a =/var/lib/tor/hidden-services/==name= directory, where the =hostname= file contains the ‘=.onion=' host name for this Onion Service.
 
@@ -307,7 +341,8 @@ The =(gnu services networking)= module discussed in the previous section provide
 
     maps ports 22 and 80 of the Onion Service to the local ports 22 and 8080.
 
-- Data Type: *tor-transport-plugin* [[#index-tor_002dtransport_002dplugin][¶]] :: Data type representing a Tor pluggable transport plugin in =tor-configuration=. Plugguble transports are programs that disguise Tor traffic, which can be useful in case Tor is censored. See the the Tor project's [[https://tb-manual.torproject.org/circumvention/][documentation]] and [[https://spec.torproject.org/pt-spec/index.html][specification]] for more information.
+<<index-pluggable-transports_002c-tor>>
+- Data Type: tor-transport-plugin  :: Data type representing a Tor pluggable transport plugin in =tor-configuration=. Plugguble transports are programs that disguise Tor traffic, which can be useful in case Tor is censored. See the the Tor project's [[https://tb-manual.torproject.org/circumvention/][documentation]] and [[https://spec.torproject.org/pt-spec/index.html][specification]] for more information.
 
   Each transport plugin corresponds either to =ClientTransportPlugin ...= or to =ServerTransportPlugin ...= line in the default configuration file, see =man tor=. Available =tor-transport-plugin= fields are:
 
@@ -336,7 +371,7 @@ The =(gnu services rsync)= module provides the following services:
 
 You might want an rsync daemon if you have files that you want available so anyone (or just yourself) can download existing files or upload new files.
 
-- Variable: *rsync-service-type* [[#index-rsync_002dservice_002dtype][¶]] :: This is the service type for the [[https://rsync.samba.org][rsync]] daemon, The value for this service type is a =rsync-configuration= record as in this example:
+- Variable: rsync-service-type  :: This is the service type for the [[https://rsync.samba.org][rsync]] daemon, The value for this service type is a =rsync-configuration= record as in this example:
 
   #+begin_src lisp
   ;; Export two directories over rsync.  By default rsync listens on
@@ -354,7 +389,7 @@ You might want an rsync daemon if you have files that you want available so anyo
 
   See below for details about =rsync-configuration=.
 
-- Data Type: *rsync-configuration* [[#index-rsync_002dconfiguration][¶]] :: Data type representing the configuration for =rsync-service=.
+- Data Type: rsync-configuration  :: Data type representing the configuration for =rsync-service=.
 
   - =package= (default: =rsync=) :: =rsync= package to use.
 
@@ -376,9 +411,9 @@ You might want an rsync daemon if you have files that you want available so anyo
 
   - =gid= (default: ="rsyncd"=) :: Group name or group ID that will be used when accessing the module.
 
-  - =modules= (default: ='())=) :: List of “modules”---i.e., directories exported over rsync. Each element must be a =rsync-module= record, as described below.
+  - =modules= (default: =%default-modules=) :: List of “modules”---i.e., directories exported over rsync. Each element must be a =rsync-module= record, as described below.
 
-- Data Type: *rsync-module* [[#index-rsync_002dmodule][¶]] :: This is the data type for rsync “modules”. A module is a directory exported over the rsync protocol. The available fields are as follows:
+- Data Type: rsync-module  :: This is the data type for rsync “modules”. A module is a directory exported over the rsync protocol. The available fields are as follows:
 
   - =name= :: The module name. This is the name that shows up in URLs. For example, if the module is called =music=, the corresponding URL will be =rsync://host.example.org/music=.
 
@@ -392,11 +427,12 @@ You might want an rsync daemon if you have files that you want available so anyo
 
   - =timeout= (default: =300=) :: Idle time in seconds after which the daemon closes a connection with the client.
 
-The =(gnu services syncthing)= module provides the following services:
+<<index-Syncthing_002c-file-synchronization-service>> <<index-backup-service_002c-Syncthing>>
+The =(gnu services syncthing)= module provides the following services: <<index-syncthing>>
 
 You might want a Syncthing daemon if you have files between two or more computers and want to sync them in real time, safely protected from prying eyes.
 
-- Variable: *syncthing-service-type* [[#index-syncthing_002dservice_002dtype][¶]] :: This is the service type for the [[https://syncthing.net/][syncthing]] daemon, The value for this service type is a =syncthing-configuration= record as in this example:
+- Variable: syncthing-service-type  :: This is the service type for the [[https://syncthing.net/][syncthing]] daemon, The value for this service type is a =syncthing-configuration= record as in this example:
 
   #+begin_src lisp
   (service syncthing-service-type
@@ -410,7 +446,7 @@ You might want a Syncthing daemon if you have files between two or more computer
 
   See below for details about =syncthing-configuration=.
 
-- Data Type: *syncthing-configuration* [[#index-syncthing_002dconfiguration][¶]] :: Data type representing the configuration for =syncthing-service-type=.
+- Data Type: syncthing-configuration  :: Data type representing the configuration for =syncthing-service-type=.
 
   - =syncthing= (default: =syncthing=) :: =syncthing= package to use.
 
@@ -436,7 +472,7 @@ XMLLINT_INDENT="    " xmllint --format /path/to/new/config.xml | diff /path/to/o
 
 When generating a configuration file through Guix, you can still temporarily modify Syncthing from the GUI or through =introducer= and =autoAcceptFolders= mechanisms, but such changes will be reset on reconfigure.
 
-- Data Type: *syncthing-config-file* [[#index-syncthing_002dconfig_002dfile][¶]] :: Data type representing the configuration file read by the Syncthing daemon.
+- Data Type: syncthing-config-file  :: Data type representing the configuration file read by the Syncthing daemon.
 
   - =folders= (default: =(list (syncthing-folder (id "default") (label "Default Folder") (path "~/Sync")))= :: The default here is the same as Syncthing's default. The value should be a list of =syncthing-folder=s.
 
@@ -524,7 +560,7 @@ When generating a configuration file through Guix, you can still temporarily mod
     =default-device= (default: =(syncthing-device (id ""))=)\\
     =default-ignores= (default: ="")=) :: Options whose names begin with ‘default-' above do not affect folders and devices added through the Guix configuration interface. They will, however, affect folders and devices that are added through the Syncthing GUI, by an =introducer=, or a device with =auto-accept-folders=.
 
-Data Type: *syncthing-folder* [[#index-syncthing_002dfolder][¶]]
+Data Type: syncthing-folder
 Data type representing a folder to be synchronized.
 
 =id= (default: =#f=)
@@ -584,7 +620,7 @@ This should be a list of other Syncthing devices. You do not need to specify the
 =send-xattrs?= (default: =#f=)
 =xattr-filter-max-single-entry-size= (default: =1024=)
 =xattr-filter-max-total-size= (default: =4096=)
-Data Type: *syncthing-device* [[#index-syncthing_002ddevice][¶]]
+Data Type: syncthing-device
 Data type representing a device to synchronize folders with.
 
 =id=
@@ -608,7 +644,7 @@ List of addresses at which to search for this device. When the special value “
 =untrusted?= (default: =#f=)
 =remote-gui-port= (default: =0=)
 =num-connections= (default: =0=)
-- Data Type: *syncthing-folder-device* [[#index-syncthing_002dfolder_002ddevice][¶]] :: This data type offers two folder-specific device options: =introduced-by= and =encryption-password=.
+- Data Type: syncthing-folder-device  :: This data type offers two folder-specific device options: =introduced-by= and =encryption-password=.
 
   =syncthing-folder-device= corresponds to the [[https://docs.syncthing.net/users/config.html#config-option-folder.device][‘device']] option in the upstream ‘folder' element.
 
@@ -649,9 +685,9 @@ Here is a more complex example configuration for illustrative purposes:
                                        (encryption-password "mypassword"))))))))))))
 #+end_src
 
-Furthermore, =(gnu services ssh)= provides the following services.
+Furthermore, =(gnu services ssh)= provides the following services. <<index-SSH>> <<index-SSH-server>>
 
-- Variable: *openssh-service-type* [[#index-openssh_002dservice_002dtype][¶]] :: This is the type for the [[http://www.openssh.org][OpenSSH]] secure shell daemon, =sshd=. Its value must be an =openssh-configuration= record as in this example:
+- Variable: openssh-service-type  :: This is the type for the [[http://www.openssh.org][OpenSSH]] secure shell daemon, =sshd=. Its value must be an =openssh-configuration= record as in this example:
 
   #+begin_src lisp
   (service openssh-service-type
@@ -673,7 +709,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
                                ,(local-file "charlie.pub")))))
   #+end_src
 
-- Data Type: *openssh-configuration* [[#index-openssh_002dconfiguration][¶]] :: This is the configuration record for OpenSSH's =sshd=.
+- Data Type: openssh-configuration  :: This is the configuration record for OpenSSH's =sshd=.
 
   - =openssh= (default =openssh=) :: The OpenSSH package to use.
 
@@ -681,7 +717,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
 
   - =port-number= (default: =22=) :: TCP port on which =sshd= listens for incoming connections.
 
-  - =max-connections= (default: =200=) :: Hard limit on the maximum number of simultaneous client connections, enforced by the inetd-style Shepherd service (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-inetd-constructor=]] in The GNU Shepherd Manual).
+  - =max-connections= (default: =200=) :: Hard limit on the maximum number of simultaneous client connections, enforced by the inetd-style Shepherd service (see [[https://www.gnu.org/software/shepherd/manual/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-inetd-constructor=]] in The GNU Shepherd Manual).
 
   - =permit-root-login= (default: =#f=) :: This field determines whether and when to allow logins as root. If =#f=, root logins are disallowed; if =#t=, they are allowed. If it's the symbol ='prohibit-password=, then root logins are permitted but not with password-based authentication.
 
@@ -734,7 +770,9 @@ Furthermore, =(gnu services ssh)= provides the following services.
                (accepted-environment '("COLORTERM"))))
     #+end_src
 
-  -  <<index-authorized-keys_002c-SSH>>=authorized-keys= (default: ='()=) [[#index-authorized-keys_002c-SSH][¶]] :: This is the list of authorized keys. Each element of the list is a user name followed by one or more file-like objects that represent SSH public keys. For example:
+  - =authorized-keys= (default: ='()=) [[#index-authorized-keys_002c-SSH][¶]] :: <<index-SSH-authorized-keys>>
+
+    This is the list of authorized keys. Each element of the list is a user name followed by one or more file-like objects that represent SSH public keys. For example:
 
     #+begin_src lisp
     (openssh-configuration
@@ -765,7 +803,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
       PermitRootLogin yes"))
     #+end_src
 
-- Variable: *dropbear-service-type* [[#index-dropbear_002dservice_002dtype][¶]] :: Type of the service that runs the [[https://matt.ucc.asn.au/dropbear/dropbear.html][Dropbear SSH daemon]], whose value is a =<dropbear-configuration>= object.
+- Variable: dropbear-service-type  :: Type of the service that runs the [[https://matt.ucc.asn.au/dropbear/dropbear.html][Dropbear SSH daemon]], whose value is a =<dropbear-configuration>= object.
 
   For example, to specify a Dropbear service listening on port 1234:
 
@@ -774,7 +812,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
                                    (port-number 1234)))
   #+end_src
 
-- Data Type: *dropbear-configuration* [[#index-dropbear_002dconfiguration][¶]] :: This data type represents the configuration of a Dropbear SSH daemon.
+- Data Type: dropbear-configuration  :: This data type represents the configuration of a Dropbear SSH daemon.
 
   - =dropbear= (default: =dropbear=) :: The Dropbear package to use.
 
@@ -790,35 +828,8 @@ Furthermore, =(gnu services ssh)= provides the following services.
 
   - =password-authentication?= (default: =#t=) :: Whether to enable password-based authentication.
 
-- Variable: *endlessh-service-type* [[#index-endlessh_002dservice_002dtype][¶]] :: This is the type for the [[https://github.com/skeeto/endlessh][EndleSSH]] program that runs an SSH tar pit. By very slowly sending an SSH banner, this program keeps unwanted visitors locked away from the actual SSH daemon.
-
-  For example, to specify a service running Endlessh on port =2222=, add this call to the operating system's =services= field:
-
-  #+begin_src lisp
-  (service endlessh-service-type
-           (endlessh-configuration
-            (port-number 2222)))
-  #+end_src
-
-- Data Type: *endlessh-configuration* [[#index-endlessh_002dconfiguration][¶]] :: This data type represents the configuration of an EndleSSH service.
-
-  - =endlessh= (default: =endlessh=) :: The EndleSSH package to use.
-
-  - =port-number= (default: =22=) :: The TCP port where the daemon waits for incoming connections.
-
-  - =log-level= (default: =1=) :: The log level. =0= is quiet, =2= is very noisy.
-
-  - =syslog-output?= (default: =#t=) :: Whether to enable syslog output.
-
-  - =pid-file= (default: ="/var/run/endlessh.pid"=) :: File name of the daemon's PID file.
-
-  - =message-delay= (default: =10000=) :: The endless banner is sent one line at a time. This is the delay in milliseconds between individual lines.
-
-  - =max-banner-length= (default: =32=) :: The length of each line is randomized. This controls the maximum length of each line. Shorter lines may keep clients on for longer if they give up after a certain number of bytes.
-
-  - =max-clients= (default: =4096=) :: Maximum number of connections to accept at a time. Connections beyond this are not immediately rejected, but will wait in the queue.
-
-- Variable: *autossh-service-type* [[#index-autossh_002dservice_002dtype][¶]] :: This is the type for the [[https://www.harding.motd.ca/autossh][AutoSSH]] program that runs a copy of =ssh= and monitors it, restarting it as necessary should it die or stop passing traffic. AutoSSH can be run manually from the command-line by passing arguments to the binary =autossh= from the package =autossh=, but it can also be run as a Guix service. This latter use case is documented here.
+<<index-AutoSSH>>
+- Variable: autossh-service-type  :: This is the type for the [[https://www.harding.motd.ca/autossh][AutoSSH]] program that runs a copy of =ssh= and monitors it, restarting it as necessary should it die or stop passing traffic. AutoSSH can be run manually from the command-line by passing arguments to the binary =autossh= from the package =autossh=, but it can also be run as a Guix service. This latter use case is documented here.
 
   AutoSSH can be used to forward local traffic to a remote machine using an SSH tunnel, and it respects the =~/.ssh/config= of the user it is run as.
 
@@ -831,7 +842,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
             (ssh-options (list "-T" "-N" "-L" "8081:localhost:8081" "remote.net"))))
   #+end_src
 
-- Data Type: *autossh-configuration* [[#index-autossh_002dconfiguration][¶]] :: This data type represents the configuration of an AutoSSH service.
+- Data Type: autossh-configuration  :: This data type represents the configuration of an AutoSSH service.
 
   - =user= (default ="autossh"=) :: The user as which the AutoSSH service is to be run. This assumes that the specified user exists.
 
@@ -851,11 +862,8 @@ Furthermore, =(gnu services ssh)= provides the following services.
 
   - =ssh-options= (default ='()=) :: The list of command-line arguments to pass to =ssh= when it is run. Options =-f= and =-M= are reserved for AutoSSH and may cause undefined behaviour.
 
-  - =auto-start?= (default =#t=) :: Whether this service should be started automatically by the Shepherd. If it is =#f=, the service has to be started manually with =herd start=.
-
-  - =shepherd-provision= (default: ='(autossh)=) :: The list of symbols defining the name(s) of the Shepherd service.
-
-- Variable: *webssh-service-type* [[#index-webssh_002dservice_002dtype][¶]] :: This is the type for the [[https://webssh.huashengdun.org/][WebSSH]] program that runs a web SSH client. WebSSH can be run manually from the command-line by passing arguments to the binary =wssh= from the package =webssh=, but it can also be run as a Guix service. This latter use case is documented here.
+<<index-WebSSH>>
+- Variable: webssh-service-type  :: This is the type for the [[https://webssh.huashengdun.org/][WebSSH]] program that runs a web SSH client. WebSSH can be run manually from the command-line by passing arguments to the binary =wssh= from the package =webssh=, but it can also be run as a Guix service. This latter use case is documented here.
 
   For example, to specify a service running WebSSH on loopback interface on port =8888= with reject policy with a list of allowed to connection hosts, and NGINX as a reverse-proxy to this service listening for HTTPS connection, add this call to the operating system's =services= field:
 
@@ -884,7 +892,7 @@ Furthermore, =(gnu services ssh)= provides the following services.
                       (nginx-server-configuration-locations %webssh-configuration-nginx))))))))
   #+end_src
 
-- Data Type: *webssh-configuration* [[#index-webssh_002dconfiguration][¶]] :: Data type representing the configuration for =webssh-service=.
+- Data Type: webssh-configuration  :: Data type representing the configuration for =webssh-service=.
 
   - =package= (default: =webssh=) :: =webssh= package to use.
 
@@ -904,19 +912,19 @@ Furthermore, =(gnu services ssh)= provides the following services.
 
   - =log-level= (default: =#f=) :: Logging level.
 
-- Variable: *block-facebook-hosts-service-type* [[#index-block_002dfacebook_002dhosts_002dservice_002dtype][¶]] :: This service type adds a list of known Facebook hosts to the =/etc/hosts= file. (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Host-Names.html#Host-Names][Host Names]] in The GNU C Library Reference Manual) Each line contains an entry that maps a known server name of the Facebook on-line service---e.g., =www.facebook.com=---to unroutable IPv4 and IPv6 addresses.
+- Variable: block-facebook-hosts-service-type  :: This service type adds a list of known Facebook hosts to the =/etc/hosts= file. (see [[https://www.gnu.org/software/libc/manual/html_node/Host-Names.html#Host-Names][Host Names]] in The GNU C Library Reference Manual) Each line contains an entry that maps a known server name of the Facebook on-line service---e.g., =www.facebook.com=---to unroutable IPv4 and IPv6 addresses.
 
   This mechanism can prevent programs running locally, such as Web browsers, from accessing Facebook.
 
 The =(gnu services avahi)= provides the following definition.
 
-- Variable: *avahi-service-type* [[#index-avahi_002dservice_002dtype][¶]] :: This is the service that runs =avahi-daemon=, a system-wide mDNS/DNS-SD responder that allows for service discovery and “zero-configuration” host name lookups (see [[https://avahi.org/]]). Its value must be an =avahi-configuration= record---see below.
+- Variable: avahi-service-type  :: This is the service that runs =avahi-daemon=, a system-wide mDNS/DNS-SD responder that allows for service discovery and “zero-configuration” host name lookups (see [[https://avahi.org/]]). Its value must be an =avahi-configuration= record---see below.
 
   This service extends the name service cache daemon (nscd) so that it can resolve =.local= host names using [[https://0pointer.de/lennart/projects/nss-mdns/][nss-mdns]]. See [[id:guix--Name-Service-Switch][Name Service Switch]], for information on host name resolution.
 
   Additionally, add the =avahi= package to the system profile so that commands such as =avahi-browse= are directly usable.
 
-- Data Type: *avahi-configuration* [[#index-avahi_002dconfiguration][¶]] :: Data type representation the configuration for Avahi.
+- Data Type: avahi-configuration  :: Data type representation the configuration for Avahi.
 
   - =host-name= (default: =#f=) :: If different from =#f=, use that as the host name to publish for this machine; otherwise, use the machine's actual host name.
 
@@ -926,7 +934,7 @@ The =(gnu services avahi)= provides the following definition.
 
     #+begin_example
     avahi-browse _workstation._tcp
-#+end_example
+    #+end_example
 
   - =wide-area?= (default: =#f=) :: When true, DNS-SD over unicast DNS is enabled.
 
@@ -935,13 +943,13 @@ The =(gnu services avahi)= provides the following definition.
 
   - =domains-to-browse= (default: ='()=) :: This is a list of domains to browse.
 
-- Variable: *openvswitch-service-type* [[#index-openvswitch_002dservice_002dtype][¶]] :: This is the type of the [[https://www.openvswitch.org][Open vSwitch]] service, whose value should be an =openvswitch-configuration= object.
+- Variable: openvswitch-service-type  :: This is the type of the [[https://www.openvswitch.org][Open vSwitch]] service, whose value should be an =openvswitch-configuration= object.
 
-- Data Type: *openvswitch-configuration* [[#index-openvswitch_002dconfiguration][¶]] :: Data type representing the configuration of Open vSwitch, a multilayer virtual switch which is designed to enable massive network automation through programmatic extension.
+- Data Type: openvswitch-configuration  :: Data type representing the configuration of Open vSwitch, a multilayer virtual switch which is designed to enable massive network automation through programmatic extension.
 
   - =package= (default: =openvswitch=) :: Package object of the Open vSwitch.
 
-- Variable: *pagekite-service-type* [[#index-pagekite_002dservice_002dtype][¶]] :: This is the service type for the [[https://pagekite.net][PageKite]] service, a tunneling solution for making localhost servers publicly visible, even from behind restrictive firewalls or NAT without forwarded ports. The value for this service type is a =pagekite-configuration= record.
+- Variable: pagekite-service-type  :: This is the service type for the [[https://pagekite.net][PageKite]] service, a tunneling solution for making localhost servers publicly visible, even from behind restrictive firewalls or NAT without forwarded ports. The value for this service type is a =pagekite-configuration= record.
 
   Here's an example exposing the local HTTP and SSH daemons:
 
@@ -953,7 +961,7 @@ The =(gnu services avahi)= provides the following definition.
              (extra-file "/etc/pagekite.rc")))
   #+end_src
 
-- Data Type: *pagekite-configuration* [[#index-pagekite_002dconfiguration][¶]] :: Data type representing the configuration of PageKite.
+- Data Type: pagekite-configuration  :: Data type representing the configuration of PageKite.
 
   - =package= (default: =pagekite=) :: Package object of PageKite.
 
@@ -967,7 +975,7 @@ The =(gnu services avahi)= provides the following definition.
 
   - =extra-file= (default: =#f=) :: Extra configuration file to read, which you are expected to create manually. Use this to add additional options and manage shared secrets out-of-band.
 
-- Variable: *yggdrasil-service-type* [[#index-yggdrasil_002dservice_002dtype][¶]] :: The service type for connecting to the [[https://yggdrasil-network.github.io/][Yggdrasil network]], an early-stage implementation of a fully end-to-end encrypted IPv6 network.
+- Variable: yggdrasil-service-type  :: The service type for connecting to the [[https://yggdrasil-network.github.io/][Yggdrasil network]], an early-stage implementation of a fully end-to-end encrypted IPv6 network.
 
   #+begin_quote
   Yggdrasil provides name-independent routing with cryptographically generated addresses. Static addressing means you can keep the same address as long as you want, even if you move to a new location, or generate a new address (by generating new keys) whenever you want. [[https://yggdrasil-network.github.io/2018/07/28/addressing.html]]
@@ -997,9 +1005,9 @@ The =(gnu services avahi)= provides the following definition.
     # Your private key. DO NOT share this with anyone!
     PrivateKey: 5c750...
   }
-#+end_example
+  #+end_example
 
-- Data Type: *yggdrasil-configuration* [[#index-yggdrasil_002dconfiguration][¶]] :: Data type representing the configuration of Yggdrasil.
+- Data Type: yggdrasil-configuration  :: Data type representing the configuration of Yggdrasil.
 
   - =package= (default: =yggdrasil=) :: Package object of Yggdrasil.
 
@@ -1013,7 +1021,8 @@ The =(gnu services avahi)= provides the following definition.
 
   - =config-file= (default: ="/etc/yggdrasil-private.conf"=) :: What HJSON file to load sensitive data from. This is where private keys should be stored, which are necessary to specify if you don't want a randomized address after each restart. Use =#f= to disable. Options defined in this file take precedence over =json-config=. Use the output of =yggdrasil -genconf= as a starting point. To configure a static address, delete everything except PrivateKey option.
 
-- Variable: *ipfs-service-type* [[#index-ipfs_002dservice_002dtype][¶]] :: The service type for connecting to the [[https://ipfs.io][IPFS network]], a global, versioned, peer-to-peer file system. Pass it a =ipfs-configuration= to change the ports used for the gateway and API.
+<<index-IPFS>>
+- Variable: ipfs-service-type  :: The service type for connecting to the [[https://ipfs.io][IPFS network]], a global, versioned, peer-to-peer file system. Pass it a =ipfs-configuration= to change the ports used for the gateway and API.
 
   Here's an example configuration, using some non-standard ports:
 
@@ -1024,7 +1033,7 @@ The =(gnu services avahi)= provides the following definition.
             (api "/ip4/127.0.0.1/tcp/8881")))
   #+end_src
 
-- Data Type: *ipfs-configuration* [[#index-ipfs_002dconfiguration][¶]] :: Data type representing the configuration of IPFS.
+- Data Type: ipfs-configuration  :: Data type representing the configuration of IPFS.
 
   - =package= (default: =go-ipfs=) :: Package object of IPFS.
 
@@ -1032,7 +1041,8 @@ The =(gnu services avahi)= provides the following definition.
 
   - =api= (default: ="/ip4/127.0.0.1/tcp/5001"=) :: Address of the API endpoint, in ‘multiaddress' format.
 
-- Variable: *keepalived-service-type* [[#index-keepalived_002dservice_002dtype][¶]] :: This is the type for the [[https://www.keepalived.org/][Keepalived]] routing software, =keepalived=. Its value must be an =keepalived-configuration= record as in this example for master machine:
+<<index-keepalived>>
+- Variable: keepalived-service-type  :: This is the type for the [[https://www.keepalived.org/][Keepalived]] routing software, =keepalived=. Its value must be an =keepalived-configuration= record as in this example for master machine:
 
   #+begin_src lisp
   (service keepalived-service-type
@@ -1053,7 +1063,7 @@ The =(gnu services avahi)= provides the following definition.
       10.0.0.4/24
     }
   }
-#+end_example
+  #+end_example
 
   and for backup machine:
 
@@ -1076,8 +1086,8 @@ The =(gnu services avahi)= provides the following definition.
       10.0.0.4/24
     }
   }
-#+end_example
+  #+end_example
 
 --------------
 
-Next: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Previous: [[id:guix--Authorization-Services][Authorization Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Unattended-Upgrades][Unattended Upgrades]], Previous: [[id:guix--Networking-Setup][Networking Setup]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

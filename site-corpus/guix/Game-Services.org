@@ -36,97 +36,49 @@ Next:
 [[../..][]]
 
 <<Game-Services>>
-Next: [[id:guix--PAM-Mount-Service][PAM Mount Service]], Previous: [[id:guix--Version-Control-Services][Version Control Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--PAM-Mount-Service][PAM Mount Service]], Previous: [[id:guix--Version-Control-Services][Version Control Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.35 Game Services [[#Game-Services-1][¶]]
+<<Game-Services-1>>
+**** 11.10.33 Game Services
 :PROPERTIES:
-:CUSTOM_ID: Game-Services-1
+:CUSTOM_ID: game-services
 :CLASS: subsection
 :END:
-**** Joycond service [[#Joycond-service][¶]]
+<<Joycond-service>>
+**** Joycond service
 :PROPERTIES:
-:CUSTOM_ID: Joycond-service
+:CUSTOM_ID: joycond-service
 :CLASS: subsubheading
 :END:
+<<index-joycond>> <<index-nintendo-controllers>>
 The joycond service allows the pairing of Nintendo joycon game controllers over Bluetooth. (see [[id:guix--Desktop-Services][Desktop Services]] for setting up Bluetooth.)
 
-- Data Type: *joycond-configuration* [[#index-joycond_002dconfiguration][¶]] :: Data type representing the configuration of =joycond=.
+- Data Type: joycond-configuration  :: Data type representing the configuration of =joycond=.
 
   - =package= (default: =joycond=) :: The joycond package to use.
 
-- Variable: *joycond-service-type* [[#index-joycond_002dservice_002dtype][¶]] :: Service type for the joycond service. It also extends the =udev-service-type= with the =joycond= package (provided via the =joycond-configuration= configuration), so that joycond controllers can be detected and used by an unprivileged user.
+- Variable: joycond-service-type  :: Service type for the joycond service. It also extends the =udev-service-type= with the =joycond= package (provided via the =joycond-configuration= configuration), so that joycond controllers can be detected and used by an unprivileged user.
 
-**** Luanti service [[#Luanti-service][¶]]
+<<The-Battle-for-Wesnoth-Service>>
+**** The Battle for Wesnoth Service
 :PROPERTIES:
-:CUSTOM_ID: Luanti-service
+:CUSTOM_ID: the-battle-for-wesnoth-service
 :CLASS: subsubheading
 :END:
-[[https://www.luanti.org/en/][Luanti]] is a voxel game engine that powers many games. This service is for hosting a Luanti server. The various options can be configured via the =luanti-configuration= record, documented below:
-
-- Data Type: *luanti-configuration* [[#index-luanti_002dconfiguration][¶]] :: Available =luanti-configuration= fields are:
-
-  - =luanti= (default: =luanti-server=) (type: file-like) :: The Luanti package to use.
-
-  - =game= (default: =luanti-mineclonia=) (type: file-like) :: The Luanti game package to serve.
-
-  - =game-configuration= (type: maybe-file-like) :: A configuration file to use for the selected Luanti game, which corresponds to the =minetest.conf= file.
-
-  - =mods= (type: maybe-list-of-file-likes) :: A list of Luanti mod packages to use. Note that using mods is complicated by the requirements of Luanti to 1) manually enable the mod and any of its dependent mods in the =world.rt= file of the world used and 2) to register the mod names and those of its dependents via a ‘=secure.trusted_mods=' =game-configuration= directive. Consult the example below for more precise directions.
-
-  - =log-file= (default: ="/var/log/luanti.log"=) (type: maybe-string) :: The log file to log to. To disable logging, set this to =%unset-value=.
-
-  - =verbose?= (default: =#f=) (type: boolean) :: Print more detailed information.
-
-  - =port= (default: =30000=) (type: port) :: The UDP port the server should listen to.
-
-  - =world= (type: maybe-string) :: An existing Luanti world directory to serve. If omitted, a new world is created under the =/var/lib/luanti/.minetest/worlds/world= directory. If an absolute file name is provided, it is used directly. Otherwise, it is expected to be a directory under =/var/lib/luanti/.minetest/worlds/=.
-
-Here's the simplest example of a Luanti server, which in its default configuration serves the =luanti-mineclonia= game.
-
-#+begin_src lisp
-(service luanti-service-type)
-#+end_src
-
-Here's a slightly more elaborate one, which adds the =luanti-whitelist= mod. Embedded are comments explaining extra needed steps when using mods. Failing to do these steps will cause the service to fail to start.
-
-#+begin_src lisp
-(service luanti-service-type
-         (luanti-configuration
-          (game luanti-mineclonia)
-          (game-configuration
-           (plain-file
-            "minetest.conf"
-            ;; lib_chatcmdbuilder is a dependency of the whitelist mod
-            "secure.trusted_mods = whitelist,lib_chatcmdbuilder\n"))
-          ;; The
-          ;; '/var/lib/luanti/.minetest/worlds/world/world.mt'
-          ;; file needs to be hand-edited to add:
-          ;; load_mod_whitelist = true
-          ;; load_mod_lib_chatcmdbuilder = true
-          (mods (list luanti-whitelist))))
-#+end_src
-
-**** The Battle for Wesnoth Service [[#The-Battle-for-Wesnoth-Service][¶]]
-:PROPERTIES:
-:CUSTOM_ID: The-Battle-for-Wesnoth-Service
-:CLASS: subsubheading
-:END:
+<<index-wesnothd>>
 [[https://wesnoth.org][The Battle for Wesnoth]] is a fantasy, turn based tactical strategy game, with several single player campaigns, and multiplayer games (both networked and local).
 
-- Variable: *wesnothd-service-type* [[#index-wesnothd_002dservice_002dtype][¶]] :: Service type for the wesnothd service. Its value must be a =wesnothd-configuration= object. To run wesnothd in the default configuration, instantiate it as:
+- Variable: wesnothd-service-type  :: Service type for the wesnothd service. Its value must be a =wesnothd-configuration= object. To run wesnothd in the default configuration, instantiate it as:
 
   #+begin_src lisp
   (service wesnothd-service-type)
   #+end_src
 
-- Data Type: *wesnothd-configuration* [[#index-wesnothd_002dconfiguration][¶]] :: Data type representing the configuration of =wesnothd=.
+- Data Type: wesnothd-configuration  :: Data type representing the configuration of =wesnothd=.
 
   - =package= (default: =wesnoth-server=) :: The wesnoth server package to use.
 
   - =port= (default: =15000=) :: The port to bind the server to.
-
---------------
-
-Next: [[id:guix--PAM-Mount-Service][PAM Mount Service]], Previous: [[id:guix--Version-Control-Services][Version Control Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

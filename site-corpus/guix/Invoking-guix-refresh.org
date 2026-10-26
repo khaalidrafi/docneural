@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Invoking-guix-refresh>>
-Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 9.6 Invoking =guix refresh= [[#Invoking-guix-refresh-1][¶]]
+<<Invoking-guix-refresh-1>>
+*** 9.6 Invoking =guix refresh=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix-refresh-1
+:CUSTOM_ID: invoking-guix-refresh
 :CLASS: section
 :END:
+<<index-guix-refresh>>
 The primary audience of the =guix refresh= command is packagers. As a user, you may be interested in the =--with-latest= option, which can bring you package update superpowers built upon =guix refresh= (see [[id:guix--Package-Transformation-Options][=--with-latest=]]). By default, =guix refresh= reports any packages provided by the distribution that are outdated compared to the latest upstream version, like this:
 
 #+begin_example
@@ -67,15 +70,16 @@ If for some reason you don't want to update to the latest version, you can updat
 
 #+begin_example
 $ guix refresh -u guile=3.0.4
-...
+…
 gnu/packages/guile.scm:392:2: guile: updating from version 3.0.3 to version 3.0.4...
-...
+…
 $ guix refresh -u guile@2.0=2.0.12
-...
+…
 gnu/packages/guile.scm:147:2: guile: updating from version 2.0.10 to version 2.0.12...
-...
+…
 #+end_example
 
+<<index-target-version_002c-guix-refresh>>
 In some specific cases, you may have many packages specified via a manifest or a module selection which should all be updated together; for these cases, the =--target-version= option can be provided to have them all refreshed to the same version, as shown in the examples below:
 
 #+begin_example
@@ -90,17 +94,18 @@ gnu/packages/qt.scm:1173:13: qtxmlpatterns would be upgraded from 5.15.8 to 5.15
 gnu/packages/qt.scm:1202:13: qtdeclarative would be upgraded from 5.15.8 to 5.15.10
 gnu/packages/qt.scm:1762:13: qtserialbus would be upgraded from 5.15.8 to 5.15.10
 gnu/packages/qt.scm:2070:13: qtquickcontrols2 would be upgraded from 5.15.8 to 5.15.10
-...
+…
 #+end_example
 
 #+begin_example
 $ guix refresh -s module:kde-plasma --target-version=6.3.6
-[...] plasma-systemmonitor would be upgraded from 6.3.4 to 6.3.6
-[...] plasma-workspace-wallpapers would be upgraded from 6.3.4 to 6.3.6
-[...] plasma-browser-integration would be upgraded from 6.3.4 to 6.3.6
-...
+[…] plasma-systemmonitor would be upgraded from 6.3.4 to 6.3.6
+[…] plasma-workspace-wallpapers would be upgraded from 6.3.4 to 6.3.6
+[…] plasma-browser-integration would be upgraded from 6.3.4 to 6.3.6
+…
 #+end_example
 
+<<index-partial-target-version_002c-guix-refresh>>
 The =--target-version= option accepts partial version prefixes, which can be useful to update to the latest major or major-minor prefixed version:
 
 #+begin_example
@@ -109,7 +114,8 @@ gnu/packages/qt.scm:1472:13: qtdeclarative would be upgraded from 5.15.8 to 5.15
 gnu/packages/qt.scm:452:13: qtbase would be upgraded from 5.15.8 to 5.15.10
 #+end_example
 
-A per-package equivalent to =--target-version= is made available by prefixing the version specification with the ‘=~=' (tilde) character. For example:
+<<index-partial-version-specification_002c-guix-refresh>>
+A per-package equivalent to --target-version is made available by prefixing the version specification with the ‘=~=' (tilde) character. For example:
 
 #+begin_example
 $ guix refresh bash=~5 guile=~3
@@ -123,7 +129,7 @@ Sometimes the upstream name differs from the package name used in Guix, and =gui
 (define-public network-manager
   (package
     (name "network-manager")
-    ;; ...
+    ;; …
     (properties '((upstream-name . "NetworkManager")))))
 #+end_src
 
@@ -150,8 +156,8 @@ The following options are supported:
   gnu/packages/m4.scm:30:12: 1.4.18 is already the latest version of m4
   gnu/packages/xml.scm:68:2: warning: no updater for expat
   gnu/packages/multiprecision.scm:40:12: 6.1.2 is already the latest version of gmp
-  ...
-#+end_example
+  …
+  #+end_example
 
 - =--expression===expr=\\
   =-e ==expr= :: Consider the package =expr= evaluates to.
@@ -160,7 +166,7 @@ The following options are supported:
 
   #+begin_example
   guix refresh -l -e '(@@ (gnu packages commencement) glibc-final)'
-#+end_example
+  #+end_example
 
   This command lists the dependents of the “final” libc (essentially all the packages).
 
@@ -169,17 +175,19 @@ The following options are supported:
 
   #+begin_example
   ./pre-inst-env guix refresh -s non-core -u
-#+end_example
+  #+end_example
 
   See [[id:guix--Defining-Packages][Defining Packages]], for more information on package definitions. You can also run it on packages from a third-party channel:
 
   #+begin_example
   guix refresh -L /path/to/channel -u package
-#+end_example
+  #+end_example
 
   See [[id:guix--Creating-a-Channel][Creating a Channel]], on how to create a channel.
 
   This command updates the version and source code hash of the package. Depending on the updater being used, it can also update the various ‘=inputs=' fields of the package. In some cases, the updater might get inputs wrong---it might not know about an extra input that's necessary, or it might add an input that should be avoided.
+
+  <<index-updater_002dextra_002dinputs_002c-package-property>> <<index-updater_002dignored_002dinputs_002c-package-property>>
 
   To address that, packagers can add properties stating inputs that should be added to those found by the updater or inputs that should be ignored: the =updater-extra-inputs= and =updater-ignored-inputs= properties pertain to “regular” inputs, and there are equivalent properties for ‘=native=' and ‘=propagated=' inputs. In the example below, we tell the updater that we need ‘=openmpi=' as an additional input:
 
@@ -187,7 +195,7 @@ The following options are supported:
   (define-public python-mpi4py
     (package
       (name "python-mpi4py")
-      ;; ...
+      ;; …
       (inputs (list openmpi))
       (properties
        '((updater-extra-inputs . ("openmpi"))))))
@@ -254,13 +262,13 @@ The following options are supported:
 
     - =release-monitoring-url= :: an alternate URL to crawl;
 
-    - <<index-release_002dfile_002dregexp-package-property_002c-for-generic_002dhtml-updater>>=release-file-regexp= [[#index-release_002dfile_002dregexp-package-property_002c-for-generic_002dhtml-updater][¶]] :: an regular expression matching release file names, whose first subexpression must correspond to the version string.
+    - =release-file-regexp= :: an regular expression matching release file names, whose first subexpression must correspond to the version string.
 
     Here is an example package with a custom release monitoring URL and a regexp matching an unconventional release file name (it's unconventional due to the use of upper case letter and the lack of a hyphen before the version string):
 
     #+begin_src lisp
     (package
-      ;; ...
+      ;; …
       (home-page "http://example.org/software/the-package.html")
       (properties
         `((release-monitoring-url . ,home-page)
@@ -269,11 +277,10 @@ The following options are supported:
 
   - =generic-git= :: a generic updater for packages hosted on Git repositories. It tries to be smart about parsing Git tag names, but if it is not able to parse the tag name and compare tags correctly, users can define the following properties for a package.
 
-    -  =release-tag-prefix=: a regular expression for matching a prefix of the tag name.
-    -  =release-tag-suffix=: a regular expression for matching a suffix of the tag name.
-    -  =release-tag-version-delimiter=: a string used as the delimiter in the tag name for separating the numbers of the version.
-    -  =accept-pre-releases=: by default, the updater will ignore pre-releases; to make it also look for pre-releases, set the this property to =#t=.
-    -  =stable-version-regexp=: a regular expression for matching the version string, if specified the updater will pick the latest version from matching ones when the =--target-version= option is omitted.
+    - =release-tag-prefix=: a regular expression for matching a prefix of the tag name.
+    - =release-tag-suffix=: a regular expression for matching a suffix of the tag name.
+    - =release-tag-version-delimiter=: a string used as the delimiter in the tag name for separating the numbers of the version.
+    - =accept-pre-releases=: by default, the updater will ignore pre-releases; to make it also look for pre-releases, set the this property to =#t=.
 
     #+begin_src lisp
     (package
@@ -291,7 +298,7 @@ The following options are supported:
   $ guix refresh --type=elpa,cran
   gnu/packages/statistics.scm:819:13: r-testthat would be upgraded from 0.10.0 to 0.11.0
   gnu/packages/emacs.scm:856:13: emacs-auctex would be upgraded from 11.88.6 to 11.88.9
-#+end_example
+  #+end_example
 
 - =--list-updaters= :: List available updaters and exit (see =--type= above).
 
@@ -309,8 +316,8 @@ The following options are supported:
   #+begin_example
   $ guix refresh --list-dependent flex
   Building the following 120 packages would ensure 213 dependent packages are rebuilt:
-  hop@2.4.0 emacs-geiser@0.13 notmuch@0.18 mu@0.9.9.5 cflow@1.4 idutils@4.6 ...
-#+end_example
+  hop@2.4.0 emacs-geiser@0.13 notmuch@0.18 mu@0.9.9.5 cflow@1.4 idutils@4.6 …
+  #+end_example
 
   The command above lists a set of packages that could be built to check for compatibility with an upgraded =flex= package.
 
@@ -320,8 +327,8 @@ The following options are supported:
   #+begin_example
   $ guix refresh --list-transitive flex
   flex@2.6.4 depends on the following 25 packages: perl@5.28.0 help2man@1.47.6
-  bison@3.0.5 indent@2.2.10 tar@1.30 gzip@1.9 bzip2@1.0.6 xz@5.2.4 file@5.33 ...
-#+end_example
+  bison@3.0.5 indent@2.2.10 tar@1.30 gzip@1.9 bzip2@1.0.6 xz@5.2.4 file@5.33 …
+  #+end_example
 
   The command above lists a set of packages which, when changed, would cause =flex= to be rebuilt.
 
@@ -343,7 +350,7 @@ The following options can be used to customize GnuPG operation:
   #+begin_example
   gpg --no-default-keyring --keyring mykeyring.kbx \
     --recv-keys A28BF40C3E551372662D14F741AAE7DCCA3D8351
-#+end_example
+  #+end_example
 
   See [[https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html#GPG-Configuration-Options][=--keyring=]] in Using the GNU Privacy Guard, for more information on GPG's =--keyring= option.
 
@@ -361,4 +368,4 @@ The following options can be used to customize GnuPG operation:
 
 --------------
 
-Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Invoking-guix-style][Invoking =guix style=]], Previous: [[id:guix--Invoking-guix-import][Invoking =guix import=]], Up: [[id:guix--Utilities][Utilities]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Customizing-the-System_002dWide-Guix>>
-Next: [[id:guix--Channel-Authentication][Channel Authentication]], Previous: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Channel-Authentication][Channel Authentication]], Previous: [[id:guix--Replicating-Guix][Replicating Guix]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.5 Customizing the System-Wide Guix [[#Customizing-the-System_002dWide-Guix-1][¶]]
+<<Customizing-the-System_002dWide-Guix-1>>
+*** 6.4 Customizing the System-Wide Guix
 :PROPERTIES:
-:CUSTOM_ID: Customizing-the-System_002dWide-Guix-1
+:CUSTOM_ID: customizing-the-system-wide-guix
 :CLASS: section
 :END:
+<<index-system_002dwide-Guix_002c-customization>> <<index-channels_002c-for-the-default-Guix>>
 If you're running Guix System or building system images with it, maybe you will want to customize the system-wide =guix= it provides---specifically, =/run/current-system/profile/bin/guix=. For example, you might want to provide additional channels or to pin its revision.
 
 This can be done using the =guix-for-channels= procedure, which returns a package for the given channels, and using it as part of your operating system configuration, as in this example:
@@ -64,7 +67,7 @@ This can be done using the =guix-for-channels= procedure, which returns a packag
    %default-channels))
 
 (operating-system
-  ;; ...
+  ;; …
   (services
     ;; Change the package used by 'guix-service-type'.
     (modify-services %base-services
@@ -79,10 +82,6 @@ The resulting operating system will have both the =guix= and the =guix-science= 
 
 The =(gnu packages package-management)= module exports the =guix-for-channels= procedure, described below.
 
-- Procedure: *guix-for-channels* =channels= [[#index-guix_002dfor_002dchannels][¶]] :: Return a package corresponding to =channels=.
+- Procedure: guix-for-channels =channels= :: Return a package corresponding to =channels=.
 
   The result is a “regular” package, which can be used in =guix-configuration= as shown above or in any other place that expects a package.
-
---------------
-
-Next: [[id:guix--Channel-Authentication][Channel Authentication]], Previous: [[id:guix--Downloading-a-List-of-Channels][Downloading a List of Channels]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

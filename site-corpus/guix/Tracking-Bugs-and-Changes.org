@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Tracking-Bugs-and-Changes>>
-Next: [[id:guix--Teams][Teams]], Previous: [[id:guix--Submitting-Patches][Submitting Patches]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Teams][Teams]], Previous: [[id:guix--Submitting-Patches][Submitting Patches]], Up: [[id:guix--Contributing][Contributing]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 22.11 Tracking Bugs and Changes [[#Tracking-Bugs-and-Changes-1][¶]]
+<<Tracking-Bugs-and-Changes-1>>
+*** 22.11 Tracking Bugs and Changes
 :PROPERTIES:
-:CUSTOM_ID: Tracking-Bugs-and-Changes-1
+:CUSTOM_ID: tracking-bugs-and-changes
 :CLASS: section
 :END:
 This section describes how the Guix project tracks its bug reports, patch submissions and topic branches.
 
 - [[id:guix--The-Issue-Tracker][The Issue Tracker]]
 - [[id:guix--Managing-Patches-and-Branches][Managing Patches and Branches]]
+- [[id:guix--Debbugs-User-Interfaces][Debbugs User Interfaces]]
+- [[id:guix--Debbugs-Usertags][Debbugs Usertags]]
 - [[id:guix--Cuirass-Build-Notifications][Cuirass Build Notifications]]

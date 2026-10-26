@@ -36,18 +36,21 @@ Next:
 [[../..][]]
 
 <<Services>>
-Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.10 Services [[#Services-1][¶]]
+<<Services-1>>
+*** 11.10 Services
 :PROPERTIES:
-:CUSTOM_ID: Services-1
+:CUSTOM_ID: services
 :CLASS: section
 :END:
+<<index-system-services>>
 An important part of preparing an =operating-system= declaration is listing /system services/ and their configuration (see [[id:guix--Using-the-Configuration-System][Using the Configuration System]]). System services are typically daemons launched when the system boots, or other actions needed at that time---e.g., configuring network access.
 
-Guix has a broad definition of “service” (see [[id:guix--Service-Composition][Service Composition]]), but many services are managed by the GNU Shepherd (see [[id:guix--Shepherd-Services][Shepherd Services]]). On a running system, the =herd= command allows you to list the available services, show their status, start and stop them, or do other specific operations (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual). For example:
+Guix has a broad definition of “service” (see [[id:guix--Service-Composition][Service Composition]]), but many services are managed by the GNU Shepherd (see [[id:guix--Shepherd-Services][Shepherd Services]]). On a running system, the =herd= command allows you to list the available services, show their status, start and stop them, or do other specific operations (see [[https://www.gnu.org/software/shepherd/manual/html_node/Jump-Start.html#Jump-Start][Jump Start]] in The GNU Shepherd Manual). For example:
 
 #+begin_example
 # herd status
@@ -73,11 +76,12 @@ Service xorg-server has been stopped.
 Service xorg-server has been started.
 #+end_example
 
+<<index-configuration_002c-action-for-shepherd-services>> <<index-configuration-file_002c-of-a-shepherd-service>>
 For some services, =herd configuration= returns the name of the service's configuration file, which can be handy to inspect its configuration:
 
 #+begin_example
 # herd configuration sshd
-/gnu/store/...-sshd_config
+/gnu/store/…-sshd_config
 #+end_example
 
 The following sections document the available services, starting with the core services, that may be used in an =operating-system= declaration.
@@ -86,7 +90,6 @@ The following sections document the available services, starting with the core s
 - [[id:guix--Scheduled-Job-Execution][Scheduled Job Execution]]
 - [[id:guix--Log-Rotation][Log Rotation]]
 - [[id:guix--Networking-Setup][Networking Setup]]
-- [[id:guix--Authorization-Services][Authorization Services]]
 - [[id:guix--Networking-Services][Networking Services]]
 - [[id:guix--Unattended-Upgrades][Unattended Upgrades]]
 - [[id:guix--X-Window][X Window]]
@@ -108,7 +111,6 @@ The following sections document the available services, starting with the core s
 - [[id:guix--DNS-Services][DNS Services]]
 - [[id:guix--VNC-Services][VNC Services]]
 - [[id:guix--VPN-Services][VPN Services]]
-- [[id:guix--DAV-Services][DAV Services]]
 - [[id:guix--Network-File-System][Network File System]]
 - [[id:guix--Samba-Services][Samba Services]]
 - [[id:guix--Continuous-Integration][Continuous Integration]]
@@ -125,4 +127,4 @@ The following sections document the available services, starting with the core s
 
 --------------
 
-Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Privileged-Programs][Privileged Programs]], Previous: [[id:guix--Locales][Locales]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

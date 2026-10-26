@@ -7,12 +7,18 @@
 Next: [[id:emacs--Standard-Faces][Standard Faces]]   Previous: [[id:emacs--Faces][Text Faces]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Colors>>
+
+--------------
+
 *** 16.9 Colors for Faces [[#Colors-for-Faces][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Colors-for-Faces
 :CLASS: section
 :END:
-Faces can have various foreground and background colors. When you specify a color for a face---for instance, when customizing the face (see [[id:emacs--Easy-Customization::#Face-Customization][Customizing Faces]])---you can use either a /color name/ or an /RGB triplet/.
+Faces can have various foreground and background colors. When you specify a color for a face---for instance, when customizing the face (see [[id:emacs--Face-Customization][Customizing Faces]])---you can use either a /color name/ or an /RGB triplet/.
+
+- [[#Color-Names][Color Names]]
+- [[#RGB-Triplets][RGB Triplets]]
 
 <<Color-Names>>
 **** 16.9.1 Color Names [[#Color-Names][¶]]

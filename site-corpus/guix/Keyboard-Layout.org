@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Keyboard-Layout>>
-Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.8 Keyboard Layout [[#Keyboard-Layout-2][¶]]
+<<Keyboard-Layout-2>>
+*** 11.8 Keyboard Layout
 :PROPERTIES:
-:CUSTOM_ID: Keyboard-Layout-2
+:CUSTOM_ID: keyboard-layout
 :CLASS: section
 :END:
+<<index-keyboard-layout-1>> <<index-keymap>>
 To specify what each key of your keyboard does, you need to tell the operating system what /keyboard layout/ you want to use. The default, when nothing is specified, is the US English QWERTY layout for 105-key PC keyboards. However, German speakers will usually prefer the German QWERTZ layout, French speakers will want the AZERTY layout, and so on; hackers might prefer Dvorak or bépo, and they might even want to further customize the effect of some of the keys. This section explains how to get that done.
 
+<<index-keyboard-layout_002c-definition>>
 There are three components that will want to know about your keyboard layout:
 
 - The /bootloader/ may want to know what keyboard layout you want to use (see [[id:guix--Bootloader-Configuration][=keyboard-layout=]]). This is useful if you want, for instance, to make sure that you can type the passphrase of your encrypted root partition using the right layout.
@@ -55,9 +59,10 @@ There are three components that will want to know about your keyboard layout:
 
 Guix allows you to configure all three separately but, fortunately, it allows you to share the same keyboard layout for all three components.
 
+<<index-XKB_002c-keyboard-layouts>>
 Keyboard layouts are represented by records created by the =keyboard-layout= procedure of =(gnu system keyboard)=. Following the X Keyboard extension (XKB), each layout has four attributes: a name (often a language code such as “fi” for Finnish or “jp” for Japanese), an optional variant name, an optional keyboard model name, and a possibly empty list of additional options. In most cases the layout name is all you care about.
 
-- Procedure: *keyboard-layout* =name [variant] [#:model] [#:options ’()]= [[#index-keyboard_002dlayout][¶]] :: Return a new keyboard layout with the given =name= and =variant=.
+- Procedure: keyboard-layout name [variant] [#:model] [#:options '()] :: Return a new keyboard layout with the given =name= and =variant=.
 
   =name= must be a string such as ="fr"=; =variant= must be a string such as ="bepo"= or ="nodeadkeys"=. See the =xkeyboard-config= package for valid options.
 
@@ -95,7 +100,10 @@ Here are a few examples:
 
 See the =share/X11/xkb= directory of the =xkeyboard-config= package for a complete list of supported layouts, variants, and models.
 
+<<index-keyboard-layout_002c-configuration>>
 Let's say you want your system to use the Turkish keyboard layout throughout your system---bootloader, console, and Xorg. Here's what your system configuration would look like:
+
+<<index-set_002dxorg_002dconfiguration>>
 
 #+begin_src lisp
 ;; Using the Turkish layout for the bootloader, the console,
@@ -123,14 +131,14 @@ We've discussed how to specify the /default/ keyboard layout of your system when
 
   #+begin_example
   setxkbmap us dvorak
-#+end_example
+  #+end_example
 
 - The =loadkeys= command changes the keyboard layout in effect in the Linux console. However, note that =loadkeys= does /not/ use the XKB keyboard layout categorization described above. The command below loads the French bépo layout:
 
   #+begin_example
   loadkeys fr-bepo
-#+end_example
+  #+end_example
 
 --------------
 
-Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Locales][Locales]], Previous: [[id:guix--User-Accounts][User Accounts]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Directory Tracking
 
-Next: [[id:emacs--Shell-Options][Shell Mode Options]]   Previous: [[id:emacs--Shell-History#Shell-History][Shell Command History]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
+Next: [[id:emacs--Shell-Options][Shell Mode Options]]   Previous: [[id:emacs--Shell-History][Shell Command History]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Directory-Tracking>>
+
+--------------
+
 *** 40.6 Directory Tracking [[#Directory-Tracking-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Directory-Tracking-1
@@ -18,6 +21,6 @@ If you use aliases for these commands, you can tell Emacs to recognize them also
 
 If Emacs gets confused about changes in the working directory of the subshell, type M-x dirs. This command asks the shell for its working directory and updates the default directory accordingly. It works for shells that support the most common command syntax, but may not work for unusual shells.
 
-You can also use Dirtrack mode, a buffer-local minor mode that implements an alternative method of tracking the shell's working directory. To use this method, your shell prompt must contain the working directory at all times, and you must supply a regular expression for recognizing which part of the prompt contains the working directory; see the documentation of the variable =dirtrack-list= for details. To use Dirtrack mode, type M-x dirtrack-mode in the Shell buffer, or add =dirtrack-mode= to =shell-mode-hook= (see [[id:emacs--Variables::#Hooks][Hooks]]).
+You can also use Dirtrack mode, a buffer-local minor mode that implements an alternative method of tracking the shell's working directory. To use this method, your shell prompt must contain the working directory at all times, and you must supply a regular expression for recognizing which part of the prompt contains the working directory; see the documentation of the variable =dirtrack-list= for details. To use Dirtrack mode, type M-x dirtrack-mode in the Shell buffer, or add =dirtrack-mode= to =shell-mode-hook= (see [[id:emacs--Hooks][Hooks]]).
 
 --------------

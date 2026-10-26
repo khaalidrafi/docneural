@@ -36,13 +36,15 @@ Next:
 [[../..][]]
 
 <<After-System-Installation>>
-Next: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Previous: [[id:guix--Manual-Installation][Manual Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Installing-Guix-in-a-VM][Installing Guix in a Virtual Machine]], Previous: [[id:guix--Manual-Installation][Manual Installation]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 3.7 After System Installation [[#After-System-Installation-1][¶]]
+<<After-System-Installation-1>>
+*** 3.7 After System Installation
 :PROPERTIES:
-:CUSTOM_ID: After-System-Installation-1
+:CUSTOM_ID: after-system-installation
 :CLASS: section
 :END:
 Success, you've now booted into Guix System! Login to the system using the non-=root= user that you created during installation. You can upgrade the system whenever you want by running:

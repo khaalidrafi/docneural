@@ -7,6 +7,9 @@
 Next: [[id:emacs--Visiting][Visiting Files]]   Up: [[id:emacs--Files][File Handling]]
 
 <<File-Names>>
+
+--------------
+
 *** 20.1 File Names [[#File-Names-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: File-Names-1
@@ -14,7 +17,7 @@ Next: [[id:emacs--Visiting][Visiting Files]]   Up: [[id:emacs--Files][File Handl
 :END:
 Many Emacs commands that operate on a file require you to specify the file name, using the minibuffer (see [[id:emacs--Minibuffer-File][Minibuffers for File Names]]).
 
-While in the minibuffer, you can use the usual completion and history commands (see [[id:emacs--Minibuffer][The Minibuffer]]). Note that file name completion ignores file names whose extensions appear in the variable =completion-ignored-extensions= (see [[id:emacs--Completion::#Completion-Options][Completion Options]]). Note also that most commands use permissive completion with confirmation for reading file names: you are allowed to submit a nonexistent file name, but if you type RET immediately after completing up to a nonexistent file name, Emacs prints ‘=[Confirm]=' and you must type a second RET to confirm. See [[id:emacs--Completion::#Completion-Exit][Completion Exit]], for details.
+While in the minibuffer, you can use the usual completion and history commands (see [[id:emacs--Minibuffer][The Minibuffer]]). Note that file name completion ignores file names whose extensions appear in the variable =completion-ignored-extensions= (see [[id:emacs--Completion-Options][Completion Options]]). Note also that most commands use permissive completion with confirmation for reading file names: you are allowed to submit a nonexistent file name, but if you type RET immediately after completing up to a nonexistent file name, Emacs prints ‘=[Confirm]=' and you must type a second RET to confirm. See [[id:emacs--Completion-Exit][Completion Exit]], for details.
 
 Minibuffer history commands offer some special features for reading file names, see [[id:emacs--Minibuffer-History][Minibuffer History]].
 

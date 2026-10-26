@@ -4,6 +4,42 @@
 #+filetags: :emacs:
 #+title: Table Definition
 
-Next:
+Next: [[id:emacs--Table-Creation][Creating a Table]]   Up: [[id:emacs--Text-Based-Tables][Editing Text-based Tables]]
 
-The node you are looking for is at [[id:emacs--Text-Based-Tables::#Table-Definition][Table Definition]].
+<<Table-Definition>>
+
+--------------
+
+**** 27.15.1 What is a Text-based Table? [[#What-is-a-Text_002dbased-Table_003f][¶]]
+:PROPERTIES:
+:CUSTOM_ID: What-is-a-Text_002dbased-Table_003f
+:CLASS: subsection
+:END:
+A /table/ consists of a rectangular text area which is divided into /cells/. Each cell must be at least one character wide and one character high, not counting its border lines. A cell can be subdivided into more cells, but they cannot overlap.
+
+Cell border lines are drawn with three special characters, specified by the following variables:
+
+- <<index-table_002dcell_002dvertical_002dchar>>=table-cell-vertical-char= [[#index-table_002dcell_002dvertical_002dchar][¶]] :: The character used for vertical lines. The default is ‘=|='.
+
+- <<index-table_002dcell_002dhorizontal_002dchars>>=table-cell-horizontal-chars= [[#index-table_002dcell_002dhorizontal_002dchars][¶]] :: The characters used for horizontal lines. The default is ‘="-="='.
+
+- <<index-table_002dcell_002dintersection_002dchar>>=table-cell-intersection-char= [[#index-table_002dcell_002dintersection_002dchar][¶]] :: The character used for the intersection of horizontal and vertical lines. The default is ‘=+='.
+
+The following are examples of /invalid/ tables:
+
+#+begin_example
+   +-----+       +--+    +-++--+
+   |     |       |  |    | ||  |
+   |     |       |  |    | ||  |
+   +--+  |    +--+--+    +-++--+
+   |  |  |    |  |  |    +-++--+
+   |  |  |    |  |  |    | ||  |
+   +--+--+    +--+--+    +-++--+
+      a          b          c
+#+end_example
+
+From left to right:
+
+1. Overlapped cells or non-rectangular cells are not allowed.
+2. The border must be rectangular.
+3. Cells must have a minimum width/height of one character.

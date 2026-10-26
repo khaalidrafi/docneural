@@ -7,6 +7,9 @@
 Next: [[id:emacs--Text-Scale][Text Scale]]   Previous: [[id:emacs--Standard-Faces][Standard Faces]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Icons>>
+
+--------------
+
 *** 16.11 Icons [[#Icons-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Icons-1
@@ -27,5 +30,3 @@ The main customization point here is the =icon-preference= user option. By using
 In addition, each individual icon can be customized with M-x customize-icon, and themes can further alter the looks of the icons.
 
 To get a quick description of an icon, use the M-x describe-icon command.
-
---------------

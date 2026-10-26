@@ -4,6 +4,21 @@
 #+filetags: :emacs:
 #+title: Fine Points of Emerge
 
-Next:
+Next:   Previous: [[id:emacs--Combining-in-Emerge][Combining the Two Versions]]   Up: [[id:emacs--Emerge][Merging Files with Emerge]]
 
-The node you are looking for is at [[id:emacs--Emerge::#Fine-Points-of-Emerge][Fine Points of Emerge]].
+<<Fine-Points-of-Emerge>>
+
+--------------
+
+**** 30.6.7 Fine Points of Emerge [[#Fine-Points-of-Emerge-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Fine-Points-of-Emerge-1
+:CLASS: subsection
+:END:
+During the merge, you mustn't try to edit the A and B buffers yourself. Emerge modifies them temporarily, but ultimately puts them back the way they were.
+
+You can have any number of merges going at once---just don't use any one buffer as input to more than one merge at once, since the temporary changes made in these buffers would get in each other's way.
+
+Starting Emerge can take a long time because it needs to compare the files fully. Emacs can't do anything else until =diff= finishes. Perhaps in the future someone will change Emerge to do the comparison in the background when the input files are large---then you could keep on doing other things with Emacs until Emerge is ready to accept commands.
+
+After setting up the merge, Emerge runs the hook =emerge-startup-hook=. See [[id:emacs--Hooks][Hooks]].

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Shift-Selection][Shift Selection]]   Previous: [[id:emacs--Mark-Ring][The Mark Ring]]   Up: [[id:emacs--Mark][The Mark and the Region]]
 
 <<Global-Mark-Ring>>
+
+--------------
+
 *** 13.5 The Global Mark Ring [[#The-Global-Mark-Ring][¶]]
 :PROPERTIES:
 :CUSTOM_ID: The-Global-Mark-Ring
@@ -17,5 +20,3 @@ In addition to the ordinary mark ring that belongs to each buffer, Emacs has a s
 Note that a mark is recorded in the global mark ring only when some command sets the mark. If an existing mark is merely activated, as is the case when you use C-SPC where a mark is already set (see [[id:emacs--Setting-Mark][Setting the Mark]]), that doesn't push the mark onto the global ring.
 
 The command C-x C-SPC (=pop-global-mark=) jumps to the buffer and position of the latest entry in the global ring. It also rotates the ring, so that successive uses of C-x C-SPC take you to earlier buffers and mark positions.
-
---------------

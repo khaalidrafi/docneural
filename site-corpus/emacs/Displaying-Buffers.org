@@ -7,6 +7,9 @@
 Next: [[id:emacs--Window-Convenience][Convenience Features for Window Handling]]   Previous: [[id:emacs--Change-Window][Deleting and Resizing Windows]]   Up: [[id:emacs--Windows][Multiple Windows]]
 
 <<Displaying-Buffers>>
+
+--------------
+
 *** 22.6 Displaying a Buffer in a Window [[#Displaying-a-Buffer-in-a-Window][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Displaying-a-Buffer-in-a-Window
@@ -16,7 +19,7 @@ It is a common Emacs operation to display or pop up some buffer in response to a
 
 Many commands, like C-x C-f (=find-file=), by default display the buffer by “taking over” the selected window, expecting that the user's attention will be diverted to that buffer.
 
-Some commands try to display intelligently, trying not to take over the selected window, e.g., by splitting off a new window and displaying the desired buffer there. Such commands, which include the various help commands (see [[id:emacs--Help][Help]]), work by calling =display-buffer= internally. See [[#Window-Choice][How =display-buffer= works]], for details.
+Some commands try to display intelligently, trying not to take over the selected window, e.g., by splitting off a new window and displaying the desired buffer there. Such commands, which include the various help commands (see [[id:emacs--Help][Help]]), work by calling =display-buffer= internally. See [[id:emacs--Window-Choice][How =display-buffer= works]], for details.
 
 Other commands do the same as =display-buffer=, and additionally select the displaying window so that you can begin editing its buffer. The command M-g M-n (=next-error=) is one example (see [[id:emacs--Compilation-Mode][Compilation Mode]]). Such commands work by calling the function =pop-to-buffer= internally. See [[../elisp_html/Switching-Buffers.html#Switching-Buffers][Switching to a Buffer in a Window]] in The Emacs Lisp Reference Manual.
 
@@ -30,71 +33,7 @@ Usually, dedicated windows are used to display specialized buffers, but dedicati
 
 You can use the command C-x w d (=toggle-window-dedicated=) to toggle whether the selected window is dedicated to the current buffer. With a prefix argument, it makes the window strongly dedicated.
 
---------------
-
-<<Window-Choice>>
-**** 22.6.1 How =display-buffer= works [[#How-display_002dbuffer-works][¶]]
-:PROPERTIES:
-:CUSTOM_ID: How-display_002dbuffer-works
-:CLASS: subsection
-:END:
-The =display-buffer= command (as well as commands that call it internally) chooses a window to display by following the steps given below. See [[../elisp_html/Choosing-Window.html#Choosing-Window][Choosing a Window for Displaying a Buffer]] in The Emacs Lisp Reference Manual, for details about how to alter this sequence of steps.
-
-- If the buffer should be displayed in the selected window regardless of other considerations, reuse the selected window. By default, this step is skipped, but you can tell Emacs not to skip it by adding a regular expression matching the buffer's name together with a reference to the =display-buffer-same-window= action function (see [[../elisp_html/Buffer-Display-Action-Functions.html#Buffer-Display-Action-Functions][Action Functions for Buffer Display]] in The Emacs Lisp Reference Manual) to the option =display-buffer-alist= (see [[../elisp_html/Choosing-Window.html#Choosing-Window][Choosing a Window for Displaying a Buffer]] in The Emacs Lisp Reference Manual). For example, to display the buffer =*scratch*= preferably in the selected window write:
-
-  #+begin_example
-  (setopt
-   display-buffer-alist
-   '(("\\*scratch\\*" (display-buffer-same-window))))
-#+end_example
-
-  By default, =display-buffer-alist= is =nil=.
-
-- Otherwise, if the buffer is already displayed in an existing window, reuse that window. Normally, only windows on the selected frame are considered, but windows on other frames are also reusable if you use the corresponding =reusable-frames= action alist entry (see [[../elisp_html/Buffer-Display-Action-Alists.html#Buffer-Display-Action-Alists][Action Alists for Buffer Display]] in The Emacs Lisp Reference Manual). See the next step for an example of how to do that.
-
-- Otherwise, optionally create a new frame and display the buffer there. By default, this step is skipped. To enable it, change the value of the option =display-buffer-base-action= (see [[../elisp_html/Choosing-Window.html#Choosing-Window][Choosing a Window for Displaying a Buffer]] in The Emacs Lisp Reference Manual) as follows:
-
-  #+begin_example
-  (setopt
-   display-buffer-base-action
-   '((display-buffer-reuse-window display-buffer-pop-up-frame)
-     (reusable-frames . 0)))
-#+end_example
-
-  This customization will also try to make the preceding step search for a reusable window on all visible or iconified frames.
-
-- Otherwise, try to create a new window by splitting a window on the selected frame, and display the buffer in that new window.
-
-  The split can be either vertical or horizontal, depending on the variables =split-height-threshold= and =split-width-threshold=. These variables should have integer values. If =split-height-threshold= is smaller than the chosen window's height, the split puts the new window below. Otherwise, if =split-width-threshold= is smaller than the window's width, the split puts the new window on the right. If neither condition holds, Emacs tries to split so that the new window is below---but only if the window was not split before (to avoid excessive splitting).
-
-- Otherwise, display the buffer in a window previously showing it. Normally, only windows on the selected frame are considered, but with a suitable =reusable-frames= action alist entry (see above) the window may be also on another frame.
-
-- Otherwise, display the buffer in an existing window on the selected frame.
-
-- If all the above methods fail for whatever reason, create a new frame and display the buffer there.
-
---------------
-
-<<Temporary-Displays>>
-**** 22.6.2 Displaying non-editable buffers. [[#Displaying-non_002deditable-buffers_002e][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Displaying-non_002deditable-buffers_002e
-:CLASS: subsection
-:END:
-Some buffers are shown in windows for perusal rather than for editing. Help commands (see [[id:emacs--Help][Help]]) typically use a buffer called =*Help*= for that purpose, minibuffer completion (see [[id:emacs--Completion::#Completion][Completion]]) uses a buffer called =*Completions*=, etc. Such buffers are usually displayed only for a short period of time.
-
-Normally, Emacs chooses the window for such temporary displays via =display-buffer=, as described in the previous subsection. The =*Completions*= buffer, on the other hand, is normally displayed in a window at the bottom of the selected frame, regardless of the number of windows already shown on that frame.
-
-If you prefer Emacs to display a temporary buffer in a different fashion, customize the variable =display-buffer-alist= (see [[../elisp_html/Choosing-Window.html#Choosing-Window][Choosing a Window for Displaying a Buffer]] in The Emacs Lisp Reference Manual) appropriately. For example, to display =*Completions*= always below the selected window, use the following form in your initialization file (see [[id:emacs--Init-File::#Init-File][The Emacs Initialization File]]):
-
-#+begin_example
-(setopt
- display-buffer-alist
- '(("\\*Completions\\*" display-buffer-below-selected)))
-#+end_example
-
-The =*Completions*= buffer is also special in the sense that Emacs usually tries to make its window just as large as necessary to display all of its contents. To resize windows showing other temporary displays, like, for example, the =*Help*= buffer, turn on the minor mode (see [[id:emacs--Minor-Modes][Minor Modes]]) =temp-buffer-resize-mode= (see [[../elisp_html/Temporary-Displays.html#Temporary-Displays][Temporary Displays]] in The Emacs Lisp Reference Manual).
-
-The maximum size of windows resized by =temp-buffer-resize-mode= can be controlled by customizing the options =temp-buffer-max-height= and =temp-buffer-max-width= (see [[../elisp_html/Temporary-Displays.html#Temporary-Displays][Temporary Displays]] in The Emacs Lisp Reference Manual), and cannot exceed the size of the containing frame.
+- [[id:emacs--Window-Choice][How =display-buffer= works]]
+- [[id:emacs--Temporary-Displays][Displaying non-editable buffers.]]
 
 --------------

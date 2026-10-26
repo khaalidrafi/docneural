@@ -7,6 +7,9 @@
 Next: [[id:emacs--Indentation][Indentation]]   Previous: [[id:emacs--International][International Character Set Support]]   Up: [[id:emacs--index][The Emacs Editor]]
 
 <<Modes>>
+
+--------------
+
 ** 25 Major and Minor Modes [[#Major-and-Minor-Modes][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Major-and-Minor-Modes
@@ -16,6 +19,8 @@ Emacs contains many /editing modes/ that alter its basic behavior in useful ways
 
 Major modes provide specialized facilities for working on a particular file type, such as a C source file (see [[id:emacs--Programs][Editing Programs]]), or a particular type of non-file buffer, such as a shell buffer (see [[id:emacs--Shell][Running Shell Commands from Emacs]]). Major modes are mutually exclusive; each buffer has one and only one major mode at any time.
 
-Minor modes are optional features which you can turn on or off, not necessarily specific to a type of file or buffer. For example, Auto Fill mode is a minor mode in which SPC breaks lines between words as you type (see [[id:emacs--Filling::#Auto-Fill][Auto Fill Mode]]). Minor modes are independent of one another, and of the selected major mode.
+Minor modes are optional features which you can turn on or off, not necessarily specific to a type of file or buffer. For example, Auto Fill mode is a minor mode in which SPC breaks lines between words as you type (see [[id:emacs--Auto-Fill][Auto Fill Mode]]). Minor modes are independent of one another, and of the selected major mode.
 
---------------
+- [[id:emacs--Major-Modes][Major Modes]]
+- [[id:emacs--Minor-Modes][Minor Modes]]
+- [[id:emacs--Choosing-Modes][Choosing File Modes]]

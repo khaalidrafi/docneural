@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<File-Search-Services>>
-Next: [[id:guix--Database-Services][Database Services]], Previous: [[id:guix--Sound-Services][Sound Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Database-Services][Database Services]], Previous: [[id:guix--Sound-Services][Sound Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 11.10.12 File Search Services [[#File-Search-Services-1][¶]]
+<<File-Search-Services-1>>
+**** 11.10.11 File Search Services
 :PROPERTIES:
-:CUSTOM_ID: File-Search-Services-1
+:CUSTOM_ID: file-search-services
 :CLASS: subsection
 :END:
+<<index-file-search-1>> <<index-searching-for-a-file>>
 The services in this section populate /file databases/ that let you search for files on your machine. These services are provided by the =(gnu services admin)= module.
 
 The first one, =file-database-service-type=, periodically runs the venerable =updatedb= command (see [[https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-updatedb.html#Invoking-updatedb][Invoking updatedb]] in GNU Findutils). That command populates a database of file names that you can then search with the =locate= command (see [[https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-locate.html#Invoking-locate][Invoking locate]] in GNU Findutils), as in this example:
@@ -61,13 +64,13 @@ You can enable this service with its default settings by adding this snippet to 
 
 This updates the database once a week, excluding files from =/gnu/store=---these are more usefully handled by =guix locate= (see [[id:guix--Invoking-guix-locate][Invoking =guix locate=]]). You can of course provide a custom configuration, as described below.
 
-- Variable: *file-database-service-type* [[#index-file_002ddatabase_002dservice_002dtype][¶]] :: This is the type of the file database service, which runs =updatedb= periodically. Its associated value must be a =file-database-configuration= record, as described below.
+- Variable: file-database-service-type  :: This is the type of the file database service, which runs =updatedb= periodically. Its associated value must be a =file-database-configuration= record, as described below.
 
-- Data Type: *file-database-configuration* [[#index-file_002ddatabase_002dconfiguration][¶]] :: Record type for the =file-database-service-type= configuration, with the following fields:
+- Data Type: file-database-configuration  :: Record type for the =file-database-service-type= configuration, with the following fields:
 
   - =package= (default: =findutils=) :: The package from which the =updatedb= command is taken. Examples of such packages are GNU Findutils and Plocate.
 
-  - =schedule= (default: =%default-file-database-update-schedule=) :: This is the schedule of database updates, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+  - =schedule= (default: =%default-file-database-update-schedule=) :: This is the schedule of database updates, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
 
   - =excluded-directories= (default =%default-file-database-excluded-directories=) :: List of regular expressions of directories to ignore when building the file database. By default, this includes =/tmp= and =/gnu/store=; the latter should instead be indexed by =guix locate= (see [[id:guix--Invoking-guix-locate][Invoking =guix locate=]]). This list is passed to the =--prunepaths= option of =updatedb= (see [[https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-updatedb.html#Invoking-updatedb][Invoking updatedb]] in GNU Findutils).
 
@@ -79,13 +82,13 @@ The second service, =package-database-service-type=, builds the database used by
 
 This will run =guix locate --update= once a week.
 
-- Variable: *package-database-service-type* [[#index-package_002ddatabase_002dservice_002dtype][¶]] :: This is the service type for periodic =guix locate= updates (see [[id:guix--Invoking-guix-locate][Invoking =guix locate=]]). Its value must be a =package-database-configuration= record, as shown below.
+- Variable: package-database-service-type  :: This is the service type for periodic =guix locate= updates (see [[id:guix--Invoking-guix-locate][Invoking =guix locate=]]). Its value must be a =package-database-configuration= record, as shown below.
 
-- Data Type: *package-database-configuration* [[#index-package_002ddatabase_002dconfiguration][¶]] :: Data type to configure periodic package database updates. It has the following fields:
+- Data Type: package-database-configuration  :: Data type to configure periodic package database updates. It has the following fields:
 
   - =package= (default: =guix=) :: The Guix package to use.
 
-  - =schedule= (default: =%default-package-database-update-schedule=) :: This is the schedule of the periodic =guix locate --update= job, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
+  - =schedule= (default: =%default-package-database-update-schedule=) :: This is the schedule of the periodic =guix locate --update= job, expressed as a string in traditional cron syntax or as a gexp evaluating to a Shepherd calendar event (see [[https://www.gnu.org/software/shepherd/manual/html_node/Timers.html#Timers][Timers]] in The GNU Shepherd Manual).
 
   - =method= (default: ='store=) :: Indexing method for =guix locate=. The default value, ='store=, yields a more complete database but is relatively expensive in terms of CPU and input/output.
 
@@ -93,4 +96,4 @@ This will run =guix locate --update= once a week.
 
 --------------
 
-Next: [[id:guix--Database-Services][Database Services]], Previous: [[id:guix--Sound-Services][Sound Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Database-Services][Database Services]], Previous: [[id:guix--Sound-Services][Sound Services]], Up: [[id:guix--Services][Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

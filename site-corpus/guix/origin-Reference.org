@@ -36,22 +36,26 @@ Next:
 [[../..][]]
 
 <<origin-Reference>>
-Previous: [[id:guix--package-Reference][=package= Reference]], Up: [[id:guix--Defining-Packages][Defining Packages]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Previous: [[id:guix--package-Reference][=package= Reference]], Up: [[id:guix--Defining-Packages][Defining Packages]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 8.2.2 =origin= Reference [[#origin-Reference-1][¶]]
+<<origin-Reference-1>>
+**** 8.2.2 =origin= Reference
 :PROPERTIES:
-:CUSTOM_ID: origin-Reference-1
+:CUSTOM_ID: origin-reference
 :CLASS: subsection
 :END:
 This section documents /origins/. An =origin= declaration specifies data that must be “produced”---downloaded, usually---and whose content hash is known in advance. Origins are primarily used to represent the source code of packages (see [[id:guix--Defining-Packages][Defining Packages]]). For that reason, the =origin= form allows you to declare patches to apply to the original source code as well as code snippets to modify it.
 
-- Data Type: *origin* [[#index-origin][¶]] :: This is the data type representing a source code origin.
+- Data Type: origin  :: This is the data type representing a source code origin.
 
   - =uri= :: An object containing the URI of the source. The object type depends on the =method= (see below). For example, when using the =url-fetch= method of =(guix download)=, the valid =uri= values are: a URL represented as a string, or a list thereof.
 
-  - <<index-fixed_002doutput-derivations_002c-for-download>>=method= [[#index-fixed_002doutput-derivations_002c-for-download][¶]] :: A monadic procedure that handles the given URI. The procedure must accept at least three arguments: the value of the =uri= field and the hash algorithm and hash value specified by the =hash= field. It must return a store item or a derivation in the store monad (see [[id:guix--The-Store-Monad][The Store Monad]]); most methods return a fixed-output derivation (see [[id:guix--Derivations][Derivations]]).
+    <<index-fixed_002doutput-derivations_002c-for-download>>
+
+  - =method= :: A monadic procedure that handles the given URI. The procedure must accept at least three arguments: the value of the =uri= field and the hash algorithm and hash value specified by the =hash= field. It must return a store item or a derivation in the store monad (see [[id:guix--The-Store-Monad][The Store Monad]]); most methods return a fixed-output derivation (see [[id:guix--Derivations][Derivations]]).
 
     Commonly used methods include =url-fetch=, which fetches data from a URL, and =git-fetch=, which fetches data from a Git repository (see below).
 
@@ -77,7 +81,7 @@ This section documents /origins/. An =origin= declaration specifies data that mu
 
   - =patch-guile= (default: =#f=) :: The Guile package that should be used in the patching process. When this is =#f=, a sensible default is used.
 
-- Data Type: *content-hash* =value== [==algorithm==]= [[#index-content_002dhash][¶]] :: Construct a content hash object for the given =algorithm=, and with =value= as its hash value. When =algorithm= is omitted, assume it is =sha256=.
+- Data Type: content-hash =value= [=algorithm=] :: Construct a content hash object for the given =algorithm=, and with =value= as its hash value. When =algorithm= is omitted, assume it is =sha256=.
 
   =value= can be a literal string, in which case it is base32-decoded, or it can be a bytevector.
 
@@ -97,7 +101,7 @@ This section documents /origins/. An =origin= declaration specifies data that mu
 
 As we have seen above, how exactly the data an origin refers to is retrieved is determined by its =method= field. The =(guix download)= module provides the most common method, =url-fetch=, described below.
 
-- Procedure: *url-fetch* =url hash-algo hash [name] [#:executable? #f]= [[#index-url_002dfetch][¶]] :: Return a fixed-output derivation that fetches data from =url= (a string, or a list of strings denoting alternate URLs), which is expected to have hash =hash= of type =hash-algo= (a symbol). By default, the file name is the base name of URL; optionally, =name= can specify a different file name. When =executable?= is true, make the downloaded file executable.
+- Procedure: url-fetch url hash-algo hash [name] [#:executable? #f] :: Return a fixed-output derivation that fetches data from =url= (a string, or a list of strings denoting alternate URLs), which is expected to have hash =hash= of type =hash-algo= (a symbol). By default, the file name is the base name of URL; optionally, =name= can specify a different file name. When =executable?= is true, make the downloaded file executable.
 
   When one of the URL starts with =mirror://=, then its host part is interpreted as the name of a mirror scheme, taken from =%mirror-file=.
 
@@ -105,11 +109,11 @@ As we have seen above, how exactly the data an origin refers to is retrieved is 
 
 Likewise, the =(guix git-download)= module defines the =git-fetch= origin method, which fetches data from a Git version control repository, and the =git-reference= data type to describe the repository and revision to fetch.
 
-- Procedure: *git-fetch* =ref hash-algo hash [name]= [[#index-git_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<git-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
+- Procedure: git-fetch ref hash-algo hash [name] :: Return a fixed-output derivation that fetches =ref=, a =<git-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
 
-- Procedure: *git-fetch/lfs* =ref hash-algo hash [name]= [[#index-git_002dfetch_002flfs][¶]] :: This is a variant of the =git-fetch= procedure that supports the Git LFS (Large File Storage) extension. This may be useful to pull some binary test data to run the test suite of a package, for example.
+- Procedure: git-fetch/lfs ref hash-algo hash [name] :: This is a variant of the =git-fetch= procedure that supports the Git LFS (Large File Storage) extension. This may be useful to pull some binary test data to run the test suite of a package, for example.
 
-- Data Type: *git-reference* [[#index-git_002dreference][¶]] :: This data type represents a Git reference for =git-fetch= to retrieve.
+- Data Type: git-reference  :: This data type represents a Git reference for =git-fetch= to retrieve.
 
   - =url= :: The URL of the Git repository to clone.
 
@@ -135,9 +139,9 @@ Likewise, the =(guix git-download)= module defines the =git-fetch= origin method
 
 For Mercurial repositories, the module =(guix hg-download)= defines the =hg-fetch= origin method and =hg-reference= data type for support of the Mercurial version control system.
 
-- Procedure: *hg-fetch* =ref hash-algo hash [name]= [[#index-hg_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<hg-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
+- Procedure: hg-fetch ref hash-algo hash [name] :: Return a fixed-output derivation that fetches =ref=, a =<hg-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
 
-- Data Type: *hg-reference* [[#index-hg_002dreference][¶]] :: This data type represents a Mercurial reference for =hg-fetch= to retrieve.
+- Data Type: hg-reference  :: This data type represents a Mercurial reference for =hg-fetch= to retrieve.
 
   - =url= :: The URL of the Mercurial repository to clone.
 
@@ -145,9 +149,9 @@ For Mercurial repositories, the module =(guix hg-download)= defines the =hg-fetc
 
 For Subversion repositories, the module =(guix svn-download)= defines the =svn-fetch= origin method and =svn-reference= data type for support of the Subversion version control system.
 
-- Procedure: *svn-fetch* =ref hash-algo hash [name]= [[#index-svn_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<svn-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
+- Procedure: svn-fetch ref hash-algo hash [name] :: Return a fixed-output derivation that fetches =ref=, a =<svn-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
 
-- Data Type: *svn-reference* [[#index-svn_002dreference][¶]] :: This data type represents a Subversion reference for =svn-fetch= to retrieve.
+- Data Type: svn-reference  :: This data type represents a Subversion reference for =svn-fetch= to retrieve.
 
   - =url= :: The URL of the Subversion repository to clone.
 
@@ -161,9 +165,9 @@ For Subversion repositories, the module =(guix svn-download)= defines the =svn-f
 
 For Bazaar repositories, the module =(guix bzr-download)= defines the =bzr-fetch= origin method and =bzr-reference= data type for support of the Bazaar version control system.
 
-- Procedure: *bzr-fetch* =ref hash-algo hash [name]= [[#index-bzr_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<bzr-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
+- Procedure: bzr-fetch ref hash-algo hash [name] :: Return a fixed-output derivation that fetches =ref=, a =<bzr-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
 
-- Data Type: *bzr-reference* [[#index-bzr_002dreference][¶]] :: This data type represents a Bazaar reference for =bzr-fetch= to retrieve.
+- Data Type: bzr-reference  :: This data type represents a Bazaar reference for =bzr-fetch= to retrieve.
 
   - =url= :: The URL of the Bazaar repository to clone.
 
@@ -171,9 +175,9 @@ For Bazaar repositories, the module =(guix bzr-download)= defines the =bzr-fetch
 
 For CVS repositories, the module =(guix cvs-download)= defines the =cvs-fetch= origin method and =cvs-reference= data type for support of the Concurrent Versions System (CVS).
 
-- Procedure: *cvs-fetch* =ref hash-algo hash [name]= [[#index-cvs_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<cvs-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
+- Procedure: cvs-fetch ref hash-algo hash [name] :: Return a fixed-output derivation that fetches =ref=, a =<cvs-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
 
-- Data Type: *cvs-reference* [[#index-cvs_002dreference][¶]] :: This data type represents a CVS reference for =cvs-fetch= to retrieve.
+- Data Type: cvs-reference  :: This data type represents a CVS reference for =cvs-fetch= to retrieve.
 
   - =root-directory= :: The CVS root directory.
 
@@ -190,28 +194,6 @@ For CVS repositories, the module =(guix cvs-download)= defines the =cvs-fetch= o
     (revision "2020-11-25"))
   #+end_src
 
-For Fossil repositories, the module =(guix fossil-download)= defines the =fossil-fetch= origin method and =fossil-reference= data type for support of the Fossil SCM (software configuration management) system.
-
-- Procedure: *fossil-fetch* =ref hash-algo hash [name]= [[#index-fossil_002dfetch][¶]] :: Return a fixed-output derivation that fetches =ref=, a =<fossil-reference>= object. The output is expected to have recursive hash =hash= of type =hash-algo= (a symbol). Use =name= as the file name, or a generic name if =#f=.
-
-- Data Type: *fossil-reference* [[#index-fossil_002dreference][¶]] :: This data type represents a Fossil reference for =fossil-fetch= to retrieve.
-
-  - =uri= (type: string) :: The URI of a Fossil repository to clone, in one of the following forms, in which =[...]= denotes optional elements:
-
-    - =http[s]://[userid[:password]@]host[:port][/path]= :: A HTTP/HTTPS URL.
-
-    - =[file://]path/to/repo.fossil= :: A file URI, where the path must have an extra leading =/= to use an absolute path (without the URI scheme, the repository is opened directly without cloning).
-
-  - =check-in= (type: string) :: A [[https://fossil-scm.org/home/doc/trunk/www/checkin_names.wiki][name of the check-in]] to fetch, e.g. its canonical hexadecimal identifier, associated tag and/or timestamp.
-
-  The example below denotes the =version-3.51.1= tag of the SQLite repository:
-
-  #+begin_src lisp
-  (fossil-reference
-   (uri "https://sqlite.org/src")
-   (check-in "version-3.51.1"))
-  #+end_src
-
 --------------
 
-Previous: [[id:guix--package-Reference][=package= Reference]], Up: [[id:guix--Defining-Packages][Defining Packages]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Previous: [[id:guix--package-Reference][=package= Reference]], Up: [[id:guix--Defining-Packages][Defining Packages]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

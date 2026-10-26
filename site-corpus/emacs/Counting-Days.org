@@ -7,6 +7,9 @@
 Next: [[id:emacs--General-Calendar][Miscellaneous Calendar Commands]]   Previous: [[id:emacs--Scroll-Calendar][Scrolling in the Calendar]]   Up: [[id:emacs--Calendar_002fDiary][The Calendar and the Diary]]
 
 <<Counting-Days>>
+
+--------------
+
 *** 33.3 Counting Days [[#Counting-Days-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Counting-Days-1
@@ -15,5 +18,3 @@ Next: [[id:emacs--General-Calendar][Miscellaneous Calendar Commands]]   Previous
 - M-= :: Display the number of days in the current region (=calendar-count-days-region=).
 
 To determine the number of days in a range, set the mark on one date using C-SPC, move point to another date, and type M-= (=calendar-count-days-region=). The numbers of days shown is /inclusive/; that is, it includes the days specified by mark and point.
-
---------------

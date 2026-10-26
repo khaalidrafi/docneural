@@ -4,9 +4,12 @@
 #+filetags: :emacs:
 #+title: Executing Lisp
 
-Next: [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]   Previous: [[id:emacs--Debuggers#Debuggers][Running Debuggers Under Emacs]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
+Next: [[id:emacs--Lisp-Libraries][Libraries of Lisp Code for Emacs]]   Previous: [[id:emacs--Debuggers][Running Debuggers Under Emacs]]   Up: [[id:emacs--Building][Compiling and Testing Programs]]
 
 <<Executing-Lisp>>
+
+--------------
+
 *** 29.7 Executing Lisp Expressions [[#Executing-Lisp-Expressions][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Executing-Lisp-Expressions
@@ -25,5 +28,3 @@ Emacs has major modes for several variants of Lisp. They use the same editing co
 - Scheme mode :: Like Lisp mode, but for Scheme programs.
 
 - Inferior Scheme mode :: Like Inferior Lisp mode, but for Scheme.
-
---------------

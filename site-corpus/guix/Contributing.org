@@ -36,17 +36,20 @@ Next:
 [[../..][]]
 
 <<Contributing>>
-Next: [[id:guix--Acknowledgments][Acknowledgments]], Previous: [[id:guix--Porting][Porting to a New Platform]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Acknowledgments][Acknowledgments]], Previous: [[id:guix--Porting][Porting to a New Platform]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-** 22 Contributing [[#Contributing-1][¶]]
+<<Contributing-1>>
+** 22 Contributing
 :PROPERTIES:
-:CUSTOM_ID: Contributing-1
+:CUSTOM_ID: contributing
 :CLASS: chapter
 :END:
 This project is a cooperative effort, and we need your help to make it grow! Please get in touch with us on [[mailto:guix-devel@gnu.org][guix-devel@gnu.org]] and =#guix= on the Libera Chat IRC network. We welcome ideas, bug reports, patches, and anything that may be helpful to the project. We particularly welcome help on packaging (see [[id:guix--Packaging-Guidelines][Packaging Guidelines]]).
 
+<<index-code-of-conduct_002c-of-contributors>> <<index-contributor-covenant>>
 We want to provide a warm, friendly, and harassment-free environment, so that anyone can contribute to the best of their abilities. To this end our project uses a “Contributor Covenant”, which was adapted from [[https://contributor-covenant.org/]]. You can find a local version in the =CODE-OF-CONDUCT= file in the source tree.
 
 Contributors are not required to use their legal name in patches and on-line communication; they can use any name or pseudonym of their choice.
@@ -56,10 +59,10 @@ Contributors are not required to use their legal name in patches and on-line com
 - [[id:guix--Running-the-Test-Suite][Running the Test Suite]]
 - [[id:guix--Running-Guix-Before-It-Is-Installed][Running Guix Before It Is Installed]]
 - [[id:guix--The-Perfect-Setup][The Perfect Setup]]
+- [[id:guix--Alternative-Setups][Alternative Setups]]
 - [[id:guix--Source-Tree-Structure][Source Tree Structure]]
 - [[id:guix--Packaging-Guidelines][Packaging Guidelines]]
 - [[id:guix--Coding-Style][Coding Style]]
-- [[id:guix--Copyright-Matters][Copyright Matters]]
 - [[id:guix--Submitting-Patches][Submitting Patches]]
 - [[id:guix--Tracking-Bugs-and-Changes][Tracking Bugs and Changes]]
 - [[id:guix--Teams][Teams]]
@@ -71,7 +74,3 @@ Contributors are not required to use their legal name in patches and on-line com
 - [[id:guix--Writing-Documentation][Writing Documentation]]
 - [[id:guix--Translating-Guix][Translating Guix]]
 - [[id:guix--Contributing-to-Guix_0027s-Infrastructure][Contributing to Guix's Infrastructure]]
-
---------------
-
-Next: [[id:guix--Acknowledgments][Acknowledgments]], Previous: [[id:guix--Porting][Porting to a New Platform]], Up: [[id:guix--index][GNU Guix]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]

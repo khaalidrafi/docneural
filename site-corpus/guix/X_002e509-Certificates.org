@@ -36,21 +36,25 @@ Next:
 [[../..][]]
 
 <<X_002e509-Certificates>>
-Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.12 X.509 Certificates [[#X_002e509-Certificates-2][¶]]
+<<X_002e509-Certificates-2>>
+*** 11.12 X.509 Certificates
 :PROPERTIES:
-:CUSTOM_ID: X_002e509-Certificates-2
+:CUSTOM_ID: x.509-certificates
 :CLASS: section
 :END:
+<<index-HTTPS_002c-certificates>> <<index-X_002e509-certificates>> <<index-TLS>>
 Web servers available over HTTPS (that is, HTTP over the transport-layer security mechanism, TLS) send client programs an /X.509 certificate/ that the client can then use to /authenticate/ the server. To do that, clients verify that the server's certificate is signed by a so-called /certificate authority/ (CA). But to verify the CA's signature, clients must have first acquired the CA's certificate.
 
 Web browsers such as GNU IceCat include their own set of CA certificates, such that they are able to verify CA signatures out-of-the-box.
 
 However, most other programs that can talk HTTPS---=wget=, =git=, =w3m=, etc.---need to be told where CA certificates can be found.
 
+<<index-nss_002dcerts-1>>
 For users of Guix System, this is done by adding a package that provides certificates to the =packages= field of the =operating-system= declaration (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]]). Guix includes one such package, =nss-certs=, which is a set of CA certificates provided as part of Mozilla's Network Security Services.
 
 This package is part of =%base-packages=, so there is no need to explicitly add it. The =/etc/ssl/certs= directory, which is where most applications and libraries look for certificates by default, points to the certificates installed globally.
@@ -75,4 +79,4 @@ For other applications you may want to look up the required environment variable
 
 --------------
 
-Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Name-Service-Switch][Name Service Switch]], Previous: [[id:guix--Privileged-Programs][Privileged Programs]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Shell-Commands-in-Dired][Shell Commands in Dired]]   Previous: [[id:emacs--Marks-vs-Flags][Dired Marks vs. Flags]]   Up: [[id:emacs--Dired][Dired, the Directory Editor]]
 
 <<Operating-on-Files>>
+
+--------------
+
 *** 32.7 Operating on Files [[#Operating-on-Files-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Operating-on-Files-1
@@ -20,7 +23,7 @@ This section describes the basic Dired commands to operate on one file or severa
 
 Certain other Dired commands, such as ! and the ‘=%=' commands, use the same conventions to decide which files to work on.
 
-In addition to Dired commands described here, you can also invoke Version Control (VC) commands on one or more files shown in a Dired buffer. See [[id:emacs--Version-Control::#Version-Control][Version Control]].
+In addition to Dired commands described here, you can also invoke Version Control (VC) commands on one or more files shown in a Dired buffer. See [[id:emacs--Version-Control][Version Control]].
 
 Commands which ask for a destination directory, such as those which copy and rename files or create links for them, try to guess the default target directory for the operation. Normally, they suggest the Dired buffer's default directory, but if the option =dired-dwim-target= is non-=nil=, and if there is another Dired buffer displayed in some window, that other buffer's directory is suggested instead. You can customize =dired-dwim-target= to prefer either the next window with a Dired buffer, or the most recently used window with a Dired buffer, or to use any other function. When the value is a function, it will be called with no arguments and is expected to return a list of directories which will be used as defaults (i.e., default target and “future history”).
 
@@ -54,7 +57,7 @@ Here are the file-manipulating Dired commands that operate on files.
 
   Dired automatically changes the visited file name of buffers associated with renamed files so that they refer to the new names.
 
-  If the value of the variable =dired-vc-rename-file= is non-=nil=, files are renamed using the commands of the underlying VCS, via =vc-rename-file= (see [[id:emacs--Version-Control::#VC-Delete_002fRename][Deleting and Renaming Version-Controlled Files]]).
+  If the value of the variable =dired-vc-rename-file= is non-=nil=, files are renamed using the commands of the underlying VCS, via =vc-rename-file= (see [[id:emacs--VC-Delete_002fRename][Deleting and Renaming Version-Controlled Files]]).
 
 -  <<index-dired_002ddo_002dhardlink>>H =new= RET [[#index-dired_002ddo_002dhardlink][¶]] :: Make hard links to the specified files (=dired-do-hardlink=). This is like the shell command =ln=. The argument =new= is the directory to make the links in, or (if making just one link) the name to give the link.
 
@@ -108,13 +111,13 @@ Here are the file-manipulating Dired commands that operate on files.
 
 -  <<index-A-_0028Dired_0029>>A =regexp= RET [[#index-A-_0028Dired_0029][¶]] :: Search all the specified files for the regular expression =regexp= (=dired-do-find-regexp=).
 
-  This command is a variant of =xref-find-references= (see [[id:emacs--Xref::#Identifier-Search][Searching and Replacing with Identifiers]]), it displays the =*xref*= buffer, where you can navigate between matches and display them as needed using the commands described in [[id:emacs--Xref::#Xref-Commands][Commands Available in the =*xref*= Buffer]].
+  This command is a variant of =xref-find-references= (see [[id:emacs--Identifier-Search][Searching and Replacing with Identifiers]]), it displays the =*xref*= buffer, where you can navigate between matches and display them as needed using the commands described in [[id:emacs--Xref-Commands][Commands Available in the =*xref*= Buffer]].
 
   If any of the marked files are directories, then this command searches all of the files in those directories, and any of their subdirectories, recursively, except files whose names match =grep-find-ignored-files= and subdirectories whose names match =grep-find-ignored-directories=.
 
 -  <<index-Q-_0028Dired_0029>>Q =regexp= RET =to= RET [[#index-Q-_0028Dired_0029][¶]] :: Perform =query-replace-regexp= on each of the specified files, replacing matches for =regexp= with the string =to= (=dired-do-find-regexp-and-replace=).
 
-  This command is a variant of =xref-query-replace-in-results=. It presents an =*xref*= buffer that lists all the matches of =regexp=, and you can use the special commands in that buffer (see [[id:emacs--Xref::#Xref-Commands][Commands Available in the =*xref*= Buffer]]). In particular, if you exit the query replace loop, you can use r in that buffer to replace more matches. See [[id:emacs--Xref::#Identifier-Search][Searching and Replacing with Identifiers]].
+  This command is a variant of =xref-query-replace-in-results=. It presents an =*xref*= buffer that lists all the matches of =regexp=, and you can use the special commands in that buffer (see [[id:emacs--Xref-Commands][Commands Available in the =*xref*= Buffer]]). In particular, if you exit the query replace loop, you can use r in that buffer to replace more matches. See [[id:emacs--Identifier-Search][Searching and Replacing with Identifiers]].
 
   Like with =dired-do-find-regexp=, if any of the marked files are directories, this command performs replacements in all of the files in those directories, and in any of their subdirectories, recursively, except for files whose names match =grep-find-ignored-files= and subdirectories whose names match =grep-find-ignored-directories=.
 

@@ -36,19 +36,21 @@ Next:
 [[../..][]]
 
 <<Limitations>>
-Next: [[id:guix--Hardware-Considerations][Hardware Considerations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Hardware-Considerations][Hardware Considerations]], Up: [[id:guix--System-Installation][System Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 3.1 Limitations [[#Limitations-2][¶]]
+<<Limitations-2>>
+*** 3.1 Limitations
 :PROPERTIES:
-:CUSTOM_ID: Limitations-2
+:CUSTOM_ID: limitations
 :CLASS: section
 :END:
 We consider Guix System to be ready for a wide range of “desktop” and server use cases. The reliability guarantees it provides---transactional upgrades and rollbacks, reproducibility---make it a solid foundation.
 
 More and more system services are provided (see [[id:guix--Services][Services]]).
 
-Nevertheless, before you proceed with the installation, be aware that some services you rely on may still be missing from version ad54bd5.
+Nevertheless, before you proceed with the installation, be aware that some services you rely on may still be missing from version 1.5.0.
 
 More than a disclaimer, this is an invitation to report issues (and success stories!), and to join us in improving it. See [[id:guix--Contributing][Contributing]], for more info.

@@ -7,6 +7,9 @@
 Next: [[id:emacs--Defining-Abbrevs][Defining Abbrevs]]   Up: [[id:emacs--Abbrevs][Abbrevs]]
 
 <<Abbrev-Concepts>>
+
+--------------
+
 *** 31.1 Abbrev Concepts [[#Abbrev-Concepts-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Abbrev-Concepts-1
@@ -19,5 +22,3 @@ Abbrevs expand only when Abbrev mode, a buffer-local minor mode, is enabled. Dis
 Abbrevs can have /mode-specific/ definitions, active only in one major mode. Abbrevs can also have /global/ definitions that are active in all major modes. The same abbrev can have a global definition and various mode-specific definitions for different major modes. A mode-specific definition for the current major mode overrides a global definition.
 
 You can define abbrevs interactively during the editing session, irrespective of whether Abbrev mode is enabled. You can also save lists of abbrev definitions in files, which you can then reload for use in later sessions.
-
---------------

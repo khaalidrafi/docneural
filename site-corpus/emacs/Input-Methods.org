@@ -7,6 +7,9 @@
 Next: [[id:emacs--Select-Input-Method][Selecting an Input Method]]   Previous: [[id:emacs--Language-Environments][Language Environments]]   Up: [[id:emacs--International][International Character Set Support]]
 
 <<Input-Methods>>
+
+--------------
+
 *** 24.3 Input Methods [[#Input-Methods-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Input-Methods-1
@@ -44,7 +47,7 @@ To find out how to input the character after point using the current input metho
 
 The variables =input-method-highlight-flag= and =input-method-verbose-flag= control how input methods explain what is happening. If =input-method-highlight-flag= is non-=nil=, the partial sequence is highlighted in the buffer (for most input methods---some disable this feature). If =input-method-verbose-flag= is non-=nil=, the list of possible characters to type next is displayed in the echo area (but not when you are in the minibuffer).
 
-You can modify how an input method works by making your changes in a function that you add to the hook variable =quail-activate-hook=. See [[id:emacs--Variables::#Hooks][Hooks]]. For example, you can redefine some of the input method's keys by defining key bindings in the keymap returned by the function =quail-translation-keymap=, using =define-key=. See [[id:emacs--Key-Bindings::#Init-Rebinding][Rebinding Keys in Your Init File]].
+You can modify how an input method works by making your changes in a function that you add to the hook variable =quail-activate-hook=. See [[id:emacs--Hooks][Hooks]]. For example, you can redefine some of the input method's keys by defining key bindings in the keymap returned by the function =quail-translation-keymap=, using =define-key=. See [[id:emacs--Init-Rebinding][Rebinding Keys in Your Init File]].
 
 Input methods are inhibited when the text in the buffer is read-only for some reason. This is so single-character key bindings work in modes that make buffer text or parts of it read-only, such as =read-only-mode= and =image-mode=, even when an input method is active.
 

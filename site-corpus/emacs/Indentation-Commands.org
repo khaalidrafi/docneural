@@ -7,6 +7,9 @@
 Next: [[id:emacs--Tab-Stops][Tab Stops]]   Up: [[id:emacs--Indentation][Indentation]]
 
 <<Indentation-Commands>>
+
+--------------
+
 *** 26.1 Indentation Commands [[#Indentation-Commands-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Indentation-Commands-1
@@ -26,7 +29,7 @@ Apart from the TAB (=indent-for-tab-command=) command, Emacs provides a variety 
 
   As a special case (useful for Lisp code), the single space is omitted if the characters to be joined are consecutive opening and closing parentheses, or if the junction follows another newline.
 
-  If there is a fill prefix, M-^ deletes the fill prefix if it appears after the newline that is deleted. See [[id:emacs--Filling::#Fill-Prefix][The Fill Prefix]].
+  If there is a fill prefix, M-^ deletes the fill prefix if it appears after the newline that is deleted. See [[id:emacs--Fill-Prefix][The Fill Prefix]].
 
   With a prefix argument, join the current line to the following line. If the region is active, and no prefix argument is given, join all lines in the region instead.
 

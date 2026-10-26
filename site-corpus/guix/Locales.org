@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<Locales>>
-Next: [[id:guix--Services][Services]], Previous: [[id:guix--Keyboard-Layout][Keyboard Layout]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Services][Services]], Previous: [[id:guix--Keyboard-Layout][Keyboard Layout]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 11.9 Locales [[#Locales-2][¶]]
+<<Locales-2>>
+*** 11.9 Locales
 :PROPERTIES:
-:CUSTOM_ID: Locales-2
+:CUSTOM_ID: locales
 :CLASS: section
 :END:
-A /locale/ defines cultural conventions for a particular language and region of the world (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Locales.html#Locales][Locales]] in The GNU C Library Reference Manual). Each locale has a name that typically has the form =language==_==territory==.==codeset=---e.g., =fr_LU.utf8= designates the locale for the French language, with cultural conventions from Luxembourg, and using the UTF-8 encoding.
+<<index-locale>>
+A /locale/ defines cultural conventions for a particular language and region of the world (see [[https://www.gnu.org/software/libc/manual/html_node/Locales.html#Locales][Locales]] in The GNU C Library Reference Manual). Each locale has a name that typically has the form =language==_==territory==.==codeset=---e.g., =fr_LU.utf8= designates the locale for the French language, with cultural conventions from Luxembourg, and using the UTF-8 encoding.
 
+<<index-locale-definition>>
 Usually, you will want to specify the default locale for the machine using the =locale= field of the =operating-system= declaration (see [[id:guix--operating_002dsystem-Reference][=locale=]]).
 
 The selected locale is automatically added to the /locale definitions/ known to the system if needed, with its codeset inferred from its name---e.g., =bo_CN.utf8= will be assumed to use the =UTF-8= codeset. Additional locale definitions can be specified in the =locale-definitions= slot of =operating-system=---this is useful, for instance, if the codeset could not be inferred from the locale name. The default set of locale definitions includes some widely used locales, but not all the available locales, in order to save space.
@@ -67,33 +71,37 @@ Likewise, to save space, one might want =locale-definitions= to list only the lo
         (charset "EUC-JP")))
 #+end_src
 
+<<index-LOCPATH-1>>
 The compiled locale definitions are available at =/run/current-system/locale/X.Y=, where =X.Y= is the libc version, which is the default location where the GNU libc provided by Guix looks for locale data. This can be overridden using the =LOCPATH= environment variable (see [[id:guix--Application-Setup::#locales_002dand_002dlocpath][=LOCPATH= and locale packages]]).
 
 The =locale-definition= form is provided by the =(gnu system locale)= module. Details are given below.
 
-- Data Type: *locale-definition* [[#index-locale_002ddefinition][¶]] :: This is the data type of a locale definition.
+- Data Type: locale-definition  :: This is the data type of a locale definition.
 
-  - =name= :: The name of the locale. See [[https://doc.guix.gnu.org/libc/latest/en/html_node/Locale-Names.html#Locale-Names][Locale Names]] in The GNU C Library Reference Manual, for more information on locale names.
+  - =name= :: The name of the locale. See [[https://www.gnu.org/software/libc/manual/html_node/Locale-Names.html#Locale-Names][Locale Names]] in The GNU C Library Reference Manual, for more information on locale names.
 
   - =source= :: The name of the source for that locale. This is typically the =language==_==territory= part of the locale name.
 
   - =charset= (default: ="UTF-8"=) :: The “character set” or “code set” for that locale, [[https://www.iana.org/assignments/character-sets][as defined by IANA]].
 
-- Variable: *%default-locale-definitions* [[#index-_0025default_002dlocale_002ddefinitions][¶]] :: A list of commonly used UTF-8 locales, used as the default value of the =locale-definitions= field of =operating-system= declarations.
+- Variable: %default-locale-definitions  :: A list of commonly used UTF-8 locales, used as the default value of the =locale-definitions= field of =operating-system= declarations.
 
-  These locale definitions use the /normalized codeset/ for the part that follows the dot in the name (see [[https://doc.guix.gnu.org/libc/latest/en/html_node/Using-gettextized-software.html#Using-gettextized-software][normalized codeset]] in The GNU C Library Reference Manual). So for instance it has =uk_UA.utf8= but /not/, say, =uk_UA.UTF-8=.
+  <<index-locale-name>> <<index-normalized-codeset-in-locale-names>>
+
+  These locale definitions use the /normalized codeset/ for the part that follows the dot in the name (see [[https://www.gnu.org/software/libc/manual/html_node/Using-gettextized-software.html#Using-gettextized-software][normalized codeset]] in The GNU C Library Reference Manual). So for instance it has =uk_UA.utf8= but /not/, say, =uk_UA.UTF-8=.
 
 - [[#Locale-Data-Compatibility-Considerations][Locale Data Compatibility Considerations]]
 
 <<Locale-Data-Compatibility-Considerations>>
-**** 11.9.1 Locale Data Compatibility Considerations [[#Locale-Data-Compatibility-Considerations][¶]]
+**** 11.9.1 Locale Data Compatibility Considerations
 :PROPERTIES:
 :CUSTOM_ID: locale-data-compatibility-considerations
 :CLASS: subsection
 :END:
+<<index-incompatibility_002c-of-locale-data>>
 =operating-system= declarations provide a =locale-libcs= field to specify the GNU libc packages that are used to compile locale declarations (see [[id:guix--operating_002dsystem-Reference][=operating-system= Reference]]). “Why would I care?”, you may ask. Well, it turns out that the binary format of locale data is occasionally incompatible from one libc version to another.
 
-For instance, a program linked against libc version 2.21 is unable to read locale data produced with libc 2.22; worse, that program /aborts/ instead of simply ignoring the incompatible locale data[[#FOOT33][^{33}]]. Similarly, a program linked against libc 2.22 can read most, but not all, of the locale data from libc 2.21 (specifically, =LC_COLLATE= data is incompatible); thus calls to =setlocale= may fail, but programs will not abort.
+For instance, a program linked against libc version 2.21 is unable to read locale data produced with libc 2.22; worse, that program /aborts/ instead of simply ignoring the incompatible locale data[[#FOOT31][^{31}]]. Similarly, a program linked against libc 2.22 can read most, but not all, of the locale data from libc 2.21 (specifically, =LC_COLLATE= data is incompatible); thus calls to =setlocale= may fail, but programs will not abort.
 
 The “problem” with Guix is that users have a lot of freedom: They can choose whether and when to upgrade software in their profiles, and might be using a libc version different from the one the system administrator used to build the system-wide locale data.
 
@@ -105,7 +113,7 @@ Still, it is best if the system-wide locale data at =/run/current-system/locale=
 (use-package-modules base)
 
 (operating-system
-  ;; ...
+  ;; …
   (locale-libcs (list glibc-2.21 (canonical-package glibc))))
 #+end_src
 
@@ -118,13 +126,12 @@ This example would lead to a system containing locale definitions for both libc 
 :CUSTOM_ID: footnotes
 :CLASS: footnotes-heading
 :END:
-***** [[#DOCF33][(33)]]
+***** [[#DOCF31][(31)]]
 :PROPERTIES:
 :CUSTOM_ID: section-1
-:CLASS: footnote-body-heading
 :END:
 Versions 2.23 and later of GNU libc will simply skip the incompatible locale data, which is already an improvement.
 
 --------------
 
-Next: [[id:guix--Services][Services]], Previous: [[id:guix--Keyboard-Layout][Keyboard Layout]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Services][Services]], Previous: [[id:guix--Keyboard-Layout][Keyboard Layout]], Up: [[id:guix--System-Configuration][System Configuration]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

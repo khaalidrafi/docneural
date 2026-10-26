@@ -4,6 +4,39 @@
 #+filetags: :emacs:
 #+title: Lisp Indent
 
-Next:
+Next: [[id:emacs--C-Indent][Commands for C Indentation]]   Previous: [[id:emacs--Multi_002dline-Indent][Indenting Several Lines]]   Up: [[id:emacs--Program-Indent][Indentation for Programs]]
 
-The node you are looking for is at [[id:emacs--Program-Indent::#Lisp-Indent][Lisp Indent]].
+<<Lisp-Indent>>
+
+--------------
+
+**** 28.3.3 Customizing Lisp Indentation [[#Customizing-Lisp-Indentation][¶]]
+:PROPERTIES:
+:CUSTOM_ID: Customizing-Lisp-Indentation
+:CLASS: subsection
+:END:
+The indentation pattern for a Lisp expression can depend on the function called by the expression. For each Lisp function, you can choose among several predefined patterns of indentation, or define an arbitrary one with a Lisp program.
+
+The standard pattern of indentation is as follows: the second line of the expression is indented under the first argument, if that is on the same line as the beginning of the expression; otherwise, the second line is indented underneath the function name. Each following line is indented under the previous line whose nesting depth is the same.
+
+If the variable =lisp-indent-offset= is non-=nil=, it overrides the usual indentation pattern for the second line of an expression, so that such lines are always indented =lisp-indent-offset= more columns than the containing list.
+
+Certain functions override the standard pattern. Functions whose names start with =def= treat the second lines as the start of a /body/, by indenting the second line =lisp-body-indent= additional columns beyond the open-parenthesis that starts the expression.
+
+You can override the standard pattern in various ways for individual functions, according to the =lisp-indent-function= property of the function name. This is normally done for macro definitions, using the =declare= construct. See [[../elisp_html/Defining-Macros.html#Defining-Macros][Defining Macros]] in The Emacs Lisp Reference Manual.
+
+In Emacs Lisp, lists are usually indented as if they are function-like forms:
+
+#+begin_src lisp-preformatted
+(setq foo '(bar zot
+                gazonk))
+#+end_src
+
+However, if you add a space after the opening parenthesis, this tells Emacs that it's a data list instead of a piece of code, and Emacs will then indent it like this:
+
+#+begin_src lisp-preformatted
+(setq foo '( bar zot
+             gazonk))
+#+end_src
+
+--------------

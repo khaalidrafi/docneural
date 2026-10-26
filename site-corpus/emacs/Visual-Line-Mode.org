@@ -7,6 +7,9 @@
 Next: [[id:emacs--Display-Custom][Customization of Display]]   Previous: [[id:emacs--Line-Truncation][Line Truncation]]   Up: [[id:emacs--Display][Controlling the Display]]
 
 <<Visual-Line-Mode>>
+
+--------------
+
 *** 16.23 Visual Line Mode [[#Visual-Line-Mode-1][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Visual-Line-Mode-1
@@ -20,7 +23,7 @@ Since word wrap and line truncation (described in the previous section) are cont
 
 In Visual Line mode, some editing commands work on screen lines instead of logical lines: C-a (=beginning-of-visual-line=) moves to the beginning of the screen line, C-e (=end-of-visual-line=) moves to the end of the screen line, and C-k (=kill-visual-line=) kills text to the end of the screen line.
 
-To move by logical lines, use the commands M-x next-logical-line and M-x previous-logical-line. These move point to the next logical line and the previous logical line respectively, regardless of whether Visual Line mode is enabled. If you use these commands frequently, it may be convenient to assign key bindings to them. See [[id:emacs--Key-Bindings::#Init-Rebinding][Rebinding Keys in Your Init File]].
+To move by logical lines, use the commands M-x next-logical-line and M-x previous-logical-line. These move point to the next logical line and the previous logical line respectively, regardless of whether Visual Line mode is enabled. If you use these commands frequently, it may be convenient to assign key bindings to them. See [[id:emacs--Init-Rebinding][Rebinding Keys in Your Init File]].
 
 By default, word-wrapped lines do not display fringe indicators. Visual Line mode is often used to edit files that contain many long logical lines, so having a fringe indicator for each wrapped line would be visually distracting. You can change this by customizing the variable =visual-line-fringe-indicators=.
 

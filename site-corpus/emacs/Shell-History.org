@@ -7,6 +7,9 @@
 Next: [[id:emacs--Directory-Tracking][Directory Tracking]]   Previous: [[id:emacs--Shell-Prompts][Shell Prompts]]   Up: [[id:emacs--Shell][Running Shell Commands from Emacs]]
 
 <<Shell-History>>
+
+--------------
+
 *** 40.5 Shell Command History [[#Shell-Command-History][¶]]
 :PROPERTIES:
 :CUSTOM_ID: Shell-Command-History
@@ -14,76 +17,6 @@ Next: [[id:emacs--Directory-Tracking][Directory Tracking]]   Previous: [[id:emac
 :END:
 Shell buffers support three ways of repeating earlier commands. You can use keys like those used for the minibuffer history; these work much as they do in the minibuffer, inserting text from prior commands while point remains always at the end of the buffer. You can move through the buffer to previous inputs in their original place, then resubmit them or copy them to the end. Or you can use a ‘=!='-style history reference.
 
---------------
-
-<<Shell-Ring>>
-**** 40.5.1 Shell History Ring [[#Shell-History-Ring][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Shell-History-Ring
-:CLASS: subsection subsubsection-level-set-subsection
-:END:
--  <<index-comint_002dprevious_002dinput>>M-p [[#index-comint_002dprevious_002dinput][¶]]\\
-  C-UP :: Fetch the next earlier old shell command (=comint-previous-input=).
-
--  <<index-M_002dn-_0028Shell-mode_0029>>M-n [[#index-M_002dn-_0028Shell-mode_0029][¶]]\\
-  C-DOWN :: Fetch the next later old shell command (=comint-next-input=).
-
--  <<index-M_002dr-_0028Shell-mode_0029>>M-r [[#index-M_002dr-_0028Shell-mode_0029][¶]] :: Begin an incremental regexp search of old shell commands (=comint-history-isearch-backward-regexp=).
-
--  <<index-C_002dc-C_002dx-_0028Shell-mode_0029>>C-c C-x [[#index-C_002dc-C_002dx-_0028Shell-mode_0029][¶]] :: Fetch the next subsequent command from the history (=comint-get-next-from-history=).
-
--  <<index-C_002dc-_002e-_0028Shell-mode_0029>>C-c . [[#index-C_002dc-_002e-_0028Shell-mode_0029][¶]] :: Fetch one argument from an old shell command (=comint-input-previous-argument=).
-
--  <<index-C_002dc-C_002dl-_0028Shell-mode_0029>>C-c C-l [[#index-C_002dc-C_002dl-_0028Shell-mode_0029][¶]] :: Display the buffer's history of shell commands in another window (=comint-dynamic-list-input-ring=).
-
-Shell buffers provide a history of previously entered shell commands. To reuse shell commands from the history, use the editing commands M-p, M-n, and M-r. These work similar to the minibuffer history commands (see [[id:emacs--Minibuffer-History][Minibuffer History]]), except that they operate within the Shell buffer rather than the minibuffer, and =M-r= in a Shell buffer invokes incremental search through shell command history.
-
-M-p fetches an earlier shell command to the end of the shell buffer. Successive use of M-p fetches successively earlier shell commands, each replacing any text that was already present as potential shell input. M-n does likewise except that it finds successively more recent shell commands from the buffer. C-UP works like M-p, and C-DOWN like M-n.
-
-The history search command M-r begins an incremental regular expression search of previous shell commands. After typing M-r, start typing the desired string or regular expression; the last matching shell command will be displayed in the current line. Incremental search commands have their usual effects---for instance, C-s and C-r search forward and backward for the next match (see [[id:emacs--Incremental-Search::#Incremental-Search][Incremental Search]]). When you find the desired input, type RET to terminate the search. This puts the input in the command line. Any partial input you were composing before navigating the history list is restored when you go to the beginning or end of the history ring.
-
-Often it is useful to reexecute several successive shell commands that were previously executed in sequence. To do this, first find and reexecute the first command of the sequence. Then type C-c C-x; that will fetch the following command---the one that follows the command you just repeated. Then type RET to reexecute this command. You can reexecute several successive commands by typing C-c C-x RET over and over.
-
-The command C-c . (=comint-insert-previous-argument=) copies an individual argument from a previous command, like ESC . in Bash and =zsh=. The simplest use copies the last argument from the previous shell command. With a prefix argument =n=, it copies the =n=th argument instead. Repeating C-c . copies from an earlier shell commands, always using the same value of =n= (don't give a prefix argument when you repeat the C-c . command).
-
-If you set =comint-insert-previous-argument-from-end= to a non-=nil= value, C-c . will instead copy the =n=th argument counting from the last one; this emulates ESC . in =zsh=.
-
-These commands get the text of previous shell commands from a special history list, not from the shell buffer itself. Thus, editing the shell buffer, or even killing large parts of it, does not affect the history that these commands access.
-
-Some shells store their command histories in files so that you can refer to commands from previous shell sessions. Emacs reads the command history file for your chosen shell, to initialize its own command history. The history file name is the string specified in =shell-history-file-name=. If that user option is =t=, the command history is not read. If the value is =nil=, the command history is read from the file specified in environment variable =HISTFILE=, or from =~/.bash_history= for bash, =~/.sh_history= for ksh, =~/.zsh_history"= for zsh, or =~/.history= for other shells.
-
---------------
-
-<<Shell-History-Copying>>
-**** 40.5.2 Shell History Copying [[#Shell-History-Copying-1][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Shell-History-Copying-1
-:CLASS: subsection subsubsection-level-set-subsection
-:END:
--  <<index-C_002dc-C_002dp-_0028Shell-mode_0029>>C-c C-p [[#index-C_002dc-C_002dp-_0028Shell-mode_0029][¶]] :: Move point to the previous prompt (=comint-previous-prompt=).
-
--  <<index-C_002dc-C_002dn-_0028Shell-mode_0029>>C-c C-n [[#index-C_002dc-C_002dn-_0028Shell-mode_0029][¶]] :: Move point to the following prompt (=comint-next-prompt=).
-
--  <<index-C_002dc-RET-_0028Shell-mode_0029>>C-c RET [[#index-C_002dc-RET-_0028Shell-mode_0029][¶]] :: Copy the input command at point, inserting the copy at the end of the buffer (=comint-copy-old-input=). This is useful if you move point back to a previous command. After you copy the command, you can submit the copy as input with RET. If you wish, you can edit the copy before resubmitting it. If you use this command on an output line, it copies that line to the end of the buffer.
-
-- mouse-2 :: If =comint-use-prompt-regexp= is =nil= (the default), copy the old input command that you click on, inserting the copy at the end of the buffer (=comint-insert-input=). If =comint-use-prompt-regexp= is non-=nil=, or if the click is not over old input, just yank as usual.
-
-Moving to a previous input and then copying it with C-c RET or mouse-2 produces the same results---the same buffer contents---that you would get by using M-p enough times to fetch that previous input from the history list. However, C-c RET copies the text from the buffer, which can be different from what is in the history list if you edit the input text in the buffer after it has been sent.
-
---------------
-
-<<History-References>>
-**** 40.5.3 Shell History References [[#Shell-History-References][¶]]
-:PROPERTIES:
-:CUSTOM_ID: Shell-History-References
-:CLASS: subsection subsubsection-level-set-subsection
-:END:
-Various shells, including csh and bash, support /history references/ that begin with ‘=!=' and ‘=^='. Shell mode recognizes these constructs, and can perform the history substitution for you.
-
-If you insert a history reference and type TAB, this searches the input history for a matching command, performs substitution if necessary, and places the result in the buffer in place of the history reference. For example, you can fetch the most recent command beginning with ‘=mv=' with ! m v TAB. You can edit the command if you wish, and then resubmit the command to the shell by typing RET.
-
-Shell mode can optionally expand history references in the buffer when you send them to the shell. To request this, set the variable =comint-input-autoexpand= to =input=. You can make SPC perform history expansion by binding SPC to the command =comint-magic-space=. See [[id:emacs--Key-Bindings::#Rebinding][Changing Key Bindings Interactively]].
-
-Shell mode recognizes history references when they follow a prompt. See [[id:emacs--Shell-Prompts][Shell Prompts]], for how Shell mode recognizes prompts.
-
---------------
+- [[id:emacs--Shell-Ring][Shell History Ring]]
+- [[id:emacs--Shell-History-Copying][Shell History Copying]]
+- [[id:emacs--History-References][Shell History References]]

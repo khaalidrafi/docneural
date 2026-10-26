@@ -36,15 +36,18 @@ Next:
 [[../..][]]
 
 <<Primary-URL>>
-Next: [[id:guix--Writing-Channel-News][Writing Channel News]], Previous: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Writing-Channel-News][Writing Channel News]], Previous: [[id:guix--Specifying-Channel-Authorizations][Specifying Channel Authorizations]], Up: [[id:guix--Channels][Channels]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 6.12 Primary URL [[#Primary-URL-1][¶]]
+<<Primary-URL-1>>
+*** 6.11 Primary URL
 :PROPERTIES:
-:CUSTOM_ID: Primary-URL-1
+:CUSTOM_ID: primary-url
 :CLASS: section
 :END:
+<<index-primary-URL_002c-channels>>
 Channel authors can indicate the primary URL of their channel's Git repository in the =.guix-channel= file, like so:
 
 #+begin_src lisp

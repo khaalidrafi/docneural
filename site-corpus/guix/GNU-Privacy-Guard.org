@@ -36,17 +36,21 @@ Next:
 [[../..][]]
 
 <<GNU-Privacy-Guard>>
-Next: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Previous: [[id:guix--Secure-Shell][Secure Shell]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Previous: [[id:guix--Secure-Shell][Secure Shell]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-**** 13.4.7 GNU Privacy Guard [[#GNU-Privacy-Guard-1][¶]]
+<<GNU-Privacy-Guard-1>>
+**** 13.3.7 GNU Privacy Guard
 :PROPERTIES:
-:CUSTOM_ID: GNU-Privacy-Guard-1
+:CUSTOM_ID: gnu-privacy-guard
 :CLASS: subsection
 :END:
+<<index-GNU-Privacy-Guard_002c-Home-service>> <<index-GPG_002c-Home-service>>
 The =(gnu home services gnupg)= module provides services that help you set up the GNU Privacy Guard, also known as GnuPG or GPG, in your home environment.
 
+<<index-gpg_002dagent_002c-Home-service>> <<index-SSH-agent_002c-with-gpg_002dagent>>
 The =gpg-agent= service configures and sets up GPG's agent, the program that is responsible for managing OpenPGP private keys and, optionally, OpenSSH (secure shell) private keys (see [[https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT][Invoking GPG-AGENT]] in Using the GNU Privacy Guard).
 
 As an example, here is how you would configure =gpg-agent= with SSH support such that it uses the Emacs-based Pinentry interface when prompting for a passphrase:
@@ -61,15 +65,13 @@ As an example, here is how you would configure =gpg-agent= with SSH support such
 
 The service reference is given below.
 
-- Variable: *home-gpg-agent-service-type* [[#index-home_002dgpg_002dagent_002dservice_002dtype][¶]] :: This is the service type for =gpg-agent= (see [[https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT][Invoking GPG-AGENT]] in Using the GNU Privacy Guard). Its value must be a =home-gpg-agent-configuration=, as shown below.
+- Variable: home-gpg-agent-service-type  :: This is the service type for =gpg-agent= (see [[https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT][Invoking GPG-AGENT]] in Using the GNU Privacy Guard). Its value must be a =home-gpg-agent-configuration=, as shown below.
 
-- Data Type: *home-gpg-agent-configuration* [[#index-home_002dgpg_002dagent_002dconfiguration][¶]] :: Available =home-gpg-agent-configuration= fields are:
+- Data Type: home-gpg-agent-configuration  :: Available =home-gpg-agent-configuration= fields are:
 
   - =gnupg= (default: =gnupg=) (type: file-like) :: The GnuPG package to use.
 
-  - =pinentry-program= (type: file-like) :: Pinentry program to use. Pinentry is a small user interface that =gpg-agent= delegates to anytime it needs user input for a passphrase or PIN (personal identification number) (see [[../pinentry_html/index.html#Top][Using the PIN-Entry]]).
-
-  - =home= (default: ="~/.gnupg"=) (type: string) :: The GnuPG home directory, relative to =$HOME=. Defaults to =~/.gnupg=.
+  - =pinentry-program= (type: file-like) :: Pinentry program to use. Pinentry is a small user interface that =gpg-agent= delegates to anytime it needs user input for a passphrase or PIN (personal identification number) (see [[../pinentry/index.html#Top][Using the PIN-Entry]]).
 
   - =ssh-support?= (default: =#f=) (type: boolean) :: Whether to enable SSH (secure shell) support. When true, =gpg-agent= acts as a drop-in replacement for OpenSSH's =ssh-agent= program, taking care of OpenSSH secret keys and directing passphrase requests to the chosen Pinentry program.
 
@@ -81,10 +83,8 @@ The service reference is given below.
 
   - =max-cache-ttl-ssh= (default: =7200=) (type: integer) :: Maximum time a cache entry for SSH keys is valid, in seconds.
 
-  - =extra-content= (default: =""=) (type: raw-configuration-string) :: Raw content to add to the end of =gpg-agent.conf=.
-
-  - =shepherd-requirement= (default: =()=) (type: list-of-symbols) :: List of services that should be started before this service.
+  - =extra-content= (default: =""=) (type: raw-configuration-string) :: Raw content to add to the end of =~/.gnupg/gpg-agent.conf=.
 
 --------------
 
-Next: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Previous: [[id:guix--Secure-Shell][Secure Shell]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Desktop-Home-Services][Desktop Home Services]], Previous: [[id:guix--Secure-Shell][Secure Shell]], Up: [[id:guix--Home-Services][Home Services]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

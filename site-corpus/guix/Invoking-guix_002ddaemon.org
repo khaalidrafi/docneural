@@ -36,25 +36,30 @@ Next:
 [[../..][]]
 
 <<Invoking-guix_002ddaemon>>
-Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+
+Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]
 
 --------------
 
-*** 2.3 Invoking =guix-daemon= [[#Invoking-guix_002ddaemon-1][¶]]
+<<Invoking-guix_002ddaemon-1>>
+*** 2.3 Invoking =guix-daemon=
 :PROPERTIES:
-:CUSTOM_ID: Invoking-guix_002ddaemon-1
+:CUSTOM_ID: invoking-guix-daemon
 :CLASS: section
 :END:
+<<index-guix_002ddaemon>>
 The =guix-daemon= program implements all the functionality to access the store. This includes launching build processes, running the garbage collector, querying the availability of a build result, etc. It is normally run as =root= like this:
 
 #+begin_example
 # guix-daemon --build-users-group=guixbuild
 #+end_example
 
-This daemon can also be started following the systemd “socket activation” protocol (see [[https://doc.guix.gnu.org/shepherd/latest/en/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
+<<index-socket-activation_002c-for-guix_002ddaemon>>
+This daemon can also be started following the systemd “socket activation” protocol (see [[https://www.gnu.org/software/shepherd/manual/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors][=make-systemd-constructor=]] in The GNU Shepherd Manual).
 
 For details on how to set it up, see [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]].
 
+<<index-chroot-1>> <<index-container_002c-build-environment>> <<index-build-environment-1>> <<index-reproducible-builds>>
 By default, =guix-daemon= launches build processes under different UIDs, taken from the build group specified with =--build-users-group=. In addition, each build process is run in a chroot environment that only contains the subset of the store that the build process depends on, as specified by its derivation (see [[id:guix--Programming-Interface][derivation]]), plus a set of specific system directories. By default, the latter contains =/dev= and =/dev/pts=. Furthermore, on GNU/Linux, the build environment is a /container/: in addition to having its own file system tree, it has a separate mount name space, its own PID name space, network name space, etc. This helps achieve reproducible builds (see [[id:guix--Features][Features]]).
 
 When the daemon performs a build on behalf of the user, it creates a build directory under =/tmp= or under the directory specified by its =TMPDIR= environment variable. This directory is shared with the container for the duration of the build, though within the container, the build tree is always called =/tmp/guix-build-==name==.drv-0=.
@@ -67,9 +72,11 @@ The following command-line options are supported:
 
 - =--build-users-group===group= :: Take users from =group= to run build processes (see [[id:guix--Setting-Up-the-Daemon][build users]]).
 
-- <<index-substitutes>>=--no-substitutes= [[#index-substitutes][¶]] :: Do not use substitutes for build products. That is, always build things locally instead of allowing downloads of pre-built binaries (see [[id:guix--Substitutes][Substitutes]]).
+- =--no-substitutes= [[#index-substitutes][¶]] :: Do not use substitutes for build products. That is, always build things locally instead of allowing downloads of pre-built binaries (see [[id:guix--Substitutes][Substitutes]]).
 
   When the daemon runs with =--no-substitutes=, clients can still explicitly enable substitution /via/ the =set-build-options= remote procedure call (see [[id:guix--The-Store][The Store]]).
+
+  <<daemon_002dsubstitute_002durls>>
 
 - =--substitute-urls===urls= :: Consider =urls= the default whitespace-separated list of substitute source URLs. When this option is omitted, ‘=https://bordeaux.guix.gnu.org https://ci.guix.gnu.org=' is used.
 
@@ -77,7 +84,9 @@ The following command-line options are supported:
 
   See [[id:guix--Getting-Substitutes-from-Other-Servers][Getting Substitutes from Other Servers]], for more information on how to configure the daemon to get substitutes from other servers.
 
-- <<index-offloading-1>>=--no-offload= [[#index-offloading-1][¶]] :: Do not use offload builds to other machines (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]). That is, always build things locally instead of offloading builds to remote machines.
+  <<index-offloading-1>>
+
+- =--no-offload= :: Do not use offload builds to other machines (see [[id:guix--Daemon-Offload-Setup][Using the Offload Facility]]). That is, always build things locally instead of offloading builds to remote machines.
 
 - =--cache-failures= :: Cache build failures. By default, only successful builds are cached.
 
@@ -126,10 +135,6 @@ The following command-line options are supported:
 
   #+end_quote
 
--  <<index-ASLR-_0028address-space-layout-randomization_0029_002c-for-builds>>=--allow-aslr= [[#index-ASLR-_0028address-space-layout-randomization_0029_002c-for-builds][¶]] :: Allow builds to start even if ASLR (Address Space Layout Randomization) cannot be disabled on Linux systems. This is normally done so as to increase reproducibility, but some environments, such as those affected by Docker's default seccomp policy, don't permit disabling ASLR. Passing this option will allow builds to start with reduced reproducibility regardless.
-
-  Note that passing this option doesn't ensure that ASLR is enabled, it only allows builds to start even when disabling it is blocked.
-
 - =--isolate-host-loopback= :: Prevent fixed-output chroot builds from accessing the host loopback. When this is used, fixed-output builds will have their own loopback interface, and attempts to connect to 127.0.0.1 or ::1 will instead attempt to connect to its local loopback interface.
 
 - =--log-compression===type= :: Compress build logs according to =type=, one of =gzip=, =bzip2=, or =none=.
@@ -150,13 +155,15 @@ The following command-line options are supported:
   #+begin_example
   herd discover guix-daemon on
   herd discover guix-daemon off
-#+end_example
+  #+end_example
 
-- <<index-deduplication>>=--disable-deduplication= [[#index-deduplication][¶]] :: Disable automatic file “deduplication” in the store.
+- =--disable-deduplication= [[#index-deduplication][¶]] :: Disable automatic file “deduplication” in the store.
 
   By default, files added to the store are automatically “deduplicated”: if a newly added file is identical to another one found in the store, the daemon makes the new file a hard link to the other file. This can noticeably reduce disk usage, at the expense of slightly increased input/output load at the end of a build process. This option disables this optimization.
 
 - =--gc-keep-outputs[=yes|no]= :: Tell whether the garbage collector (GC) must keep outputs of live derivations.
+
+  <<index-GC-roots>> <<index-garbage-collector-roots>>
 
   When set to =yes=, the GC will keep the outputs of any live derivation available in the store---the =.drv= files. The default is =no=, meaning that derivation outputs are kept only if they are reachable from a GC root. See [[id:guix--Invoking-guix-gc][Invoking =guix gc=]], for more on GC roots.
 
@@ -178,7 +185,9 @@ The following command-line options are supported:
 
   - =--listen=/gnu/var/daemon= :: Listen for connections on the =/gnu/var/daemon= Unix-domain socket, creating it if needed.
 
-  -  <<index-daemon_002c-remote-access>>=--listen=localhost= [[#index-daemon_002c-remote-access][¶]] :: Listen for TCP connections on the network interface corresponding to =localhost=, on port 44146.
+  - =--listen=localhost= [[#index-daemon_002c-remote-access][¶]] :: <<index-remote-access-to-the-daemon>> <<index-daemon_002c-cluster-setup>> <<index-clusters_002c-daemon-setup>>
+
+    Listen for TCP connections on the network interface corresponding to =localhost=, on port 44146.
 
   - =--listen=128.0.0.42:1234= :: Listen for TCP connections on the network interface corresponding to =128.0.0.42=, on port 1234.
 
@@ -193,4 +202,4 @@ The following command-line options are supported:
 
 --------------
 
-Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Programming-Index][Index]]]
+Next: [[id:guix--Application-Setup][Application Setup]], Previous: [[id:guix--Setting-Up-the-Daemon][Setting Up the Daemon]], Up: [[id:guix--Installation][Installation]]   [[[id:guix--index::#SEC_Contents][Contents]]][[[id:guix--Concept-Index][Index]]]

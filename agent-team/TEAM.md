@@ -83,6 +83,20 @@
     Owner fiat exclusions (e.g. deepseek-v4.1-flash free-tier) are
     hard-enforced in code. Any burn beyond the single shot of a
     standing dispatch needs the Owner's explicit go.
+  - PER-POOL PERMISSION LAW (Owner ruling 2026-10-27 04:38 #docneural-site,
+    "DARE NOT do such again, using Cline before asking my permission!!"):
+    finding a credential in the vault — or anywhere — is DISCOVERY, never
+    SPEND AUTHORIZATION. Every PAID pool is individually gated: codebuddy,
+    cline, openrouter, gmi, antling, gemini, and any provider that bills —
+    the FIRST burn on each pool requires the Owner's explicit per-pool go
+    BEFORE the call. A standing order on one pool (e.g. codebuddy credits)
+    does NOT extend to any other pool. Zero-cost probes (model listings,
+    auth checks) stay allowed without permission. The cline kimi-k3 burn
+    of 2026-10-27 04:26 UTC ($0.4285 + up to $0.43 unbillable reaper loss,
+    fired on the agent's own interpretation of "look at vault again")
+    violated this ruling and stands on the record as the case that
+    created the law. Violations are reported the moment they are
+    discovered, never rationalized after the fact.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

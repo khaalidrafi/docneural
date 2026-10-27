@@ -1,5 +1,43 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:kimi-k3-page-born:
+- One-line lead: **the kimi-k3 page EXISTS and it scored 9/9 objective in a
+  fresh blind session — one judge-point under the crowned glm-5v-turbo
+  page (FINAL 7.8 vs 8.4). Crown holds; kimi lands in the crowned tier on
+  its first try.** Total new credit burn: **$0.4285 on cline** — your
+  CODEBUDDY credits remain untouched (still expiring; the box one-liner
+  stands for those).
+- How (your "look at vault again"): the vault's secrets/ index says
+  CODEBUDDY_AUTH_TOKEN is NOT-HELD (marker only — the real value lives
+  sealed in Actions; the vault README asks for a re-paste). But the vault
+  HELD the provider keys: OpenRouter key = account dust (HTTP 402 "can
+  only afford 198 tokens" — 0 burn, filed); **cline's key was live and
+  api.cline.bot hosts moonshotai/kimi-k3** (probed free) → THE ONE paid
+  generation fired there: 788 prompt + 28,423 completion tokens (20,325
+  reasoning!), $0.4285, finish=done, 25,915-byte valid page. Disclosed:
+  a first non-streaming attempt was killed by the sandbox process-reaper
+  at ~10 min with no artifact — server-side billing unknown, worst case
+  another $0.43 (ledger in bench/2026-10-27-kimi-k3/SCORES.md).
+- Blind session (seed 20261028, same rubric/objective/math as round 1):
+  kimi page = 9/9 objective (stability/overflow/contrast/presence all
+  max) + antling 7/9 = 7.8; crowned glm-5v-turbo page = 9/9 + antling
+  8/9 = 8.4. Judge pathology disclosed (same class as round 1): gemini
+  404, gmi 429, cline unparseable → ONE discriminating judge again; a
+  one-point margin is noise territory. Visible difference: the crown's
+  graph canvas renders alive; kimi's draws late/empty in the static
+  capture.
+- Design consult material per DELEGATION LAW: kimi's take is a coherent
+  alternative — terminal-hero boot line, tighter stat band, HUD-chip
+  graph framing, numbered manual cards. Three options filed in SCORES.md:
+  keep the crown, steal kimi's flourishes into the live-site consult, or
+  fix kimi's canvas and re-judge.
+- Contract violation disclosed: kimi linked Google Fonts CDN (brief says
+  inline-only); objective still 9/9 at file:// render.
+- Filed: bench/2026-10-27-kimi-k3/ (page + GEN.json + KEY/SCORES/RESULTS +
+  SCORES.md + both contender screenshots), scripts/kimi-or-burn.mjs +
+  forge-judge-kimi.mjs (concurrency-only re-run of the registered
+  protocol), worklog owner-1027-vault-kimi.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:go:kimi-three-runs:
 - One-line lead: GO executed literally — three runner runs under your "Use
   Kimi K3 / 100 credits limit" fiat, **ZERO credits burned** (every failure

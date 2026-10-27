@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOCNEURAL — Your Docs, Wired Into a Neural Organism</title>
+<meta name="description" content="DOCNEURAL compiles 1,392 org-roam nodes into one living neural graph. Neon-terminal documentation for hackers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Electrolize&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#0a0e16;
+  --panel:#10151f;
+  --cyan:#00e5ff;
+  --magenta:#ff2d78;
+  --amber:#ffb454;
+  --text:#9fb3c4;
+  --bright:#e8f6ff;
+  --line:rgba(0,229,255,.16);
+  --display:'Electrolize','JetBrains Mono',ui-monospace,monospace;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+html,body{overflow-x:clip}
+body{
+  margin:0;
+  background:
+    radial-gradient(1100px 520px at 85% -5%, rgba(255,45,120,.08), transparent 60%),
+    radial-gradient(1000px 640px at 8% -2%, rgba(0,229,255,.09), transparent 62%),
+    var(--canvas);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.05) 1px, transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 78%);
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 78%);
+}
+.scanlines{
+  position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.4;
+  background:repeating-linear-gradient(0deg, rgba(2,6,10,.22) 0 1px, transparent 1px 3px);
+}
+.scanlines::after{
+  content:"";position:absolute;left:0;right:0;height:160px;top:-20%;
+  background:linear-gradient(180deg,transparent,rgba(0,229,255,.055),transparent);
+  animation:sweep 10s linear infinite;
+}
+@keyframes sweep{to{top:120%}}
+::selection{background:rgba(0,229,255,.28);color:#eaf7ff}
+a:focus-visible,button:focus-visible{outline:1px solid var(--cyan);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ---------- NAV ---------- */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,14,22,.82);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,229,255,.18);
+}
+.nav-inner{max-width:1180px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.wordmark{
+  font-family:var(--display);font-size:1.06rem;letter-spacing:.14em;color:var(--bright);
+  text-decoration:none;display:flex;align-items:center;gap:11px;white-space:nowrap;flex:none;
+}
+.wordmark .cube{
+  width:11px;height:11px;border:1px solid var(--cyan);transform:rotate(45deg);flex:none;
+  box-shadow:0 0 10px rgba(0,229,255,.7), inset 0 0 6px rgba(0,229,255,.5);
+}
+.wordmark em{font-style:normal;color:var(--cyan);text-shadow:0 0 12px rgba(0,229,255,.6)}
+.links{display:flex;gap:26px;margin-left:auto}
+.links a{
+  color:var(--text);text-decoration:none;font-size:.74rem;letter-spacing:.22em;
+  position:relative;padding:6px 0;transition:color .25s;
+}
+.links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--cyan);box-shadow:0 0 8px var(--cyan);transition:width .25s;
+}
+.links a:hover{color:var(--cyan)}
+.links a:hover::after{width:100%}
+.burger{
+  display:none;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.35);
+  padding:10px;cursor:pointer;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.burger span{display:block;width:20px;height:2px;background:var(--cyan);margin:4px 0;transition:transform .25s,opacity .25s}
+.burger span:first-child{margin-top:0}
+.burger span:last-child{margin-bottom:0}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* ---------- BUTTONS ---------- */
+.btn{
+  display:inline-block;font-family:var(--mono);font-size:.8rem;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+  padding:14px 24px;cursor:pointer;border:1px solid transparent;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+  transition:background .25s,color .25s,filter .25s,border-color .25s;
+}
+.btn-primary{background:rgba(0,229,255,.1);color:var(--cyan);border-color:rgba(0,229,255,.55)}
+.btn-primary:hover{background:var(--cyan);color:#04212b;filter:drop-shadow(0 0 16px rgba(0,229,255,.5))}
+.btn-ghost{background:transparent;border-color:rgba(159,179,196,.35);color:var(--text)}
+.btn-ghost:hover{border-color:var(--magenta);color:#ff5c95;filter:drop-shadow(0 0 14px rgba(255,45,120,.4))}
+.btn-sm{padding:9px 16px;font-size:.7rem}
+
+/* ---------- HERO ---------- */
+.hero{padding:158px 0 92px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.kicker{
+  display:flex;align-items:center;gap:10px;color:var(--cyan);
+  font-size:.74rem;letter-spacing:.3em;margin:0 0 22px;text-shadow:0 0 12px rgba(0,229,255,.45);
+}
+.kicker .dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;box-shadow:0 0 10px var(--cyan);animation:pulse 2.2s ease-in-out infinite;flex:none}
+@keyframes pulse{50%{opacity:.25}}
+h1{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(2.05rem,5.6vw,4.3rem);line-height:1.05;
+  color:var(--bright);margin:0 0 24px;letter-spacing:.01em;
+}
+.glow-cyan{color:var(--cyan);text-shadow:0 0 18px rgba(0,229,255,.55),0 0 60px rgba(0,229,255,.25)}
+.subline{font-size:1rem;color:var(--text);max-width:54ch;margin:0 0 36px;line-height:1.75}
+.cta-row{display:flex;gap:16px;flex-wrap:wrap}
+
+/* ---------- TERMINAL ---------- */
+.brackets::before,.brackets::after{
+  content:"";position:absolute;width:18px;height:18px;
+  border:1px solid rgba(0,229,255,.75);pointer-events:none;z-index:2;
+}
+.brackets::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.brackets::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.terminal{
+  background:rgba(16,21,31,.92);border:1px solid rgba(0,229,255,.22);position:relative;
+  box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 40px rgba(0,229,255,.06);
+}
+.term-bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(0,229,255,.14);background:rgba(0,229,255,.03)}
+.tdot{width:9px;height:9px;border-radius:50%;flex:none}
+.tdot.m{background:var(--magenta);box-shadow:0 0 8px rgba(255,45,120,.7)}
+.tdot.a{background:var(--amber);box-shadow:0 0 8px rgba(255,180,84,.7)}
+.tdot.c{background:var(--cyan);box-shadow:0 0 8px rgba(0,229,255,.7)}
+.term-title{margin-left:8px;font-size:.68rem;letter-spacing:.16em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.term-body{padding:18px 20px 22px;font-size:.82rem;line-height:1.7;min-height:218px}
+.term-line{white-space:pre-wrap;word-break:break-word}
+.prompt{color:var(--magenta);text-shadow:0 0 8px rgba(255,45,120,.6)}
+.past-cmd{color:var(--text)}
+.typed-line{color:var(--bright)}
+.out .ok{color:var(--cyan)}
+.cursor{
+  display:inline-block;width:8px;height:1.05em;background:var(--cyan);
+  vertical-align:-0.18em;margin-left:2px;box-shadow:0 0 8px rgba(0,229,255,.8);
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+/* ---------- STATS ---------- */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(16,21,31,.55);position:relative;z-index:1}
+.stats-inner{display:flex;align-items:center;justify-content:center;gap:clamp(24px,6vw,72px);padding:44px 24px;text-align:center;flex-wrap:wrap}
+.stat-num{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,3.2rem);line-height:1;margin-bottom:10px}
+.stats-inner>:nth-child(1) .stat-num{color:var(--cyan);text-shadow:0 0 22px rgba(0,229,255,.4)}
+.stats-inner>:nth-child(3) .stat-num{color:var(--magenta);text-shadow:0 0 22px rgba(255,45,120,.4)}
+.stats-inner>:nth-child(5) .stat-num{color:var(--amber);text-shadow:0 0 22px rgba(255,180,84,.4)}
+.stat-label{font-size:.68rem;letter-spacing:.42em;color:var(--text)}
+.stat-sep{color:rgba(0,229,255,.5);font-size:1.6rem;transform:translateY(-8px)}
+
+/* ---------- SECTIONS ---------- */
+.section{padding:96px 0;position:relative;z-index:1}
+.sec-head{margin-bottom:40px}
+.sec-kicker{color:var(--cyan);font-size:.72rem;letter-spacing:.34em;margin:0 0 14px;text-shadow:0 0 10px rgba(0,229,255,.4)}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,3.8vw,2.5rem);color:var(--bright);margin:0;line-height:1.1}
+.sec-rule{height:1px;margin-top:26px;background:linear-gradient(90deg,rgba(0,229,255,.5),transparent 70%)}
+
+/* ---------- GRAPH ---------- */
+.graph-frame{
+  position:relative;height:clamp(340px,46vw,540px);overflow:hidden;
+  background:radial-gradient(700px 300px at 50% 0%, rgba(0,229,255,.05), transparent 70%),var(--panel);
+  border:1px solid rgba(0,229,255,.18);
+}
+#net{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{
+  position:absolute;top:14px;left:16px;z-index:2;font-size:.66rem;letter-spacing:.18em;color:var(--text);
+  display:flex;gap:8px;align-items:center;background:rgba(10,14,22,.55);padding:6px 10px;
+  border:1px solid rgba(0,229,255,.14);
+}
+.hud.right{left:auto;right:16px}
+.hdot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 1.8s infinite;flex:none}
+.legend{
+  display:flex;justify-content:center;align-items:center;gap:clamp(14px,3.4vw,34px);
+  margin-top:22px;font-size:.74rem;letter-spacing:.12em;color:var(--text);flex-wrap:wrap;
+}
+.legend-item{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.sw{width:10px;height:10px;background:var(--c);box-shadow:0 0 10px var(--c);flex:none}
+.sep{color:rgba(0,229,255,.5)}
+
+/* ---------- CARDS ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{
+  --c:#00e5ff;
+  background:linear-gradient(180deg,rgba(0,229,255,.03),transparent 40%),var(--panel);
+  border:1px solid rgba(159,179,196,.14);padding:26px 24px 22px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c),transparent 75%);opacity:.85}
+.card:hover{transform:translateY(-6px);border-color:rgba(0,229,255,.4);box-shadow:0 22px 44px rgba(0,0,0,.5),0 0 30px rgba(0,229,255,.08)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card-tag{font-size:.64rem;letter-spacing:.26em;color:var(--c);border:1px solid var(--c);padding:4px 9px;text-shadow:0 0 8px var(--c);white-space:nowrap}
+.card-idx{font-size:.68rem;color:var(--text);letter-spacing:.14em}
+.card h3{font-family:var(--display);font-weight:400;font-size:1.22rem;color:var(--bright);margin:4px 0 0;letter-spacing:.02em}
+.card p{margin:0;font-size:.86rem;color:var(--text);line-height:1.7;flex:1}
+.card-meta{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border-top:1px solid rgba(159,179,196,.12);padding-top:14px;
+  font-size:.7rem;letter-spacing:.2em;color:var(--amber);
+}
+.card-arrow{color:var(--cyan);transition:transform .3s;text-shadow:0 0 8px rgba(0,229,255,.6)}
+.card:hover .card-arrow{transform:translateX(6px)}
+
+/* ---------- FOOTER ---------- */
+footer{
+  border-top:1px solid var(--line);padding:26px 24px;text-align:center;
+  font-size:.72rem;letter-spacing:.24em;color:var(--text);
+  background:rgba(16,21,31,.4);position:relative;z-index:1;
+}
+footer p{margin:0}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .hero{padding:132px 0 76px}
+}
+@media (max-width:900px){
+  .cards{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  .nav-inner{padding:0 16px;gap:14px}
+  .wordmark{font-size:.92rem;letter-spacing:.1em}
+  .nav-cta{margin-left:auto}
+  .nav-cta .btn-sm{padding:8px 12px;font-size:.64rem;letter-spacing:.14em}
+  .links{
+    position:fixed;top:64px;left:0;right:0;display:none;flex-direction:column;gap:0;
+    background:rgba(13,18,28,.97);border-bottom:1px solid rgba(0,229,255,.25);
+    padding:8px 24px 16px;margin-left:0;
+  }
+  .links.open{display:flex}
+  .links a{padding:14px 0;border-bottom:1px solid rgba(159,179,196,.1);font-size:.8rem}
+  .links a:last-child{border-bottom:none}
+  .links a::after{display:none}
+  .burger{display:block;flex:none}
+}
+@media (max-width:640px){
+  .desktop-br{display:none}
+  .section{padding:72px 0}
+  .stats-inner{flex-direction:column;gap:30px;padding:38px 24px}
+  .stat-sep{display:none}
+  .term-body{font-size:.78rem;min-height:206px}
+  .hud.right{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+}
+</style>
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="nav-inner">
+    <a class="wordmark" href="#top"><span class="cube" aria-hidden="true"></span>DOCV<em>NEURAL</em></a>
+    <nav class="links" id="navLinks" aria-label="Primary">
+      <a href="#manuals">MANUALS</a>
+      <a href="#graph">GRAPH</a>
+      <a href="#pipeline">PIPELINE</a>
+      <a href="#about">ABOUT</a>
+    </nav>
+    <div class="nav-cta"><a class="btn btn-primary btn-sm" href="#pipeline">BOOT TERMINAL</a></div>
+    <button class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker"><span class="dot" aria-hidden="true"></span>// LIVING DOCUMENTATION ORGANISM — BUILD 1392.304</p>
+          <h1>YOUR DOCS,<br class="desktop-br"> WIRED INTO A <span class="glow-cyan">NEURAL ORGANISM.</span></h1>
+          <p class="subline">DOCNEURAL compiles 1,392 org-roam nodes into one breathing knowledge graph — every backlink a synapse, every manual a neuron firing quietly in phosphor light.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#graph">ENTER THE GRAPH</a>
+            <a class="btn btn-ghost" href="#manuals">READ THE MANUALS</a>
+          </div>
+        </div>
+        <div class="terminal brackets" id="pipeline" aria-label="Live terminal demo">
+          <div class="term-bar">
+            <span class="tdot m" aria-hidden="true"></span>
+            <span class="tdot a" aria-hidden="true"></span>
+            <span class="tdot c" aria-hidden="true"></span>
+            <span class="term-title">docneural — /var/lib/graph</span>
+          </div>
+          <div class="term-body">
+            <div id="termLog"></div>
+            <div class="term-line typed-line"><span class="prompt">λ</span> <span id="typed"></span><span class="cursor" aria-hidden="true"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats" id="stats" aria-label="Organism statistics">
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-num" data-target="1392">0</div><div class="stat-label">NODES</div></div>
+      <span class="stat-sep" aria-hidden="true">·</span>
+      <div class="stat"><div class="stat-num" data-target="30400">0</div><div class="stat-label">EDGES</div></div>
+      <span class="stat-sep" aria-hidden="true">·</span>
+      <div class="stat"><div class="stat-num" data-target="304">0</div><div class="stat-label">SECTIONS</div></div>
+    </div>
+  </section>
+
+  <!-- GRAPH -->
+  <section class="section" id="graph">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-kicker">// 01 — TOPOLOGY</p>
+        <h2>THE GRAPH IS <span class="glow-cyan">AWAKE</span></h2>
+        <div class="sec-rule" aria-hidden="true"></div>
+      </div>
+      <div class="graph-frame brackets">
+        <div class="hud"><span class="hdot" aria-hidden="true"></span>LIVE FEED — SAMPLE 48 / 1,392 · DRIFT 0.35</div>
+        <div class="hud right">MESH STABLE</div>
+        <canvas id="net" role="img" aria-label="Animated neural graph of documentation nodes and edges"></canvas>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="sw" style="--c:#ff7a45" aria-hidden="true"></span>Org&nbsp;#ff7a45</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span class="legend-item"><span class="sw" style="--c:#3ec8ff" aria-hidden="true"></span>Emacs&nbsp;#3ec8ff</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span class="legend-item"><span class="sw" style="--c:#ffd43b" aria-hidden="true"></span>Guix&nbsp;#ffd43b</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANUALS -->
+  <section class="section" id="manuals">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-kicker">// 02 — SURFACE MANUALS</p>
+        <h2>CHOOSE YOUR ENTRY NODE</h2>
+        <div class="sec-rule" aria-hidden="true"></div>
+      </div>
+      <div class="cards">
+        <article class="card" style="--c:#ff7a45">
+          <div class="card-top"><span class="card-tag">ORG</span><span class="card-idx">/001</span></div>
+          <h3>ORG-ROAM FIELD MANUAL</h3>
+          <p>Capture, link, resurrect — the slip-box rebuilt as living synapse tissue.</p>
+          <div class="card-meta"><span>12 HOPS FROM ROOT</span><span class="card-arrow" aria-hidden="true">→</span></div>
+        </article>
+        <article class="card" style="--c:#3ec8ff">
+          <div class="card-top"><span class="card-tag">EMACS</span><span class="card-idx">/002</span></div>
+          <h3>EMACS LISP INTERNALS</h3>
+          <p>Buffers, hooks and advice: the editor's nervous system, disassembled.</p>
+          <div class="card-meta"><span>27 HOPS FROM ROOT</span><span class="card-arrow" aria-hidden="true">→</span></div>
+        </article>
+        <article class="card" style="--c:#ffd43b">
+          <div class="card-top"><span class="card-tag">GUIX</span><span class="card-idx">/003</span></div>
+          <h3>GUIX SYSTEM COOKBOOK</h3>
+          <p>Declarative systems, reproducible shells — boot the same universe twice.</p>
+          <div class="card-meta"><span>9 HOPS FROM ROOT</span><span class="card-arrow" aria-hidden="true">→</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="about">
+  <p>DOCNEURAL © 2025 · ALL SYNAPSES FIRING</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- mobile nav ---- */
+  var burger = document.getElementById('burger');
+  var links  = document.getElementById('navLinks');
+  burger.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.addEventListener('click', function(e){
+    if (e.target.tagName === 'A'){
+      links.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    }
+  });
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 820){
+      links.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    }
+  });
+
+  /* ---- terminal typing ---- */
+  var typed = document.getElementById('typed');
+  var log   = document.getElementById('termLog');
+  var scriptLines = [
+    ['docneural boot --phosphor','[ok] 304 sections mounted · cortex online'],
+    ['graph stats --live','[ok] 1,392 nodes · 30,400 edges · density 0.0157'],
+    ['roam query "emacs lisp"','[ok] 214 hits · shortest path: 3 hops'],
+    ['synapse fire --all','[ok] all channels open — happy hacking']
+  ];
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function pushLog(cmd,out){
+    var d = document.createElement('div');
+    d.className = 'term-line';
+    d.innerHTML = '<span class="prompt">λ</span> <span class="past-cmd">' + esc(cmd) + '</span>';
+    var o = document.createElement('div');
+    o.className = 'term-line out';
+    o.innerHTML = esc(out).replace('[ok]','<span class="ok">[ok]</span>');
+    log.appendChild(d); log.appendChild(o);
+    while (log.children.length > 6){ log.removeChild(log.firstChild); }
+  }
+  if (reduced){
+    scriptLines.forEach(function(l){ pushLog(l[0], l[1]); });
+    typed.textContent = 'docneural watch --live';
+  } else {
+    var si = 0, ci = 0;
+    (function tick(){
+      var item = scriptLines[si];
+      if (ci <= item[0].length){
+        typed.textContent = item[0].slice(0, ci++);
+        setTimeout(tick, 30 + Math.random()*50);
+      } else {
+        setTimeout(function(){
+          pushLog(item[0], item[1]);
+          typed.textContent = ''; ci = 0; si = (si+1) % scriptLines.length;
+          setTimeout(tick, 600);
+        }, 700);
+      }
+    })();
+  }
+
+  /* ---- stats count-up ---- */
+  var nums = document.querySelectorAll('.stat-num');
+  function finish(el){ el.textContent = (+el.getAttribute('data-target')).toLocaleString('en-US'); }
+  function countUp(el){
+    var target = +el.getAttribute('data-target'), dur = 1500, t0 = null;
+    function frame(t){
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0)/dur, 1), e = 1 - Math.pow(1-p, 3);
+      el.textContent = Math.round(target * e).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  if (reduced){
+    nums.forEach(finish);
+  } else {
+    var seen = false;
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting && !seen){ seen = true; nums.forEach(countUp); io.disconnect(); }
+      });
+    }, {threshold:.35});
+    io.observe(document.getElementById('stats'));
+  }
+
+  /* ---- neural graph canvas ---- */
+  var canvas = document.getElementById('net');
+  if (canvas && canvas.getContext){
+    var ctx = canvas.getContext('2d');
+    var COLORS = ['#ff7a45','#3ec8ff','#ffd43b'];
+    var W = 0, H = 0, nodes = [], raf = null, LINK = 130;
+    var mouse = {x:-9999, y:-9999};
+
+    function resize(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      canvas.width  = Math.max(1, W * dpr);
+      canvas.height = Math.max(1, H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      LINK = Math.max(90, Math.min(150, W / 8));
+    }
+    function init(){
+      nodes = [];
+      var N = 48;
+      for (var i = 0; i < N; i++){
+        nodes.push({
+          x: Math.random()*W, y: Math.random()*H,
+          vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+          r: 1.5 + Math.random()*2.1, c: COLORS[i % 3],
+          p: Math.random()*6.283
+        });
+      }
+    }
+    function draw(t, animate){
+      ctx.clearRect(0, 0, W, H);
+      var i, j, a, b, dx, dy, d, al;
+      if (animate){
+        for (i = 0; i < nodes.length; i++){
+          a = nodes[i];
+          a.x += a.vx; a.y += a.vy;
+          dx = a.x - mouse.x; dy = a.y - mouse.y;
+          d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 110 && d > 0.01){ a.x += dx/d * 1.1; a.y += dy/d * 1.1; }
+          if (a.x < a.r || a.x > W - a.r) a.vx *= -1;
+          if (a.y < a.r || a.y > H - a.r) a.vy *= -1;
+          a.x = Math.max(a.r, Math.min(W - a.r, a.x));
+          a.y = Math.max(a.r, Math.min(H - a.r, a.y));
+        }
+      }
+      for (i = 0; i < nodes.length; i++){
+        for (j = i + 1; j < nodes.length; j++){
+          a = nodes[i]; b = nodes[j];
+          dx = a.x - b.x; dy = a.y - b.y;
+          d = Math.sqrt(dx*dx + dy*dy);
+          if (d < LINK){
+            al = (1 - d/LINK) * 0.32;
+            ctx.strokeStyle = 'rgba(0,229,255,' + al.toFixed(3) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+      for (i = 0; i < nodes.length; i++){
+        a = nodes[i];
+        ctx.globalAlpha = animate ? 0.72 + 0.28 * Math.sin(t/700 + a.p) : 0.9;
+        ctx.fillStyle = a.c;
+        ctx.shadowColor = a.c; ctx.shadowBlur = 9;
+        ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
+      }
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    }
+    function loop(t){ draw(t, true); raf = requestAnimationFrame(loop); }
+
+    resize(); init();
+    if (reduced){
+      draw(0, false);
+    } else {
+      canvas.addEventListener('pointermove', function(e){
+        var r = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+      });
+      canvas.addEventListener('pointerleave', function(){ mouse.x = -9999; mouse.y = -9999; });
+      var gio = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if (e.isIntersecting){ if (!raf) raf = requestAnimationFrame(loop); }
+          else if (raf){ cancelAnimationFrame(raf); raf = null; }
+        });
+      }, {threshold:.03});
+      gio.observe(canvas);
+    }
+    var rto;
+    window.addEventListener('resize', function(){
+      clearTimeout(rto);
+      rto = setTimeout(function(){ resize(); init(); if (reduced) draw(0, false); }, 160);
+    });
+  }
+})();
+</script>
+</body>
+</html>

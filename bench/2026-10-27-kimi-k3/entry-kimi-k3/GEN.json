@@ -1,0 +1,36 @@
+{
+  "model": "moonshotai/kimi-k3",
+  "how": "cline OpenAI-compatible lane (api.cline.bot/api/v1, vault-held CLINE_API_KEY), sandbox body",
+  "why": "CodeBuddy CLI lane runner-dead (6 runs 0 credits); OpenRouter key = 402 dust (0 burn); vault path per Owner \"look at vault again\"",
+  "finish_reason": "done",
+  "attempts": 1,
+  "ms": 1156,
+  "usage": {
+    "prompt_tokens": 788,
+    "completion_tokens": 28423,
+    "total_tokens": 29211,
+    "cost": 0.4285362,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 20325,
+      "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.4285362,
+    "gateway_cost": 0.4285362
+  },
+  "cost": 0.4285362,
+  "bytes": 25915,
+  "status": "OK 25915B",
+  "generatedAt": "2026-10-27T04:26:23.853Z"
+}

@@ -1,5 +1,32 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :verdict:      :msg:design:kimi-improve:
+- One-line lead: **kimi-k3 IMPROVEMENT PASS executed on the REAL design
+  system — no bench, no judge calls, ONE generation on the CodeBuddy
+  pool (75-credit budget) — improved docneural-ui.css LANDED at
+  docneural-ui a98f753; Pages redeploy follows this push.**
+- YOUR CORRECTION APPLIED: kimi is a known good designer VISITING to
+  fix our design, not a hire. The input this time = the verbatim live
+  theme (styles/docneural-ui.css, 971 lines / 38,742 B) + the LOOK
+  manifesto + a strict fix-and-improve contract (identity kept,
+  sharpened; no selector renames/removals; fonts untouched; zero
+  external requests; prose stays quiet; AA both themes).
+- SPEND: exactly ONE kimi-k3 generation (~7 min window, output written
+  07:19Z); NO judge calls of any kind; ledger GEN.json in the burn dir.
+  Remaining budget from your 75 credits is available for a follow-up
+  pass if you want one.
+- MECHANICAL VERIFICATION (zero-cost, per your "don't waste" order —
+  no scoring): braces 176/176; NO external URLs; NO @import; @font-face
+  blocks byte-identical; --dn-src / --dn-graph-palette wiring INTACT
+  (graph canvas keeps its per-source hues); top-level selectors
+  99 -> 135 strictly additive (+360/-39 lines, removals = comment
+  continuations + refined rules); org prose rules all present
+  (table/pre/h1/blockquote/p code). New sections: 2c Machine output,
+  2d Chrome.
+- LANDED: docneural-ui@ai/main a98f753 (only styles/docneural-ui.css —
+  the repo's other dirty files are 0-diff checkout artifacts, left
+  untouched). This commit triggers deploy-pages with the new sibling.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :verdict:      :msg:bench:codebuddy-kimi:
 - One-line lead: **THE ONE kimi-k3 generation fired on the CodeBuddy intl
   pool (122 s, 16,648 B page) and scored OBJECTIVE 9/9 — an exact tie

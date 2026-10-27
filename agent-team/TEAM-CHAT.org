@@ -1,5 +1,63 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :verdict:      :msg:compliance:dual-law-audit:
+- One-line lead: **whole-repo AGENTS.md audit EXECUTED under your direct
+  order — both laws read (vault global + newly authored local); commit
+  history swept: 41 author + 106 trailer + 88 giant-subject violations
+  -> 0/0/0 in one byte-identical filter-branch, force-pushed (tip
+  2802332); root AGENTS.md committed; ci/ submodule = WAITING (kit repo
+  is empty — never faked, per UPDATE #10).**
+- BOTH LAWS READ: global = khaalidrafi/vault AGENTS.md (sha256
+  335c85ee1d084cb6, fresh clone). Local = did not exist -> AUTHORED per
+  UPDATE #9: root AGENTS.md holds the read-both mandate + per-harness
+  config paths, repo facts, build/test/gate, board roles; restates
+  NOTHING from the global law (UPDATE #10 ban respected). TEAM.md's
+  "No repo-root AGENTS.md is ever created" superseded in the same push.
+- CONFIG MATRIX (lane x global x local x mechanism — order #8):
+  - goose builder (glm-4.7-flash): global NOT wired (no .goosehints in
+    image); local auto-read from CWD; both via ci/ bake -> WAITING
+  - opencode FE/QA: global NOT wired (no ~/.config/opencode/AGENTS.md);
+    local not natively read; both via ci/ + law_brief.sh -> WAITING
+  - codebuddy: global NOT wired (no ~/.codebuddy/CODEBUDDY.md); local
+    repo-root auto-fallback (file now exists); fix -> WAITING
+  - qoder: no documented global path; local repo-root auto-recognized;
+    image bake -> WAITING
+  - raw-curl lanes: no law at all; brief composition via
+    ci/bin/law_brief.sh -> WAITING
+  - web/EM lane (me): global + local inline per dispatch — ACTIVE; this
+    verdict was executed under both laws.
+  - MECHANISM: khaalidrafi/agent-team-ci = EMPTY (git ls-remote: no
+    refs). ORDER B adoption contract ready; the line stays WAITING
+    until the kit is seeded.
+- AUDIT (path x clause x severity, 116 commits + tracked tree):
+  - C1 author identity 41 VIOLATIONS (32x "Z User <z@container>", 7x
+    costume "DocNeural Agent Team", 1x malformed step-5 name/email jam,
+    1x harness-as-author) -> FIXED by env-filter per your UPDATE #6
+    mapping; my chat.z.ai lineage unified to GLM-5.3-Flash
+    <glm-5.3-flash@z.ai>; YOUR 6 commits (Oct 8-14,
+    author=committer=Khalid) left untouched — confirm they are yours.
+  - C2 co-author trailers 106 missing -> FIXED: every commit ends with
+    BOTH trailers; foreign ones preserved; malformed "<gmail.com >"
+    normalized away.
+  - C3 subjects 88 over 72 chars -> FIXED: split at " - " / " — " /
+    "; " into short subject + wrapped body (96-col). C4 banned
+    mechanical subjects: 0 (descriptive "fix: <what>" lawful per #9).
+  - REWRITE SAFETY: filter-branch env+msg ONLY; trees BYTE-IDENTICAL
+    (git diff backup..ai/main = empty); 116/116 commits preserved;
+    dates preserved; force-pushed --force-with-lease in a chain-quiet
+    window (Agent Team Chain completed; only non-writing deploy-pages
+    in flight); PAT CLEAN after push.
+  - tracked tree secrets: 0 violations (only ${{ secrets.* }} refs).
+  - tests/: 1 file (slim-graph) vs the whole app = coverage GAP, LOW —
+    gate green (vitest + svelte-check); every new behavior change lands
+    with its test per AGENTS.md; no retro rewrite fired.
+  - code floor (scripts/): CLEAN on spot-check (small, commented,
+    single-purpose); AI-REVIEW.org maintained; Org-over-Markdown holds.
+- FINAL: history 41+106+88 -> 0/0/0; secrets 0; code floor 0. OPEN:
+  ci/ submodule WAITING (kit empty) + tests coverage GAP (LOW) + your
+  6 old commits to confirm. Fix commits: 2802332 (root AGENTS.md) +
+  this records commit (TEAM.md supersession + verdict).
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :msg:forge:kimi-k3-page-born:
 - One-line lead: **the kimi-k3 page EXISTS and it scored 9/9 objective in a
   fresh blind session — one judge-point under the crowned glm-5v-turbo

@@ -33,7 +33,10 @@
     never vendored into this tree.
   - TEAM-UPDATE.org is read, never edited; answer with commits and
     pasted output. TEAM-CONTROL.org and .github/* are Lead-owned;
-    seats never edit them. No repo-root AGENTS.md is ever created.
+    seats never edit them. Root AGENTS.md is the LOCAL agent law
+    (Owner dual-law order 2026-10-27 #hq supersedes the earlier
+    no-root-file rule): every agent reads BOTH it and the global law
+    in khaalidrafi/vault, always.
   - Keys and PATs never enter files, commits, board, or chat.
   - Every board item is judged by the two TODOs.org rules: usability
     first, design second; instant means on a phone.

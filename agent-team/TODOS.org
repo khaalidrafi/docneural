@@ -40,6 +40,15 @@
 
 * Board
 
+- DONE dual-law compliance round (Owner 2026-10-27 direct order "Read
+  AGENTS.md on vault, and also this project's AGENTS.md... audit the
+  whole repo for compliance... rewrite earlier code if needed"): both
+  laws read (vault global + local AUTHORED root AGENTS.md); history
+  sweep 41+106+88 violations -> 0/0/0 via byte-identical filter-branch,
+  force-pushed tip 2802332; secrets 0; scripts floor CLEAN; ci/
+  submodule WAITING (kit empty per UPDATE #10); tests coverage GAP LOW
+  open (source: Owner Discord + TEAM-UPDATE #8/#9/#10; evidence:
+  TEAM-CHAT :msg:compliance:dual-law-audit: + STATE DONE row)
 - DONE design round 3 cyberpunk-revamp — Owner order "Revamp the design...
   sci-fi, cyberpunk style" + "Who's your designer, btw?" (2026-10-26
   #docneural-site): docneural-ui ai/main 289e146 (task ai/task/fe-cyberpunk-revamp,

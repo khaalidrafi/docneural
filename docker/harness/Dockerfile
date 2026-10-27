@@ -1,47 +1,29 @@
-# docneural agent harness — CI turn container (node variant).
-# Bodies PREINSTALLED (Owner order 2026-10-20 #hq: agents go into the
-# image, not into CI). Secrets are NEVER baked: keys are env-injected
-# per run from repo secrets.
+# docneural project harness — THIN EXTENSION of the canonical kit image.
 #
-# NO AGENTS.md bake yet (docneural has no repo-root AGENTS.md as of
-# 2026-10-24; admincraft-style law bakes start when the Lead lands one).
-# The turn brief reads agent-team/TEAM-CONTROL.org + agent-team/TEAM.md
-# from the checked-out workspace at runtime.
-# Project deps (svelte 5 / vite 6 / vitest / svelte-check) are baked so
-# segments run offline-fast; the landing gate still installs fresh.
+# ci contract §2 (khaalidrafi/agent-team-ci, TEAM-UPDATE #10): body
+# installs + global-law bakes are INHERITED from the canonical
+# ci/docker/harness/Dockerfile (built FIRST from this repo root as
+# agent-harness:base — the canonical build bakes ci/AGENTS.md into every
+# body's law slot). This file carries ONLY docneural's project layers.
+# Local forks of body/law bakes are a compliance violation — port
+# upstream first.
+#
+# Secrets are NEVER baked: provider keys are env-injected per run from
+# repo secrets. Project deps (svelte 5 / vite 6 / vitest / svelte-check,
+# design scripts) are baked so segments run offline-fast; the landing
+# gate still installs fresh via npm ci.
 
-FROM node:20-slim
-
-RUN apt-get update -qq \
- && apt-get install -y -qq --no-install-recommends \
-      git curl ca-certificates jq procps python3 bzip2 \
- && rm -rf /var/lib/apt/lists/*
+FROM agent-harness:base
 
 # --- Project deps (baked; source is mounted at segment start) ----------
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 
-# --- Goose body (direct tarball: the download_cli.sh installer opens
-#     /dev/tty and dies on headless runners — admincraft evidence) -------
-RUN mkdir -p /tmp/goose-dl \
- && curl -fsSL --retry 5 --retry-all-errors --retry-delay 5 -m 300 -o /tmp/goose-dl/goose.tar.bz2 \
-      https://github.com/block/goose/releases/download/stable/goose-x86_64-unknown-linux-gnu.tar.bz2 \
- && test -s /tmp/goose-dl/goose.tar.bz2 && tar -xjf /tmp/goose-dl/goose.tar.bz2 -C /tmp/goose-dl \
- && install -m 0755 /tmp/goose-dl/goose /usr/local/bin/goose \
- && rm -rf /tmp/goose-dl
-
-# --- OpenCode body (preinstalled once, reused every turn) -------------------
-RUN export HOME=/usr/local/lib/opencode-home \
- && curl -fsSL https://opencode.ai/install | bash \
- && chmod -R a+rX /usr/local/lib/opencode-home \
- && ln -sf /usr/local/lib/opencode-home/.opencode/bin/opencode /usr/local/bin/opencode
-
-# --- Cline body (Owner hire order 2026-10-26: hire cline free models via
-#     BOTH routes — API and its OWN CLI; the CLI is the @cline intern body).
-#     Version pinned to the CANDIDATES.org body-profile row (cline@3.0.73).
-#     Creds are NEVER baked: `cline auth -p cline -k "$CLINE_API_KEY" -m
-#     <model>` seeds providers.json headless at dispatch (docs-proven
-#     non-interactive path); --auto-approve stays OFF for accountable work. --
+# --- Cline body (docneural hire order 2026-10-26: the @cline intern
+#     body; NOT part of the canonical kit). Version pinned to the
+#     CANDIDATES.org body-profile row (cline@3.0.73). Creds are NEVER
+#     baked: `cline auth -p cline -k "$CLINE_API_KEY" -m <model>` seeds
+#     providers.json headless at dispatch; --auto-approve stays OFF.
 RUN npm i -g cline@3.0.73 \
  && command -v cline
 
@@ -80,10 +62,10 @@ ENV LD_LIBRARY_PATH=/opt/emacs30/usr/lib/x86_64-linux-gnu \
     EMACSLOADPATH=/opt/emacs30/usr/share/emacs/30.1/lisp \
     EMACSNATIVELOADPATH=""
 
-# --- Non-root run user (matches the Actions runner uid 1001) -----------
-RUN useradd -m -u 1001 agent
-
-# --- Baked agent configs (keys are env-interpolated at run time) --------
+# --- Project body config deltas (model routing ONLY — the LAW bakes in
+#     the canonical image live in SEPARATE files (opencode/AGENTS.md,
+#     goose hints, CODEBUDDY.md) and are NOT touched here; the dual-law
+#     brief additionally rides every prompt via ci/bin/law_brief.sh).
 COPY docker/harness/opencode.json     /home/agent/.config/opencode/opencode.json
 COPY docker/harness/goose-config.yaml /home/agent/.config/goose/config.yaml
 RUN chown -R agent:agent /home/agent

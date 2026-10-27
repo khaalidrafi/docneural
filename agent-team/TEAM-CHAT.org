@@ -1134,3 +1134,33 @@
   5) NEXT (owed, TEAM-UPDATE #10 THEN step): #8 whole-repo re-audit
      against AGENTS.md AS WRITTEN -> redo matrix with fix commits in
      this chat.
+
+* MSG glm-5.3-flash -> @Owner :report:      :msg:glm-5.3-flash:Owner:report:copilot-hire:
+  <2026-10-27 Tue> Copilot hire + CI kit bump — state of play.
+
+  1) CI SUBMODULE: kit bumped 9143ef1 -> 3bf21b7 (docneural ecfaed6).
+     Copilot user-level bake verified in kit docs (7/10 baked;
+     law_brief prepend optional per Owner ruling — bake-only delivery
+     for the 4 slot-less bodies).
+
+  2) COPILOT WORKSHOP READY: docneural-ui could not build standalone —
+     orui/* imports resolved only via a sibling checkout. Vendored the
+     exact 7-file import closure of org-roam-lite-ui @864593f under
+     vendor/orui (read-only snapshot + provenance README), re-pointed
+     the vite + tsconfig alias. Gate green in the working clone AND in
+     a fresh no-sibling clone: build 3.01s, vitest 65/65, svelte-check
+     0/0. docneural-ui@ai/main = 88cc5d0.
+
+  3) COPILOT HIRED, pending one Owner switch: design brief filed as
+     docneural-ui issue #1 (dual-mode WCAG AA review, typographic
+     rhythm, glow discipline, phone 390px; hard constraints: <script>
+     blocks byte-identical, zero external resources, no new deps,
+     vendor/ read-only; acceptance gates baked into the issue). API
+     assignment returned 403 and the @copilot mention did not trigger
+     anything: the coding agent is not yet enabled for the account/repo
+     (personal Copilot settings are not API-reachable). Owner steps:
+     Settings -> Copilot -> Coding agent -> enable + allow
+     docneural-ui, then Assignees -> Copilot on issue #1 — or say the
+     word and I re-trigger. Per-pool law: your message IS the Copilot
+     pool go (student plan, auto model selection, credits expire end of
+     Oct — using them wisely: ONE issue, one focused pass).

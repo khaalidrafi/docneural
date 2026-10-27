@@ -208,6 +208,8 @@ jobs:
       CLINE_API_KEY: ${{ secrets.CLINE_API_KEY }}   # cline API lane (opencode cline block; self-activates when sealed)
       CLINE_AUTH_JSON: ${{ secrets.CLINE_AUTH_JSON }}   # cline CLI OAuth lane (@cline intern bodies)
       GH_PAT: ${{ secrets.GH_PAT }}   # task segments clone/push the UI siblings (docneural-ui, org-roam-lite-ui) — R-2-69 seat work lives there
+      GH_TOKEN: ${{ secrets.GH_PAT }}   # Copilot CLI auth (same fine-grained PAT, Copilot
+      # Requests permission, live-verified 2026-10-27); ask-first body
     steps:
       - uses: actions/checkout@v4
         with:
@@ -883,6 +885,7 @@ jobs:
             -e ZAI_API_KEY -e OPENROUTER_API_KEY -e GOMODEL_MASTER_KEY -e GOMODEL_GATEWAY_URL \
             -e GROQ_API_KEY -e OPENCODE_API_KEY -e CLINE_API_KEY -e CLINE_AUTH_JSON \
             -e GH_PAT \
+            -e GH_TOKEN \
             agent-harness:local bash /workspace/.turn-inside.sh \
             > /tmp/.turn-out.txt 2>&1; then
             echo "container verdict captured"

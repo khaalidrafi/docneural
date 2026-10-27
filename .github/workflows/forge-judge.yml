@@ -21,6 +21,14 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive   # ci/ = agent-team-ci kit (dual-law brief)
+
+      - name: compose the dual-law brief (ci contract §3 — every lane runs lawed)
+        run: |
+          printf '%s\n' 'Lane: forge judge completion pass — fills missing blind peer pairs from committed renders (scripts/forge-judge.mjs, committed rubric). Follow the global + local law above in every review reply (English-only, evidence-first).' > /tmp/segment-brief.txt
+          bash ci/bin/law_brief.sh /tmp/segment-brief.txt "$PWD" > "$PWD/.law-brief.txt"
+          echo "CI_LAW_BRIEF_FILE=$PWD/.law-brief.txt" >> "$GITHUB_ENV"
 
       - name: setup node
         uses: actions/setup-node@v4

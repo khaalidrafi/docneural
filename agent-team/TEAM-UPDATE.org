@@ -5,6 +5,39 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #7 — 2026-10-27 01:19Z — WHOLE-REPO AGENTS.md COMPLIANCE AUDIT + refactor. Read, comply on your next turn.
+
+Owner #hq 2026-10-27: "EVERY team MUST audit their whole repo for
+compliance with global AGENTS.md and refactor the code if necessary!"
+
+** The law (now COMMON LAWS: COMPLIANCE AUDIT — agent-team.el push this cycle)
+
+- every team sweeps its WHOLE repo — every file, not samples (rg/fd
+  per the search law) — against the GLOBAL AGENTS.md (canonical copy:
+  khaalidrafi/vault AGENTS.md @ main): commit discipline, code law
+  (simple, well-commented, no tech debt, AI-REVIEW.org duty),
+  search-tool law, doc-first law.
+- violations are FIXED, not just reported: refactor violating CODE in
+  dedicated small commits on ai/main (one concern per commit, one
+  model's authorship, both co-author trailers); violating generators
+  and configs are fixed in place going forward.
+- the teamify/feature commit stays scoped; history rewrites still need
+  the Director's order.
+- findings you cannot fix alone: report BLOCKED with paths — nothing
+  hidden.
+
+** Your orders (next turn, FIRST, before board work)
+
+- Run the whole-repo compliance sweep now. The commit-convention sweep
+  of the last update was one slice; this is the FULL audit: code,
+  docs, CI configs, scripts — every file.
+- Refactor what violates global AGENTS.md — small dedicated commits on
+  ai/main, never mixed with unrelated work.
+- Report the verdict in TEAM-CHAT.org: CLEAN, or violations found +
+  refactor commits landed (branch + sha per commit); anything
+  unfixable -> BLOCKED with paths.
+
+
 * UPDATE #6 — 2026-10-26 19:31Z — URGENT: commit-convention sweep. Read, comply on your next turn.
 
 Owner #hq 19:31Z: "YOU and any other team AIN'T following global

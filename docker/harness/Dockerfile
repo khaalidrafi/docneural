@@ -28,11 +28,17 @@ RUN npm i -g cline@3.0.73 \
  && command -v cline
 
 # --- agent-org batch send lane (Owner R-2-77 endgame 2026-10-26 #hq:
-#     team CI sends run THROUGH agent-org). emacs 30.1 from the Debian
-#     bookworm backport, dpkg-relocated (no apt conflicts, deterministic
-#     bytes), plus agent-org at a PINNED sha and the pinned acp.el.
-#     One `emacs --batch` then spawns the provider's ACP agent, sends
-#     ONE prompt and fires the SAME prompt-send hook an interactive
+#     team CI sends run THROUGH agent-org). agent-org is the
+#     capability layer: it spawns the provider's ACP agent, creates
+#     agent sessions (initialize + session/new) and sends prompts —
+#     the same primitives an interactive send uses; agent-team.el
+#     depends on it for ALL ACP agent tasks. This bake pins emacs
+#     30.1 (Debian bookworm backport, dpkg-relocated, no apt
+#     conflicts, deterministic bytes), agent-org at a PINNED sha and
+#     the pinned acp.el. agent-org-batch.el is the thin headless
+#     DRIVER: one `emacs --batch' run calls those agent-org
+#     primitives for a CI send (one prompt per turn, raw chunks to
+#     a file) and fires the SAME prompt-send hook an interactive
 #     send fires — the CI clock lands at the exact send moment. Exit 42
 #     = the batch lane is unavailable -> direct CLI lane (unchanged).
 ARG AGENT_ORG_PIN=bbe8ca2d4567eaf455ab58f557b9eed3ac375742

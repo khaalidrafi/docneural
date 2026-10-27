@@ -1232,3 +1232,22 @@
   5) LANDING: commit law format, author GLM-5.3-Flash, trailers
      z.ai-agent + Khalid Rafi + Copilot credit. Pushed 88cc5d0 ->
      6c224d1 on ai/main. PAT CLEAN verified post-push.
+
+* MSG glm-5.3-flash -> @Owner :fix:          :msg:glm-5.3-flash:Owner:fix:acp-gomodel-record:
+  <2026-10-27 Tue> Record corrected on both points (Owner ruling).
+
+  1) AGENT-ORG vs BATCH: agent-org is the capability layer — it
+     already spawns the provider's ACP agent, sends prompts, and
+     keeps agent sessions (initialize + session/new). The
+     `emacs --batch' run adds nothing new; agent-org-batch.el is a
+     thin headless driver calling those same primitives (one prompt
+     per CI turn, same prompt-send hook, clock at send moment).
+     Wording fixed in docker/harness/Dockerfile; kit template
+     fixed upstream (agent-team-ci 475dd5f, same fix landed in
+     parallel; local duplicate 836a92b dropped, pointer bumped).
+
+  2) GOMODEL GATEWAY: it is the door to ALL our models — one access
+     point for every provider the Owner runs (17 providers); Jev's
+     finalize judgment is just ONE of its consumers. "Jev judgment
+     brain" framing removed from the kit template. Direct-provider
+     seat law (2026-10-20) and the binary judgment rule unchanged.

@@ -90,6 +90,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive   # ci/ = agent-team-ci kit (dual law + guard)
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -210,6 +212,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive   # ci/ = agent-team-ci kit (dual law + guard)
 
       - name: Read control file (kill switch / objective / turn)
         id: control
@@ -476,9 +479,19 @@ jobs:
             echo "gomodel lane: DOWN (HTTP $CODE) — lane-fallback law active (turn proceeds on direct provider lanes; auto-reuses gomodel the moment the box answers)" >> "$SUMMARY"
           fi
 
-      - name: Build harness image (preinstalled agents — cached, no installs)
+      - name: Build harness image (canonical kit base + project layers)
         if: steps.control.outputs.mode == 'work'
         run: |
+          # ci contract §2 (TEAM-UPDATE #10): bodies + global-law bakes come
+          # from the CANONICAL ci/docker/harness/Dockerfile (built from THIS
+          # repo root so it bakes ci/AGENTS.md); docker/harness/Dockerfile
+          # only EXTENDS it with docneural project layers. Never forked.
+          docker buildx build --load \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            -f ci/docker/harness/Dockerfile \
+            -t agent-harness:base \
+            .
           docker buildx build --load \
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
@@ -634,7 +647,13 @@ jobs:
              yourself — the duty REVIEWER sets DONE when everything is
              clear (Owner 2026-10-26 10:55Z); at delivery, flip the item
              to REVIEW with :DELIVERED: evidence.
-          7. Commit everything on this branch with message 'turn(${SEAT}): ...'.
+          7. Commit everything on this branch with YOUR OWN descriptive
+             message written by you about what changed: the subject names
+             WHAT changed (file/feature/behavior + effect), >= 3 words;
+             banned subjects: ci-turn / ci-chain / turn(...) / wip /
+             progress / done / update / fix / stall=N — the landing gate
+             runs ci/bin/commit_msg_guard.sh and mechanical subjects
+             never land (Owner commit-substance law 2026-10-27).
           8. REPORT: append your report to agent-team/TEAM-CHAT.org as
              '${SEAT} -> @lead :report:' (RESULT: DONE | PARTIAL | BLOCKED,
              evidence included). Real runs ALSO post it to YOUR role's Lark
@@ -673,6 +692,22 @@ jobs:
           (30-day retention). The next turn of YOUR seat restores them
           before you run — resume your context (qoder / goose / opencode /
           codebuddy session files) instead of starting cold."
+
+          # DUAL-LAW BRIEF (Owner order 2026-10-27 #hq, TEAM-UPDATE #10
+          # FIRST-CONFIGURE): every lane composes its prompt through
+          # ci/bin/law_brief.sh — GLOBAL law (ci/AGENTS.md, submodule)
+          # + LOCAL law (repo-root AGENTS.md) + this segment brief.
+          # A missing kit degrades LOUDLY (marker travels inside the
+          # prompt) — never a silent lawless run.
+          printf '%s\n' "$BRIEF" > "$PWD/.segment-brief.txt"
+          if [ -f ci/bin/law_brief.sh ]; then
+            bash ci/bin/law_brief.sh "$PWD/.segment-brief.txt" "$PWD" > "$PWD/.law-brief.txt"
+            BRIEF="$(cat "$PWD/.law-brief.txt")"
+            rm -f "$PWD/.segment-brief.txt" "$PWD/.law-brief.txt"
+          else
+            BRIEF="!!! GLOBAL+LOCAL LAW MISSING: ci/bin/law_brief.sh absent (ci submodule not checked out). Report BLOCKED for the law gap, do not improvise law. !!! ${BRIEF}"
+            echo "!!! law kit MISSING — brief carries the loud marker (never silent lawless)" >> "$SUMMARY"
+          fi
 
           # Seat -> body command. Brains come from the baked configs; keys
           # come from repo secrets via env. The harness image has the
@@ -872,7 +907,8 @@ jobs:
           # diff so a segment's work ALWAYS reaches the branch.
           if ! git diff --quiet || ! git diff --cached --quiet; then
             git add -A
-            git commit -m "turn(${SEAT}): segment work — host-committed" \
+            FILES=$(git diff --cached --name-only | head -5 | tr '\n' ' ')
+            git commit -m "${SEAT} segment work: host-commit of workspace diff (${FILES:-no files})" \
               -m "result: ${TURN_RESULT}" || echo "::notice::workspace commit failed"
           else
             echo "workspace clean — no host commit needed"
@@ -977,7 +1013,7 @@ jobs:
             fi
             sed -i "s|^\#+TURN:.*|\#+TURN: ${NEXT}|" "$CTL"
             git add "$CTL"
-            git commit -m "ci-turn: ${TURN_SEAT:-unknown} done — next turn ${NEXT}" \
+            git commit -m "control: rotate #+TURN to ${NEXT} after ${TURN_SEAT:-unknown} segment" \
               -m "result: ${TURN_RESULT:-unknown}" || { CPUSH=uptodate; break; }
             if [ "${CHAIN_REF:-ai/main}" != "ai/main" ]; then
               if git push --force origin "$CHAIN_REF"; then CPUSH=yes; break; fi
@@ -1016,6 +1052,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive   # ci/ = agent-team-ci kit (commit guard lives here)
           ref: ${{ github.ref_name }}   # R-2-69: the chain ref itself — ai/main trunk or the task branch
 
       # R-2-69: GITHUB_ENV is JOB-SCOPED — the turn job's CHAIN_REF never
@@ -1043,6 +1080,19 @@ jobs:
           OUTCOME="no-branch"
           if [ -n "$BRANCH" ] && git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
             git fetch origin "$BRANCH"
+            # COMMIT-SUBSTANCE GATE (TEAM-UPDATE #9 ORDER A + ci contract
+            # §4): mechanical subjects never land. Missing guard = red
+            # step (never merge unguarded — never-fake law).
+            if [ -f ci/bin/commit_msg_guard.sh ]; then
+              if ! bash ci/bin/commit_msg_guard.sh "origin/ai/main..origin/$BRANCH"; then
+                echo "outcome=gate-red-commit-msg" >> "$GITHUB_OUTPUT"
+                echo "MERGE: gate-red-commit-msg (branch: $BRANCH — commit subjects violate the substance law; branch left for the seat to re-commit)"
+                exit 0
+              fi
+            else
+              echo "!!! COMMIT GUARD MISSING (ci/bin/commit_msg_guard.sh) — refusing to merge unguarded !!!"
+              exit 1
+            fi
             if git merge --no-ff --no-edit "origin/$BRANCH" 2>/dev/null; then
               OUTCOME="merged"
             elif git checkout HEAD -- agent-team/TEAM-CONTROL.org 2>/dev/null \
@@ -1336,7 +1386,7 @@ jobs:
             fi
             sed -i "s|^\#+STALL-COUNT:.*|\#+STALL-COUNT: ${NEW}|" "$CTL"
             git add "$CTL"
-            git commit -m "ci-chain: stall=${NEW} (segment ${OUTCOME}, result ${RESULT:-none})" \
+            git commit -m "control: set #+STALL-COUNT to ${NEW} after ${OUTCOME:-none} segment (result ${RESULT:-none})" \
               || echo "::notice::stall commit empty"
             if [ "${CHAIN_REF:-ai/main}" != "ai/main" ]; then
               git push --force origin "${CHAIN_REF}" || echo "::warning::stall push failed"

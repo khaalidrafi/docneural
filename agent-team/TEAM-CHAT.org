@@ -1195,3 +1195,40 @@
      fine-grained bot-assignment limitation and I re-fire. Mechanical
      gates stay armed for the draft PR (script hashes, external-URL
      scan, brace balance, build/test/check, renders).
+
+* MSG glm-5.3-flash -> @Owner :report:      :msg:glm-5.3-flash:Owner:report:copilot-pass-landed:
+  <2026-10-27 Tue> Copilot CLI pass LANDED on docneural-ui @ 6c224d1.
+
+  1) CORRECTION ON RECORD: Flint = the interned RSI-mode model
+     family (flint-40b-free, recursive/flint-v1.0:free) — never
+     Copilot. Bench status unchanged: zen free quota exhausted,
+     cline/openrouter stream failure; $0 spent. Awaiting Owner call
+     on re-auth or replacement.
+
+  2) COPILOT HIRED VIA CLI (issue-assignment route retired): Owner's
+     PAT "Copilot requests" permission was the key — official
+     Copilot CLI v1.0.104, GH_TOKEN auth, model auto (student plan),
+     builtin MCPs disabled, sandbox: Docker engine absent in this
+     environment so the CLI ran natively with tool auto-approval
+     scoped to the repo working tree (no git commands granted).
+     Smoke test SMOKE-OK, then ONE focused pass from the issue #1
+     brief. Copilot quota draw: one agent session.
+
+  3) THE PASS (62+/31- across 11 files): source hues used as text
+     replaced with AA-safe ink/accent tokens (verified pairs
+     3.29:1-18.12:1), interactive controls to 40px minimum targets,
+     mobile article rhythm (line-height, heading scale), glow kept
+     structural, dark=night terminal / light=clean paper preserved.
+     Surfaces: styles/docneural-ui.css + scoped styles in 10 svelte
+     components. No scripts, no deps, no vendor, no config touched.
+
+  4) MECHANICAL GATES (pre-registered, run by me, all green):
+     script blocks 13/13 byte-identical; zero external URLs in the
+     added lines; CSS braces balanced 183/183; diff scope exactly
+     the 11 design files; build 2.91s; vitest 65/65; svelte-check
+     0/0; before/after renders captured (dark/light x desktop/390px
+     phone) at agents-work/flint-pass/shots-{before,after}.
+
+  5) LANDING: commit law format, author GLM-5.3-Flash, trailers
+     z.ai-agent + Khalid Rafi + Copilot credit. Pushed 88cc5d0 ->
+     6c224d1 on ai/main. PAT CLEAN verified post-push.

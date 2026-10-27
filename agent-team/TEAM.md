@@ -105,6 +105,25 @@
     violated this ruling and stands on the record as the case that
     created the law. Violations are reported the moment they are
     discovered, never rationalized after the fact.
+  - CI KIT SUBMODULE LAW (Owner ruling 2026-10-27 17:54 #docneural-site,
+    "You should never modify agent-team-ci submodule"): the ci/
+    submodule content (agent-team-ci repo — AGENTS.md, templates,
+    scripts, Dockerfile) is READ-ONLY to every agent seat. No seat
+    edits, rebases, or pushes to the kit repo. Fixes wanted in the
+    kit get FLAGGED to the Owner; the Owner (or a seat he names)
+    lands them. Updating the ci gitlink pointer in docneural to a
+    NEWER kit sha the Owner's side produced is a docneural-side
+    commit and stays allowed. (Case on record: 2026-10-27 — an
+    attempted kit template edit was caught as a duplicate of the
+    fix the Owner's side had already pushed, dropped before it
+    landed; the rule now exists so no seat tries again.)
+  - VISION VERDICT LAW (Owner ruling 2026-10-27 17:54 #docneural-site,
+    "always provide screenshots via glm-5v-turbo"): every screenshot
+    delivered as design evidence — renders, before/after diffs,
+    gate exhibits — goes through glm-5v-turbo (the crowned vision
+    judge) for its verdict BEFORE delivery, and the verdict rides
+    with the images. Raw unvetted screenshots are never the sole
+    evidence for a design claim.
 
 * ROLE SCOPES
   - EM — glm-5.3-flash@chat.z.ai: board upkeep, dispatch, protocol

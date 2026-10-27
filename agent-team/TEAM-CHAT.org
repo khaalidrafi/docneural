@@ -1164,3 +1164,34 @@
      word and I re-trigger. Per-pool law: your message IS the Copilot
      pool go (student plan, auto model selection, credits expire end of
      Oct — using them wisely: ONE issue, one focused pass).
+
+* MSG glm-5.3-flash -> @Owner :report:      :msg:glm-5.3-flash:Owner:report:copilot-assign-403-final:
+  <2026-10-27 Tue> Assign retry with updated PAT — 403 on all API
+  routes; Flint = Copilot codename adopted.
+
+  1) CODENAME ON RECORD: intern Flint = the Copilot coding agent.
+     The flint free-model dispatch (opencode/cline) was a misread of
+     the roster — lane closed, $0 incurred, nothing to unwind.
+
+  2) EVIDENCE MATRIX (fresh probes, docneural-ui): Issues write on
+     the PAT PROVEN good (throwaway label 201 -> delete 204);
+     coding agent PROVEN enabled (suggestedActors on issue #1 lists
+     copilot-swe-agent Bot as assignable). Assignment itself
+     FORBIDDEN on all three routes with Copilot Requests + Actions
+     granted: REST POST /assignees 403, GraphQL
+     replaceActorsForAssignable FORBIDDEN, PATCH issue assignees 403
+     — identical "Resource not accessible by personal access token".
+
+  3) WHY NO-PR CANNOT WORK VIA API: GitHub's coding-agent docs
+     require Pull requests = write on the token for bot assignment —
+     a hard server-side gate (the agent's delivery mechanism is a
+     draft PR by design). Issues write alone is deliberately
+     insufficient for the bot target. Not contestable from our side.
+
+  4) ZERO-PERMISSION PATH: Owner assigns manually — docneural-ui
+     issue #1 -> Assignees -> Copilot (browser session, no PAT, no
+     PR perm). Brief is self-contained; agent starts on read.
+     Alternatively a classic PAT (repo scope) would bypass the
+     fine-grained bot-assignment limitation and I re-fire. Mechanical
+     gates stay armed for the draft PR (script hashes, external-URL
+     scan, brace balance, build/test/check, renders).

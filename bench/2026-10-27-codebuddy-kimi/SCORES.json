@@ -1,0 +1,55 @@
+{
+  "rule": "PRE-REGISTERED: FINAL = 0.4*objective + 0.6*mean(all completed blind peer sums); tie-break = higher objective",
+  "scores": [
+    {
+      "code": "A",
+      "origin": "staged:entry-2",
+      "model": "sandbox-gateway",
+      "objective": 9,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 9,
+      "oneLiners": []
+    },
+    {
+      "code": "D",
+      "origin": "staged:entry-1",
+      "model": "sandbox-gateway (glm-5v-turbo incumbent, round-1 crown)",
+      "objective": 9,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 9,
+      "oneLiners": []
+    },
+    {
+      "code": "E",
+      "origin": "staged:entry-codebuddy-kimi",
+      "model": "kimi-k3@codebuddy-intl",
+      "objective": 9,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 9,
+      "oneLiners": []
+    },
+    {
+      "code": "C",
+      "origin": "antling",
+      "model": "Ling-3.0-flash-VL",
+      "objective": 8,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 8,
+      "oneLiners": []
+    },
+    {
+      "code": "B",
+      "origin": "gemini",
+      "model": "gemini-2.5-flash",
+      "objective": 4,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 4,
+      "oneLiners": []
+    }
+  ]
+}

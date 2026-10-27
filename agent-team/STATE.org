@@ -1,6 +1,19 @@
 #+TITLE: STATE.org — cross-session state (Owner pastes back at session start)
 
 * DONE
+- CODEBUDDY-POOL KIMI BURN + BENCH 2026-10-27 06:40Z: THE ONE paid
+  kimi-k3 generation fired on the CodeBuddy intl pool from the sandbox
+  body (server-minted CLI auth — root cause of every prior "request
+  parameter error" was locally-invented states; real protocol =
+  POST /v2/plugin/auth/state?platform=CLI). Token validated Bearer on
+  2 intl endpoints; burn script gate verified index.html (16,648 B,
+  122 s); spend law intact (2 dead bg launches 0.00 pre-auth + ONE
+  generation; ds-v4.1-flash excluded; no retries). Objective 9/9 vs
+  round-1 field (ties crown glm-5v-turbo); peer column pending CI
+  judge (sandbox holds none of the 25 Actions keys). Landed
+  bench/2026-10-27-codebuddy-kimi/ + TEAM-CHAT
+  :msg:bench:codebuddy-kimi:. Google-font externality disclosed,
+  artifact untouched.
 - OWNER-IDENTITY MISATTRIBUTION FIXED 2026-10-27 05:5Z (Owner: "I didn't author a single commit"): the 6 Oct 8-14 commits carried author=committer=Khalid Rafi <khaalidrafi@gmail.com> — an agent-era identity leak, never his work. Env-only filter-branch re-authored all 6 to GLM-5.3-Flash <glm-5.3-flash@z.ai> (same DoE-era mapping as UPDATE #6); trees byte-identical, 118/118 commits, force-pushed tip 646a4a7, PAT CLEAN. Census now: 114 GLM + 3 Qwen3.8-Flash + 1 step-5-preview-free, ZERO under the Owner's identity. Co-author trailers keep his address by law (attribution of order, not authorship).
 - DUAL-LAW COMPLIANCE ROUND 2026-10-27 (Owner direct order, post-kimi):
   both AGENTS.md read (vault global 335c85ee1d084cb6 + local AUTHORED at

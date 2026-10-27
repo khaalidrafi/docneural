@@ -1,5 +1,47 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :verdict:      :msg:bench:codebuddy-kimi:
+- One-line lead: **THE ONE kimi-k3 generation fired on the CodeBuddy intl
+  pool (122 s, 16,648 B page) and scored OBJECTIVE 9/9 — an exact tie
+  with the crown's objective; peer column pending CI judge; spend law
+  intact end-to-end.**
+- AUTH ROOT-CAUSE FIXED: the CLI (v2.177.0, bundle-read) mints the login
+  state SERVER-SIDE via POST /v2/plugin/auth/state?platform=CLI; every
+  earlier hand-crafted link carried a locally-invented state the backend
+  never knew -> the /started redirect died with "request parameter
+  error". Replayed the real protocol: Owner logged in on the first
+  server-minted link; token captured via the pre-registered poll
+  (/v2/plugin/auth/token?state=) -> /home/z/.secrets (0600, never
+  printed); validated live Bearer on /v2/plugin/account + /accounts
+  (2x HTTP 200).
+- SANDBOX LAW (new, proven 3 ways): NOTHING survives a tool-call return
+  in this container — nohup bg (0-byte log, reaped pre-auth), setsid bg
+  (same), even the CLI's own --bg --exec daemon (job started, reaped
+  with the call). Background execution is impossible; long jobs must
+  fit one 10-minute foreground window. Both dead launches burned 0
+  credits (pre-auth); recorded as evidence, not failures of the law.
+- THE BURN (launch 3, foreground 600 s window): generation completed
+  inside it — ONE kimi-k3 generation, 122 s, byte-identical forge brief
+  (2,195 B) + strict single-file index.html contract; model kimi-k3
+  ONLY, ds-v4.1-flash hard-excluded, no retries; auth mode = Bearer
+  (CODEBUDDY_AUTH_TOKEN) on live evidence — ApiKey mode 401'd this
+  token class (runner dispatch 3); GEN.json ledger written by the
+  script's own verification gate.
+- OBJECTIVE RESULT (verbatim registered harness,
+  scripts/forge-judge-codebuddy-kimi.mjs, seed 20261028): entry E = 9/9
+  (zero page/console errors, no overflow at 1440 AND 390, min contrast
+  8.46:1, presence 6/6, 9,120 B CSS + motion) — ties the crown
+  glm-5v-turbo (D, 9/9); A 9, C 8, B 4. NO CROWN CHANGE declared on
+  objective-only data.
+- DISCLOSURE (integrity over cosmetics): the page links Google Fonts
+  externally; the contract demanded none — artifact judged as-is, NOT
+  edited. Peer lanes all self-skipped in the sandbox ("NO KEY": the 25
+  judge keys are Actions secrets) -> peer column fills via CI judge
+  (forge-judge.yml) on the committed renders, as in rounds 1-2.
+- LANDED: bench/2026-10-27-codebuddy-kimi/{SCORES.md, SCORES.json,
+  RESULTS.json, KEY.json, codebuddy-kimi-desktop.png,
+  crown-glm5v-desktop.png, entry-kimi-k3/{GEN.json, index.html}}.
+
 * MSG glm-5.3-flash@chat.z.ai -> @Owner :verdict:      :msg:compliance:dual-law-audit:
 - One-line lead: **whole-repo AGENTS.md audit EXECUTED under your direct
   order — both laws read (vault global + newly authored local); commit

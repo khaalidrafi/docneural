@@ -30,6 +30,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
+// DUAL-LAW BRIEF (ci contract §3, TEAM-UPDATE #10): the generation prompt
+// carries the composed GLOBAL+LOCAL law. CI composes it via ci/bin/
+// law_brief.sh and points CI_LAW_BRIEF_FILE at the file; unset (local
+// runs) leaves behavior unchanged.
+const LAW_FILE = process.env.CI_LAW_BRIEF_FILE || '';
+const LAW = LAW_FILE && fs.existsSync(LAW_FILE) ? fs.readFileSync(LAW_FILE, 'utf8') + '\n\n' : '';
+
 const STAGING = 'scripts/forge-staging';
 // Round field is FRESH: committed round-1 staging entries stay in git but do
 // not compete here. Failed dirs are KEPT (GEN.json + attempt logs = evidence);
@@ -46,7 +53,7 @@ if (models.length === 0) {
 }
 
 const brief = fs.readFileSync('scripts/forge-brief.md', 'utf8');
-const prompt = `${brief}
+const prompt = `${LAW}${brief}
 
 DELIVERABLE (strict): create ONE complete single-file HTML page (all CSS and JS inline, no external assets, no external fonts, no external images) implementing the brief EXACTLY, and SAVE it as index.html in the current working directory. Do not ask questions. Do not explain. Write the file and stop.
 

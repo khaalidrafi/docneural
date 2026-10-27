@@ -22,6 +22,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// DUAL-LAW BRIEF (ci contract §3, TEAM-UPDATE #10): every lane's prompt
+// carries the composed GLOBAL+LOCAL law. CI composes it via ci/bin/
+// law_brief.sh and points CI_LAW_BRIEF_FILE at the file; unset (local
+// runs) leaves behavior unchanged.
+const LAW_FILE = process.env.CI_LAW_BRIEF_FILE || '';
+const LAW = LAW_FILE && fs.existsSync(LAW_FILE) ? fs.readFileSync(LAW_FILE, 'utf8') + '\n\n' : '';
+
 const OUT = 'bench-out';
 const IN = 'scripts/bakeoff-inputs';
 fs.mkdirSync(OUT, { recursive: true });
@@ -96,7 +103,7 @@ async function chat(lane, model, content) {
   const res = await fetch(`${lane.baseURL}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-    body: JSON.stringify({ model, messages: [{ role: 'user', content }], ...(lane.extraBody || {}) }),
+    body: JSON.stringify({ model, messages: [{ role: 'user', content: LAW + content }], ...(lane.extraBody || {}) }),
     signal: AbortSignal.timeout(120000),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 160)}`);

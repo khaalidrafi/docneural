@@ -13,6 +13,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// DUAL-LAW BRIEF (ci contract §3, TEAM-UPDATE #10): every lane's prompt
+// carries the composed GLOBAL+LOCAL law. CI composes it via ci/bin/
+// law_brief.sh and points CI_LAW_BRIEF_FILE at the file; unset (local
+// runs) leaves behavior unchanged.
+const LAW_FILE = process.env.CI_LAW_BRIEF_FILE || '';
+const LAW = LAW_FILE && fs.existsSync(LAW_FILE) ? fs.readFileSync(LAW_FILE, 'utf8') + '\n\n' : '';
+
 const BENCH = 'agent-team/bench/2026-10-27-forge';
 const OUT = 'forge-judge-out';
 fs.mkdirSync(OUT, { recursive: true });
@@ -83,7 +90,7 @@ for (const l of LANES) {
             role: 'user',
             content: [
               { type: 'image_url', image_url: { url: `data:image/png;base64,${fs.readFileSync(img).toString('base64')}` } },
-              { type: 'text', text: RUBRIC },
+              { type: 'text', text: LAW + RUBRIC },
             ],
           }],
           max_tokens: 1500,

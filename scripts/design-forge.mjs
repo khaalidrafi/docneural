@@ -29,6 +29,13 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+
+// DUAL-LAW BRIEF (ci contract §3, TEAM-UPDATE #10): every lane's prompt
+// carries the composed GLOBAL+LOCAL law. CI composes it via ci/bin/
+// law_brief.sh and points CI_LAW_BRIEF_FILE at the file; unset (local
+// runs) leaves behavior unchanged.
+const LAW_FILE = process.env.CI_LAW_BRIEF_FILE || '';
+const LAW = LAW_FILE && fs.existsSync(LAW_FILE) ? fs.readFileSync(LAW_FILE, 'utf8') + '\n\n' : '';
 import { chromium } from 'playwright';
 
 const OUT = 'forge-out';
@@ -112,7 +119,7 @@ async function gen(l, model) {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
       body: JSON.stringify({
         model,
-        messages: [{ role: 'user', content: BRIEF }],
+        messages: [{ role: 'user', content: LAW + BRIEF }],
         max_tokens: maxTokens,
       }),
       signal: AbortSignal.timeout(300000),
@@ -348,7 +355,7 @@ for (const j of judgeLaneSpecs) {
             role: 'user',
             content: [
               { type: 'image_url', image_url: { url: `data:image/png;base64,${fs.readFileSync(img).toString('base64')}` } },
-              { type: 'text', text: RUBRIC },
+              { type: 'text', text: LAW + RUBRIC },
             ],
           }],
           max_tokens: 1500, // 600 truncated judge JSON mid-key (run 40367431379) — a4ff3fd fix ported

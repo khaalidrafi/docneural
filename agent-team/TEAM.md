@@ -38,6 +38,11 @@
     no-root-file rule): every agent reads BOTH it and the global law
     in khaalidrafi/vault, always.
   - Keys and PATs never enter files, commits, board, or chat.
+  - LANGUAGE LAW (Owner 2026-10-27 #docneural-site "always ENGLISH, NO
+    CHINESE!"): every message this team or any seat sends to the Owner
+    or any channel — Discord, board, chat, commits, code comments — is
+    ENGLISH only. A violation is a chain fault: own it and re-issue in
+    English on correction.
   - Every board item is judged by the two TODOs.org rules: usability
     first, design second; instant means on a phone.
   - LETTER LAW (Owner 2026-10-26 #hq): any message this team addresses

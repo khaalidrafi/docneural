@@ -1,0 +1,89 @@
+name: ds-design
+
+# Design consult with the hired designer DeepSeek V4.1-Flash (zen free lane).
+# Owner pick 2026-10-28: best CANDIDATES.org designer per PUBLIC boards only
+# (WebDev Arena #14/151 = 1665; Design Arena website Elo 1300/rank 15).
+# GO: "ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!"
+# Lane: opencode zen REST (probe -> consult), key stays sealed. Artifact-only;
+# never runs on push; integration + gates happen sandbox-side afterwards.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ds-design
+  cancel-in-progress: false
+
+jobs:
+  consult:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: compose the dual-law brief (ci contract §3 — every lane runs lawed)
+        run: |
+          printf '%s\n' 'Lane: DESIGN consult (CSS/markup design specification for docneural-ui). The brief is bench/2026-10-28-ds-design/inputs/BRIEF.md plus the current UI sources. Follow the global + local law above in the whole reply.' > /tmp/segment-brief.txt
+          bash ci/bin/law_brief.sh /tmp/segment-brief.txt "$PWD" > "$PWD/.law-brief.txt"
+          echo "CI_LAW_BRIEF_FILE=$PWD/.law-brief.txt" >> "$GITHUB_ENV"
+
+      - name: probe the zen deepseek lane (zero-cost alive check)
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p bench/2026-10-28-ds-design/out
+          code=$(curl -sS -m 45 -o /tmp/probe.json -w '%{http_code}' -X POST \
+            "https://opencode.ai/zen/v1/chat/completions" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer $OPENCODE_API_KEY" \
+            -d '{"model":"deepseek-v4.1-flash-free","messages":[{"role":"user","content":"Reply with the single word: alive"}],"max_tokens":16}' \
+            || echo 000)
+          echo "probe HTTP $code" | tee bench/2026-10-28-ds-design/out/probe.txt
+          head -c 300 /tmp/probe.json | tee -a bench/2026-10-28-ds-design/out/probe.txt || true
+          echo "" >> bench/2026-10-28-ds-design/out/probe.txt
+          [ "$code" = "200" ] || { echo "zen deepseek lane NOT alive (HTTP $code)" | tee -a bench/2026-10-28-ds-design/out/probe.txt; exit 1; }
+
+      - name: "run the design consult - designer deepseek-v4.1-flash-free"
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        run: |
+          set -euo pipefail
+          cd bench/2026-10-28-ds-design
+          jq -n \
+            --rawfile law ../../.law-brief.txt \
+            --rawfile b inputs/BRIEF.md \
+            --rawfile css inputs/docneural-ui.css \
+            --rawfile home inputs/home.svelte.txt \
+            --rawfile shell inputs/app-shell.svelte.txt \
+            --rawfile graph inputs/graph-view.svelte.txt \
+            --rawfile idx inputs/index.html.txt \
+            '{model:"deepseek-v4.1-flash-free",
+              messages:[{role:"user", content: ($law + "\n\n" + $b + "\n\n===== FILE: docneural-ui.css =====\n" + $css + "\n\n===== FILE: home.svelte.txt (markup+style, script removed) =====\n" + $home + "\n\n===== FILE: app-shell.svelte.txt (markup+style, script removed) =====\n" + $shell + "\n\n===== FILE: graph-view.svelte.txt (markup+style, script removed) =====\n" + $graph + "\n\n===== FILE: index.html.txt (script removed) =====\n" + $idx)}],
+              max_tokens: 20000,
+              temperature: 0.7}' > payload.json
+          code=$(curl -sS -m 900 -o out/response.json -w '%{http_code}' -X POST \
+            "https://opencode.ai/zen/v1/chat/completions" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer $OPENCODE_API_KEY" \
+            --data-binary @payload.json || echo 000)
+          echo "consult HTTP $code" | tee out/consult-status.txt
+          [ "$code" = "200" ] || { head -c 500 out/response.json | tee -a out/consult-status.txt; exit 1; }
+          jq -r '.choices[0].message.content // empty' out/response.json > out/response.md
+          jq -r '.choices[0].message.reasoning_content // empty' out/response.json > out/reasoning.txt
+          jq '{finish: .choices[0].finish_reason, usage: .usage, model: .model}' out/response.json > out/meta.json
+          wc -c out/response.md
+          [ -s out/response.md ] || { echo "EMPTY response content"; exit 1; }
+
+      - name: upload consult outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ds-design-out
+          path: bench/2026-10-28-ds-design/out/
+          retention-days: 7

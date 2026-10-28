@@ -1,0 +1,1319 @@
+/* ==========================================================================
+   Docneural UI — theme tokens + Org-exported content styles.
+
+   Name: Docneural UI — doc + neural: the reading surface of a documentation
+   graph. Hebb's law says neurons that fire together wire together — every
+   read of an interlinked doc strengthens the connection in a human brain,
+   and every citation resolved strengthens an LLM's context.
+
+   LOOK: a HUD, not a magazine. Ink-blue black, neon cyan/magenta/electric
+   yellow, monospace chrome in uppercase with wide tracking, sharp corners
+   with one notched edge, corner brackets instead of soft shadows, a faint
+   circuit grid and scanlines on the page. Long-form prose stays quiet and
+   readable (Inter, no glow) — the neon belongs to the instrument panel, not
+   to the text you are trying to read.
+
+   MULTI-SOURCE: this site hosts documentation from many projects (Org, Emacs,
+   Guix, ...). Each source owns one neon hue, and the hue is not a second
+   palette: it is the SAME colour the graph canvas paints that source's nodes
+   with, because core/source.ts hashes the source tag with orui's djb2 and
+   indexes the SAME --dn-graph-palette the canvas reads. Components receive it
+   as an inline `--dn-src` custom property and use `var(--dn-src)`.
+
+   Structure:
+   1. Tokens (dark default + light override) — every color/size the theme
+      uses lives here, so downstream sites can re-skin with one block.
+   2. Base/reset — page chrome: circuit grid, scanlines, links, caret.
+   2b. HUD vocabulary — notches, brackets, glitch, chips, source tint.
+   2c. Machine output — key/value grids, selection.
+   2d. Chrome — header, nav, status rows, section headers, footer.
+   3. `.dn-org` — styling for raw org-export HTML (headings, tables, src
+      blocks, TODO badges…). The site injects unmodified Org HTML here; the
+      theme must NOT depend on any JS.
+   ========================================================================== */
+
+/* ---------- 0. Fonts ---------------------------------------------------
+   Self-hosted, latin subset, three files (96 kB total, cached forever).
+   WHY: a render-blocking <link> to fonts.googleapis.com delays
+   DOMContentLoaded by however long that round trip takes — on the machine
+   this site is built on it added tens of seconds to first paint, and on a
+   phone it is a DNS + TLS + CSS fetch before the font files even start.
+   `font-display: swap` means text paints in the fallback immediately and
+   the real face swaps in; nothing waits on a network.
+   Inter and JetBrains Mono ship as variable files, so one URL serves both
+   weights we use (same arrangement Google's own CSS uses). */
+@font-face {
+  font-family: "Electrolize";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/electrolize-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+
+/* ---------- 1. Tokens -------------------------------------------------- */
+:root {
+  /* Type. Mono IS the identity: headings, nav, labels, meta, code. Human
+     prose stays on a quiet sans, because a long read in mono is not a long
+     read — Inter carries the body text and nothing else. */
+  --dn-font-mono: "JetBrains Mono", "Iosevka", "IBM Plex Mono", ui-monospace,
+    "DejaVu Sans Mono", Menlo, monospace;
+  --dn-font-prose: "Inter", ui-sans-serif, system-ui, "Segoe UI", Roboto,
+    sans-serif;
+  /* The brand voice, used ONLY where a shape is more useful than a word:
+     the wordmark and the reader's page title. Electrolize is single-weight
+     and cramped small, so nothing readable is set in it — one file, 17 kB. */
+  --dn-font-display: "Electrolize", "JetBrains Mono", ui-monospace, monospace;
+  /* Tracking for the uppercase micro-labels that make this read as an
+     instrument panel. The ramp: tight for code-ish tags, base for labels,
+     wide for overline kickers and the status bar. */
+  --dn-track: 0.16em;
+  --dn-track-tight: 0.08em;
+  --dn-track-wide: 0.28em;
+
+  /* Type-size ramp (rem). Only what the chrome + prose actually use; the
+     prose section sizes off these so heading rhythm is one scale. */
+  --dn-text-xs: 0.7rem;   /* micro-labels, chips */
+  --dn-text-sm: 0.85rem;  /* table headers, code wells */
+  --dn-text-md: 1rem;     /* body */
+  --dn-text-lg: 1.12rem;  /* h3 */
+  --dn-text-xl: 1.3rem;   /* h2 */
+  --dn-text-2xl: 1.7rem;  /* h1 / page title */
+
+  /* Spacing ramp — 4px base unit, 8 steps. Chrome rhythm (nav gaps, panel
+     padding, section margins) reads off this so everything lands on the
+     same grid the circuit pattern draws. */
+  --dn-space-1: 0.25rem;
+  --dn-space-2: 0.5rem;
+  --dn-space-3: 0.75rem;
+  --dn-space-4: 1rem;
+  --dn-space-5: 1.5rem;
+  --dn-space-6: 2rem;
+  --dn-space-7: 3rem;
+  --dn-space-8: 4rem;
+
+  /* Radii — the HUD is sharp; radii exist only to take the pixel-sting off
+     filled elements (chips, wells). Never above 4px, never on panels. */
+  --dn-radius-sm: 2px;
+  --dn-radius: 3px;
+  --dn-radius-lg: 4px;
+
+  /* Surfaces — VOID black (designer round-3 spec: "deeper pit, so emissive
+     elements breathe"), keeping the SIGNAL pass's raised text tiers so the
+     contrast complaint stays answered. Cool, never neutral grey: the cast
+     is what sells the night-city look. */
+  --dn-bg: #030608;
+  --dn-bg-raise: #0c1219; /* panels, table stripes, code wells */
+  --dn-bg-sunken: #05090d; /* page backdrop behind the raise panels */
+  --dn-fg: #eaf3fc;
+  /* Secondary text and hairlines have to survive a dim room on a cheap
+     laptop panel. Tuned for contrast, not subtlety (r3 spec §5, lifted by
+     the SIGNAL pass): body ~16:1, muted ~9:1, faint ~5.5:1, borders 3:1. */
+  --dn-fg-muted: #a9bfd6;
+  --dn-fg-faint: #8ba3bd;
+  --dn-border: #416487;
+  --dn-border-strong: #5d89b4;
+
+  /* Signals — the cyberpunk set (designer r3): cyan is the wire, hot pink
+     the synapse, yellow the alert, acid the LIVE readout, violet the brand
+     gradient. Hues at SIGNAL-pass brightness. */
+  --dn-accent: #00f0ff;   /* primary: links, focus, active chrome */
+  --dn-accent-dim: #2cc4e3; /* accent, safe as text on ink */
+  --dn-accent-2: #ff3366; /* secondary: tags, counts, the firing set */
+  --dn-accent-2-text: #ff3366;
+  --dn-hot: #ffdf3f;      /* attention: hover, backlink arrows, reticle */
+  --dn-amber: #ffb347;    /* TODO markers, warnings */
+  --dn-acid: #39ff14;     /* live/online readouts: LED, uplink kicker */
+  --dn-violet: #bd00ff;   /* gradient borders + the wordmark's middle stop */
+
+  /* The wordmark: a neon-sign decay from electric cyan through violet into
+     hot pink. One recipe, shared by the header brand and the hero. */
+  --dn-wordmark: linear-gradient(135deg,
+    #7df9ff 0%, var(--dn-accent) 26%, var(--dn-violet) 62%, var(--dn-accent-2) 100%);
+
+  /* One shared glow recipe, so "neon" is a constant and not 40 hand-tuned
+     box-shadows. R3: hotter — the bloom is the cyberpunk tell. */
+  --dn-glow: 0 0 7px color-mix(in srgb, var(--dn-accent) 70%, transparent),
+    0 0 26px color-mix(in srgb, var(--dn-accent) 30%, transparent);
+  --dn-glow-2: 0 0 7px color-mix(in srgb, var(--dn-accent-2) 70%, transparent),
+    0 0 26px color-mix(in srgb, var(--dn-accent-2) 30%, transparent);
+  /* The acid readout gets its own small halo (status LEDs, LIVE kickers). */
+  --dn-glow-acid: 0 0 6px color-mix(in srgb, var(--dn-acid) 75%, transparent),
+    0 0 18px color-mix(in srgb, var(--dn-acid) 35%, transparent);
+
+  /* Corner-bracket recipe, as tokens: stroke width, arm length, and the
+     neon bleed under the strokes. .dn-hud and .dn-brackets both read these,
+     so "a bracket" is a constant across pseudo-element and gradient
+     implementations. */
+  --dn-bracket-w: 2px;
+  --dn-bracket-l: 14px;
+  --dn-bracket-bleed: drop-shadow(0 0 4px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 60%, transparent));
+
+  /* Graph wires, as a LITERAL color: the force-graph canvas cannot read
+     custom properties or parse color-mix(), so the embed bridges
+     --orui-link-color to this resolved value (DocneuralGraph). The engine's
+     LOD tiers multiply this per zoom band (neuronEngine.ts), so the token is
+     the NEAR-band color: at corpus zoom wires drop far below this, which is
+     how the cyan burn-out died. 0.28 keeps the mini-map (no LOD there)
+     readable while the canvas tiers go quieter at distance. */
+  --dn-graph-link: rgba(0, 240, 255, 0.28);
+
+  /* The canvas backdrop: one step lighter than the page, so the graph reads
+     as a lit panel sunk into the HUD. GraphView paints a transparent canvas,
+     so this DOM color shows through it (DocneuralGraph .roam-wrap). */
+  --dn-graph-bg: #0a1524;
+
+  /* The graph's grid: fine circuit lines rather than petri-dish dots. These
+     are the colors the grid's linear-gradients paint with; both themes carry
+     the same two tokens so the well reads as one material everywhere. */
+  --dn-dish-dot-1: rgba(0, 240, 255, 0.1);
+  --dn-dish-dot-2: rgba(255, 51, 102, 0.06);
+
+  /* Node colors, as a LITERAL comma list: orui's canvas reads
+     --orui-node-palette off the container (see DocneuralGraph/SynapseRail) and
+     picks hue = hash(first tag) % length. core/source.ts hashes the SAME way
+     and indexes THIS SAME list, so a source's DOM colour and its graph colour
+     are one value, not two that happen to look alike. R3 palette: the
+     designer's cyberpunk hues at SIGNAL-pass brightness. */
+  --dn-graph-palette: #00f0ff, #ff3366, #ffdf3f, #bd00ff, #39ff14, #ff7a45, #56c8ff, #ff5c8a;
+
+  /* Geometry — sharp. The one notch is the signature; --dn-notch feeds the
+     clip-path shapes in §2b. */
+  --dn-notch: 9px;
+  --dn-max-prose: 74ch;
+  --dn-header-h: 3.2rem;
+  --dn-side-w: 240px;
+  --dn-panel-w: 340px;
+
+  color-scheme: dark;
+}
+
+/* Day mode: same network, bleached to paper. Opt in with
+   <html data-theme="light">; the JS theme toggle only flips this attribute.
+   The neon darkens into ink-jet colour so the HUD survives a bright room.
+   SIGNAL pass: this is a first-class look now, not an afterthought — real
+   paper (brighter floor), real ink (darker text), saturated signal colours,
+   and every token re-checked against WCAG AA (text >= 4.5:1, borders >= 3:1).
+   Full parity: the glow recipes and bracket bleed are re-tuned for paper
+   too, because a dark-theme bloom on white reads as a dirty smudge. */
+:root[data-theme='light'] {
+  --dn-bg: #f4f7fb;
+  --dn-bg-raise: #ffffff;
+  --dn-bg-sunken: #e5ecf4;
+  --dn-fg: #0b1524;
+  --dn-fg-muted: #38506a;
+  --dn-fg-faint: #556a80;
+  --dn-border: #66839c;
+  --dn-border-strong: #47647f;
+  --dn-accent: #00688f;
+  --dn-accent-dim: #056a8a;
+  --dn-accent-2: #c91375;
+  --dn-accent-2-text: #a80e5f;
+  --dn-hot: #7a5c00;
+  --dn-amber: #8f5600;
+  /* Ink-jet versions of the two new signals: readable as text on paper. */
+  --dn-acid: #0b7a12;
+  --dn-violet: #8a00d1;
+  /* The wordmark keeps its decay on paper with the darkened stops. */
+  --dn-wordmark: linear-gradient(135deg,
+    #056a8a 0%, var(--dn-accent) 30%, var(--dn-violet) 66%, var(--dn-accent-2) 100%);
+  /* Glows on paper: shorter throw, tighter core — a printed halo, not a
+     lamp. Keeps focus rings and hover states legible in a bright room. */
+  --dn-glow: 0 0 4px color-mix(in srgb, var(--dn-accent) 45%, transparent),
+    0 0 12px color-mix(in srgb, var(--dn-accent) 18%, transparent);
+  --dn-glow-2: 0 0 4px color-mix(in srgb, var(--dn-accent-2) 45%, transparent),
+    0 0 12px color-mix(in srgb, var(--dn-accent-2) 18%, transparent);
+  --dn-glow-acid: 0 0 4px color-mix(in srgb, var(--dn-acid) 50%, transparent),
+    0 0 10px color-mix(in srgb, var(--dn-acid) 22%, transparent);
+  --dn-bracket-bleed: drop-shadow(0 0 3px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 35%, transparent));
+  --dn-graph-link: rgba(0, 104, 143, 0.5);
+  --dn-graph-bg: #ffffff;
+  --dn-dish-dot-1: rgba(0, 104, 143, 0.16);
+  --dn-dish-dot-2: rgba(201, 19, 117, 0.1);
+  --dn-graph-palette: #00688f, #c91375, #7a5c00, #5b3fd6, #007a5c, #c2410c, #0369a1, #b3125f;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  /* Honor the OS unless the page explicitly asked for dark. Kept in sync with
+     the block above by hand — there is no build step, so a token added to one
+     must be added to the other. */
+  :root:not([data-theme]) {
+    --dn-bg: #f4f7fb;
+    --dn-bg-raise: #ffffff;
+    --dn-bg-sunken: #e5ecf4;
+    --dn-fg: #0b1524;
+    --dn-fg-muted: #38506a;
+    --dn-fg-faint: #556a80;
+    --dn-border: #66839c;
+    --dn-border-strong: #47647f;
+    --dn-accent: #00688f;
+    --dn-accent-dim: #056a8a;
+    --dn-accent-2: #c91375;
+    --dn-accent-2-text: #a80e5f;
+    --dn-hot: #7a5c00;
+    --dn-amber: #8f5600;
+    --dn-acid: #0b7a12;
+    --dn-violet: #8a00d1;
+    --dn-wordmark: linear-gradient(135deg,
+      #056a8a 0%, var(--dn-accent) 30%, var(--dn-violet) 66%, var(--dn-accent-2) 100%);
+    --dn-glow: 0 0 4px color-mix(in srgb, var(--dn-accent) 45%, transparent),
+      0 0 12px color-mix(in srgb, var(--dn-accent) 18%, transparent);
+    --dn-glow-2: 0 0 4px color-mix(in srgb, var(--dn-accent-2) 45%, transparent),
+      0 0 12px color-mix(in srgb, var(--dn-accent-2) 18%, transparent);
+    --dn-glow-acid: 0 0 4px color-mix(in srgb, var(--dn-acid) 50%, transparent),
+      0 0 10px color-mix(in srgb, var(--dn-acid) 22%, transparent);
+    --dn-bracket-bleed: drop-shadow(0 0 3px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 35%, transparent));
+    --dn-graph-link: rgba(0, 104, 143, 0.5);
+    --dn-graph-bg: #ffffff;
+    --dn-dish-dot-1: rgba(0, 104, 143, 0.16);
+    --dn-dish-dot-2: rgba(201, 19, 117, 0.1);
+    --dn-graph-palette: #00688f, #c91375, #7a5c00, #5b3fd6, #007a5c, #c2410c, #0369a1, #b3125f;
+    color-scheme: light;
+  }
+}
+
+/* Phones (and any chrome-under-a-notch context): the header height grows by
+   the top safe-area inset so EVERY surface's `calc(100dvh - header)` math
+   stays true (synapse canvas, reader, home). The header itself pads by the
+   same inset (DocneuralApp); the graph chips pad their bottom edge the same
+   way. On devices without a notch env() is 0 and nothing moves. */
+@media (max-width: 600px) {
+  :root {
+    --dn-header-h: calc(3.2rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+/* ---------- 2. Base ----------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body.dn-body {
+  margin: 0;
+  font-family: var(--dn-font-prose);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--dn-fg);
+  /* The circuit board the HUD sits on: one fine grid, one coarse grid. Two
+     sizes so the page has depth without a heavy pattern, and both are hairline
+     1px lines — SIGNAL pass sizing (72/14px), alphas up a step. R3 adds the
+     layer the designer called the vignette mask: a fixed radial that pulls
+     the page's edges into the void, so the center of every surface reads
+     closer to the eye than its frame. background-attachment is per-layer;
+     only the vignette is fixed, so the grid scrolls and the void does not. */
+  background-color: var(--dn-bg);
+  background-image:
+    radial-gradient(ellipse at 50% 42%, transparent 52%, color-mix(in srgb, black 62%, transparent) 100%),
+    linear-gradient(to right, color-mix(in srgb, var(--dn-accent) 5.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--dn-accent) 5.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in srgb, var(--dn-accent-2) 3.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--dn-accent-2) 3.5%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 72px 72px, 72px 72px, 14px 14px, 14px 14px;
+  background-attachment: fixed, scroll, scroll, scroll, scroll;
+}
+:root[data-theme='light'] body.dn-body {
+  /* On paper the void is a soft grey bloom, not black. */
+  background-image:
+    radial-gradient(ellipse at 50% 42%, transparent 55%, color-mix(in srgb, var(--dn-bg-sunken) 70%, transparent) 100%),
+    linear-gradient(to right, color-mix(in srgb, var(--dn-accent) 5.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--dn-accent) 5.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in srgb, var(--dn-accent-2) 3.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--dn-accent-2) 3.5%, transparent) 1px, transparent 1px);
+}
+
+/* The aurora: four slow, pre-blurred signal glows pinned off the corners of
+   the viewport (two bright on the leading diagonal, two faint framing the
+   other diagonal), behind all content (z-index -1) — the board's power rails
+   leaking light at all four corners, not just two. The gradients ARE soft,
+   so there is no filter() blur cost; only transform/opacity animate, and the
+   layer is fixed, so it composites once and never repaints on scroll.
+   prefers-reduced-motion parks it. */
+body.dn-body::before {
+  content: "";
+  position: fixed;
+  inset: -14%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(44% 36% at 16% 6%, color-mix(in srgb, var(--dn-accent) 14%, transparent), transparent 70%),
+    radial-gradient(40% 32% at 88% 94%, color-mix(in srgb, var(--dn-accent-2) 12%, transparent), transparent 70%),
+    radial-gradient(34% 28% at 86% 8%, color-mix(in srgb, var(--dn-accent-2) 6%, transparent), transparent 70%),
+    radial-gradient(34% 28% at 12% 92%, color-mix(in srgb, var(--dn-accent) 6%, transparent), transparent 70%);
+  animation: dn-aurora 26s ease-in-out infinite alternate;
+}
+@keyframes dn-aurora {
+  from { transform: translate3d(-2.2%, -1.4%, 0) scale(1); opacity: 0.8; }
+  to { transform: translate3d(2.2%, 1.4%, 0) scale(1.07); opacity: 1; }
+}
+:root[data-theme='light'] body.dn-body::before {
+  /* On paper the aurora is a wash of tint, not a lamp: keep it faint. */
+  opacity: 0.5;
+  animation-name: dn-aurora-soft;
+}
+@keyframes dn-aurora-soft {
+  from { transform: translate3d(-2.2%, -1.4%, 0) scale(1); }
+  to { transform: translate3d(2.2%, 1.4%, 0) scale(1.07); }
+}
+
+/* Scanlines: the CRT overlay every cyberpunk HUD has. Fixed and full-bleed so
+   it survives scrolling, pointer-events:none so it never eats a click, and
+   above the canvas too — a screen effect that stops at the graph would look
+   like a bug. Kept at 3% so it reads on a bright monitor and does not turn
+   the text into a strobe. */
+body.dn-body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--dn-bg-sunken) 55%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  /* Corner presence: a radial mask lets the scanlines breathe over the
+     reading area and deepen toward the edges/corners, so the screen reads as
+     a lit CRT face — brighter at the center of attention, denser where the
+     tube curves away. A static mask composites once; nothing repaints. */
+  -webkit-mask-image: radial-gradient(130% 130% at 50% 44%, transparent 46%, black 100%);
+  mask-image: radial-gradient(130% 130% at 50% 44%, transparent 46%, black 100%);
+}
+
+/* The scan SWEEP was considered here (designer effect #3) and dropped in the
+   R3 merge: the SIGNAL aurora already owns body::before, and aurora +
+   scanlines + vignette + brackets is the right effect budget — a third
+   full-viewport animated layer bought nothing but frame risk. The retrace
+   idea survives in the scanline mask deepening toward the tube's edge. */
+:root[data-theme='light'] body.dn-body::after {
+  /* On paper the overlay has to be light-on-dark or it just greys the page. */
+  mix-blend-mode: screen;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--dn-bg-sunken) 80%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+.dn-body a {
+  color: var(--dn-accent);
+  text-decoration-color: color-mix(in srgb, var(--dn-accent) 45%, transparent);
+  text-underline-offset: 3px;
+  transition: color 120ms, text-shadow 120ms;
+}
+.dn-body a:hover {
+  color: var(--dn-hot);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--dn-hot) 65%, transparent);
+}
+:root[data-theme='light'] .dn-body a:hover {
+  /* On paper the hot-yellow halo reads as a stain; a firmer underline does
+     the hovering instead. */
+  text-shadow: none;
+  text-decoration-color: var(--dn-hot);
+}
+
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 1px solid var(--dn-accent);
+  outline-offset: 2px;
+  box-shadow: var(--dn-glow);
+}
+
+.dn-mono {
+  font-family: var(--dn-font-mono);
+}
+
+/* Motion vocabulary. `.spark` (the ⌁ glyph) breathes; content rises in on
+   mount; a landed anchor flashes so a stub→section redirect is visible.
+   All opt out under prefers-reduced-motion (block at the end of § 2b). */
+@keyframes dn-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes dn-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dn-flash {
+  from { background: color-mix(in srgb, var(--dn-accent) 30%, transparent); }
+  to { background: transparent; }
+}
+/* The status LED's beat: scale + opacity only (compositor-friendly), twice
+   as fast as the old opacity fade — a heartbeat, not a breathing exercise. */
+@keyframes dn-led {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.78); opacity: 0.6; }
+}
+/* Terminal cursor blink for the hero feed line (Home). */
+@keyframes dn-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Thin themed scrollbars keep the rails feeling like one instrument. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dn-border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--dn-border-strong);
+  border-radius: 0;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--dn-accent-dim); }
+
+/* ---------- 2b. HUD vocabulary -----------------------------------------
+   The DOM-side equivalents of what the canvas paints. Everything here is
+   sharp-edged and lit from the edge: brackets, notches, underline-glow —
+   no soft 20px-radius cards anywhere.                                       */
+
+/* The brand mark: a node in cross-section. Kept as a ring + nucleus so it
+   reads at 0.7em in the header and at 3em in the hero. The membrane pulses:
+   the mark is never static, even when it means "idle". */
+.dn-neuron-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  color: var(--dn-accent);
+  border: 1px solid currentColor;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--dn-accent) 45%, transparent) 0,
+    color-mix(in srgb, var(--dn-accent) 6%, transparent) 62%,
+    transparent 100%);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--dn-accent) 38%, transparent);
+  /* PERF-MOBILE: the membrane pulse is gone — animating box-shadow repaints
+     every frame, on every surface the mark sits on (brand, stats head,
+     controls). The static glow IS the look. */
+}
+.dn-neuron-mark::before {
+  content: "";
+  width: 0.34em;
+  height: 0.34em;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--dn-accent) 92%, white);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--dn-accent) 80%, transparent);
+}
+
+/* Firing indication for anything "synapse" (counts, tabs, chips): the
+   accent breathes, matching the canvas particles' direction of travel. */
+.dn-firing {
+  color: var(--dn-accent);
+  animation: dn-pulse 2.4s ease-in-out infinite;
+}
+
+/* The graph well: the canvas sits inside this. A circuit grid (finer than the
+   page's, and brighter — this is the lit panel) plus an inward vignette, so
+   the neurons read as live signal on a board rather than dots on a flat pane.
+   Class name kept as .dn-dish because both graph mounts already use it. */
+.dn-dish {
+  background-color: var(--dn-graph-bg);
+  background-image:
+    linear-gradient(to right, var(--dn-dish-dot-1) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--dn-dish-dot-1) 1px, transparent 1px),
+    linear-gradient(to right, var(--dn-dish-dot-2) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--dn-dish-dot-2) 1px, transparent 1px),
+    radial-gradient(ellipse at center,
+      transparent 55%,
+      color-mix(in srgb, var(--dn-bg-sunken) 60%, transparent) 100%);
+  background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px, 100% 100%;
+}
+
+/* Floating surfaces — the command palette, the note preview, the graph
+   controls. SIGNAL pass: sharper glass — a darker fill behind a neon-tinted
+   1px edge and a wider shadow, so a panel reads as a slab of black glass
+   laid over the board. Still no backdrop-filter: on a 4 GB machine a big
+   backdrop-filter costs frames, and the border does the glowing anyway. */
+.dn-glass {
+  background: color-mix(in srgb, var(--dn-bg-raise) 92%, color-mix(in srgb, var(--dn-bg-sunken) 70%, transparent));
+  border: 1px solid color-mix(in srgb, var(--dn-accent) 32%, var(--dn-border-strong));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--dn-accent) 18%, transparent),
+    0 14px 40px color-mix(in srgb, var(--dn-bg-sunken) 85%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--dn-accent) 6%, transparent);
+}
+
+/* Corner brackets: the signature. Two pseudo-elements draw an L at opposite
+   corners, so any region reads as a framed HUD target — the trick that
+   replaces a soft drop shadow. SIGNAL pass took the strokes to 2px/12px;
+   R3 extends the arms to 14px and adds the designer's neon bleed under the
+   strokes. Needs position:relative on the host, and the host must not clip
+   its own overflow. Stroke/arms/bleed all come from the §1 bracket tokens. */
+.dn-hud {
+  position: relative;
+}
+.dn-hud::before,
+.dn-hud::after {
+  content: "";
+  position: absolute;
+  width: var(--dn-bracket-l);
+  height: var(--dn-bracket-l);
+  pointer-events: none;
+  color: var(--dn-src, var(--dn-accent));
+  opacity: 0.9;
+  filter: var(--dn-bracket-bleed);
+}
+.dn-hud::before {
+  top: -1px;
+  left: -1px;
+  border-top: var(--dn-bracket-w) solid currentColor;
+  border-left: var(--dn-bracket-w) solid currentColor;
+}
+.dn-hud::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: var(--dn-bracket-w) solid currentColor;
+  border-bottom: var(--dn-bracket-w) solid currentColor;
+}
+
+/* Four-corner brackets as a pure background — for hosts that already spend
+   both pseudo-elements (or clip their overflow and can't use .dn-hud). Eight
+   gradient strokes, one per corner-arm, drawn from the same tokens. No
+   pseudo-elements, no extra markup; composites once and never repaints. */
+.dn-brackets {
+  background-image:
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent))),
+    linear-gradient(var(--dn-src, var(--dn-accent)), var(--dn-src, var(--dn-accent)));
+  background-repeat: no-repeat;
+  background-size:
+    var(--dn-bracket-l) var(--dn-bracket-w), var(--dn-bracket-w) var(--dn-bracket-l),
+    var(--dn-bracket-l) var(--dn-bracket-w), var(--dn-bracket-w) var(--dn-bracket-l),
+    var(--dn-bracket-l) var(--dn-bracket-w), var(--dn-bracket-w) var(--dn-bracket-l),
+    var(--dn-bracket-l) var(--dn-bracket-w), var(--dn-bracket-w) var(--dn-bracket-l);
+  background-position:
+    0 0, 0 0,
+    100% 0, 100% 0,
+    0 100%, 0 100%,
+    100% 100%, 100% 100%;
+}
+
+/* The notched edge: one corner cut at 45°, the silhouette of a hardware
+   label. Used on filled chrome (chips, CTAs, segmented buttons) where there
+   is no border to clip. clip-path also clips box-shadow, so anything that
+   needs an OUTER glow wants .dn-hud instead of a notch. */
+.dn-notch {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--dn-notch)) 0,
+    100% var(--dn-notch),
+    100% 100%,
+    var(--dn-notch) 100%,
+    0 calc(100% - var(--dn-notch))
+  );
+}
+/* The half-notch: only the leading corner cut — for elements already in a
+   row (tabs, breadcrumb segments) where two cuts fight the neighbours. */
+.dn-notch-lead {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--dn-notch)) 0,
+    100% var(--dn-notch),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Uppercase micro-label — the small caps of the HUD. Anything that is a
+   caption rather than content goes through this so "SYSTEM // NODES" and a
+   sentence never look like the same kind of text. */
+.dn-label {
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-xs);
+  letter-spacing: var(--dn-track);
+  text-transform: uppercase;
+  color: var(--dn-fg-muted);
+}
+/* The kicker: the widest-tracking tier, for the one line above a page or
+   panel title ("CORPUS // GNU EMACS"). Wider than a label, dimmer than a
+   heading — the hierarchy is track width, not size. */
+.dn-kicker {
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-xs);
+  letter-spacing: var(--dn-track-wide);
+  text-transform: uppercase;
+  color: var(--dn-fg-faint);
+}
+
+/* Chip: the tag/source pill. Square-ish, 1px edge, colour from --dn-src when
+   the host set one (see the MULTI-SOURCE note above). SIGNAL pass: the edge
+   and the fill both rose so a chip reads from across the page. */
+.dn-chip {
+  font-family: var(--dn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--dn-src, var(--dn-accent-2));
+  background: color-mix(in srgb, var(--dn-src, var(--dn-accent-2)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dn-src, var(--dn-accent-2)) 45%, transparent);
+  border-radius: var(--dn-radius-sm);
+  padding: 0.12em 0.6em;
+  white-space: nowrap;
+}
+/* The lit chip: for the one active filter/tab in a row of chips. Same hue,
+   but the fill doubles and the edge goes solid, so "selected" is weight,
+   not a second colour. */
+.dn-chip.active {
+  background: color-mix(in srgb, var(--dn-src, var(--dn-accent-2)) 24%, transparent);
+  border-color: var(--dn-src, var(--dn-accent-2));
+}
+
+/* The lit edge: a bar that grows out of an element when it becomes active —
+   the DOM echo of an axon leaving a soma. Row-like things (cards, chapters,
+   palette entries) all share it, so "the lit edge" means one thing everywhere.
+   Same idea as .dn-spine from the previous pass, kept under that class name so
+   existing markup keeps working, now without the round glow. */
+.dn-spine { position: relative; }
+.dn-spine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  height: 0;
+  background: var(--dn-src, var(--dn-accent));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 70%, transparent);
+  transform: translateY(-50%);
+  transition: height 160ms ease;
+  pointer-events: none;
+}
+.dn-spine.active::before,
+.dn-spine:hover::before { height: 72%; }
+
+/* Glitch wordmark — the hero's whole reason to look like a screen. The text
+   is real (::before/::after carry the SAME string from data-text, so the
+   glyphs stay selectable and the accessible name is untouched), and the two
+   offset copies are cyan and magenta: the chromatic split of a bad signal.
+   It fires briefly on a 6s loop rather than strobing, so it reads as an
+   event, not a headache. */
+.dn-glitch {
+  position: relative;
+  display: inline-block;
+}
+/* PERF-MOBILE: the ghosts park at opacity 0 — same treatment reduced-motion
+   already gave them, because "a frozen chromatic split looks like misrendered
+   text" (this file's own words). The wordmark keeps its chromatic fringe via
+   the text-shadow under the gradient; the 6s steps() loops are gone from
+   every page load. */
+.dn-glitch::before,
+.dn-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: inset(0 0 60% 0);
+}
+.dn-glitch::before {
+  color: var(--dn-accent);
+}
+.dn-glitch::after {
+  color: var(--dn-accent-2-text);
+  clip-path: inset(55% 0 0 0);
+}
+
+/* Brand gradient text — the wordmark and section headers. R2: the gradient
+   IS the neon-sign decay (cyan -> violet -> hot pink, the designer's token),
+   and the aberration shadows ride underneath it: text-shadow paints the
+   glyph silhouette even when the fill is transparent, so the fringe reads
+   while the gradient carries the face. Kept as a background-clip trick so it
+   survives every theme (both stops are live tokens, not baked hues). */
+.dn-gradient-text {
+  background: var(--dn-wordmark, linear-gradient(100deg,
+    var(--dn-accent), var(--dn-violet), var(--dn-accent-2)));
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    -2px 0 color-mix(in srgb, var(--dn-accent-2) 55%, transparent),
+    2px 0 color-mix(in srgb, var(--dn-accent) 45%, transparent),
+    0 0 30px color-mix(in srgb, var(--dn-accent) 30%, transparent);
+  /* PERF-MOBILE: the 9s background-position sweep is parked — a gradient
+     that never stops repainting the wordmark bought little; the decay
+     gradient at rest is the look. */
+  background-position: 0% 0;
+}
+:root[data-theme='light'] .dn-gradient-text {
+  /* On paper the aberration fringe is noise, not neon: drop the offsets and
+     keep only the faintest cool halo so the wordmark stays ink-crisp. */
+  text-shadow: 0 0 18px color-mix(in srgb, var(--dn-accent) 18%, transparent);
+}
+
+/* Hairline rule that reads as a trace on the board: a 1px line with a lit
+   node riding on it. Used between hero blocks and above footers. */
+.dn-trace {
+  position: relative;
+  height: 1px;
+  border: 0;
+  margin: 1.6rem 0;
+  background: linear-gradient(90deg,
+    transparent, var(--dn-accent-dim) 10%, var(--dn-border-strong) 50%, var(--dn-accent-dim) 90%, transparent);
+}
+.dn-trace::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--dn-accent);
+  box-shadow: 0 0 12px 2px color-mix(in srgb, var(--dn-accent) 65%, transparent);
+  /* PERF-MOBILE: the lit node rests mid-trace instead of drifting forever. */
+  transform: translateX(0);
+}
+
+/* A halo behind a hero/panel: two stacked rings, so a DOM surface reads as
+   live signal next to the graph. */
+.dn-halo {
+  position: relative;
+}
+.dn-halo::before,
+.dn-halo::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--dn-accent);
+  pointer-events: none;
+}
+.dn-halo::before { inset: -0.35em; opacity: 0.4; }
+.dn-halo::after { inset: -0.7em; opacity: 0.18; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spark { animation: none; }
+  .dn-firing { animation: none; }
+  body.dn-body::before { animation: none; opacity: 0; }
+  .dn-gradient-text { animation: none; }
+  .dn-trace::after { animation: none; }
+  .dn-neuron-mark { animation: none; }
+  .dn-led-dot { animation: none; }
+  /* The glitch is the one effect that cannot merely stop: a frozen chromatic
+     split looks like misrendered text, so the ghosts go entirely. */
+  .dn-glitch::before,
+  .dn-glitch::after { animation: none; opacity: 0; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* ---------- 2c. Machine output ------------------------------------------
+   Numbers the site computed (corpus stats, counts) are set in mono and put
+   in a key/value grid. That is the whole vocabulary now: an earlier revision
+   dressed this content as a shell session — a tty window with title-bar
+   glyphs, a PS1 prompt, `[ ok ]` lines, a blinking block cursor — and it made
+   a documentation site look like it was mid-boot. The terminal feel stays in
+   the DESIGN (monospace, tracking, notched corners, the neon trio), not in
+   props that pretend the page is a terminal.                                   */
+
+/* A column of keys, a column of values. Grid rather than a table because it
+   is not tabular data. */
+.dn-kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1.4em;
+  row-gap: var(--dn-space-1);
+}
+.dn-kv > span:nth-child(odd) { color: var(--dn-fg-faint); }
+.dn-kv > span { overflow-wrap: anywhere; }
+.dn-kv b { color: var(--dn-hot); font-weight: 600; }
+
+/* Text you select should read as part of the HUD: a solid neon block,
+   not the browser's blue. */
+::selection {
+  background: var(--dn-accent);
+  color: var(--dn-bg-sunken);
+}
+
+/* ---------- 2d. Chrome --------------------------------------------------
+   Header, nav, status rows, section headers, footer. The hierarchy rule:
+   track width and border weight do the ranking, not size jumps — an
+   instrument panel reads top-to-bottom as kicker > label > value.         */
+
+/* The header bar: a glass strip with a neon-tinted bottom hairline, the
+   board's top edge. Height comes from --dn-header-h so every
+   `calc(100dvh - var(--dn-header-h))` stays honest. */
+.dn-header {
+  min-height: var(--dn-header-h);
+  display: flex;
+  align-items: center;
+  gap: var(--dn-space-4);
+  padding: 0 var(--dn-space-4);
+  background: color-mix(in srgb, var(--dn-bg-raise) 82%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--dn-accent) 28%, var(--dn-border));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--dn-accent) 10%, transparent);
+}
+.dn-header .dn-label { color: var(--dn-fg-faint); }
+
+/* Primary nav: mono, uppercase, base tracking. The active link is lit by an
+   underline trace in the source hue — no pills, no background fill, so the
+   row keeps one rhythm and "where you are" is a wire, not a badge. */
+.dn-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--dn-space-5);
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-sm);
+  letter-spacing: var(--dn-track);
+  text-transform: uppercase;
+}
+.dn-nav a {
+  color: var(--dn-fg-muted);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 120ms, border-color 120ms;
+}
+.dn-nav a:hover {
+  color: var(--dn-fg);
+  text-shadow: none;
+  border-bottom-color: color-mix(in srgb, var(--dn-accent) 55%, transparent);
+}
+.dn-nav a.active,
+.dn-nav a[aria-current] {
+  color: var(--dn-accent);
+  border-bottom-color: var(--dn-src, var(--dn-accent));
+}
+
+/* A status row: the LED-and-readout strip ("LIVE · 1,386 NODES · SYNCED").
+   Widest tracking tier; the LED beats in acid. */
+.dn-status {
+  display: flex;
+  align-items: center;
+  gap: var(--dn-space-3);
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-xs);
+  letter-spacing: var(--dn-track-wide);
+  text-transform: uppercase;
+  color: var(--dn-fg-faint);
+}
+.dn-status b { color: var(--dn-fg-muted); font-weight: 600; }
+.dn-led-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dn-acid);
+  box-shadow: var(--dn-glow-acid);
+  animation: dn-led 1.6s ease-in-out infinite;
+}
+
+/* Section header: kicker over a mono title over a trace. The bus-line under
+   it carries the source hue, matching the h1 rule in §3, so "a new section"
+   looks the same in chrome and in prose. */
+.dn-section-head {
+  margin: var(--dn-space-6) 0 var(--dn-space-4);
+  padding-bottom: var(--dn-space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--dn-src, var(--dn-accent)) 45%, var(--dn-border));
+}
+.dn-section-head .dn-kicker { display: block; margin-bottom: var(--dn-space-1); }
+.dn-section-head h2 {
+  margin: 0;
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-xl);
+  font-weight: 600;
+  letter-spacing: var(--dn-track-tight);
+  text-transform: uppercase;
+  color: var(--dn-fg);
+}
+
+/* The footer: quiet ink, one trace on top, mono meta row. It closes the
+   instrument — no glow, nothing firing. */
+.dn-footer {
+  margin-top: var(--dn-space-7);
+  padding: var(--dn-space-4);
+  border-top: 1px solid var(--dn-border);
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-xs);
+  letter-spacing: var(--dn-track-tight);
+  color: var(--dn-fg-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dn-space-2) var(--dn-space-5);
+}
+.dn-footer a { color: var(--dn-fg-muted); }
+
+/* ---------- 3. Org content (.dn-org) -----------------------------------
+   org-export produces plain semantic HTML (div.outline-N, h1..h4, table,
+   pre.src, span.todo/markup). Style it here; components mount content
+   inside a container with class="dn-org".
+
+   Prose rules for this section: the BODY TEXT stays a quiet sans with no
+   glow — a HUD that makes you work to read a manual is a failed HUD. The
+   neon belongs to structure: headings, table headers, code wells.         */
+
+.dn-org {
+  max-width: var(--dn-max-prose);
+  animation: dn-rise 220ms ease-out both;
+}
+
+/* Paragraph rhythm: no indent, one blank line's worth of air. Text is the
+   quiet tier — nothing here glows, ever. */
+.dn-org p {
+  margin: 0 0 1em;
+  orphans: 3;
+  widows: 3;
+}
+.dn-org p:last-child { margin-bottom: 0; }
+
+/* When the reader lands on a heading (TOC click, prev/next, or a stub
+   redirect into a chapter), flash it so the eye finds the spot. Org-export
+   gives every headline a real id, so :target fires on the URL fragment. */
+.dn-org [id]:target,
+.dn-org :target {
+  animation: dn-flash 1.4s ease-out 1;
+  scroll-margin-top: calc(var(--dn-header-h) + 12px);
+}
+
+/* JS-driven sibling of the above: the reader scrolls with scrollIntoView (no
+   URL fragment), so it adds .dn-flash to the landed heading and removes it
+   when the animation ends. */
+.dn-flash {
+  animation: dn-flash 1.4s ease-out 1;
+  scroll-margin-top: calc(var(--dn-header-h) + 12px);
+}
+
+.dn-org h1, .dn-org h2, .dn-org h3, .dn-org h4,
+.dn-org h5, .dn-org h6 {
+  font-family: var(--dn-font-mono);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin: 1.8em 0 0.6em;
+  scroll-margin-top: calc(var(--dn-header-h) + 12px);
+}
+/* The first heading of a chapter doesn't need the top margin — the outline
+   wrapper already supplies the air. */
+.dn-org h1:first-child, .dn-org h2:first-child, .dn-org h3:first-child {
+  margin-top: 0;
+}
+
+.dn-org h1 {
+  font-size: var(--dn-text-2xl);
+  color: var(--dn-fg);
+  /* The page title is the one place a glow earns its keep: it is a header,
+     not a paragraph, and it marks the top of the doc. Under it, a neon rule
+     in the source's hue — the chapter's bus line. */
+  text-shadow: 0 0 26px color-mix(in srgb, var(--dn-accent) 30%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--dn-src, var(--dn-accent)) 55%, var(--dn-border-strong));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--dn-src, var(--dn-accent)) 16%, transparent);
+  padding-bottom: 0.35em;
+}
+:root[data-theme='light'] .dn-org h1 {
+  /* On paper the title glow is a halo smudge; the bus line alone carries it. */
+  text-shadow: none;
+}
+/* h2/h3 carry a mono sigil in the source's hue (set --dn-src by the reader):
+   a heading level is legible from the margin before you read a word. */
+.dn-org h2 {
+  font-size: var(--dn-text-xl);
+  letter-spacing: 0.005em;
+  padding-bottom: 0.2em;
+  /* Overline rule in the section's own hue — quiet (mostly border ink) but
+     never anonymous: every section sits on its corpus's bus line. */
+  border-bottom: 1px solid color-mix(in srgb, var(--dn-src, var(--dn-accent)) 34%, var(--dn-border));
+}
+.dn-org h2::before {
+  content: "// ";
+  color: var(--dn-src, var(--dn-accent));
+  text-shadow: 0 0 10px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 45%, transparent);
+}
+:root[data-theme='light'] .dn-org h2::before { text-shadow: none; }
+.dn-org h3 { font-size: var(--dn-text-lg); }
+.dn-org h3::before {
+  content: "» ";
+  color: var(--dn-src, var(--dn-border-strong));
+}
+.dn-org h4 { font-size: var(--dn-text-md); color: var(--dn-fg-muted); }
+/* Deep levels go small-caps rather than smaller-and-smaller: at h5 the
+   hierarchy flips to weight+tracking, which keeps the scale from shrinking
+   into unreadability. */
+.dn-org h5 {
+  font-size: var(--dn-text-sm);
+  letter-spacing: var(--dn-track-tight);
+  text-transform: uppercase;
+  color: var(--dn-fg-muted);
+}
+.dn-org h6 {
+  font-size: var(--dn-text-sm);
+  letter-spacing: var(--dn-track-tight);
+  text-transform: uppercase;
+  color: var(--dn-fg-faint);
+}
+
+/* A heading with an id is a link target: clicking it copies a deep link to
+   that section (DocReader labels them and handles the click). The # only
+   appears on hover/focus so the margin stays quiet while you read. */
+.dn-org h2[id], .dn-org h3[id] {
+  cursor: pointer;
+  /* Keep the same header offset as every other target — an earlier revision
+     set this to 0.6rem and landed headings slid under the fixed header. */
+  scroll-margin-top: calc(var(--dn-header-h) + 12px);
+}
+.dn-org h2[id]::after, .dn-org h3[id]::after {
+  content: " #";
+  font-family: var(--dn-font-mono);
+  color: var(--dn-accent);
+  opacity: 0;
+  transition: opacity 120ms linear;
+}
+.dn-org h2[id]:hover::after, .dn-org h3[id]:hover::after,
+.dn-org h2[id]:focus-visible::after, .dn-org h3[id]:focus-visible::after {
+  opacity: 1;
+}
+
+/* Org TODO keywords on headlines: org exports <span class="todo">TODO</span>
+   and <span class="done">DONE</span> — note .done does NOT also carry .todo,
+   so the base badge styles must cover both (an earlier revision only styled
+   .todo and DONE rendered as bare amber text). Both are filled badges with a
+   single notched corner: status you can read from the margin, mid-scroll. */
+.dn-org .todo, .dn-org .done {
+  font-family: var(--dn-font-mono);
+  font-weight: 600;
+  font-size: 0.74em;
+  letter-spacing: 0.06em;
+  padding: 0.15em 0.55em;
+  border: 1px solid;
+  border-radius: var(--dn-radius-sm);
+  margin-right: 0.6em;
+  white-space: nowrap;
+  vertical-align: 0.08em;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 4px) 0,
+    100% 4px,
+    100% 100%,
+    0 100%
+  );
+}
+.dn-org .todo {
+  border-color: var(--dn-amber);
+  color: var(--dn-amber);
+  background: color-mix(in srgb, var(--dn-amber) 10%, transparent);
+}
+.dn-org .done {
+  border-color: var(--dn-accent-dim);
+  color: var(--dn-accent-dim);
+  background: color-mix(in srgb, var(--dn-accent-dim) 10%, transparent);
+}
+
+/* Tags as #chips — the same chip the rest of the HUD uses, because a tag
+   means one thing in the article and one thing in the sidebar. */
+.dn-org .tag {
+  font-family: var(--dn-font-mono);
+  font-size: 0.72em;
+  background: color-mix(in srgb, var(--dn-accent-2) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dn-accent-2) 30%, transparent);
+  border-radius: var(--dn-radius-sm);
+  padding: 0.1em 0.55em;
+  margin-left: 0.35em;
+  color: var(--dn-accent-2-text);
+  white-space: nowrap;
+}
+
+.dn-org p code,
+.dn-org li code,
+.dn-org td code {
+  font-family: var(--dn-font-mono);
+  font-size: 0.88em;
+  background: var(--dn-bg-raise);
+  border: 1px solid color-mix(in srgb, var(--dn-accent) 26%, var(--dn-border));
+  border-radius: var(--dn-radius-sm);
+  padding: 0.08em 0.4em;
+  color: var(--dn-accent);
+}
+/* Code inside a pre is not a chip — strip the inline treatment so the well
+   owns the styling. */
+.dn-org pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* Source blocks: a well sunk into the page, with a NEON left rail (the
+   source's hue, glowing softly) so it reads as machine output at a glance
+   even mid-scroll. */
+.dn-org pre {
+  font-family: var(--dn-font-mono);
+  font-size: var(--dn-text-sm);
+  line-height: 1.5;
+  tab-size: 4;
+  background: var(--dn-bg-sunken);
+  border: 1px solid var(--dn-border);
+  border-left: 3px solid var(--dn-src, var(--dn-accent));
+  border-radius: var(--dn-radius-sm);
+  padding: 0.9em 1.1em;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  box-shadow:
+    -3px 0 10px -4px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 55%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--dn-bg-sunken) 60%, transparent);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.dn-org pre:hover {
+  border-left-color: var(--dn-src, var(--dn-accent));
+  box-shadow:
+    -3px 0 14px -3px color-mix(in srgb, var(--dn-src, var(--dn-accent)) 70%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--dn-bg-sunken) 60%, transparent);
+}
+.dn-org pre.example {
+  border-left-color: var(--dn-accent-2);
+  box-shadow:
+    -3px 0 10px -4px color-mix(in srgb, var(--dn-accent-2) 55%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--dn-bg-sunken) 60%, transparent);
+}
+:root[data-theme='light'] .dn-org pre,
+:root[data-theme='light'] .dn-org pre.example {
+  /* On paper the rail's glow becomes a clean edge; the well shades instead. */
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--dn-bg-sunken) 55%, transparent);
+}
+
+/* Org tables: borderless grids with hairlines; header row is a column of
+   uppercase mono under a NEON rule — the instrument look for data. */
+.dn-org table {
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  font-size: 0.92rem;
+  max-width: 100%;
+}
+.dn-org th, .dn-org td {
+  padding: 0.35em 0.9em 0.35em 0;
+  border-bottom: 1px solid var(--dn-border);
+  text-align: left;
+  vertical-align: top;
+}
+.dn-org th {
+  font-family: var(--dn-font-mono);
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: var(--dn-track-tight);
+  text-transform: uppercase;
+  color: var(--dn-accent);
+  border-bottom: 2px solid color-mix(in srgb, var(--dn-src, var(--dn-accent)) 60%, var(--dn-border-strong));
+}
+/* Zebra: every second body row sits on the raised surface — the stripe
+   reads as a panel seam, not a fill, so the data stays quiet. */
+.dn-org tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--dn-bg-raise) 55%, transparent);
+}
+.dn-org tr:hover td {
+  background: color-mix(in srgb, var(--dn-accent) 6%, transparent);
+}
+
+.dn-org blockquote {
+  margin: 1.2em 0;
+  padding: 0.4em 1.2em;
+  border-left: 3px solid var(--dn-accent-2);
+  background: color-mix(in srgb, var(--dn-accent-2) 6%, transparent);
+  color: var(--dn-fg-muted);
+  font-style: italic;
+}
+
+.dn-org ul, .dn-org ol { padding-left: 1.4em; }
+.dn-org li { margin: 0.25em 0; }
+.dn-org li::marker { color: var(--dn-border-strong); }
+
+/* Org footnotes and targets */
+.dn-org .footref a, .dn-org .target { scroll-margin-top: 100px; }
+.dn-org .footref { font-size: 0.8em; vertical-align: super; }
+.dn-org .footdefined, .dn-org .figure { margin: 1.4em 0; }
+.dn-org .caption {
+  font-family: var(--dn-font-mono);
+  font-size: 0.82rem;
+  color: var(--dn-fg-muted);
+  text-align: center;
+}
+
+.dn-org img { max-width: 100%; height: auto; }
+
+.dn-org hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--dn-border-strong), transparent);
+  margin: 2em 0;
+}
+
+/* Org exports the document title and property drawers as spans; drawers
+   stay hidden, the title takes the display face — the one place in the
+   reader where the brand voice is allowed. */
+.dn-org .title { font-family: var(--dn-font-mono); }
+
+/* Graph hues remain on edges and markers; readable labels use verified
+   foreground colors so every source stays AA-safe in both themes. */
+.dn-body .src-name,
+.dn-body .src-open,
+.dn-body .mk-src,
+.dn-body .chapter.active,
+.dn-body .pager-btn .pt,
+.dn-body .src-chip {
+  color: var(--dn-accent);
+}
+.dn-body .seg.active { color: var(--dn-accent); }
+
+/* Keep interactive chrome comfortable on touch screens without stretching
+   prose links or dense data rows. */
+:where(.dn-body .seg, .dn-body .tool, .dn-body .menu, .dn-body .cpy,
+  .dn-body .raw, .dn-body .pager-btn, .dn-body .resume, .dn-body .src-card,
+  .dn-body .cta, .dn-body .card, .dn-body .mk, .dn-body .tab,
+  .dn-body .tag-chip, .dn-body .link-btn, .dn-body .more, .dn-body .expand,
+  .dn-body .chapter, .dn-body .home, .dn-body .pinned button) {
+  min-height: 2.5rem;
+}
+
+@media (max-width: 700px) {
+  .dn-org { line-height: 1.72; }
+  .dn-org h1 { font-size: clamp(1.45rem, 7vw, var(--dn-text-2xl)); }
+  .dn-org h2 { font-size: clamp(1.15rem, 5.5vw, var(--dn-text-xl)); }
+}
+
+/* ---------- PERF-MOBILE (≤700px): the static phone board -----------------
+   Designer: glm-5v-turbo (design-forge crown, FINAL 9.0/9). Owner law:
+   performance beats eye candy; phones get "performance, responsiveness,
+   lightweight and simplicity". Desktop keeps its five cheap survivors
+   (aurora, shell rail, power rail, caret, spark); the phone keeps none of
+   them — every surface rests on its composed frame. Last in the cascade so
+   the parks outrank every base rule above. The body's fixed attachment also
+   drops on phones: a background-attachment: fixed layer forces repaints
+   into every scroll frame on mobile GPUs (and iOS ignores it anyway), so
+   the vignette rides the grid like the rest. */
+@media (max-width: 700px) {
+  body.dn-body::before { animation: none; }
+  .spark, .dn-firing, .dn-led-dot { animation: none; }
+  body.dn-body { background-attachment: scroll, scroll, scroll, scroll, scroll; }
+}

@@ -1,0 +1,99 @@
+<!-- SCRIPT BLOCK REMOVED (11506 bytes) - DO NOT RECREATE OR MODIFY JS -->
+
+<div class="roam-wrap dn-dish" data-layout={store.layout} bind:this={wrapEl}>
+  <!-- loadEngine comes from neuronEngine so the force-graph import resolves
+       from SYNAPT's node_modules (Vite resolves bare specifiers relative to
+       the importing file, and GraphView.svelte lives in the sibling orui
+       checkout) — and so the neuron painting rides in at construction. -->
+  <GraphView store={roam} onNodeClick={click} loadEngine={neuronLoad} />
+  {#if !painted}
+    <!-- Shape, not a spinner: the promise of what is coming (a field of
+         neurons) in the pixels it will occupy. Compositor-only (one
+         translateX sweep), aria-hidden, and deliberately the LAST child —
+         the checks that read the engine's live node count sample
+         `.roam-wrap`'s firstElementChild, which must stay GraphView's root. -->
+    <div class="skel" aria-hidden="true">
+      <span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>
+      <span class="orb o4"></span><span class="orb o5"></span>
+      <span class="sweep"></span>
+      <p class="skel-line dn-mono">// laying out {store.data.links.length} connections</p>
+    </div>
+  {/if}
+</div>
+
+<style>
+  /* ---------- The pre-canvas skeleton ----------
+     Only opacity/transform animate (a Celeron composites those for free), the
+     whole thing is ~1 kB of markup, and it leaves the moment a <canvas>
+     appears. */
+  .skel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .skel .orb {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dn-accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--dn-accent) 70%, transparent);
+    opacity: 0.28;
+    animation: sk-pulse 1.8s ease-in-out infinite;
+  }
+  /* SIGNAL pass: the skeleton is the graph's promise — so it wears the same
+     neon duo the canvas will paint, not a single flat cyan. */
+  .skel .o2, .skel .o4 { background: var(--dn-accent-2); box-shadow: 0 0 10px color-mix(in srgb, var(--dn-accent-2) 70%, transparent); }
+  .skel .o1 { top: 30%; left: 22%; }
+  .skel .o2 { top: 58%; left: 46%; width: 16px; height: 16px; animation-delay: 0.25s; }
+  .skel .o3 { top: 26%; left: 68%; animation-delay: 0.5s; }
+  .skel .o4 { top: 70%; left: 76%; width: 8px; height: 8px; animation-delay: 0.75s; }
+  .skel .o5 { top: 74%; left: 15%; width: 7px; height: 7px; animation-delay: 1s; }
+  .skel .sweep {
+    position: absolute;
+    inset: -20% -60%;
+    background: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--dn-accent) 10%, transparent) 50%, transparent 65%);
+    animation: sk-sweep 2.2s linear infinite;
+  }
+  .skel .skel-line {
+    position: absolute;
+    left: 0.9rem;
+    bottom: 3.1rem;
+    margin: 0;
+    color: var(--dn-fg-faint);
+    font-size: 0.66rem;
+    letter-spacing: var(--dn-track);
+  }
+  @keyframes sk-pulse {
+    50% { opacity: 0.42; transform: scale(1.25); }
+  }
+  @keyframes sk-sweep {
+    from { transform: translateX(-40%); }
+    to { transform: translateX(40%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skel .orb, .skel .sweep { animation: none; }
+  }
+  /* PERF-MOBILE (≤700px): the skeleton rests on its lit frame — a phone
+     loading the graph is exactly when it can least afford decorative loops. */
+  @media (max-width: 700px) {
+    .skel .orb, .skel .sweep { animation: none; }
+  }
+
+  .roam-wrap {
+    position: absolute;
+    inset: 0;
+    /* Map the site theme onto orui's canvas tokens. GraphView polls the
+       container's COMPUTED style twice a second, so these resolved literal
+       values (canvas fillStyle cannot parse var()/color-mix(), which is why
+       the site carries them as --dn-* tokens per theme in docneural-ui.css)
+       repaint the nodes AND wires when the site's theme toggle flips. */
+    --orui-link-color: var(--dn-graph-link);
+    --orui-node-palette: var(--dn-graph-palette);
+    /* The agar dish (dots + vignette) lives in .dn-dish (docneural-ui.css §2b) —
+       same treatment, per-theme dot colors, in hero mode and the rail
+       mini-map. The canvas paints transparent, so this DOM background IS
+       what the neurons sit in. */
+  }
+</style>

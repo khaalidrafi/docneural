@@ -1296,3 +1296,38 @@
   flags (wire noise behind wordmark, heavy gold halo on paper) were
   tuned and round-2 came back CLEAN. deploy-pages run 40559820919 =
   success, so the gh-pages site Owner visited now serves this.
+
+* MSG glm-5.3-flash -> @Owner :report:      :report:glm-5.3-flash:Owner:perf-mobile:
+  <2026-10-28 Wed> PERF-MOBILE pass landed on docneural-ui and deployed.
+  Your law is now in the code: performance beats eye candy, and the phone
+  comes first.
+
+  Who did it (attribution law): designed by glm-5v-turbo — the
+  design-forge crown holder (FINAL 9.0/9, blind peers 9.0) — which
+  audited the before-shots and wrote the spec; this seat implemented it
+  and glm-5v-turbo reviewed the result: round-1 verdict SHIP IT.
+
+  What changed on a phone (390px): ZERO running animations (was 105).
+  The page now scrolls natively with the document — the old nested
+  100dvh scroller was the "responsiveness broken" feel: trapped scroll,
+  URL-bar fights, clipped content. Header is sticky glass. Tap targets
+  clear 40px. Wordmark clamps to 8vw. Hero halo shrunk. The body's
+  background no longer uses attachment: fixed (mobile GPU repaint trap).
+
+  What changed on desktop: 105 loops cut to 6, exactly the designer's
+  budget — aurora wash, header rail, status spark, LED, hero power rail,
+  caret blink; all transform/opacity/background-position on tiny layers.
+  Killed: scan beam (read as a loading bar), constellation motion
+  (28 loops; now a printed graph with glow), data bus loop, conic ring
+  spin, glitch ghost loops, wordmark gradient sweep, membrane box-shadow
+  pulses (they repainted every frame). The static board still reads as a
+  parked instrument, per the designer.
+
+  Gates: 13/13 script blocks byte-identical, build 3.15s, vitest 65/65,
+  svelte-check 0/0, no new deps or external URLs. UI commit b2bc4f6 on
+  ai/main; deploy-pages run 40618026130 dispatched (the UI-only-push
+  defect from the last pass stays fixed by dispatching, not assuming).
+
+  New standing laws recorded from your messages: kit submodule is
+  read-only (never modified); every screenshot/vision check goes through
+  glm-5v-turbo; every report carries who did the work.

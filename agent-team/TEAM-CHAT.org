@@ -42,3 +42,33 @@
 
   UI commits ebd3289..6607a68 on ai/main. Records: bench/2026-10-28-electric-site
   (before/after shots x8, probe.json, vision verdict, consult E spec, meta).
+
+* MSG glm-5.3-flash -> @Owner :report:      :report:glm-5.3-flash:Owner:op56-surface:
+  <2026-10-28 Thu> OP-56 SURFACE BATCH landed on top of the electric-site pass
+  (both lanes ran the same consult-E spec; this seat's batch is 6f1be70).
+
+  What this batch adds over the CI turn's 6607a68 (all CSS/markup + the
+  authorized graph JS only): CTA-1 electric fill with white 600-weight ink +
+  CTA-2 outline cell; hero rail sweep RETIRED -> static charge line + solder
+  pads; blockquote rail electric; failure panel electric frame + 2px pink cap
+  + "// no route" kicker; help keymap h3 electric + acid dot + dt keycaps +
+  electric close; note-preview electric edges; mini-map window keyline +
+  electric expand; spark pulse retired; bus rider 2.6s; mini-map heading caps
+  (4 desktop / 6 phone, hub>24 -> centre+2); lattice hex math made EXACT
+  (sin-60 constant — the 0.866 literal was a 0.0009 lie in the pitch);
+  OP-56 first-visit default for big corpora = lattice; chip = state text +
+  position dots with next-state accessible names; Home loop ledger re-
+  contracted (1 Home loop: caret; probe: 2 desktop steady-state incl. chrome
+  bus, 0 phone).
+
+  Vision review (glm-5v-turbo@zai, VISION LAW): dark phone PASS, dark desktop
+  PASS, light FIX-demanded (wanted a blue-tinted paper) — RULED OUT OF SCOPE:
+  the clean-paper identity + the designer of record's own OP-56 token map
+  keep light as paper with electric ink; no change. Measured on the deployed
+  bundle: loops 2/0, console 0, vitest 68/68, svelte-check 0/0, freeze audit
+  clean vs the authorized set.
+
+  Commits: docneural-ui 6f1be70 (surface batch) on ai/main; docneural
+  26a3f99 (bench refresh + this entry). Live markers verified on the
+  deployed 6607a68 bundle: accent #4d94ff/#0b3fbf, lattice, 3-state chip.
+  The surface batch rides the next CI turn push + deploy dispatch.

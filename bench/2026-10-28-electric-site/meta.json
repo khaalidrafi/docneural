@@ -32,5 +32,18 @@
       "1448355 consult E reconciled",
       "6607a68 noscript + cleanup"
     ]
+  },
+  "deploy": {
+    "runs": "40735664790 attempts 1-3 (race: attempt 1 checked out a 1-commit-stale UI; reruns per playbook)",
+    "live_markers": {
+      "accent_dark_4d94ff": 3,
+      "accent_light_0b3fbf": 2,
+      "electric_light_1b4fd6": 2,
+      "palette_slot0_cyan_kept": 1,
+      "lattice_in_js": true,
+      "BUS_ARMING_in_js": true,
+      "404_4f8bff": true
+    },
+    "known_gap": "noscript block absent from CI build (CI vite drops it; source placement correct inside body; lands on next vite bump) \u2014 no-JS nicety only, zero visitor impact"
   }
 }

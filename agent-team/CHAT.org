@@ -1,5 +1,15 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's NOTICE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:lane:owner-named: Owner-named lane = DIRECT serve; ladder walk only when no lane is named
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner: "why the heck do you try opencode, when CB is next after openrouter, and I EXPLICITLY TOLD YOU TO USE CODEBUDDY?" - ruled. Order of precedence from here on:
+1. Owner NAMES a lane in the directive -> that lane serves the consult DIRECTLY, no ladder walk, no pre-attempts. The ladder exists for directives that name no lane.
+2. No lane named -> ladder walks top-down with every attempt logged (unchanged).
+3. openrouter stays OUT of the standing ladder: PAID on canon ($0.15/$0.60, no :free deepseek on the openrouter :free roster) per the Owner's own "ONLY free tiers" fiat -> exception lane needing explicit per-consult go. Offered re-rank to openrouter-first IF the Owner authorizes paid spend; awaiting word. Until then CB is the top FREE rung.
+Fact on the record: consult #3 (COOLER-3) WAS served by deepseek-v4.1-flash@codebuddy as ordered (123s, $0); the opencode stop was a ~3-minute rung-1 attempt under the old walk rule, also $0. No rework owed; the rule change removes the walk for every future named-lane directive.
 * [2026-10-28 Thu] :msg:cooler3-ship: DS pushed harder (re-audit 7.2/10) and I implemented OP-19..32
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

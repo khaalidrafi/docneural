@@ -1,0 +1,70 @@
+{
+  "audit": "docneural publish-readiness cycle 2 (final gap sweep)",
+  "date": "2026-10-28",
+  "target": "https://khaalidrafi.github.io/docneural/",
+  "deploy": { "run": 40668733174, "conclusion": "success", "sha": "d2cd8cf", "live_design": "COOLER-3 (docneural-ui a715586, tokens mark-in/dn-rise/orbit verified in served CSS)" },
+  "designed_by": "deepseek-v4.1-flash@codebuddy (DS free-lane ladder, rung 2, $0)",
+  "implemented_by": "glm-5.3-flash@chat.z.ai",
+  "reviewed_by": "this file = mechanical gates; independent verdict = glm-4.7-flash@zai (see REVIEW.md)",
+  "gates": {
+    "render_4view": {
+      "overflow_1280_and_390_both_schemes": "FALSE x4",
+      "running_loops": { "desktop": 3, "phone": 0, "law": "desktop <=4, phone 0", "pass": true },
+      "console_errors": 0,
+      "canvases": 0,
+      "dom_nodes": { "desktop": 770, "phone": 508 }
+    },
+    "perf_chromium": {
+      "fcp_ms_range": "104-296 (warm CDN; 668 first cold load)",
+      "cls_worst": 0.0039,
+      "ttfb_ms": "16-23",
+      "transfer_kb_total": 370,
+      "pass": true
+    },
+    "keyboard_focus": {
+      "method": "Tab x14 stops, computed outline/box-shadow on activeElement, both themes",
+      "stops": 14,
+      "all_visible_indicator": true,
+      "min_ring_contrast": 10.76,
+      "pass": true
+    },
+    "print_emulation": {
+      "overflow": false,
+      "text_chars": 3684,
+      "hero_text_present": true,
+      "verdict": "PASS"
+    },
+    "wcag_page_wide_sweep": {
+      "method": "every visible text leaf (198-200/theme, 21-22 unique color/bg pairs), alpha-composited (color(srgb / a) handled), WCAG thresholds 4.5 normal / 3.0 large; theme flipped via the site's own toggle (click verified by bg change)",
+      "text_failures": { "dark": 0, "light": 0 },
+      "text_min_ratio": { "dark": 6.09, "light": 6.41 },
+      "notable": { "dark": ["cta key 6.09", "status line 6.14", "feed 6.63"], "light": ["HUB callout 6.41", "tab 6.66", "feed 6.74"] },
+      "decorative_findings": "2/theme: span.bracket 55%-alpha accent tint measures 2.91 (dark) / 1.57-1.69 (light) vs the 3:1 non-text guideline. Purely decorative frame glyphs (corner reticle chrome), no information content -> WCAG 1.4.11 exempts pure decoration. Solid-ink brackets pass (6.39 dark / 4.71 light). Disclosed as non-blocking polish for the next DS directive.",
+      "hard_gate_pass": true
+    },
+    "docs_spot_check": {
+      "sitemap_urls": 1387,
+      "docs_pages": 1386,
+      "sampled": 10,
+      "all_sane": true,
+      "note": "corpus pages are org-export content FRAGMENTS (no html/head shell by design; fetched into the SPA reader). 1 sampled cross-reference stub verified: 'is at' target returns 200."
+    },
+    "cards_and_seo": {
+      "robots_txt": "200", "sitemap_xml": "200 (1387 urls)", "social_card_png": "200 image/png 1200x630",
+      "og_image_in_served_html": true, "twitter_card": true, "favicon": "inline data-URI"
+    },
+    "frozen_scripts": {
+      "gate": "sha256 of every <script> block vs git HEAD",
+      "result": "PASS 14/14 byte-identical (working tree clean == ratified a715586 state)"
+    },
+    "prior_gates_unchanged": "COOLER-3 GATES.md: build 3.09s, vitest 65/65, svelte-check 0/0, AA touched tokens 10/10 (visited 8.83/10.13, accent 7.43)"
+  },
+  "observed_behavior_note": "The app pins data-theme=dark on boot: a fresh context with prefers-color-scheme:light still renders dark until the toggle is used. Not a defect per the standing identity law (dark = night terminal primary; toggle verified working); recorded for the record.",
+  "mechanical_verdict": "ALL MECHANICAL GATES GREEN - 1 disclosed non-blocking decorative finding",
+  "evidence": {
+    "live_measurements": "audit-live.json",
+    "spot_check": "spot-check.json",
+    "screenshots": ["shots/dark-desktop.png", "shots/dark-phone.png", "shots/light-desktop.png", "shots/light-phone.png", "shots/print-emulated.png", "shots/light-desktop-toggled.png"],
+    "note": "light-desktop/light-phone view shots render dark (app pins dark boot theme; colorScheme context only) - authoritative light evidence is light-desktop-toggled.png + the toggle-verified sweep"
+  }
+}

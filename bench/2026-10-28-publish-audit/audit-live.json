@@ -1,0 +1,635 @@
+{
+  "base": "https://khaalidrafi.github.io/docneural/",
+  "date": "2026-10-28T10:38:46.322Z",
+  "views": {
+    "dark-desktop": {
+      "horizontalOverflow": false,
+      "themeAttr": "dark",
+      "bodyBg": "rgb(5, 9, 15)",
+      "docHeight": 900,
+      "domNodes": 770,
+      "runningLoops": 3,
+      "runningDetail": {
+        "svelte-1ehik19-dn-pulse": 1,
+        "svelte-2nc2zg-dn-rail": 1,
+        "dn-blink": 1
+      },
+      "canvases": 0,
+      "fcpMs": 192,
+      "ttfbMs": 16,
+      "transferKB": 370,
+      "cls": 0.0039,
+      "consoleErrors": 0,
+      "consoleErrorSamples": []
+    },
+    "dark-phone": {
+      "horizontalOverflow": false,
+      "themeAttr": "dark",
+      "bodyBg": "rgb(5, 9, 15)",
+      "docHeight": 5381,
+      "domNodes": 508,
+      "runningLoops": 0,
+      "runningDetail": {},
+      "canvases": 0,
+      "fcpMs": 104,
+      "ttfbMs": 23,
+      "transferKB": 370,
+      "cls": 0,
+      "consoleErrors": 0,
+      "consoleErrorSamples": []
+    },
+    "light-desktop": {
+      "horizontalOverflow": false,
+      "themeAttr": "dark",
+      "bodyBg": "rgb(5, 9, 15)",
+      "docHeight": 900,
+      "domNodes": 770,
+      "runningLoops": 3,
+      "runningDetail": {
+        "svelte-1ehik19-dn-pulse": 1,
+        "svelte-2nc2zg-dn-rail": 1,
+        "dn-blink": 1
+      },
+      "canvases": 0,
+      "fcpMs": 296,
+      "ttfbMs": 19,
+      "transferKB": 370,
+      "cls": 0.0039,
+      "consoleErrors": 0,
+      "consoleErrorSamples": []
+    },
+    "light-phone": {
+      "horizontalOverflow": false,
+      "themeAttr": "dark",
+      "bodyBg": "rgb(5, 9, 15)",
+      "docHeight": 5381,
+      "domNodes": 508,
+      "runningLoops": 0,
+      "runningDetail": {},
+      "canvases": 0,
+      "fcpMs": 116,
+      "ttfbMs": 16,
+      "transferKB": 370,
+      "cls": 0,
+      "consoleErrors": 0,
+      "consoleErrorSamples": []
+    }
+  },
+  "keyboardFocus": {
+    "dark": {
+      "stops": [
+        {
+          "tag": "button",
+          "cls": "brand dn-mono svelte-1ehik19",
+          "text": "DOCNEURAL",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "seg svelte-1ehik19 active",
+          "text": "[▤DOCS]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "seg svelte-1ehik19",
+          "text": "[⌁SYNAPSES]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool kbd svelte-1ehik19",
+          "text": "⌕ ⌘K",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool keys svelte-1ehik19",
+          "text": "?",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool svelte-1ehik19",
+          "text": "FULL",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool svelte-1ehik19",
+          "text": "☾",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "cta dn-notch svelte-2nc2zg",
+          "text": "▤ Start reading A Beamer exa",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "cta graph dn-notch",
+          "text": "⌁ Explore synapses the whole",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "Org 319 pages · 6732 wires r",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "GNU Emacs 752 pages · 16524 ",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "GNU Guix 276 pages · 7659 wi",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "input",
+          "cls": "svelte-2nc2zg",
+          "text": "",
+          "outline": "0px none",
+          "boxShadow": true,
+          "ringColor": "rgb(232, 241, 251)",
+          "ringVsBg": 17.8,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tab dn-mono svelte-141co7e",
+          "text": "[Org]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.48,
+          "visibleIndicator": true
+        }
+      ],
+      "stopsCount": 14,
+      "allVisible": true,
+      "minRingContrast": 10.76
+    },
+    "light": {
+      "stops": [
+        {
+          "tag": "button",
+          "cls": "brand dn-mono svelte-1ehik19",
+          "text": "DOCNEURAL",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "seg svelte-1ehik19 active",
+          "text": "[▤DOCS]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "seg svelte-1ehik19",
+          "text": "[⌁SYNAPSES]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.52,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool kbd svelte-1ehik19",
+          "text": "⌕ ⌘K",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool keys svelte-1ehik19",
+          "text": "?",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool svelte-1ehik19",
+          "text": "FULL",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tool svelte-1ehik19",
+          "text": "☾",
+          "outline": "0px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(166, 188, 212)",
+          "ringVsBg": 10.76,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "cta dn-notch svelte-2nc2zg",
+          "text": "▤ Start reading A Beamer exa",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "cta graph dn-notch",
+          "text": "⌁ Explore synapses the whole",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "Org 319 pages · 6732 wires r",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "GNU Emacs 752 pages · 16524 ",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "src-card svelte-2nc2zg",
+          "text": "GNU Guix 276 pages · 7659 wi",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 11.81,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "input",
+          "cls": "svelte-2nc2zg",
+          "text": "",
+          "outline": "0px none",
+          "boxShadow": true,
+          "ringColor": "rgb(232, 241, 251)",
+          "ringVsBg": 17.8,
+          "visibleIndicator": true
+        },
+        {
+          "tag": "button",
+          "cls": "tab dn-mono svelte-141co7e",
+          "text": "[Org]",
+          "outline": "2px solid",
+          "boxShadow": true,
+          "ringColor": "rgb(0, 229, 245)",
+          "ringVsBg": 13.48,
+          "visibleIndicator": true
+        }
+      ],
+      "stopsCount": 14,
+      "allVisible": true,
+      "minRingContrast": 10.76
+    }
+  },
+  "print": {
+    "horizontalOverflow": false,
+    "docHeight": 900,
+    "textChars": 3684,
+    "hasHeroText": true,
+    "bgSample": "rgb(5, 9, 15)",
+    "colorSample": "rgb(232, 241, 251)",
+    "pageErrors": 0,
+    "verdict": "PASS"
+  },
+  "lightContrast": {},
+  "themeContrast": {
+    "dark": {
+      "textLeaves": 198,
+      "uniquePairs": 21,
+      "textPairs": 16,
+      "textFailing": 0,
+      "textMinRatio": 6.09,
+      "decoPairs": 5,
+      "decoFailing": 2,
+      "worstText": [
+        {
+          "tag": "span",
+          "cls": "cta-k svelte-2nc2zg",
+          "text": "▤",
+          "color": "rgb(127, 151, 179)",
+          "bgTop": "rgb(13, 21, 32)",
+          "ratio": 6.09,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "status dn-mono svelte-1ehik19",
+          "text": "1386 NODES · 30915 WIR",
+          "color": "rgb(127, 151, 179)",
+          "bgTop": "color(srgb 0.0509804 0.0823529 0.12549 / 0.92)",
+          "ratio": 6.14,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "p",
+          "cls": "feed dn-mono svelte-2nc2zg",
+          "text": "// 30915 synapses prim",
+          "color": "rgb(127, 151, 179)",
+          "bgTop": "rgb(5, 9, 15)",
+          "ratio": 6.63,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "text",
+          "cls": "callout-t svelte-167nipd",
+          "text": "HUB·1",
+          "color": "rgb(127, 151, 179)",
+          "bgTop": "color(srgb 0.0117647 0.0235294 0.0392157 / 0.55)",
+          "ratio": 6.7,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "cta-s svelte-2nc2zg",
+          "text": "A Beamer example (The ",
+          "color": "rgb(166, 188, 212)",
+          "bgTop": "rgb(13, 21, 32)",
+          "ratio": 9.4,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        }
+      ],
+      "worstDeco": [
+        {
+          "tag": "span",
+          "cls": "bracket svelte-1ehik19",
+          "text": "[",
+          "color": "color(srgb 1 0.478431 0.270588 / 0.55)",
+          "bgTop": "color(srgb 0.0509804 0.0823529 0.12549 / 0.92)",
+          "ratio": 2.91,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": false
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-141co7e",
+          "text": "[",
+          "color": "color(srgb 1 0.478431 0.270588 / 0.55)",
+          "bgTop": "color(srgb 1 0.478431 0.270588 / 0.12)",
+          "ratio": 2.93,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": false
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-1ehik19",
+          "text": "[",
+          "color": "rgb(107, 157, 198)",
+          "bgTop": "color(srgb 0.0509804 0.0823529 0.12549 / 0.92)",
+          "ratio": 6.39,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-141co7e",
+          "text": "[",
+          "color": "rgb(107, 157, 198)",
+          "bgTop": "rgb(5, 9, 15)",
+          "ratio": 6.9,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "seg-ico svelte-1ehik19",
+          "text": "▤",
+          "color": "rgb(0, 229, 245)",
+          "bgTop": "color(srgb 0.0509804 0.0823529 0.12549 / 0.92)",
+          "ratio": 11.91,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        }
+      ]
+    },
+    "light": {
+      "textLeaves": 200,
+      "uniquePairs": 22,
+      "textPairs": 17,
+      "textFailing": 0,
+      "textMinRatio": 6.41,
+      "decoPairs": 5,
+      "decoFailing": 2,
+      "worstText": [
+        {
+          "tag": "text",
+          "cls": "callout-t svelte-167nipd",
+          "text": "HUB·1",
+          "color": "rgb(74, 91, 110)",
+          "bgTop": "color(srgb 0.933333 0.945098 0.960784 / 0.55)",
+          "ratio": 6.41,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "button",
+          "cls": "tab dn-mono svelte-141co7e",
+          "text": "Org",
+          "color": "rgb(0, 90, 120)",
+          "bgTop": "color(srgb 1 0.478431 0.270588 / 0.12)",
+          "ratio": 6.66,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "p",
+          "cls": "feed dn-mono svelte-2nc2zg",
+          "text": "// 30915 synapses prim",
+          "color": "rgb(74, 91, 110)",
+          "bgTop": "rgb(251, 251, 253)",
+          "ratio": 6.74,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "status dn-mono svelte-1ehik19",
+          "text": "1386 NODES · 30915 WIR",
+          "color": "rgb(74, 91, 110)",
+          "bgTop": "color(srgb 1 1 1 / 0.96)",
+          "ratio": 6.96,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "cta-k svelte-2nc2zg",
+          "text": "▤",
+          "color": "rgb(74, 91, 110)",
+          "bgTop": "rgb(255, 255, 255)",
+          "ratio": 6.97,
+          "need": 4.5,
+          "kind": "text",
+          "pass": true
+        }
+      ],
+      "worstDeco": [
+        {
+          "tag": "span",
+          "cls": "bracket svelte-141co7e",
+          "text": "[",
+          "color": "color(srgb 1 0.478431 0.270588 / 0.55)",
+          "bgTop": "color(srgb 1 0.478431 0.270588 / 0.12)",
+          "ratio": 1.57,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": false
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-1ehik19",
+          "text": "[",
+          "color": "color(srgb 1 0.478431 0.270588 / 0.55)",
+          "bgTop": "color(srgb 1 1 1 / 0.96)",
+          "ratio": 1.69,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": false
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-141co7e",
+          "text": "[",
+          "color": "rgb(96, 115, 138)",
+          "bgTop": "rgb(251, 251, 253)",
+          "ratio": 4.71,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "bracket svelte-1ehik19",
+          "text": "[",
+          "color": "rgb(96, 115, 138)",
+          "bgTop": "color(srgb 1 1 1 / 0.96)",
+          "ratio": 4.86,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        },
+        {
+          "tag": "span",
+          "cls": "seg-ico svelte-1ehik19",
+          "text": "▤",
+          "color": "rgb(0, 90, 120)",
+          "bgTop": "color(srgb 1 1 1 / 0.96)",
+          "ratio": 7.67,
+          "need": 3,
+          "kind": "decorative-glyph",
+          "pass": true
+        }
+      ]
+    },
+    "mechanism": "toggle-click (tool svelte-1ehik19)",
+    "allAA": false
+  }
+}

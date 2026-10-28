@@ -1,0 +1,90 @@
+{
+  "scripts": {
+    "src/Demo.svelte": [
+      "be62033958b753a327008e141263eaf076deaf2b211a6a33f072d3bc980f3345"
+    ],
+    "src/lib/DocneuralApp.svelte": [
+      "3c16f3595c8d3e9909c1af8ba807aac0130de8745e4c6c0f5814b36cd49fb167"
+    ],
+    "src/lib/graph/DocneuralGraph.svelte": [
+      "beb6bf0f4fd961d9334326608dce62ee6e40ce1798c695fe37ef55dd045043af"
+    ],
+    "src/lib/graph/FilterBar.svelte": [
+      "7f0047b6d8d39eaf836cfc5ed578ca05d7163be0d302764c8cce5a30b9673f89"
+    ],
+    "src/lib/reader/ChapterNav.svelte": [
+      "0999d6eb4863e4647d50e3d245efea3dc146d276f498a3365b42baaf13308704"
+    ],
+    "src/lib/reader/DocReader.svelte": [
+      "958ffe79908431920ac4251464c42319b55555058d43d0d7e3acc22a4cdec21b"
+    ],
+    "src/lib/reader/Home.svelte": [
+      "2dab84d0327ed1bb2be1a416943ea4dbc5eaaa4bdc461f6dfe2be35830bc3748"
+    ],
+    "src/lib/reader/LinkPeek.svelte": [
+      "b97f8145aa05a11da1a96fa3a49f4991201b7879be4e112b7dc853b9ea89007a"
+    ],
+    "src/lib/reader/NotePreview.svelte": [
+      "837acf0cbe41618545d3f037ff3820f721bd288a86a1a0f49eab7b161e2ab14b"
+    ],
+    "src/lib/reader/SynapseRail.svelte": [
+      "ba2ebc393de7a66f986b339c196454c6e76a7e1499e474715fbc76ffbc92fdda"
+    ],
+    "src/lib/ui/CommandPalette.svelte": [
+      "8b9d354e28b005ccff942cdaa64bbcf5127283b547d4852cefe0d940bea13745"
+    ],
+    "src/lib/ui/ManualTabs.svelte": [
+      "9a0a0c83dc6e05a440388764e2620304eee8027b7a8cd2b356d879ee224dfe76"
+    ],
+    "index.html": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
+  "css_braces": {
+    "src/lib/DocneuralApp.svelte#style0": {
+      "open": 87,
+      "close": 87
+    },
+    "src/lib/graph/DocneuralGraph.svelte#style0": {
+      "open": 20,
+      "close": 20
+    },
+    "src/lib/graph/FilterBar.svelte#style0": {
+      "open": 9,
+      "close": 9
+    },
+    "src/lib/reader/ChapterNav.svelte#style0": {
+      "open": 24,
+      "close": 24
+    },
+    "src/lib/reader/DocReader.svelte#style0": {
+      "open": 42,
+      "close": 42
+    },
+    "src/lib/reader/Home.svelte#style0": {
+      "open": 141,
+      "close": 141
+    },
+    "src/lib/reader/LinkPeek.svelte#style0": {
+      "open": 12,
+      "close": 12
+    },
+    "src/lib/reader/NotePreview.svelte#style0": {
+      "open": 17,
+      "close": 17
+    },
+    "src/lib/reader/SynapseRail.svelte#style0": {
+      "open": 32,
+      "close": 32
+    },
+    "src/lib/ui/CommandPalette.svelte#style0": {
+      "open": 19,
+      "close": 19
+    },
+    "src/lib/ui/ManualTabs.svelte#style0": {
+      "open": 6,
+      "close": 6
+    }
+  },
+  "script_block_count": 13
+}

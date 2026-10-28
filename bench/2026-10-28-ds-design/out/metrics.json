@@ -1,0 +1,63 @@
+{
+  "dark-desktop": {
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "horizontalOverflow": false,
+    "docHeight": 900,
+    "domNodes": 9,
+    "totalAnimations": 0,
+    "runningAnimations": 0,
+    "runningDetail": {},
+    "canvases": 0,
+    "errors": 2,
+    "consoleErrors": [
+      "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"application/octet-stream\". Strict MIME type checking is enforced for module scri",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  "dark-phone": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "horizontalOverflow": false,
+    "docHeight": 844,
+    "domNodes": 9,
+    "totalAnimations": 0,
+    "runningAnimations": 0,
+    "runningDetail": {},
+    "canvases": 0,
+    "errors": 1,
+    "consoleErrors": [
+      "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"application/octet-stream\". Strict MIME type checking is enforced for module scri"
+    ]
+  },
+  "light-desktop": {
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "horizontalOverflow": false,
+    "docHeight": 900,
+    "domNodes": 9,
+    "totalAnimations": 0,
+    "runningAnimations": 0,
+    "runningDetail": {},
+    "canvases": 0,
+    "errors": 1,
+    "consoleErrors": [
+      "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"application/octet-stream\". Strict MIME type checking is enforced for module scri"
+    ]
+  },
+  "light-phone": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "horizontalOverflow": false,
+    "docHeight": 844,
+    "domNodes": 9,
+    "totalAnimations": 0,
+    "runningAnimations": 0,
+    "runningDetail": {},
+    "canvases": 0,
+    "errors": 1,
+    "consoleErrors": [
+      "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"application/octet-stream\". Strict MIME type checking is enforced for module scri"
+    ]
+  }
+}

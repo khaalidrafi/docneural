@@ -1,5 +1,29 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+#+TITLE: TEAM-CHAT.org — team response log
+#+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:roles:ds-designs: I implement, DS designs, Owner reviews
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner: "WTH will YOU implement? YOU are NOT the designer! DS should audit the current design, and improve it to make it the coolest!!! glm-5v-turbo is a poor model compared with DS. I'll review the design!!!! And, ALL other free options from OC, Cline etc. MUST be tried BEFORE tokenharbor. Cline comes after CB in fallback rank." - owned on every count. Standing role split from here on: DESIGNER = deepseek-v4.1-flash via the free lane ladder (audits the design, issues the improvement directives, "make it the coolest"); IMPLEMENTATION + mechanical gates = glm-5.3-flash@chat.z.ai (me, no design taste of my own enters the repo); independent reviewer = glm-4.7-flash@zai; DESIGN SIGN-OFF = the Owner personally. glm-5v-turbo@z.ai demoted: no more design-judgment cites from it; measurements only. Cline inserted at rung 3 (after codebuddy, before tokenharbor) in :msg:ladder:freetiers:. DS design-audit consults now run down the ladder top-down with every attempt logged.
+
+* [2026-10-28 Thu] :msg:ladder:freetiers: ladder rebuilt - canon FREE TIERS only, cf REMOVED
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner: "rmv the cf one. ONLY free tiers as listed in candidates, bruh!" - implemented. cloudflare/deepseek-v4.1-flash@workers-ai REMOVED from the lane ladder (Owner fiat; the canon CANDIDATES.org row itself stays untouched - ADD-FREEZE: canon rows are Owner-written only). Canon cross-check of every rung (CANDIDATES.org 2026-10-26 copy):
+- openrouter ds-flash is recorded PAID (deepseek-v4.1-flash-1017 $0.15/$0.60 flat, :batch $0.05/$0.15, owner key; the openrouter :free roster has NO deepseek) -> DEMOTED out of the standing ladder to an exception lane requiring explicit per-consult Owner go. Update 08:14Z fiat: glm-5v-turbo is DEMOTED for design judgment ("a poor model compared with DS") - design review goes to the DS lanes themselves; glm-5v-turbo survives only as mechanical vision fallback (measurements, not taste).
+- qoder's canon row lists qwen3.8-flash built-in only -> deepseek-v4.1-flash@qoder awaits an Owner-written canon row before it can stand as a rung (Owner intel on record, ADD-FREEZE honored).
+STANDING LADDER (canon free tiers, every consult attempts top-down, attempts logged; tokenharbor only after all above):
+1. deepseek-v4.1-flash@opencode (zen :free list; REST 429 client-only, pty-drive session owed)
+2. deepseek-v4.1-flash@codebuddy (WorkBuddy twin pool, free-tier expiry: none published; pty-drive session owed)
+3. deepseek-v4.1-flash@cline (Owner fiat 08:14Z "Cline comes after CB in fallback rank"; canon cline free catalog 10-26 has NO :free deepseek id - 17 free ids checked, none deepseek; DS attempt there may bill paid credits, so the rung is attempted + logged, never billed without Owner go)
+4. tokenharbor/deepseek-v4.1-flash:free@tokenharbor = LAST (the limited-time-free promo window - MAKE BEST USE, text-only)
+scripts/ds-lane-probe.py cloudflare section removed.
+
 * [2026-10-28 Thu] :msg:ladder:try-all: ALL ds-flash lanes probed - tokenharbor stays LAST
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

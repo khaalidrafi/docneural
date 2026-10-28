@@ -1,5 +1,41 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's NOTICE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:neon-header: electric header shipped - DS consults C+D, loops 4/0 at cap, $0
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner (verbatim, 14:16Z): "Use neon blue, add electric vibe. Change header design."
+Pasted evidence:
+  $ pty-run.py --out out/C-neon-header.raw.txt -- codebuddy -p "$(cat inputs/BRIEF-C-neon-header.md)"
+  exit=0 bytes=52222  (C: tokens + header anatomy + electric touchpoints + cost table + 7 risks)
+  $ pty-run.py --out out/D-rulings.raw.txt -- codebuddy -p "$(cat inputs/BRIEF-D-rulings.md)"
+  exit=0  (D: WCAG rulings F1-F4)
+DS doctrine (verbatim, out/C-neon-header.md):
+  "A new 'neon blue' cannot collide with either, so it lands as a *distinct* blue — saturated, slightly toward indigo, unmistakably BLUE not CYAN. It becomes the **header's own wire**: the chrome that frames every surface."
+  --dn-electric #1f6bff dark / #004299 paper (7.9:1) — ~38 deg from cyan accent, ~28 deg from canvas #56c8ff; no collision, no re-pin
+DS rulings (verbatim, out/D-rulings.md):
+  "F1/F2: EXEMPT — the exemption is keyed to the *decorative role + zero information payload + legible flank*, not to a specific hue. A hue swap within the same alpha recipe preserves all three grounds"
+  "F3: FIX — ... Replace the color-mix with a fixed electric ... #4d94ff (dark raise: 4.62:1) / #1a4fb3 (paper: 5.71:1)"
+  "F4: EXEMPT — ... non-text decorative bar governed by 1.4.11's 3:1 non-text floor ... 4.38:1 clears 3:1 with margin"
+Implementation gates (pasted, probe-fullrights.mjs, post-fix):
+  loops: desktop=4 phone=0 (budget 4/0 — consult C rider is the 4th, transform-only)
+  wcag: dark failures=3 / light failures=2 — DS-exempt family only (brackets 1.49/4.17, caret 4.38; ledger rows updated)
+  focus: 14/14 visible, allVisible=true
+  print: chars=7171 scanlines=none bg=rgb(255, 255, 255) overflow=false
+  script-hashes: PASS 14/14 script blocks byte-identical (CSS/markup only; zero JS)
+  VERDICT: GREEN
+Commits:
+  docneural-ui 34db7d2 design: NEON BLUE electric header - DS consult C+D directives (designer deepseek-v4.1-flash@codebuddy)
+  docneural    81f5785 records: neon-header consults C+D artifacts + gate rulings (designer deepseek-v4.1-flash@codebuddy)
+Deploy (pasted):
+  run 40708655976 (head 81f5785): completed success — UI pushed FIRST (34db7d2), checkout race avoided
+  $ curl -s $LIVE$CSS | grep -oE '#1f6bff|#004299|bus-rail|dn-bus|#4d94ff' | sort | uniq -c
+        2 #004299 / 1 #1f6bff / 1 #4d94ff / 6 bus-rail / 2 dn-bus
+  $ curl -s $LIVE$JS | grep -c 'bus-rail' → 1
+  $ curl -s $LIVE/404.html | wc -c → 4121 (byte-identical)
+Attribution: design deepseek-v4.1-flash@codebuddy (consults C-D, $0) · implementation + gates + deploy + records glm-5.3-flash@chat.z.ai. Records: bench/2026-10-28-fullrights/ @ 81f5785. Live: https://khaalidrafi.github.io/docneural/
+
 * [2026-10-28 Thu] :msg:fullrights-ship: DS full-rights revamp OP-33..55 shipped - audit 14 regions, score 9.6->10, $0
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

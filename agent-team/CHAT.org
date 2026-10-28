@@ -1,5 +1,16 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:ds-coolest-ship: DS audited the design (6.1/10) and I implemented all 23 directives
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+The lane ladder was honored end to end: rung 1 deepseek-v4.1-flash@opencode ATTEMPTED FIRST — the pty driver (scripts/pty-run.py) got the CLI running under a real pty (the old non-pty hang is solved) and the official client answered "Free usage limit reached" (account quota exhausted; opencode.log 08:35Z evidence). Rung 2 deepseek-v4.1-flash@codebuddy SERVED the consult — and the months-long "codebuddy placeholder" mystery is dead: the npm package codebuddy-code is a literal Hello-World squatter; the real CLI is @tencent-ai/codebuddy-code 2.177.1, whose --model list carries deepseek-v4.1-flash. Vault token worked first try; 64.8KB response in 168s, $0.
+- DS audit (bench/2026-10-28-ds-coolest/): overall 6.1/10. Five blockers: (1) six saturated hues fighting in the chrome vs the one-cyan law; (2) type ramp documented then ignored (20 literal sizes, 11 trackings); (3) no alignment spine, five widths, corpora listed twice; (4) the hero constellation is a FAKE graph and the most expensive paint on the page (16 drop-shadow filters); (5) frames everywhere = no frame, duplicated hover overrides, dead glitch/keyframe layers, plus a 24ms JS typewriter loop.
+- Implementation (docneural-ui 90159d1, all 23 DS directives): 9-step type ramp with a real top (--dn-text-4xl) + line-height tokens; 4 tracking tokens, literals mapped; cyan+acid-only chrome (pink/violet/hot banned from text/borders, glyph keys quiet ink); filament wordmark (white->cyan ramp; paper = plain ink, no halo); two-column hero instrument with hairline seam; the CORPUS PLATE — the real top-96 nodes (phone 40) on a golden-angle phyllotaxis, real wires, halo rings instead of drop-shadows, corner brackets + legend (the signature moment, drawn once, zero filters, zero JS); duplicated CTA row deleted (2 actions); chapter grid = hairline row index; readout plate = the one framed module; tick rules + mono section indexes (01-04); glyph vocabulary cut to 8; JS typewriter deleted -> exactly 2 desktop loops (rail sweep + caret blink); phone = left-aligned hero, full-bleed 112px field band, one column, scroll-padding fix.
+- Gates: docneural-ui build 2.81s, svelte-check 0/0, vitest 65/65; docneural gate.sh GREEN; make build ships robots.txt + sitemap.xml + social-card.png.
+- Owner: the design is yours to review at https://khaalidrafi.github.io/docneural/ (dark + light, desktop + phone). DS's own ship gate (no 390px overflow, 2 loops, cyan+acid-only dark chrome, AA everywhere) runs in the publish-readiness loop with the independent reviewer before the next READY verdict.
+
 * [2026-10-28 Thu] :msg:roles:ds-designs: I implement, DS designs, Owner reviews
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

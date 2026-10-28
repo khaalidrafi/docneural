@@ -1,0 +1,145 @@
+]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;⠏ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS]0;⠙ Build onboarding flow stepper markup and CSS]0;⠹ Build onboarding flow stepper markup and CSS]0;⠸ Build onboarding flow stepper markup and CSS]0;⠼ Build onboarding flow stepper markup and CSS]0;⠴ Build onboarding flow stepper markup and CSS]0;⠦ Build onboarding flow stepper markup and CSS]0;⠧ Build onboarding flow stepper markup and CSS]0;⠇ Build onboarding flow stepper markup and CSS]0;✳ Build onboarding flow stepper markup and CSS]0;⠋ Build onboarding flow stepper markup and CSS```html
+<section class="how" aria-labelledby="how-read-corpus">
+  <div class="how__head">
+    <span class="how__index" aria-hidden="true">00 · how to read this corpus</span>
+  </div>
+
+  <ol class="how__steps">
+    <li class="how__step">
+      <span class="how__num" aria-hidden="true">01</span>
+      <h3 class="how__verb">Orient</h3>
+      <p class="how__line">This page is the map: the Corpus Plate plots the 96 most-connected of 1386 nodes, and the ledger below counts every wire.</p>
+      <p class="how__next"><span aria-hidden="true">›</span> next: where the 1386 live</p>
+    </li>
+
+    <li class="how__step">
+      <span class="how__num" aria-hidden="true">02</span>
+      <h3 class="how__verb">Navigate</h3>
+      <p class="how__line">The sources strip lists three corpora, each in its graph hue — open a card to read that corpus; tabs hop between its manuals.</p>
+      <p class="how__next"><span aria-hidden="true">›</span> next: walk the citations</p>
+    </li>
+
+    <li class="how__step">
+      <span class="how__num" aria-hidden="true">03</span>
+      <h3 class="how__verb">Trace</h3>
+      <p class="how__line">Each page is a real org-export fragment; its links are the manual's own cross-references, and the same graph wires the Plate.</p>
+      <p class="how__next"><span aria-hidden="true">›</span> the citation network is the navigation</p>
+    </li>
+  </ol>
+
+  <p class="how__foot"><span aria-hidden="true">—</span> the three corpora sit in the strip below</p>
+</section>
+```
+
+```css
+/* how-to-read stepper — component-scoped, two-theme AA */
+.how {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair, #c9c9c9);
+}
+.how__head {
+  padding: 1.25rem 0 0.75rem;
+}
+.how__index {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--ink-mute, #555);
+}
+.how__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.how__step {
+  position: relative;
+  padding: 1rem 1.25rem 1.75rem 3.25rem;
+  min-height: 44px; /* floor for touch */
+}
+/* hairline connector between desktop steps */
+.how__step + .how__step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  bottom: 1.25rem;
+  width: 1px;
+  background: var(--hair, #c9c9c9);
+}
+.how__num {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.1rem;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 1rem;
+  font-weight: 400;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink, #111);
+  text-stroke: 1px var(--ink, #111);
+}
+.how__verb {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink, #111);
+}
+.how__line {
+  margin: 0 0 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink, #111);
+  max-width: 22em;
+}
+.how__next {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-mute, #555);
+  display: flex;
+  gap: 0.4ch;
+}
+.how__foot {
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  font-size: 0.75rem;
+  color: var(--ink-mute, #555);
+  display: flex;
+  gap: 0.5ch;
+}
+
+/* phone: stack vertical, left-aligned, static connector (no draw-in) */
+@media (max-width: 720px) {
+  .how__steps { grid-template-columns: 1fr; }
+  .how__step {
+    padding: 1rem 1rem 1.25rem 3.25rem;
+    border-left: 1px solid var(--hair, #c9c9c9);
+  }
+  /* neutralize the desktop top-to-bottom connector with a full left rail */
+  .how__step + .how__step::before { display: none; }
+  .how__step::after {
+    content: "";
+    position: absolute;
+    left: 1.25rem;
+    top: 2.6rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--hair, #c9c9c9);
+  }
+  .how__step:last-child::after { display: none; }
+}
+
+/* reduced motion: nothing animates, but declare intent for any future transitions */
+@media (prefers-reduced-motion: reduce) {
+  .how__step, .how__num, .how__next { transition: none; }
+}
+
+/* dark theme AA: pick contrast-safe vars at the :root level;
+   .how consumes var(--hair/--ink/--ink-mute) so no overrides here. */
+```
+
+Rationale: hollow-stroked mono numerals reuse the existing counter idiom, a single hairline rail reads as a citation thread in both layouts, and every step states a verifiable mechanic of the corpus so the stepper doubles as a reading contract.
+]0;✳ Build onboarding flow stepper markup and CSS

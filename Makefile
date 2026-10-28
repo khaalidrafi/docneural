@@ -106,6 +106,8 @@ build:
 	python3 scripts/gen-sitemap.py $(OUT)
 	cp $(OUT)/sitemap.xml dist/sitemap.xml
 	cp static/social-card.png dist/social-card.png
+	# CB-EXHAUST state strings: the reader-shell 404 (node-not-found / wire-target-missing)
+	cp static/404.html dist/404.html
 
 serve:
 	npm run preview

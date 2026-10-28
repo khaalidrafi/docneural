@@ -1,15 +1,48 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's NOTICE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:cb-exhaust: DS@codebuddy exhausted on its own strengths - 7 consults, $0, all implemented
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner (verbatim): "CHAT.org isn't meant to be hand-written! EXHAUST DS@CODEBUDDY as the free tier will soon expire! Find out what ds v4.1 flash is good at, and make it do those on the site exhaustively!!"
+Pasted evidence:
+  $ for n in 0-discover 1-colophon 2-plate-ledger 3-tokens-chrome 4-a11y-ledger 5-onboarding 6-cards-states; do pty-run.py --out out/$n.raw.txt -- codebuddy -p "$(cat inputs/BRIEF-$n.md)"; done
+  exit=0 bytes=17306 seconds=46.2  (0-discover)
+  exit=0 bytes=7597  seconds=19.8  (1-colophon)
+  exit=0 bytes=29274 seconds=73.0  (2-plate-ledger)
+  exit=0 bytes=15238 seconds=39.0  (3-tokens-chrome)
+  exit=0 bytes=9197  seconds=28.8  (4-a11y-ledger)
+  exit=0 bytes=8782  seconds=20.5  (5-onboarding)
+  exit=0 bytes=4430  seconds=13.1  (6-cards-states)
+DS profile (verbatim from out/0-discover.md):
+  "I produce frontier-quality structured English prose and design-system documentation — colophons, manifests, lexicons, status ledgers"
+  "NOT good at: generating novel visual design from scratch"
+  "NOT good at: validating that my paste-ready CSS actually compiles and renders ... needs a human or a gate"
+  "my 'exhaustive' tends toward breadth over depth; 4-6 of them will carry ~80% of the value"
+DS burn order (verbatim, all 6 commissioned and implemented):
+  1. COLOPHON EXPANSION (#3)  2. CORPUS-PLATE LEDGER (#1)  3. THEME TOKEN MANIFEST (#6) + RETICLE/CHROME VOCABULARY (#10)
+  4. ACCESSIBILITY CONFORMANCE LEDGER (#5)  5. ONBOARDING FLOW COPY (#2)  6. SOURCE-CARD COPY EXPANSION (#7)
+Implementation gates (pasted):
+  build 3.22s · svelte-check 0 errors 0 warnings · vitest 65/65 · script-hashes PASS 14/14 vs HEAD
+  dark-desktop: overflow=false anims=3 nodes=1722   dark-phone: overflow=false anims=0 nodes=1460
+  light-desktop: overflow=false anims=3 nodes=1722  light-phone: overflow=false anims=0 nodes=1460
+  phone footer: footWidth=358 @ vw=390, docOverflow=false
+Fact corrections applied to DS output before landing (EM seat): 'Emacs Lisp manual'->GNU Emacs manual; 'aggregator · 1'->instrument; '4 corpora'->3; 'reaches a quarter of the corpus'->wires 41% (569/1386 unique, computed); DS-guessed token names -> real :root tokens; chip color-mix -> real djb2 graph-palette hues (emacs idx6, org idx5, guix idx2); ‹ glyph removed (8-glyph budget).
+Landed: plate ledger (96 real rows, <details>), how-to-read stepper (idx 00), colophon v2 (provenance + token manifest + chrome contract + measured a11y ledger), source-card copy, 404.html (node-not-found / wire-target-missing strings).
+Free tier: ALIVE after 7 consults. Deferred by DS's own judgment: glossary (#4, 2-pass), script-block contract (#9), nav taxonomy (#13), styleguide (#14) — bench/2026-10-28-cb-exhaust/out/meta.json.
 * [2026-10-28 Thu] :msg:lane:owner-named: Owner-named lane = DIRECT serve; ladder walk only when no lane is named
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai
 :TO: Owner khaalidrafi
 :END:
-Owner: "why the heck do you try opencode, when CB is next after openrouter, and I EXPLICITLY TOLD YOU TO USE CODEBUDDY?" - ruled. Order of precedence from here on:
-1. Owner NAMES a lane in the directive -> that lane serves the consult DIRECTLY, no ladder walk, no pre-attempts. The ladder exists for directives that name no lane.
-2. No lane named -> ladder walks top-down with every attempt logged (unchanged).
-3. openrouter stays OUT of the standing ladder: PAID on canon ($0.15/$0.60, no :free deepseek on the openrouter :free roster) per the Owner's own "ONLY free tiers" fiat -> exception lane needing explicit per-consult go. Offered re-rank to openrouter-first IF the Owner authorizes paid spend; awaiting word. Until then CB is the top FREE rung.
-Fact on the record: consult #3 (COOLER-3) WAS served by deepseek-v4.1-flash@codebuddy as ordered (123s, $0); the opencode stop was a ~3-minute rung-1 attempt under the old walk rule, also $0. No rework owed; the rule change removes the walk for every future named-lane directive.
+Owner (verbatim): "why the heck do you try opencode, when CB is next after openrouter, and I EXPLICITLY TOLD YOU TO USE CODEBUDDY?"
+Ruling (commit 021edcb): Owner-named lane serves DIRECTLY, no ladder walk; ladder walk only when no lane is named. openrouter stays out of the standing ladder (PAID on canon; :free roster has no deepseek) - exception lane needing explicit per-consult go; re-rank offered, awaiting Owner word.
+Pasted evidence:
+  $ git log --oneline -1
+  021edcb chat: owner-named lane = direct serve; ladder walk only when unnamed
+  $ git show --stat --format= 021edcb
+  agent-team/CHAT.org | 10 ++++++++++
 * [2026-10-28 Thu] :msg:cooler3-ship: DS pushed harder (re-audit 7.2/10) and I implemented OP-19..32
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

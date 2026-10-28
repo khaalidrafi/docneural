@@ -1,0 +1,61 @@
+The user is asking for paste-ready HTML markup for a footer colophon. This is a content/markup generation task, not a code modification task. Let me deliver exactly what was requested.
+```svelte
+<footer class="dn-colophon" aria-labelledby="dn-colophon-h">
+  <h2 id="dn-colophon-h" class="dn-colophon__title">Colophon</h2>
+  <p class="dn-colophon__lead">
+    › A static reader for a public corpus. 1386 nodes, 30915 wires, three GNU manuals, and this aggregator. Every page is a pre-exported Org fragment served read-only. ‹
+  </p>
+  <div class="dn-colophon__grid dn-grid-3">
+    <section class="dn-col" aria-labelledby="dn-col-method-h">
+      <h3 id="dn-col-method-h" class="dn-col__head">› METHOD</h3>
+      <dl class="dn-col__list">
+        <dt>Export</dt>
+        <dd>Corpus is exported once by a batch Emacs ox-html pass into a graph plus one body-only HTML fragment per node. The shell mounts that data; it never re-parses Org at runtime.</dd>
+        <dt>Wire graph</dt>
+        <dd>30915 edges drawn from the corpus' real cross-references. The graph is computed, not curated — a link exists here only if it exists in the source manuals.</dd>
+        <dt>Plate</dt>
+        <dd>A single reading surface layered over the graph. Navigation is graph traversal; no crawl, no rebuild on load.</dd>
+        <dt>Provenance</dt>
+        <dd>GNU Emacs · 791 nodes — Org · 319 — Guix · 276 — aggregator · 1.</dd>
+      </dl>
+    </section>
+    <section class="dn-col" aria-labelledby="dn-col-contract-h">
+      <h3 id="dn-col-contract-h" class="dn-col__head">› CONTRACT</h3>
+      <dl class="dn-col__list">
+        <dt>The site owes</dt>
+        <dd>Read-only pages, no accounts, no cookies, no trackers, no external requests. Both themes meet WCAG AA. The canon ships whole or not at all: every change lands in both the corpus and the reader, or in neither.</dd>
+        <dt>The reader owes</dt>
+        <dd>A browser that runs the SPA once. Nothing is stored, nothing is sent back. The reader is a witness, not a participant.</dd>
+        <dt>Themes</dt>
+        <dd>Dark = night terminal, primary. Light = clean paper. No third surface.</dd>
+        <dt>Type</dt>
+        <dd>JetBrains Mono for identity — headings, nav, labels, code. Inter for prose. Electrolize for the wordmark only.</dd>
+      </dl>
+    </section>
+    <section class="dn-col" aria-labelledby="dn-col-machine-h">
+      <h3 id="dn-col-machine-h" class="dn-col__head">› MACHINE</h3>
+      <dl class="dn-col__list">
+        <dt>Built with</dt>
+        <dd>Svelte 5 + Vite, hosted on GitHub Pages. A 9-step type ramp, four tracking tokens, cyan-and-acid chrome only, three hairline tiers, sixteen-arm reticle brackets, eight glyphs, zero animations on phone.</dd>
+        <dt>Design</dt>
+        <dd>[DESIGNER-LINE]</dd>
+        <dt>Review</dt>
+        <dd>[REVIEWER-LINE]</dd>
+        <dt>Generated</dt>
+        <dd>[GENERATED-STAMP]</dd>
+        <dt>Licenses</dt>
+        <dd>Emacs · [EMACS-LICENSE] — Org · [ORG-LICENSE] — Guix · [GUIX-LICENSE]. The reader itself ships under its own terms.</dd>
+      </dl>
+    </section>
+  </div>
+  <nav class="dn-colophon__tickline" aria-label="Colophon meta">
+    <span class="dn-tick">▤</span>
+    <address class="dn-tick__addr">docneural · static · public · [GENERATED-STAMP] · canon intact</address>
+    <span class="dn-tick">▤</span>
+  </nav>
+</footer>
+```
+Per-column rationale (implementation notes, not shipped):
+- METHOD— answers "how does this site actually work" by naming the one-time export, the computed (never curated) graph, and the single Plate surface; this is the only column that can be falsified against the corpus, so it carries the provenance count.
+- CONTRACT— framed as mutual obligation (site owes / reader owes) rather than a feature list, because the site's promise is mostly about what it refuses to do (no tracking, no accounts, canon-whole-or-not-at-all); WCAG AA + theme pair sit here because they are reader-facing guarantees.
+- MACHINE— the only column with placeholder slots, holding build stack, design/review credit, generation stamp, and the three license pointers; keeps all "who/when/legal" facts in one place so the other two columns stay conceptual.

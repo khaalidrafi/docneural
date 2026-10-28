@@ -1,0 +1,44 @@
+]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;]0;⠋ Write source-card copy and state strings]0;⠙ Write source-card copy and state strings]0;⠹ Write source-card copy and state strings]0;⠸ Write source-card copy and state strings]0;⠼ Write source-card copy and state strings]0;⠴ Write source-card copy and state strings]0;⠦ Write source-card copy and state strings]0;⠧ Write source-card copy and state strings]0;⠇ Write source-card copy and state strings]0;⠏ Write source-card copy and state strings]0;⠋ Write source-card copy and state strings]0;⠙ Write source-card copy and state strings]0;⠹ Write source-card copy and state strings]0;⠸ Write source-card copy and state strings]0;⠼ Write source-card copy and state strings]0;⠴ Write source-card copy and state strings]0;⠦ Write source-card copy and state strings]0;⠧ Write source-card copy and state strings]0;⠇ Write source-card copy and state strings]0;⠏ Write source-card copy and state strings]0;⠋ Write source-card copy and state strings]0;⠙ Write source-card copy and state strings]0;⠹ Write source-card copy and state strings]0;⠸ Write source-card copy and state strings]0;⠼ Write source-card copy and state strings]0;⠴ Write source-card copy and state strings]0;⠦ Write source-card copy and state strings]0;⠧ Write source-card copy and state strings]0;⠇ Write source-card copy and state strings]0;⠏ Write source-card copy and state strings]0;⠋ Write source-card copy and state strings]0;⠙ Write source-card copy and state strings]0;⠹ Write source-card copy and state strings]0;⠸ Write source-card copy and state strings]0;⠼ Write source-card copy and state strings]0;⠴ Write source-card copy and state strings]0;⠦ Write source-card copy and state strings]0;⠧ Write source-card copy and state strings]0;⠇ Write source-card copy and state strings]0;⠏ Write source-card copy and state strings]0;⠋ Write source-card copy and state strings]0;⠙ Write source-card copy and state strings]0;✳ Write source-card copy and state strings]0;⠋ Write source-card copy and state strings# A — Source-card copy
+
+**EMACS · 791**
+The GNU Emacs manual as a navigable node graph: editing, modes, and shell integration, edition-agnostic.
+Index hubs dominate the wire graph — the Concept Index alone reaches a quarter of the corpus.
+
+› Open Emacs nodes
+
+**ORG · 319**
+The Org mode manual as a node graph: capture, agenda, tables, and export pipelines, edition-agnostic.
+The Main Index concentrates references; most nodes sit one or two hops from the capture and agenda cores.
+
+› Open Org nodes
+
+**GUIX · 276**
+The GNU Guix manual as a node graph: package definition, system configuration, and profiles, edition-agnostic.
+The Programming Index pulls the heaviest degree; declarative service and package nodes cluster tightly around it.
+
+› Open Guix nodes
+
+**DOCNEURAL · 1386**
+All three manuals aggregated into one wire graph, computed from real cross-references across the corpus.
+Index hubs from each manual merge into a single degree field; 39 nodes carry no wires and float at the edge.
+
+› Open the aggregated corpus
+
+# B — State strings
+
+- node-not-found: No node by that id anywhere in the corpus.
+- wire-target-missing: This link points to a node that no longer exists.
+- corpus-fetch-failed: Corpus could not load; refresh or check the connection.
+- loading-corpus: Loading the corpus graph.
+- empty-graph: No nodes to display in this view.
+- print-hint: Print mode renders the corpus as a single linear document.
+- theme-hint: Paper is one click; dark is the default.
+
+# C — Rationale
+
+- **EMACS**: Largest share (57%); degree skews to its two indexes, so the second sentence names the hub and its reach.
+- **ORG**: Smallest set but dense; the Main Index and capture/agenda cores are the real structure, stated plainly.
+- **GUIX**: Manual-centric hubs; Programming Index is the high-degree anchor, services and packages the tight cluster.
+- **DOCNEURAL**: The aggregator card must say "all three, real wires" — the only card that claims computation, not scope.
+- **State strings**: Declarative, factual, terminal-voice; each names the failure or affordance without filler or apologies.
+]0;✳ Write source-card copy and state strings

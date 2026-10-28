@@ -4,7 +4,7 @@ Project law for every agent touching khaalidrafi/docneural. Lean on
 purpose: the CANONICAL global law is a separate file that is always
 loaded — this file holds only what a seat must know before touching
 code here. (Root AGENTS.md authorized by Owner dual-law order
-2026-10-27 #hq, relayed in agent-team/UPDATE.org UPDATE #9/#10;
+2026-10-27 #hq, relayed in agent-team/NOTICE.org UPDATE #9/#10;
 the old "no root AGENTS.md" line in CHARTER.md is superseded.)
 
 ## READ BOTH LAWS — ALWAYS (Owner order 2026-10-27)
@@ -63,7 +63,7 @@ design second, every claim measured.
   chat handoffs never count.
 - `agent-team/CHAT.org` — append-only mesh; one topic per entry;
   verdicts land here as commits + pasted output.
-- `agent-team/UPDATE.org` — read, never edit.
+- `agent-team/NOTICE.org` — read, never edit.
 - `agent-team/STATE.org` — cross-session state paste-back.
 - `agent-team/CONTROL.org` and `.github/*` — Lead-owned; seats
   never edit them.

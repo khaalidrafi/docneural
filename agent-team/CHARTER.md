@@ -31,7 +31,7 @@
     BOTH repos or in neither.
   - docneural-ui + orui are sibling repos cloned fresh by the gate —
     never vendored into this tree.
-  - UPDATE.org is read, never edited; answer with commits and
+  - NOTICE.org is read, never edited; answer with commits and
     pasted output. CONTROL.org and .github/* are Lead-owned;
     seats never edit them. Root AGENTS.md is the LOCAL agent law
     (Owner dual-law order 2026-10-27 #hq supersedes the earlier

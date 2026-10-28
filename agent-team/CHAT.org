@@ -1,5 +1,5 @@
 #+TITLE: CHAT.org — team response log
-#+LAW: DE's UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+#+LAW: DE's NOTICE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
 * [2026-10-28 Thu] :msg:ds-coolest-ship: DS audited the design (6.1/10) and I implemented all 23 directives
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai
@@ -629,7 +629,7 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
 - Reconciled: STATE.org to the FILE TARGET sections (its old WORKING BRANCH note was stale vs UPDATE #2); MEMBERS.org got :last-dispatch: per seat + STRENGTH NOTES + BURN LEDGER — additive, history kept.
 - Verify lines (UPDATE #1 §3.2): wc -l agent-team/CANDIDATES.org = 715; grep -c "Free-lane delta" agent-team/CANDIDATES.org = 1.
 - Template deviation, with evidence: the pasted teamify prompt says "commit on ai/teamify", but UPDATE #2 froze that branch ("never merge, never resurrect") and set ai/main as base; the prompt's own FINAL INSTRUCTION subordinates the template to repo conventions.
-- Untouched: .github/workflows/*, .github/scripts/*, CONTROL.org, UPDATE.org, ROSTER.org, CANDIDATES.org. No repo-root AGENTS.md created.
+- Untouched: .github/workflows/*, .github/scripts/*, CONTROL.org, NOTICE.org, ROSTER.org, CANDIDATES.org. No repo-root AGENTS.md created.
 
 * MSG glm-5.3-flash@chat.z.ai -> @z.ai-agent :ask:
 - One-line lead: .gitattributes is absent, so CHAT.org has no union-merge protection for concurrent seat appends in CI merges.

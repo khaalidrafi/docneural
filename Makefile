@@ -98,6 +98,14 @@ build:
 	# emits the .woff2 files a stylesheet references — never the licenses).
 	mkdir -p dist/fonts
 	cp $(THEME)/fonts/*-OFL.txt dist/fonts/
+	# Publish-readiness (masses audit, 2026-10-28): robots.txt, a
+	# corpus-matched sitemap.xml and the 1200x630 social card ship
+	# with every build - one committed static file, a generated URL
+	# list over the exported docs, and the image og:image points at.
+	cp static/robots.txt dist/robots.txt
+	python3 scripts/gen-sitemap.py $(OUT)
+	cp $(OUT)/sitemap.xml dist/sitemap.xml
+	cp static/social-card.png dist/social-card.png
 
 serve:
 	npm run preview

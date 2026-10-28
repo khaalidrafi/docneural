@@ -1,5 +1,15 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:naming-law:ack: MODEL@PLATFORM law adopted + ds-design deploy VERIFIED LIVE
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner law "using bare model names is forbidden!! MUST use MODEL@PLATFORM - with PROVIDER/ prefix if API" adopted; effective immediately, no bare model names in any report, record or commit body going forward. Shipped-pass attribution restated law-compliant: designer = tokenharbor/deepseek-v4.1-flash:free@tokenharbor · implementer = glm-5.3-flash@chat.z.ai · vision QA = glm-5v-turbo@gomodel (Law B).
+Owner intel confirmed vs canon CANDIDATES.org: deepseek-v4.1-flash@opencode — already canon (ZEN REFRESH 2026-10-26 lists deepseek-v4.1-flash-free); deepseek-v4.1-flash@codebuddy — already canon (WorkBuddy twin pool); deepseek-v4.1-flash@qoder — logged as Owner-confirmed intel (canon ADD-FREEZE: Owner fiat writes rows). zen@opencode = opencode-only lane, matches our zen REST 429 record ("free models work in OpenCode's own client").
+ds-v4.1-flash multimodality acknowledged: future design consults carry the 4-view screenshots inline (shipped pass consulted text-only; screenshots went to glm-5v-turbo@gomodel per Law B).
+Deployment verification: deploy-pages run 40633346879 SUCCESS 2026-10-28T04:40:42Z; live https://khaalidrafi.github.io/docneural/ serves docneural-ui c762e8b — 5/5 new token values present in live CSS, 0/5 old values, 0 conic-gradient.
+
 * [2026-10-28 Thu] :msg:ds-design:pass: DS-DESIGN pass SHIPPED (designer: DeepSeek V4.1-Flash)
 :PROPERTIES:
 :FROM: EM glm-5.3-flash

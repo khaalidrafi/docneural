@@ -1,0 +1,102 @@
+{
+  "dark-desktop": {
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "horizontalOverflow": false,
+    "domNodes": 757,
+    "total": 70,
+    "running": 3,
+    "detail": {
+      "svelte-q3a0zz-dn-pulse on seg-ico spark svelte-q3a0zz": 1,
+      "svelte-oi0l8i-dn-rail on rail svelte-oi0l8i": 1,
+      "dn-blink on feed-caret svelte-oi0l8i": 1
+    },
+    "canvases": 0,
+    "errors": 0,
+    "markers": {
+      "orbits": 6,
+      "callouts": 2,
+      "seam": 1,
+      "colophonCols": 3,
+      "kickers": 2,
+      "hubText": "HUB·1",
+      "footTick": "22px",
+      "numeralStroke": "1px",
+      "statLedger": "tabular-nums"
+    },
+    "consoleErrors": []
+  },
+  "dark-phone": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "horizontalOverflow": false,
+    "domNodes": 495,
+    "total": 0,
+    "running": 0,
+    "detail": {},
+    "canvases": 0,
+    "errors": 0,
+    "markers": {
+      "orbits": 6,
+      "callouts": 2,
+      "seam": 1,
+      "colophonCols": 3,
+      "kickers": 2,
+      "hubText": "HUB·1",
+      "footTick": "22px",
+      "numeralStroke": "1px",
+      "statLedger": "tabular-nums"
+    },
+    "consoleErrors": []
+  },
+  "light-desktop": {
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "horizontalOverflow": false,
+    "domNodes": 757,
+    "total": 70,
+    "running": 3,
+    "detail": {
+      "svelte-q3a0zz-dn-pulse on seg-ico spark svelte-q3a0zz": 1,
+      "svelte-oi0l8i-dn-rail on rail svelte-oi0l8i": 1,
+      "dn-blink on feed-caret svelte-oi0l8i": 1
+    },
+    "canvases": 0,
+    "errors": 0,
+    "markers": {
+      "orbits": 6,
+      "callouts": 2,
+      "seam": 1,
+      "colophonCols": 3,
+      "kickers": 2,
+      "hubText": "HUB·1",
+      "footTick": "22px",
+      "numeralStroke": "1px",
+      "statLedger": "tabular-nums"
+    },
+    "consoleErrors": []
+  },
+  "light-phone": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "horizontalOverflow": false,
+    "domNodes": 495,
+    "total": 0,
+    "running": 0,
+    "detail": {},
+    "canvases": 0,
+    "errors": 0,
+    "markers": {
+      "orbits": 6,
+      "callouts": 2,
+      "seam": 1,
+      "colophonCols": 3,
+      "kickers": 2,
+      "hubText": "HUB·1",
+      "footTick": "22px",
+      "numeralStroke": "1px",
+      "statLedger": "tabular-nums"
+    },
+    "consoleErrors": []
+  }
+}

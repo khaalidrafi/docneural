@@ -1,0 +1,13 @@
+{
+ "model": "deepseek-v4.1-flash",
+ "lane": "deepseek-v4.1-flash@codebuddy (@tencent-ai/codebuddy-code 2.177.1, CLI -p, pty-driven, CODEBUDDY_AUTH_TOKEN)",
+ "mode": "cooler-push consult #3 (re-audit + 14 bold directives OP-19..OP-32)",
+ "prompt_bytes": 5117,
+ "response_bytes": 49233,
+ "response_clean_bytes": 22073,
+ "duration_s": 123.2,
+ "date": "2026-10-28",
+ "ladder": "rung1 opencode ATTEMPTED x2 this tick (binary lost to sandbox rollback -> reinstalled 1.19.5 -> session-build hang 70s with valid key; plus 08:35Z source-level 'Free usage limit reached'); rung2 codebuddy SERVED, $0",
+ "ds_verdict": "7.2/10 - sound/law-clean/disciplined but restrained; owner ordered PUSH HARDER",
+ "implemented": ["OP-19 orbit+focal+resolve-on-hover", "OP-20 HUB callouts", "OP-21 0.92/1.08 re-weight + 4/5 stage (y*1.25 in TEMPLATE, script untouched)", "OP-22 hollow drop numerals", "OP-23 drop-line kickers", "OP-24 tabular ledger numerals + keys", "OP-25 two-beat mark-in (src-card only; card keeps hover-only rails per directive 14)", "OP-26 CTA 4-state lean", "OP-27 src-open slide", "OP-28 colophon footer", "OP-29 underline-firming links + visited state", "OP-30 16-arm double reticle (corrected from DS's 12-image malformed list)", "OP-31 wire-on-paper light identity", "OP-32 designed seam", "OP-5-fidelity: auto-light accent arm unified to #005a78/#00455c"]
+}

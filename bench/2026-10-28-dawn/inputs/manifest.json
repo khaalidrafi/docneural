@@ -1,0 +1,32 @@
+[
+ {
+  "src": "styles/docneural-ui.css",
+  "dst": "docneural-ui.css",
+  "bytes": 49161,
+  "sha256": "98503b9965573a68"
+ },
+ {
+  "src": "src/lib/reader/Home.svelte",
+  "dst": "home.svelte.txt",
+  "bytes": 35327,
+  "sha256": "9fdefaea86f59b56"
+ },
+ {
+  "src": "src/lib/DocneuralApp.svelte",
+  "dst": "app-shell.svelte.txt",
+  "bytes": 23903,
+  "sha256": "58ddcf0e067fd24c"
+ },
+ {
+  "src": "src/lib/graph/DocneuralGraph.svelte",
+  "dst": "graph-view.svelte.txt",
+  "bytes": 4191,
+  "sha256": "484dfc97e27f519e"
+ },
+ {
+  "src": "index.html",
+  "dst": "index.html.txt",
+  "bytes": 468,
+  "sha256": "4b412d0588e45ca7"
+ }
+]

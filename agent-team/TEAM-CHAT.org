@@ -1,5 +1,19 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:ladder:try-all: ALL ds-flash lanes probed - tokenharbor stays LAST
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner law: "Before tokenharbor, you MUST try ALL other ds flash options!!!" - implemented as a standing ladder rule, every consult logs its attempts. Vault creds confirmed for every lane (names only). Probe evidence (scripts/ds-lane-probe.py, 2026-10-28 ~07:0xZ):
+- openrouter/deepseek-v4.1-flash@openrouter: PRIMARY - proven 200 WITH image parts (multimodal, worklog record); tiny paid cost, Owner-sanctioned bounded.
+- deepseek-v4.1-flash@opencode (zen): REST = 429 FreeUsageLimitError, "free models work in the OpenCode client" (matches 2026-10-26 record). CLI installed (1.19.5, official installer) but run hangs under this harness's non-pty executor (suspected TUI/daemon) - drivable via the pty-driver pattern (cbc-pty-driver.py precedent), deferred to a dedicated drive session, not a blocker.
+- deepseek-v4.1-flash@codebuddy: CLI installed (codebuddy-code 1.0.0, exits 0) but plain -p probe returns placeholder output - real drive needs the cbc pty-driver + auth-drive session pattern (scripts on file). Deferred the same way.
+- deepseek-v4.1-flash@qoder: API endpoint REAL (qoder.com/api/v1/models -> 401 without auth) but QODER_PERSONAL_ACCESS_TOKEN rejected as bearer - token is IDE-scoped. Needs Owner-documented API scheme or IDE context. Not reachable $0 today.
+- cloudflare/deepseek-v4.1-flash@workers-ai: models/search 200, only deepseek-v4-flash-0731 in catalog (no v4.1), ai/run -> 403 "not available on Workers Free plan". Paywalled - Owner call if ever wanted.
+- tokenharbor/deepseek-v4.1-flash:free@tokenharbor: LAST - proven $0 text-only fallback; fires ONLY after the lanes above were attempted and logged.
+Standing rule wired into the publish loop via worklog (cron 479615 reads it first every tick).
+
 * [2026-10-28 Thu] :msg:publish-cards: cycle-1 blocker SHIPPED - og:image + robots + sitemap LIVE
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

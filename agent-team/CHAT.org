@@ -1,5 +1,44 @@
 #+TITLE: CHAT.org — team response log
 #+LAW: DE's NOTICE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:fullrights-ship: DS full-rights revamp OP-33..55 shipped - audit 14 regions, score 9.6->10, $0
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner (verbatim, 12:31Z): "still not pretty enough! I'm giving DS FULL RIGHTS! It should audit the WHOLE site, and revamp the design to make it the coolest doc site. But, ofc, performance and speed MUSTN'T be compromised!!!"
+Owner (verbatim, 13:21Z): "<@1561638679921954867> done?"
+Pasted evidence:
+  $ pty-run.py --out out/A-audit.raw.txt -- codebuddy -p "$(cat inputs/BRIEF-A-audit.md)"   # cwd docneural-ui, DS reads real files
+  exit=0 bytes=29400 seconds=390  (A: whole-site audit + OP-33..OP-52 + burn order + will-NOT-do list)
+  $ pty-run.py --out out/B-gates.raw.txt -- codebuddy -p "$(cat inputs/BRIEF-B-gates.md)"
+  exit=0 bytes=12442 seconds=120  (B: gate rulings + OP-53..55 + score)
+  (auth: CODEBUDDY_AUTH_TOKEN re-pulled from vault after session reset; lane = owner-named codebuddy, direct serve)
+DS audit one-line verdict (verbatim, out/A-audit.md):
+  "the site is a well-engineered HUD whose every region lands at 'correct and quiet' — nothing is *wrong*, but nothing *performs*; the design never commits to a single signature moment"
+DS score (verbatim, out/B-gates.md):
+  "Overall: 9.6 / 10." — "once those land and re-measure ≥4.5:1, the site is a 10 against the Part A bar. Gate: PASS with F1/F2 fix required, F3–F6 exempt, OP-53..55 optional polish."
+DS rulings implemented: F1/F2 gradient-clip legacy ink (@supports wrap) REQUIRED, applied; F3-F6 55%-alpha seg ticks EXEMPT (1.4.11, ledger row stands); OP-53 ramp floor verified (worst stop clears bar); OP-54 light tick color-mix applied; OP-55 prefers-contrast:more hardening applied.
+Implementation gates (pasted, probe-fullrights.mjs, post-fix):
+  dark-desktop: overflow=false loops=3 dom=1757 fcp=272ms cls=0.0028 ttfb=26ms console=0
+  dark-phone:   overflow=false loops=0 dom=1495 fcp=128ms cls=0     ttfb=12ms console=0
+  light x2:     overflow=false console=0
+  wcag: dark failures=2 / light failures=2 — the disclosed-exempt seg-tick family only (consult B ruling); wordmark F1/F2 GONE after worst-stop fix
+  focus: 14/14 visible, allVisible=true
+  print: chars=7171 scanlines=none bg=rgb(255, 255, 255) overflow=false
+  script-hashes: PASS 14/14 script blocks byte-identical (CSS/markup-only pass, zero JS)
+  VERDICT: GREEN
+Commits:
+  docneural-ui 6d7c524 design: FULL-RIGHTS pass - DS directives OP-33..55 implemented (designer deepseek-v4.1-flash@codebuddy)
+  docneural    c3a7271 records + 404: full-rights consult artifacts A/B + OP-49a 404 page (designer deepseek-v4.1-flash@codebuddy)
+Deploy (pasted):
+  run 40697975126 attempt 1: completed success — UI checkout raced the docneural-ui push by seconds (old bundle)
+  $ curl -s -X POST .../actions/runs/40697975126/rerun  → 201
+  run 40697975126 attempt 2: completed success — live verified
+  $ curl -s $LIVE$CSS | grep -c 'prefers-contrast:more' → 1   (OP-55 present)
+  $ curl -s $LIVE$JS  | grep -oE 'grid-head|masthead|corpus plate' → grid-head masthead corpus plate  (OP-41/43 present)
+  $ curl -s $LIVE/404.html | wc -c → 4121 == local static/404.html (OP-49a live, byte-identical)
+Attribution: design deepseek-v4.1-flash@codebuddy (consults A-B, $0, full rights) · implementation + gates + deploy + records glm-5.3-flash@chat.z.ai · probe Chromium. Records: bench/2026-10-28-fullrights/ @ c3a7271. Live: https://khaalidrafi.github.io/docneural/
+
 * [2026-10-28 Thu] :msg:cb-exhaust: DS@codebuddy exhausted on its own strengths - 7 consults, $0, all implemented
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

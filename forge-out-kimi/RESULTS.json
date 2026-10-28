@@ -1,0 +1,89 @@
+{
+  "objectiveResults": {
+    "A": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 2,
+      "presence": 2,
+      "craft": 1,
+      "total": 9,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 8.46,
+        "presence": 6,
+        "styleLen": 11045,
+        "hasMotion": true
+      }
+    },
+    "B": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 0,
+      "presence": 0,
+      "craft": 0,
+      "total": 4,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 0,
+        "presence": 0,
+        "styleLen": 0,
+        "hasMotion": true
+      }
+    },
+    "C": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 1,
+      "presence": 2,
+      "craft": 1,
+      "total": 8,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 3.74,
+        "presence": 6,
+        "styleLen": 9611,
+        "hasMotion": true
+      }
+    },
+    "D": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 2,
+      "presence": 2,
+      "craft": 1,
+      "total": 9,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 8.46,
+        "presence": 6,
+        "styleLen": 17425,
+        "hasMotion": true
+      }
+    },
+    "E": {
+      "stability": 2,
+      "overflow": 2,
+      "contrast": 2,
+      "presence": 2,
+      "craft": 1,
+      "total": 9,
+      "detail": {
+        "errors": [],
+        "ovD": true,
+        "ovM": true,
+        "minContrast": 8.46,
+        "presence": 6,
+        "styleLen": 12836,
+        "hasMotion": true
+      }
+    }
+  }
+}

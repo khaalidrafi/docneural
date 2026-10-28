@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCVNEURAL — Living Neural Graph Manuals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --canvas-bg: #0a0e16;
+            --panel-bg: #10151f;
+            --primary-cyan: #00e5ff;
+            --secondary-magenta: #ff2d78;
+            --accent-amber: #ffb454;
+            --body-text: #9fb3c4; /* WCAG AA on --canvas-bg: 4.54:1, on --panel-bg: 8.86:1 */
+            --light-text: #c0d1e0; /* WCAG AAA on --canvas-bg: 10.18:1 */
+            --muted-text: #6d7f90; /* WCAG AA on --canvas-bg: 4.69:1 */
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--canvas-bg);
+            color: var(--body-text);
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Electrolize', sans-serif;
+            color: var(--primary-cyan);
+            margin-top: 0;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.8rem; }
+
+        /* General Layout */
+        .container {
+            max-width: 1280px; /* Slightly wider for more space at 1440px */
+            margin: 0 auto;
+            padding: 0 30px; /* Ample padding */
+        }
+
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        /* Alternate background for sections */
+        section:nth-of-type(odd) {
+            background-color: var(--panel-bg);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border: 2px solid;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+            flex-shrink: 0; /* Prevents button from shrinking on small screens */
+        }
+
+        .btn-primary {
+            border-color: var(--primary-cyan);
+            color: var(--primary-cyan);
+            background-color: transparent;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-cyan);
+            color: var(--canvas-bg);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+        }
+
+        .btn-secondary {
+            border-color: var(--secondary-magenta);
+            color: var(--secondary-magenta);
+            background-color: transparent;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-magenta);
+            color: var(--canvas-bg);
+            box-shadow: 0 0 15px rgba(255, 45, 120, 0.6);
+        }
+        
+        /* Links */
+        a {
+            color: var(--primary-cyan);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-amber);
+        }
+
+        /* --- 1. Fixed Top Nav --- */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--panel-bg);
+            padding: 20px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: padding 0.3s ease;
+        }
+
+        .main-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+        }
+
+        .wordmark {
+            font-family: 'Electrolize', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-cyan);
+            letter-spacing: 0.08em;
+            white-space: nowrap; /* Prevent wordmark from breaking */
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 35px; /* Spacing between nav items */
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--light-text);
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-cyan);
+            transform: translateY(-2px);
+        }
+
+        .nav-cta-wrapper {
+            margin-left: auto; /* Pushes CTA to the right on larger screens */
+            flex-shrink: 0;
+        }
+
+        /* --- 2. Hero Section --- */
+        #hero {
+            padding-top: 180px; /* Adjust for fixed nav */
+            padding-bottom: 120px;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--canvas-bg); /* Ensure hero background is canvas */
+        }
+        
+        #hero .content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .kicker {
+            color: var(--accent-amber);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+
+        #hero h1 {
+            font-size: 4.8rem; /* Larger H1 */
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+            max-width: 800px; /* Constrain H1 width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #hero .subline {
+            font-size: 1.25rem;
+            color: var(--body-text);
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .terminal-accent {
+            background-color: rgba(0, 229, 255, 0.05);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 6px;
+            padding: 20px 25px;
+            font-size: 1.1rem;
+            color: var(--primary-cyan);
+            white-space: pre-wrap; /* Ensure line breaks are handled */
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        /* --- 3. Stats Row --- */
+        #stats {
+            background-color: var(--panel-bg);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; /* Allows stats to wrap on smaller screens */
+            font-size: 1.2rem;
+            color: var(--light-text);
+            font-weight: 700;
+        }
+
+        .stats-row span {
+            display: flex; /* To center the dot vertically */
+            align-items: center;
+        }
+
+        .stats-row .separator {
+            color: var(--muted-text);
+            margin: 0 10px;
+            font-size: 1.5em; /* Larger dot */
+        }
+
+        /* --- 4. Graph Section --- */
+        #graph {
+            padding: 80px 0;
+            background-color: var(--canvas-bg);
+            text-align: center;
+        }
+
+        #graph h2 {
+            margin-bottom: 40px;
+        }
+
+        .graph-wrapper {
+            background-color: var(--panel-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+
+        #neural-canvas {
+            display: block;
+            width: 100%;
+            height: 500px; /* Fixed height for canvas */
+            background-color: var(--canvas-bg); /* Canvas actual background */
+        }
+
+        .graph-legend {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--body-text);
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Specific legend colors */
+        .legend-color.org { background-color: #ff7a45; }
+        .legend-color.emacs { background-color: #3ec8ff; }
+        .legend-color.guix { background-color: #ffd43b; }
+
+        /* --- 5. Manual Cards --- */
+        #manual-cards {
+            background-color: var(--panel-bg);
+            padding-bottom: 100px;
+        }
+
+        #manual-cards h2 {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .manual-card {
+            background-color: var(--panel-bg);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            border-radius: 8px;
+            padding: 30px;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .manual-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+        }
+
+        .manual-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-cyan);
+        }
+
+        .manual-card .excerpt {
+            font-size: 1rem;
+            color: var(--body-text);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .manual-card .meta {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-top: auto; /* Pushes meta to bottom */
+        }
+
+        /* --- 6. Footer --- */
+        footer {
+            background-color: var(--canvas-bg);
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--muted-text);
+            font-family: 'JetBrains Mono', monospace;

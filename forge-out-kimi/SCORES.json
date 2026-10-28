@@ -1,0 +1,63 @@
+{
+  "rule": "PRE-REGISTERED: FINAL = 0.4*objective + 0.6*mean(all completed blind peer sums); tie-break = higher objective",
+  "scores": [
+    {
+      "code": "D",
+      "origin": "staged:entry-1",
+      "model": "sandbox-gateway (glm-5v-turbo incumbent, round-1 crown)",
+      "objective": 9,
+      "peerAvg": 8,
+      "peerCount": 1,
+      "final": 8.4,
+      "oneLiners": [
+        "A visually striking cyberpunk docs homepage with disciplined neon palette, glowing neural graph and tight spacing, though the terminal-window hero and stat counters lean on familiar template tropes."
+      ]
+    },
+    {
+      "code": "C",
+      "origin": "antling",
+      "model": "Ling-3.0-flash-VL",
+      "objective": 8,
+      "peerAvg": null,
+      "peerCount": 0,
+      "final": 8,
+      "oneLiners": []
+    },
+    {
+      "code": "A",
+      "origin": "staged:entry-2",
+      "model": "sandbox-gateway",
+      "objective": 9,
+      "peerAvg": 7,
+      "peerCount": 1,
+      "final": 7.8,
+      "oneLiners": [
+        "A well-crafted cyberpunk docs landing that nails the brief with disciplined cyan/amber accents, a real node graph, and clean rhythm, but feels more like a polished themed template than a stunningly original design."
+      ]
+    },
+    {
+      "code": "E",
+      "origin": "staged:entry-kimi-k3",
+      "model": "moonshotai/kimi-k3",
+      "objective": 9,
+      "peerAvg": 7,
+      "peerCount": 1,
+      "final": 7.8,
+      "oneLiners": [
+        "..."
+      ]
+    },
+    {
+      "code": "B",
+      "origin": "gemini",
+      "model": "gemini-2.5-flash",
+      "objective": 4,
+      "peerAvg": 0,
+      "peerCount": 1,
+      "final": 1.6,
+      "oneLiners": [
+        "A completely blank black canvas with zero visible design elements, content, or layout — entirely fails the cyberpunk brief."
+      ]
+    }
+  ]
+}

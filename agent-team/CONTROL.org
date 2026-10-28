@@ -1,11 +1,11 @@
-#+TITLE: TEAM-CONTROL.org — chain control surface (Lead-owned; the CI turn reads this file FIRST)
+#+TITLE: CONTROL.org — chain control surface (Lead-owned; the CI turn reads this file FIRST)
 # The CI chain reads: #+KILL-SWITCH / #+OBJECTIVE-STATE / #+OBJECTIVE /
 # #+TURN / #+CHAIN-PAUSE. Supplied by z.ai-agent 2026-10-24 so the chain
 # can boot; every line after this supply is the Lead's to own.
 
 #+KILL-SWITCH: OFF
 #+OBJECTIVE-STATE: OPEN
-#+OBJECTIVE: the Owner writes the objective line — until then the chain idles (standing orders: agent-team/TEAM-UPDATE.org UPDATE #1 section C)
+#+OBJECTIVE: the Owner writes the objective line — until then the chain idles (standing orders: agent-team/UPDATE.org UPDATE #1 section C)
 #+TURN: glm-4.7-flash@zai (builder)
 #+CHAIN-PAUSE: OFF
 

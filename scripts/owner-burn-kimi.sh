@@ -13,7 +13,7 @@
 #     an intl-reachable body by the agent. CANDIDATES.org lists codebuddy as
 #     a RESIDENT harness (Owner box: installed AND logged in).
 #
-# SPEND LAW (TEAM.md): EXACTLY ONE paid generation, kimi-k3 ONLY,
+# SPEND LAW (CHARTER.md): EXACTLY ONE paid generation, kimi-k3 ONLY,
 # deepseek-v4.1-flash HARD-EXCLUDED (Owner fiat: free this month). 100-credit
 # ceiling (Owner 2026-10-27): one generation is the whole budget.
 #
@@ -64,7 +64,7 @@ echo "      OK: index.html $(wc -c < index.html) bytes"
   echo "  \"endpoint\": \"intl (www.codebuddy.ai) via resident body\","
   echo "  \"generationSeconds\": $GEN_S,"
   echo "  \"generatedAt\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
-  echo "  \"spendLedger\": \"ONE paid generation, no retries (TEAM.md spend law; Owner 100-credit ceiling)\","
+  echo "  \"spendLedger\": \"ONE paid generation, no retries (CHARTER.md spend law; Owner 100-credit ceiling)\","
   echo "  \"bytes\": $(wc -c < index.html)"
   echo '}'
 } > GEN.json

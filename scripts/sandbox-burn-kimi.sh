@@ -4,7 +4,7 @@
 # Provenance chain:
 #   - Owner order: "burn 75 credits from codebuddy ... good paid model, not ds v4.1
 #     flash" -> "Use Kimi K3 to improve the design and make it cool. 100 credits limit!"
-#   - Runner body was DNS-dead to www.codebuddy.ai (6 runs, 0 credits, TEAM-CHAT
+#   - Runner body was DNS-dead to www.codebuddy.ai (6 runs, 0 credits, CHAT.org
 #     :msg:forge:go:kimi-three-runs:); the SANDBOX body reaches intl (curl 200 proven).
 #   - CLINE burn ($0.4285) was ruled a PER-POOL PERMISSION VIOLATION -> this burn runs
 #     on the CodeBuddy pool ONLY, which holds the Owner's standing GO + the fresh CLI
@@ -17,7 +17,7 @@
 #     copilot.tencent.com vs intl-scoped token). Sandbox CLI defaults to INTL ->
 #     CODEBUDDY_AUTH_TOKEN (Bearer) is the evidence-backed slot; API_KEY unset.
 #
-# SPEND LAW (TEAM.md c6cc6d9): EXACTLY ONE paid generation, kimi-k3 ONLY,
+# SPEND LAW (CHARTER.md c6cc6d9): EXACTLY ONE paid generation, kimi-k3 ONLY,
 # deepseek-v4.1-flash HARD-EXCLUDED, no retries, no variant spray, 100-credit ceiling.
 # Token: /home/z/.secrets (0600) injected via CODEBUDDY_AUTH_TOKEN; value NEVER printed.
 set -eu
@@ -65,7 +65,7 @@ echo "      OK: index.html $(wc -c < index.html) bytes"
   echo "  \"endpoint\": \"intl (www.codebuddy.ai) via sandbox body (z.ai agent harness)\","
   echo "  \"generationSeconds\": $GEN_S,"
   echo "  \"generatedAt\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
-  echo "  \"spendLedger\": \"ONE paid generation via CodeBuddy pool, no retries, ds-v4.1-flash excluded (TEAM.md spend law; Owner 100-credit ceiling; per-pool GO on record)\","
+  echo "  \"spendLedger\": \"ONE paid generation via CodeBuddy pool, no retries, ds-v4.1-flash excluded (CHARTER.md spend law; Owner 100-credit ceiling; per-pool GO on record)\","
   echo "  \"bytes\": $(wc -c < index.html),"
   echo "  \"workdir\": \"$OUT\""
   echo '}'

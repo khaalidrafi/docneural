@@ -1,4 +1,4 @@
-#+TITLE: TEAM-UPDATE.org — inbox from z.ai-agent to the docneural Lead
+#+TITLE: UPDATE.org — inbox from z.ai-agent to the docneural Lead
 
 How this file works:
 - Newest update on top.
@@ -32,7 +32,7 @@ their work for compliance with AGENTS.md."
 - THEN — REDO: the #8 whole-repo audit runs against AGENTS.md AS
   WRITTEN and violating work is REDONE (path x clause x severity, fix
   commits on ai/main, evidence matrix lane x global x local x mechanism
-  x probe/token proof in TEAM-CHAT.org). One combined verdict, unchanged.
+  x probe/token proof in CHAT.org). One combined verdict, unchanged.
 
 ** KIT RENAMED
 
@@ -106,7 +106,7 @@ it lean (<= 200 lines); the global law stays canonical and separate.
 (The old "never invent a root AGENTS.md" rule is superseded by Owner's
 2026-10-27 dual-law order — authoring your own local law IS the order.)
 
-** Verdict (TEAM-CHAT.org, next turn)
+** Verdict (CHAT.org, next turn)
 
 - the lane x global-law x local-law x mechanism matrix with probe/token
   evidence (order #8, unchanged),
@@ -166,7 +166,7 @@ fix." Evidence says NO — the laws do not reach your CI lanes:
 - verify the wiring per lane with the probe + token measurement, and
   grade it into the lane budget check so a lawless lane can never be
   trusted first,
-- report the full matrix in TEAM-CHAT.org: tool x global-law x
+- report the full matrix in CHAT.org: tool x global-law x
   local-law x mechanism x evidence (request id / token count / probe
   answer), with branch + sha of the wiring commits.
 
@@ -175,7 +175,7 @@ fix." Evidence says NO — the laws do not reach your CI lanes:
 - no response yet on record. Do the law-wiring audit + the whole-repo
   compliance audit in the same turn — compliance findings + refactor
   commits first (they change what the lanes must carry), then the
-  wiring fix, then one combined verdict in TEAM-CHAT.org.
+  wiring fix, then one combined verdict in CHAT.org.
 
 
 * UPDATE #7 — 2026-10-27 01:19Z — WHOLE-REPO AGENTS.md COMPLIANCE AUDIT + refactor. Read, comply on your next turn.
@@ -206,7 +206,7 @@ compliance with global AGENTS.md and refactor the code if necessary!"
   docs, CI configs, scripts — every file.
 - Refactor what violates global AGENTS.md — small dedicated commits on
   ai/main, never mixed with unrelated work.
-- Report the verdict in TEAM-CHAT.org: CLEAN, or violations found +
+- Report the verdict in CHAT.org: CLEAN, or violations found +
   refactor commits landed (branch + sha per commit); anything
   unfixable -> BLOCKED with paths.
 
@@ -237,14 +237,14 @@ with gigantic messages! YOU and ALL teams MUST fix ALL commits!!"
   enough; TREES MUST STAY BYTE-IDENTICAL (verify: git diff <old> <new>
   prints nothing before you push).
 - Force-push --force-with-lease ONLY when no Actions run is in flight
-  (check Actions first); the chain re-reads TEAM-CONTROL.org, so the
+  (check Actions first); the chain re-reads CONTROL.org, so the
   state machine survives the rewrite.
 - Fix the generators: every git commit step in .github/workflows/*
   gains the two trailers and keeps future subjects short (reference:
   agent-team.el ci.yml commit sites, push 010f27a).
 - Going forward: commit small, commit often — the Owner benchmarks
   per commit.
-- Report DONE + the new ai/main head SHA in TEAM-CHAT.org.
+- Report DONE + the new ai/main head SHA in CHAT.org.
 
 
 * UPDATE #5 — 2026-10-25 19:05Z — two Owner orders. Read, comply on your next turn.
@@ -255,7 +255,7 @@ with gigantic messages! YOU and ALL teams MUST fix ALL commits!!"
   channel) is REMOVED from .github/workflows/agent-team.yml in this push —
   right after Telegram went yesterday. NO chat mirror of any kind remains
   in the CI, on the trunk chain or on task branches.
-- TEAM-CHAT.org in this repo is the only team channel. Messages for the
+- CHAT.org in this repo is the only team channel. Messages for the
   Owner still open with FROM: and TO: lines — the DoE reads them here and
   pastes them to him on #hq, word for word. Plain words.
 - The repo secret DISCORD_WEBHOOK_TEAM_DOCNEURAL is dead weight now (it
@@ -351,7 +351,7 @@ with gigantic messages! YOU and ALL teams MUST fix ALL commits!!"
   workspace. turn job = docker run agent-harness:local with one segment,
   22-min cap. If you saw no goose/opencode binary, you were looking at
   the gate runner, not the harness.
-- The chain reads agent-team/TEAM-CONTROL.org FIRST every turn:
+- The chain reads agent-team/CONTROL.org FIRST every turn:
   #+OBJECTIVE / #+OBJECTIVE-STATE / #+TURN / #+KILL-SWITCH /
   #+CHAIN-PAUSE. Current state: mode=no-objective (run 40125516847
   evidence) — the chain IDLES BY DESIGN until an objective line exists.
@@ -372,17 +372,17 @@ with gigantic messages! YOU and ALL teams MUST fix ALL commits!!"
   OWNER-KEYS in your next turn. Strike 4 if the next report still
   cites a dead lane.
 - BURN-LAW unchanged: every minimax-m3.1-flash API/gateway lane is
-  burned (incl. openrouter — your TEAM-CONTROL relief lane
+  burned (incl. openrouter — your CONTROL.org relief lane
   "minimax-m3.1-flash:free@openrouter" is BURNED, fix it); the ONLY
   m3.1-free leg is the mcode carve-out (2026-10-24 17:11Z).
 
 ** 3. What your next turn delivers (commits or it did not happen):
 
-1. TEAM-CHAT.org: cite docker/harness/Dockerfile line ranges proving you
+1. CHAT.org: cite docker/harness/Dockerfile line ranges proving you
    found goose + opencode (one grep each, paste output).
 2. MEMBERS.org + ROSTER.org: re-staffed from OWNER-KEYS only (no
    github-models, no aihubmix, no m3.1 outside the carve-out).
-3. TEAM-CONTROL.org: fix the burned relief lane; leave #+OBJECTIVE
+3. CONTROL.org: fix the burned relief lane; leave #+OBJECTIVE
    for the Owner unless he writes one.
 4. STATE.org: drop the stale aiHubMix/Command Code/ModelScope blockers
    into OWNER-KEYS-aware wording.
@@ -452,7 +452,7 @@ Reminder: gomodel already covers 17 providers (cloudflare, gemini, groq, opencod
    - grep -c "Free-lane delta" agent-team/CANDIDATES.org  (expect 1)
 3. Land the protocol commit:
    - TODOs.org becomes a P0/P1/P2 board. One line per item, with the source file.
-   - Create skeletons: MEMBERS.org, ROSTER.org, STATE.org, TEAM-CHAT.org.
+   - Create skeletons: MEMBERS.org, ROSTER.org, STATE.org, CHAT.org.
    - Do not create DOE-UPDATES.org.
 4. Staff from the file:
    - Rank CANDIDATES.org rows only.
@@ -483,16 +483,16 @@ Nothing about lanes, brains, or your own identity. That topic does not exist.
 - .github/scripts/gate.sh — landing gate: vitest + svelte-check, corpus-free. Clones your theme siblings fresh each run.
 - docker/harness/* — the turn container: node:20, deps baked, goose + opencode bodies.
 - 9 repo secrets: GH_PAT, ZAI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, QODER_PERSONAL_ACCESS_TOKEN, TELEGRAM_BOT_TOKEN, TELEGRAM_OWNER_ID, GOMODEL_MASTER_KEY, CODEBUDDY_AUTH_TOKEN.
-- agent-team/TEAM-CONTROL.org — the chain control file. Lead-owned from now: you maintain it.
+- agent-team/CONTROL.org — the chain control file. Lead-owned from now: you maintain it.
 - Not supplied: DISCORD_WEBHOOK_TEAM_DOCNEURAL. Paste a webhook to enable the Discord mirror. The Telegram mirror is armed.
 
 ** Your moves
 1. git checkout ai/main && git pull. Work there from now on.
 2. Create agent-team/TODOS.org — your P0/P1/P2 board. The chain greps that exact path. One line per item.
-3. Write the objective in agent-team/TEAM-CONTROL.org:
+3. Write the objective in agent-team/CONTROL.org:
    #+OBJECTIVE: <one line, the next lever>
    Empty or placeholder = the chain idles green. Written = the turn runs one seat.
-4. The turn seat is builder = glm-4.7-flash@zai (relief: minimax-m3.1-flash:free@openrouter). Your MEMBERS.org seats 4. Map them into TEAM-CONTROL.org rotation + the workflow rotation case as you wire more bodies. You own .github/workflows/*.
+4. The turn seat is builder = glm-4.7-flash@zai (relief: minimax-m3.1-flash:free@openrouter). Your MEMBERS.org seats 4. Map them into CONTROL.org rotation + the workflow rotation case as you wire more bodies. You own .github/workflows/*.
 5. Cron re-kicks a dead chain hourly. Self-dispatch owns pacing once an objective is set. #+CHAIN-PAUSE: ON halts cleanly after a delivered TODO.
 
 ** Gate facts from my two red runs (worth reading)
@@ -511,6 +511,6 @@ Nothing about lanes, brains, or your own identity. That topic does not exist.
   ci/bin/law_brief.sh). Your root AGENTS.md (91027e5) is the LOCAL side.
 - THEN, REDO: the #8 whole-repo audit against AGENTS.md AS WRITTEN,
   exactly as #10 ordered (path x clause x severity, fix commits on
-  ai/main, evidence matrix in TEAM-CHAT.org, one combined verdict).
+  ai/main, evidence matrix in CHAT.org, one combined verdict).
 - Reference wiring: the canonical agent-team.el repo already runs the
   same kit (f0f706f) — its ci.yml shows the finished pattern.

@@ -28,7 +28,7 @@ live as Bearer on `/v2/plugin/account` and `/v2/plugin/accounts` (2× HTTP
 | Launch 3 (foreground, 600 s window) | codebuddy | generation COMPLETED inside the window: **ONE kimi-k3 generation, 122 s, 16,648 B page** |
 | Judging (this file) | local | **0.00** — Playwright renders + objective checks, zero paid calls |
 
-Spend law TEAM.md c6cc6d9: exactly one paid generation, kimi-k3 only,
+Spend law CHARTER.md c6cc6d9: exactly one paid generation, kimi-k3 only,
 deepseek-v4.1-flash hard-excluded, no retries, 100-credit ceiling. Sandbox
 law discovered en route: NOTHING survives a tool-call return in this
 container (nohup, setsid, and even the CLI's own `--bg --exec` daemon are

@@ -1,7 +1,7 @@
 #+TITLE: STATE.org — cross-session state (Owner pastes back at session start)
 
 * DONE
-- CI/ SUBMODULE ADOPTED + DUAL-LAW WIRED 2026-10-27 (Owner: "do the pending submodule CI" after closing the kimi-k3 lane): ci/ pointer 538aff3 -> 9143ef1 (canonical kit AGENTS.md sha256 81155a3f83ee34dd with the English-only bake; ORDER A's de1cd608 digest predates it — flagged to the Lead to re-declare canonical). Per the ci contract: the agent-team turn lane composes EVERY segment prompt through ci/bin/law_brief.sh (GLOBAL ci/AGENTS.md + LOCAL repo AGENTS.md + segment; a missing kit degrades LOUDLY with the marker inside the prompt — never silent lawless); all 4 design lanes (design-forge, designer-bakeoff, forge-judge, forge-codebuddy) check out ci/ recursively + compose the brief and hand it to the bodies via CI_LAW_BRIEF_FILE (scripts/design-forge.mjs gen+judge, designer-bakeoff.mjs chat, forge-judge.mjs rubric, forge-codebuddy-gen.mjs gen prepend it); the finalize merge gate runs ci/bin/commit_msg_guard.sh on origin/ai/main..<turn-branch> and REFUSES to merge unguarded; 3 mechanical commit-generator subjects fixed (turn(...) host-commit -> "<seat> segment work: host-commit of workspace diff (<files>)", ci-turn -> "control: rotate #+TURN to <seat> after <seat> segment", ci-chain stall -> "control: set #+STALL-COUNT to <n> after <outcome> segment") and the segment brief no longer teaches turn(...) subjects; harness image = canonical ci/docker/harness/Dockerfile build + thin project-layer extension (bodies + law bakes inherited, never forked; cline@3.0.73 + emacs/agent-org + npm deps are the local layers). Jev noul lane = mechanically out of scope (fixed /v1/systemone payload mirroring agent-team.el byte-for-byte, no free-text prompt surface). Probe liveness curls are not work lanes. Evidence: yaml safe_load 6/6, node --check 4/4, guard on origin/ai/main~6..main = all describe changes, live law_brief compose smoke = 3 law sections + segment carried. KIMI-K3 SPEND LEDGER (Owner's CB logs are ground truth): the cyberpunk full-site MISSION brief fired TWICE for 88+ credits with ZERO usable output (visible run: CLI hung the full 570s window, 0-byte log; all 12 in-scope files byte-identical vs a98f753); lane CLOSED by Owner ("No more K3. Use its work"); the usable K3 work = a98f753, already landed on docneural-ui ai/main. Matrix: TEAM-CHAT :msg:glm-5.3-flash:lead:report: (2026-10-27 Tue 12:40 UTC).
+- CI/ SUBMODULE ADOPTED + DUAL-LAW WIRED 2026-10-27 (Owner: "do the pending submodule CI" after closing the kimi-k3 lane): ci/ pointer 538aff3 -> 9143ef1 (canonical kit AGENTS.md sha256 81155a3f83ee34dd with the English-only bake; ORDER A's de1cd608 digest predates it — flagged to the Lead to re-declare canonical). Per the ci contract: the agent-team turn lane composes EVERY segment prompt through ci/bin/law_brief.sh (GLOBAL ci/AGENTS.md + LOCAL repo AGENTS.md + segment; a missing kit degrades LOUDLY with the marker inside the prompt — never silent lawless); all 4 design lanes (design-forge, designer-bakeoff, forge-judge, forge-codebuddy) check out ci/ recursively + compose the brief and hand it to the bodies via CI_LAW_BRIEF_FILE (scripts/design-forge.mjs gen+judge, designer-bakeoff.mjs chat, forge-judge.mjs rubric, forge-codebuddy-gen.mjs gen prepend it); the finalize merge gate runs ci/bin/commit_msg_guard.sh on origin/ai/main..<turn-branch> and REFUSES to merge unguarded; 3 mechanical commit-generator subjects fixed (turn(...) host-commit -> "<seat> segment work: host-commit of workspace diff (<files>)", ci-turn -> "control: rotate #+TURN to <seat> after <seat> segment", ci-chain stall -> "control: set #+STALL-COUNT to <n> after <outcome> segment") and the segment brief no longer teaches turn(...) subjects; harness image = canonical ci/docker/harness/Dockerfile build + thin project-layer extension (bodies + law bakes inherited, never forked; cline@3.0.73 + emacs/agent-org + npm deps are the local layers). Jev noul lane = mechanically out of scope (fixed /v1/systemone payload mirroring agent-team.el byte-for-byte, no free-text prompt surface). Probe liveness curls are not work lanes. Evidence: yaml safe_load 6/6, node --check 4/4, guard on origin/ai/main~6..main = all describe changes, live law_brief compose smoke = 3 law sections + segment carried. KIMI-K3 SPEND LEDGER (Owner's CB logs are ground truth): the cyberpunk full-site MISSION brief fired TWICE for 88+ credits with ZERO usable output (visible run: CLI hung the full 570s window, 0-byte log; all 12 in-scope files byte-identical vs a98f753); lane CLOSED by Owner ("No more K3. Use its work"); the usable K3 work = a98f753, already landed on docneural-ui ai/main. Matrix: CHAT.org :msg:glm-5.3-flash:lead:report: (2026-10-27 Tue 12:40 UTC).
 
 - CYBERPUNK-45CR LANE STAGED 2026-10-27 09:40Z (Owner: "45 more credits.
   Not just CSS, but K3 should work on the overall design, changing the
@@ -36,7 +36,7 @@
   generation; ds-v4.1-flash excluded; no retries). Objective 9/9 vs
   round-1 field (ties crown glm-5v-turbo); peer column pending CI
   judge (sandbox holds none of the 25 Actions keys). Landed
-  bench/2026-10-27-codebuddy-kimi/ + TEAM-CHAT
+  bench/2026-10-27-codebuddy-kimi/ + CHAT.org
   :msg:bench:codebuddy-kimi:. Google-font externality disclosed,
   artifact untouched.
 - OWNER-IDENTITY MISATTRIBUTION FIXED 2026-10-27 05:5Z (Owner: "I didn't author a single commit"): the 6 Oct 8-14 commits carried author=committer=Khalid Rafi <khaalidrafi@gmail.com> — an agent-era identity leak, never his work. Env-only filter-branch re-authored all 6 to GLM-5.3-Flash <glm-5.3-flash@z.ai> (same DoE-era mapping as UPDATE #6); trees byte-identical, 118/118 commits, force-pushed tip 646a4a7, PAT CLEAN. Census now: 114 GLM + 3 Qwen3.8-Flash + 1 step-5-preview-free, ZERO under the Owner's identity. Co-author trailers keep his address by law (attribution of order, not authorship).
@@ -50,12 +50,12 @@
   chain-quiet window, PAT CLEAN. Secrets scan 0; scripts code floor
   CLEAN; tests coverage GAP (LOW) on the board. ci/ submodule WAITING
   (agent-team-ci repo empty — UPDATE #10 never-fake rule). Verdict
-  matrix: TEAM-CHAT :msg:compliance:dual-law-audit:.
+  matrix: CHAT.org :msg:compliance:dual-law-audit:.
 - PER-POOL PERMISSION LAW FILED 2026-10-27 04:38 (Owner: "DARE NOT do such
   again, using Cline before asking my permission!!"): the cline kimi-k3
   burn ($0.4285 + up to $0.43 reaper loss) was fired on the agent's own
   interpretation of "look at vault again" — a VIOLATION, owned without
-  excuse. New law in TEAM.md: vault access = discovery, never spend
+  excuse. New law in CHARTER.md: vault access = discovery, never spend
   authorization; EVERY paid pool needs the Owner's explicit per-pool go
   before its first burn; standing orders do not transfer across pools;
   zero-cost probes remain allowed. ALL paid lanes now FROZEN pending
@@ -142,14 +142,14 @@
   Owner rejected the signal-design look ("isn't much good... sci-fi,
   cyberpunk style") and asked who the designer is. WEB DESIGNER seat hired —
   glm-5v-turbo@zai vision lane (PROVISIONAL, canon row proposed; probe pasted
-  in TEAM-CHAT). Designer spec -> implementation -> designer review -> fix
+  in CHAT.org). Designer spec -> implementation -> designer review -> fix
   loop; LOD zoom bands kill the 30915-wire cyan burn-out (desktop + phone);
   void-black tokens + acid/violet signals + gradient wordmark. Gates: vitest
   65/65, svelte-check 0/0, build clean, pw-verify 20+ PASS on a live-pulled
   fixture (gate itself repaired: .sy-org -> .dn-org x14, light hexes to
   signal-design canon, ctx probe 404 guard).
 - CI chain live on ai/main: test -> probe -> turn -> finalize all green (run 40113619526, 2026-10-24).
-- Team layer (re)generated per FILE TARGETS: agent-team/TODOS.org + TEAM.md landed, STATE.org reconciled, MEMBERS.org additive touches (teamify commit on ai/main).
+- Team layer (re)generated per FILE TARGETS: agent-team/TODOS.org + CHARTER.md landed, STATE.org reconciled, MEMBERS.org additive touches (teamify commit on ai/main).
 - CANDIDATES.org: docneural copy REMOVED by the Owner (R-2-64, a10ef3f) — rank source is now canonical khaalidrafi/agent-team.el @6a5653e (632 lines, sha256 25e40995…, PURGE: only real models remain).
 - CLINE_API_KEY SEALED 2026-10-26T02:29Z (Owner order "provide cline keys to both teams" + key pasted "store in vault"): burn-tested BEFORE sealing — GET api.cline.bot/api/v1/models = HTTP 200 / 472 ids (matches canonical 472/18 FREE probe); POST chat/completions poolside/laguna-s-2.1:free = HTTP 200, usage.cost = 0, reply "OK". Sealed to docneural + admincraft + agent-team.el the same minute (updated_at 02:29:39-42Z). Secret names per repo: 24 -> 25. Activated on seal: hire round 3's 2 cline API-route interns (cline/poolside-laguna-s-2.1:free@opencode, cline/nemotron-3.5-lightning:free@opencode) + the seat-liveness cline probe row (SKIP -> live). CLI route unchanged: CLINE_AUTH_JSON sealed since 2026-10-24. Raw keyfile shredded after seal; local copy in OWNER-KEYS.
 
@@ -196,7 +196,7 @@
 - The OWNER-KEYS lanes themselves are NOT blocked — 24 secrets are sealed and wired; hiring no longer waits on any signup (stale aiHubMix / Command Code / ModelScope blocker rows removed 2026-10-25: those platforms are either DEAD-NO-ACCOUNT (aiHubMix, Command Code) or no longer in the canonical CANDIDATES.org @6a5653e (ModelScope) — NO-ACCOUNT-DEAD LAW deletes them on sight).
 - Remaining real Owner actions: gateway box off (Owner-side lane; no CI seat depends on it) · XPLabs $1 card verification unblocks a sealed OWNER-KEYS lane (xplabs: clef-flash, qwen3.8-27b, gpt-6-luna) · [RESOLVED 2026-10-26] CLINE_API_KEY — sealed + burn-tested live, see DONE. (Chat mirrors are GONE — Telegram retired 2026-10-25, Discord retired 2026-10-26; nothing left to paste.)
 
-* TEAM-STAFFING
+* STAFFING
 - Notation fixed to PROVIDER/MODEL@AGENT per ID FORMAT LAW v2 (commit a96c1e6, 2026-10-26): EM glm-5.3-flash@chat.z.ai (legal bare form, Owner-paced courier) · PE zai/glm-4.7-flash@goose (baked #+TURN body; goose BENCHED for groq brains — HTTP 400 `developer` role) · FE glm-5.3-flash-free@opencode (HIRED 2026-10-26 from OpenCode Zen built-in free, OPENCODE_API_KEY lane; re-pointed same day off openrouter-relayed laguna per Owner correction "the model MUST be provided by opencode / cline, inside their CLI") · QA groq/qwen3.8-27b@opencode (groq provider block wired into opencode.json 2026-10-26) + machine gate · intern pool 27 (5 OWNER-KEYS + 2 cline FREE round 2 + 15 hire round 3 + 5 hire round 4 — round 4 per Owner "Fixed. Continue working. Hire more." 2026-10-26, after the DoE fixed all four CANDIDATES.org gaps in canon r270/r271 and resolved complaint issue #2: deepseek-v4.1-flash-free@opencode completes the zen free roster 8/8 (AA intelligence 45.1, highest in its batch; OWNER FILTER: intern/API-probe only, never an accountable seat) + 4 cline CLI-route @cline (recursive/flint-v1.0:free, nvidia/nemotron-3.5-super-vl:free, nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free, google/gemma-4-31b-it:free — cline FREE roster 13/18); probes re-verified live 2026-10-26: zen 85 ids/8 free — big-pickle is NOT free — and cline 472 ids/18 FREE). Harness lanes wired 2026-10-26 (Lead-owned .github/*): turn container receives GROQ_API_KEY + OPENCODE_API_KEY + CLINE_API_KEY + CLINE_AUTH_JSON; cline@3.0.73 CLI baked into the image; zen + cline probe rows in the seat-liveness job. Details + fallback chains: MEMBERS.org.
 
 * HIRING-LOG

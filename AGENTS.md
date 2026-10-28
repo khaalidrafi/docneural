@@ -4,8 +4,8 @@ Project law for every agent touching khaalidrafi/docneural. Lean on
 purpose: the CANONICAL global law is a separate file that is always
 loaded — this file holds only what a seat must know before touching
 code here. (Root AGENTS.md authorized by Owner dual-law order
-2026-10-27 #hq, relayed in agent-team/TEAM-UPDATE.org UPDATE #9/#10;
-the old "no root AGENTS.md" line in TEAM.md is superseded.)
+2026-10-27 #hq, relayed in agent-team/UPDATE.org UPDATE #9/#10;
+the old "no root AGENTS.md" line in CHARTER.md is superseded.)
 
 ## READ BOTH LAWS — ALWAYS (Owner order 2026-10-27)
 
@@ -14,7 +14,7 @@ the old "no root AGENTS.md" line in TEAM.md is superseded.)
    trailers, subject/body discipline, tests-first, AI-REVIEW.org,
    Org-over-Markdown, key handling, response style. Never restate it;
    load it.
-2. LOCAL LAW: this file + `agent-team/TEAM.md` (team constitution:
+2. LOCAL LAW: this file + `agent-team/CHARTER.md` (team constitution:
    standing laws, role scopes, spend laws).
 3. CONFIG RULE (global + local must be WIRED, not merely told):
    each harness loads the global law at its verified global path —
@@ -61,18 +61,18 @@ design second, every claim measured.
 
 - `agent-team/TODOS.org` — the board, single source of truth for work;
   chat handoffs never count.
-- `agent-team/TEAM-CHAT.org` — append-only mesh; one topic per entry;
+- `agent-team/CHAT.org` — append-only mesh; one topic per entry;
   verdicts land here as commits + pasted output.
-- `agent-team/TEAM-UPDATE.org` — read, never edit.
+- `agent-team/UPDATE.org` — read, never edit.
 - `agent-team/STATE.org` — cross-session state paste-back.
-- `agent-team/TEAM-CONTROL.org` and `.github/*` — Lead-owned; seats
+- `agent-team/CONTROL.org` and `.github/*` — Lead-owned; seats
   never edit them.
 - Work lands on `ai/main` only (team truth). `ai/teamify` and
   `ai/agent-team` are frozen archives: never merge, never resurrect.
 
 ## PAID LANES
 
-TEAM.md owns the money laws: PAID-LANE SPEND LAW and PER-POOL
+CHARTER.md owns the money laws: PAID-LANE SPEND LAW and PER-POOL
 PERMISSION LAW. Summary pointer only — read them there: one paid
 generation per model per dispatch, per-pool Owner go before first
 burn, vault access is discovery not authorization, paid artifacts land

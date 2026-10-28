@@ -3,7 +3,7 @@
 Owner order chain: "burn 75 credits from codebuddy … good paid model" →
 "Use Kimi K3 to improve the design and make it cool. 100 credits limit!" →
 "look at vault again". The CodeBuddy CLI lane is runner-dead (6 runs, 0
-credits — TEAM-CHAT :msg:forge:go:kimi-three-runs:); the vault
+credits — CHAT.org :msg:forge:go:kimi-three-runs:); the vault
 (khaalidrafi/vault @1a32:57Z) HELD provider keys; moonshotai/kimi-k3 (the
 pre-registered Design Arena 1335 challenger id) is live on cline's
 OpenAI-compatible catalog, probed free. THE ONE paid generation fired

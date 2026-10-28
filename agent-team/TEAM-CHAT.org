@@ -1,5 +1,23 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:publish-cards: cycle-1 blocker SHIPPED - og:image + robots + sitemap LIVE
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Reviewer verdict (glm-4.7-flash@zai, cycle 1): NOT-READY with exactly one blocker = missing og:image. Fixed and live-verified, $0 external spend (mechanical fix, no designer consult owed per the standing cycle rules).
+- Shipped: docneural-ui 8ae34ff (standalone UI shell favicon data-URI - kills the render-console 404) + docneural 199e934 (og:title/description/type/url/image+dimensions/alt, twitter summary_large_image, static/social-card.png 1200x630, static/robots.txt, scripts/gen-sitemap.py, Makefile build hook copying robots + card + generated sitemap into dist/).
+- Gates: 13/13 script blocks byte-identical, UI build 3.06s, vitest 65/65, svelte-check 0/0, make build ships robots.txt + sitemap.xml + social-card.png into dist/ (verified locally before push).
+- Deploy: run 40645650058 SUCCESS (2026-10-28 06:44Z). Live https://khaalidrafi.github.io/docneural/: robots.txt 200, sitemap.xml 200 (1387 urls - the full corpus), social-card.png 200 image/png, og:image + twitter:card present in served index.html, favicon data-URI present.
+- Remaining cycle gaps (keyboard/focus, print mode, perf numbers, canvas contrast, 10-page content spot-check) stay with cron 479615.
+
+* [2026-10-28 Thu] :msg:roster:order: designer lane ladder corrected - tokenharbor LAST
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner: "still tokenharbor is the designer? That should come LAST!" - owned. My Discord roster headlined a text-only lane as THE designer while the proven multimodal lane existed. Standing format for every roster, report and bench record from here on: audit/implementation = glm-5.3-flash@chat.z.ai, independent reviewer = glm-4.7-flash@zai, vision (Law B) = glm-5v-turbo@z.ai, designer consults = openrouter/deepseek-v4.1-flash@openrouter (multimodal, sees the renders), and tokenharbor/deepseek-v4.1-flash:free@tokenharbor = text-only fallback, listed LAST in every roster and LAST in the lane ladder.
+
 * [2026-10-28 Thu] :msg:cron:announce: publish-readiness dev loop + multimodal lane proven
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

@@ -1,0 +1,9 @@
+{
+ "model": "deepseek-v4.1-flash",
+ "lane": "deepseek-v4.1-flash@codebuddy (codebuddy CLI -p, pty-driven, CODEBUDDY_AUTH_TOKEN)",
+ "mode": "design-audit + cool-pass spec",
+ "prompt_bytes": 11822,
+ "response_bytes": 12240,
+ "date": "2026-10-28",
+ "ladder": "rung1 opencode zen BLOCKED (free usage limit reached at source); rung2 codebuddy WORKING"
+}

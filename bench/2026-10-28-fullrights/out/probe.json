@@ -1,0 +1,115 @@
+{
+ "date": "2026-10-28T13:34:19.275Z",
+ "base": "http://127.0.0.1:4137/",
+ "views": {
+  "dark-desktop": {
+   "overflow": false,
+   "docHeight": 900,
+   "domNodes": 1757,
+   "runningLoops": 3,
+   "runningDetail": [
+    "svelte-q3a0zz-dn-pulse",
+    "svelte-oi0l8i-dn-rail",
+    "dn-blink"
+   ],
+   "fcpMs": 272,
+   "cls": 0.0028,
+   "themeAttr": "dark",
+   "bodyBg": "rgb(5, 9, 15)",
+   "scanlineOpacity": "0.4",
+   "transferKB": 592,
+   "ttfbMs": 26,
+   "consoleErrors": 0,
+   "consoleErrorSamples": []
+  },
+  "dark-phone": {
+   "overflow": false,
+   "docHeight": 8855,
+   "domNodes": 1495,
+   "runningLoops": 0,
+   "runningDetail": [],
+   "fcpMs": 128,
+   "cls": 0,
+   "themeAttr": "dark",
+   "bodyBg": "rgb(5, 9, 15)",
+   "scanlineOpacity": "0.4",
+   "transferKB": 592,
+   "ttfbMs": 12,
+   "consoleErrors": 0,
+   "consoleErrorSamples": []
+  },
+  "light-desktop": {
+   "overflow": false,
+   "domNodes": 1757,
+   "runningLoops": 3,
+   "themeAttr": "light",
+   "bodyBg": "rgb(251, 251, 253)",
+   "scanlineOpacity": "0",
+   "consoleErrors": 0,
+   "toggledViaButton": true
+  },
+  "light-phone": {
+   "overflow": false,
+   "domNodes": 1495,
+   "runningLoops": 0,
+   "themeAttr": "light",
+   "bodyBg": "rgb(251, 251, 253)",
+   "scanlineOpacity": "0",
+   "consoleErrors": 0,
+   "toggledViaButton": true
+  }
+ },
+ "wcag": {
+  "dark": {
+   "theme": "dark",
+   "leavesChecked": 260,
+   "textMin": 1.6,
+   "textFailures": 2,
+   "samples": [
+    {
+     "text": "[",
+     "best": 1.6,
+     "bar": 4.5,
+     "ink": "color(srgb 0.588235 0.25098 0.0392157 / 0.55)"
+    },
+    {
+     "text": "]",
+     "best": 1.6,
+     "bar": 4.5,
+     "ink": "color(srgb 0.588235 0.25098 0.0392157 / 0.55)"
+    }
+   ]
+  },
+  "light": {
+   "theme": "light",
+   "leavesChecked": 260,
+   "textMin": 2.62,
+   "textFailures": 2,
+   "samples": [
+    {
+     "text": "[",
+     "best": 2.62,
+     "bar": 4.5,
+     "ink": "color(srgb 0.588235 0.25098 0.0392157 / 0.55)"
+    },
+    {
+     "text": "]",
+     "best": 2.62,
+     "bar": 4.5,
+     "ink": "color(srgb 0.588235 0.25098 0.0392157 / 0.55)"
+    }
+   ]
+  }
+ },
+ "keyboardFocus": {
+  "stops": 14,
+  "visibleIndicator": 14,
+  "allVisible": true
+ },
+ "print": {
+  "textChars": 7171,
+  "scanlines": "none",
+  "bodyBg": "rgb(255, 255, 255)",
+  "overflow": false
+ }
+}

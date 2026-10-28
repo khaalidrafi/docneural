@@ -1,5 +1,12 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:cron:announce: publish-readiness dev loop + multimodal lane proven
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner orders executed: (1) cron job 479610 "docneural publish-readiness dev loop" — 2h cadence (Asia/Dhaka), each cycle = full publish-readiness audit (mechanical + 4-view + reader/graph phone renders + glm-5v-turbo@z.ai vision + site intel) → top-gap fix pass → gates → ship → deploy verify → ledger; self-deletes when the PUBLISH-READY BAR passes with glm-5v-turbo@z.ai sign-off (favicon, robots.txt, OG tags, zero console errors, no overflow 320-1280, AA both themes, 0 phone loops, reader+graph phone-clean, live = latest ai/main). (2) Multimodal platform PROVEN: openrouter/deepseek-v4.1-flash@openrouter accepts image parts (live 200, provider OpenInference; reasoning model — effort none or generous max_tokens). It is now the primary design lane; tokenharbor/deepseek-v4.1-flash:free@tokenharbor stays text-fallback. Cycle-1 gap list: favicon 404, robots.txt 404, OG tags absent, reader+graph phone vision audit owed.
+
 * [2026-10-28 Thu] :msg:dawn:pass: DAWN polish pass SHIPPED (designer: deepseek-v4.1-flash@tokenharbor:free)
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

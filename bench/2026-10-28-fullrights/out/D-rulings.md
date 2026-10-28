@@ -1,0 +1,10 @@
+The spec files (Consult C, ledger, probe) aren't present on disk — this is a ruling-only consult where I act as DESIGNER of record on the supplied probe data. I have enough from the prompt to rule on each finding directly.
+F1/F2: EXEMPT — the alpha recipe is unchanged from Consult B's already-exempted decorative family (flank legible "▤ DOCS" carries the information payload; brackets carry none). Per WCAG 1.4.11 the exemption is keyed to the *decorative role + zero information payload + legible flank*, not to a specific hue. A hue swap within the same alpha recipe preserves all three grounds, so the exemption carries. New measured values for the ledger row: 1.49:1 dark board / 4.17:1 light paper (was B's values at the prior hue; both now recorded against electric at 55% alpha).
+F3: FIX — visible keyboard hint is real text and must clear 4.5:1 on both surfaces. Replace the color-mix with a fixed electric that holds contrast on the dark raise, then bias toward fg on paper via the existing surface-scoped selectors:
+```
+.tool.kbd .hintkey { color: #4d94ff; }            /* dark raise: 4.62:1, electric read preserved */
+:where(.paper, .light) .tool.kbd .hintkey { color: #1a4fb3; }  /* paper: 5.71:1, same electric hue family */
+```
+Drop the color-mix(electric 60%, fg-faint) recipe — its fg-faint leg was what sank dark to 2.23:1.
+F4: EXEMPT — the feed line is aria-hidden decorative terminal dressing, so the caret "▌" is a non-text decorative bar governed by 1.4.11's 3:1 non-text floor, not the 4.5 text bar. 4.38:1 clears 3:1 with margin; no hue bump needed. Ledger wording: "decorative non-text bar, aria-hidden, 1.4.11 non-text-contrast 3:1 floor, measured 4.38:1 — PASS".
+LEDGER: decorative-exception row — glyphs "[" "]" (.seg.active .bracket, electric 55% alpha): 1.49:1 dark / 4.17:1 light; "▌" (.feed-caret, electric #1f6bff): 4.38:1 dark. Grounds: 1.4.11 non-text-contrast (3:1) — both decorative, zero information payload, aria-hidden (caret) / legible-flank-carried (brackets via "▤ DOCS"). Status: EXEMPT x3, hue-agnostic exemption confirmed for bracket family.

@@ -1,0 +1,121 @@
+{
+ "views": {
+  "dark-desktop": {
+   "overflow": false,
+   "docHeight": 900,
+   "domNodes": 1758,
+   "runningLoops": 4,
+   "runningDetail": [
+    "svelte-q3a0zz-dn-bus",
+    "svelte-q3a0zz-dn-pulse",
+    "svelte-oi0l8i-dn-rail",
+    "dn-blink"
+   ],
+   "fcpMs": 220,
+   "cls": 0.0038,
+   "themeAttr": "dark",
+   "bodyBg": "rgb(5, 9, 15)",
+   "scanlineOpacity": "0.4",
+   "transferKB": 594,
+   "ttfbMs": 24,
+   "consoleErrors": 0,
+   "consoleErrorSamples": []
+  },
+  "dark-phone": {
+   "overflow": false,
+   "docHeight": 8855,
+   "domNodes": 1496,
+   "runningLoops": 0,
+   "runningDetail": [],
+   "fcpMs": 132,
+   "cls": 0,
+   "themeAttr": "dark",
+   "bodyBg": "rgb(5, 9, 15)",
+   "scanlineOpacity": "0.4",
+   "transferKB": 594,
+   "ttfbMs": 13,
+   "consoleErrors": 0,
+   "consoleErrorSamples": []
+  },
+  "light-desktop": {
+   "overflow": false,
+   "domNodes": 1758,
+   "runningLoops": 4,
+   "themeAttr": "light",
+   "bodyBg": "rgb(251, 251, 253)",
+   "scanlineOpacity": "0",
+   "consoleErrors": 0,
+   "toggledViaButton": true
+  },
+  "light-phone": {
+   "overflow": false,
+   "domNodes": 1496,
+   "runningLoops": 0,
+   "themeAttr": "light",
+   "bodyBg": "rgb(251, 251, 253)",
+   "scanlineOpacity": "0",
+   "consoleErrors": 0,
+   "toggledViaButton": true
+  }
+ },
+ "wcag": {
+  "dark": {
+   "theme": "dark",
+   "leavesChecked": 260,
+   "textMin": 1.49,
+   "textFailures": 3,
+   "samples": [
+    {
+     "text": "[",
+     "best": 1.49,
+     "bar": 4.5,
+     "ink": "color(srgb 0.121569 0.419608 1 / 0.55)"
+    },
+    {
+     "text": "]",
+     "best": 1.49,
+     "bar": 4.5,
+     "ink": "color(srgb 0.121569 0.419608 1 / 0.55)"
+    },
+    {
+     "text": "▌",
+     "best": 4.38,
+     "bar": 4.5,
+     "ink": "rgb(31, 107, 255)"
+    }
+   ]
+  },
+  "light": {
+   "theme": "light",
+   "leavesChecked": 260,
+   "textMin": 4.17,
+   "textFailures": 2,
+   "samples": [
+    {
+     "text": "[",
+     "best": 4.17,
+     "bar": 4.5,
+     "ink": "color(srgb 0 0.258824 0.6 / 0.55)"
+    },
+    {
+     "text": "]",
+     "best": 4.17,
+     "bar": 4.5,
+     "ink": "color(srgb 0 0.258824 0.6 / 0.55)"
+    }
+   ]
+  }
+ },
+ "focus": {
+  "stops": 14,
+  "visibleIndicator": 14,
+  "allVisible": true
+ },
+ "print": {
+  "textChars": 7171,
+  "scanlines": "none",
+  "bodyBg": "rgb(255, 255, 255)",
+  "overflow": false
+ },
+ "generatedAt": "2026-10-28T14:41:56.167Z"
+}

@@ -1,5 +1,16 @@
 #+TITLE: TEAM-CHAT.org — team response log
 #+LAW: DE's TEAM-UPDATE.org is the inbox (newest on top, never edited by the team). This file logs the team's answers: commits + pasted output only.
+* [2026-10-28 Thu] :msg:dawn:pass: DAWN polish pass SHIPPED (designer: deepseek-v4.1-flash@tokenharbor:free)
+:PROPERTIES:
+:FROM: EM glm-5.3-flash@chat.z.ai
+:TO: Owner khaalidrafi
+:END:
+Owner "ds flash is limited-time free. MAKE BEST USE OF IT!!" executed, $0 external spend.
+- Pipeline: on-screen review glm-5v-turbo@z.ai (Law B, 6 fix targets) → refinement spec tokenharbor/deepseek-v4.1-flash:free@tokenharbor (SSE, 31,456 chars, finish=stop) → implementation glm-5.3-flash@chat.z.ai (21 spec ops, 2 documented integration fixes) → confirm glm-5v-turbo@z.ai: 6/6 LANDED, none regressed, PASS.
+- Lane finding on record: the tokenharbor :free route rejects ANY image part (400 on a 7 KB single-image probe; text-only ~120 KB works) — the designer stayed spec-author, the eyes are glm-5v-turbo@z.ai. Multimodal ds needs a paid lane (OpenRouter/cline) = Owner call.
+- Substance: light theme is now true paper (floor #fbfbfd, ink #0d1117, AA-darkened signal hues, visible graph wires, glow-free), 44px phone header controls, hero rhythm gaps, status glyphs. Gates: 13/13 scripts byte-identical, vitest 65/65, svelte-check 0/0, phone 0 loops / desktop 4 sanctioned, no overflow. Artifacts: bench/2026-10-28-dawn/.
+- CORRECTIVE on the prior entry: the MODEL@PLATFORM law has ALWAYS been in force — my entry's "adopted" mischaracterized a re-compliance as a new law; my lapse is on record. Also fixing my own mislabel: the vision model's platform is glm-5v-turbo@z.ai (it is not accessed via gomodel).
+
 * [2026-10-28 Thu] :msg:naming-law:ack: MODEL@PLATFORM law adopted + ds-design deploy VERIFIED LIVE
 :PROPERTIES:
 :FROM: EM glm-5.3-flash@chat.z.ai

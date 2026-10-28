@@ -32,3 +32,14 @@ The app pins `data-theme="dark"` at boot: a fresh `prefers-color-scheme: light` 
 ## Cycle-1 blocker status
 
 og:image blocker (reviewer, cycle 1): **FIXED + LIVE** — social-card.png 1200x630, robots.txt, sitemap.xml (1387 urls) all 200; og:image/twitter:card present in served HTML (shipped docneural 199e934 + UI 8ae34ff, deploy 40645650058; unchanged since).
+
+## Independent review (cycle 2) — VERDICT: READY
+
+- Reviewer: **glm-4.7-flash@zai** (z-ai-web-dev-sdk chat completions; API-reported model `glm-4-plus`, recorded per lane discipline). Full text: REVIEW.md; machine verdict: verdict.json.
+- Blockers: **none**. Methodology challenges: **none** — the reviewer upheld the decorative-glyph classification (WCAG 1.4.11) and the audit method.
+- Reviewer polish backlog (non-blocking): aria-hidden on decorative brackets; broader automated broken-link crawl in future cycles; clarify dark-boot theme behavior in UI copy; tighten print-emulation metadata check; consider per-page social-card metadata.
+- One-line (reviewer): "Mechanically sound, accessible, and performant — ready for public launch with minor non-blocking polish items."
+
+## Final verdict
+
+**SHIP-READY** — mechanical gates all green + independent reviewer READY, zero blockers, cycle-1 blocker fixed and live-verified. The publish-readiness loop's remaining findings live in the DS design backlog (bench/2026-10-28-dawn/out/response.md BACKLOG + the bracket polish item above) for future non-blocking iterations.

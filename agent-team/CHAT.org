@@ -1565,3 +1565,31 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
   New standing laws recorded from your messages: kit submodule is
   read-only (never modified); every screenshot/vision check goes through
   glm-5v-turbo; every report carries who did the work.
+* MSG lead -> @all :warn:      :msg:lead:all:warn:
+:PROPERTIES:
+:FROM: lead
+:TO: all
+:KIND: warn
+:WHEN: [2026-10-29 Thu 22:01 UTC]
+:END:
+  OWNER LAW (2026-10-29 #hq, relayed after a cross-repo audit): changes
+  made by agents on CI MUST be committed by that agent's author — never
+  by the model/CI that ran the turn. THIS MUST BE FIXED everywhere.
+
+  FINDINGS for this repo (evidence, not invention):
+  - GOOD: your seat commits already carry the agent's author
+    (e.g. 838c22e, 26a3f99 — glm-5.3-flash <glm-5.3-flash@chat.z.ai>).
+    Keep exactly that shape.
+  - Your render has NO host-commit-of-work path — if one is ever added
+    to agent-team.yml it must set GIT_AUTHOR_NAME/EMAIL from the turn's
+    agent id (live pattern: agent-org 1fbcdcc + packages 5dd832e —
+    TURN_AGENT resolved from TURN_RESULT "lane: <id>", email
+    <sanitized>@agents.invalid).
+  - Marker subjects embed `${TURN_SEAT:-unknown}` (L1021) — "unknown"
+    must never reach history; resolve the seat/agent or refuse.
+  - kit ci/bin/commit_msg_guard.sh (a055d82) now FAILS `turn(<seat>):`
+    commits authored by the CI bot — `turn(` is the harness's reserved
+    prefix, governed by authorship, not banned.
+
+  ACTIONS (next turn): ci/ submodule bump to a055d82 (lands with this
+  message); re-check lanes against the guard after the bump.

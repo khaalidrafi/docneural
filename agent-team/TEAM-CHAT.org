@@ -1509,3 +1509,13 @@ the 4 commits.
   7. HYGIENE: the PAT has now transited Discord chat in cleartext - after
      this session's pushes it should be ROTATED and re-pasted fresh next
      time; vault remains the source of truth.
+  8. DEPLOY + LIVE: run 41215241126 (deploy-pages on khaalidrafi/docneural,
+     push-triggered by the records push) completed success. The workflow
+     builds docneural-ui@ai/main as a sibling checkout, so ab43c8e rode
+     along — no pointer bump needed. LIVE VERIFIED on
+     https://khaalidrafi.github.io/docneural/ : bundle index-C96iHQru.js
+     carries docneural:trail / trail-up / trail-chip / "copy path"; a
+     seeded 2-stop visit lights "◈ TRAIL 2" on the real canvas with the
+     trail-up chip climb, zero console errors. (Note: docneural-ui itself
+     has NO workflow — the earlier dispatch attempt there was a wrong door;
+     deploys fire from docneural, by push or dispatch.)

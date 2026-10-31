@@ -1,0 +1,129 @@
+diff --git a/src/lib/graph/DocneuralGraph.svelte b/src/lib/graph/DocneuralGraph.svelte
+--- a/src/lib/graph/DocneuralGraph.svelte
++++ b/src/lib/graph/DocneuralGraph.svelte
+@@
+   <div class="roam-wrap dn-dish" data-layout={store.layout} bind:this={wrapEl}>
+     <GraphView store={roam} onNodeClick={click} loadEngine={neuronLoad} />
++    <div class="graph-controls graph-controls--corner" aria-label="Graph controls">
++      <button class="graph-control" type="button"
++        aria-label={locked ? 'Unlock graph positions' : 'Lock graph positions'}
++        aria-pressed={locked} onclick={toggleLock}>
++        {locked ? '🔒' : '🔓'}
++      </button>
++      <button class="graph-control" type="button" aria-label="Zoom in"
++        disabled={zoomAtMax} onclick={() => zoom(1.25)}>+</button>
++      <button class="graph-control" type="button" aria-label="Zoom out"
++        disabled={zoomAtMin} onclick={() => zoom(0.8)}>−</button>
++      <button class="graph-control" type="button" aria-label="Fit graph"
++        onclick={fit}>⌗</button>
++    </div>
++    <div class="graph-controls graph-controls--distance" aria-label="Graph distance">
++      <button class="graph-control" type="button" aria-label="Decrease graph distance"
++        disabled={distance <= 80} onclick={() => changeDistance(-20)}>−</button>
++      <output aria-live="polite">{distance}px</output>
++      <button class="graph-control" type="button" aria-label="Increase graph distance"
++        disabled={distance >= 280} onclick={() => changeDistance(20)}>+</button>
++    </div>
++    {#if peek}
++      <aside class="edge-peek" aria-label="Link details">
++        <button class="edge-peek__close" type="button" aria-label="Close link details"
++          onclick={closePeek}>×</button>
++        <div class="edge-peek__endpoints">
++          <button type="button" onclick={() => focusEndpoint(peek.source)}>
++            {peek.source}
++          </button>
++          <span aria-hidden="true">→</span>
++          <button type="button" onclick={() => focusEndpoint(peek.target)}>
++            {peek.target}
++          </button>
++        </div>
++        {#if peek.loading}<p>Loading citation…</p>
++        {:else if peek.error}<p role="alert">{peek.error}</p>
++        {:else if peek.line}<pre>{peek.line}</pre>
++        {:else}<p>No citing line recorded for this link.</p>{/if}
++      </aside>
++    {/if}
+     {#if !painted}
+@@
+   .roam-wrap {
+     position: absolute;
+     inset: 0;
++    isolation: isolate;
+   }
++  .graph-controls {
++    position: absolute;
++    z-index: 3;
++    display: flex;
++    gap: var(--dn-space-1);
++    pointer-events: auto;
++  }
++  .graph-controls--corner {
++    top: var(--dn-space-3);
++    right: max(var(--dn-space-3), env(safe-area-inset-right));
++    flex-direction: column;
++  }
++  .graph-controls--distance {
++    right: max(var(--dn-space-3), env(safe-area-inset-right));
++    bottom: var(--dn-space-3);
++    align-items: center;
++  }
++  .graph-control,
++  .edge-peek button {
++    min-width: 44px;
++    min-height: 44px;
++  }
++  .edge-peek {
++    position: absolute;
++    z-index: 4;
++    top: 4.5rem;
++    left: var(--dn-space-3);
++    width: min(360px, calc(100vw - 2 * var(--dn-space-3)));
++    padding: var(--dn-space-3);
++    background: var(--dn-bg-raise);
++    color: var(--dn-fg);
++    border: 1px solid var(--dn-border-strong);
++  }
++  .edge-peek__endpoints { display: flex; align-items: center; gap: var(--dn-space-2); }
++  .edge-peek pre { white-space: pre-wrap; overflow-wrap: anywhere; }
++  @media (max-width: 700px) {
++    .edge-peek {
++      top: auto;
++      right: var(--dn-space-3);
++      bottom: 4.75rem;
++      width: auto;
++    }
++  }
+diff --git a/vendor/orui/src/lib/graph/GraphView.svelte b/vendor/orui/src/lib/graph/GraphView.svelte
+--- a/vendor/orui/src/lib/graph/GraphView.svelte
++++ b/vendor/orui/src/lib/graph/GraphView.svelte
+@@
+-  export let onNodeClick
++  export let onNodeClick
++  export let onLinkClick
++  export let onLinkHover
+@@
+   graph.onNodeClick(onNodeClick)
++       .onLinkClick(onLinkClick)
++       .onLinkHover(onLinkHover)
++       .edgeHoverPrecision(8)
+diff --git a/src/lib/graph/neuronEngine.ts b/src/lib/graph/neuronEngine.ts
+--- a/src/lib/graph/neuronEngine.ts
++++ b/src/lib/graph/neuronEngine.ts
+@@
+   graph
++    .linkDirectionalArrowLength((link) => arrowVisible(link) ? 4 : 0)
++    .linkDirectionalArrowRelPos(1)
++    .linkDirectionalArrowColor(() => resolvedToken('--dn-graph-arrow'))
++    .edgeHoverPrecision(8)
+@@
++  export function setGraphLocked(locked: boolean) {
++    for (const node of graph.graphData().nodes) {
++      if (locked) { node.fx = node.x; node.fy = node.y }
++      else { delete node.fx; delete node.fy }
++    }
++    if (!locked) graph.cooldownTicks(90).d3ReheatSimulation()
++  }
+@@
++  export function setSpreadDistance(distance: number) {
++    graph.linkDistance(() => distance).cooldownTicks(36).d3ReheatSimulation()
++  }

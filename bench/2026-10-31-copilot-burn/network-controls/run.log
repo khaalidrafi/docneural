@@ -1,0 +1,148 @@
+label: network-controls
+model: auto
+runner: x86_64 node: v22.23.3
+I’ll inspect the governing instructions and the graph implementation surfaces, then write only the requested design artifacts under the consultant directory and verify the diff stays scoped.
+
+✗ Read AGENTS.md
+  │ ~/work/AGENTS.md
+  └ Path does not exist
+
+● Read AGENTS.md
+  └ 87 lines read
+
+● Read CHARTER.md
+  │ agent-team/CHARTER.md
+  └ L1:220 (208 lines read)
+
+● Check worktree and graph files (shell)
+  │ git status --short && printf '\n-- files --\n' && find src/lib/graph src/lib/core
+  │ vendor/orui/src/lib/graph styles -maxdepth 2 -type f | sort | sed -n '1,120p'
+  └ 7 lines…
+
+The checkout path is present, but the expected source directories are not at its root; I’m locating the actual repository contents and the canonical global law before drafting against the real file structure.
+
+● List directory bench/2026-10-31-copilot-burn
+  └ 1 file found
+
+● Locate checkout contents (shell)
+  │ pwd; printf '\n-- root --\n'; find . -maxdepth 2 -type f | sort | sed -n '1,160p'; printf '\n--
+  │ dirs --\n'; find . -maxdepth 2 -type d | sort | sed -n '1,120p'
+  └ 121 lines…
+
+● Locate global law and vault (shell)
+  │ find /home/runner -path '*/AGENTS.md' -o -path '*/vault' -type d 2>/dev/null | sed -n '1,80p'
+  └ 2 lines…
+
+● Read AI-REVIEW.org
+  └ L1:120 (120 lines read)
+
+● List directory bench/2026-10-31-copilot-burn/network-controls
+  └ 1 file found
+
+● Inspect actual source tree (shell)
+  │ find src -maxdepth 5 -type f | sort | sed -n '1,240p'; printf '\n-- submodules --\n'; git
+  │ submodule status
+  └ 5 lines…
+
+/ Search (grep)
+  │ "neuronEngine|DocneuralGraph|GraphView|spreadStrength|labelExtent|force-graph"
+  └ 39 files found
+
+● Check tracked graph surfaces and branch (shell)
+  │ git ls-tree -r --name-only HEAD | grep -E
+  │ '(neuronEngine|DocneuralGraph|GraphView|graph\.ts|docneural-ui\.css|orui)' | sed -n '1,160p';
+  │ git branch --show-current; git log -1 --oneline
+  └ 3 lines…
+
+● Read network-controls.md
+  │ bench/copilot-burn/network-controls.md
+  └ L1:240 (19 lines read)
+
+● Read graph-view.svelte.txt
+  │ bench/2026-10-28-ds-design/inputs/graph-view.svelte.txt
+  └ L1:260 (99 lines read)
+
+● Read docneural-ui.css
+  │ bench/2026-10-28-ds-design/inputs/docneural-ui.css
+  └ L1:220 (220 lines read)
+
+● Read App.svelte
+  │ src/App.svelte
+  └ L1:160 (10 lines read)
+
+/ Search (grep)
+  │ "--dn-hot|--dn-accent|color-scheme|data-theme"
+  │ (bench/2026-10-28-ds-design/inputs/docneural-ui.css)
+  └ 33 lines found
+
+The tracked checkout is a consultant snapshot without the named graph source files, so I’m basing the sketch on the verified state and the available UI capture, while making the API contract explicit and keeping all edits confined to the requested artifact directory.
+
+● Edit
+  │ Create bench/2026-10-31-copilot-burn/network-controls/spec.md
+  │ Create bench/2026-10-31-copilot-burn/network-controls/controls-sketch.patch
+  └ Create bench/2026-10-31-copilot-burn/network-controls/risks.md
+
+The three artifacts are drafted; I’m doing a focused consistency pass now for exact API names, token values, and scope, especially because the sketch must remain structurally faithful even though it is intentionally non-compiling.
+
+/ Search (grep)
+  │ "linkHoverPrecision|edgeHoverPrecision|dn-control-locked-bg|dn-graph-arrow"
+  │ (bench/2026-10-31-copilot-burn/network-controls)
+  └ 7 lines found
+
+● Validate artifact scope and formatting (shell)
+  │ git diff --check -- bench/2026-10-31-copilot-burn/network-controls && git status --short --
+  │ bench/2026-10-31-copilot-burn/network-controls && find
+  │ bench/2026-10-31-copilot-burn/network-controls -maxdepth 1 -type f -printf '%f %s bytes\n' |
+  │ sort
+  └ 5 lines…
+
+✗ Edit
+  │ Edit bench/2026-10-31-copilot-burn/network-controls/spec.md
+  │ Edit bench/2026-10-31-copilot-burn/network-controls/controls-sketch.patch
+  └ Failed to apply patch: Error: Failed to find expected lines in
+    /home/runner/work/docneural/docneural/bench/2026-10-31-copilot-burn/network-controls/spec.md:
+    The locked state uses `--dn-hot` for the icon/stroke and
+    `--dn-control-locked-bg` for the button background; both tokens must have dark
+    and light values. Do not rely on color alone: use the pressed attribute and a
+    closed-lock icon.
+
+● Read spec.md
+  │ bench/2026-10-31-copilot-burn/network-controls/spec.md
+  └ L92:108 (17 lines read)
+
+● Read controls-sketch.patch
+  │ bench/2026-10-31-copilot-burn/network-controls/controls-sketch.patch
+  └ L110:122 (13 lines read)
+
+● Edit
+  │ Edit bench/2026-10-31-copilot-burn/network-controls/spec.md
+  └ Edit bench/2026-10-31-copilot-burn/network-controls/controls-sketch.patch
+
+The consistency pass caught and fixed the sketch’s hover-tolerance method name and made the locked-state token values explicit. I’m finishing with a final scope and content check; no source or workflow files have been modified.
+
+/ Search (grep)
+  │ "linkHoverPrecision|edgeHoverPrecision|--dn-control-locked-bg|--dn-graph-arrow|30915|1386|44px|c
+  │ ooldownTicks" (bench/2026-10-31-copilot-burn/network-controls)
+  └ 28 lines found
+
+● Verify final scope and artifacts (shell)
+  │ git status --short; printf '\n-- changed tracked paths --\n'; git diff --name-only; printf '\n--
+  │ requested artifacts --\n'; for f in spec.md controls-sketch.patch risks.md; do test -s
+  │ "bench/2026-10-31-copilot-burn/network-controls/$f" && echo "ok $f"; done
+  └ 8 lines…
+
+Created the requested artifacts under `bench/2026-10-31-copilot-burn/network-controls/`:
+
+- `spec.md` — arrows, spacing, lock, zoom/distance controls, edge peek behavior, exact values/tokens.
+- `controls-sketch.patch` — structurally aligned unified diff.
+- `risks.md` — five performance and interaction risks with mitigations.
+
+Verified all requested files are non-empty, API names are consistent, and no tracked source or workflow files changed.
+
+
+
+Changes    +353 -4
+AI Credits 2.24 (1m 38s)
+Tokens     ↑ 407.7k (376.5k cached, 31.1k written) • ↓ 8.0k (1.3k reasoning)
+Resume     copilot --resume=8da991cb-a335-450d-91cb-03b123780fd5
+exit:0

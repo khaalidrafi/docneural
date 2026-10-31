@@ -75,6 +75,10 @@ jobs:
           # dist/ keeps vite's flat layout while index.html URLs carry base.
           test -f dist/graph.json
           test -f dist/graph.json.br
+          # The bridge synapses fetch ./bridges.json from the dist ROOT — a
+          # missing copy 404s live and the store's silent-continue fallback
+          # hides the whole feature (no amber wires, no "+2 recovered").
+          test -f dist/bridges.json
           test -f dist/docs/org--index.html
           test -f dist/docs/emacs--Basic-Files.html
           test -f dist/docs/guix--index.html

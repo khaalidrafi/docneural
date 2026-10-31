@@ -92,7 +92,18 @@ build:
 	# check. Fail here, at the make line, with the fix in the message.
 	@test -f $(OUT)/graph.json || { echo "build: $(OUT)/graph.json missing — run 'make export' (export + slim) first"; exit 1; }
 	@test -f $(OUT)/graph.json.br -o -f $(OUT)/graph.json.gz || { echo "build: no $(OUT)/graph.json.{br,gz} — run 'make slim' (the transport pass) first"; exit 1; }
+	# Bridge synapses (network pass): the store fetches ./bridges.json from
+	# the dist ROOT in every deployment (base='.' on live Pages; only the dev
+	# server serves the theme's public/sample/), but nothing ever published
+	# the artifact — live Pages 404ed the fetch and the documented
+	# "FETCH FAIL = SILENTLY CONTINUE" fallback hid the whole feature (no
+	# dashed amber wires, no "+2 recovered" plate). Fail here, at the make
+	# line, with the fix in the message.
+	@test -f $(THEME)/public/sample/bridges.json || { echo "build: $(THEME)/public/sample/bridges.json missing — the bridge synapses have no source (check the sibling docneural-ui checkout)"; exit 1; }
 	npm run build -- $(BASE_FLAG)
+	# ...and the copy rides with the publishes below, not up here: vite
+	# empties dist/, so nothing written before npm run build survives.
+	@cp $(THEME)/public/sample/bridges.json dist/bridges.json
 	# The self-hosted latin subsets are redistributed in dist/assets/, so the
 	# SIL OFL texts that accompany them travel with the bundle (Vite only
 	# emits the .woff2 files a stylesheet references — never the licenses).

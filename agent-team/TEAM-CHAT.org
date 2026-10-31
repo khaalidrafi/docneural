@@ -1465,3 +1465,47 @@ the 4 commits.
      0 new animations, DO-NOTs (no ?trail= URL param; never touch camera/
      physics; no route animation). Worker dispatched; lead reviews + gates
      before commit.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :report:glm-5.3-flash:Owner:trail-shipped-ds-cb:
+  <2026-10-31 Sat> FULL MULTIMODAL REVIEW with ds@cb DONE — reading trail
+  SHIPPED (ab43c8e), deployed, live-verified. The "NOW" directive honored:
+  the consult lane is DS flash on CB, for real this time.
+
+  1. DS LANE RESTORED FROM VAULT: khaalidrafi/vault secrets/CODEBUDDY_AUTH_
+     TOKEN pulled via the PAT (names only in this record — the value went
+     /tmp -> env, never the repo, never the log). CLI 2.179.0 verified with
+     a one-word generation on deepseek-v4.1-flash: DS-LANE-OK, $0, 2.0s.
+     The 10-28 law ("use ds flash, stupid!!") is now the standing consult
+     route for this seat.
+  2. LEAD REVIEW of the worker's trail implementation (8 files, +748):
+     clean append-only FIFO store, slug-keyed, redirect-home recorded, the
+     honesty rule strokes solid only on real corpus wires (either
+     direction), camera/physics untouched, earned-only chrome, 44px taps,
+     5 token pairs AA-measured in both arms. PASS.
+  3. SWEEP: trail-sweep.mjs — 10 regression views + the trail block
+     (fresh-visitor earned-only, chip/panel/count/trail-up, persistence,
+     re-read keeps order, 12-cap FIFO, clear wipes chip+storage, copy path
+     honest, phone 44px, WebGL-off chrome survives). Final verdict 51/51,
+     zero console errors. Gates: vitest 106/106, svelte-check 0 errors
+     (16 baseline), build 3.4-3.9s.
+  4. DS CONSULT r2 (single-turn, brief-inlined): SHIP. Verified verdicts:
+     W1 (dark arm missing wash/halo) REFUTED against the source — brief
+     truncation hallucination; W2 home row hierarchy CONFIRMED + fixed
+     (destination now --dn-fg, wash 7->10%, radius 3px->0 house law);
+     W3 first-stop-invisible CONFIRMED + fixed (stop mark gates at 1, the
+     route painter keeps 2, chrome stays earned-only). PICK = the newest
+     hop draws itself (~380ms tween, reduced-motion snap) — feature-scale,
+     filed for the next worker dispatch, not smuggled into this pass.
+  5. SCREENSHOT REVIEW caught a real ship-blocker the DOM checks missed:
+     with the sheet open the climbed scope chip's tail poked out beside
+     CLEAR ("g Manual) - 319 of..." floating fragment). Fixed: chips yield
+     (visibility) while the sheet is open; the rule lives in the GLOBAL
+     sheet because Svelte PRUNES a scoped selector it cannot prove used -
+     the scoped :has([data-trail-open]) was silently dead. Sweep now
+     asserts the yield (51st check).
+  6. SHIP: docneural-ui ai/main = ab43c8e pushed; deploy-pages dispatched;
+     LIVE VERIFIED on https://khaalidrafi.github.io/docneural/ (details in
+     the next report line once the run lands).
+  7. HYGIENE: the PAT has now transited Discord chat in cleartext - after
+     this session's pushes it should be ROTATED and re-pasted fresh next
+     time; vault remains the source of truth.

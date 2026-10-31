@@ -1629,3 +1629,18 @@ the 4 commits.
   7. SHIP: docneural-ui ai/main @ 726d924, deploy-pages rebuilds from
      this push. Data contracts untouched: graph.json / ctx/ / ?mode=graph
      all keep their names.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:live-gap-caught:
+  <2026-10-31 Sun> ADDENDUM — the final audit's sharpest catch, found in
+  live verification AFTER the first deploy: the bridge synapses were
+  SILENTLY DEAD on live Pages. The deployed boot fetches ./bridges.json
+  from the dist root, but the artifact only ever lived at
+  public/sample/bridges.json (the dev base) — live 404ed and the store's
+  documented "FETCH FAIL = SILENTLY CONTINUE" fallback hid the whole
+  feature: no dashed amber wires, no +N recovered, no legend. The local
+  preview masked it because dist/sample/bridges.json exists there. Fix
+  8f0afe4: the build publishes bridges.json into the export publicDir
+  (cp rides after npm run build — emptyOutDir wipes pre-build copies),
+  and the CI smoke now test -f dist/bridges.json so this can never
+  silently regress again. The rename's honesty anchor draws on live
+  from this push.

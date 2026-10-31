@@ -1,0 +1,10 @@
+You are a consultant for DOCNEURAL, a static-site reader for public GNU manuals (Svelte 5 runes + Vite + TS). Work from the repo you are checked out into. CONSULTANT ROLE: write ONLY into bench/2026-10-31-copilot-burn/glossary-rename/ — never touch src/, styles/, or workflows.
+
+TASK: The Owner ordered a full rename of the network vocabulary. His words: nodes are NEURONS, connections/links are SYNAPSES, the whole thing is the NEURAL NETWORK of docs. Never call it 'graph'. Pick the best, coolest terms where his words leave freedom.
+
+DELIVERABLE: bench/2026-10-31-copilot-burn/glossary-rename/rename.md containing:
+1. The glossary table: old term -> new term -> rationale (one line). Cover at minimum: graph, nodes, edges, wires, connections, link, 'SYNAPSES' mode chip label, 'Open synapses' palette command, status plate line '1386 NODES - 30915 WIRES - 3 SRC', 'reading the graph' status line, 'graph engine on/off', 'This documentation graph did not load', 'show in the synapses graph' aria labels, the GRAPH label in the reader rail, home copy lines mentioning graph/nodes/edges. Keep data-contract file names (graph.json, docs/, ctx/) unchanged - note that explicitly.
+2. Per-file replacement list: for each file that contains user-visible strings (scan src/ yourself: src/lib/DocneuralApp.svelte, src/lib/reader/Home.svelte, src/lib/reader/ChapterNav.svelte, src/lib/reader/DocReader.svelte, src/lib/ui/FilterBar.svelte, src/lib/ui/CommandPalette.svelte, src/lib/ui/CorpusField.svelte, src/lib/reader/SynapseRail.svelte, src/lib/reader/Toc.svelte, src/lib/graph/DocneuralGraph.svelte), list exact old string -> exact new string, line numbers included. Preserve tone: lowercase technical poetry, no exclamation marks.
+3. A suggested name for the view mode segmented control (today: DOCS / SYNAPSES) if it should change, or keep-and-reason.
+4. Terms you rejected and why (one line each).
+House style: the site speaks lowercase, electric, precise. WCAG-safe wording, aria labels stay descriptive. No code changes - strings only.

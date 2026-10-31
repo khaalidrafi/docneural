@@ -1,0 +1,79 @@
+# copilot-burn — Owner directive 2026-10-31T17:36Z:
+# "Use Copilot CLI via CI as much as you can bcz the usage resets TONIGHT!"
+# Consultant lane only: runs write into bench/2026-10-31-copilot-burn/<label>/
+# and never touch src/ or workflows. Every run commits its full log
+# (credit accounting included). A failed run is recorded, not retried
+# (spend law: no accidental double-burn).
+
+name: copilot-burn
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Copilot model (auto = let Copilot pick)'
+        required: false
+        default: 'auto'
+
+permissions:
+  contents: write
+
+jobs:
+  burn:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        label: [glossary-rename, toc-rescue, network-controls, xref-miner]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ai/main
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Copilot CLI (pinned to the sandbox-proven version)
+        run: npm install -g @github/copilot@1.0.105
+
+      - name: Burn one consultant brief
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          LABEL="${{ matrix.label }}"
+          OUT="bench/2026-10-31-copilot-burn/$LABEL"
+          mkdir -p "$OUT"
+          echo "label: $LABEL" | tee "$OUT/run.log"
+          echo "model: ${{ inputs.model }}" | tee -a "$OUT/run.log"
+          echo "runner: $(uname -m) node: $(node --version)" | tee -a "$OUT/run.log"
+          copilot -p "$(cat bench/copilot-burn/$LABEL.md)" \
+            --allow-all-tools --allow-all-paths --trust-folder \
+            --model "${{ inputs.model }}" \
+            -C "$GITHUB_WORKSPACE" 2>&1 | tee -a "$OUT/run.log"
+          echo "exit:$?" | tee -a "$OUT/run.log"
+
+      - name: Commit deliverable back to ai/main
+        run: |
+          LABEL="${{ matrix.label }}"
+          git config user.name "copilot-burn"
+          git config user.email "copilot-burn@users.noreply.github.com"
+          git add "bench/2026-10-31-copilot-burn/$LABEL" || true
+          if git diff --cached --quiet; then
+            echo "nothing produced — recording the empty run"
+            echo "RUN NOTE: no deliverable produced" >> "bench/2026-10-31-copilot-burn/$LABEL/run.log"
+            git add "bench/2026-10-31-copilot-burn/$LABEL"
+          fi
+          git commit -m "copilot-burn: $LABEL — consultant deliverable [skip ci]" || true
+          for i in 1 2 3; do
+            if git push "https://x-access-token:${{ secrets.GH_PAT }}@github.com/khaalidrafi/docneural.git" HEAD:ai/main; then
+              echo "pushed (attempt $i)"; break
+            fi
+            echo "push attempt $i failed — rebasing on origin"
+            git fetch "https://x-access-token:${{ secrets.GH_PAT }}@github.com/khaalidrafi/docneural.git" ai/main
+            git rebase FETCH_HEAD || { git rebase --abort; break; }
+          done

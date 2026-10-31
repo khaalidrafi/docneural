@@ -1,0 +1,144 @@
+diff --git a/src/lib/core/toc.ts b/src/lib/core/toc.ts
+new file mode 100644
+--- /dev/null
++++ b/src/lib/core/toc.ts
+@@ -0,0 +1,71 @@
++export type TocItem = {
++  id: string
++  title: string
++  degree?: number
++  order?: number
++  depth?: number
++  children: TocItem[]
++  open?: boolean
++}
++
++export const defaultOpen = (depth: number): boolean => depth < 2
++
++export function setAllOpen<T extends { children: T[]; open?: boolean }>(
++  nodes: T[],
++  open: boolean,
++): T[] {
++  return nodes.map(node => ({
++    ...node,
++    open,
++    children: setAllOpen(node.children, open),
++  }))
++}
++
++export function filterToc<T extends { title: string; children: T[] }>(
++  nodes: T[],
++  query: string,
++): T[] {
++  const needle = query.trim().toLocaleLowerCase()
++  if (!needle) return nodes
++  return nodes.flatMap(node => {
++    const children = filterToc(node.children, query)
++    return node.title.toLocaleLowerCase().includes(needle) || children.length
++      ? [{ ...node, children }]
++      : []
++  })
++}
++
++const KNOWN = /^(introduction|getting started|basics|commands|customization|reference|appendices|indexes?)\b/i
++
++function prefix(title: string): string {
++  const clean = title.replace(/^(?:chapter|part|section)?\s*[\d.ivx.)-]*\s*/i, '').trim()
++  const known = clean.match(KNOWN)?.[1]
++  if (known) return known.replace(/\s+/g, ' ')
++  const words = clean.split(/\s+/).filter(Boolean)
++  return words.slice(0, 2).join(' ') || 'Other'
++}
++
++export function clusterOrRankFallback(
++  nodes: Array<Omit<TocItem, 'children'> & { order?: number }>,
++): TocItem[] {
++  const groups = new Map<string, TocItem>()
++  for (const [index, node] of nodes.entries()) {
++    const key = prefix(node.title)
++    const group = groups.get(key) ?? {
++      id: `group:${key}`, title: key, children: [], order: index,
++    }
++    group.children.push({ ...node, children: [], order: node.order ?? index })
++    groups.set(key, group)
++  }
++  const largest = Math.max(...[...groups.values()].map(group => group.children.length), 0)
++  if (groups.size >= 4 && largest <= nodes.length * 0.6) {
++    return [...groups.values()].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
++  }
++  return nodes
++    .map((node, order) => ({ ...node, children: [], order: node.order ?? order }))
++    .sort((a, b) => (b.degree ?? 0) - (a.degree ?? 0) || (a.order ?? 0) - (b.order ?? 0))
++}
++
++export function hasAlphabetFallback(nodes: Array<{ title: string; children?: unknown[] }>): boolean {
++  return nodes.length > 24 && nodes.every(node => /^[A-Z]$/.test(node.title))
++}
+diff --git a/src/lib/reader/Toc.svelte b/src/lib/reader/Toc.svelte
+--- a/src/lib/reader/Toc.svelte
++++ b/src/lib/reader/Toc.svelte
+@@ -1,0 +1,37 @@
++<script lang="ts">
++  import { onDestroy } from 'svelte'
++  import { defaultOpen, filterToc, setAllOpen } from '../core/toc'
++
++  let query = $state('')
++  let settledQuery = $state('')
++  let timer: ReturnType<typeof setTimeout> | undefined
++  let allOpen = $state(false)
++  let open = $state(new Set<string>())
++
++  $effect(() => {
++    clearTimeout(timer)
++    timer = setTimeout(() => { settledQuery = query }, 250)
++  })
++  onDestroy(() => clearTimeout(timer))
++
++  const visible = $derived(filterToc(toc, settledQuery))
++  const isOpen = (id: string, depth: number) => allOpen || open.has(id) || defaultOpen(depth)
++  function toggle(id: string) {
++    const next = new Set(open)
++    next.has(id) ? next.delete(id) : next.add(id)
++    open = next
++  }
++  function setEveryBranch(value: boolean) {
++    allOpen = value
++    open = new Set(value ? toc.map(node => node.id) : [])
++  }
++</script>
++
++<div class="toc-tools">
++  <input class="toc-filter" bind:value={query} placeholder="Filter chapters" aria-label="Filter chapters" />
++  <button class="toc-action" type="button" onclick={() => setEveryBranch(true)}>Expand all</button>
++  <button class="toc-action" type="button" onclick={() => setEveryBranch(false)}>Collapse all</button>
++</div>
++<!-- Keep the existing recursive row below this block. Its details element must
++     use isOpen(node.id, depth) and its summary toggle must call toggle(node.id).
++     Preserve the existing active-page auto-open and degree badge expressions. -->
+@@ -1,0 +44,10 @@
++<style>
++  .toc-tools { display: grid; gap: .5rem; grid-template-columns: 1fr auto auto; }
++  .toc-filter, .toc-action, :global(.toc summary) { min-height: 40px; }
++  .toc-filter { min-width: 0; padding: 0 .75rem; color: var(--dn-fg); background: var(--dn-bg); border: 1px solid var(--dn-border); }
++  .toc-action { padding: 0 .75rem; color: var(--dn-fg); background: var(--dn-surface); border: 1px solid var(--dn-border); }
++  @media (max-width: 640px) {
++    .toc-tools { grid-template-columns: 1fr 1fr; }
++    .toc-filter { grid-column: 1 / -1; }
++  }
++</style>
+diff --git a/src/lib/core/graph.ts b/src/lib/core/graph.ts
+--- a/src/lib/core/graph.ts
++++ b/src/lib/core/graph.ts
+@@ -1,0 +1,6 @@
++// In manualToc, replace the alphabet fallback with:
++//   return clusterOrRankFallback(chapters.map((node, order) => ({
++//     id: node.id, title: tocTitle(node), degree: degree.get(node.id) ?? 0, order
++//   })))
++// Import clusterOrRankFallback from './toc'. Keep linked roots, active-page
++// auto-open, and degree badges unchanged.
+diff --git a/src/lib/reader/Home.svelte b/src/lib/reader/Home.svelte
+--- a/src/lib/reader/Home.svelte
++++ b/src/lib/reader/Home.svelte
+@@ -1,0 +1,2 @@
++<!-- Pass the already-loaded manual chapters and active page through to Toc;
++     no fetch or network callback is added to the filter path. -->

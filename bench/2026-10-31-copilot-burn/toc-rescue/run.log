@@ -1,0 +1,281 @@
+label: toc-rescue
+model: auto
+runner: x86_64 node: v22.23.4
+I’ll inspect the governing instructions and the current TOC implementation, then produce only the requested diagnosis, patch, and test specification under the bench directory.
+
+● Read AGENTS.md
+  └ 87 lines read
+
+✗ Read graph.ts
+  │ src/lib/core/graph.ts
+  └ Path does not exist
+
+● Read CHARTER.md
+  │ agent-team/CHARTER.md
+  └ 208 lines read
+
+✗ Read Toc.svelte
+  │ src/lib/reader/Toc.svelte
+  └ Path does not exist
+
+✗ Read Home.svelte
+  │ src/lib/reader/Home.svelte
+  └ Path does not exist
+
+✗ Read store.svelte.ts
+  │ src/lib/core/store.svelte.ts
+  └ Path does not exist
+
+The expected `src/` paths are absent from this checkout, so I’m locating the actual repository layout and the required global law before drafting a patch against the real HEAD.
+
+● Locate repository files (shell)
+  │ pwd && printf '\nTop-level:\n' && find . -maxdepth 2 -type f | sort | head -80
+  └ 74 lines…
+
+● Locate global law file (shell)
+  │ find /home/runner/work -maxdepth 3 -name AGENTS.md -type f -print | sort
+  └ 1 line…
+
+● Check repository state (shell)
+  │ git status --short --branch && git rev-parse --show-toplevel && git log -1 --oneline
+  └ 4 lines…
+
+● Inspect existing bench artifacts (shell)
+  │ find bench/2026-10-31-copilot-burn -maxdepth 3 -type f -print -exec sed -n '1,80p' {} \;
+  └ 42 lines…
+
+● List source files (shell)
+  │ find src -maxdepth 4 -type f | sort
+  └ 2 lines…
+
+● Find canonical global law (shell)
+  │ find /home/runner -path '*/vault/AGENTS.md' -o -path '*/khaalidrafi/vault/AGENTS.md' 2>/dev/null
+  │ | head -20
+  └ No Content
+
+/ Search (grep)
+  │ "manualToc|TocNode|tocTitle|chapters" in *.{ts,svelte,js,mjs}
+  └ 2 lines found
+
+● Inspect available refs (shell)
+  │ git branch -a --no-color && git show-ref | head -30
+  └ 63 lines…
+
+● Check HEAD source paths (shell)
+  │ git ls-tree -r --name-only HEAD | grep -E
+  │ '(^|/)(graph\.ts|Toc\.svelte|Home\.svelte|store\.svelte\.ts)$|^src/' | head -200
+  └ 2 lines…
+
+● Find TOC source history (shell)
+  │ git log --all --oneline -- src/lib/core/graph.ts | head -20
+  └ No Content
+
+● Inspect current application shape (shell)
+  │ git show --stat --oneline HEAD && git show HEAD:src/App.svelte | sed -n '1,120p'
+  └ 18 lines…
+
+● Find historical TOC paths (shell)
+  │ git log --all --name-only --pretty=format: | grep -E
+  │ 'src/lib/(core/graph|reader/Toc|reader/Home|core/store)' | sort -u | head -50
+  └ No Content
+
+● Read package.json
+  └ 26 lines read
+
+● Read toc-rescue.md
+  │ bench/copilot-burn/toc-rescue.md
+  └ 18 lines read
+
+● Inspect checkout directories (shell)
+  │ find . -maxdepth 2 -type d -print | sort
+  └ 45 lines…
+
+● Search tracked dependency and source names (shell)
+  │ git ls-tree -r --name-only HEAD | grep -E 'docneural-ui|orui|graph|Toc|Home|store' | head -100
+  └ 31 lines…
+
+● Check related refs for source (shell)
+  │ for ref in remotes/origin/ai/task/fe-graph-peek-card remotes/origin/ai/cloud
+  │ remotes/origin/ai/task/gh-pages-site; do echo "--- $ref"; git ls-tree -r --name-only "$ref" |
+  │ grep -E 'src/lib/(core/graph|reader/Toc|reader/Home|core/store)' | head -20; done
+  └ 3 lines…
+
+● Inspect submodule configuration (shell)
+  │ git submodule status && cat .gitmodules
+  └ 5 lines…
+
+● Check unreachable source objects (shell)
+  │ git fsck --no-reflogs --unreachable 2>/dev/null | head -30
+  └ No Content
+
+The current `ai/main` HEAD contains only the Vite shell; the four requested implementation files are in the external `docneural-ui` package referenced by `package.json`, not tracked here. I’m checking that canonical sibling repository read-only so the artifact patch can target the actual implementation paths rather than inventing a non-applying diff.
+
+● Read canonical graph implementation (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/contents/src/lib/core/graph.ts --jq .content 2>/dev/null |
+  │ base64 -d | sed -n '430,560p'
+  └ No Content
+
+● Read canonical store implementation (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/contents/src/lib/core/store.svelte.ts --jq .content
+  │ 2>/dev/null | base64 -d | sed -n '1,240p'
+  └ No Content
+
+● Read canonical home mount (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/contents/src/lib/reader/Home.svelte --jq .content
+  │ 2>/dev/null | base64 -d | sed -n '430,490p'
+  └ No Content
+
+● Read canonical TOC component (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/contents/src/lib/reader/Toc.svelte --jq .content
+  │ 2>/dev/null | base64 -d | sed -n '1,260p'
+  └ No Content
+
+● Inspect prior design artifacts (shell)
+  │ git log --all --oneline -- bench/2026-10-28-ds-design | head -20 && find
+  │ bench/2026-10-28-ds-design -type f | sort | head -80
+  └ 22 lines…
+
+✗ Check canonical repository access (shell)
+  │ gh api repos/khaalidrafi/docneural-ui --jq '{name,private,default_branch}'
+  └ gh: To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
+    Example:
+    env:
+    GH_TOKEN: ${{ github.token }}
+    Failed with exit code 4
+
+● Probe canonical source URL (shell)
+  │ curl -L --silent --show-error -w '\nHTTP %{http_code}\n'
+  │ https://raw.githubusercontent.com/khaalidrafi/docneural-ui/main/src/lib/core/graph.ts | head -20
+  └ 2 lines…
+
+● Read home.svelte.txt
+  │ bench/2026-10-28-ds-design/inputs/home.svelte.txt
+  └ L1:260 (260 lines read)
+
+● Read graph-view.svelte.txt
+  │ bench/2026-10-28-ds-design/inputs/graph-view.svelte.txt
+  └ L1:300 (99 lines read)
+
+● Read BRIEF.md
+  │ bench/2026-10-28-ds-design/inputs/BRIEF.md
+  └ L1:200 (84 lines read)
+
+The canonical UI source is not present locally, not tracked in `ai/main`, and is not publicly readable from the configured GitHub endpoint. I’ll still create the requested bench artifacts, but I’ll mark the patch as blocked by that checkout mismatch instead of falsely claiming it applies; the diagnosis will separate verified facts from source evidence unavailable in this HEAD.
+
+● Edit
+  │ Create bench/2026-10-31-copilot-burn/toc-rescue/diagnosis.md
+  │ Create bench/2026-10-31-copilot-burn/toc-rescue/tests.md
+  └ Create bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+
+● Check artifact formatting (shell)
+  │ git diff --check -- bench/2026-10-31-copilot-burn/toc-rescue && grep -n '^diff
+  │ --git\|^+++\|^---' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  └ 12 lines…
+
+● Inspect generated patch (shell)
+  │ sed -n '1,80p' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch && printf '\n--- tail
+  │ ---\n' && tail -40 bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  └ 122 lines…
+
+● Verify requested artifacts (shell)
+  │ git status --short && find bench/2026-10-31-copilot-burn/toc-rescue -maxdepth 1 -type f -printf
+  │ '%f %s bytes\n' | sort
+  └ 5 lines…
+
+● Count patch hunk lines (shell)
+  │ awk 'NR>=1&&NR<77{n++} END{print n}' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch; sed
+  │ -n '75,145p' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | nl -ba
+  └ 71 lines…
+
+● Edit
+  └ Edit bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+
+● Validate patch syntax and applicability (shell)
+  │ git apply --check bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch 2>&1 || true
+  └ 1 line…
+
+● Verify patch hunks (shell)
+  │ grep -n '^@@' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch && sed -n '70,155p'
+  │ bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  └ 80 lines…
+
+● Check artifact files and whitespace (shell)
+  │ git diff --check --no-index /dev/null bench/2026-10-31-copilot-burn/toc-rescue/diagnosis.md
+  │ >/dev/null; echo diagnosis:$?; git status --short --untracked-files=all | grep 'toc-rescue'
+  └ 5 lines…
+
+● Count unified diff hunk bodies (shell)
+  │ sed -n '6,76p' bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | wc -l; sed -n '81,117p'
+  │ bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | wc -l; sed -n '119,129p'
+  │ bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | wc -l; sed -n '133,138p'
+  │ bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | wc -l
+  └ 4 lines…
+
+● Edit
+  └ Edit bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+
+● Validate patch artifact (shell)
+  │ git apply --check bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch 2>&1 || true
+  └ 1 line…
+
+● Check patch whitespace (shell)
+  │ git diff --no-index --check /dev/null bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  │ 2>&1 || true
+  └ No Content
+
+● Confirm scope of changes (shell)
+  │ git status --short --untracked-files=all | grep 'bench/2026-10-31-copilot-burn/toc-rescue'
+  └ 4 lines…
+
+● Inspect failing hunk boundary (shell)
+  │ nl -ba bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | sed -n '112,135p'
+  └ 24 lines…
+
+● Edit
+  └ Edit bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+
+● Final artifact validation (shell)
+  │ git diff --no-index --check /dev/null bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  │ 2>&1 || true; wc -l
+  │ bench/2026-10-31-copilot-burn/toc-rescue/{diagnosis.md,tests.md,toc-fix.patch}
+  └ 4 lines…
+
+● Confirm patch parses and report target mismatch (shell)
+  │ git apply --check bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch 2>&1 || true
+  └ 1 line…
+
+● Ensure no out-of-scope changes (shell)
+  │ git status --short --untracked-files=all | grep -v 'toc-rescue' || true
+  └ No Content
+
+● Inspect final hunk boundary (shell)
+  │ nl -ba bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch | tail -15
+  └ 15 lines…
+
+● Edit
+  └ Edit bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+
+● Validate final patch artifact (shell)
+  │ git apply --check bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch 2>&1 || true
+  └ 3 lines…
+
+● Check final artifact status (shell)
+  │ git diff --no-index --check /dev/null bench/2026-10-31-copilot-burn/toc-rescue/toc-fix.patch
+  │ 2>&1 || true; git status --short --untracked-files=all | grep 'toc-rescue'
+  └ 4 lines…
+
+Created under `bench/2026-10-31-copilot-burn/toc-rescue/`:
+
+- `diagnosis.md`
+- `toc-fix.patch`
+- `tests.md`
+
+The patch is a review artifact but **cannot apply to this `ai/main` HEAD** because the requested `src/lib/...` files are absent; they belong to the external `docneural-ui` sibling package. `git apply --check` confirms those missing targets.
+
+
+
+Changes    +309 -9
+AI Credits 3.55 (2m 20s)
+Tokens     ↑ 922.1k (883.2k cached, 38.8k written) • ↓ 10.1k (2.3k reasoning)
+Resume     copilot --resume=53892373-b298-4a94-8185-b637ae09da9f
+exit:0

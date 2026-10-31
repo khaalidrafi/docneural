@@ -1579,3 +1579,53 @@ the 4 commits.
       the design (verdict + glossary + per-ask spec + DO-NOTs), the
       consult itself caught that the rename would read as marketing
       unless bridge synapses shipped in the same release — they did.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:final-polish:audit-shipped:
+  <2026-10-31 Sun> FINAL AUDIT + POLISH SHIPPED — "no more copilot, final
+  audit and polish with DS@CB" honored to the letter: zero copilot/CI usage
+  tonight, the DS flash lane did the ruling, the worker did the code.
+
+  1. FINAL AUDIT (sweep rebuilt for the shipped surface — the old sweep
+     predated the network pass and its selectors were stale): 72 checks,
+     both themes, desktop + phone, every surface. Result 71/72 with ZERO
+     console errors and zero failed requests everywhere; vitest 106/106,
+     svelte-check 0 errors (16 baseline), build 3.9s. Live Pages probed:
+     WebGL ok, 0 errors.
+  2. THE ONE FAILURE WAS REAL: aria-label "Search nodes" survived the
+     rename pass. The audit also caught, by eye: the hero tagline said
+     "citations are AXONS" (an axon is the fiber; the Owner's glossary
+     says citations ARE the synapses — and it is the most-read sentence
+     on the site); the note-preview kicker said "node // preview"; the
+     synapse card sometimes showed raw Info-header boilerplate
+     ("Previous: ... Up: ...") as the citing line (7.7% of ctx values);
+     the "+3 recovered" plate sat next to a wire count that only grew by
+     2; the hint plate overflowed its dashed border; the zoom pair read
+     [+ -] while spacing read [- +]; the phone status plate wrapped to 3
+     lines.
+  3. DS CONSULT (one generation, spend law): deepseek-v4.1-flash ruled
+     all 7 findings + caught the big one — vocab.test.ts NEVER EXISTED
+     (the ledger was aspirational, which is why the misses survived) —
+     plus: boilerplate must be detected on LABELS not prose ratios
+     (measured: 1030/17400 values hit the 2-label rule), the plate must
+     count WIRES not refs, aliases accepted = graph/network/synapses
+     (never "neurons": entity, not destination), phone status copy
+     "arrows: selection only". Verdict + exact copy table + priority
+     order in bench/2026-10-31-final-polish/.
+  4. WORKER PASS (46b234f): all 7 shipped + the ledger test written
+     (vocab.test.ts scans USER_VISIBLE_STRINGS + every aria-label/
+     title/placeholder/alt literal in src) + bridges context now prefers
+     the first non-boilerplate provenance line. 14 new tests -> 120/120.
+  5. HOTFIX (726d924, found in the lead's own phone screenshot): the
+     filter panel's toggle chip was desktop-hidden by a GLOBAL rule —
+     phone got a closed headless details that painted a blank ghost
+     plate over the hint text. Summary restored on phone (44px tap,
+     doubles as the wire-count badge), hint stacks beneath it. Desktop
+     byte-identical.
+  6. GATES (lead re-ran independently): audit sweep 72/72, vitest
+     120/120, svelte-check 0/16, build 3.6s, phone + desktop DOM probes
+     (chip toggles, hint gap 22px/10px, zero intersection), phone-corner
+     screenshot reviewed by eye. ?mode=network now deep-links (graph
+     forever, aliases never emitted).
+  7. SHIP: docneural-ui ai/main @ 726d924, deploy-pages rebuilds from
+     this push. Data contracts untouched: graph.json / ctx/ / ?mode=graph
+     all keep their names.

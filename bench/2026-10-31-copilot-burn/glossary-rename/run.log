@@ -1,0 +1,220 @@
+label: glossary-rename
+model: auto
+runner: x86_64 node: v22.23.4
+● Auto selected GPT-5.6 Luna because it was the best choice out of the models available in your
+  plan.
+
+● Remote index: queued khaalidrafi/docneural for indexing
+
+I’ll inspect the governing project notes and the specified source files, then write only the requested glossary artifact and verify the diff is confined to that path.
+
+● Read AGENTS.md
+  └ 87 lines read
+
+● Read CHARTER.md
+  │ agent-team/CHARTER.md
+  └ L1:220 (208 lines read)
+
+● Check repository state and target files (shell)
+  │ git status --short && printf '\n-- files --\n' && for f in src/lib/DocneuralApp.svelte
+  │ src/lib/reader/Home.svelte src/lib/reader/ChapterNav.svelte src/lib/reader/DocReader.svelte
+  │ src/lib/ui/FilterBar.svelte src/lib/ui/CommandPalette.svelte src/lib/ui/CorpusField.svelte
+  │ src/lib/reader/SynapseRail.svelte src/lib/reader/Toc.svelte src/lib/graph/DocneuralGraph.svelte;
+  │ do printf '%s\n' "$f"; done
+  └ 13 lines…
+
+✗ Read AGENTS.md
+  │ ~/work/vault/AGENTS.md
+  └ Path does not exist
+
+✗ Search (grep)
+  │ "graph|nodes?|edges?|wires?|connections?|link|SYNAPSES|Open synapses|reading the graph|graph
+  │ engine|did not load|show in the synapses graph|GRAPH" (src/lib/DocneuralApp.svelte,
+  │ src/lib/reader/Home.svelte, src/lib/reader/ChapterNav.svelte, src/lib/reader/DocReader.svelte,
+  │ src/lib/ui/FilterBar.svelte, src/lib/ui/CommandPalette.svelte, src/lib/ui/CorpusField.svelte,
+  │ src/lib/reader/SynapseRail.svelte, src/lib/reader/Toc.svelte,
+  │ src/lib/graph/DocneuralGraph.svelte)
+  └ Search paths do not exist: /home/runner/work/docneural/docneural/src/lib/DocneuralApp.svelte,
+    /home/runner/work/docneural/docneural/src/lib/reader/Home.svelte,
+    /home/runner/work/docneural/docneural/src/lib/reader/ChapterNav.svelte,
+    /home/runner/work/docneural/docneural/src/lib/reader/DocReader.svelte,
+    /home/runner/work/docneural/docneural/src/lib/ui/FilterBar.svelte,
+    /home/runner/work/docneural/docneural/src/lib/ui/CommandPalette.svelte,
+    /home/runner/work/docneural/docneural/src/lib/ui/CorpusField.svelte,
+    /home/runner/work/docneural/docneural/src/lib/reader/SynapseRail.svelte,
+    /home/runner/work/docneural/docneural/src/lib/reader/Toc.svelte,
+    /home/runner/work/docneural/docneural/src/lib/graph/DocneuralGraph.svelte
+
+/ Search (glob)
+  │ "src/lib/**/*.svelte"
+  └ No matches found
+
+● Locate repository files and global law (shell)
+  │ pwd; printf '\n-- root --\n'; ls -la; printf '\n-- src --\n'; find src -maxdepth 3 -type f |
+  │ sort | head -80; printf '\n-- global candidates --\n'; find /home/runner -path
+  │ '*/vault/AGENTS.md' -o -path '*/AGENTS.md' 2>/dev/null | head -20
+  └ 40 lines…
+
+● List tracked source paths (shell)
+  │ git ls-files | grep -E
+  │ '(^|/)DocneuralApp\.svelte$|src/lib|SynapseRail|CommandPalette|CorpusField' | head -100
+  └ No Content
+
+● Inspect source layout and requested output directory (shell)
+  │ find src -maxdepth 5 -ls | head -120; printf '\n-- bench target --\n'; find
+  │ bench/2026-10-31-copilot-burn -maxdepth 3 -type f -print 2>/dev/null | sort
+  └ 6 lines…
+
+● Read run.log
+  │ bench/2026-10-31-copilot-burn/glossary-rename/run.log
+  └ 66 lines read
+
+● Read App.svelte
+  │ src/App.svelte
+  └ 10 lines read
+
+● Inspect history and repository state (shell)
+  │ git log --oneline -8 --all; printf '\n-- refs --\n'; git branch -a; printf '\n--
+  │ ignored/untracked --\n'; git status --short --untracked-files=all | head -100
+  └ 46 lines…
+
+The checked-out repository is a thin shell: all ten requested `src/lib/...` files are absent, and the UI is imported from the external `docneural-ui` package. I’ll use repository history and available refs to recover the exact user-visible strings and line numbers without modifying source, then document the data-contract boundary explicitly.
+
+● Locate sibling UI source if present (shell)
+  │ find /home/runner/work -maxdepth 4 -type f \( -name 'DocneuralApp.svelte' -o -name
+  │ 'SynapseRail.svelte' -o -name 'CommandPalette.svelte' \) -print 2>/dev/null; find /home/runner
+  │ -maxdepth 5 -type d -name 'docneural-ui' -print 2>/dev/null
+  └ No Content
+
+● Search repository history for requested UI files (shell)
+  │ git log --all --oneline -- 'src/lib/**' 'src/lib/*' | head -40; printf '\n-- historical paths
+  │ --\n'; git rev-list --all --objects | grep -E
+  │ 'src/lib/(DocneuralApp|reader/(Home|ChapterNav|DocReader|SynapseRail|Toc)|ui/(FilterBar|CommandP
+  │ alette|CorpusField)|graph/DocneuralGraph)\.svelte$' | head -40
+  └ 1 line…
+
+● Find historical commits containing requested strings (shell)
+  │ git log --all -S'Open synapses' --oneline -- . | head -20; git log --all -S'1386 NODES'
+  │ --oneline -- . | head -20; git log --all -S'reading the graph' --oneline -- . | head -20
+  └ 11 lines…
+
+● Inspect remotes, dependency source, and tracked tree (shell)
+  │ git remote -v; printf '\n-- package --\n'; cat package.json; printf '\n-- git tree --\n'; git
+  │ ls-tree -r --name-only HEAD | grep -E 'src/|docneural-ui|orui' | head -100
+  └ 35 lines…
+
+● Inspect campaign brief and task context (shell)
+  │ git show ec8b909:bench/2026-10-31-copilot-burn/README.org 2>/dev/null | head -100; git show
+  │ ec8b909:bench/2026-10-31-copilot-burn/glossary-rename/brief.md 2>/dev/null | head -200
+  └ No Content
+
+● List external UI repository branches (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/branches --jq '.[].name' | head -30
+  └ 3 lines…
+
+✗ List external UI repository files (shell)
+  │ gh api repos/khaalidrafi/docneural-ui/contents --jq '.[].name'
+  └ gh: To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
+    Example:
+    env:
+    GH_TOKEN: ${{ github.token }}
+    Failed with exit code 4
+
+● Fetching web content https://api.github.com/repos/khaalidrafi/docneural-ui/contents · url: "https…
+  └ Content type application/json; charset=utf-8 cannot be simplified to markdown...
+
+● Web Search (MCP: github-mcp-server) · site:github.com/khaalidrafi/docneural-ui "Open synapses"… 9s
+  └ No relevant web results found.
+
+● Web Search (MCP: github-mcp-server) · site:github.com/khaalidrafi/docneural-ui "1386 NODES" · … 9s
+  └ No relevant web results found.
+
+● Fetching web content https://raw.githubusercontent.com/khaalidrafi/docneural-ui/ai/main/src/lib/r…
+  └ Content type text/plain; charset=utf-8 cannot be simplified to markdown. Here...
+
+● Fetching web content https://raw.githubusercontent.com/khaalidrafi/docneural-ui/ai/main/src/lib/D…
+  └ Content type text/plain; charset=utf-8 cannot be simplified to markdown. Here...
+
+● Fetching web content https://api.github.com/repos/khaalidrafi/docneural-ui/git/trees/ai/main?recu…
+  └ Content type application/json; charset=utf-8 cannot be simplified to markdown...
+
+● Fetch external UI sources and scan requested vocabulary (shell)
+  │ set -eu
+  │ mkdir -p /tmp/docneural-ui-scan
+  │ base='https://raw.githubusercontent.com/khaalidrafi/docneural-ui/ai/main/src/lib'
+  │ for f in DocneuralApp.svelte reader/Home.svelte reader/ChapterNav.svelte
+  │ reader/DocReader.svelte ui/FilterBar.svelte ui/CommandPalette.svelte ui/CorpusField.svelte …
+  └ 30 lines…
+
+● Extract matching strings with line numbers from fetched UI files (shell)
+  │ for f in /tmp/docneural-ui-scan/*.svelte; do printf '\n### %s\n' "$(basename "$f")"; grep -Ein
+  │ 'graph|nodes?|edges?|wires?|connections?|link|SYNAPSES|Open synapses|reading the graph|graph
+  │ engine|did not load|show in the synapses graph|GRAPH' "$f" || true; done
+  └ 14 lines…
+
+● Resolve exact external UI source paths (shell)
+  │ curl -fsSL 'https://api.github.com/repos/khaalidrafi/docneural-ui/git/trees/92ad19002b898a507fbe
+  │ d3f265ce61c2d948dc81?recursive=1' | python -c 'import json,sys; d=json.load(sys.stdin);
+  │ print("\n".join(x["path"] for x in d.get("tree",[]) if x["path"].endswith(".svelte")))' | grep
+  │ -E 'DocneuralApp|Home|ChapterNav|DocReader|FilterBar|CommandPalette|CorpusField|SynapseRail|Toc|
+  │ DocneuralGraph'
+  └ 10 lines…
+
+● Read 1793468811380-copilot-tool-output-2165-dfc46557-6f69-44ad-93d2-13bac1397213.txt
+  │ /tmp/1793468811380-copilot-tool-output-2165-dfc46557-6f69-44ad-93d2-13bac1397213.txt
+  └ L1:260 (243 lines read)
+
+● Fetch remaining external sources and isolate visible vocabulary hits (shell)
+  │ set -eu
+  │ base='https://raw.githubusercontent.com/khaalidrafi/docneural-ui/ai/main/src/lib'
+  │ curl -fsSL "$base/graph/FilterBar.svelte" -o /tmp/docneural-ui-scan/graph_FilterBar.svelte
+  │ curl -fsSL "$base/reader/CorpusField.svelte" -o
+  │ /tmp/docneural-ui-scan/reader_CorpusField.svelte…
+  └ 152 lines…
+
+● Inspect exact component strings with line numbers (shell)
+  │ for spec in 'reader_ChapterNav.svelte:30,62' 'reader_DocReader.svelte:255,267'
+  │ 'reader_DocReader.svelte:455,470' 'ui_CommandPalette.svelte:30,42'
+  │ 'graph_FilterBar.svelte:25,52' 'reader_CorpusField.svelte:115,127'
+  │ 'reader_SynapseRail.svelte:100,155' 'reader_Toc.svelte:90,101'
+  │ 'graph_DocneuralGraph.svelte:440,467'; do f=${spec%%:*}; r=${spec#*:}; printf '\n### %s %s\n' …
+  └ 230 lines…
+
+● Inspect exact app and home strings with line numbers (shell)
+  │ for spec in 'DocneuralApp.svelte:190,198' 'DocneuralApp.svelte:224,275'
+  │ 'DocneuralApp.svelte:292,352' 'DocneuralApp.svelte:375,398' 'reader_Home.svelte:145,195'
+  │ 'reader_Home.svelte:225,255' 'reader_Home.svelte:360,375' 'reader_Home.svelte:498,513'; do
+  │ f=${spec%%:*}; r=${spec#*:}; printf '\n### %s %s\n' "$f" "$r"; sed -n "${r}p"
+  │ "/tmp/docneural-ui-scan/$f"; done
+  └ 275 lines…
+
+The external UI snapshot supplies the requested strings and line references; the repository shell itself has no `src/lib` copies to edit. I’m now recording a surgical vocabulary map that distinguishes network terminology from ordinary URL/link actions and preserves `graph.json`, `docs/`, and `ctx/` as contracts.
+
+● Edit
+  └ Create bench/2026-10-31-copilot-burn/glossary-rename/rename.md
+
+/ Search (grep)
+  │ "src/lib/(DocneuralApp|reader/(Home|ChapterNav|DocReader|SynapseRail|Toc)|ui/(FilterBar|CommandP
+  │ alette|CorpusField)|graph/DocneuralGraph)\.svelte"
+  │ (bench/2026-10-31-copilot-burn/glossary-rename/rename.md)
+  └ 1 file found
+
+● Verify artifact content and changed-path scope (shell)
+  │ git status --short --untracked-files=all; printf '\n-- artifact --\n'; wc -l
+  │ bench/2026-10-31-copilot-burn/glossary-rename/rename.md; sed -n '1,28p'
+  │ bench/2026-10-31-copilot-burn/glossary-rename/rename.md; printf '\n-- changed paths --\n'; git
+  │ status --short --untracked-files=all | grep -v '^??
+  │ bench/2026-10-31-copilot-burn/glossary-rename/run.log$'
+  └ 36 lines…
+
+Created `bench/2026-10-31-copilot-burn/glossary-rename/rename.md`.
+
+It includes the glossary, exact per-file replacements with line references, mode-control recommendation, rejected terms, accessibility guidance, and preserved data-contract names. No source, style, or workflow files were changed.
+
+
+
+Changes    +167 -0
+AI Credits 3.79 (2m 4s)
+Tokens     ↑ 721.1k (648.0k cached, 73.0k written) • ↓ 9.0k (2.1k reasoning)
+Resume     copilot --resume=04944158-8030-46e6-a2b8-277794a7de80
+exit:0

@@ -1519,3 +1519,63 @@ the 4 commits.
      trail-up chip climb, zero console errors. (Note: docneural-ui itself
      has NO workflow — the earlier dispatch attempt there was a wrong door;
      deploys fire from docneural, by push or dispatch.)
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :report:glm-5.3-flash:Owner:network-pass-shipped:
+  <2026-10-31 Sun> THE NEURAL NETWORK PASS SHIPPED — all 8 asks resolved
+  (24cb6e5 on docneural-ui ai/main), plus your copilot-burn directive
+  executed the same night.
+
+  1. RENAME (ask 8): nodes are NEURONS, edges/wires are SYNAPSES, the
+     whole view is the NEURAL NETWORK of docs — swept across every
+     user-visible string and aria label (status plate, palette, rail,
+     home, empty states). Data contracts keep their names (graph.json
+     stays graph.json so artifacts stay findable). Mode chip stays
+     DOCS / SYNAPSES — your own word, now the only edge word left.
+  2. TOC RESCUE (ask 2): the lone "Top" row was a default-state bug —
+     the tree now opens to depth 2 (persisted per manual) and emacs
+     shows its real chapter tree with expand/collapse-all + a filter
+     with breadcrumb hits. org (whose export carries ZERO info
+     structure) gets a flat reading-order list with wire badges — the
+     A-Z letter fallback is deleted, never returns.
+  3. DOC SWITCHER (ask 1): cmd-K palette now sections Documents /
+     Chapters / Neurons; new document library drawer (cmd-shift-K or
+     the + on the manual tabs) with recents from your trail. Tabs
+     stay, as highlights, per your call.
+  4. CROSS-MANUAL SYNAPSES (ask 3): your instinct was right and the
+     data proves it — the export pipeline DROPPED cross-manual
+     references (makeinfo renders them as plain text). The xref-miner
+     recovered 3 literal references (guix->emacs, org->emacs); they
+     ship as dashed amber "bridge · recovered" synapses with full
+     provenance, +3 recovered on the status plate. Exporter-side fix
+     filed to grow this set honestly.
+  5. ARROWS (ask 4): direction is now a zoom-LOD — selected/hovered
+     synapses always arrowed; all-visible arrows under the 1500-wire
+     paint budget, with an honest over-budget line at full corpus.
+  6. SPREAD + LOCK + ZOOM/DISTANCE (asks 5-6): spread spacing up
+     (220px links, extent-reserving repulsion), spacing multiplier
+     0.6-2.0 with one-shot reheat; control stack bottom-right — lock
+     (freezes the sim; phone defaults locked so phone runs zero
+     loops), zoom +/-, spacing +/-, fit.
+  7. SYNAPSE CLICK (ask 7): wires are first-class — hover lights the
+     wire + chip, click opens the card with the citing line from ctx,
+     endpoint jumps, trail-light, copy citation.
+  8. GATES: vitest 106/106, svelte-check 0 errors (16 baseline), build
+     3.9s, real-browser sweep 19/19 (TOC emacs/org, controls, lock
+     freeze, zoom camera, bridge, rename, trail regression, phone lock,
+     WebGL-off) with ZERO console errors.
+  9. LEAD HOTFIX: the phone lock default + force-graph's animation
+     cycle recursed to stack overflow (resumeAnimation re-entered the
+     cycle body from onZoom during a zoom tween) — poke deferred to a
+     macrotask, sweep verifies zero errors.
+  10. COPILOT-BURN (your 17:36Z directive): copilot-burn.yml dispatches
+      4 consultant briefs on Actions runners (glossary-rename,
+      toc-rescue, network-controls, xref-miner) — all 4 completed
+      success in ~11 min, deliverables committed to
+      bench/2026-10-31-copilot-burn/ with full credit-accounted logs.
+      Their outputs were harvested into the lead-merged spec
+      (bench/2026-10-31-network-pass/). The wave fired well before the
+      reset; more waves can dispatch anytime.
+  11. DS CONSULT (law honored): deepseek-v4.1-flash via CB lane ruled
+      the design (verdict + glossary + per-ask spec + DO-NOTs), the
+      consult itself caught that the rename would read as marketing
+      unless bridge synapses shipped in the same release — they did.

@@ -1433,3 +1433,35 @@ it). Owner: paste a fresh PAT (repo scope, both repos) and this seat pushes
 both repos + dispatches deploy-pages + verifies live, exactly per protocol.
 Alternatives: any Copilot-side push of the same branch, or the Owner pushing
 the 4 commits.
+
+* MSG glm-5.3-flash@chat.z.ai -> @Owner :report:      :report:glm-5.3-flash:Owner:multimodal-review-shipped:
+  <2026-10-31 Sat> MULTIMODAL REVIEW pass SHIPPED + DEPLOYED — sandbox rollback #2
+  recovered, both fix commits pushed, Pages live, DS flash (CB lane) consulted.
+
+  What happened -> what shipped:
+  1. ROLLBACK #2: sandbox snapped back to a338fbe (pre-AI). Re-applied the
+     ready-to-use AI pass from the reviewed spec (2592a70) and the multimodal
+     audit fixes from the audit record (4fc8f4b, 11 files). Gates re-run each
+     time: vitest 93 -> 97/97, svelte-check 0 errors (16 known warnings),
+     build 3.3s; real-browser sweep 40/40, zero console errors / crashes /
+     failed requests (dark/light x desktop/phone x 5 surfaces + WebGL-off).
+  2. YOUR PAT: received, used for push + workflow dispatch only (secret law:
+     value never echoed, never filed). docneural-ui ai/main = 4fc8f4b on
+     GitHub; docneural records rebased onto the CI tip (9b7075c) and pushed.
+  3. DEPLOYED: dispatch 41206348844 completed success. LIVE VERIFIED on
+     https://khaalidrafi.github.io/docneural/ — bundle index-D19lii4q.js
+     carries the free-brain copy, presets, FOLLOW-UPS, 402 + 60s markers.
+  4. DS FLASH FROM CB — honored this time: vault CODEBUDDY_AUTH_TOKEN pulled
+     (names only), CLI 2.179.0 installed, ONE consult generation fired on
+     model deepseek-v4.1-flash (free body, zero credit burn; zen free lane
+     was 429-exhausted, filed). Artifact: bench/2026-10-31-multimodal-review/
+     out/consult-ds-flash.md (7.7K).
+  5. DS VERDICT: keep the honesty arms + token discipline; weak spots = phone
+     starfield reads silent, reader has no memory of the road, ask panel
+     hierarchy. PICK = TRAIL — the visitor's reading path pinned as a lit
+     route on the graph + plain-text export (retention: possession without
+     accounts; agents: 12 ordered slugs ingest as one markdown block).
+     Implementation-ready spec: 7 files, 5 new tokens (AA ratios measured),
+     0 new animations, DO-NOTs (no ?trail= URL param; never touch camera/
+     physics; no route animation). Worker dispatched; lead reviews + gates
+     before commit.

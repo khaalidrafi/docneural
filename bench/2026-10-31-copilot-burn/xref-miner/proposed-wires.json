@@ -1,0 +1,26 @@
+[
+  {
+    "source": "guix--Documentation",
+    "target": "emacs--Network-Security",
+    "kind": "xref",
+    "ctx": "\"(emacs)Network Security\" -- STARTTLS",
+    "src_file": "site-corpus/guix/Documentation.org",
+    "confidence": 1.0
+  },
+  {
+    "source": "guix--Documentation",
+    "target": "emacs--Network-Security",
+    "kind": "xref",
+    "ctx": "\"(emacs)Network Security\" -- TLS",
+    "src_file": "site-corpus/guix/Documentation.org",
+    "confidence": 1.0
+  },
+  {
+    "source": "org--Advanced-topics-in-ODT-export",
+    "target": "emacs--File-Archives",
+    "kind": "xref",
+    "ctx": "Sometimes ODT format files may not open due to ‘=.odt=' file corruption. To verify if such a file is corrupt, validate it against the OpenDocument Relax NG Comp",
+    "src_file": "site-corpus/org/Advanced-topics-in-ODT-export.org",
+    "confidence": 1.0
+  }
+]

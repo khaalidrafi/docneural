@@ -1,0 +1,11 @@
+// dn-pulse — presence worker config (SPEC 4, workstream A).
+// The KV namespace id is a PLACEHOLDER: the lead creates the namespace
+// (`npx wrangler kv namespace create PULSE`) and fills the id before the
+// first deploy. No routes: workers.dev only. No secrets, no AI binding.
+{
+  "name": "dn-pulse",
+  "compatibility_date": "2026-10-01",
+  "main": "src/index.js",
+  "workers_dev": true,
+  "kv_namespaces": [{ "binding": "PULSE", "id": "LEAD_FILLS" }]
+}

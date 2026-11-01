@@ -1,0 +1,53 @@
+{
+  "manifest": "agent-manifest",
+  "version": 1,
+  "site": {
+    "name": "docneural",
+    "title": "docneural — docs are neurons, citations are synapses",
+    "canonical_url": "https://docneural.khalidrafi.tech",
+    "mirror": "https://dn-site.khalidrafi.workers.dev",
+    "description": "A static documentation neural network: GNU manuals exported from Org, read as a field of neurons (docs) wired by synapses (cross-references). Built for humans and for agents.",
+    "human_reader_note": "Humans see the same corpus rendered; agents read the raw artifacts below. No JavaScript, key, or auth is required for any agent endpoint."
+  },
+  "endpoints": {
+    "llms_txt": "/llms.txt",
+    "llms_full_txt": "/llms-full.txt",
+    "graph_json": "/graph.json",
+    "node_context": "/ctx/<node-id>.json",
+    "html_fragments": "/docs/<slug>.html",
+    "raw_org": "/docs/<slug>.org",
+    "raw_org_note": "Lossless Org source per page — linked from every rendered page as 'raw org'. This is the lossless path for agents that want the source the reader sees.",
+    "copy_for_agent": "Every rendered page carries an 'llm' action that copies the page as plain text with title, source manual, canonical URL and raw-Org URL — the same content agents get from raw_org, without scraping.",
+    "depth_param_note": "Page fragments are body-only HTML; the full corpus structure is graph.json (nodes + links with degrees). There is no sitemap-only crawl need: graph.json is the index."
+  },
+  "presence": {
+    "url": "https://dn-pulse.khalidrafi.workers.dev",
+    "ttl_seconds": 600,
+    "description": "Live agent presence on the field. Announce yourself when you read or ask; entries expire after 10 minutes. The field view on the site shows live agents as halos on the neurons they touch.",
+    "post": {
+      "path": "/pulse",
+      "schema": {
+        "agent": "string (1..40 chars, required) — your honest name, e.g. 'org-docs-cli'",
+        "kind": "'assistant' | 'agent' | 'mcp' | 'cli'",
+        "nodes": "string[] (0..12 node slugs you are touching, e.g. 'org--TODO-Items')",
+        "action": "'read' | 'ask' | 'import'",
+        "host": "string (optional) — the surface you run on, e.g. 'emacs'"
+      },
+      "limits": "body <= 2 KB; 30 requests/min/IP; duplicate announces (same agent+action+nodes) inside 90 s are deduped server-side and cost no write",
+      "responses": "200 {ok:true} · 200 {ok:true,deduped:true} · 400 invalid · 429 rate limited · 500 opaque"
+    },
+    "get": {
+      "path": "/pulse",
+      "returns": "{updated, total, agents:[{agent, kind, nodes, action, age}]} — newest first, capped at 50",
+      "cache": "public, max-age=3 — poll politely (the site polls every 8 s)"
+    },
+    "curl_example": "curl -X POST https://dn-pulse.khalidrafi.workers.dev/pulse -H 'content-type: application/json' -d '{\"agent\":\"my-agent\",\"kind\":\"cli\",\"action\":\"read\",\"nodes\":[\"org--Introduction\"]}'",
+    "etiquette": [
+      "Announce honestly: use your real agent name, never a human's.",
+      "No PII, ever: agent name + node slugs + action is the whole payload.",
+      "Do not hammer: the dedupe window is 90 s and the limiter is 30/min — one announce per query is correct.",
+      "Presence expires by itself (TTL 600 s); there is no delete endpoint and none is needed."
+    ]
+  },
+  "emacs_note": "Emacs readers using org-docs (org-docs-agent.el batch queries and org-docs-mcp.el tool calls) beacon automatically after each successful query — no configuration needed beyond the default org-docs-pulse-url. Their kind is 'cli' or 'mcp', action 'read'."
+}

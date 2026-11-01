@@ -114,6 +114,9 @@ build:
 	# with every build - one committed static file, a generated URL
 	# list over the exported docs, and the image og:image points at.
 	cp static/robots.txt dist/robots.txt
+	# Agent surface (SPEC 4): the machine-readable manifest ships with
+	# every build — endpoints, the presence API contract and etiquette.
+	cp static/agent-manifest.json dist/agent-manifest.json
 	python3 scripts/gen-sitemap.py $(OUT)
 	cp $(OUT)/sitemap.xml dist/sitemap.xml
 	cp static/social-card.png dist/social-card.png

@@ -5,6 +5,49 @@ How this file works:
 - You read it. You never edit it.
 - You answer with commits and pasted output. Not with words about work.
 
+* UPDATE #12 — 2026-11-01 06:55Z — Owner order: org-learn.el + org-roadmap move to the docneural Lead — teamified, live, prompts shared
+
+Owner order 2026-11-01 #hq, verbatim: "You'll control both shepherd and
+unslop pkgs. You can make multiple teams, or have a single team handle
+ALL. Do what you see fit for the best. The learn and roadmap pkgs will
+be handled by the lead@docneural. Work FAST! Teamify and share prompts!"
+
+** WHAT MOVED TO YOU
+
+- khaalidrafi/org-learn.el + khaalidrafi/org-roadmap — both ALREADY
+  TEAMIFIED and live (umbrella bootstrap, this morning): agent-team
+  chain workflow on ai/main, board seed landed (CONTROL / TODOS /
+  MEMBERS / CANDIDATES / STATE / CHAT / CHARTER), 25 repo secrets
+  sealed, in-runner GoModel gateway proven on the sibling runs
+  (GOMODEL_BOOT=boot -> lane health -> Jev green), chains self-dispatch
+  with the 5-min backoff + BR-01 stall law (auto-halt at stall 12).
+- The umbrella lead (z.ai-agent) keeps agent-shepherd + unslop.el.
+
+** PROMPTS SHARED (where everything lives)
+
+- THE one common teamify prompt: khaalidrafi/agent-team-ci
+  templates/TEAMIFY-COMMON-PROMPT.org (AGENT-FACING ONLY; per-repo
+  input = the appended last line `repo:`; NOT-TOUCH list inside;
+  regenerate from templates, never hand-edit a built prompt).
+- Turn briefs compose GLOBAL + LOCAL + segment via ci/bin/law_brief.sh
+  (the ci/ submodule IS agent-team-ci; already seeded on both repos).
+- Board switches: agent-team/CONTROL.org (#+OBJECTIVE /
+  #+OBJECTIVE-STATE / #+TURN / #+KILL-SWITCH / #+STALL-COUNT /
+  #+PAUSE-AFTER-TODO / #+CHAIN-PAUSE). Seat rotation + duties:
+  agent-team/MEMBERS.org (the proven umbrella roster: poolside
+  laguna-s-2.1 Principal, qwen3.8-27b SW + Release, glm-4.7-flash QA).
+- Handover notes are posted on BOTH boards' CHAT.org.
+
+** TAKING OVER (your first steps)
+
+1. Read TEAMIFY-COMMON-PROMPT.org + both repos' CHARTER.md + CONTROL.org.
+2. Steer via the boards — set #+OBJECTIVE, read #+LAST-VERDICT. Do NOT
+   re-teamify; the chains are running and pause-after-todo is ON (they
+   halt for the Lead's audit after each delivery — you are that Lead).
+3. Same laws as here: global AGENTS.md via the ci/ submodule, commit
+   author = model identity, LEAD DOESN'T CODE, secrets travel as env
+   var NAMES only.
+
 * UPDATE #10 — 2026-10-27 05:4Z — #9 ORDER A WITHDRAWN — laws configured FIRST, then redo for compliance (Owner 2026-10-27 #hq)
 
 Owner correction, verbatim: "AGENTS.md already had commit rules which

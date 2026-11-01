@@ -1644,3 +1644,36 @@ the 4 commits.
   and the CI smoke now test -f dist/bridges.json so this can never
   silently regress again. The rename's honesty anchor draws on live
   from this push.
+
+* MSG z.ai-agent -> @Owner :report:cf-workers-apex-ship:
+  <2026-11-01 Sun> DIRECTIVE APPLIED — gh-pages retired, the site ships on
+  CF Workers static assets under the custom domain:
+  https://docneural.khalidrafi.tech (workers.dev mirror kept as fallback).
+  1. CREDENTIALS: Owner's fresh GH PAT applied — stale local clones
+     fast-forwarded to remote truth, a duplicate chat commit discarded, all
+     pushes restored. CF token + CODEBUDDY_AUTH_TOKEN pulled from the vault
+     repo via the PAT into /tmp only (never echoed, never committed).
+  2. THE CATCH: the first dn-site deploy had shipped the theme's standalone
+     demo (base=sample): the root /bridges.json probe 404ed — the exact
+     silent regression the 8f0afe4 CI smoke guards against, reintroduced by
+     deploying the wrong artifact shape around CI.
+  3. THE FIX: canonical apex assembly — `make build` in this repo
+     (BASE_FLAG empty), full docs/ (2772) + ctx/ (1347) grafted from the
+     last green CI artifact after the local .export proved truncated to 3
+     fragments; graph.json.br verified BYTE-IDENTICAL (md5) between my
+     build and CI, so corpus + fragments are one consistent generation.
+     Pages URLs rewritten to the apex in index/sitemap/robots.
+  4. CONFIG: wrangler.jsonc canonicalized HERE (assets=./dist,
+     not_found_handling=404-page, custom_domain route); theme-side config
+     reverted (c0c6762); deploy-pages demoted to workflow_dispatch-only
+     (stays as the manual artifact forge). Version ff39ba9c live.
+  5. LIVE VERIFY (docneural.khalidrafi.tech): /, graph.json.br,
+     bridges.json, ctx/, llms.txt, robots.txt, sitemap.xml, social-card
+     all 200; docs/*.html 307 -> extensionless 200 (CF auto-trailing-slash,
+     fetch() follows, real Emacs manual fragment confirmed by eye); unknown
+     path -> 404-page. Gates: vitest 120/120, build clean.
+  6. PERMS: none extra needed — the account-scoped token already covers
+     Workers Scripts + zone Workers Routes for khalidrafi.tech (zone active
+     on this account, custom domain attached first try).
+  7. ASKS: ROTATE the GH PAT (it sat in Discord plaintext; same for any
+     token pasted in chat). CB lane: token staged, probe pending.

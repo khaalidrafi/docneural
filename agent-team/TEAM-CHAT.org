@@ -1677,3 +1677,51 @@ the 4 commits.
      on this account, custom domain attached first try).
   7. ASKS: ROTATE the GH PAT (it sat in Discord plaintext; same for any
      token pasted in chat). CB lane: token staged, probe pending.
+
+* MSG z.ai-agent -> @Owner :report:agents-on-the-field:
+  <2026-11-01 Sun> SPEC 4 SHIPPED — the field shows live agents, the AI
+  ladder is honest, org-docs + org-roam-lite-ui adopted and hired.
+  1. AI LADDER (Owner: "try harder for free options, else Workers AI"):
+     hunted again — Pollinations is still the ONLY keyless+free+CORS default
+     (verified live: openai-fast answers keyless). Groq/OpenRouter/Gemini/
+     Cerebras added as one-chip BYOK presets (keys stay in the visitor's
+     localStorage). Workers AI is BACK as the automatic LAST rung: dn-brain
+     resurrected as a minimal OpenAI-shaped relay onto
+     llama-3.3-70b-instruct-fp8-fast — live-verified: /health ok, real
+     completion in 0.86 s. Free 10k neurons/day is OUR allocation, fallback
+     volume only. The ASK panel retries keyless once, then edge, then shows
+     an honest error + which brain answered.
+  2. PRESENCE (the cool ask): dn-pulse worker (KV, TTL 600 s, 90 s server
+     dedupe against the ~1k writes/day free wall, per-IP 30/min, CORS *)
+     + client poll every 8 s desktop-full only (phone/lite zero loops law).
+     ASK runs beacon asked+source neurons; the visitor sees the assistant
+     reading the corpus. Violet --dn-agent halos + glyph dots on live nodes,
+     "◈ N AGENTS ON THE FIELD" chip, last-5 ticker, agents line in the
+     synapse card. agent-manifest.json ships at the root: any external
+     agent can POST /pulse and light up (curl example in the manifest).
+  3. LIVE E2E RECEIPTS: pulse-probe all green (beacon appears, dedupe,
+     400 junk, cache headers); 3 demo beacons -> "◈ 4 AGENTS ON THE FIELD"
+     chip in the DOM; SCREENSHOT: violet halos on the exact beacons' neurons
+     at ?mode=network. org-docs (Emacs MCP/CLI) now auto-beacons reads —
+     agents reading through the official reader appear on the field.
+  4. THE CATCH: unit mocks + curl probes could not see it — the browser's
+     preflight failed on cache-control (worker allow-headers listed only
+     content-type) and every client refresh died silently. Live browser
+     E2E caught it; one-line CORS hotfix, redeployed, DOM-verified. This is
+     why the pixel pass exists.
+  5. HIRES: 4-a site wave (148/148 tests, +28 new, svelte-check 0/16,
+     build clean; commits f08de3f..6f12ed0 + 9883173). 4-b org-docs: beacon
+     in agent-CLI + MCP paths, GH Actions CI (emacs-nox + 7 ERT suites,
+     first real execution on push), AGENTS.md updated; orphaned gptel WIP
+     committed separately (4fd009a). 4-c org-roam-lite-ui: NO open TODOs —
+     ran the audit instead, found the README entry-bundle promise drifted
+     (~20 kB -> true 26.3 kB), trued it up (ad50f99; 159/159 + 22/22 e2e);
+     next-step recs recorded (check:bundle gate, OrgRoamGraph trim).
+  6. DEPLOYS: dn-pulse (f18828bd), dn-brain (2f8be5bd), dn-site apex
+     (642f4056 — includes agent-manifest.json at /). Canonical build
+     re-assembled (md5-identical graph vs CI, docs 2772 / ctx 1347).
+  7. NOTES: '/' now opens ASK (palette moved to Cmd+K) — spec-mandated,
+     flag if you want it back. NOTICE #12 acknowledged: org-learn.el +
+     org-roadmap ride with this Lead now. Still open: rotate the GH PAT
+     (plaintext in Discord); brainstorms queued for next waves (agent
+     attention heatmap, trails, SSE live push, MCP server for the corpus).

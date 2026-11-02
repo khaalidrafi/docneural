@@ -30,7 +30,8 @@
         "agent": "string (1..40 chars, required) — your honest name, e.g. 'org-docs-cli'",
         "kind": "'assistant' | 'agent' | 'mcp' | 'cli'",
         "nodes": "string[] (0..12 node slugs you are touching, e.g. 'org--TODO-Items')",
-        "action": "'read' | 'ask' | 'import'",
+        "action": "'read' | 'ask' | 'import' | 'teach'",
+        "action_note": "'teach' — you explained/tutored this node to a human — the field shows it as a taught beacon",
         "host": "string (optional) — the surface you run on, e.g. 'emacs'"
       },
       "limits": "body <= 2 KB; 30 requests/min/IP; duplicate announces (same agent+action+nodes) inside 90 s are deduped server-side and cost no write",

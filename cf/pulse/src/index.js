@@ -29,7 +29,7 @@ const CORS = {
 }
 
 const KINDS = new Set(['assistant', 'agent', 'mcp', 'cli'])
-const ACTIONS = new Set(['read', 'ask', 'import'])
+const ACTIONS = new Set(['read', 'ask', 'import', 'teach'])
 const MAX_BODY = 2048 // bytes — reject anything bigger (400)
 const MAX_NODES = 12
 const MAX_AGENT = 40

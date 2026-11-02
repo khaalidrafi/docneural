@@ -1,30 +1,27 @@
-# Deploy the docneural site to GitHub Pages.
+# docneural SITE ARTIFACT FORGE (Pages RETIRED — Owner order 2026-11-02:
+# "take down gh pages for docneural since we hv workers now"; the canonical
+# host is the CF Worker dn-site -> https://docneural.khalidrafi.tech, deployed
+# by `make build` + `npx wrangler deploy` per wrangler.jsonc).
 #
-# Triggered by every push to ai/main plus workflow_dispatch. The corpus is
-# site-corpus/ — the REAL manuals (Emacs 30.1 via makeinfo, the published
-# Org and Guix node-split HTML), converted by the Owner's org-import
-# package (git.khalidrafi.tech/org-pandoc-import) through
+# This workflow is the MANUAL ARTIFACT FORGE only (workflow_dispatch — no
+# push trigger): it builds the full corpus assembly (graph.json + docs/ +
+# ctx/) on clean runners so a local lead can graft docs/ctx from the last
+# green artifact instead of re-exporting 44 MB locally. It does NOT publish
+# anywhere.
+#
+# The corpus is site-corpus/ — the REAL manuals (Emacs 30.1 via makeinfo,
+# the published Org and Guix node-split HTML), converted by the Owner's
+# org-import package (git.khalidrafi.tech/org-pandoc-import) through
 # scripts/manuals-corpus.py, and committed, so the build needs no network,
 # no pandoc and no emacs: 1386 nodes / 30915 wires across 3 sources.
 # Regeneration steps: site-corpus/README.org.
-#
-# Concurrency: group "pages" — only the latest build matters for a static
-# site, so superseded runs cancel instead of racing to deploy.
-name: deploy-pages
+name: site-artifact
 
 on:
-  push:
-    branches: [ai/main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -62,17 +59,15 @@ jobs:
         working-directory: docneural
         run: make export CORPUS=site-corpus DOC="org emacs guix" OUT=.export
 
-      - name: Build (base=/docneural/ for the Pages project site)
+      - name: Build (apex base — the canonical host is the zone apex)
         working-directory: docneural
         run: |
           npm ci --no-audit --no-fund
-          make build BASE_FLAG=--base=/docneural/
+          make build
 
-      - name: "Smoke the shipped artifact (Pages layout /docneural/)"
+      - name: "Smoke the shipped artifact (apex layout)"
         working-directory: docneural
         run: |
-          # Pages serves the artifact ROOT under the /docneural/ prefix, so
-          # dist/ keeps vite's flat layout while index.html URLs carry base.
           test -f dist/graph.json
           test -f dist/graph.json.br
           # The bridge synapses fetch ./bridges.json from the dist ROOT — a
@@ -83,18 +78,10 @@ jobs:
           test -f dist/docs/emacs--Basic-Files.html
           test -f dist/docs/guix--index.html
           test -f dist/ctx/org--index.json
-          grep -q '/docneural/assets/' dist/index.html
+          grep -q '/assets/' dist/index.html
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: site-dist
           path: docneural/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          retention-days: 30

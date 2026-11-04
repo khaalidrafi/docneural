@@ -777,18 +777,44 @@ async function main() {
     fit: document.querySelector('.roam-wrap')?.dataset?.fit,
     stored: localStorage.getItem('docneural:layout'),
     chip: (document.querySelector('.layout')?.innerText ?? '').replace(/\s+/g, ' ').trim(),
-    pressed: document.querySelector('.layout')?.getAttribute('aria-pressed'),
+    // The chip is a cycle button: its accessible name is the NEXT state
+    // ("switch to spread …" while cluster is active, and so on), so the aria
+    // label is the state evidence the old aria-pressed attribute used to be.
+    aria: (document.querySelector('.layout')?.getAttribute('aria-label') ?? ''),
     nodes: Number(document.querySelector('.roam-wrap')?.firstElementChild?.dataset?.nodes ?? -1)
   }))
-  const lay0 = await layout()
-  await page.locator('.layout').click()
-  await page.waitForTimeout(4000) // reheat + relayout + the fit that follows it
-  const lay1 = await layout()
+  // The first-visit default is size-aware (loadLayout: >300 nodes boot the
+  // fixed-distance lattice, smaller scopes boot the packed clusters) and a
+  // saved preference always wins — so the gate may not assume WHICH reading
+  // boots. The chip cycles cluster → spread → lattice → cluster; walk it
+  // until spread is on screen, judging the relayout evidence on every leg
+  // travelled, so a chip that skips or double-fires a state fails here too.
+  const NEXT = { cluster: 'spread', spread: 'lattice', lattice: 'cluster' }
+  const ARIA_FOR = { cluster: /switch to spread/, spread: /switch to lattice/, lattice: /switch to clusters/ }
+  const clickLeg = async () => {
+    await page.locator('.layout').click()
+    await page.waitForTimeout(4000) // reheat + relayout + the fit that follows it
+    return layout()
+  }
+  const leg0 = await layout()
+  let leg = leg0
+  let legs = 0
+  while (leg.hook !== 'spread' && legs < 2) {
+    const from = leg.hook
+    leg = await clickLeg()
+    legs += 1
+    check(`the layout chip steps ${from} → ${NEXT[from]} (leg ${legs})`,
+      leg.hook === NEXT[from] && leg.stored === NEXT[from] &&
+        ARIA_FOR[leg.hook].test(leg.aria) && leg.nodes === leg0.nodes,
+      `${legs} click(s): ${leg.chip} · stored "${leg.stored}" · aria "${leg.aria.slice(0, 24)}" · ${leg.nodes} nodes`)
+  }
+  const lay1 = leg
   await page.screenshot({ path: `${OUT}/11-titles-spread.png` })
   check('the titles chip switches the canvas to the spread layout',
-    lay0.hook === 'cluster' && lay1.hook === 'spread' && lay1.stored === 'spread' &&
-      lay1.pressed === 'true' && /spread/.test(lay1.chip) && lay1.nodes === lay0.nodes,
-    `${lay0.chip} → ${lay1.chip} · ${lay1.nodes} nodes, stored "${lay1.stored}"`)
+    lay1.hook === 'spread' && lay1.stored === 'spread' &&
+      /spread/.test(lay1.chip) && /switch to lattice/.test(lay1.aria) &&
+      lay1.nodes === leg0.nodes,
+    `${legs} click(s) from boot ${leg0.hook}: ${lay1.chip} · ${lay1.nodes} nodes, stored "${lay1.stored}"`)
   // The camera is half the feature. Titles paint at 11/globalScale — a constant
   // size on screen — so a fit that ZOOMS IN past 1:1 draws somas bigger than
   // their own names, which is the abstract-looking-as-a-diagram failure. The
@@ -807,11 +833,16 @@ async function main() {
     lay2.hook === 'spread' && /spread/.test(lay2.chip),
     `${lay2.chip} · hook "${lay2.hook}"`)
   await page.screenshot({ path: `${OUT}/12-titles-spread-reload.png` })
-  await page.locator('.layout').click()
-  await page.waitForTimeout(300)
-  const lay3 = await layout()
+  // Spread's next leg is the lattice (cluster → spread → lattice → cluster),
+  // so packing the corpus back into its clusters is TWO legs from here —
+  // walk both and judge the landing state.
+  let packBack = await layout()
+  for (let i = 0; i < 2; i++) {
+    packBack = await clickLeg()
+  }
+  const lay3 = packBack
   check('the chip packs the corpus back into its clusters',
-    lay3.hook === 'cluster' && lay3.stored === 'cluster' && /packed/.test(lay3.chip),
+    lay3.hook === 'cluster' && lay3.stored === 'cluster' && /clusters/.test(lay3.chip),
     `${lay3.chip} · stored "${lay3.stored}"`)
 
   await page.keyboard.press('g')

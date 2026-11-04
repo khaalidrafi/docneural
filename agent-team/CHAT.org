@@ -1703,3 +1703,28 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
      the site-artifact CI forge (emacs-nox) — dispatching on push, then
      grafting the artifact's dist and re-running make verify-built.
      RESULT: PARTIAL (fix landed; CI forge + probe + un-hold next).
+
+* :report: GATE GREEN — TOC tree live in the data, deploy unblocked
+:FROM: lead
+:TO: owner
+:KIND: report
+:WHEN: [2026-11-04 Wed 14:4x UTC]
+:END:
+  Segment 3 of the TOC rescue: proof, gate, unblock.
+
+  1. The CI forge (site-artifact run 41846247074, emacs-nox, HEAD
+     65d10a4) exported the FULL tracked corpus: org up 0->318 /
+     next 0->268, guix up 0->275 / next 0->241, emacs byte-identical
+     (751/646 — regression guard holds on the real export too). Links
+     30915->30313: the Previous/Up nav lines no longer pollute the
+     citation graph.
+  2. dist grafted from the artifact (2772 docs, 1347 ctx files,
+     graph.json.br 89 kB). make verify-built: ALL CHECKS PASSED —
+     zero FAIL, zero HOLD, first green since the 18-check shelf. The
+     new TOC check reads the Owner's complaint directly: 18 chapters
+     in book order (Introduction | Document Structure | Tables), one
+     Info root, no flat note, no alphabet.
+  3. DEPLOY UNBLOCKED: the canonical host is the dn-site worker
+     (docneural.khalidrafi.tech) — `make build` + `npx wrangler
+     deploy` runs on the Owner box; the artifact is on the run page if
+     the Owner prefers grafting. RESULT: DONE (TOC rescue complete).

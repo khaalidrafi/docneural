@@ -633,7 +633,18 @@ async function main() {
   // prove: keys that move you, copies that reach the clipboard, a resume line
   // that survives a reload. Each is driven like a user and asserted on the
   // browser's own state (scrollTop, clipboard, localStorage).
-  const readDoc = graphJson.nodes.find((x) => !x.stub && x.tags?.[0] === 'org') ??
+  // The reading-tools page must be a chapter the corpus actually WIRES: the
+  // hover-peek checks fire on a cross-reference, and on the full corpus the
+  // scan-first org node (A Beamer example) carries no wired prose link at
+  // all — the honest answer there is the no-wired-link branch, which fails
+  // the gate for a fact about the PAGE CHOICE, not the product (2026-11-04
+  // run). So read the best-connected non-index org chapter: outbound wires
+  // to hover, enough body to scroll, real headings to copy and mark.
+  const outDeg = new Map()
+  for (const l of graphJson.links) outDeg.set(l.source, (outDeg.get(l.source) ?? 0) + 1)
+  const readDoc = graphJson.nodes
+    .filter((x) => !x.stub && x.tags?.[0] === 'org' && !/index/i.test(x.id))
+    .sort((a, b) => (outDeg.get(b.id) ?? 0) - (outDeg.get(a.id) ?? 0))[0] ??
     graphJson.nodes.find((x) => !x.stub)
   await page.goto(`${BASE}?doc=${encodeURIComponent(readDoc.slug)}`, NAV)
   await page.waitForSelector('.reader .dn-org h2[id]', { timeout: 90000 })
@@ -643,6 +654,40 @@ async function main() {
   // invisible in code and obvious on screen — a wall of the same title.
   // Scoped to the afferent SECTION: `.rail li .link-btn` also matches the
   // table of contents above it, whose repeated headings are not wires at all.
+  //
+  // The page must BE a hub: on the full corpus the first org chapter's
+  // afferent section is two wires from two distinct sources — no multiplicity
+  // to group, and the check would fail on a fact about the data, not the
+  // product (2026-11-04 gate run). So pick the citation pair with the most
+  // repeats whose page stays small enough for the rail to show whole
+  // (≤ 8 distinct sources), and read THAT page: grouping is then provable
+  // exactly — one row per source, ×N on the repeated one, zero raw dupes.
+  const hubPair = (() => {
+    const pairs = new Map()
+    const srcs = new Map()
+    for (const l of graphJson.links) {
+      const k = `${l.source}\u0000${l.target}`
+      pairs.set(k, (pairs.get(k) ?? 0) + 1)
+    }
+    for (const l of graphJson.links) {
+      srcs.set(l.target, (srcs.get(l.target) ?? new Set()).add(l.source))
+    }
+    let best = null, bestN = 0
+    for (const [k, n] of pairs) {
+      const tgt = k.split('\u0000')[1]
+      const fan = srcs.get(tgt)?.size ?? 99
+      if (n > bestN && fan <= 8) { bestN = n; best = k }
+    }
+    if (!best) return null
+    const [src, tgt] = best.split('\u0000')
+    return { src, tgt, n: bestN, fan: srcs.get(tgt)?.size ?? 0 }
+  })()
+  const hubSlug = hubPair
+    ? graphJson.nodes.find((n) => n.id === hubPair.tgt)?.slug : null
+  if (corpusComplete && hubSlug) {
+    await page.goto(`${BASE}?doc=${encodeURIComponent(hubSlug)}`, NAV)
+    await page.waitForSelector('.reader .dn-org h2[id]', { timeout: 90000 })
+  }
   const rail = await page.evaluate(() => {
     const sec = [...document.querySelectorAll('.rail section')].find((s) =>
       /afferent/.test(s.querySelector('h3')?.textContent ?? ''))
@@ -658,13 +703,20 @@ async function main() {
   })
   if (corpusComplete) {
     check('the rail groups a hub into one counted row',
-      !!rail && rail.rows > 0 && rail.rows <= 8 && rail.dupes === 0 && rail.multi >= 1,
-      rail ? `${rail.rows} rows, ${rail.multi} counted, ${rail.dupes} duplicates · "${rail.head}"`
+      !!rail && !!hubPair && rail.rows === hubPair.fan && rail.dupes === 0 && rail.multi >= 1,
+      rail ? `${rail.rows} rows (fan ${hubPair?.fan ?? '?'}, ×${hubPair?.n ?? 0} hub), ${rail.multi} counted, ${rail.dupes} duplicates · "${rail.head}"`
            : 'no afferent section found in the rail')
   } else {
     hold('the rail groups a hub into one counted row', `corpus gate: ${corpusNote}`)
   }
   await page.screenshot({ path: `${OUT}/11-rail-grouped.png` })
+  // Back to the reading-tools page: every check below asserts against
+  // readDoc's own URL, clipboard and marks — the hub detour must not
+  // redefine what "where you are" means.
+  if (corpusComplete && hubSlug) {
+    await page.goto(`${BASE}?doc=${encodeURIComponent(readDoc.slug)}`, NAV)
+    await page.waitForSelector('.reader .dn-org h2[id]', { timeout: 90000 })
+  }
 
   // `/` is the ASSISTANT key since SPEC 4 made the ask panel first-class
   // (the keymap says so; the palette keeps ⌘K). Assert the ask dish opens —
@@ -980,6 +1032,48 @@ async function main() {
   const afterReload = await page.locator('.home .resume').count()
   check('resume survives a reload', afterReload === 1,
     await page.evaluate(() => localStorage.getItem('docneural:last-read') ?? 'unset'))
+
+  // ---------- the TOC is a chapter tree, not an alphabetical shelf ----------
+  // Owner 2026-11-04 14:04Z: "I can't still see TOC, and instead seeing
+  // stupid alphabetical doc chapters." The defect lived in the EXPORTER:
+  // Org and Guix shipped zero up/next (the nav parser's paragraph window
+  // closed on the pandoc conversion's broken headers), so manualToc's
+  // no-structure fallback rendered a flat list in corpus order — which for
+  // a globbed corpus is the alphabet. No gate check covered the TOC, which
+  // is how it shipped. Four facts prove the tree on the default manual
+  // (org): branch rows exist; the no-structure note is GONE; the top level
+  // holds chapters, not all 319 pages; and the chapter order is the book's
+  // — Introduction leads and the list is not alphabetically sorted.
+  const toc = await page.evaluate(() => {
+    const nav = document.querySelector('nav.toc')
+    if (!nav) return null
+    const branches = [...nav.querySelectorAll('.toc-branch')]
+    const at = (d) => branches.filter((b) => b.dataset.depth === String(d))
+    const titles = (rows) => rows.map((b) =>
+      b.querySelector('.toc-link')?.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+    // The Info shape: ONE depth-0 root row (the manual's Top), the manual's
+    // chapters at depth 1 in BOOK order beneath it. The chapters are what
+    // the Owner reads — assert on them, not on the root.
+    const chapters = titles(at(1))
+    const maxKids = at(1).length
+      ? Math.max(...at(1).map((b) => Number(b.querySelector('.toc-count')?.textContent ?? 0)))
+      : 0
+    return {
+      rows: nav.querySelectorAll('.toc-row').length,
+      branches: branches.length,
+      roots: at(0).length,
+      chapters,
+      maxKids,
+      flatNote: !!document.querySelector('.toc-flat'),
+    }
+  })
+  check('the TOC is a chapter tree (Owner 14:04Z: no more alphabetical chapters)',
+    !!toc && toc.branches >= 5 && !toc.flatNote && toc.roots === 1 &&
+      toc.rows >= 200 && toc.maxKids >= 5 && toc.chapters.length >= 10 &&
+      JSON.stringify(toc.chapters) !== JSON.stringify([...toc.chapters].sort()) &&
+      /introduction/i.test(toc.chapters[0] ?? ''),
+    toc ? `${toc.rows} rows · ${toc.branches} branches · roots ${toc.roots} · chapters ${toc.chapters.length} · maxKids ${toc.maxKids} · flatNote ${toc.flatNote} · first chapters: "${toc.chapters.slice(0, 3).join(' | ')}"`
+        : 'no nav.toc on home')
 
   await ctx.close()
 

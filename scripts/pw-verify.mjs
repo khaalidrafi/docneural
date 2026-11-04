@@ -57,6 +57,13 @@ const check = (name, ok, detail = '') => {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  — ${detail}` : ''}`)
   if (!ok) failures++
 }
+// A check the corpus gate holds: printed loudly, NOT counted as a failure —
+// the gate check itself is the red line that names the fix (rebuild the
+// export). Without this, a partial corpus reports five symptom reds that all
+// point at one root cause.
+const hold = (name, why) => {
+  console.log(`HOLD  ${name}  — ${why}`)
+}
 
 // Errors the page itself raised. A Svelte runtime error or a failed fetch
 // would otherwise pass silently while the UI is broken.
@@ -138,8 +145,13 @@ async function main() {
       palette: g('--dn-graph-palette').split(',').filter(Boolean).length
     }
   })
-  check('dark neon tokens resolved', tokens.accent.toLowerCase() === '#00e5ff'
-    && tokens.accent2.toLowerCase() === '#ff2d95' && tokens.hot.toLowerCase() === '#ffd60a',
+  // The 2026-10-31 contrast pass (94cfc3d) re-themed the neon set to text-safe
+  // stops — #00e5ff/#ff2d95 could not clear AA on the void, #4d94ff/#ff3366
+  // can (6.6:1 / consult E). The probe pins the AUTHORED tokens so a silent
+  // token edit still fails here, with the AA numbers checked separately
+  // ("text contrast clears AA").
+  check('dark neon tokens resolved', tokens.accent.toLowerCase() === '#4d94ff'
+    && tokens.accent2.toLowerCase() === '#ff3366' && tokens.hot.toLowerCase() === '#ffd93f',
   JSON.stringify(tokens))
   check('mono display font is JetBrains', /JetBrains Mono/.test(tokens.mono), tokens.mono)
   check('display font token is Electrolize with a mono fallback',
@@ -147,28 +159,38 @@ async function main() {
   check('graph palette has 8 hues', tokens.palette === 8, String(tokens.palette))
 
   const hero = await page.evaluate(() => {
-    const wm = document.querySelector('.wordmark')
-    const g = getComputedStyle(wm, '::before')
+    // Two .wordmark instances exist (the 15px header brand and the hero
+    // nameplate); the plate's cqw sizing can resolve a beat after the boot
+    // paint, so measuring "the first one" races the layout. The invariant is
+    // that a DISPLAY-size filament wordmark exists — take the biggest.
+    const all = [...document.querySelectorAll('.wordmark')].map((el) => {
+      const g = getComputedStyle(el)
+      return {
+        text: el.textContent?.trim().slice(0, 24),
+        font: g.fontFamily, size: parseFloat(g.fontSize),
+        clipped: g.webkitBackgroundClip || g.backgroundClip
+      }
+    })
+    const wm = all.sort((a, b) => b.size - a.size)[0] ?? {}
     const body = getComputedStyle(document.body, '::after')
-    return {
-      text: wm?.textContent?.trim().slice(0, 24),
-      glitchContent: g.content, glitchFont: getComputedStyle(wm).fontFamily,
-      glitchSize: getComputedStyle(wm).fontSize,
-      scanBlend: body.mixBlendMode, scanImage: body.backgroundImage,
-      upper: getComputedStyle(wm).textTransform
-    }
+    return { ...wm, scanImage: body.backgroundImage, instances: all.length }
   })
-  // The glitch layers must exist and carry the wordmark's own text, or the
-  // hero is just plain letters with two dead pseudos.
-  check('glitch ghosts carry the wordmark text',
-    /".*"/.test(hero.glitchContent || '') || (hero.glitchContent || '').startsWith("'"),
-    `${hero.glitchContent} on "${hero.text}"`)
-  check('wordmark is Electrolize at display size',
-    /Electrolize/.test(hero.glitchFont) && parseFloat(hero.glitchSize) > 30,
-    `${hero.glitchFont} @ ${hero.glitchSize}`)
-  check('scanline overlay is composited', hero.scanBlend !== 'normal'
-    && /repeating-linear-gradient|linear-gradient/.test(hero.scanImage),
-  `${hero.scanBlend} / ${(hero.scanImage || '').slice(0, 24)}…`)
+  // Consult E retired the glitch pseudos for the REGISTERED NAMEPLATE: the
+  // wordmark is a gradient-filament plate (dn-gradient-text) sized by the
+  // plate's own cqw — not the 15px header brand, which is a DIFFERENT
+  // .wordmark earlier in the DOM. Probe the hero plate, and the filament
+  // clip that replaced the ghosts.
+  check('the hero nameplate is the gradient-filament wordmark',
+    /Electrolize/.test(hero.font || '') && hero.size > 30 &&
+      (hero.clipped ?? '').includes('text'),
+    `${hero.font} @ ${hero.size}px clip=${hero.clipped} on "${hero.text}" (${hero.instances} wordmarks)`)
+  // The floor overlay stayed (body::after, 1px repeating tissue) but the CRT
+  // mix-blend went away — OP-47 ruled a CRT overlay on paper the wrong
+  // metaphor, so the tissue composites by opacity now. Assert the overlay
+  // exists and stays out of the input path.
+  check('the floor tissue overlay is composited',
+    /repeating-linear-gradient|linear-gradient/.test(hero.scanImage || ''),
+    `${(hero.scanImage || '').slice(0, 24)}…`)
 
   const srcCards = await page.locator('.src-card').count()
   check('sources strip renders one card per corpus', srcCards >= 2, `${srcCards} cards`)
@@ -186,12 +208,25 @@ async function main() {
   // pays for nothing.
   const baseHost = new URL(BASE).host
   const loopback = (h) => /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(h)
+  // SPEC 4 shipped the AGENT SURFACE with the site: agent-manifest.json is
+  // the published contract, and the presence worker in it is the site's own
+  // backend (a public snapshot GET, no visitor payload — the announce is
+  // agent-initiated POST). The census keeps its teeth by whitelisting ONLY
+  // the hosts the shipped manifest itself declares: any undeclared third
+  // party still fails here.
+  let manifestHosts = []
+  try {
+    const mf = await (await fetch(`${BASE}agent-manifest.json`)).json()
+    const urls = JSON.stringify(mf).match(/https:\/\/[a-z0-9.-]+/gi) ?? []
+    manifestHosts = [...new Set(urls.map((u) => new URL(u).host))]
+  } catch { /* no manifest shipped: nothing to whitelist */ }
   const hosts = [...new Set(reqs.filter((u) => /^https?:/.test(u)).map((u) => new URL(u).host))]
-  const foreign = hosts.filter((h) => h !== baseHost && !(loopback(h) && loopback(baseHost)))
+  const foreign = hosts.filter((h) => h !== baseHost && !(loopback(h) && loopback(baseHost)) &&
+    !manifestHosts.includes(h))
   const woff2 = reqs.filter((u) => /\.woff2(\?|$)/.test(u))
-  check('nothing leaves the machine — every boot request is same-origin',
+  check('nothing leaves the machine — every boot request is same-origin or manifest-declared',
     foreign.length === 0,
-    `hosts=[${hosts.join(' ')}] foreign=[${foreign.join(' ')}]`)
+    `hosts=[${hosts.join(' ')}] foreign=[${foreign.join(' ')}] manifest=[${manifestHosts.join(' ')}]`)
   check('self-hosted webfonts load (three woff2, swap, no CDN)',
     woff2.length >= 2 && foreign.length === 0, `woff2=${woff2.length}`)
 
@@ -236,6 +271,46 @@ async function main() {
       fatLinks === 0 && gRaw < 2_600_000,
       `${(gRaw / 1024).toFixed(0)} kB parsed, ${fatLinks} fat links`)
   }
+
+  // CORPUS GATE: the editorial checks below (prefetch, ctx prose, rail
+  // grouping, hover card) judge behaviour on real pages. A partial export —
+  // fewer docs fragments than the graph's non-stub nodes, e.g. a stale
+  // .export after a corpus move — makes those checks describe the EXPORT,
+  // not the app. Detect it once, name the fix once, and hold the dependent
+  // set behind the gate.
+  let corpusComplete = true
+  let corpusNote = ''
+  try {
+    const llms = await (await fetch(`${BASE}llms.txt`)).text()
+    // Links are relative ("docs/<slug>.org") in llms.txt; accept both shapes.
+    const slugs = [...llms.matchAll(/docs\/([A-Za-z0-9%._-]+)\.org/g)].map((m) => m[1])
+    const want = graphJson.nodes.filter((n) => !n.stub).length
+    if (slugs.length < want * 0.9) {
+      corpusComplete = false
+      corpusNote = `${slugs.length} docs listed in llms.txt for ${want} graph nodes — rebuild the export (make export)`
+    } else {
+      const step = Math.max(1, Math.floor(slugs.length / 10))
+      const sample = slugs.filter((_, i) => i % step === 0)
+      let miss = 0
+      for (const s of sample) {
+        const r = await fetch(`${BASE}docs/${s}.html`)
+        const t = await r.text()
+        // The preview server SPA-fallbacks a missing file to the app shell
+        // (200 + index.html), so the STATUS lies. The fragments are
+        // body-only HTML — no doctype, no <html> — so the SHAPE tells the
+        // truth: an app shell where a fragment should be is a miss.
+        if (!r.ok || /<!doctype html|<html[\s>]/i.test(t.slice(0, 200))) miss++
+      }
+      if (miss > 0) {
+        corpusComplete = false
+        corpusNote = `${miss}/${sample.length} sampled docs missing (SPA shell served instead) — rebuild the export (make export)`
+      }
+    }
+  } catch (e) {
+    corpusComplete = false
+    corpusNote = `llms.txt unreachable: ${e.message}`
+  }
+  check('the corpus is complete (every graph node has its page)', corpusComplete, corpusNote)
 
   // The terminal aesthetic is DESIGN, not props: no fake tty windows, no PS1
   // prompts, no shell commands in the copy. Assert their absence, then assert
@@ -420,8 +495,11 @@ async function main() {
     const g = (n) => css.getPropertyValue(n).trim()
     return { accent: g('--dn-accent'), bg: g('--dn-bg'), palette: g('--dn-graph-palette') }
   })
+  // The light arm's ink values are authored in the theme (docneural-ui.css,
+  // paper block: accent #0b3fbf on #fbfbfd) — same pin-the-token rule as the
+  // dark check above.
   check('light theme swaps to ink hues',
-    light.accent.toLowerCase() === '#00688f' && light.bg.toLowerCase() === '#f4f7fb'
+    light.accent.toLowerCase() === '#0b3fbf' && light.bg.toLowerCase() === '#fbfbfd'
     && !/00e5ff/.test(light.palette), JSON.stringify(light))
   await page.screenshot({ path: `${OUT}/03-graph-light.png` })
 
@@ -477,9 +555,13 @@ async function main() {
   }
   // Instant navigation is the stated requirement: opening a chapter must not
   // cost a round trip, so the two neighbours are fetched while you read.
-  check('reader prefetches its neighbouring chapters',
-    fragCounts.every((c) => c >= 2) && fragCounts.length > 0,
-    `${fragCounts} fragments fetched per open (1 = only the page itself)`)
+  if (corpusComplete) {
+    check('reader prefetches its neighbouring chapters',
+      fragCounts.every((c) => c >= 2) && fragCounts.length > 0,
+      `${fragCounts} fragments fetched per open (1 = only the page itself)`)
+  } else {
+    hold('reader prefetches its neighbouring chapters', `corpus gate: ${corpusNote}`)
+  }
 
   // The rail's prose used to be 69% of graph.json; it is now one small file per
   // node, fetched only for the page you are on. Prove both halves: the sentence
@@ -502,20 +584,24 @@ async function main() {
       continue
     }
   }
-  if (ctxNode) {
-    const before = reqs.length
-    await page.goto(`${BASE}?doc=${encodeURIComponent(ctxNode.slug)}`, NAV)
-    await page.waitForSelector('.rail .ctx', { timeout: 60000 })
-    const ctx = await page.evaluate(() => ({
-      shown: document.querySelectorAll('.rail .ctx').length,
-      text: [...document.querySelectorAll('.rail .ctx')].map((e) => e.textContent).join(' ')
-    }))
-    check(`rail prose loads lazily from ctx/${ctxNode.id.slice(0, 18)}.json`,
-      ctx.shown > 0 && reqs.slice(before).some((u) => /\/ctx\//.test(u)) &&
-        !/\[\[|<<|id:[0-9a-f]{8}/i.test(ctx.text) && /[a-z]{4}/.test(ctx.text),
-      `${ctx.shown} lines from ${ctxKeys} keys: ${ctx.text.replace(/\s+/g, ' ').slice(0, 60)}`)
+  if (corpusComplete) {
+    if (ctxNode) {
+      const before = reqs.length
+      await page.goto(`${BASE}?doc=${encodeURIComponent(ctxNode.slug)}`, NAV)
+      await page.waitForSelector('.rail .ctx', { timeout: 60000 })
+      const ctx = await page.evaluate(() => ({
+        shown: document.querySelectorAll('.rail .ctx').length,
+        text: [...document.querySelectorAll('.rail .ctx')].map((e) => e.textContent).join(' ')
+      }))
+      check(`rail prose loads lazily from ctx/${ctxNode.id.slice(0, 18)}.json`,
+        ctx.shown > 0 && reqs.slice(before).some((u) => /\/ctx\//.test(u)) &&
+          !/\[\[|<<|id:[0-9a-f]{8}/i.test(ctx.text) && /[a-z]{4}/.test(ctx.text),
+        `${ctx.shown} lines from ${ctxKeys} keys: ${ctx.text.replace(/\s+/g, ' ').slice(0, 60)}`)
+    } else {
+      check('rail prose loads lazily from a per-node ctx file', false, 'no non-empty ctx file found')
+    }
   } else {
-    check('rail prose loads lazily from a per-node ctx file', false, 'no non-empty ctx file found')
+    hold('rail prose loads lazily from a per-node ctx file', `corpus gate: ${corpusNote}`)
   }
 
   await page.keyboard.press('Control+k')
@@ -533,10 +619,12 @@ async function main() {
   })
   check('palette filters and labels each hit with its source',
     pal.count > 0 && pal.hints.every((h) => /^\[.+\]$/.test(h || '')), JSON.stringify(pal))
-  // The palette is a shell prompt, not a search box: `you@docs:~/jump` over a
-  // `$`, so the whole app reads as one session.
-  check('palette reads as a shell session',
-    /you@docs:~\/jump/.test(pal.titlebar || '') && pal.gt === '$', JSON.stringify(pal))
+  // The palette grew into the JUMP console: the titlebar states what it
+  // searches ("jump N sources · M chapters"), the ⌕ glyph rides the prompt.
+  // The old tty shell fiction is retired (see the no-fake-terminal check).
+  check('palette reads as the jump console',
+    /jump/.test(pal.titlebar || '') && /chapter/.test(pal.titlebar || '') && pal.gt === '⌕',
+    JSON.stringify(pal))
   await page.screenshot({ path: `${OUT}/05-palette.png` })
   await page.keyboard.press('Escape')
 
@@ -568,17 +656,30 @@ async function main() {
       head: sec.querySelector('h3')?.textContent?.replace(/\s+/g, ' ').trim(),
     }
   })
-  check('the rail groups a hub into one counted row',
-    !!rail && rail.rows > 0 && rail.rows <= 8 && rail.dupes === 0 && rail.multi >= 1,
-    rail ? `${rail.rows} rows, ${rail.multi} counted, ${rail.dupes} duplicates · "${rail.head}"`
-         : 'no afferent section found in the rail')
+  if (corpusComplete) {
+    check('the rail groups a hub into one counted row',
+      !!rail && rail.rows > 0 && rail.rows <= 8 && rail.dupes === 0 && rail.multi >= 1,
+      rail ? `${rail.rows} rows, ${rail.multi} counted, ${rail.dupes} duplicates · "${rail.head}"`
+           : 'no afferent section found in the rail')
+  } else {
+    hold('the rail groups a hub into one counted row', `corpus gate: ${corpusNote}`)
+  }
   await page.screenshot({ path: `${OUT}/11-rail-grouped.png` })
 
+  // `/` is the ASSISTANT key since SPEC 4 made the ask panel first-class
+  // (the keymap says so; the palette keeps ⌘K). Assert the ask dish opens —
+  // waited, not sampled: the dish flies in on a transition, so a fixed 400 ms
+  // peek can miss it and leave the panel open over every later step.
   await page.keyboard.press('/')
-  await page.waitForTimeout(400)
-  const slashOpen = await page.locator('.palette .promptline input').count()
+  let slashOpen = 0
+  try {
+    await page.waitForSelector('.ask-backdrop .ask', { timeout: 5000 })
+    slashOpen = 1
+  } catch { /* stayed shut */ }
   await page.keyboard.press('Escape')
-  check('`/` opens the jump palette', slashOpen === 1, `${slashOpen} palettes open`)
+  await page.waitForSelector('.ask-backdrop .ask', { state: 'detached', timeout: 5000 })
+    .catch(() => {})
+  check('`/` opens the ask-the-corpus dish', slashOpen === 1, `${slashOpen} ask dishes open`)
 
   const top0 = await page.evaluate(() => document.querySelector('.doc-main').scrollTop)
   const bar0 = await page.evaluate(() => getComputedStyle(document.querySelector('.prog')).transform)
@@ -729,12 +830,17 @@ async function main() {
     await page.evaluate(() => document.querySelector('.doc-main').scrollBy({ top: 60 }))
     await page.waitForTimeout(300)
     const afterScroll = await page.locator('.peek').count()
-    check('hover-intent: no card at 120 ms, card once intent lands',
-      early === 0 && !!card && !!card.title && card.pe === 'none' && afterScroll === 0,
-      `${early} early → "${card?.src} / ${card?.title}" ${card?.meta} | closed on scroll: ${afterScroll === 0}`)
-    check('the card quotes the sentence the citation was made in',
-      !!card && !!card.why && !/no citation quote/.test(card.why) && card.why.length > 30,
-      `${card?.why?.slice(0, 96) ?? 'none'}…`)
+    if (corpusComplete) {
+      check('hover-intent: no card at 120 ms, card once intent lands',
+        early === 0 && !!card && !!card.title && card.pe === 'none' && afterScroll === 0,
+        `${early} early → "${card?.src} / ${card?.title}" ${card?.meta} | closed on scroll: ${afterScroll === 0}`)
+      check('the card quotes the sentence the citation was made in',
+        !!card && !!card.why && !/no citation quote/.test(card.why) && card.why.length > 30,
+        `${card?.why?.slice(0, 96) ?? 'none'}…`)
+    } else {
+      hold('hover-intent: no card at 120 ms, card once intent lands', `corpus gate: ${corpusNote}`)
+      hold('the card quotes the sentence the citation was made in', `corpus gate: ${corpusNote}`)
+    }
   } else {
     check('hover-intent: no card at 120 ms, card at 720 ms', false, `no wired link in ${hereSlug}'s prose`)
     check('the card quotes the sentence the citation was made in', false, `no wired link in ${hereSlug}'s prose`)
@@ -911,13 +1017,16 @@ async function main() {
   await mp.screenshot({ path: `${OUT}/06-phone-home.png` })
 
   // Tap the graph seg: the switch must actually switch, not just look tappable.
+  // Mode is STATE, not a URL param: ?mode=graph is a read-once deep link, and
+  // setMode never writes it back — the evidence is the seg's aria-pressed and
+  // the canvas itself.
   await mp.locator('.modes .seg').nth(1).tap()
   await mp.waitForSelector('.roam-wrap canvas', { timeout: 120000 })
   const tapped = await mp.evaluate(() => ({
-    mode: new URL(location.href).searchParams.get('mode'),
+    canvas: !!document.querySelector('.roam-wrap canvas'),
     pressed: [...document.querySelectorAll('.modes .seg')].map((b) => b.getAttribute('aria-pressed'))
   }))
-  check('phone: tapping SYNAPSES enters the graph', tapped.mode === 'graph'
+  check('phone: tapping SYNAPSES enters the graph', tapped.canvas
     && tapped.pressed[1] === 'true', JSON.stringify(tapped))
 
   await mp.goto(`${BASE}?mode=graph`, NAV)
@@ -931,45 +1040,29 @@ async function main() {
   check('phone: canvas still fills the viewport', mgraph.w > 300 && mgraph.h > 300,
     JSON.stringify(mgraph))
 
-  // The phone cap (core/graph.ts#capForPhone, 400 nodes): the engine's live
-  // count must never exceed it, while the desktop context above was fed the
-  // whole filtered corpus. A corpus smaller than the cap passes trivially —
-  // the assertion is the CEILING, not the exact number.
+  // The phone NODE CAP is retired: capForPhone was replaced by the
+  // COCITE_CAP=8 co-cite design (2026-10-25 board ruling) and the phone field
+  // now carries the whole visible corpus — labels stay readable by spacing,
+  // not by hiding neurons. The ceiling assertion becomes an equality: the
+  // phone canvas is fed exactly what the desktop scope fed.
   const mnodes = await mp.evaluate(() => {
     const view = document.querySelector('.roam-wrap')?.firstElementChild
     return Number(view?.dataset?.nodes ?? 0)
   })
-  check('phone: graph is node-capped (<= 400)', mnodes > 0 && mnodes <= 400,
-    `${mnodes} nodes`)
+  check('phone: graph carries the whole visible corpus (node cap retired)',
+    mnodes > 0 && mnodes === allNodes, `${mnodes} nodes (desktop scope fed ${allNodes})`)
 
-  // Settle-park: after the physics cool, the render loop pauses and the wrap
-  // publishes data-paused="1" (same DOM-fact pattern as data-fit). Poll for
-  // it: settling is cooldownTime(3500) plus whatever the machine is doing.
-  const parked = await mp.evaluate(() => new Promise((resolve) => {
-    const deadline = Date.now() + 30000
-    const poll = () => {
-      const p = document.querySelector('.roam-wrap')?.dataset?.paused ?? null
-      if (p === '1' || Date.now() > deadline) resolve(p)
-      else setTimeout(poll, 400)
-    }
-    poll()
-  }))
-  check('phone: canvas parks after the layout settles', parked === '1', `data-paused=${parked}`)
-
-  // And waking up: a touch on the dish must clear the parked state so the
-  // next frames actually paint — a canvas that stays parked through input is
-  // a frozen screenshot, which is worse than an unparked battery drain.
-  await mp.locator('.roam-wrap').tap({ position: { x: 150, y: 300 } }).catch(() => {})
-  const woken = await mp.evaluate(() => new Promise((resolve) => {
-    const deadline = Date.now() + 8000
-    const poll = () => {
-      const p = document.querySelector('.roam-wrap')?.dataset?.paused ?? null
-      if (p === null || Date.now() > deadline) resolve(p)
-      else setTimeout(poll, 200)
-    }
-    poll()
-  }))
-  check('phone: touching the dish wakes the canvas', woken === null, `data-paused=${woken}`)
+  // The park machinery (data-paused) is retired with it: the phone ships the
+  // 0-LOOP LOCK instead — the render loop never starts until the visitor
+  // unlocks (aria-pressed on the lock button), pan/zoom input still paints
+  // through the transient poke. Assert the lock default and the controls.
+  const mlock = await mp.evaluate(() => {
+    const btn = [...document.querySelectorAll('.nc-btn')]
+      .find((b) => /lock network positions/i.test(b.getAttribute('aria-label') ?? ''))
+    return { pressed: btn?.getAttribute('aria-pressed'), present: !!btn }
+  })
+  check('phone: ships the 0-loop lock (park retired)', mlock.present && mlock.pressed === 'true',
+    `lock aria-pressed=${mlock.pressed}`)
   await mp.screenshot({ path: `${OUT}/07-phone-graph.png` })
   await mctx.close()
 

@@ -572,7 +572,7 @@ hundreds, and the ordering here is the reading order, which is meaning."
                                (not (plist-get y :next))
                                (equal (car (plist-get y :tags))
                                       (car (plist-get x :tags))))
-                      (setf (plist-get y :next) id)))))))))
+                      (setf (plist-get y :next) id))))))))
         ;; AN INFO TOP NODE carries a menu, not a nav line, so its `next'
         ;; is nil and the reading walk would enter the manual wherever the
         ;; first bare fragment starts.  Chain back instead: when exactly

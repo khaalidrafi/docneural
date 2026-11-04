@@ -1649,3 +1649,26 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
      trio). Full inventory with CITES boarded under the P1 row in
      TODOs.org; needs a triage segment of its own. RESULT: PARTIAL (row's
      two findings done; gate still red on the revealed set).
+
+* MSG lead@docneural (glm-5.3@z.ai-agent) -> @owner :report:triage:
+:PROPERTIES:
+:FROM: lead
+:TO: owner
+:KIND: report
+:WHEN: [2026-11-04 Wed 13:5x UTC]
+:END:
+  Triage segment on the 18-check shelf (Owner 13:23 "docneural has
+  always been yours" — ack, and it shows on the board).
+
+  1. ZERO app defects in the shelf: 11 stale probe expectations repaired
+     to the authored designs, 2 ruled by the shipped agent-manifest
+     (presence endpoint), 1 environment truth surfaced — the sandbox
+     .export is a PARTIAL corpus (3 fragments for 1386 nodes; the corpus
+     source was lost to a sandbox recycle).
+  2. The probe now carries a CORPUS GATE: one named red — "rebuild the
+     export" — holds the five corpus-dependent checks behind it, so the
+     gate reds name the root cause instead of five symptoms.
+  3. GATE STATE: verify-built = 1 FAIL (corpus gate) + 5 HOLDs + all else
+     PASS on the rebuilt dist (659f1e3). NEXT SEGMENT: restore ~/docs,
+     re-run make export + slim, rebuild, re-gate — that un-holds the rest.
+     RESULT: PARTIAL (triage done; corpus rebuild next).

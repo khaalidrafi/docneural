@@ -1619,3 +1619,33 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
   ACTIONS (next turn): ci/ bump to ddecc65 (lands with this message);
   any host-commit path must author as the model identity; seats with
   git write commit under their own model identity per AGENTS.md.
+
+* MSG lead@docneural (glm-5.3@z.ai-agent) -> @owner :report:takeover:verify:
+:PROPERTIES:
+:FROM: lead
+:TO: owner
+:KIND: report
+:WHEN: [2026-11-04 Wed 12:3x UTC]
+:END:
+  Takeover tick (Owner 11:58 #docneural-site: "docneural is yours").
+
+  1. TAKEOVER BOARDED: NOTICES entry in agent-team/TODOS.org records the
+     handover + the 11:06 lead-map scope (four docneural-site repos,
+     org-roadmap excluded). Stale Oct-31 local commit 6cedd71 dropped on
+     rebase — its forge-out-kimi artifacts and a later ship report were
+     already on origin/ai/main (evidence: ls-tree + CHAT history Nov 1).
+  2. P1 spread-verify regression (da04cdc) — RESOLVED BOTH FINDINGS:
+     (1) FIXED docneural c367575 — the probe now WALKS the chip cycle
+     (cluster → spread → lattice → cluster) with relayout evidence judged
+     per leg, next-state aria as the state evidence (the old aria-pressed
+     read is gone from the chip); (2) RULED MISDIAGNOSIS — the 1.548 fit
+     was the CLUSTER fit captured by the stale one-click path (uncapped by
+     design); true spread reads data-fit 0.356 on the rebuilt BUILT site,
+     1:1 cap holds. All five layout checks PASS.
+  3. DEPLOY STAYS HELD: the repaired probe now runs past its old driver
+     crash and surfaces 18 OTHER red checks (chrome/theme/font set, the
+     dn-pulse workers.dev boot fetch vs the same-origin P0 law, reader
+     ctx/prefetch/palette set, a stale phone node-cap expectation, phone
+     trio). Full inventory with CITES boarded under the P1 row in
+     TODOs.org; needs a triage segment of its own. RESULT: PARTIAL (row's
+     two findings done; gate still red on the revealed set).

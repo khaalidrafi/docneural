@@ -1672,3 +1672,34 @@ Owner GO “ds v4.1 flash is ALSO in opencode, qoder and codebuddy. Let's go!”
      PASS on the rebuilt dist (659f1e3). NEXT SEGMENT: restore ~/docs,
      re-run make export + slim, rebuild, re-gate — that un-holds the rest.
      RESULT: PARTIAL (triage done; corpus rebuild next).
+
+* :report: TOC defect found + fixed — the Owner's alphabetical-chapters complaint
+:FROM: lead
+:TO: owner
+:KIND: report
+:WHEN: [2026-11-04 Wed 14:2x UTC]
+:END:
+  Owner 14:04Z: "I can't still see TOC, and instead seeing stupid
+  alphabetical doc chapters." Diagnosed to the byte, fixed in the
+  exporter, no UI change needed.
+
+  1. ROOT CAUSE: the exporter's nav parser read only the FIRST
+     keyword-opening paragraph of each fragment; the 2026-10-26 pandoc
+     conversion left many Org/Guix fragments with a bare `Next:' (its
+     link dropped) and the surviving `Previous/Up' line 1-2 paragraphs
+     down. The window closed on the blank line -> Org+Guix exported
+     with ZERO up/next -> manualToc's no-structure fallback = flat list
+     in alphabetical corpus order. Emacs rode makeinfo's intact nav
+     line, which is why only two manuals looked broken.
+  2. FIX (scripts/docneural-export.el): per-keyword whole-file nav
+     search + NEXT-FROM-PREV derivation — texinfo's Previous is the
+     exact inverse of Next (measured: 646/646 explicit emacs pairs
+     agree, zero counterexamples). Also stopped Previous/Up-led nav
+     lines from counting as citation edges. Emacs fields verified
+     byte-equivalent pre/post (regression guard); guix up 0->275 /
+     next 0->241, org up 0->318 / next 0->268, zero cycles — simulated
+     over the whole tracked corpus (scripts/export-sim-diff.py).
+  3. PROOF PATH: no emacs in this sandbox, so the real export runs in
+     the site-artifact CI forge (emacs-nox) — dispatching on push, then
+     grafting the artifact's dist and re-running make verify-built.
+     RESULT: PARTIAL (fix landed; CI forge + probe + un-hold next).

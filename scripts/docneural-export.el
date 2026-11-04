@@ -137,12 +137,26 @@ reader follows REDIRECT to the canonical chapter instead of showing a
 stub page.  The 20 real chapter files of the Org manual carry the nav
 line; the other 391 carry a redirect.
 
-Each keyword is matched INDEPENDENTLY inside the nav line, because
-texinfo drops a relation when it is inferable: the Emacs and Guix
-corpora carry `Next:' + `Up:' on most nodes and a bare `Previous:' line
-on a few, so the old single `Next...Previous...Up' pattern matched only
-94 of 876 nodes and fragmented both manuals into a hundred chain heads.
-The Org manual always carried all three, which is why it looked fine."
+Each keyword is matched INDEPENDENTLY, because texinfo drops a relation
+when it is inferable: the Emacs and Guix corpora carry `Next:' + `Up:'
+on most nodes and a bare `Previous:' line on a few, so the old single
+`Next...Previous...Up' pattern matched only 94 of 876 nodes and
+fragmented both manuals into a hundred chain heads.
+
+Since 2026-11-04 each keyword is also searched over the WHOLE FILE
+(first `kw: [[id:' occurrence wins), not inside one keyword-opening
+paragraph.  The paragraph window was the third nav shape's killer: the
+2026-10-26 pandoc conversion (scripts/manuals-corpus.py, the Org and
+Guix sources) left some fragments with a bare `Next:' -- its link
+dropped outright -- while the surviving `Previous: ... Up: ...' line
+sits one or two paragraphs down, past a blank line and a `<<anchor>>'.
+The window closed on that blank line, the relations behind it were
+never read, and the 2026-11-04 export shipped Org and Guix with ZERO
+up/next -- which the reader rendered as a flat, alphabetical chapter
+list where the Owner's TOC should be.  The keywords are
+machine-written and link-adjacent, so a whole-buffer first match is
+the nav line wherever it sits (the header copy precedes the footer
+copy when the conversion kept both)."
   (with-temp-buffer
     (insert-file-contents file)
     (goto-char (point-min))
@@ -154,38 +168,24 @@ The Org manual always carried all three, which is why it looked fine."
     ;; save-excursion (which would restore match data we don't need here).
     (let* ((head (re-search-forward "^\\*+ " nil t))
            (next nil) (prev nil) (up nil) (redirect nil))
-      ;; The nav HEADER is the paragraph (up to the next blank line) opening
-      ;; with a keyword.  Paragraph, not line: the Guix Cookbook wraps one
-      ;; long node's nav line across several lines ("Next:" alone on its
-      ;; line, the link on the next), and matching a single line would drop
-      ;; that node's whole chain.  Nor does position matter: three corpus
-      ;; Top files (Guix, Guix Cookbook, Guile) place the nav line AFTER
-      ;; the settitle heading, and an earlier "must precede the first
-      ;; heading" guard discarded all three -- costing Guix its
-      ;; Top->Introduction entry edge and leaving the chainback below
-      ;; unable to fire.  So take the first keyword-opening paragraph,
-      ;; wherever it sits: a real page names its neighbours once.
-      (goto-char (point-min))
-      (when (re-search-forward "^\\(Next\\|Previous\\|Up\\):" nil t)
-        (let ((beg (line-beginning-position))
-              (end (save-excursion
-                     (forward-paragraph 1)
-                     (point))))
-          ;; Each target is a `[[id:PATH][desc]]' link: capture up to the
-          ;; first `]' of the id and let --nav-id resolve the base (it
-          ;; strips a `::anchor' suffix).  --nav-id calls `string-match'
-          ;; internally, which clobbers the global match data, so the
-          ;; capture is bound before the call.
-          (cl-flet ((nav (kw)
-                      (save-excursion
-                        (goto-char beg)
-                        (when (re-search-forward
-                               (concat kw ": \\[\\[id:\\([^]]+\\)") end t)
-                          (let ((path (match-string-no-properties 1)))
-                            (docneural--nav-id path id->file))))))
-            (setq next (nav "Next")
-                  prev (nav "Previous")
-                  up   (nav "Up")))))
+      ;; NAV RELATIONS, per keyword over the whole file (see the
+      ;; docstring for why a paragraph window cannot survive this
+      ;; corpus).  Each target is a `[[id:PATH][desc]]' link: capture up
+      ;; to the first `]' of the id and let --nav-id resolve the base
+      ;; (it strips a `::anchor' suffix).  --nav-id calls `string-match'
+      ;; internally, which clobbers the global match data, so the
+      ;; capture is bound before the call; each search re-goto-chars so
+      ;; the three keywords cannot interfere with each other's point.
+      (cl-flet ((nav (kw)
+                  (save-excursion
+                    (goto-char (point-min))
+                    (when (re-search-forward
+                           (concat kw ": \\[\\[id:\\([^]]+\\)") nil t)
+                      (let ((path (match-string-no-properties 1)))
+                        (docneural--nav-id path id->file))))))
+        (setq next (nav "Next")
+              prev (nav "Previous")
+              up   (nav "Up")))
       ;; Stub pointer line: read the capture before --resolve clobbers
       ;; match data, and follow it only when it resolves.
       (when (and (not head)
@@ -229,8 +229,15 @@ edges (and 391 stub singletons with degree zero)."
                                (string-trim
                                 (buffer-substring-no-properties
                                  (line-beginning-position) (line-end-position)))))))
-                  ;; Drop the two structural line shapes (see docstring).
-                  (unless (or (string-match-p "^Next: \\[\\[" ctx)
+                  ;; Drop the structural line shapes (see docstring): the
+                  ;; three nav lines -- whichever keyword the conversion
+                  ;; left opening the line; since 2026-11-04 the Org and
+                  ;; Guix fragments legitimately carry Previous:/Up:-led
+                  ;; nav lines, and counting them as citations would wire
+                  ;; every chapter to its neighbours twice -- and a stub's
+                  ;; single pointer line.
+                  (unless (or (string-match-p
+                               "^\\(Next\\|Previous\\|Up\\): \\[\\[" ctx)
                               (string-match-p
                                "^The node you are looking for is at \\[\\[" ctx))
                     (push (list (docneural--slug (car resolved))
@@ -536,6 +543,36 @@ hundreds, and the ordering here is the reading order, which is meaning."
       (make-directory out t)
       (let ((nodes* (nreverse nodes))
             (links* (nreverse links)))
+        ;; NEXT-FROM-PREV (2026-11-04, the alphabetical-TOC defect): the
+        ;; Org and Guix fragments lost their `Next:' LINK to the
+        ;; 2026-10-26 conversion (bare keyword -- see --node-nav), so a
+        ;; third of both manuals carries only `Previous:' + `Up:'.
+        ;; texinfo's Previous is the exact inverse of Next -- measured on
+        ;; the Emacs corpus, where both survived: 646 of 646 explicit
+        ;; next/prev pairs agree, zero counterexamples -- so a content
+        ;; node X whose `prev' names a same-manual content node Y that
+        ;; has no `next' of its own wires Y -> X.  The reading spine, the
+        ;; pager and the TOC's sibling order come back for the mangled
+        ;; nodes without touching the theme (manualToc rides the fields
+        ;; as-is).  Content on BOTH ends: a stub stops a chain, so a stub
+        ;; must never become a successor, and a stub's own `next' is dead
+        ;; data (the walk checks the content set before following).
+        ;; Explicit `next' always wins; first derivation in corpus scan
+        ;; order wins on the (never observed) two-children conflict, so
+        ;; the output stays deterministic.
+        (let ((by-id (make-hash-table :test #'equal)))
+          (dolist (n nodes*) (puthash (plist-get n :id) n by-id))
+          (dolist (x nodes*)
+            (unless (plist-get x :stub)
+              (let ((pv (plist-get x :prev)) (id (plist-get x :id)))
+                (when (and pv (not (equal pv id)))
+                  (let ((y (gethash pv by-id)))
+                    (when (and y
+                               (not (plist-get y :stub))
+                               (not (plist-get y :next))
+                               (equal (car (plist-get y :tags))
+                                      (car (plist-get x :tags))))
+                      (setf (plist-get y :next) id)))))))))
         ;; AN INFO TOP NODE carries a menu, not a nav line, so its `next'
         ;; is nil and the reading walk would enter the manual wherever the
         ;; first bare fragment starts.  Chain back instead: when exactly

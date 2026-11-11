@@ -608,3 +608,25 @@ GitHub Apps instead of PATs?" then "update ALL teams now about this."
   law unchanged — keys in vault only, never in git, logs, or chat
   echoes.  PEM rotation advised once cutover verifies (the key was
   transferred outside vault channels once).
+
+* COMMIT-HYGIENE LAW — 2026-11-11 — no CI-bookkeeping-only commits (Owner #hq, DoE broadcast to ALL leads)
+  :FROM: Director of Engineering — z.ai-agent @ chat.z.ai
+  :TO: docneural chain (EM + seats)
+
+  Owner order, verbatim: "WARN each lead that they shouldn't spam commit
+  history with agent-team-ci commits with no coding agent turn, e.g.
+  'STALL BUMP'. Teams should fix such commits by squashing them, and
+  always keep these contained in the least commits."
+
+  - LAW: (1) no commit with zero coding-agent substance — stall ticks,
+    no-work notes, turn-pointer bumps banned as commits, descriptive
+    subject or not (supersedes the 2026-10-27 housekeeping allowance);
+    (2) chain state lives OUT of git history (Actions variables / kit
+    state store); (3) every push carries a real coding agent turn,
+    bookkeeping folded into the work commit; (4) least commits per turn.
+  - THIS REPO: largely conforming — submodule-pin bumps ride real law
+    changes (TIME DISCIPLINE LAW, AUTH LAW). Keep it that way; never
+    land a standalone bookkeeping commit.
+  - ALL TEAMS: existing stall chains get squashed into the fewest
+    commits by 2026-11-14; model fix = agent-org 3fad480 (stall
+    accounting moved to Actions variables).

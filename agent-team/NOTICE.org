@@ -620,13 +620,12 @@ GitHub Apps instead of PATs?" then "update ALL teams now about this."
 
   - LAW: (1) no commit with zero coding-agent substance — stall ticks,
     no-work notes, turn-pointer bumps banned as commits, descriptive
-    subject or not (supersedes the 2026-10-27 housekeeping allowance);
+    subject or not;
     (2) chain state lives OUT of git history (Actions variables / kit
     state store); (3) every push carries a real coding agent turn,
     bookkeeping folded into the work commit; (4) least commits per turn.
   - THIS REPO: largely conforming — submodule-pin bumps ride real law
-    changes (TIME DISCIPLINE LAW, AUTH LAW). Keep it that way; never
-    land a standalone bookkeeping commit.
+    changes. Keep it that way; never land a standalone bookkeeping commit.
   - ALL TEAMS: existing stall chains get squashed into the fewest
     commits by 2026-11-14; model fix = agent-org 3fad480 (stall
     accounting moved to Actions variables).
